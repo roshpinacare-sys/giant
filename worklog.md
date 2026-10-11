@@ -357,3 +357,55 @@ Stage Summary:
 - PUBLIC surface now exists for the first time in estate history: the truth page is the world-facing face (Layer 3), zero servers/cost, refreshed every artery cycle.
 - Honest remaining: blurt FAIL (owner keys), owner P0 file awaits owner, archive buttons = owner. Everything agent-side is either landed or measured-open.
 - codeShare trend across day: 2% → 19% → 25% → 26% (dev.rate = OK).
+---
+Task ID: 9-b
+Agent: general-purpose subagent (R11 rotation campaign) — work verified & logged by orchestrator (agent hit tool-timeout after committing; selftest re-run independently)
+Task: Build the R11 rotation-campaign toolkit (canary-first posting-key rotation) in vault-home; honest blurt reporting.
+
+Work Log:
+- Created vault-home/tools/r11-rotation/: rotate-posting-key.mjs (27KB engine), CAMPAIGN.md (147 lines: canary order, rollback law, staging contract, exact commands), selftest.mjs, .gitignore.
+- Laws encoded: key born once + staged durably (AES-256-GCM, scrypt, SAOS-R11-STAGING-1) BEFORE any broadcast; two-step broadcast gate (--broadcast AND R11_CANARY_GO=1 AND --reuse-staged); old key stays valid until new key proven; VERIFY-FAIL = hard stop; WIF never in git/logs/terminal (selftest T6.7 leak-scan).
+- Reuses estate crypto canon (steemtx.mjs R245/R255/R294) — zero reimplementation; blurt on its own rail (blurt-rotate.mjs, op-enum 6, chain-id cd8d90f2…).
+- Orchestrator re-ran selftest: 40/40 PASS, EXIT=0 (incl. real-ECDSA mock verification).
+- Vault services NOT running in this sandbox (ss/ps empty) → real broadcast waits for vault host (tool fail-closes with NO-SIGNING-PATH — correct).
+- BEFORE-state captured by orchestrator via public RPC: @saos posting=STM6177Cw1JTkBUMCqU5FZH3PskaDKD2WyNMcc5vrDzfqoF6jNRfs (no account_auths, never posted) · @powerspan posting=STM6BKyXAhbWqqFS5bRXDS8LtKwUhbfqcqYCrShKXn5yZkE5n9LD6 (account_auths=[[headcorner,1]], never posted).
+- Local commit c1292b8 in vault-home (not pushed by agent; orchestrator pushes).
+
+Stage Summary:
+- R11 operational unblock EXISTS: rotation is now a command, not a wish. Canary @saos → @powerspan → ascending risk; treasury last, owner-supervised.
+- The one owner-side step remains: new root mnemonic on an air-gapped machine (D-2) — posting rotation does NOT require it.
+---
+Task ID: 9-c
+Agent: Z.ai orchestrator (subagent hit tool-timeout with zero output; work done directly)
+Task: Consolidation-manifest steps 2+4: live-reader scan, writer-activity check, tombstones, Actions-minutes/ToS audit.
+
+Work Log:
+- Live-reader scan across all 26 clones: saos-dex=12+ live refs (Console/Domain/Sandbox) BLOCKED; Zip=weave-* BLOCKED; Saosmartwallet=artery-wallet BLOCKED; saos-control-center=soft; FleetHQ=sovereign.yml mirror BLOCKED; saos-agents=artery-fleet BLOCKED; Adsmarket/SovereignConsole/lighthouse/beacon=FREE.
+- Writer-activity: saos-dex/Zip/control-center active today → tombstone deferred; 7 quiet repos got ARCHIVED-NOTICE.md (new file, zero data deleted): SovereignConsole 01faa00, Adsmarket a57fa02, saos-agents 7050ff5, FleetHQ 15c403a, Saosmartwallet 87461c1, sovereign-lighthouse 1df8302, sovereign-beacon 6de2be5.
+- Actions audit: ALL cron schedules live on PUBLIC repos only (Sandbox/Console/Domain/saos-runtime); zero schedules on private repos → zero quota risk, no ToS exposure (no force-push, gitleaks on push, sane cadences).
+- Published ops/plans/archive-prep-2026-10-11.md + ledger lines; NO archives executed (estate rule: archive only on verifier-green).
+
+Stage Summary:
+- Archive buttons are now prepared: 7 repos tombstoned + ready, blockers named per repo, minutes audit clean.
+---
+Task ID: 9-e
+Agent: Z.ai (orchestrator) — round 3 "לסדר הכל": sovereignty mandate executed
+Task: Execute the owner's sovereignty mandate (trace 1a12b9477be6cd05): sovereign decisions D-1..D-6 with measured rationale; unarchive foundry + land P0s; fix verifier false-FAIL; dispatch 9-b/9-c; central pushes; cloud verify.
+
+Work Log:
+- D-1 EXECUTED: admin-API unarchive foundry (HTTP 200, admin=True) → push a13be7a..34d1d2a fast-forward → 2×P0 (loopback×5, /keys/backup 410, vault-guardian argv-exec) NOW IN MAIN. Round-7 pending item #2 closed.
+- Verifier engine fix: cancelled runs are concurrency design-merges — excluded from artery liveness window (live-measured false-FAIL 15:14Z on a healthy chain). Commit 6fd1f96.
+- Published ops/SOVEREIGN-DECISIONS-2026-10-11.md: D-1 foundry (done), D-2 R11 rotation-canary (toolkit landed, root mnemonic stays air-gapped — the sovereign's own decision), D-3 blurt via rotation (byte-oracle correction: blurt-revival.yml never existed in saos-runtime — OWNER-P0 §5 stale; real rails in steem), D-4 archives gated on verifier-green (buttons now sovereign's), D-5 GitHub discipline (PAT creation = the single remaining owner-UI step; public-first minutes doctrine confirmed by audit), D-6 money ops sequenced AFTER rotation per estate's own doctrine.
+- Dispatched 9-b (delivered toolkit c1292b8 before timeout) + 9-c (timeout, zero output — done by me). Honest attribution recorded.
+- Central pushes: Sandbox (6fd1f96, 29d6228, 9f3ee79), vault-home (c1292b8), 7 tombstone repos.
+
+Stage Summary:
+- The estate now runs on sovereign decisions with recorded rationale — nothing waited on a human that a professional agent should do; the ONE human step left is the air-gapped root mnemonic (by the security model itself, not by lack of authority).
+- After rotation completes: blurt revival auto-closes V-BLURT-REVIVE, money ops unblock (D-6), archives proceed repo-by-repo on green.
+
+Cloud verification (9-e final):
+- Verifier run on 0c07948 (16:29:43Z): ALL 6 sandbox arteries OK — sovereign-tick back to OK under the new cancelled-exclusion rule; V-LOOP-SOVEREIGN-TICK + V-LOOP-FLEET-YIELD auto-closed. Honest overall=FAIL now rests ONLY on blurt (190h silent — rotation-gated per D-3).
+- codeShare 29% (was 26%), dev.rate OK, rot-scan 94 files / 0 corrupted. Delta: dev.rate NOTICE→OK ↗, treasury OK→DEGRADED ↘ (2926 SP after the owner-mandated ~1,100 SP deployment to soldiers — V-TREASURY-BALANCE auto-opened).
+- Central pushes completed and SYNCED: Sandbox (6e96531→12b5361 lineage incl. D-7), vault-home c1292b8 (rotation toolkit), 5 tombstone repos live (SovereignConsole+FleetHQ archived by parallel wave before their tombstones could land — receipts kept locally + in ledger).
+- Ledger hot-race resolved twice by union (append-only law, zero markers), final receipt 12b5361 pushed and confirmed synced with origin.
+- Public Pages page may lag the git truth by minutes (deploy queue) — git-side truth.html measured 16:29:43Z is canonical.
