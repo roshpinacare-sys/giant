@@ -409,3 +409,35 @@ Cloud verification (9-e final):
 - Central pushes completed and SYNCED: Sandbox (6e96531→12b5361 lineage incl. D-7), vault-home c1292b8 (rotation toolkit), 5 tombstone repos live (SovereignConsole+FleetHQ archived by parallel wave before their tombstones could land — receipts kept locally + in ledger).
 - Ledger hot-race resolved twice by union (append-only law, zero markers), final receipt 12b5361 pushed and confirmed synced with origin.
 - Public Pages page may lag the git truth by minutes (deploy queue) — git-side truth.html measured 16:29:43Z is canonical.
+---
+Task ID: 10
+Agent: Z.ai (orchestrator) — round 4 "לסדר הכל": D-8 revive-not-kill + parallel-wave convergence
+Task: Owner trace 1a12c560e16e946d — no archiving, open everything, fix instead of flee, office first on the page, no agent stepping on agents. Executed unarchive wave, dispatched 10-a/10-b/10-c, converged with parallel E-series waves without duplication, central ledger/push, cloud verify.
+
+Work Log:
+- Ground truth: 26 repos, 8 ARCHIVED (FleetHQ, SovereignConsole, saos-sovereign-platform, anchor-baseline, Defi, roshpina, Sdk, Project-files). Environment rebuilt from scratch: askpass helper recreated, 15 fresh clones under /home/z/estate/.
+- D-8 EXECUTED: 8× PATCH archived:false — every one HTTP 200 + verified archived=false. Final re-check: 26/26 open, ZERO archived. G3 respected (8 sequential calls + sleeps).
+- Dispatched 3 parallel subagents in disjoint territories: 10-a FleetHQ office-bake (3 local commits 4aab52a/419f43c/95091c4 — real engine import, status/office.json+html, Pages workflow, DEMO·SIMULATION watermark, zero invented numbers); 10-b Domain office-first landing (764f49aa: office hero + 6 live tiles with committed-feed freshness + stale date-marks, byte oracle 168539→184198); 10-c revival value map (39,992B sha256 c11adc24… — 13 repos × why-muted/unique-value/first-step/duplication/research/success-metrics).
+- PARALLEL-WAVE CONVERGENCE measured: twins (zai-code-3/5, zai-sec, lanes zai-10b/zai-10c, traces 1a12c59452cbc355/1a12c57bccbf89bd/1a12c566036dc565) already delivered: 5 tombstone retractions pushed, D-8 doctrine published (430b759), office-heartbeat 2h live Actions + keyless failover, office-ci receipts, office-window→office-pages Pages deployed (status=built), Domain office-first hero + crew-panel merged non-duplicatively.
+- Convergence decisions (anti-duplication per owner): my 10-a/10-b code products were SUPERSEDED — NOT pushed as code; preserved as provenance patches at Sandbox ops/agents/zai-revive-10/superseded/ (4 patch files); FleetHQ+Domain clones reset to origin. 10-c value map PUBLISHED (complements zai-code-3 dossier, no overlap).
+- Pushed Sandbox: addfb79 (lane README receipts + value map) + cfa7bc7 (ledger union line). Both verified synced 0/0. One push initially failed (askpass not exported in fresh shell — pipe masked exit code; lesson: no pipes on push, always export per-call).
+- All worklog discipline: subagents returned text; orchestrator scribes (parallel-write protection).
+
+Work Log (10-a — zai-revive-10a, FleetHQ):
+- tools/office-snapshot.mjs imports the REAL engine (Office from mini-services/agent-hq/src/office.ts), runs its own scripted sim scenario over byte-identical demo-data temp copy — no fake office, zero LLM, zero keys.
+- status/office.json (measured-only: crew/taskWall/podium/library/books/feed + provenance) + status/office.html (RTL dark, zero JS, DEMO·SIMULATION). First local bake: 16.7s, 6 crew, 3/3 tasks, 1 autonomous decision, 3 reports, 15 books measured.
+- .github/workflows/office-snapshot.yml (dispatch + cron 17 */3 + push paths) → bun install → bake → upload-pages-artifact(_pages/status) → deploy-pages@v4. Local commits only; superseded by parallel office-heartbeat/window — kept as patch receipts.
+
+Work Log (10-b — zai-revive-10b, Domain):
+- index.html top rebuilt office-first: Fleet HQ hero card (same-origin /FleetHQ/status/office.json fetch, DEMO tagging, honest pending-bake fallback) + "שימושים חיים של הרשת" 6 tiles (grid-truth/market-grid/twin-audit/truth/wallet/registry) with real committed freshness; "עודכן לאחרונה" stamps incl. explicit stale warning on 3-week-old missions.
+- Site laws held: relative/same-origin only, no CDN/tracking, RTL, no build. Byte oracle recorded; headless e2e 0 errors. Commit 764f49aa — superseded by T-56 hero + zai-10b lane + crew-panel; kept as patch receipt.
+
+Work Log (10-c — zai-revive-10c, value map):
+- 13-repo map published at ops/plans/revival-value-map-2026-10-11.md: per-repo (א) inventory (ב) recorded mute-reason (ג) unique value (ד) concrete first revival step (ה) duplications; global duplication map (truth-page trio roles; archive homes split; r11-rotation single home); 7 research ideas (top: V-FLEETHQ-FRESH freshness gate — fail-soft masks frozen sources, worklog-intel adoption making saos-agents library a verifier truth component, monthly archives artery); success metrics per repo incl. honest dormant-but-open admissions.
+- Key measured finding: receipts/network.json green while inner FleetHQ source 26h old — fail-soft masks frozen sources (R1).
+
+Stage Summary:
+- The archive doctrine is DEAD at the platform level: 26/26 repos open. Tombstones retracted estate-wide (5 by twins; FleetHQ/SovereignConsole never got theirs — 403 receipts in ledger).
+- The office (FleetHQ) is ALIVE and PUBLIC: 2h heartbeats in Actions, CI receipts, Pages window at https://roshpinacare-sys.github.io/FleetHQ/ — and the Domain page opens with the office first, then live network uses with measured freshness.
+- Zero duplicated artifacts landed: convergence receipts preserved (superseded/ patches), value map published as the per-repo deep layer under D-8.
+- Open owner-side (unchanged): PAT minting §1 (single human touch), custom.db decision (Saosmartwallet), public-placement/token-minimal steps for anchor-baseline/Project-files/roshpina/Sdk revival (G4), money ops after rotation (D-6). Honest overall: blurt gate still FAIL by design until rotation (D-3).
