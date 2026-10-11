@@ -503,3 +503,21 @@ Stage Summary:
 - V-FLEETHQ-FRESH is no longer a proposal: measured 4/4 MATCH, receipt committed.
 - Open (their lanes, flagged not touched): saos-dex/wallet REDs, steem gitleaks (key-proof linkage documented), foundry CI silence, standing cron for fresh-oracle (OWNER-WORD).
 - Pushes: FleetHQ 82342f8 + 601073c + 56965b8; Sandbox 1deb507 (fresh-oracle + ledger union). All hot-race-safe (rebase+verify, no force-push, PAT never in argv/config).
+
+---
+Task ID: 14
+Agent: Z.ai (orchestrator) — round 8: מה לא מחובר + המשרד בודק את עצמו
+Task: owner trace 1a12cf8c33f87d71 — join twins, find unconnected layers, wire, self-check standing, product delivery verified.
+
+Work Log:
+- 14-a: auth LIVE again; twins +9 (T-59 worlds+value-scan); pulled clean, zero stomps.
+- 14-b: connectivity-audit tool (real import-graph walk, bytes+sha256): library=46 scaffold=1 true-orphans=0; boot-verify.json zero-consumer; security-regression outside CI.
+- 14-c wired: office-ci +5th check (cloud SUCCESS 5/5); fresh-oracle.yml 30-min standing (cloud SUCCESS); office-selfcheck :3040 boots office+foreman on REAL Domain books, self-heals deps, env-parity suite 81/81 GREEN, receipts travel; bridge +3 sources; /worlds +עצמי tab (browser-verified, mobile OK, zero console errors).
+- JOIN T-60: oracle verifies the PRODUCT (Domain marketing/ + products.json) — 7/7 MATCH standing.
+- Lessons: self-dispatch receipt collision → union law; exit codes direct (no pipes).
+
+Stage Summary:
+- Organism self-trains/self-checks standing: CI(5) + 30-min byte-oracle + host selfcheck (boot+repair+suite) — all receipt-backed, fail-loud.
+- Newly connected: security-regression→host loop; boot-verify→bridge/worlds; connectivity→console; product→oracle.
+- Honest remainders: boot-verify 72.6h stale (shown honestly); vite.config classification; foundry CI silence; dex/wallet/gitleaks = their lanes.
+- Pushes: FleetHQ ad1f7d2 + e79377c; Sandbox ledger union; clouds green.
