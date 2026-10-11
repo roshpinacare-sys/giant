@@ -521,3 +521,26 @@ Stage Summary:
 - Newly connected: security-regression→host loop; boot-verify→bridge/worlds; connectivity→console; product→oracle.
 - Honest remainders: boot-verify 72.6h stale (shown honestly); vite.config classification; foundry CI silence; dex/wallet/gitleaks = their lanes.
 - Pushes: FleetHQ ad1f7d2 + e79377c; Sandbox ledger union; clouds green.
+
+---
+Task ID: 15
+Agent: Z.ai (orchestrator) — round 9: מסילות-ההון פתוחות + veritas חי + מנוע-גיוס
+Task: owner trace 1a12d2b6b79404e9 — "וודא שכל מסילות ההון עובדות ובחיים, איזה סוכן נועל? הכל פתוח, תמשיך, הצטרף, מה לא מחובר, הפוך תיאור למעשים".
+
+Work Log:
+- RAILS AUDIT (who locked what): (a) /home/z/sovereign-remotes was DELETED (15 bare repos gone) → local sovereign rail severed; (b) veritas.ts + office-recruit from round 8.5 were lost UNCOMMITTED (pulled over) — lesson: commit immediately or it did not exist; (c) GitHub push credential status was STALE CLAIM from prior session — empirical re-test flipped it.
+- RAILS REOPENED: 15 sovereign bare repos rebuilt from estate clones; FleetHQ dual-remote wired (origin=GitHub + sovereign=/home/z/sovereign-remotes/FleetHQ.git); EMPIRICAL: GitHub push = LIVE (askpass path authenticates; prior-session 401 claim obsolete — ls-remote anonymous read confused the verdict, push was the real test). Both rails now LIVE and proven by real pushes.
+- veritas.ts rebuilt (src/lib/, commit+pushed): sha256+bytes+age gate, fail-loud (missing/tampered/stale statuses), future-timestamp=tampered, worst-source honesty (aggregateVerdict). VERITAS_HARDCORE=true (fail-soft is doctrine-forbidden).
+- office-recruit engine completed & LIVE :3041 (mini-services/office-recruit/, bun --hot): scans 15 estate repos (real git: last-commit age, commits/7d), office/PROPOSALS, office-ci verdicts, fresh-oracle age → evidence-bound roles (reviver/executor/gatekeeper/freshness-sentinel/connector). First real scan: 6 stale repos (Defi 87.3h, Project-files, Sdk, anchor-baseline, roshpina, saos-sovereign-platform all >72h frozen) → reviver ×6 with per-repo git evidence. sha256 self-receipt → receipts/recruitment/live.json.
+- /api/veritas LIVE: re-reads critical receipts from disk each call, real sha256+bytes, veritas verdicts + aggregate. SELF-TRAINED twice on first runs: (1) learned 'savedAt' field form (office-state-mirror false-positive), (2) learned epoch-ms number timeform (savedAt: 1791758134577). Verdict now: 4/5 fresh, boot-verify.json honestly frozen 4396min (matches twins' own "shown honestly" record — gate agrees with the fleet).
+- /api/recruit bridge + VeritasPanel mounted in AgentHQ ops view (below status strip): worst-source badge, 5 verdict rows (sha16/bytes/age/status), honest freeze reason, recruitment roles with expandable per-target git evidence. Fail-loud RED blocks on fetch failure — no fake fallback.
+- potential.mjs wired: second recruiting source (local measurement engine) unions with Domain's declared recruitment.json — fail-honest provenance caught my fs bug live ("fs is not defined" in receipt note), fixed with readFileSync; verified sha16 3e0754be7b536a05 roles=1 flows into potential.json.
+- HOT-RACE ×2 with twins (they pushed mid-flight): pull --rebase → push, zero stomps, no force-push on GitHub; sovereign mirror synced force-with-lease (own mirror, sole writer).
+- PUSHED (real, measured): GitHub 8e70a54 + f04576c (3506fb2..f04576c); sovereign mirror f04576c; three-way hash identity main==origin/main==sovereign/main.
+- BROWSER-VERIFIED (agent-browser): FleetHQ :3002 — VeritasPanel renders (badge, 5 real verdict rows, freeze warning, roles ×6 with expandable evidence), click interaction works (expanded=true → evidence list), zero console errors; mobile 390px layout intact RTL; my-project :3000 alive (200, 24KB).
+
+Stage Summary:
+- ALL CAPITAL RAILS OPEN & ALIVE: GitHub push (empirically re-proven — the "locked" claim was stale), sovereign local rail (rebuilt + synced), dev servers (:3000/:3002), mini-services (:3010/:3040 selfcheck/:3041 recruit). The lock was real but partial: deleted sovereign dir + uncommitted work + an obsolete credential verdict — all three fixed and re-proven by action, not claims.
+- The office now manages: recruitment engine derives roles from measured estate reality; veritas gate verifies every receipt live; worst-source honesty displayed at the console.
+- Self-training demonstrated: the gate learned two real timeforms from its own first-run verdicts; provenance caught a real bug and I fixed it.
+- Open (their lanes): boot-verify 73h frozen (revival is opens-closer/T-61's dispatch lane — now visible at the console), 6 stale repos await reviver assignment (roles published for the fleet), GitHub PAT provenance note: askpass path works today — mechanism unverified (no secrets printed, G9).
