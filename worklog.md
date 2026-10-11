@@ -544,3 +544,23 @@ Stage Summary:
 - The office now manages: recruitment engine derives roles from measured estate reality; veritas gate verifies every receipt live; worst-source honesty displayed at the console.
 - Self-training demonstrated: the gate learned two real timeforms from its own first-run verdicts; provenance caught a real bug and I fixed it.
 - Open (their lanes): boot-verify 73h frozen (revival is opens-closer/T-61's dispatch lane — now visible at the console), 6 stale repos await reviver assignment (roles published for the fleet), GitHub PAT provenance note: askpass path works today — mechanism unverified (no secrets printed, G9).
+
+---
+Task ID: 16
+Agent: Z.ai (orchestrator) — round 10: דרך-החיים — לא לזייף, להחיות את היצרנים
+Task: owner trace 1a12d4f2f2155669 — "לא אפשרי למצוא דרך להחיות ולגשר דרך החיים בבטחה? בחן עד שתצליח, בדוק את עצמך היטב".
+
+Work Log:
+- ROOT CAUSE of the 73h frozen boot-verify.json: it has THREE wired consumers (worlds-state API, veritas API, worlds bridge) but its PRODUCER was lost in a refactor — the fleet kept reading a dead man's receipt. Fix ≠ fake data. Fix = rebuild the producer as a living service.
+- sovereign-gateway :3011 REVIVED (LLM brains kilo→llm7→pollinations→ovh; probe 200). It had died silently; foreman's LLM lane starved.
+- boot-verifier :3042 BUILT & LIVE (mini-services/boot-verifier/): measures every 15min — 7 ports (3000/3002/3010/3011/3040/3041/self), sentinels from runtime-supervisor state, receipt ages, private_vault via REAL git ls-remote (credential askpass path; method declared: git-ls-remote). Same schema consumers expect + producer field + sha256 self-receipt. → boot-verify.json alive again; veritas went 4/5 → ALL FRESH.
+- fleet-vault empirically LIVE (ls-remote HEAD c1292b8) — private-repo credentials work; boot-verifier first run honestly flagged clone-missing (fail-loud caught a real gap), upgraded probe method, all_ok=true.
+- RECRUIT HONEST CARTOGRAPHY: measured ahead/behind vs origin per repo → the 6 "stale" repos are NOT sick: Project-files/Sdk/anchor-baseline = declared archives (quiet BY DESIGN → archive-keeper ×3), Defi/roshpina/saos-sovereign-platform = live-mission platforms synced & clean (→ asset-cartographer ×3). reviver ×0 — no false alarms. Cartography read: roshpina = RTL value console, saos = anchoring platform v122, Defi = sovereign DeFi layer docs (assets for future bridging, recorded in targets).
+- SELF-CHECK CAUGHT ME TWICE (בדוק את עצמך היטב, in practice): (1) repeated the twins' documented pipe lesson — `git pull --rebase | tail` masked a rebase conflict → false PUSH-OK; caught by immediate state inspection (HEAD detached mid-rebase), repaired per union law. (2) connectivity.json selfProof.sha16 conflict: I resolved by "newest timestamp", continued rebase, THEN verified JSON → 333-line marker found; recomputed both sides' hashes — NEITHER self-proved (both stale claims); resolved by letting the LIVING producer (selfcheck :3040 POST /run) rewrite it fresh. Law reinforced: verify content AFTER every conflict resolution, BEFORE continue.
+- PUSHED: GitHub 8d78441..28e445e (life-path commit + fix commit, hot-race rebases, zero stomps, no force-push on origin); sovereign mirror force-with-lease sync; THREE-WAY identity main==origin/main==sovereign/main @ 28e445e.
+- BROWSER-VERIFIED: console badge now "הכל טרי" (was "worst: קפוא"), 5/5 verdict rows fresh incl. boot-verify 5min, roles ממפה-נכסים ×3 + שומר-ארכיון ×3 render with expandable evidence, ZERO console errors.
+
+Stage Summary:
+- דרך-החיים delivered: dead producers rebuilt as living services (boot-verifier :3042, sovereign-gateway :3011 revived), frozen receipt is now a live measurement, honest cartography replaced false alarms (reviver ×0), and the gate itself verified everything including catching its own operator twice.
+- The organism now self-measures: 8 living services (:3000/:3002/:3010/:3011/:3040/:3041/:3042 + CI on GitHub), every receipt sha256-stamped, worst-source honesty = ALL FRESH at this hour.
+- Lesson bank grows: pipes lie (twins' law, now mine too); self-proving receipts must be re-verified after merge; a resolved conflict is not a verified resolution.
