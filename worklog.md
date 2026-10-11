@@ -483,3 +483,23 @@ Stage Summary:
 - לוח הגיוס חי: 3 תפקידי-רשת (מחבר-ספרים ×7, שומר-הגשר ×8, שומר-טריות V-FLEETHQ-FRESH) + 3 מסלולות תפוסות (T-58) + 7 תפקידי משרד מ-recruitment.json — "שכל הזמן ישאלו מה הפוטנציאל" עכשיו עמוד חי, לא שאלה.
 - עולם-3D גדל ברמה חדשה: 4 סבבי 3D חיים (office3d אינטראקטיבי ב-FleetHQ-Pages, v2.5 מוביל, חדר-עולמות, frames אפויים) — כולם מפידים אמיתיים בלבד.
 - פתוח ליינות אחרות (מתועד ב-ledger, לא שלי): תיאטרון dex ×8 + 7 יתומים (שער-hash/צרכן-או-פרישה), stale dex-router 524h.
+---
+Task ID: 13
+Agent: Z.ai (orchestrator) — round 7 "תמשיך": console node + RED-ים אמיתיים + fresh-oracle
+Task: continue trace 1a12cab8a1748829 — the / route becomes the wired console of the organism; everything RED gets root-caused & fixed; V-FLEETHQ-FRESH proven standing; zero stomps against racing twins.
+
+Work Log:
+- Ground truth: twins hot-pushing (Sandbox +19 incl. ledger-REPAIR by zai-main; FleetHQ worlds/retro lanes; Domain growth room + integrity chip). Picked up their lines, duplicated nothing.
+- Sandbox / route rebuilt: מפקדת-האורגניזם console (RTL, dark, 5 tabs) + /api/organism — 11 estate feeds (office-ci verdict, live office-state, keeper tick, integrity, KEY-PROOF summary-only, potential/work-orders/VALUE-MAP, flow-map, recruitment, TOKEN-TRUTH) + 6 live Pages fetches with sha256+bytes+markers + selftest block (every source: exists/bytes/sha16/age). Zero-fake contract stated in payload; missing = declared missing; key material never read. Verified in agent-browser: office/worlds/recruit/anti-fake/network tabs render real data; mobile 390px OK; zero console errors.
+- FleetHQ RED root-causes (was: 2×fail on 020ca7b): (a) office-3d bake = next/font/google build-time fetch flake → 38 font resolve errors → fonts self-hosted (geist pkg + @fontsource/heebo/jetbrains-mono, same CSS var contract); verified locally: tsc PASS + full next build PASS before push. (b) office-ci receipt publish lost hot-race (rebase-then-push x3 exhausted on a GREEN build) → x6 jittered retries + SIBLING-STAND-DOWN law (duplicate trigger runs of same sha/bake exit 0 when sibling already published — rebase conflict on shared receipt files is a win, not a failure).
+- Fixed NetworkWorld TS18048 (T13 lane's d.nodes possibly-undefined) @82342f8 — typecheck GREEN restored.
+- V-FLEETHQ-FRESH first standing proof: byte-oracle live-vs-committed 4/4 MATCH (FleetHQ/ + potential.html vs origin/office-pages; Domain/ + office3d/ vs origin/main; sha256 16-hex). Receipt: Sandbox receipts/fresh-oracle-2026-10-11.json + AGENT-LEDGER union line (survived a real ledger merge-conflict with zai-main's repair line — union law applied, every block exactly once).
+- Dispatched office-ci + office-3d ×2 rounds; final office-ci receipt on font-fixed sha = PASS (all 4 checks); twin pages deploys green.
+- Lesson recorded: a pipe masked a rebase conflict and produced a false PUSH-OK — caught by immediate state inspection, repaired by clean union + no-pipes push (exit code read directly).
+
+Stage Summary:
+- The owner's preview (/) is now the organism's wired command console: every number source-declared, the anti-fake wall shows live sha256 verification of all public pages, recruitment/work-orders/potential flow from the engines' real feeds.
+- FleetHQ build/typecheck/bake = GREEN with zero build-time network dependencies (fonts self-hosted); receipt races resolved structurally (sibling-stand-down law).
+- V-FLEETHQ-FRESH is no longer a proposal: measured 4/4 MATCH, receipt committed.
+- Open (their lanes, flagged not touched): saos-dex/wallet REDs, steem gitleaks (key-proof linkage documented), foundry CI silence, standing cron for fresh-oracle (OWNER-WORD).
+- Pushes: FleetHQ 82342f8 + 601073c + 56965b8; Sandbox 1deb507 (fresh-oracle + ledger union). All hot-race-safe (rebase+verify, no force-push, PAT never in argv/config).
