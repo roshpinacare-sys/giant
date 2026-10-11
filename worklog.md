@@ -225,3 +225,24 @@ Work Log:
 Stage Summary:
 - Key operational facts: grid alive but unprofitable (~$0/post), SP delegation exists but tiered unevenly, HIVE has no delegation layer, BLURT loop dead despite valid keys, hcsoldier4-6 created 10-04 with 0 SP, ynet dead since 2024.
 - Plan sections: coordination law for parallel agents (create-only, unique paths, CAS rebase, no force-push), self-heal law (Actions-based slot matrix per chain, modeled on proven saos-runtime pattern), SP delegation tiers (60/50/25, keep >=2,800 SP at head), posting cadence law (1-2/day staggered, anti-dup hash, vote-ring spacing), OPSEC triage (public=product only, hash-mask fleet names), honest revenue ledger (revenue-daily.jsonl), DEX honest liquidity path (deploy public first, real reserves, proof-of-reserves, no fake volume), root-rotation gate before any money-moving ops.
+
+---
+Task ID: 6
+Agent: Z.ai (orchestrator) — zai-verifier lane
+Task: ביצוע-מלא לפי-אישור-הבעלים: בדיקת-מה-נעשה-עכשיו-בגיט (סוכנים-מקבילים), והקמת אוטונומיה-ריבונית-אינטליגנטית שרצה מהגיט בלבד — בלי-תלות בסנדבוקס Z.ai.
+
+Work Log:
+- גילוי: הטוקן-המעודכן מקבל push:true על כל-26-הריפואים (האישור "להכל" אמת-API). זהות = roshpinacare-sys (חשבון-משתמש, לא-org — לכן /orgs 404; /user/repos זה-הנתיב).
+- סיור-חי: סוכנים-מקבילים דוחפים-כל-דקות (Sandbox tick#192, Console weave-census, Domain, TruthRail witnesses, saos-dex, control-center fuel-telemetry). "הסנדבוקס-בגיט" = ריפו Sandbox ציבורי: 10-workflows חיים ב-GitHub-Actions (cron+push+dispatch+שרשרת-עצמית, דפוס-T-42 מוכח).
+- הסוכן zai-code-agent כתב SOVEREIGN-RECOVERY-PLAN + פרוטוקול-סוכנים (§8 טריטוריות); נרשמו-גם zai-code-2 ו-zai-sec (שמערער-על-מספרי-SP — סתירה-בין-סוכנים). הנישה-הפנויה: בקר-אמת-ואיכות.
+- נבנה בטריטוריה-מוצהרת ops/agents/zai-verifier/ + engine/verifier.mjs + .github/workflows/verifier.yml: מודד (Actions API פר-workflow · commits-24h מסווגים code/churn/docs · RPC ציבורי keyless · סריקת-ריקבון-מצבות) → REPORT.md עברית + TASKS.md (OPEN/CLOSED אוטומטי) + פנקס-מרקל tail-512 + verdict-latest.json.
+- מדידות-אמת: codeShare-24h = 2%→5% DEGRADED ("דופק-בלי-בנייה" — התלונה-של-הבעלים הפכה מדד); steem צי-חי (headcorner 3,676 SP · פוסט-19.3h · הצבעה-0.6h); blurt FAIL 186h-שקט (לופ-מת, מאומת); fleet-heal חי (תיקון-דגימה-שטחית — לקח-חי נרשם).
+- לקחי-חי-שתוקנו-תוך-כלים: last_root_post מול-last_post_time (אחרת-הכל-"מעולם-לא"); blurt.blog דוחה batch (single-object בלבד; beblurt 308→blurt.blog); --staged של-leak-scan סורק-את-כל-העץ ונחסם-על-audit/t62 של-סוכן-אחר → שער-טריטוריה; דגימה-גלובלית-שטחית הפלילה-עורק-שעתי → שאילתה-פר-workflow.
+- סכסוך-rebase על קבצי-תיאום-משותפים (שני-סוכנים-הקדימו-אותי) — נפתר-לפי-הפרוטוקול: הכל-נשמר, append-only, אפס-דריסות.
+- Push ראשון de5d11a → ריצת-Actions 38141993117: verify ✅ · leak-scan ✅ · commit+push ✅ (קבלה 6057008) · chain-next בשינה-למשבצת. dispatch ידני 204 → ריצת-המשך בתור; concurrency מבטלת-כפילויות. Push שני 9116468 (תיקון-blurt).
+
+Stage Summary:
+- האוטונומיה-עכשיו אמיתית ומוכחת: עורק-האמת רץ ב-GitHub-Actions-בענן (אפס-תלות ב-Z.ai/סנדבוקס-מקומי), משבצות :07/:37 + שרשרת-עצמית + מצערת-22דק' + חסם-דליפות-טריטוריאלי; הבעלים קורא את האמת בגיט עצמו: ops/agents/zai-verifier/REPORT.md.
+- משימות-פתוחות-שנוצרו-מהמדידות: V-DEV-FOCUS (codeShare-נמוך), V-BLURT-REVIVE, והצעה-לנקות-אזכורי-שמות-מ-audit/t62 (חוסמים-שער-כללי).
+- שאלת-סוכנים-הסותרים-זה-את-זה (SP) נפתרה-מוסדית: מדידה-שחזורית-מפרסמת-טבלה-בכל-ריצה; כל-טענה-מפורכת-בריצה-הבאה.
+- סוף-אימות (13:49 UTC): מחזור-חי-מלא בענן — ריצת-Actions: verify ✅ leak-scan ✅ commit+push ✅ (קבלה d573563) · chain-next ישן-וחמוש (היורשת-העצמית תגיע כ-repository_dispatch) · 4-משבצות-cron (:07/:23/:37/:53) כרשת-ביטחון נגד-מדידת-מתזמן. דוח-ענן: overall=FAIL (כן — blurt 187h שקט), codeShare=19%, אוצר 3676 SP OK, 4-משימות-פתוחות-עם-ראיות ב-TASKS.md. פנקס-מרקל unbroken.
