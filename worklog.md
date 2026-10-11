@@ -462,3 +462,24 @@ Stage Summary:
 - Estate assurance: everything verified side-by-side; one real regression (truth-publish starvation) found, root-caused (post-hex-oracle), fixed, and ignited; 7 findings documented with owners and first steps.
 - The [m-swallowing display oracle lesson is now law-grade: hex/sha256 or it did not happen.
 - Open: steem gitleaks triage, saos-dex/wallet RED gates, 3 fresh REDs triage, foundry CI silent since 10-07, interactive 3D app itself not served on Pages (frames only — stated honestly in the window).
+
+---
+Task ID: 12
+Agent: Z.ai (orchestrator) — round 6 "לסדר הכל": אנטי-זיופים + חיווט משרד↔רשת + עולמות
+Task: Owner trace 1a12cab8a1748829 — "חייב לוודא שאין זיופים, לחווט את המשרד עם הרשת והריבונות, גיוס עובדים, פוטנציאל פתוח, עולם 3D ישתפר ויגדל, עולם עסקים + עולם מקביל מטפורי, בלי דריסות".
+
+Work Log:
+- Ground truth מול remotes: תאומים דחפו מעבר (FleetHQ 149f64c living-office v2 + hero CTA; Domain 3dcbee12 office3d/v2; Sandbox F-series flow map). כל 3 הקלונים ff-מעודכנים dirty=0.
+- סריקת זיופים על F-ledger של zai-code-3: רפא digest.json → נבדק חי ונמצא נפתר (Pages 200/8KB — התאומים פרסמו; ה-Domain בנוי עם fallback כנה). 7 יתומים + תיאטרון-קומיטים → ליינות dex (לא נגעתי — חוק שטחים). דגל #4 (office-live.json ללא צרכן) → נסגר על ידי.
+- 12-a חדר העולמות (Domain office3d/worlds/): buildless RTL canvas 2.5D, 3 עולמות — משרד (KPIs נמדדים + קישורים), עיר-הריפואים (בניין-לריפו מ-digest: גובה=commits7d, צבע=CI verdict, הילה=טריות, מחסני-יתומים עם שלטי-גיל, שלט תיאטרון, עגורנים=קשתות בתור), עולם-מקביל (שיירת נושאי-פנסים מ-office-state states אמיתיים, תהום-רפאים שנסגרת רק אם digest מאומת-חי, מיראז'י תיאטרון, מדורת אש-המשרד same-origin). 5 פידים מצוטטים + selftest (?selftest=1, window.__worldsSelftest).
+- 12-b מנוע הפוטנציאל (FleetHQ tools/potential.mjs): Node20 zero-dep; קלטות = digest (same-run) + FLEET-GRAPH + write-log.jsonl + flow-map raw + recruitment.json (צריכה מוצהרת); רפאים נבדקים חי (re-verify); fail→unknown; פלט potential.json+potential.html (RTL zero-JS) → Pages דרך publish.sh אדיטיבי + step ב-office-window.yml.
+- באגים שנתפסו בבדיקות ותוקנו: נתיב יחסי ../../ ל-office-live; commits7d הוא מספר; חוק-תיאטרון = law-content-divergence; fleet חסר ב-JSON; תגי <b> מילוליים ב-HTML.
+- בדיקות דפדפן (agent-browser): selftest 4/5 (pot=404 כנה עד פרסום), עיר מצוירת עם 9 שלטים קריאים, קליק→כרטיס נמדד (saos-runtime: 37 קומיטים/2.0שע׳/in_progress), עולם-מקביל עם גשר-חודש-ואומת, potential.html מלא (KPIs 26/26 · 12 קשתות · 11 פתוחים · 8 תיאטרון · 2 רפאים חודש✓, 3 תפקידי גיוס, 11 שורות עבודה, 7 תפקידי משרד מ-recruitment).
+- דריסות: FleetHQ push נקי (b947698→b5d69fb); Domain — התנגשות חיה מול v2.5 של התאומים (0bcb9f2c) שבנו עולם-הון+גן בתוך v2 → איחוד (הצד שלהם במלואו + צ'יפ עולמות שלי), הבדלה מפורשת: החדר שלי = עיר-הריפואים+עולם-חובות (digest+flow-map+רפאים-חי), שלהם = עולם-הון+גן (STEEM/HIVE/credits) — משלימים, קישורים הדדיים, potential מצהיר צריכה של recruitment.json. push שני נדחה (human-cadence) → rebase → pushed 5b7ae89d.
+- Ledger union ב-Sandbox (3e4fa1a) + office-window dispatched (204).
+
+Stage Summary:
+- השרשרת הציבורית הפכה חסרת-זיופים-פעילה: כל רפא נבדק חי, דגל #4 סגור עם צרכן אמיתי, ולוח הפוטנציאל מציג 11 פריטים פתוחים עם עדות+מקור+צעד-ראשון+מצב-תביעה.
+- לוח הגיוס חי: 3 תפקידי-רשת (מחבר-ספרים ×7, שומר-הגשר ×8, שומר-טריות V-FLEETHQ-FRESH) + 3 מסלולות תפוסות (T-58) + 7 תפקידי משרד מ-recruitment.json — "שכל הזמן ישאלו מה הפוטנציאל" עכשיו עמוד חי, לא שאלה.
+- עולם-3D גדל ברמה חדשה: 4 סבבי 3D חיים (office3d אינטראקטיבי ב-FleetHQ-Pages, v2.5 מוביל, חדר-עולמות, frames אפויים) — כולם מפידים אמיתיים בלבד.
+- פתוח ליינות אחרות (מתועד ב-ledger, לא שלי): תיאטרון dex ×8 + 7 יתומים (שער-hash/צרכן-או-פרישה), stale dex-router 524h.
