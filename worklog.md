@@ -339,3 +339,21 @@ Stage Summary:
 - Landed in git: 2 commits Sandbox (fd19e10, 63de56a) incl. verifier engine fix auto-closing V-ROT-HYGIENE; 2 ready patches for archived foundry; 2 published planning docs; 5 ledger entries; lane README with archive discovery + attribution correction.
 - Still open for OWNER: (1) R11 real root rotation (only owner can), (2) unarchive foundry (or designate successor) → then `git am ops/agents/zai-fix/patches/foundry/*.patch` lands the two P0 fixes, (3) V-BLURT-REVIVE blocked on new-keys P0, (4) archive wave intent confirmation (7 repos — right direction per consolidation plan, want explicit owner confirmation in ledger).
 - Honest overall: verifier overall=FAIL stands (blurt 187h silent) — correct; everything else measured green or improved.
+---
+Task ID: 8
+Agent: Z.ai (orchestrator) — round 2 "לסדר הכל": Layer-3 goes live
+Task: Agent-side execution beyond P0s: public truth page (Layer 3 step 1), consolidation manifest, cloud end-to-end verification.
+
+Work Log:
+- Read zai-code-3's ops/OWNER-P0-2026-10-11.md (8 owner-only items incl. PAT rotation order) — did NOT duplicate owner asks; focused on agent-doable work.
+- LAYER 3 LIVE: engine/verifier.mjs now bakes status/truth.html every run — self-contained RTL dark HTML, zero JS, strict CSP, embedded third-party verify commands (curl REPORT/ledger/engine). Suppressed runs re-bake idempotently from existing receipt (template updates propagate on quiet runs).
+- CLOUD BUG CAUGHT & FIXED: verifier runs 7/8 failed — suppressed path (22-min throttle) wrote nothing → git add status/truth.html pathspec error. Fix: engine re-bake in suppressed branch + tolerant yml add. Verified both paths locally (full run + guard-999 suppressed run) before push.
+- END-TO-END CLOUD PROOF: push-triggered run measured → baked → committed (88db5c1 by sandbox-verifier 15:14:49Z) → pages.yml dispatched → PUBLIC URL https://roshpinacare-sys.github.io/Sandbox/status/truth.html returns HTTP 200 with verified content (verdict badge, fleet table, codeShare, merkle head, zero script tags). The autonomy loop now closes IN PUBLIC: measure → bake → commit → deploy → world sees.
+- CONSOLIDATION MANIFEST published: ops/plans/consolidation-26to8-2026-10-11.md — measured fate for each of 26 repos: 8 keep (Sandbox/Domain/Console/steem/saos-runtime/vault-home/TruthRail/saos-jummper), 11 to archive/merge with concrete salvage notes, archive-itself = owner button (marked 🔴), tombstone-README law before each archive, new-repo birth law (layer justification required in ledger).
+- LEDGER CONFLICT RESOLVED per append-only law: parallel new agent zai-code-5 appended simultaneously → rebase conflict on AGENT-LEDGER.md → all lines kept, zero markers, pushed 5b54b30.
+
+Stage Summary:
+- Landed: e4389dd+4e0ff3e (truth-page engine+yml), 88db5c1 (cloud-baked page), 5b54b30 (manifest+ledger).
+- PUBLIC surface now exists for the first time in estate history: the truth page is the world-facing face (Layer 3), zero servers/cost, refreshed every artery cycle.
+- Honest remaining: blurt FAIL (owner keys), owner P0 file awaits owner, archive buttons = owner. Everything agent-side is either landed or measured-open.
+- codeShare trend across day: 2% → 19% → 25% → 26% (dev.rate = OK).
