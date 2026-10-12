@@ -695,3 +695,25 @@ Stage Summary:
 - The owner's master password is now THE sovereign credential: steemit.com login (standard derivation), the organism console gate (:3002), and the vault — one key, owner-held, chain-verified bit-exact.
 - The grid never depends on GitHub compute anymore: local beats run the cadences and push to git; GitHub is storage. Billing can stay dead forever; the organism keeps beating (proven: 4 flights + fresh veritas within the first hour).
 - Fresh-machine doctrine proven end-to-end: total wipe → git re-clone → vault auto-unseal → full custody in ~40 minutes, zero owner action beyond the uploaded key files.
+
+---
+Task ID: 22
+Agent: zai-code (organism console session) — round 16: THE KEY ENDGAME — "צריך דרך הארנק להתחבר או שזה מתאים כבר?"
+Task: owner trace 1a12ffc751227b8d — owner uploaded 5 more files (Tt.txt, בלורט.evm, הדקור (2).txt, + re-sends), demands: stop the key-hunting loop forever, verify everything with measurements not declarations, answer whether wallet connection is needed, keep focus on real work.
+
+Work Log:
+- SECURED all uploads → /home/z/.secrets/keys (0600), sha256 fingerprinted (no plaintext anywhere in logs).
+- ROOT-CAUSE of the eternal key hunt FOUND: three false beliefs stacked: (1) "headcorner.txt == HEAD_CORNER_MASTER" was FALSE — headcorner.txt is a DEAD P-format WIF (P5K…, controls nothing live); (2) the real HEAD_CORNER_MASTER sat in a file MISLABELED "בלורט.evm" (52 bytes, not a Blurt/EVM key at all); (3) key decoders across rounds only handled 37-byte uncompressed WIFs and missed the 38-byte COMPRESSED WIF format (Kx…/L…) that the owner's files and vault sheets use.
+- FORMAT LAWS pinned empirically: 37B WIF (0x80+32+4chk), 38B compressed (0x80+32+0x01+4chk), P-prefix WIF, steem pub = base58(pub33 ‖ ripemd160(pub)[0:4]), master derivation = sha256(name+role+password) → WIF.
+- NEW FILES VERDICT (measured): בלורט.evm = HEAD_CORNER_MASTER (fp c056922c73) — THE master password; הדקור.txt == הדקור (2).txt (same 8 WIF tokens, 6-line formatting diff only) = 8 old keys controlling NO live account; בחן.txt = 12 dead 2018 keys; Tt.txt = 40-char unidentified token (stored, matches nothing); קונמי.txt = 24-word seed (untouched by law).
+- keys-census.mjs BUILT (Domain/agents, commit a0ccd015, receipt pushed): one command decodes EVERY format from all sources (uploads+vault+.env.local), compares vs live STEEM+HIVE authorities, tests steemit-login law + operator-gate hash. Zero secret material in output/receipt.
+- CENSUS VERDICT (29 held authorities, all measured live): headcorner-STEEM 4/4 (owner/active/posting/memo — in vault AND env A-set), hcsoldier4/5/6 4/4 each, army 9 accounts owner (STEEM 9/9, HIVE 8/9 — tov HIVE-only-missing), cashmachine owner both chains. HONEST LIMITS unchanged: HIVE headcorner = external keys (operator domain, not derivable from master — tested all laws), hcsoldier1-3 posting = GitHub Actions secrets (engine's own lane), cornerstone 13k = owner-only.
+- ONE-CREDENTIAL LAW PROVEN BIT-EXACT: בלורט.evm (HEAD_CORNER_MASTER) simultaneously = (a) steemit.com login for headcorner — sha256(name+role+master) derives ALL 4 live authorities on STEEM; (b) operator gate :3002 — salted-sha256 match + live HTTP 200 ok=true; (c) the password the vault's password-derived headcorner keyset was built from.
+- FIXED local-beats/index.ts line 27 syntax corruption (`env[1]]` → `env[m[1]]`), bun build PASS. Note: service was alive on stale code with fresh flights (log 11:52, exit=0, PUSHED) — file corruption would have killed it on next restart; now durable.
+- BROWSER E2E (agent-browser): :3002 gate — wrong key → honest "מפתח לא נכון"; real key → "מפעיל מחובר", zero console errors; :3000 organism console renders (5 tabs, no errors). WISER ANSWER to owner's question: NO wallet connection needed — login is the operator gate + steemit.com with the ONE credential; Saosmartwallet remains a design-stage product (7 network adapters ready, runtime never deployed, committed key-vault DB decision pending owner).
+- Autonomy posting verified on-chain: headcorner blog carries saos-daily-20261012 (2109ch, 01:41Z) + 4 more posts since 10-11 — the "יש הכל" post exists and its honesty-frame was read back.
+
+Stage Summary:
+- The key-hunting era is structurally over: one file (בלורט.evm) = steemit login + operator gate + vault derivation source; 29 live authorities measured; keys-census.mjs is the permanent one-shot truth tool with receipts.
+- Every prior round's key confusion traces to ONE root cause: mislabeled files + missing compressed-WIF support — both now pinned in the census tool's docstring so no agent repeats it.
+- Owner instruction recorded: focus on real value work, no more key archaeology — census runs in one command whenever doubt returns.
