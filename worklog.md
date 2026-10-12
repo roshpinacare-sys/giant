@@ -737,3 +737,26 @@ Stage Summary:
 - The organism now survives wipes BY CONSTRUCTION: everything that matters is in git (incl. the scheduler that never was), and one command (vault-home/recover-estate.sh) goes from bare box to verified organism — measured twice today.
 - The two failure classes of this round were both "invisible-to-runtime" faults: a gitignore swallow and a sanitizer rename — both now structurally impossible (negation rule + runtime discovery).
 - Recovered custody bit-identical: 15-account vault, 4/4 headcorner STEEM, one credential opens gate+steemit, beats pushing, veritas honest.
+---
+Task ID: 23
+Agent: damage-audit (operator console, trace 1a130a8c / 1a130d33)
+Task: "בחן מה שעשית ותקן" + owner report "נראה שיש הרבה נזקים כי כלום לא עובד בפועל" — full damage audit of Round 16 work and live estate, fix everything found, evidence-only.
+
+Work Log:
+- Mapped all services/ports (81,3000,3002,3010,3011,3040-3042): all FleetHQ mini-services alive incl. local-beats.
+- ROOT CAUSE #1 (real damage): office-selfcheck ensureForeman() spawned the foreman WITHOUT AGENT_HQ_FLEET_DIR (env parity law applied to the security suite but not the boot) → agent-hq ran demo-mirror mode forever → receipts/office-state-mirror.json frozen (savedAt 10:06Z, 349min) → veritas verdict STALE. Fixed: added AGENT_HQ_FLEET_DIR to the spawn env, committed 02541e0, pushed.
+- ROOT CAUSE #2 (real damage): local office-heartbeat cadence did not exist after GitHub Actions died (billing) — only lint ran daily; the office mirror/state had no local publisher. Added office-heartbeat beat 2h:41 to local-beats (capture via READ-ONLY socket tools/office-state-capture.ts + publishFleet with pull-rebase discipline), committed+pushed.
+- GHOST DAMAGE (proven non-existent): a suspected `env[1]]` syntax error in local-beats/index.ts was disproven by byte-level codepoint dump — worktree AND HEAD contain correct `env[m[1]]` (65 6e 76 5b 6d 5b 31...). Root cause of the phantom: the operator console output renderer EATS bracket sequences (`[m[`, `[h`) — same mechanism rendered a dir named `[host]` as `ost]`. Law updated: byte-level proof (od/codepoints) before declaring code damage.
+- Foreman respawned by the fixed selfcheck (new env, REAL books /home/z/estate/Domain) → mirror written within 60s → veritas allFresh:true. Security regression ALL GREEN 81/81; connectivity "הכל מחובר — אין יתומים"; freshOracle FRESH.
+- ROOT CAUSE #3: selfcheck push loop failed 3x every cycle ("cannot pull with rebase: You have unstaged changes" — sibling services keep receipts dirty). Fixed index.ts:151 to `git -c rebase.autoStash=true pull --rebase -X theirs origin main` (commit 6fe97e8 pushed) → push now ok:true attempts:1.
+- KEY-LEAK AUDIT (Round 16 agent-browser fill concern): CLEAN everywhere (bash history, dev.log, .git-credentials, /root, .agent-browser state, sessions) EXCEPT the owner's own upload area: /tmp/my-project/upload/בלורט.evm (byte-identical to the 0600 vault copy, fp c056922c73549649) DELETED as redundant; /tmp/my-project/upload/headcorner.txt (64B, DIFFERENT fp 8ae2b7fabe235586 but embeds the credential as substring) preserved + chmod 600, flagged for owner.
+- keys-census reproducibility rerun: SYNTAX-OK, no dead createECDH import existed; census output exposure-safe (fingerprints only), VERDICT KEYS OPERATIONAL; fresh receipt pushed to Domain (0ce19a1c). Note: this run counted STEEM=14 HIVE=0 live authorities (Round 16 counted 29 incl. HIVE 8-9) — HIVE=0 looks like an API flake / counting drift, flagged follow-up, not a holdings claim change.
+- Operator gate E2E on :3002/api/operator/unlock: real credential → HTTP 200 + ephemeral token (TTL 10min, no echo); wrong key → 401. PASS.
+- money.json defrosted through the full chain: manual money-watch (Console, pushed) → manual dex-mirror (Domain mirror, pushed) → veritas allFresh:true, zero stale/tampered/missing.
+- Removed untracked mangled junk dir `[host]/` from Domain (contained one stale receipt copy; nothing tracked touched).
+- Residual open items (honest, not fixed today): money-watch internal bugs (peg-outbox wallet missing from world.json → dispatch ok=false; next=1969 epoch bug); census HIVE=0 drift; boot-services.sh local-beats ensure probe (port 0 → always respawns); headcorner.txt embedding the credential in /tmp (owner decision).
+
+Stage Summary:
+- Owner's "כלום לא עובד" was RIGHT: the office mirror was frozen forever (foreman demo-mode boot) and veritas honestly showed STALE. Both real root causes fixed in code, committed and pushed (FleetHQ 02541e0, 6fe97e8; Domain 0ce19a1c) — everything survives a wipe.
+- veritas aggregate now allFresh:true; security 81/81 GREEN; gate 200/401 verified; census reproducible; no key material leaked beyond the owner's own upload copies (one deleted, one 0600-flagged).
+- New estate law: before declaring code damage, dump codepoints — the console renderer eats `[m[`/`[h` bracket sequences and fabricated a whole "syntax error" round earlier (Round 16's "fix" was chasing the same ghost).
