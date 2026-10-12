@@ -669,3 +669,29 @@ Stage Summary:
 - The grid now has a measured, self-healing never-stops guarantee: hourly guard + proven measure→ignite→verify loop + veritas fail-loud on top.
 - The HIVE flow map is honest and pre-wired: engine armed on live vault keys; the ONLY missing material is owner-side (STEEM active rotation key + cornerstone 13k keys — slots pre-wired under CR-0076) or any external deposit to headcorner-HIVE, which the new flow-watch converts to armed-grid within the hour automatically.
 - What the chains now carry (twins + this round): escrow payroll canary, on-chain sovereignty attestation, delegation rails, daily honest posts, 4×/day grid engine with a doctor + guard above it.
+
+---
+Task ID: 21
+Agent: zai-code (organism console session)
+Task: "סדר הכל תקן הכל... אני לא יכול להתחבר עם המפתח שלי — שגיאה על המפתח של headcorner... פתור את בעיית החיוב ב-Actions כי לא יהיה שם תשלום לעולם" — keys+login+billing-bypass, everything must work.
+
+Work Log:
+- DISCOVERED: sandbox fully reset — /home/z/estate GONE, all services dead, /home/z/.secrets empty. Sovereign git thesis tested for real: re-cloned ALL 26 repos from GitHub (roshpinacare-sys) via the owner-uploaded PAT (pat.env, auto-redacted in context, stored 0600).
+- SECURED uploads → /home/z/.secrets/keys/ (0700/0600): headcorner.txt (= vault HEAD_CORNER_MASTER, bit-identical), הדקור.txt (old K/L WIFs — valid WIFs but control NO account, pre-rotation, get_key_references=[] on both chains), בחן.txt (2018 archive), קונמי.txt (24-word seed — untouched), pat.env.
+- CRYPTO LAW pinned empirically: steem STM pub = base58(pub33 ‖ ripemd160(pub)[0:4]) — NOT double-sha (validated vs dsteem fromSeed roundtrip).
+- ROOT CAUSE of login failure found: current headcorner authorities = ROT3 keys = sha256("headcorner/"+role+"/"+random rot3Seed) (steem/mini-services/saos-engine/rot3-derive.mjs) — the owner's master password derives NOTHING on chain anymore → steemit.com login "incorrect password". rot3Seed lived only in /tmp (wiped).
+- RECOVERY CHAIN (all evidence-pinned): vault-home auto-unseal.sh → Tier-2 opened via PAT (wraps in private fleet-vault) → estate .env.local restored (full keyring) → recovery-meta-3 pointed at KEYS-ZIP-2026-10-08-ROT4.zip.enc → pass recovered from PRE-MIGRATION git history (R-VAULTPASS-1 law: "material persists in pre-migration git history") → vault.json unsealed → headcorner 4/4 roles bit-exact vs live chain + hcsoldier4/5/6 full + 10 army accounts owner-match.
+- ROTATION EXECUTED (owner directive "וודא שאני יכול להיכנס... לא רוצה לשמוע על זה יותר"): master-rotate.mjs (steem-js generateKeys law sha256(name+role+password), byte-law vs node 185=185, owner-sig self-verified) → broadcast tx f6283d2e9fd37dbd → 4/4 roles VERIFIED-BIT-EXACT on chain. The owner's password IS now the login credential — forever reproducible.
+- WIRED all consumers: vault copy + .env.local A-set + 8 Actions secrets (saos-dex STEEM_ACTIVE/POSTING_WIF, Domain SA_HEAD_ACTIVE/STEEM_ACTIVE/POSTING/HEADCORNER_CRED, saos-runtime CI_ADOPT_ACTIVE/POSTING) via manual sealed-box (tweetnacl+blakejs; libsodium wasm broken in sandbox) — 8/8 UPDATED. CRLF regex bug found+fixed on the way.
+- RE-SEALED vault → KEYS-ZIP-2026-10-12-MASTER.zip.enc (inner sha 89d58fd3…, outer 90bfe1a7…) + recovery-meta.json rotation block → pushed steem repo 2da16cb2 (secret-scanned clean: zero WIF-shaped/pass/master material in code; scans hits were sha256-hex false positives, verified precisely).
+- SERVICES REBORN: :3000 (organism console, was alive), :3002 agent-hq+veritas (bun install needed), :3011 gateway, :3040 selfcheck, :3041 recruit, :3042 boot-verifier — all 200/healthy.
+- OPERATOR GATE restored: /home/z/.operator/config.json was wiped (gate-unconfigured 503 = the console login error) → recreated salted-sha256 with the owner master password as the key (one-credential law). Verified live: correct key → ok+token; wrong → 401 "מפתח לא נכון"; empty → 401.
+- ACTIONS BILLING BYPASS (owner law: never pay): local-beats mini-service (FleetHQ/mini-services/local-beats) — money-watch (2h :33), grid-pulse (03:13/15:13), dex-mirror (hourly :52), office-ci local lane (daily 04:10 + boot catch-up). First flights: money-watch PUSHED, dex-mirror PUSHED (9 files redacted), grid-pulse honest step-aside (engine alive), office-ci local PASS 5/5 (incl. full Next build) → receipts pushed via clean worktree (hot-file conflict discipline).
+- FINAL VERITAS: allFresh=TRUE — 7/7 sources fresh (grid 20min, money 7min, office-ci fresh).
+- BROWSER E2E (agent-browser): :3000 renders (5 tabs, zero-forgery tab live-verify, zero console errors, mobile no-h-scroll, footer natural-push); :3002 operator gate — wrong key honest rejection, master password GATE-PASSED, "מתחבר", memory-only token (by design).
+- HONEST LIMITS: hive:headcorner authorities match NO held key (0/4, operator domain — pre-existing whale verdict, unchanged); org Actions minutes remain exhausted (hosted workflows dead — now irrelevant for the critical beats, local lanes cover them); HIVE-flow lane untouched this round; rot3Seed-era WIFs in old Actions secrets were write-only-unreadable, replaced by name-mapping from estate code (WEAVE_/BLURT_/HIVE_ lanes for other accounts left untouched).
+
+Stage Summary:
+- The owner's master password is now THE sovereign credential: steemit.com login (standard derivation), the organism console gate (:3002), and the vault — one key, owner-held, chain-verified bit-exact.
+- The grid never depends on GitHub compute anymore: local beats run the cadences and push to git; GitHub is storage. Billing can stay dead forever; the organism keeps beating (proven: 4 flights + fresh veritas within the first hour).
+- Fresh-machine doctrine proven end-to-end: total wipe → git re-clone → vault auto-unseal → full custody in ~40 minutes, zero owner action beyond the uploaded key files.
