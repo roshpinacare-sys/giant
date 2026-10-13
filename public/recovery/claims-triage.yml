@@ -1,0 +1,61 @@
+# claims-triage — the autonomy layer: every claim gets a decision, every decision
+# a ledger line. Auto-fix first; quarantine (disable schedule) for persistent
+# failing-on-schedule workflows — the email storm ends here, honesty stays in the
+# books; escalation to the operator is ONE deduped issue per signature.
+name: claims-triage
+
+on:
+  schedule:
+    - cron: "4,34 * * * *"   # every 30 min at odd minutes, AFTER the selfscan lands claims (:21)
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "triage | reenable"
+        default: "triage"
+
+permissions:
+  contents: write
+  actions: write
+  issues: write
+
+concurrency:
+  group: claims-triage
+  cancel-in-progress: false
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout FleetHQ (keyless, same-repo)
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 1
+
+      - name: Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Decide on every open claim (route to autonomy, not to the inbox)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node assets/sovereign/triage.mjs
+
+      - name: Land the decision ledger
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "roshpinacare-sys"
+          git config user.email "326012154+roshpinacare-sys@users.noreply.github.com"
+          git add ops/
+          if git diff --cached --quiet; then echo "no delta"; exit 0; fi
+          git commit -m "claims-triage: decisions ledger $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
+          ok=0
+          for i in 1 2 3 4 5 6 7 8; do
+            if git pull --rebase --autostash -q origin main && git push -q origin main; then ok=1; break; fi
+            sleep $((8 + RANDOM % 10))
+          done
+          [ "$ok" = "1" ] || { echo "named terminal: ledger-deferred — lands on next flight"; exit 0; }
