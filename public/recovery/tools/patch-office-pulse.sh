@@ -26,9 +26,11 @@ p = sys.argv[1]
 s = open(p, encoding='utf-8').read()
 orig = s
 
-# D1: widen the publish retry loop
+# D1: widen the publish retry loop — IDEMPOTENT (measured 22:55Z: a bare
+# "for i in 1 2 3" replace matched inside the already-patched loop and grew it
+# every kit run; the semicolon anchor + normalization stop that forever).
+s = re.sub(r"for i in 1 2 3(?: 4 5 6 7 8)*\s*;", "for i in 1 2 3 4 5 6 7 8;", s)  # normalize, any prior state
 s = s.replace("sleep 3\n", "sleep $((8 + RANDOM % 10))\n")          # jittered backoff
-s = s.replace("for i in 1 2 3", "for i in 1 2 3 4 5 6 7 8")          # 3 -> 8 attempts
 s = s.replace("git pull --rebase -q origin main",
               "git pull --rebase --autostash -q origin main")
 # D1b: PUSH-FAILED defers honestly instead of failing the run (next cron re-lands the book)

@@ -47,7 +47,41 @@ function decide(c) { // the decision ladder — deterministic, evidence-based
 
 mkdirSync(CLAIMS, { recursive: true });
 const files = existsSync(CLAIMS) ? readdirSync(CLAIMS).filter(f => f.startsWith('claim-') && f.endsWith('.json')) : [];
-let acted = 0, quarantined = 0, escalated = 0, healed = 0;
+let acted = 0, quarantined = 0, escalated = 0, healed = 0, closedIssues = 0;
+
+async function findIssue(sig) { // the ONE deduped issue for this signature, if open
+  const q = encodeURIComponent(`repo:${OWNER}/FleetHQ is:issue is:open "sig:${sig}" in:body`);
+  const found = await gh(`/search/issues?q=${q}`);
+  return (found.items && found.items[0]) || null;
+}
+async function openIssue(title, body, labels) {
+  await gh(`/repos/${OWNER}/FleetHQ/issues`, { method: 'POST', body: JSON.stringify({ title, body, labels }) });
+  escalated++;
+}
+
+// ISSUE LIFECYCLE — the anti-storm law's closing bracket: when selfscan resolved
+// a claim with evidence, the operator's issue closes WITH the evidence. An open
+// issue whose problem is gone is noise, and noise is a storm in slow motion.
+for (const f of files) {
+  let c;
+  try { c = JSON.parse(readFileSync(`${CLAIMS}/${f}`, 'utf8')); } catch { continue; }
+  if (c.status === 'resolved' && !c.issueClosed) {
+    try {
+      const iss = await findIssue(c.sig);
+      if (iss) {
+        await gh(`/repos/${OWNER}/FleetHQ/issues/${iss.number}/comments`, { method: 'POST', body: JSON.stringify({ body: `RESOLVED with evidence: ${JSON.stringify(c.resolveEvidence || {})}. Closing — the red lives on in the ledger history, not in an open issue.` }) });
+        await gh(`/repos/${OWNER}/FleetHQ/issues/${iss.number}`, { method: 'PATCH', body: JSON.stringify({ state: 'closed', state_reason: 'completed' }) });
+        closedIssues++;
+      }
+      c.issueClosed = stamp;
+      writeFileSync(`${CLAIMS}/${f}`, JSON.stringify(c, null, 2));
+      appendFileSync(DECISIONS, JSON.stringify({ at: stamp, actor: 'claims-triage', sig: c.sig, claim: `${c.repo}/${c.workflow}`, action: 'close-issue', issue: iss?.number ?? 'none-found', evidence: c.resolveEvidence ?? null }) + '\n');
+      acted++;
+    } catch (e) {
+      appendFileSync(DECISIONS, JSON.stringify({ at: stamp, actor: 'claims-triage', sig: c.sig, action: 'error', error: String(e.message).slice(0, 120) }) + '\n');
+    }
+  }
+}
 
 for (const f of files) {
   let c;
@@ -73,42 +107,44 @@ for (const f of files) {
     if (d.action === 'quarantine') {
       await gh(`/repos/${OWNER}/${c.repo}/actions/workflows/${c.workflowId}/disable`, { method: 'PUT' });
       c.status = 'quarantined'; c.quarantinedAt = stamp; c.quarantineReason = d.reason; quarantined++;
-      // the ONE escalation for this signature: a deduped issue (search before open)
-      const q = encodeURIComponent(`repo:${OWNER}/FleetHQ is:issue is:open "sig:${c.sig}" in:body`);
-      const found = await gh(`/search/issues?q=${q}`);
-      if ((found.total_count ?? 0) === 0) {
-        await gh(`/repos/${OWNER}/FleetHQ/issues`, {
-          method: 'POST',
-          body: JSON.stringify({
-            title: `[QUARANTINE] ${c.repo}/${c.workflow} disabled-schedule — needs fix + re-enable`,
-            body: [`signature: \`sig:${c.sig}\``, `reason: ${d.reason}`, `evidence: ${c.evidence?.runUrl}`, '',
-              'To re-enable after the fix: Actions tab → the workflow → Enable, or dispatch `claims-triage` with REENABLE claim.',
-              'The ledger (ops/decisions.jsonl) and network/STATE.md keep the RED visible — nothing is hidden.'].join('\n'),
-            labels: ['operator-needed', 'quarantined'],
-          }),
-        });
-        escalated++;
+      const iss = await findIssue(c.sig);
+      if (!iss) {
+        await openIssue(`[QUARANTINE] ${c.repo}/${c.workflow} disabled-schedule — needs fix + re-enable`, [
+          `signature: \`sig:${c.sig}\``, `reason: ${d.reason}`, `evidence: ${c.evidence?.runUrl}`, '',
+          'To re-enable after the fix: Actions tab → the workflow → Enable, or dispatch `claims-triage` with REENABLE claim.',
+          'The ledger (ops/decisions.jsonl) and network/STATE.md keep the RED visible — nothing is hidden.'].join('\n'),
+          ['operator-needed', 'quarantined']);
       }
     }
     if (d.action === 'escalate') {
-      c.status = 'needs-operator'; c.escalatedAt = stamp; escalated++;
-      const q = encodeURIComponent(`repo:${OWNER}/FleetHQ is:issue is:open "sig:${c.sig}" in:body`);
-      const found = await gh(`/search/issues?q=${q}`);
-      if ((found.total_count ?? 0) === 0) {
-        await gh(`/repos/${OWNER}/FleetHQ/issues`, {
-          method: 'POST',
-          body: JSON.stringify({ title: `[NEEDS-OPERATOR] ${c.repo}/${c.workflow} — ${d.reason}`, body: `signature: \`sig:${c.sig}\`\nevidence: ${c.evidence?.runUrl}`, labels: ['operator-needed'] }),
-        });
-      }
+      c.status = 'needs-operator'; c.escalatedAt = stamp;
+      const iss = await findIssue(c.sig);
+      if (!iss) await openIssue(`[NEEDS-OPERATOR] ${c.repo}/${c.workflow} — ${d.reason}`, `signature: \`sig:${c.sig}\`\nevidence: ${c.evidence?.runUrl}`, ['operator-needed']);
     }
     c.lastAction = { action: d.action, reason: d.reason, at: stamp, runUrl: RUN_URL };
     writeFileSync(`${CLAIMS}/${f}`, JSON.stringify(c, null, 2));
     appendFileSync(DECISIONS, JSON.stringify({ at: stamp, actor: 'claims-triage', sig: c.sig, claim: `${c.repo}/${c.workflow}`, action: d.action, reason: d.reason, evidence: RUN_URL }) + '\n');
     acted++;
   } catch (e) {
-    appendFileSync(DECISIONS, JSON.stringify({ at: stamp, actor: 'claims-triage', sig: c.sig, action: 'error', error: String(e.message).slice(0, 120) }) + '\n');
+    const msg = String(e.message || e);
+    if (msg.includes('-> 422')) {
+      // named terminal: this workflow cannot be dispatched (no workflow_dispatch
+      // trigger / disabled). Self-heal by redispatch is IMPOSSIBLE here — an
+      // infinite retry loop would be noise. Escalate once, deduped.
+      c.status = 'needs-operator'; c.escalatedAt = stamp; escalated++;
+      try {
+        const iss = await findIssue(c.sig);
+        if (!iss) await openIssue(`[NEEDS-OPERATOR] ${c.repo}/${c.workflow} — not dispatchable (422): self-heal impossible`, `signature: \`sig:${c.sig}\`\nreason: workflow has no workflow_dispatch trigger or is disabled — needs a code fix or schedule-based recovery\nevidence: ${c.evidence?.runUrl}`, ['operator-needed']);
+      } catch { /* issue path failing — the ledger line below stays loud */ }
+      c.lastAction = { action: 'escalate', reason: 'not dispatchable (422)', at: stamp, runUrl: RUN_URL };
+      writeFileSync(`${CLAIMS}/${f}`, JSON.stringify(c, null, 2));
+      appendFileSync(DECISIONS, JSON.stringify({ at: stamp, actor: 'claims-triage', sig: c.sig, claim: `${c.repo}/${c.workflow}`, action: 'escalate', reason: 'not dispatchable (422) — self-heal impossible' }) + '\n');
+      acted++;
+    } else {
+      appendFileSync(DECISIONS, JSON.stringify({ at: stamp, actor: 'claims-triage', sig: c.sig, action: 'error', error: msg.slice(0, 120) }) + '\n');
+    }
   }
 }
 
-console.log(`triage done: claims=${files.length} acted=${acted} healed=${healed} quarantined=${quarantined} escalated=${escalated}`);
+console.log(`triage done: claims=${files.length} acted=${acted} healed=${healed} quarantined=${quarantined} escalated=${escalated} issuesClosed=${closedIssues}`);
 process.exit(0); // the triage duty is done — loud in the ledger, quiet in the inbox
