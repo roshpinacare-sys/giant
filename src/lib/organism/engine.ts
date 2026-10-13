@@ -241,7 +241,8 @@ function execGit(args: string[], cwd: string, timeoutMs = 6000): Promise<string>
 export async function scanEstate(): Promise<{ clones: RepoScan[]; refsSource: string }> {
   let dirs: string[] = [];
   try {
-    dirs = (await fs.readdir(ESTATE_DIR)).filter(Boolean).sort();
+    const entries = await fs.readdir(ESTATE_DIR, { withFileTypes: true });
+    dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name).filter(Boolean).sort();
   } catch {
     return { clones: [], refsSource: "estate-dir-missing" };
   }
