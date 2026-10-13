@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # RUN-KIT.sh — one-shot immune-system installation for the sovereign network.
-# Run this from ANY machine that has: git + gh (or a PAT) + write access to the
-# org repos. Idempotent; parallel-agent-safe (rebase-before-push, agent-scoped
-# paths, defers on race-loss instead of failing).
+# Run this from ANY machine that has: git + curl + a PAT with contents/actions/
+# issues write on the org repos. Idempotent; parallel-agent-safe (rebase-before-
+# push, agent-scoped paths, defers on race-loss instead of failing).
 #
 # Usage:
-#   ESTATE_ROOT=/path/to/clones bash RUN-KIT.sh
+#   GITHUB_PAT=github_pat_xxx ESTATE_ROOT=/path/to/clones bash RUN-KIT.sh
 #   (ESTATE_ROOT defaults to ./estate; creates missing shallow clones itself)
 set -euo pipefail
 KIT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -14,18 +14,36 @@ OWNER="roshpinacare-sys"
 REPOS=(FleetHQ Domain)   # FleetHQ: new files; Domain: office-pulse surgery
 STAMP="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 TRACE="1a1374da43d52c39"
+PAT="${GITHUB_PAT:-}"
+[ -n "$PAT" ] || { echo "ERR: GITHUB_PAT env required (contents+actions+issues write on the org)"; exit 3; }
+
+auth_url() { echo "https://roshpinacare-sys:${PAT}@github.com/$OWNER/$1.git"; }
+
+api() { # method path [json-body]
+  local m="$1" p="$2" b="${3:-}"
+  if [ -n "$b" ]; then curl -s -m 20 -X "$m" -o /tmp/kit-api.out -w '%{http_code}' \
+    -H "Authorization: Bearer $PAT" -H "Accept: application/vnd.github+json" \
+    -H "User-Agent: immune-kit" -d "$b" "https://api.github.com$p";
+  else curl -s -m 20 -X "$m" -o /tmp/kit-api.out -w '%{http_code}' \
+    -H "Authorization: Bearer $PAT" -H "Accept: application/vnd.github+json" \
+    -H "User-Agent: immune-kit" "https://api.github.com$p"; fi
+}
 
 echo "== immune-system kit @ $STAMP (trace $TRACE) =="
 mkdir -p "$ESTATE_ROOT"
 
-sync_repo() { # name -> shallow clone or fast-forward
+sync_repo() { # name -> shallow clone or fast-forward (authenticated remote for push)
   local r="$1" d="$ESTATE_ROOT/$r"
   if [ ! -d "$d/.git" ]; then
-    if git clone --depth 3 "https://github.com/$OWNER/$r.git" "$d" 2>/dev/null; then echo "  $r: cloned"
+    if git clone --depth 3 "$(auth_url "$r")" "$d" 2>/dev/null; then echo "  $r: cloned (authed)"
     else echo "  $r: CLONE FAILED (auth/network) — aborting kit"; exit 3; fi
   else
+    git -C "$d" remote set-url origin "$(auth_url "$r")" 2>/dev/null || true
     git -C "$d" pull --rebase --autostash -q origin main 2>/dev/null || { echo "  $r: pull race — retrying once"; sleep 10; git -C "$d" pull --rebase --autostash -q origin main; }
   fi
+  # estate writer identity (identity-guard law: compliant writer identity)
+  git -C "$d" config user.name "roshpinacare-sys"
+  git -C "$d" config user.email "326012154+roshpinacare-sys@users.noreply.github.com"
 }
 
 push_repo() { # name msg -> push with race-tolerant retries
@@ -64,10 +82,9 @@ chmod +x "$DM/tools/patch-office-pulse.sh"
 push_repo Domain "office-pulse surgery: race-proof publish (8x jittered retries, defer-not-fail) + release writers lock (dispatch-now relay) — fixes stale book + blockage-email storm [trace $TRACE]"
 
 echo "== verification =="
-if command -v gh >/dev/null 2>&1; then
-  ( cd "$FH" && gh workflow run sovereign-selfscan.yml --ref main && echo "  selfscan dispatch: OK" ) || echo "  selfscan dispatch failed — run it manually from the Actions tab"
-  echo "  watch: $(gh run list -R $OWNER/FleetHQ --workflow sovereign-selfscan.yml --limit 1 2>/dev/null || echo 'Actions tab')"
-else
-  echo "  gh not found — trigger 'sovereign-selfscan' manually from the FleetHQ Actions tab (Run workflow)."
-fi
+c1=$(api POST "/repos/$OWNER/FleetHQ/actions/workflows/sovereign-selfscan.yml/dispatches" '{"ref":"main"}')
+[ "$c1" = "204" ] && echo "  selfscan dispatch: HTTP 204 OK" || { echo "  selfscan dispatch: HTTP $c1 (check workflow file landed on main)"; }
+c2=$(api POST "/repos/$OWNER/Domain/actions/workflows/office-pulse.yml/dispatches" '{"ref":"main"}')
+[ "$c2" = "204" ] && echo "  office-pulse dispatch: HTTP 204 OK (book re-lands within ~3min)" || { echo "  office-pulse dispatch: HTTP $c2"; }
+echo "  watch: https://github.com/$OWNER/FleetHQ/actions/workflows/sovereign-selfscan.yml"
 echo "== done. The network now: scans itself hourly, claims every red, decides autonomously, escalates ONE issue per new signature. =="

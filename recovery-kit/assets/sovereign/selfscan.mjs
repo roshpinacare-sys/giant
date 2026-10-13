@@ -57,7 +57,7 @@ for (const f of existsSync(CLAIMS) ? readdirSync(CLAIMS) : []) {
   try { const c = JSON.parse(readFileSync(`${CLAIMS}/${f}`, 'utf8')); claimsSeen.set(c.sig, c); } catch { /* torn file — skip, rescan rewrites */ }
 }
 
-const state = { generatedAt: stamp, runUrl: RUN_URL, repos: {}, newClaims: [], counts: { green: 0, red: 0, disabled: 0, stale: 0 } };
+const state = { generatedAt: stamp, runUrl: RUN_URL, repos: {}, workflows: {}, newClaims: [], newCapabilities: [], counts: { green: 0, red: 0, disabled: 0, stale: 0 } };
 const lines = [];
 lines.push('# Network STATE — the sovereign self-scan');
 lines.push('');
@@ -145,6 +145,20 @@ for (const repo of REPOS) {
 
       const mark = wstate === 'disabled_manually' ? '⏸' : failing ? '❌' : isStale ? '⏳' : '✅';
       wfRows.push(`| ${mark} ${name} | ${r.conclusion || '—'} | ${ageMin}m | ${wstate} |`);
+
+      // NEW-CAPABILITY awareness: a workflow the owner added since the last scan
+      // is an event the network must NOTICE (the owner's mandate: "the network is
+      // not aware of the new things I build at all") — recorded, never alarmed.
+      const wfKey = `${repo}|${name}`;
+      state.workflows[wfKey] = { state: wstate, lastConcl: r.conclusion || '—', lastRun: r.created_at };
+      if (prev.workflows && Object.keys(prev.workflows).length > 0 && !(wfKey in prev.workflows)) {
+        const nsig = sig8(`new-capability|${repo}|${name}`);
+        if (!claimsSeen.has(nsig)) {
+          const nc = { sig: nsig, kind: 'new-capability', repo, workflow: name, firstSeenAt: stamp, status: 'noted', evidence: { runUrl: r.html_url, conclusion: r.conclusion } };
+          writeFileSync(`${CLAIMS}/claim-${nsig}.json`, JSON.stringify(nc, null, 2));
+          state.newCapabilities.push(nc);
+        }
+      }
     }
 
     lines.push(`| [${repo}](https://github.com/${OWNER}/${repo}) | \`${pushedAt}\` | ${pushAgeMin}m${pushAgeMin > budget ? ' ⚠️STALE' : ''} | ${latest.size} | ${g} | ${red} | ${dis} |`);
@@ -166,6 +180,11 @@ lines.push('');
 lines.push(`Scan window: last ~200 runs per repo (high-frequency writers fill it fast; low-frequency jobs are protected by cadence-aware rules — 48h staleness + runsInWindow evidence).`);
 
 writeFileSync(`${NETDIR}/STATE.md`, lines.join('\n'));
+if (state.newCapabilities.length) {
+  const ncLines = ['', '## NEW capabilities noticed this scan (the owner built — the network noticed)', ''];
+  for (const nc of state.newCapabilities) ncLines.push(`- ${nc.repo}/${nc.workflow} — first seen ${nc.firstSeenAt}`);
+  writeFileSync(`${NETDIR}/STATE.md`, lines.join('\n') + ncLines.join('\n') + '\n');
+}
 writeFileSync(`${NETDIR}/STATE.json`, JSON.stringify({ ...state, newClaims: state.newClaims }, null, 2));
 
 // one issue per NEW signature batch, deduped by signature tag in the body
