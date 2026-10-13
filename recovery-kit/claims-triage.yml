@@ -41,6 +41,7 @@ jobs:
       - name: Decide on every open claim (route to autonomy, not to the inbox)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SOVEREIGN_PAT: ${{ secrets.SOVEREIGN_PAT }} # sealed org PAT — cross-repo dispatch/disable powers
         run: node assets/sovereign/triage.mjs
 
       - name: Land the decision ledger

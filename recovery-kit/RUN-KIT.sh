@@ -33,7 +33,8 @@ echo "== immune-system kit @ $STAMP (trace $TRACE) =="
 mkdir -p "$ESTATE_ROOT"
 
 sync_repo() { # name -> shallow clone or fast-forward (authenticated remote for push)
-  local r="$1" d="$ESTATE_ROOT/$r"
+  local r="$1"
+  local d="$ESTATE_ROOT/$r"
   if [ ! -d "$d/.git" ]; then
     if git clone --depth 3 "$(auth_url "$r")" "$d" 2>/dev/null; then echo "  $r: cloned (authed)"
     else echo "  $r: CLONE FAILED (auth/network) — aborting kit"; exit 3; fi
@@ -47,7 +48,8 @@ sync_repo() { # name -> shallow clone or fast-forward (authenticated remote for 
 }
 
 push_repo() { # name msg -> push with race-tolerant retries
-  local r="$1" msg="$2" d="$ESTATE_ROOT/$r"
+  local r="$1" msg="$2"
+  local d="$ESTATE_ROOT/$r"
   git -C "$d" add -A
   if git -C "$d" diff --cached --quiet; then echo "  $r: nothing to commit (already installed)"; return 0; fi
   git -C "$d" commit -q -m "$msg [trace $TRACE]"

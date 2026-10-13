@@ -9,7 +9,8 @@ const OWNER = 'roshpinacare-sys';
 const HOME = process.cwd();
 const CLAIMS = `${HOME}/ops/claims`;
 const DECISIONS = `${HOME}/ops/decisions.jsonl`;
-const TOKEN = process.env.GITHUB_TOKEN;
+const TOKEN = process.env.SOVEREIGN_PAT || process.env.GITHUB_TOKEN; // cross-repo powers ride the sealed org PAT when present
+const CROSS_OK = !!process.env.SOVEREIGN_PAT;
 const API = 'https://api.github.com';
 const RUN_URL = process.env.GITHUB_SERVER_URL && process.env.GITHUB_REPOSITORY
   ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}` : 'local';
@@ -55,6 +56,16 @@ for (const f of files) {
   const d = decide(c);
 
   try {
+    const ownRepo = c.repo === 'FleetHQ';
+    if (!ownRepo && !CROSS_OK) {
+      // named terminal — honest, not an error storm: the cross-repo powers need the
+      // sealed SOVEREIGN_PAT secret on FleetHQ. The claim stays open and re-decides
+      // every triage flight once the secret lands.
+      appendFileSync(DECISIONS, JSON.stringify({ at: stamp, actor: 'claims-triage', sig: c.sig, claim: `${c.repo}/${c.workflow}`, action: 'awaiting-credential', reason: 'cross-repo autonomy needs SOVEREIGN_PAT secret on FleetHQ (sealed by owner PAT)' }) + '\n');
+      c.lastAction = { action: 'awaiting-credential', at: stamp, runUrl: RUN_URL };
+      writeFileSync(`${CLAIMS}/${f}`, JSON.stringify(c, null, 2));
+      continue;
+    }
     if (d.action === 'redispatch') {
       await gh(`/repos/${OWNER}/${c.repo}/actions/workflows/${c.workflowId}/dispatches`, { method: 'POST', body: JSON.stringify({ ref: 'main' }) });
       c.attempts = (c.attempts ?? 0) + 1; healed++;
