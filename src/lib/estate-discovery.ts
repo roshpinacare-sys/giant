@@ -71,6 +71,7 @@ export interface GitMeta {
   commitCount: number;
   authors: GitAuthorCount[];
   authorCount: number;
+  dirtyCount: number;
   error: string | null;
 }
 
@@ -99,6 +100,7 @@ export async function gitMeta(dir: string): Promise<GitMeta> {
     commitCount: 0,
     authors: [],
     authorCount: 0,
+    dirtyCount: 0,
     error: null,
   };
   try {
@@ -108,6 +110,10 @@ export async function gitMeta(dir: string): Promise<GitMeta> {
     ]);
     meta.remote = remote.trim() ? redactRemote(remote.trim()) : null;
     meta.branch = branch.trim() || null;
+
+    // שסתום-אמת: כמה-קבצים-מוטים-בעץ-העבודה (ראיית-ריצה-כנה-למסך)
+    const dirty = await git(dir, ["status", "--porcelain"]).catch(() => "");
+    meta.dirtyCount = dirty.split("\n").filter((l) => l.trim()).length;
 
     const [head, count, authorsRaw] = await Promise.all([
       git(dir, ["log", "-1", "--format=%H|%h|%cI|%s"]).catch(() => ""),

@@ -26,7 +26,8 @@ import {
   Terminal,
   Users,
 } from "lucide-react";
-import { FileText, GitMerge, Network, Orbit, TrendingUp } from "lucide-react";
+import { Crown, FileText, GitMerge, Network, Orbit, TrendingUp } from "lucide-react";
+import { FinalView } from "@/components/giant/final";
 import { DexView } from "@/components/giant/dex/dex-view";
 import { EstateView } from "@/components/giant/estate";
 import { OpsView } from "@/components/giant/ops";
@@ -267,6 +268,7 @@ function RelayProcessedChip({ processed }: { processed: boolean }) {
 }
 
 const NAV_ITEMS = [
+  { id: "final", label: "ההגשה-הסופית", icon: Crown },
   { id: "merge", label: "המיזוג-הגדול", icon: GitMerge },
   { id: "ops", label: "מרכז-ההפעלה", icon: Orbit },
   { id: "skills", label: "מרכז-היכולות", icon: Sparkles },
@@ -303,7 +305,7 @@ export default function Home() {
   const [landText, setLandText] = useState("");
   const [landing, setLanding] = useState(false);
   const [tab, setTab] = useState("inbox");
-  const [view, setView] = useState("merge");
+  const [view, setView] = useState("final");
   const [navOpen, setNavOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
@@ -398,6 +400,8 @@ export default function Home() {
 
   function renderView() {
     switch (view) {
+      case "final":
+        return <FinalView />;
       case "merge":
         return <MergeView onNavigate={setView} />;
       case "ops":

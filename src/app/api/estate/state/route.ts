@@ -138,7 +138,14 @@ const SEMANTIC: Record<string, { role: string; status: EstateRepo["status"]; wha
   },
 };
 
+// מטמון-זיכרון-קל (45ש) — מדידת-גיט-על-13-ריפו-ים יקרה; רענון-מדוד-בכל-ביקור-מחדש
+let estateCache: { at: number; data: unknown } | null = null;
+const ESTATE_TTL = 45_000;
+
 export async function GET() {
+  if (estateCache && Date.now() - estateCache.at < ESTATE_TTL) {
+    return NextResponse.json(estateCache.data, { headers: { "cache-control": "no-store" } });
+  }
   try {
     await ensureEngine();
 
@@ -239,7 +246,7 @@ export async function GET() {
       ? `${systemRepo.git.headShort} ${systemRepo.git.headSubject ?? ""}`.trim().slice(0, 120)
       : null;
 
-    return NextResponse.json({
+    const payload = {
       ok: true,
       measuredAt: new Date().toISOString(),
       head,
@@ -261,7 +268,9 @@ export async function GET() {
       },
       truth:
         "גילוי-דינמי-של-כל-תיקיות-הגיט + מדידת-דיסק-ולדג'ר-חיה · אין-מחרוזות-סטטיות-מתחזות-לנתונים",
-    });
+    };
+    estateCache = { at: Date.now(), data: payload };
+    return NextResponse.json(payload);
   } catch (err) {
     console.error("[api/estate/state]", err);
     return NextResponse.json({ ok: false, error: "נכשלה-מדידת-האחוזה" }, { status: 500 });

@@ -28,7 +28,14 @@ interface RosterEntry {
   };
 }
 
+// מטמון-זיכרון-קל (45ש) — git-log-על-13-ריפו-ים יקר; הזהויות-לא-משתנות-בכל-שנייה
+let rosterCache: { at: number; data: unknown } | null = null;
+const ROSTER_TTL = 45_000;
+
 export async function GET() {
+  if (rosterCache && Date.now() - rosterCache.at < ROSTER_TTL) {
+    return NextResponse.json(rosterCache.data, { headers: { "cache-control": "no-store" } });
+  }
   try {
     // --- 1 · מפקד-git: כל-המחברים-בכל-תיקיות-הגיט ---
     const repos = await discoverGitRepos();
@@ -103,7 +110,7 @@ export async function GET() {
 
     const total = agg.size;
 
-    return NextResponse.json({
+    const payload = {
       ok: true,
       measuredAt: new Date().toISOString(),
       reposScanned: repos.length,
@@ -135,7 +142,9 @@ export async function GET() {
       })),
       proof:
         "כל-זהות-נמדדה-מgit-log-אמת-על-פני-כל-תיקיות-הגיט · הסיווג-למשפחות-מוצהר-בקוד · אין-רשימה-מקודדת",
-    });
+    };
+    rosterCache = { at: Date.now(), data: payload };
+    return NextResponse.json(payload);
   } catch (err) {
     console.error("[api/fleet/roster]", err);
     return NextResponse.json({ ok: false, error: "נכשל-מפקד-הסוכנים" }, { status: 500 });
