@@ -1362,3 +1362,20 @@ Stage Summary:
 - Org red count: every active red eliminated or already healed-and-verified; the only remaining red marks on the Actions UI are immutable historical entries (ops-forge Oct 12), with their recovery runs green on record.
 - Fleet-wide Node20 deprecation debt retired in one verified pass: 12 repos, ~185 workflow files, 354 action-ref bumps, zero behavior change (majors chosen per release notes, not per latest-version reflex), zero post-bump failures, deprecation warnings confirmed gone from live run logs.
 - The 840s chain-sleep design in Autonomy sovereign-state was inspected and intentionally left alone: it is the state-slot chain semantics, not waste; touching sovereignty mechanics for minutes-savings is not a trade this estate should make.
+---
+Task ID: 37
+Agent: Continuation agent (IM trace 1a1390aef3ac8259 "תמשיך")
+Task: Continue fleet maintenance — sweep for the red that re-emerged, heal it, keep optimizing.
+
+Work Log:
+- ORG SWEEP @ 06:13Z: 1 new active red — FleetHQ/office-3d ×4 consecutive failures (04:06, 04:38, 05:07, 05:51Z). All other 12 repos green (ops-forge ×2 = known historical Oct-12 entries).
+- OFFICE-3D BORN-RED DIAGNOSED (architecture traced end-to-end): the deploy-room job (added by an artery lane at 0f5dc14 ~04:06Z) does `cp -r dist-office3d` after a FRESH main checkout — but dist-office3d is the VITE OUTDIR of tools/office3d-static (base './', outDir ../../dist-office3d per its vite.config.ts), a build artifact that is NEVER committed, and the job had NO build step → `cp: cannot stat 'dist-office3d'` ×4. The job automated the manual deploys (R53: measured 5h+ staleness windows) but omitted the step every manual deploy began with: `bun run office3d:build`. Also traced: FleetHQ public/office3d/index.html is a 2s meta-refresh STUB → the real interactive room lives at Domain/office3d (React bundle, hashed assets); bake-and-publish's frames go to the office-pages branch (window surface) — three distinct surfaces, now correctly understood.
+- FIX (2f7c003): deploy-room now builds before deploying — Setup Bun + bun install --frozen-lockfile + bunx prisma generate + bun run office3d:build, then the existing guarded deploy. LOCAL PROOF BEFORE PUSH: build measured 612 modules / 5.28s, and the output bundle hash `assets/index-BxXlC6LN.js` is IDENTICAL to the live Domain/office3d bundle → proves both the build recipe and that the first CI deploy must be an honest NO-CHANGE.
+- END-TO-END VALIDATION: the fix push itself triggered office-3d (the workflow file is in its own paths filter). Run 38521659279 @ 06:20:43Z: bake-and-publish SUCCESS → deploy-room ALL 6 steps SUCCESS → measured verdict at 06:23:27Z: `NO-CHANGE: room bundle identical to live` — born-red → honest green, zero drift forced onto Domain.
+- STEEM QUEUED ZOMBIES ROOT-CAUSED: 3 presence-matrix dispatches queued 3h+ → repo-level Actions `enabled: false` (operator policy: 7 workflows disabled_manually). They can never execute and cannot even be canceled while disabled (cancel API → HTTP 409, GitHub refuses state transitions on a disabled repo). Left as-is by law — re-enabling is an operator decision; documented so a future re-enable starts clean (or cancels then).
+- FINAL SWEEP: 0 active failures across the org. Only ops-forge's 2 immutable historical entries remain on the UI.
+
+Stage Summary:
+- The 4×-red office-3d deploy-room healed with a measured chain: local build proof (identical hash) → CI green → honest NO-CHANGE verdict. The room auto-deploy loop (R53) now actually works for the first time since it was written.
+- steem's stuck queue explained and quarantined by root cause (disabled Actions), not force-cancelled — the estate's own manual policy respected.
+- Net org state at 06:30Z: every workflow that CAN run is green; every non-green entry is either immutable history (ops-forge) or policy-frozen (steem).
