@@ -52,17 +52,20 @@ export function verifyToken(token: string): boolean {
 }
 
 export async function checkKey(key: string): Promise<boolean> {
+  /* תיקון-בעלים (T55, 401-נמדד): קובץ-המפתח של הבעלים נושא שתי-צורות (מילה+טוקן)
+     — השער משווה מול כל-הדיגסטים-הרשומים; אפס-מפתח-בקונפיג, דיגסטים-בלבד. */
   let salt = "";
-  let expected = "";
+  let expected: string[] = [];
   try {
-    const cfg = JSON.parse(await readFile(CONFIG, "utf8")) as { salt?: string; hash?: string };
+    const cfg = JSON.parse(await readFile(CONFIG, "utf8")) as { salt?: string; hash?: string; hashes?: string[] };
     salt = cfg.salt ?? "";
-    expected = cfg.hash ?? "";
+    expected = [...(cfg.hashes ?? []), ...(cfg.hash ? [cfg.hash] : [])];
   } catch {
     return false; // gate-unconfigured — fail-closed
   }
+  if (expected.length === 0) return false;
   const candidate = createHash("sha256").update(salt + key).digest("hex");
-  return candidate.length === expected.length && candidate === expected;
+  return expected.some((h) => h.length === candidate.length && h === candidate);
 }
 
 /** express helper for owner-write routes: returns null if token ok else an error string */

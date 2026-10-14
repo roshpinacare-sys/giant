@@ -3,20 +3,29 @@
 import { useEffect, useState } from "react";
 import { ChannelView } from "@/components/giant/ChannelView";
 import { DexView } from "@/components/giant/DexView";
+import { WalletView } from "@/components/giant/WalletView";
+import { DeskView } from "@/components/giant/DeskView";
+import { LedgerView } from "@/components/giant/LedgerView";
+import { ProductsView } from "@/components/giant/ProductsView";
 import { PulseView } from "@/components/giant/PulseView";
 import { OfficeView } from "@/components/giant/OfficeView";
 import { ShieldCheck } from "lucide-react";
 
-/* ═══ GIANT — מערכת-האמת של הריבונות (R360 · trace 1a13bcec79d9da45) ═══════
- * דלת-קדמית-אחת: ערוץ-אחד · דקס-מרכז-כובד · דופק-אמת · משרד-יחיד.
- * הכל נמדד-חי מהגיט (Domain · Pulse · FleetHQ); שער-headcorner פותח-הכל;
- * אפס-כפילויות (צו-הצמצום 2026-10-15); המערכת לעולם אינה גמורה. */
+/* ═══ GIANT — מערכת-האמת של הריבונות (R360 · מיזוג-צי T55) ═══════════════
+ * מיזוג-הליינים: שטח-מסחר+נרות+ארנק+שולחן+רישום+מוצרים (התאומים) ∪
+ * ליגת-ענקים+דופק-אמת+משרד-חי+שער-headcorner (הליין-החי).
+ * משטח-אחד-לכל-יכולת · ערוץ-אחד · אפס-כפילויות · הכל נמדד-חי מהגיט. */
 
-type ViewId = "channel" | "dex" | "pulse" | "office";
+type ViewId = "dex" | "channel" | "wallet" | "desk" | "ledger" | "products" | "pulse" | "office";
 
+/* סדר-הפתיחה (T55): הדקס ראשון — הכסף הוא הפנים-של-המערכת; הערוץ הדלת-הראשית אחריו. */
 const NAV: Array<{ id: ViewId; label: string; he: string }> = [
+  { id: "dex", label: "הדקס", he: "מרכז-הכובד: נרות · ליגת-ענקים · ווליום" },
   { id: "channel", label: "הערוץ", he: "הדלת-הראשית: בעלים ↔ ריבונות" },
-  { id: "dex", label: "הדקס", he: "מרכז-הכובד: מטבע · נזילות · ווליום" },
+  { id: "wallet", label: "הארנק", he: "חשבונות-אמת מהמנוע" },
+  { id: "desk", label: "השולחן", he: "מנדט · equity · אסטרטגיות" },
+  { id: "ledger", label: "הרישום", he: "כל-ההחלטות · חיפוש" },
+  { id: "products", label: "המוצרים", he: "קטלוג-אמת · סטטוסים-כנים" },
   { id: "pulse", label: "הדופק", he: "מערכת-האמת: שערים · זרמים · טביעות" },
   { id: "office", label: "המשרד-החי", he: "המשרד-היחיד של הריבונות" },
 ];
@@ -27,7 +36,7 @@ interface TruthChip {
 }
 
 export default function Home() {
-  const [view, setView] = useState<ViewId>("channel");
+  const [view, setView] = useState<ViewId>("dex");
   const [clock, setClock] = useState("");
   const [truth, setTruth] = useState<TruthChip | null>(null);
 
@@ -125,8 +134,12 @@ export default function Home() {
             <p className="text-xs font-bold text-zinc-300">{active?.label}</p>
             <p className="text-[10px] text-zinc-500">{active?.he}</p>
           </div>
-          {view === "channel" && <ChannelView />}
           {view === "dex" && <DexView />}
+          {view === "channel" && <ChannelView />}
+          {view === "wallet" && <WalletView />}
+          {view === "desk" && <DeskView />}
+          {view === "ledger" && <LedgerView />}
+          {view === "products" && <ProductsView />}
           {view === "pulse" && <PulseView />}
           {view === "office" && <OfficeView />}
         </main>
@@ -138,7 +151,7 @@ export default function Home() {
         className="fixed inset-x-0 bottom-0 z-40 flex border-t border-white/10 bg-zinc-950/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
         dir="rtl"
       >
-        {NAV.map((n) => (
+        {NAV.slice(0, 5).map((n) => (
           <button
             key={n.id}
             onClick={() => setView(n.id)}
@@ -148,6 +161,13 @@ export default function Home() {
             {n.label}
           </button>
         ))}
+        <button
+          onClick={() => setView(view === "office" ? "dex" : "office")}
+          aria-label="עוד-מודולים"
+          className={`min-h-[44px] flex-1 py-2 text-center text-xs font-bold transition ${view === "office" ? "text-amber-500" : "text-zinc-500"}`}
+        >
+          {view === "office" ? "◀ הדקס" : "עוד ▶"}
+        </button>
       </nav>
 
       {/* ═══ תחתית-המערכת (דביקה) ═══ */}

@@ -319,7 +319,8 @@ export function ChannelView() {
             <KeyRound className="h-4 w-4 text-amber-500" aria-hidden /> שער-המנהל (headcorner)
           </h3>
           <p className="mt-1 text-[11px] leading-5 text-zinc-500">
-            מפתח-אחד פותח-הכל: הכרעות GRANT/DECLINE · הוראות-חוק · קול-הריבונות. המפתח מושווה כדיגסט-בלבד, מתרוקן מיד, ולעולם לא נשמר.
+            מפתח-אחד פותח-הכל: הכרעות GRANT/DECLINE · הוראות-חוק · קול-הריבונות. המפתח = מקובץ-המפתח שלך (headcorner) —
+            <b className="text-zinc-400"> המילה או הטוקן, שתיהן נסגרות</b>. נשווה כדיגסט-בלבד, מתרוקן מיד, ולעולם לא נשמר.
           </p>
           <div className="mt-3 flex flex-col gap-2 sm:flex-row">
             <Input
