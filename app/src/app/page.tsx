@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { MachineView } from "@/components/giant/MachineView";
 import { ChannelView } from "@/components/giant/ChannelView";
 import { DexView } from "@/components/giant/DexView";
 import { WalletView } from "@/components/giant/WalletView";
@@ -11,15 +12,17 @@ import { PulseView } from "@/components/giant/PulseView";
 import { OfficeView } from "@/components/giant/OfficeView";
 import { ShieldCheck } from "lucide-react";
 
-/* ═══ GIANT — מערכת-האמת של הריבונות (R360 · מיזוג-צי T55) ═══════════════
+/* ═══ GIANT — מערכת-האמת של הריבונות (R360 · מיזוג-צי T55 · anatomy) ══════
  * מיזוג-הליינים: שטח-מסחר+נרות+ארנק+שולחן+רישום+מוצרים (התאומים) ∪
- * ליגת-ענקים+דופק-אמת+משרד-חי+שער-headcorner (הליין-החי).
- * משטח-אחד-לכל-יכולת · ערוץ-אחד · אפס-כפילויות · הכל נמדד-חי מהגיט. */
+ * ליגת-ענקים+דופק-אמת+משרד-חי+שער-headcorner (הליין-החי) ∪
+ * מכונת-הריבונות (anatomy): המערכת-כולה כמכונה-פיזית חיה — כל-חלק דלת,
+ * כל-מספר נמדד-מאותו-מקור-שמזיז-את-החלקים · אפס-סימולציות. */
 
-type ViewId = "dex" | "channel" | "wallet" | "desk" | "ledger" | "products" | "pulse" | "office";
+type ViewId = "machine" | "dex" | "channel" | "wallet" | "desk" | "ledger" | "products" | "pulse" | "office";
 
 /* סדר-הפתיחה (T55): הדקס ראשון — הכסף הוא הפנים-של-המערכת; הערוץ הדלת-הראשית אחריו. */
 const NAV: Array<{ id: ViewId; label: string; he: string }> = [
+  { id: "machine", label: "המכונה", he: "המערכת-כולה כמכונה-אמיתית · כל-חלק דלת" },
   { id: "dex", label: "הדקס", he: "מרכז-הכובד: נרות · ליגת-ענקים · ווליום" },
   { id: "channel", label: "הערוץ", he: "הדלת-הראשית: בעלים ↔ ריבונות" },
   { id: "wallet", label: "הארנק", he: "חשבונות-אמת מהמנוע" },
@@ -36,7 +39,7 @@ interface TruthChip {
 }
 
 export default function Home() {
-  const [view, setView] = useState<ViewId>("dex");
+  const [view, setView] = useState<ViewId>("machine");
   const [clock, setClock] = useState("");
   const [truth, setTruth] = useState<TruthChip | null>(null);
 
@@ -134,6 +137,7 @@ export default function Home() {
             <p className="text-xs font-bold text-zinc-300">{active?.label}</p>
             <p className="text-[10px] text-zinc-500">{active?.he}</p>
           </div>
+          {view === "machine" && <MachineView onNavigate={setView} />}
           {view === "dex" && <DexView />}
           {view === "channel" && <ChannelView />}
           {view === "wallet" && <WalletView />}
