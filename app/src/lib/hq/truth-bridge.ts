@@ -41,7 +41,7 @@ interface OfficeLiveRaw {
   books?: { list?: { name?: unknown; ageHours?: unknown; fresh?: unknown; empty?: unknown }[] };
 }
 
-function mapBooks(raw: OfficeLiveRaw | null): { ok: boolean; at?: string; list?: { name: string; ageHours: number | null; fresh: boolean; empty: boolean }[] } {
+function mapBooks(raw: OfficeLiveRaw | null): { ok: boolean; error?: string; at?: string; list?: { name: string; ageHours: number | null; fresh: boolean; empty: boolean }[] } {
   const list = raw?.books?.list;
   if (!Array.isArray(list)) return { ok: false, error: 'unavailable' };
   const out: { name: string; ageHours: number | null; fresh: boolean; empty: boolean }[] = [];

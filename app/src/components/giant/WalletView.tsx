@@ -24,11 +24,13 @@ function heName(n: string): string {
   if (n.startsWith("bot-")) return `בוט ${n.split("-")[1].toUpperCase()}`;
   return n;
 }
-/* קנון: הספר ב-µ (1 = 1000µ) — תצוגה ביחידות (÷1000). העיוות ×1000 תוקן. */
+/* חוק-היחידות (תיקון-בעלים): הספר מדוד ב-mu (אלפיות) — 85,482,163 mu = 85,482 SAOS.
+   הבעלים ראה "85 מיליון" והיה-צדק-עמו: התצוגה הייתה מציגה mu גולמי. מעכשיו — יחידות-אנוש בלבד. */
 function fmt(v: number): string {
-  const u = v / 1000;
-  if (Math.abs(u) >= 1e6) return `${(u / 1e6).toFixed(2)}M`;
-  return Math.round(u).toLocaleString("en-US");
+  const h = v / 1000;
+  if (Math.abs(h) >= 1e6) return `${(h / 1e6).toFixed(2)}M`;
+  if (Math.abs(h) >= 1e3) return `${(h / 1e3).toFixed(2)}K`;
+  return h.toLocaleString("en-US", { maximumFractionDigits: 2 });
 }
 function timeHe(iso: string | null): string {
   if (!iso) return "—";
@@ -84,8 +86,9 @@ export function WalletView() {
     <div className="space-y-4" dir="rtl">
       <section className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-zinc-900/60 px-4 py-3">
         <div>
-          <h2 className="text-sm font-black text-zinc-100">ארנק-הספר — {dex?.accounts.length ?? "—"} חשבונות (סימולציה-מוצהרת)</h2>
+          <h2 className="text-sm font-black text-zinc-100">ארנק-הריבונות — {dex?.accounts.length ?? "—"} חשבונות מהמנוע</h2>
           <p className="mt-0.5 text-[10px] text-zinc-500">מאזני-אמת מ-state-snapshot · גובה {dex?.height?.toLocaleString("en-US") ?? "—"} · snapshot {timeHe(dex?.savedAt ?? null)}</p>
+          <p className="mt-1 rounded-lg border border-amber-600/25 bg-amber-500/[0.05] px-2 py-1 text-[10px] font-bold text-amber-400/90">חוק-היחידות: הספר מדוד ב-mu (אלפיות) — התצוגה מומרת ÷1000 ליחידות-אנוש (למשל 85,482,163 mu = 85,482 SAOS)</p>
         </div>
         <input
           value={q}
@@ -124,8 +127,8 @@ export function WalletView() {
               {filtered.map((a) => (
                 <tr key={a.name} className="border-t border-white/5 transition hover:bg-white/[0.02]">
                   <td className="px-2 py-2">
-                    <span className="whitespace-nowrap font-semibold text-zinc-200">{heName(a.name)}</span>
-                    <span className="mr-1.5 whitespace-nowrap font-mono text-[9px] text-zinc-600">{a.name}</span>
+                    <span className="font-semibold text-zinc-200">{heName(a.name)}</span>
+                    <span className="mr-1.5 font-mono text-[9px] text-zinc-600">{a.name}</span>
                   </td>
                   {tokens.map((t) => {
                     const v = a.balances[t] ?? 0;

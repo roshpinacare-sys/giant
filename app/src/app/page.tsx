@@ -1,36 +1,48 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MachineView } from "@/components/giant/MachineView";
-import { ChannelView } from "@/components/giant/ChannelView";
 import { DexView } from "@/components/giant/DexView";
+import { GiantsView } from "@/components/giant/LeagueView";
+import { ChannelView } from "@/components/giant/ChannelView";
 import { WalletView } from "@/components/giant/WalletView";
 import { DeskView } from "@/components/giant/DeskView";
 import { LedgerView } from "@/components/giant/LedgerView";
 import { ProductsView } from "@/components/giant/ProductsView";
 import { PulseView } from "@/components/giant/PulseView";
-import { OfficeView } from "@/components/giant/OfficeView";
-import { ShieldCheck } from "lucide-react";
+import { OfficeHqView } from "@/components/giant/OfficeHqView";
+import { EstateView } from "@/components/giant/EstateView";
+import { TickerTape } from "@/components/giant/TickerTape";
+import { GiantPalette } from "@/components/giant/GiantPalette";
+import { Command, ShieldCheck } from "lucide-react";
 
-/* ═══ GIANT — מערכת-האמת של הריבונות (R360 · מיזוג-צי T55 · anatomy) ══════
- * מיזוג-הליינים: שטח-מסחר+נרות+ארנק+שולחן+רישום+מוצרים (התאומים) ∪
- * ליגת-ענקים+דופק-אמת+משרד-חי+שער-headcorner (הליין-החי) ∪
- * מכונת-הריבונות (anatomy): המערכת-כולה כמכונה-פיזית חיה — כל-חלק דלת,
- * כל-מספר נמדד-מאותו-מקור-שמזיז-את-החלקים · אפס-סימולציות. */
+/* ═══ GIANT — הממשק-המאוחד של כל-הצי (T58 · מיזוג-5-הסוכנים) ══════════════
+ * מה-מי:
+ *  · מכונת-האמת (anatomy-grade, חוקי wheresryan22/anatomy: האובייקט=ההסבר)
+ *  · הדקס + ליגת-הענקים (DefiLlama חי) — הכסף הוא הפנים (T55)
+ *  · הערוץ האחד + שער-headcorner + קול-הריבונות (T53/T56, מנדט-הבעלים: עושה-הכל)
+ *  · המשרד-החי התלת-מימדי + קונסולת-מפעיל (FleetHQ ∪ giant/app)
+ *  · דופק-אמת · האחוזה (מפקד-הגיט) · ארנק/שולחן/רישום/מוצרים (התאומים)
+ *  · Ctrl+K פלטת-פקודה על-כל-המערכת · סרט-מחירים חי (Kraken)
+ * משטח-אחד-לכל-יכולת · ערוץ-אחד · אפס-כפילויות · הכל נמדד-חי מהגיט. */
 
-type ViewId = "machine" | "dex" | "channel" | "wallet" | "desk" | "ledger" | "products" | "pulse" | "office";
+type ViewId =
+  | "machine" | "dex" | "league" | "channel" | "wallet" | "desk"
+  | "ledger" | "products" | "pulse" | "office" | "estate";
 
-/* סדר-הפתיחה (T55): הדקס ראשון — הכסף הוא הפנים-של-המערכת; הערוץ הדלת-הראשית אחריו. */
+/* סדר-הפתיחה (T58): המכונה דלת-הקראפט; הכסף מיד אחריה; הערוץ הדלת-הראשית. */
 const NAV: Array<{ id: ViewId; label: string; he: string }> = [
-  { id: "machine", label: "המכונה", he: "המערכת-כולה כמכונה-אמיתית · כל-חלק דלת" },
-  { id: "dex", label: "הדקס", he: "מרכז-הכובד: נרות · ליגת-ענקים · ווליום" },
+  { id: "machine", label: "המכונה", he: "מכונת-האמת: הדקס כמכונה חיה (anatomy)" },
+  { id: "dex", label: "הדקס", he: "מרכז-הכובד: נרות · קופות · ווליום" },
+  { id: "league", label: "ליגת-הענקים", he: "DefiLlama חי · השורה-שלנו בכנות" },
   { id: "channel", label: "הערוץ", he: "הדלת-הראשית: בעלים ↔ ריבונות" },
-  { id: "wallet", label: "הארנק", he: "חשבונות-אמת מהמנוע" },
+  { id: "wallet", label: "הארנק", he: "חשבונות-אמת מהמנוע · יחידות-אנוש" },
   { id: "desk", label: "השולחן", he: "מנדט · equity · אסטרטגיות" },
   { id: "ledger", label: "הרישום", he: "כל-ההחלטות · חיפוש" },
-  { id: "products", label: "המוצרים", he: "קטלוג-אמת · סטטוסים-כנים" },
+  { id: "products", label: "המוצרים", he: "קטלוג-אמת · קבלות · מדידות" },
   { id: "pulse", label: "הדופק", he: "מערכת-האמת: שערים · זרמים · טביעות" },
-  { id: "office", label: "המשרד-החי", he: "המשרד-היחיד של הריבונות" },
+  { id: "office", label: "המשרד-החי", he: "החדר-התלת-מימדי · קונסולת-מפעיל" },
+  { id: "estate", label: "האחוזה", he: "מפקד-הגיט: 39 ספרים · בריאות · פוטנציאל" },
 ];
 
 interface TruthChip {
@@ -69,11 +81,20 @@ export default function Home() {
     };
   }, []);
 
+  /* פלטת-הפקודה: ניווט + פעולות (action:* מפורש לעמודה-הנכונה) */
+  const onPaletteNavigate = useCallback((id: string) => {
+    if (id === "action:refresh-pulse") setView("pulse");
+    else if (id === "action:gate.open" || id === "action:sovereign.ask") setView("channel");
+    else if (NAV.some((n) => n.id === id)) setView(id as ViewId);
+  }, []);
+
   const active = NAV.find((n) => n.id === view);
   const truthGreen = truth?.verdict?.includes("GREEN") ?? false;
 
   return (
     <div className="flex min-h-dvh flex-col bg-zinc-950 text-zinc-100">
+      <GiantPalette onNavigate={onPaletteNavigate} />
+
       {/* ═══ ראש-המערכת ═══ */}
       <header className="sticky top-0 z-40 border-b border-white/10 bg-zinc-950/90 backdrop-blur" dir="rtl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
@@ -81,9 +102,9 @@ export default function Home() {
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-600 font-black text-zinc-950" aria-hidden>G</span>
             <div>
               <h1 className="text-base font-black leading-5">
-                GIANT <span className="text-amber-500">·</span> מערכת-האמת
+                GIANT <span className="text-amber-500">·</span> הממשק-המאוחד
               </h1>
-              <p className="hidden text-[10px] leading-3 text-zinc-500 sm:block">הפלטפורמה-המאוחדת של הריבונות · ערוץ-אחד · אפס-כפילויות</p>
+              <p className="hidden text-[10px] leading-3 text-zinc-500 sm:block">הפלטפורמה-האחת של הריבונות · מיזוג-כל-הצי · אפס-כפילויות</p>
             </div>
           </div>
           <div className="flex items-center gap-2.5">
@@ -100,9 +121,20 @@ export default function Home() {
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-500" aria-hidden />
               ריבונות חיה · 24/7
             </span>
+            <button
+              onClick={() => window.dispatchEvent(new Event("giant-palette:open"))}
+              className="hidden min-h-[36px] items-center gap-1.5 rounded-lg border border-white/10 bg-zinc-900 px-2.5 text-[10px] font-bold text-zinc-400 transition hover:border-amber-600/40 hover:text-amber-400 sm:flex"
+              aria-label="פתח פלטת-פקודה (Ctrl+K)"
+              title="פלטת-פקודה · Ctrl+K"
+            >
+              <Command className="h-3 w-3" aria-hidden />
+              Ctrl+K
+            </button>
             <span className="hidden font-mono text-xs text-zinc-500 md:inline" aria-label="שעון-המערכת">{clock}</span>
           </div>
         </div>
+        {/* סרט-המחירים החי (Kraken→Binance→CoinGecko) */}
+        <TickerTape />
       </header>
 
       {/* ═══ גוף: ניווט-צד (מחשב) + תוכן ═══ */}
@@ -124,8 +156,8 @@ export default function Home() {
             </button>
           ))}
           <div className="mt-4 rounded-xl border border-white/5 bg-zinc-900/40 p-4 text-[10px] leading-5 text-zinc-500">
-            <b className="text-zinc-300">מפתח-מנהל (headcorner)</b> פותח-הכל: הכרעות · הוראות · קול-הריבונות.
-            המערכת לעולם אינה גמורה — האוטונומיה בודקת, מתקנת, בונה, משפרת, פורצת-דרך.
+            <b className="text-zinc-300">מפתח-מנהל (headcorner)</b> פותח-הכל: הכרעות · הוראות · קונסולת-מפעיל · קול-הריבונות.
+            מנדט-הבעלים: אין-חוקים-מעכבים — עושים-הכל, מדידה-קודמת-לכל-טענה.
           </div>
           <div className="rounded-xl border border-white/5 bg-zinc-900/40 p-4 text-[10px] leading-5 text-zinc-600">
             זרמי-האמת: <span className="font-mono text-zinc-500">Domain/dex</span> · <span className="font-mono text-zinc-500">Pulse/sovereign-channel</span> · <span className="font-mono text-zinc-500">FleetHQ/office</span>
@@ -137,27 +169,27 @@ export default function Home() {
             <p className="text-xs font-bold text-zinc-300">{active?.label}</p>
             <p className="text-[10px] text-zinc-500">{active?.he}</p>
           </div>
-          <div key={view} className="view-in">
-            {view === "machine" && <MachineView onNavigate={setView} />}
-            {view === "dex" && <DexView />}
-            {view === "channel" && <ChannelView />}
-            {view === "wallet" && <WalletView />}
-            {view === "desk" && <DeskView />}
-            {view === "ledger" && <LedgerView />}
-            {view === "products" && <ProductsView />}
-            {view === "pulse" && <PulseView />}
-            {view === "office" && <OfficeView />}
-          </div>
+          {view === "machine" && <MachineView />}
+          {view === "dex" && <DexView />}
+          {view === "league" && <GiantsView />}
+          {view === "channel" && <ChannelView />}
+          {view === "wallet" && <WalletView />}
+          {view === "desk" && <DeskView />}
+          {view === "ledger" && <LedgerView />}
+          {view === "products" && <ProductsView />}
+          {view === "pulse" && <PulseView />}
+          {view === "office" && <OfficeHqView />}
+          {view === "estate" && <EstateView />}
         </main>
       </div>
 
-      {/* ═══ ניווט-תחתון (נייד) ═══ */}
+      {/* ═══ ניווט-תחתון (נייד): 4-ראשונים + פלטת-פקודה ═══ */}
       <nav
         aria-label="מודולי-המערכת (נייד)"
         className="fixed inset-x-0 bottom-0 z-40 flex border-t border-white/10 bg-zinc-950/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
         dir="rtl"
       >
-        {NAV.slice(0, 5).map((n) => (
+        {NAV.slice(0, 4).map((n) => (
           <button
             key={n.id}
             onClick={() => setView(n.id)}
@@ -168,11 +200,11 @@ export default function Home() {
           </button>
         ))}
         <button
-          onClick={() => setView(view === "office" ? "dex" : "office")}
-          aria-label="עוד-מודולים"
-          className={`min-h-[44px] flex-1 py-2 text-center text-xs font-bold transition ${view === "office" ? "text-amber-500" : "text-zinc-500"}`}
+          onClick={() => window.dispatchEvent(new Event("giant-palette:open"))}
+          aria-label="כל-המודולים (פלטת-פקודה)"
+          className={`min-h-[44px] flex-1 py-2 text-center text-xs font-bold transition ${view !== "machine" && view !== "dex" && view !== "league" && view !== "channel" ? "text-amber-500" : "text-zinc-500"}`}
         >
-          {view === "office" ? "◀ הדקס" : "עוד ▶"}
+          עוד ▶
         </button>
       </nav>
 
@@ -183,7 +215,7 @@ export default function Home() {
           <span className="hidden sm:inline">· הריבונות מפעילה-הכל; הגיט הוא שכבת-הקיום; המערכת מתפתחת לנצח</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="font-mono text-[10px] text-zinc-600">SAOS-SOVEREIGN-CHANNEL/1 · R360 · R74</span>
+          <span className="font-mono text-[10px] text-zinc-600">SAOS-SOVEREIGN-CHANNEL/1 · R360 · R74 · T58-merge</span>
         </div>
       </footer>
     </div>

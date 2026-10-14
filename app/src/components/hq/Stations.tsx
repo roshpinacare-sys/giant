@@ -82,7 +82,8 @@ export function StationSync() {
               ? curTask.status === 'done' ? 'הושלם' : curTask.status === 'doing' ? 'בביצוע' : curTask.status === 'review' ? 'בביקורת' : curTask.status === 'blocked' ? 'חסום' : 'מתוכנן'
               : '',
           }
-        : null);
+        /* אין סנאפשוט = פס-המתנה-כנה, לעולם לא עבודה-מדומה (חוק-הכנות) */
+        : { stateHe: '—', stateCol: '#71717a', activity: '', task: 'ממתין למדידה', taskStatusHe: '' });
     }
     // לוח משימות
     if (!taskWallTex) taskWallTex = makeTaskWallTexture();
