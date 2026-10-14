@@ -1430,3 +1430,19 @@ Stage Summary:
 - The organism console now has zero missing declared sources: every card is either live-measured or honestly-null, and the keeper keeps it that way autonomously every 2 minutes.
 - Both improvement debts from the Task-39 audit are closed; the dashboard is fully self-sustaining (office-ci PASS via fresh clone, keeper PASS via real ticks).
 - Known honest residual: office-state feed staleness (~13h) remains flagged until the office window's next bake; ops-forge's 2 permanent historical reds remain visible-as-truth with root-cause already fixed for future cycles.
+---
+Task ID: 41
+Agent: Continuation agent (IM trace 1a13a1d37bf9e341 "תמשיך בנוסף תבחן למה האתר של הדומיין לא מחובר למידע")
+Task: Continue + diagnose why the Domain site appeared disconnected from its data.
+
+Work Log:
+- FEEDS RULED OUT FIRST: all five declared feeds (status.json, dex/world.json, dex/office-feed.json, dex/grid.json, office/data.json) are HTTP 200 with last-modified minutes fresh — the data pipeline was never the problem. The footer's data.json/heartbeat.json guesses 404'd; real hrefs extracted from the page.
+- REAL ROOT CAUSE — the page's 34KB inline script died at PARSE time: browser errors showed SyntaxError at script-line 1048:35. Source located in deployed index.html line 1049: `var g = s.gridVerdict, gt = '…'';` — a stray quote. Blame: commit 205d6a9 (today 08:34Z, the C-2e typography repair wave that replaced 134 banned glyphs — 133 em-dashes + 1 arrow). 133 replacements landed in prose/comments harmlessly; THIS one landed inside a JS string literal and left a doubled quote. One parse-time death = every live card (office, pacemaker, steem/blurt nodes, world, integrity, receipts) frozen forever on "טוען…". Exactly the owner's "לא מחובר למידע".
+- FIX: gt = '…'' → gt = '…' (honest pending ellipsis, the same law's intended glyph). Pre-verified with node --check on the extracted script BEFORE push (lesson from the wave: a change to generated JS must be syntax-checked). Committed 6891548 with full root-cause receipt; artery superseded twice during Pages builds (c9c1e47, a0e2020 on top — the fix survived every rebase, verified in origin's line 1049).
+- VERIFICATION PROTOCOL vs CACHE PHANTOMS: fresh fetch + new Function = SCRIPT OK (34846 chars); DOM-level re-parse of the live script = OK; no service workers; brand-new tab confirmed. The 5 residual "SyntaxError" entries in the tool's error log are stale session residue (identical signature ×5 = the count of old-page loads), NOT live — the decisive proof is the populated DOM: ofState=מחובר, ofEngines=4/0, ofArteries=7/7, ppVerdict populated, chips="משרד חי/חי · ממש עכשיו/גששים חיים", shift-thread showing real pacemaker receipts with hashes.
+- Pages build for the fixed head completed success (fcc18da); earlier cancelled builds are the artery's fast-push cadence, by design.
+
+Stage Summary:
+- Domain live page reconnected to all feeds: one stray quote from a well-meaning typography wave had killed the whole measurement script; fixed, syntax-proven, deployed, browser-verified end-to-end.
+- New standing lesson recorded: automated glyph/text transformations must never run over code contexts without a parse-check afterward — 1 corrupted line out of 134 replacements was enough to blind every live card on the site.
+- Organism keeper meanwhile self-verified: tick cadence stable, status=ok, 13 repos, feeds written every 2 minutes.
