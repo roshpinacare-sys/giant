@@ -51,7 +51,9 @@ export function ammQuote(
     spotAfter = baseAfter > 0 ? quoteAfter / baseAfter : spotBefore;
   }
 
-  const effectivePrice = amountIn > 0 ? out / amountIn : 0;
+  // מחיר-אפקטיבי תמיד ביחידות: quote-לכל-base (כמו מחיר-הספוט)
+  const effectivePrice =
+    amountIn > 0 ? (side === "BUY" ? amountIn / out : out / amountIn) : 0;
   const priceImpactPct =
     spotBefore > 0 ? ((spotAfter - spotBefore) / spotBefore) * 100 : 0;
 

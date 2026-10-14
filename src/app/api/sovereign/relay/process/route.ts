@@ -4,13 +4,13 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { generateSovereignPosition } from "@/lib/sovereign-llm";
-import { isOwner } from "@/lib/sovereign-auth";
+import { isOwnerReq } from "@/lib/sovereign-auth";
 
 export const dynamic = "force-dynamic";
 
-export async function POST() {
+export async function POST(req: Request) {
   // שער-הבעלים: עיבוד-התור-הפנימי הוא פעולת-ניהול (חוק-הפרונט/הבק)
-  if (!(await isOwner())) {
+  if (!(await isOwnerReq(req))) {
     return NextResponse.json(
       { error: "עיבוד-התור-הפנימי דורש מפתח headcorner" },
       { status: 401 },

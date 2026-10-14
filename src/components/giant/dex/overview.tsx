@@ -1,0 +1,295 @@
+"use client";
+
+// giant DEX · סקירת-שוק: KPIs-חיים, GNT-זרקור, ארנת-הווליום (M-9), מובילים, טופ-זוגות
+
+import { useCallback, useEffect, useState } from "react";
+import { Activity, Flame, Gauge, TrendingDown, TrendingUp, Zap } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+import {
+  chainColor,
+  fmtMicro,
+  fmtPct,
+  fmtPrice,
+  trendBg,
+  trendColor,
+} from "@/lib/dex-format";
+import type { Overview, PairSummary } from "@/lib/dex-types";
+
+export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }) {
+  const [data, setData] = useState<Overview | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    try {
+      const res = await fetch("/api/dex/overview", { cache: "no-store" });
+      const d = (await res.json()) as Overview;
+      setData(d);
+    } catch {
+      // שקט
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void load();
+    const t = setInterval(() => void load(), 8_000);
+    return () => clearInterval(t);
+  }, [load]);
+
+  if (loading || !data) {
+    return (
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <Skeleton key={i} className="h-28 rounded-xl bg-white/5" />
+        ))}
+      </div>
+    );
+  }
+
+  const { kpis, moversUp, moversDown, arena, engine, topPairs, sparks } = data;
+
+  return (
+    <div className="space-y-4">
+      {/* KPI-ראשי */}
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+        <Kpi label="נפח-24 שעות" value={fmtMicro(kpis.vol24h)} icon={<Activity className="h-4 w-4" />} tone="up" />
+        <Kpi label="TVL · נזילות-כוללת" value={fmtMicro(kpis.tvl)} icon={<Gauge className="h-4 w-4" />} />
+        <Kpi label="עמלות-24h" value={fmtMicro(kpis.fees24h)} icon={<Flame className="h-4 w-4" />} tone="warn" />
+        <Kpi label="זוגות-פעילים" value={String(kpis.pairsCount)} icon={<Zap className="h-4 w-4" />} />
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.2fr_1fr]">
+        {/* זרקור-GNT */}
+        <section className="relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-950/50 to-[#0d1312] p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/20 text-lg font-black text-emerald-300" aria-hidden="true">
+                  G
+                </span>
+                <div>
+                  <div className="flex items-center gap-2 text-xl font-black text-white" dir="ltr">
+                    GNT
+                    <Badge className="bg-emerald-500/15 text-[10px] text-emerald-300 hover:bg-emerald-500/15">המטבע-שלנו</Badge>
+                  </div>
+                  <div className="text-xs text-zinc-500">Giant Chain · הריבונות</div>
+                </div>
+              </div>
+              <div className="mt-4 flex items-end gap-3">
+                <span className="text-4xl font-black tabular-nums text-white" dir="ltr">
+                  {fmtPrice(kpis.gntPrice)}
+                </span>
+                <span className={cn("rounded-lg px-2 py-1 text-sm font-bold tabular-nums", trendBg(kpis.gntChange24h))} dir="ltr">
+                  {fmtPct(kpis.gntChange24h)}
+                </span>
+              </div>
+            </div>
+            <Spark data={sparks["GNT/USDS"] ?? []} />
+          </div>
+          <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
+            <MiniStat label="נפח-24h" value={fmtMicro(kpis.vol24h)} />
+            <MiniStat label="נפח-7d" value={fmtMicro(kpis.vol7d)} />
+            <MiniStat label="נפח-30d" value={fmtMicro(kpis.vol30d)} />
+          </div>
+        </section>
+
+        {/* ארנת-הווליום M-9 */}
+        <section className="rounded-2xl border border-white/5 bg-white/[0.03] p-5">
+          <div className="mb-3 flex items-center justify-between">
+            <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-200">
+              <Activity className="h-4 w-4 text-emerald-400" aria-hidden="true" />
+              ארנת-הווליום · M-9
+            </h3>
+            <Badge
+              className={
+                engine.running
+                  ? "bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/15"
+                  : "bg-amber-500/15 text-amber-400 hover:bg-amber-500/15"
+              }
+            >
+              {engine.running ? "מנוע-חי" : "מנוע-מתחמם"}
+            </Badge>
+          </div>
+          <div className="space-y-3">
+            <Goal
+              label="יעד-שבועי · 500K µ יומי"
+              pct={arena.goal7dPct}
+              current={arena.current24h}
+              target={arena.target7d}
+            />
+            <Goal
+              label="יעד-חודשי · 1M µ יומי"
+              pct={arena.goal30dPct}
+              current={arena.current24h}
+              target={arena.target30d}
+            />
+          </div>
+          {/* גרף-עמודות-14 יום */}
+          <div className="mt-4 flex h-16 items-end gap-1" dir="ltr">
+            {arena.days.slice(-14).map((d) => {
+              const max = Math.max(...arena.days.map((x) => x.vol), 1);
+              return (
+                <div
+                  key={d.day}
+                  className="flex-1 rounded-t bg-emerald-500/60 transition-all hover:bg-emerald-400"
+                  style={{ height: `${Math.max(4, (d.vol / max) * 100)}%` }}
+                  title={`${d.day}: ${fmtMicro(d.vol)}`}
+                />
+              );
+            })}
+          </div>
+          <div className="mt-1 text-[10px] text-zinc-600">נפח-יומי · 14 ימים אחרונים (µ-USDS)</div>
+        </section>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_1fr]">
+        {/* מובילים */}
+        <section className="rounded-2xl border border-white/5 bg-white/[0.03] p-4">
+          <div className="mb-3 grid grid-cols-2 gap-4">
+            <div>
+              <h3 className="mb-2 flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+                <TrendingUp className="h-3.5 w-3.5" aria-hidden="true" /> עולים
+              </h3>
+              <MoverList movers={moversUp} onTrade={onTrade} />
+            </div>
+            <div>
+              <h3 className="mb-2 flex items-center gap-1.5 text-xs font-bold text-red-400">
+                <TrendingDown className="h-3.5 w-3.5" aria-hidden="true" /> יורדים
+              </h3>
+              <MoverList movers={moversDown} onTrade={onTrade} />
+            </div>
+          </div>
+        </section>
+
+        {/* טופ-זוגות */}
+        <section className="rounded-2xl border border-white/5 bg-white/[0.03] p-4">
+          <h3 className="mb-2 text-xs font-bold text-zinc-400">הזוגות-החמים · לפי-נפח</h3>
+          <div className="space-y-0.5">
+            {topPairs.map((p: PairSummary) => (
+              <button
+                key={p.id}
+                onClick={() => onTrade?.(p.id)}
+                className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-white/5"
+              >
+                <span className="flex items-center gap-2">
+                  <span className="font-bold text-white" dir="ltr">
+                    {p.base}/{p.quote}
+                  </span>
+                  <Badge className={cn("text-[9px]", chainColor(p.chain))}>{p.chain}</Badge>
+                </span>
+                <span className="flex items-center gap-3 tabular-nums" dir="ltr">
+                  <span className="text-zinc-300">{fmtPrice(p.price)}</span>
+                  <span className={cn("w-16 rounded px-1.5 py-0.5 text-center text-xs font-semibold", trendBg(p.change24h))}>
+                    {fmtPct(p.change24h)}
+                  </span>
+                  <span className="w-20 text-end text-xs text-zinc-500">{fmtMicro(p.vol24h)}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function Kpi({ label, value, icon, tone }: { label: string; value: string; icon: React.ReactNode; tone?: "up" | "warn" }) {
+  return (
+    <div className="rounded-xl border border-white/5 bg-white/[0.03] p-4">
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-zinc-500">{label}</span>
+        <span
+          className={cn(
+            "text-zinc-500",
+            tone === "up" && "text-emerald-400",
+            tone === "warn" && "text-amber-400",
+          )}
+          aria-hidden="true"
+        >
+          {icon}
+        </span>
+      </div>
+      <div className="mt-2 text-2xl font-black tabular-nums text-white" dir="ltr">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function MiniStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg bg-black/30 py-2">
+      <div className="text-[10px] text-zinc-500">{label}</div>
+      <div className="font-bold tabular-nums text-zinc-200" dir="ltr">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function Goal({ label, pct, current, target }: { label: string; pct: number; current: number; target: number }) {
+  return (
+    <div>
+      <div className="mb-1 flex items-center justify-between text-xs">
+        <span className="text-zinc-400">{label}</span>
+        <span className="font-bold tabular-nums text-emerald-400" dir="ltr">
+          {pct.toFixed(0)}%
+        </span>
+      </div>
+      <Progress value={pct} className="h-2 bg-white/5 [&>div]:bg-emerald-500" aria-label={label} />
+      <div className="mt-1 text-[10px] text-zinc-600 tabular-nums" dir="ltr">
+        {fmtMicro(current)} / {fmtMicro(target)}
+      </div>
+    </div>
+  );
+}
+
+function MoverList({ movers, onTrade }: { movers: { pairId: string; base: string; price: number; change24h: number }[]; onTrade?: (id: string) => void }) {
+  if (!movers.length) return <div className="py-3 text-xs text-zinc-600">—</div>;
+  return (
+    <div className="space-y-1">
+      {movers.map((m) => (
+        <button
+          key={m.pairId}
+          onClick={() => onTrade?.(m.pairId)}
+          className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-white/5"
+        >
+          <span className="font-bold text-white" dir="ltr">
+            {m.base}
+          </span>
+          <span className="flex items-center gap-2 tabular-nums" dir="ltr">
+            <span className="text-xs text-zinc-400">{fmtPrice(m.price)}</span>
+            <span className={cn("text-xs font-bold", trendColor(m.change24h))}>{fmtPct(m.change24h)}</span>
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function Spark({ data }: { data: { t: number; v: number }[] }) {
+  if (data.length < 2) return null;
+  const vs = data.map((d) => d.v);
+  const min = Math.min(...vs);
+  const max = Math.max(...vs);
+  const span = max - min || 1;
+  const up = vs[vs.length - 1] >= vs[0];
+  const pts = data
+    .map((d, i) => `${(i / (data.length - 1)) * 100},${28 - ((d.v - min) / span) * 26}`)
+    .join(" ");
+  return (
+    <svg viewBox="0 0 100 30" className="h-16 w-36 shrink-0" preserveAspectRatio="none" aria-hidden="true">
+      <polyline points={pts} fill="none" stroke={up ? "#34d399" : "#f87171"} strokeWidth="1.8" />
+      <polygon
+        points={`0,30 ${pts} 100,30`}
+        fill={up ? "rgba(52,211,153,0.08)" : "rgba(248,113,113,0.08)"}
+      />
+    </svg>
+  );
+}

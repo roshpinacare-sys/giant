@@ -72,17 +72,24 @@ export async function getWalletState(): Promise<WalletState> {
 
   const positionsRaw = await db.dexLpPosition.findMany({
     where: { owner: "OWNER" },
-    include: { pair: true },
   });
-  const positions: WalletPosition[] = positionsRaw.map((pos) => ({
-    pairId: pos.pairId,
-    base: pos.pair.base,
-    quote: pos.pair.quote,
-    shares: pos.shares,
-    baseAmount: pos.baseAmount,
-    quoteAmount: pos.quoteAmount,
-    valueUsd: pos.baseAmount * pos.pair.price + pos.quoteAmount,
-  }));
+  const posPairs = await db.dexPair.findMany({
+    where: { id: { in: positionsRaw.map((p) => p.pairId) } },
+  });
+  const pairById = new Map(posPairs.map((p) => [p.id, p]));
+  const positions: WalletPosition[] = positionsRaw.flatMap((pos) => {
+    const pair = pairById.get(pos.pairId);
+    if (!pair) return [];
+    return [{
+      pairId: pos.pairId,
+      base: pair.base,
+      quote: pair.quote,
+      shares: pos.shares,
+      baseAmount: pos.baseAmount,
+      quoteAmount: pos.quoteAmount,
+      valueUsd: pos.baseAmount * pair.price + pos.quoteAmount,
+    }];
+  });
 
   const ledger = await db.dexLedger.findMany({
     where: { account: "OWNER" },

@@ -8,7 +8,7 @@ import {
   generateSovereignReply,
   type SovereignHistoryItem,
 } from "@/lib/sovereign-llm";
-import { isOwner } from "@/lib/sovereign-auth";
+import { isOwnerReq } from "@/lib/sovereign-auth";
 import { landOwnerDirective } from "@/lib/giant-git";
 
 export const dynamic = "force-dynamic";
@@ -155,10 +155,10 @@ const postSchema = z.object({
   priority: z.enum(["NORMAL", "HIGH", "CRITICAL"]).optional(),
 });
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     await ensureSeed();
-    const owner = await isOwner();
+    const owner = await isOwnerReq(req);
     const messages = await db.sovereignMessage.findMany({
       orderBy: { createdAt: "asc" },
     });
@@ -210,7 +210,7 @@ export async function POST(req: Request) {
     }
 
     // שער-הבעלים: כתיבה כבעלים דורשת מפתח-headcorner (חוק-הפרונט/הבק)
-    if (!(await isOwner())) {
+    if (!(await isOwnerReq(req))) {
       return NextResponse.json(
         { error: "כתיבה-כבעלים דורשת מפתח headcorner" },
         { status: 401 },

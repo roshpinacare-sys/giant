@@ -67,8 +67,8 @@ export async function POST(req: NextRequest) {
         pairId: pair.id,
         side,
         price: quote.effectivePrice,
-        amount: quote.outAmount,
-        total: amountIn,
+        amount: side === "BUY" ? quote.outAmount : amountIn,
+        total: side === "BUY" ? amountIn : quote.outAmount,
         source: "USER",
       },
     });

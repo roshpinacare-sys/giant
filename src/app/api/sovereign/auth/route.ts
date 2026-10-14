@@ -5,14 +5,16 @@ import { NextResponse } from "next/server";
 import {
   OWNER_COOKIE,
   isOwner,
+  isOwnerReq,
   ownerSessionToken,
   verifyHeadcorner,
 } from "@/lib/sovereign-auth";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  return NextResponse.json({ owner: await isOwner() });
+export async function GET(req: Request) {
+  const owner = (await isOwnerReq(req)) || (await isOwner());
+  return NextResponse.json({ owner });
 }
 
 export async function POST(req: Request) {
@@ -29,8 +31,9 @@ export async function POST(req: Request) {
       { status: 401 },
     );
   }
-  const res = NextResponse.json({ owner: true });
-  res.cookies.set(OWNER_COOKIE, await ownerSessionToken(), {
+  const token = await ownerSessionToken();
+  const res = NextResponse.json({ owner: true, token });
+  res.cookies.set(OWNER_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
     path: "/",

@@ -3,7 +3,7 @@
 
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { isOwner } from "@/lib/sovereign-auth";
+import { isOwnerReq } from "@/lib/sovereign-auth";
 import { landOwnerDirective } from "@/lib/giant-git";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +13,7 @@ const landSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  if (!(await isOwner())) {
+  if (!(await isOwnerReq(req))) {
     return NextResponse.json(
       { error: "נחיתת-הוראות דורשת מפתח-בעלים (headcorner)" },
       { status: 401 },

@@ -191,26 +191,26 @@ export interface Overview {
 
 /* ------------------------------ תשובות-API ------------------------------ */
 
-export interface OverviewResponse extends Overview {}
-export interface PairsResponse {
+export type OverviewResponse = Overview;
+export type PairsResponse = {
   pairs: PairSummary[];
-}
-export interface CandlesResponse {
+};
+export type CandlesResponse = {
   candles: Candle[];
   tf: Timeframe;
-}
-export interface TradesResponse {
+};
+export type TradesResponse = {
   trades: TradeRow[];
-}
-export interface DepthResponse extends Depth {}
-export interface QuoteResponse {
+};
+export type DepthResponse = Depth;
+export type QuoteResponse = {
   quote: SwapQuote;
-}
-export interface SwapResponse {
+};
+export type SwapResponse = {
   trade: TradeRow;
   quote: SwapQuote;
-}
-export interface PoolsResponse {
+};
+export type PoolsResponse = {
   pools: PoolRow[];
-}
-export interface WalletResponse extends WalletState {}
+};
+export type WalletResponse = WalletState;

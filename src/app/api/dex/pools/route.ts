@@ -82,19 +82,31 @@ export async function POST(req: NextRequest) {
 
     if (body.action === "remove") {
       const pct = Math.min(100, Math.max(1, Number(body.pct ?? 0)));
-      if (!body.positionId) return NextResponse.json({ error: "חסר-positionId" }, { status: 400 });
-      const pos = await db.dexLpPosition.findUnique({ where: { id: body.positionId }, include: { pair: true } });
-      if (!pos || pos.owner !== "OWNER") {
+      // תמיכה-גם-ב-pairId (הפרונט שולח-זוג) וגם-ב-positionId
+      const pos = body.positionId
+        ? await db.dexLpPosition.findFirst({
+            where: { id: body.positionId, owner: "OWNER" },
+            orderBy: { createdAt: "desc" },
+          })
+        : body.pairId
+          ? await db.dexLpPosition.findFirst({
+              where: { pairId: body.pairId, owner: "OWNER" },
+              orderBy: { createdAt: "desc" },
+            })
+          : null;
+      if (!pos) {
         return NextResponse.json({ error: "עמדה-לא-נמצאה" }, { status: 404 });
       }
+      const pair = await db.dexPair.findUnique({ where: { id: pos.pairId } });
+      if (!pair) return NextResponse.json({ error: "זוג-לא-נמצא" }, { status: 404 });
       const f = pct / 100;
       const outBase = pos.baseAmount * f;
       const outQuote = pos.quoteAmount * f;
       await db.dexPair.update({
         where: { id: pos.pairId },
         data: {
-          reserveBase: Math.max(1e-9, pos.pair.reserveBase - outBase),
-          reserveQuote: Math.max(1e-9, pos.pair.reserveQuote - outQuote),
+          reserveBase: Math.max(1e-9, pair.reserveBase - outBase),
+          reserveQuote: Math.max(1e-9, pair.reserveQuote - outQuote),
         },
       });
       if (pct >= 100) {
@@ -106,10 +118,10 @@ export async function POST(req: NextRequest) {
         });
       }
       await db.dexLedger.create({
-        data: { account: "OWNER", token: pos.pair.quote, amount: outQuote, reason: `משיכה-מבריכה ${pos.pair.base}/${pos.pair.quote} (${pct}%)`, ref: pos.id },
+        data: { account: "OWNER", token: pair.quote, amount: outQuote, reason: `משיכה-מבריכה ${pair.base}/${pair.quote} (${pct}%)`, ref: pos.id },
       });
       await db.dexLedger.create({
-        data: { account: "OWNER", token: pos.pair.base, amount: outBase, reason: `משיכה-מבריכה ${pos.pair.base}/${pos.pair.quote} (${pct}%)`, ref: pos.id },
+        data: { account: "OWNER", token: pair.base, amount: outBase, reason: `משיכה-מבריכה ${pair.base}/${pair.quote} (${pct}%)`, ref: pos.id },
       });
       return NextResponse.json({ ok: true, outBase, outQuote });
     }

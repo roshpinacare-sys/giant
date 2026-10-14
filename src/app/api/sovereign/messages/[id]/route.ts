@@ -4,7 +4,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { isOwner } from "@/lib/sovereign-auth";
+import { isOwnerReq } from "@/lib/sovereign-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +34,7 @@ export async function PATCH(
   }
 
   // שער-הבעלים: סימון/הכרעה הן פעולות-ניהול-בעלים (חוק-הפרונט/הבק)
-  if (!(await isOwner())) {
+  if (!(await isOwnerReq(req))) {
     return NextResponse.json(
       { error: "פעולת-בעלים דורשת מפתח headcorner" },
       { status: 401 },

@@ -54,3 +54,24 @@ export async function isOwner(): Promise<boolean> {
     return false;
   }
 }
+
+// בדיקת-הרשאה עם תמיכת-iframe: קובץ-עוגיות נחסם בתצוגה-מקדימה-מוטמעת,
+// לכן הפרונט שולח את אסימון-ההפעלה הנגזר בכותרת x-giant-owner.
+// האסימון אינו הסוד — הוא SHA-256 נגזר ממנו ואינו חושף דבר.
+export async function isOwnerReq(req: Request): Promise<boolean> {
+  try {
+    const header = req.headers.get("x-giant-owner");
+    if (header) {
+      const expected = await ownerSessionToken();
+      if (
+        header.length === expected.length &&
+        timingSafeEqual(Buffer.from(header), Buffer.from(expected))
+      ) {
+        return true;
+      }
+    }
+  } catch {
+    // נופל-לבדיקת-העוגייה
+  }
+  return isOwner();
+}

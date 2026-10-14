@@ -25,7 +25,8 @@ import {
   Terminal,
   Users,
 } from "lucide-react";
-import { FileText } from "lucide-react";
+import { FileText, TrendingUp } from "lucide-react";
+import { DexView } from "@/components/giant/dex/dex-view";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -260,6 +261,7 @@ function RelayProcessedChip({ processed }: { processed: boolean }) {
 }
 
 const NAV_ITEMS = [
+  { id: "dex", label: "giant DEX", icon: TrendingUp },
   { id: "channel", label: "ערוץ הריבון", icon: MessagesSquare },
   { id: "ledger", label: "לדג'ר-האמת", icon: ScrollText },
   { id: "plans", label: "תוכניות-האם", icon: FileText },
@@ -291,7 +293,7 @@ export default function Home() {
   const [landText, setLandText] = useState("");
   const [landing, setLanding] = useState(false);
   const [tab, setTab] = useState("inbox");
-  const [view, setView] = useState("channel");
+  const [view, setView] = useState("dex");
   const [navOpen, setNavOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
@@ -303,10 +305,23 @@ export default function Home() {
     });
   }, []);
 
+  // אסימון-בעלים (תמיכת-iframe: העוגייה נחסמת בהטמעה — האסימון הנגזר עובר בכותרת)
+  const ownerHeaders = useCallback((): Record<string, string> => {
+    try {
+      const t = localStorage.getItem("giant_owner_token");
+      return t ? { "x-giant-owner": t } : {};
+    } catch {
+      return {};
+    }
+  }, []);
+
   const refresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      const res = await fetch("/api/sovereign/messages", { cache: "no-store" });
+      const res = await fetch("/api/sovereign/messages", {
+        cache: "no-store",
+        headers: ownerHeaders(),
+      });
       if (!res.ok) throw new Error("נכשלה-טעינת-הערוץ");
       const data = (await res.json()) as { messages: SovereignMessage[] };
       setMessages((prev) =>
@@ -347,9 +362,13 @@ export default function Home() {
   useEffect(() => {
     void (async () => {
       try {
-        const res = await fetch("/api/sovereign/auth", { cache: "no-store" });
+        const res = await fetch("/api/sovereign/auth", {
+          cache: "no-store",
+          headers: ownerHeaders(),
+        });
         const data = (await res.json()) as { owner: boolean };
         setOwner(data.owner);
+        if (data.owner) void refresh();
       } catch {
         setOwner(false);
       }
@@ -377,6 +396,8 @@ export default function Home() {
 
   function renderView() {
     switch (view) {
+      case "dex":
+        return <DexView />;
       case "ledger":
         return <LedgerView />;
       case "plans":
@@ -420,7 +441,7 @@ export default function Home() {
     try {
       const res = await fetch(`/api/sovereign/messages/${m.id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...ownerHeaders() },
         body: JSON.stringify({ action: "read" }),
       });
       if (!res.ok) throw new Error("נכשל-סימון-נקרא");
@@ -439,7 +460,7 @@ export default function Home() {
     try {
       const res = await fetch(`/api/sovereign/messages/${m.id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...ownerHeaders() },
         body: JSON.stringify({ action: "decide", requestStatus: decision }),
       });
       const data = (await res.json()) as {
@@ -500,7 +521,7 @@ export default function Home() {
     try {
       const res = await fetch("/api/sovereign/messages", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...ownerHeaders() },
         body: JSON.stringify({ from: "OWNER", body }),
       });
       const data = (await res.json()) as {
@@ -540,7 +561,10 @@ export default function Home() {
     if (processingRelay) return;
     setProcessingRelay(true);
     try {
-      const res = await fetch("/api/sovereign/relay/process", { method: "POST" });
+      const res = await fetch("/api/sovereign/relay/process", {
+        method: "POST",
+        headers: ownerHeaders(),
+      });
       const data = (await res.json()) as { processed?: number; error?: string };
       if (!res.ok || typeof data.processed !== "number") {
         throw new Error(data.error ?? "נכשל-עיבוד-התור-הפנימי");
@@ -574,8 +598,17 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
-      const data = (await res.json()) as { owner: boolean; error?: string };
+      const data = (await res.json()) as {
+        owner: boolean;
+        token?: string;
+        error?: string;
+      };
       if (!res.ok || !data.owner) throw new Error(data.error ?? "מפתח-לא-תקין");
+      try {
+        if (data.token) localStorage.setItem("giant_owner_token", data.token);
+      } catch {
+        // סשן-זמני בלבד
+      }
       setOwner(true);
       setPassword("");
       setAuthOpen(false);
@@ -598,6 +631,11 @@ export default function Home() {
 
   async function logout() {
     try {
+      localStorage.removeItem("giant_owner_token");
+    } catch {
+      // המשך-יציאה
+    }
+    try {
       await fetch("/api/sovereign/auth", { method: "DELETE" });
     } catch {
       // יציאה-מקומית בכל-מקרה
@@ -614,7 +652,7 @@ export default function Home() {
     try {
       const res = await fetch("/api/git/land", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...ownerHeaders() },
         body: JSON.stringify({ text }),
       });
       const data = (await res.json()) as {
@@ -659,7 +697,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       {/* כותרת */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-        <div className="mx-auto flex w-full max-w-7xl items-start justify-between gap-4 px-4 py-5">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
           <div className="flex min-w-0 items-start gap-1">
             <Button
               variant="ghost"
@@ -672,18 +710,18 @@ export default function Home() {
             </Button>
             <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-2xl font-bold tracking-tight">giant · מערכת-האמת</h1>
+              <h1 className="text-xl font-bold tracking-tight sm:text-2xl">giant · מערכת-האמת</h1>
               <Badge className="gap-1 bg-emerald-600 text-white hover:bg-emerald-600">
                 <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
                 הערוץ-האחד · בעלים ↔ ריבונות
               </Badge>
             </div>
-            <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+            <p className="mt-1.5 hidden text-sm text-muted-foreground leading-relaxed md:block">
               חוק-giant: ערוץ-אחד בלבד · אין טענות-סוכנים לבעלים · הריבונות היא המפעילה ומשיגה את המימון בעצמה · ניהול-הבעלים מאחורי מפתח-headcorner
             </p>
             </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 ps-13 sm:ps-0">
             <Button
               variant="outline"
               size="lg"

@@ -7,7 +7,7 @@ import { TF_SECONDS } from "@/lib/dex-types";
 
 /* ============================== הגדרות-שוק ============================== */
 
-const SEED_VERSION = "dex-v1.1b-2026-10-15";
+const SEED_VERSION = "dex-v1.1c-2026-10-15";
 const TICK_MS = 8_000;
 const FEE_BPS = 30;
 
@@ -269,7 +269,7 @@ function aggregate(
     const b = bucket(c.t, tf);
     const cur = map.get(b);
     if (!cur) {
-      map.set(b, { tf, ...c, t: b });
+      map.set(b, { ...c, tf, t: b });
     } else {
       cur.h = Math.max(cur.h, c.h);
       cur.l = Math.min(cur.l, c.l);
