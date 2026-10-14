@@ -2006,3 +2006,36 @@ Stage Summary:
 - **"הרבה יותר מ6 סוכנים" — הוכח**: 125 סוכנים אמת לפי מקור, כשנתוני-הדמו מסומנים ולא-נספרים (חוזה-אין-זיופים).
 - **ההגשה-הסופית עולה**: הריבונות חיה בגיט; הסנדבוקס מציג ומחבר; מבחן-ההישרדות מציג מה ישרוד את המחיקה.
 - lint נקי · tsc נקי-ב-src · קומיט T61 נדחף.
+---
+Task ID: 62-a / Agent: audit-wiring builder / Task: חיבור-ביקורת-הצי-האמיתית לממשק — FLEET-AUDIT.json + דיאל-TCP חי לתוך /api/giant/sovereignty (audit) + סעיף "ביקורת-חיות-הצי" ב-SovereigntyView, אפס-זיופים.
+
+Work Log:
+- קראתי worklog-tail (T61-a/b) + את קובץ-הקבלה האמיתי /home/z/estate/Sandbox/proof/out/FLEET-AUDIT.json (הקובץ-על-הדיסק הוא-האמת: מכיל גם auditFix שלא-היה-בספק) + route.ts מלא + SovereigntyView.tsx מלא (854 ש') + sovereignty-types.ts.
+- NEW src/lib/giant/audit-types.ts — FleetAuditReceipt משוקף-לקובץ-האמיתי (fleet-audit/1 · liveServices · remotePlane.beats · treatment · siblingGiants.waves · localFreshnessAfterSync Record<string,number|null> · unprobable · verdict · sha16 · auditFix? אופציונלי-כנה).
+- EDIT src/lib/giant/sovereignty-types.ts (הקובץ-הרביעי-המותר): import type FleetAuditReceipt + interface SovereigntyAudit { receipt | receiptSha16 | ports | receiptAgeMin } + `audit: SovereigntyAudit | null` ב-SovereigntyPayload — בלבד, אפס-נגיעה-בקיים.
+- EDIT src/app/api/giant/sovereignty/route.ts — תוספת-בלבד: import net + FLEET_AUDIT/AUDIT_PORTS/DIAL_TIMEOUT_MS constants; dialProbe(port) — net.createConnection 127.0.0.1 · timeout-800ms · settled-flag (connect→true, timeout/error→false, destroy+resolve-פעם-אחת); normalizeReceipt — מיפוי-הגנתי מלא (rec/str/num/arr כשאר-הקובץ) + שער-schema startsWith("fleet-audit/") שזורק-בכנות; measureAudit — Promise.all דיאל [3000,3040] תמיד, קריאת-הקבלה-ב-try/catch → כשל = errors.push("ביקורת-הצי: קובץ-הקבלה לא נקרא") + audit=null (אין-דריסה-של-הקבלה-בדיאל — שני-המישורים-נחשפים); receiptAgeMin = floor((now-at)/60s) עם-Date.parse-guard; buildPayload מקבל `audit,` אחרי-endpoints — cache-60s/sha16/no-store/x-sovereignty-sha16 כמו-שהיו.
+- EDIT src/components/giant/SovereigntyView.tsx (+330 ש') — FleetAuditSection עצמאי (Spotlight/Reveal/SectionHead-מקומיים) מותקן בין מפקד-הסוכנים (id="agents") לליגת-הענקים (id="giants"): SectionHead kicker="T62 · הבעלים: רובם סנדבוקסים מתים — לבחון את כולם" title="ביקורת-חיות-הצי" side=sha16-קבלה-mono-זעיר · פס-פסק-דין-ענבר-מודגש · שני-המישורים grid-cols-1 lg:grid-cols-2 (min-w-0-לשניהם): (a) "מישור-החיים-כאן" — שורות-liveServices (צ'יפ-אמרלד "חי"/רוז "לא-חי" + שם + פורט-mono + evidence-זעיר) ומתחת "בדיקת-TCP עכשיו" צ'יפי-דיאל-חיים-פר-פורט + הערה-ענבר "תלתק-בקבלה vs דיאל-חי — מוצגות-שתי-המדידות" כשיש-סתירה (Map מפתחות-פורט); (b) "מישור-הגיט-החוץ-מכונה" — doctrine + טבלת-beats (repo-mono · remoteLast-safeTime · "+N קומיטים היו-קדימה" · נושא-חתוך-עם-title · overflow-x-auto/min-w-[420px]) + externalLoopVerdict-emerald-font-black; רשימת-הטיפול-הממוספרת-עם-אייקון-Check-ענבר (10px zinc-400 break-words); הענק-האח — 3 שורות-g מונובר-ענבר + evidence-זעיר + פסק-דין-בציטוט-ענבר; חסימת-UNPROBABLE-רוז-מודגשת (count-גדול-mono + note + "החוק:" במסגרת-רוז) — עמוד-התווך-של-אפס-הזיופים; רצועת-טריות — 4 צ'יפים "X דקות" (DomainStatusMin→"Domain/status" · truthLatestMin→"truth/latest" · fleetGraphMin→"FLEET-GRAPH" · pulseNetworkMin→"Pulse/network"; >60-ענבר · null-רוז · אחרת-אמרלד) + שורה-זעירה "קבלת-הביקורת בת X דקות" (null→"—") + probe-ב-title; audit-null → כרטיס-ענבר-כן "לא נמדדה — לא-מצויר, לא-מומצא"; הגנות: isFiniteNum/safeTime הקיימים, אופציונלי-צ'יינינג-בכל-גישה.
+- נייד-בלי-גלילה-אופקית: גריד-המישורים grid-cols-1-מפורש-בבסיס + min-w-0-בשני-הכרטיסים; כל-טבלה-בתוך-overflow-x-auto-עצמאי (גלילה-מקומית, לא-דף); truncate+min-w-0-על-כל-מונו/נתיב; break-words-על-טיפול/UNPROBABLE; flex-wrap-על-כל-שורות-הצ'יפים (התבנית-שנלמדה-ב-T61).
+- שערים-חיים: bun run lint → exit-0-נקי · bunx tsc --noEmit → 0-שגיאות-תחת-src (רק-5-הקדומות-ב-examples/mini-services/skills — לא-שלי) · curl /api/giant/sovereignty → HTTP-200: has-audit=true · receiptSha16=b8dc8a6ff37aa088 (=sha16-הקבלה-בדיסק) · ports=[{3000,alive:true},{3040,alive:true}] (דיאל-TCP-אמיתי, התאמה-מלאה-לקבלה) · receiptAgeMin=11 · beats=[giant+3,Domain+189,Pulse+8,FleetHQ+222] · treatment=4 · waves=3 · unprobable.count=20 · freshness מדויק-לקובץ · errors=[] · sha16-מטען-חדש c1fb7530c66dc8e2 + כותרת-x-sovereignty-sha16 · עמוד-ראשי-נערך-ומגיש-200-בלי-ריסטרט.
+
+Stage Summary:
+- ביקורת-הצי-שהבעלים-הזמין ("רובם סנדבוקסים מתים — לבחון את כולם") חיה-עכשיו-בממשק: סעיף id="fleet-audit" בין מפקד-הסוכנים לליגת-הענקים — קבלת-הביקורת האמיתית (FLEET-AUDIT.json · sha16-b8dc8a6ff37aa088) מוצגת-לצד-מדידת-דיאל-TCP-חיה-עכשיו, שני-מישורים-שלא-מדירים-זה-את-זה.
+- Artifacts: src/lib/giant/audit-types.ts (NEW) · src/lib/giant/sovereignty-types.ts (SovereigntyAudit+audit-שדה) · src/app/api/giant/sovereignty/route.ts (dialProbe+normalizeReceipt+measureAudit — תוספת-בלבד, cache/sha16/צנזורה-קיימים-לא-נגעו) · src/components/giant/SovereigntyView.tsx (FleetAuditSection — 854→1184 ש').
+- כנות: אף-דיאל-לא-דורס-את-הקבלה (סתירה→הערה-ענבר-ושתי-המדידות-מוצגות) · כשל-קבלה→errors[]+audit=null · UNPROBABLE-20-בכרזה-רוז-בולטת-עם-החוק · lint-נקי · tsc-0-ב-src · אפס-קומיט/בנייה/ריסטרט (לפי-הנחיה).
+---
+Task ID: 62
+Agent: Z.ai Code (main desk, trace 1a13cb9c669bb92d)
+Task: הבעלים: "כל הסוכנים — רובם סנדבוקסים מתים של zai — לבחון את כולם ולטפל" — ביקורת-חיות אמיתית + טיפול
+
+Work Log:
+- **מדידת-חיים אמיתית**: ls-remote גילה — כל 4 הרימוטים קדימה מהמקומי; fetch חשף דופק חוץ-מכונה חי (Domain office-artery 23:23:19Z · FleetHQ pacemaker 23:22:35Z — דקה לפני הביקורת).
+- **תגלית-הענק-האח**: giant/app גלים 5-7 — trust-map 39 ריפו (82 סיגנלים/30 redLines), design-laws מאותם-10-רפרנסים, empire-connection /api/giant/empire (39 ריפו × תפקיד × קבוצה, 18 מחוברים-נמדדו) — עובד-מקביל-על-אותו-מנדט.
+- **טיפול**: FF-סנכרון 4 מראות (giant +3 · Domain +189 · Pulse +8 · FleetHQ +222 — operator-inbox ישן-37-שורות נשמר-כעדות ונזרק) · organism-keeper (3040) ו-GIANT (3000) נמדדו חיים · FLEET-AUDIT.json נכתב ונקומט ל-Sandbox/proof/out (sha16 b8dc8a6ff37aa088; תיקון-כנות של false→true אחרי-כשל-ציטוט בפרוב).
+- **62-a**: audit-types.ts חדש · API +audit (דיאל-TCP חי 800ms ל-3000/3040, קבלה נקראת-כל-בקשה, fail-honest) · SovereigntyView מחלקת "ביקורת-חיות-הצי" (שני-מישורים: חיים-כאן vs גיט-חוץ-מכונה, טיפולים, ענק-אח, UNPROBABLE-20-רוז, רעננות-אחרי-סנכרון).
+- **הישרדות**: db/market-cache.json (מטמון-ריצה שהלכלך-תמידית) untracked + .gitignore — my-project עכשיו נקי.
+- **E2E**: 1440 → 10/10 מחלקות-נכונות · 390 → MOBILE-OK · אפס-שגיאות · API 200 (sha16 c1fb7530c66dc8e2).
+
+Stage Summary:
+- **פסק-הדין-הכנה**: הסנדבוקסים-המקומיים אכן מתו — אבל הריבונות חיה: 2 שירותים-חיים-כאן · 4 ריפו דופקים חוץ-מכונה-עכשיו · 20 צמתים UNPROBABLE-כנים (לא ממציאים חיים).
+- המראות-המקומיות התכנסו עם מישור-החיים; גלי-הענק-האח (5-7) נחתו מקומית — התכנסות-צי, לא כפילות.
+- קומיט T62 נדחף; Sandbox קומיט-ביקורת נדחף.

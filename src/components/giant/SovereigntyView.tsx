@@ -11,8 +11,10 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  Activity,
   AlertTriangle,
   Archive,
+  Check,
   GitBranch,
   Landmark,
   Lightbulb,
@@ -29,6 +31,7 @@ import type {
   GiantFamily,
   Lesson,
   RepoInfo,
+  SovereigntyAudit,
   SovereigntyPayload,
 } from "@/lib/giant/sovereignty-types";
 
@@ -281,6 +284,331 @@ function LessonCard({ lesson, index }: { lesson: Lesson; index: number }) {
           {lesson.source}
         </p>
       </article>
+    </Reveal>
+  );
+}
+
+/* ─── T62 · ביקורת-חיות-הצי: קבלת-הביקורת מול דיאל-TCP-חי — שתי-מישורי-מדידה ─── */
+
+const FRESHNESS_LABELS: Record<string, string> = {
+  DomainStatusMin: "Domain/status",
+  truthLatestMin: "truth/latest",
+  fleetGraphMin: "FLEET-GRAPH",
+  pulseNetworkMin: "Pulse/network",
+};
+
+function FleetAuditSection({ audit }: { audit: SovereigntyAudit | null }) {
+  const receipt = audit?.receipt ?? null;
+  const ports = audit?.ports ?? [];
+  const aliveByPort = new Map<number, boolean>();
+  for (const s of receipt?.liveServices ?? []) aliveByPort.set(s.port, s.alive);
+  const dialDisagrees = ports.some((p) => {
+    const r = aliveByPort.get(p.port);
+    return r !== undefined && r !== p.alive;
+  });
+  const services = receipt?.liveServices ?? [];
+  const beats = receipt?.remotePlane.beats ?? [];
+  const waves = receipt?.siblingGiants.waves ?? [];
+  const freshness: [string, number | null][] = receipt
+    ? Object.entries(receipt.localFreshnessAfterSync ?? {})
+    : [];
+
+  return (
+    <Reveal>
+      <section
+        id="fleet-audit"
+        className="rounded-2xl border border-white/[0.07] bg-white/[0.035] p-4 backdrop-blur-xl sm:p-5"
+      >
+        <SectionHead
+          kicker="T62 · הבעלים: רובם סנדבוקסים מתים — לבחון את כולם"
+          title="ביקורת-חיות-הצי"
+          side={
+            audit ? (
+              <span
+                className="font-mono text-[9px] text-zinc-600"
+                dir="ltr"
+                title="sha16 של קובץ-הקבלה FLEET-AUDIT.json"
+              >
+                {audit.receiptSha16 ?? "—"}
+              </span>
+            ) : undefined
+          }
+        />
+        {!audit ? (
+          <p className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-3 text-xs leading-6 text-zinc-400">
+            ביקורת-הצי לא נמדדה במדידה-הזאת — קובץ-הקבלה לא נקרא; לא-מצויר, לא-מומצא.
+          </p>
+        ) : (
+          <div className="min-w-0 space-y-4">
+            {/* פס-פסק-הדין-של-הקבלה */}
+            {receipt?.verdict ? (
+              <p className="rounded-xl border border-amber-500/40 bg-amber-500/[0.06] px-3 py-2.5 text-sm font-black leading-6 text-amber-200">
+                {receipt.verdict}
+              </p>
+            ) : (
+              <p className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] px-3 py-2.5 text-xs leading-6 text-zinc-400">
+                קובץ-הקבלה לא נקרא במדידה-הזאת — מוצגת-רק-מדידת-הדיאל-החיה.
+              </p>
+            )}
+
+            {/* שני-המישורים זה-לצד-זה — גריד-1-עמודה-מפורש-בנייד (הלקח-מ-T61) */}
+            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+              {/* a · מישור-החיים-כאן */}
+              <Spotlight className="flex min-w-0 flex-col rounded-2xl border border-white/[0.07] bg-white/[0.02] p-3.5 backdrop-blur-xl">
+                <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">
+                  <Activity className="h-3.5 w-3.5 shrink-0 text-amber-500/60" aria-hidden />
+                  מישור-החיים-כאן · השירותים-בקבלה
+                </p>
+                <div className="mt-2 divide-y divide-white/5">
+                  {services.map((s) => (
+                    <div key={`${s.name}:${s.port}`} className="min-w-0 py-1.5">
+                      <div className="flex min-w-0 items-center justify-between gap-2">
+                        <span className="flex min-w-0 items-center gap-2">
+                          <span
+                            className={`shrink-0 rounded-full border px-2 py-0.5 text-[9px] font-bold ${
+                              s.alive
+                                ? "border-emerald-500/30 bg-emerald-500/[0.07] text-emerald-400"
+                                : "border-rose-500/30 bg-rose-500/[0.07] text-rose-400"
+                            }`}
+                          >
+                            {s.alive ? "חי" : "לא-חי"}
+                          </span>
+                          <span className="truncate text-[11px] font-bold text-zinc-200" title={s.name}>
+                            {s.name}
+                          </span>
+                        </span>
+                        <span
+                          className="shrink-0 font-mono text-[10px] font-bold tabular-nums text-amber-300/90"
+                          dir="ltr"
+                        >
+                          :{s.port}
+                        </span>
+                      </div>
+                      {s.evidence && (
+                        <p className="mt-0.5 truncate text-[9px] text-zinc-600" dir="auto" title={s.evidence}>
+                          {s.evidence}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                  {services.length === 0 && (
+                    <p className="py-1.5 text-[10px] text-zinc-600">אין-רשימת-שירותים בקבלה — לא-מומצא</p>
+                  )}
+                </div>
+                <div className="mt-3 border-t border-white/[0.06] pt-2.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="text-[10px] font-bold text-zinc-500">בדיקת-TCP עכשיו:</span>
+                    {ports.map((p) => (
+                      <span
+                        key={p.port}
+                        title={`dial 127.0.0.1:${p.port} · 800ms`}
+                        dir="ltr"
+                        className={`rounded-full border px-2 py-0.5 font-mono text-[9px] font-bold tabular-nums ${
+                          p.alive
+                            ? "border-emerald-500/30 bg-emerald-500/[0.07] text-emerald-400"
+                            : "border-rose-500/30 bg-rose-500/[0.07] text-rose-400"
+                        }`}
+                      >
+                        :{p.port} {p.alive ? "פתוח" : "סגור"}
+                      </span>
+                    ))}
+                    {ports.length === 0 && (
+                      <span className="text-[10px] text-zinc-600">הדיאל-לא-רץ — לא-מומצא</span>
+                    )}
+                  </div>
+                  {dialDisagrees && (
+                    <p className="mt-2 rounded-lg border border-amber-500/30 bg-amber-500/[0.05] px-2 py-1 text-[10px] font-bold leading-4 text-amber-300">
+                      תלתק-בקבלה vs דיאל-חי — מוצגות-שתי-המדידות
+                    </p>
+                  )}
+                </div>
+              </Spotlight>
+
+              {/* b · מישור-הגיט-החוץ-מכונה */}
+              <Spotlight className="flex min-w-0 flex-col rounded-2xl border border-white/[0.07] bg-white/[0.02] p-3.5 backdrop-blur-xl">
+                <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">
+                  <GitBranch className="h-3.5 w-3.5 shrink-0 text-amber-500/60" aria-hidden />
+                  מישור-הגיט-החוץ-מכונה
+                </p>
+                {receipt ? (
+                  <>
+                    <p className="mt-2 text-[11px] leading-5 text-zinc-400">{receipt.remotePlane.doctrine}</p>
+                    <div className="mt-2 overflow-x-auto">
+                      <table className="w-full min-w-[420px] text-right text-xs">
+                        <thead className="text-[10px] uppercase text-zinc-500">
+                          <tr>
+                            <th className="px-2 py-1.5">ריפו</th>
+                            <th className="px-2 py-1.5">דפיקת-הרימוט-האחרונה</th>
+                            <th className="px-2 py-1.5">הפער-שסונכרן</th>
+                            <th className="px-2 py-1.5">נושא</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {beats.map((b) => (
+                            <tr key={b.repo} className="border-t border-white/5 transition hover:bg-white/[0.02]">
+                              <td className="px-2 py-2 font-mono font-bold text-zinc-200" dir="ltr">
+                                {b.repo}
+                              </td>
+                              <td className="px-2 py-2 font-mono tabular-nums text-zinc-300">
+                                {safeTime(b.remoteLast) ?? "—"}
+                              </td>
+                              <td className="px-2 py-2 font-mono tabular-nums text-amber-300">
+                                +{fmtInt(b.aheadBefore)} קומיטים היו-קדימה
+                              </td>
+                              <td className="max-w-[220px] px-2 py-2">
+                                <span className="block truncate text-zinc-400" title={b.subject}>
+                                  {b.subject}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                          {beats.length === 0 && (
+                            <tr>
+                              <td colSpan={4} className="px-2 py-3 text-center text-zinc-500">
+                                אין-דפיקות-רימוט בקבלה — לא-מומצא
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                    <p className="mt-2 text-[11px] font-black leading-5 text-emerald-400">
+                      {receipt.remotePlane.externalLoopVerdict}
+                    </p>
+                  </>
+                ) : (
+                  <p className="mt-2 text-[10px] leading-5 text-zinc-600">
+                    מישור-הגיט לא נמדד בקבלה — לא-מצויר, לא-מומצא.
+                  </p>
+                )}
+              </Spotlight>
+            </div>
+
+            {/* הטיפול-שבוצע */}
+            {receipt && receipt.treatment.length > 0 && (
+              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">
+                  הטיפול-שבוצע
+                </p>
+                <ol className="mt-2 space-y-1.5">
+                  {receipt.treatment.map((t, i) => (
+                    <li
+                      key={`${i}-${t.slice(0, 24)}`}
+                      className="flex items-start gap-2 text-[10px] leading-5 text-zinc-400"
+                    >
+                      <Check className="mt-0.5 h-3 w-3 shrink-0 text-amber-400" aria-hidden />
+                      <span className="shrink-0 font-mono text-amber-500/80" dir="ltr">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="min-w-0 break-words" dir="auto">
+                        {t}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+
+            {/* הענק-האח · גלי-העבודה-המקבילים */}
+            {receipt && (
+              <div className="min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">
+                  הענק-האח · גלי-העבודה-המקבילים
+                </p>
+                <div className="mt-2 space-y-1">
+                  {waves.map((w) => (
+                    <div key={w.wave} className="flex items-baseline gap-2 text-[11px] leading-5">
+                      <span className="shrink-0 font-mono text-[10px] font-black text-amber-400" dir="ltr">
+                        wave {w.wave}
+                      </span>
+                      <span className="min-w-0 truncate text-zinc-300" title={w.subject}>
+                        {w.subject}
+                      </span>
+                    </div>
+                  ))}
+                  {waves.length === 0 && <p className="text-[10px] text-zinc-600">אין-גלים בקבלה — לא-מומצא</p>}
+                </div>
+                {receipt.siblingGiants.evidence && (
+                  <p
+                    className="mt-1 truncate font-mono text-[9px] text-zinc-600"
+                    dir="ltr"
+                    title={receipt.siblingGiants.evidence}
+                  >
+                    {receipt.siblingGiants.evidence}
+                  </p>
+                )}
+                {receipt.siblingGiants.verdict && (
+                  <p className="mt-2 border-r-2 border-amber-500/60 pr-3 text-[11px] font-bold leading-5 text-amber-200/90">
+                    {receipt.siblingGiants.verdict}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* UNPROBABLE — עמוד-התווך-של-אפס-זיופים, בולט-במכוון */}
+            {receipt && (
+              <div className="rounded-xl border border-rose-500/40 bg-rose-500/[0.06] p-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-full border border-rose-500/40 bg-rose-500/10 px-2 py-0.5 text-[9px] font-black text-rose-300">
+                    UNPROBABLE
+                  </span>
+                  <span className="font-mono text-xl font-black tabular-nums text-rose-300">
+                    {fmtInt(receipt.unprobable.count)}
+                  </span>
+                  <span className="text-[10px] font-bold text-rose-200/80">
+                    צמתים-שלא-ניתן-לבדוק-מהמכונה-הזאת
+                  </span>
+                </div>
+                <p className="mt-2 break-words text-[11px] leading-5 text-zinc-300">{receipt.unprobable.note}</p>
+                <p className="mt-2 border-r-2 border-rose-500/60 pr-3 text-[11px] font-black leading-5 text-rose-200">
+                  החוק: {receipt.unprobable.law}
+                </p>
+              </div>
+            )}
+
+            {/* טריות-המקומי-אחרי-הסנכרון */}
+            {receipt && (
+              <div className="min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">
+                  טריות-המקומי-אחרי-הסנכרון
+                </p>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {freshness.map(([k, v]) => (
+                    <span
+                      key={k}
+                      title={`${k} · דקות-מאז-עדכון-אחרון`}
+                      className={`rounded-full border px-2.5 py-1 text-[10px] font-bold ${
+                        !isFiniteNum(v)
+                          ? "border-rose-500/30 bg-rose-500/[0.07] text-rose-400"
+                          : v > 60
+                            ? "border-amber-500/30 bg-amber-500/[0.07] text-amber-400"
+                            : "border-emerald-500/30 bg-emerald-500/[0.07] text-emerald-400"
+                      }`}
+                    >
+                      {FRESHNESS_LABELS[k] ?? k}{" "}
+                      <span className="font-mono tabular-nums" dir="ltr">
+                        {isFiniteNum(v) ? `${fmtInt(v)} דקות` : "—"}
+                      </span>
+                    </span>
+                  ))}
+                  {freshness.length === 0 && (
+                    <p className="text-[10px] text-zinc-600">טריות-לא-נמדדה בקבלה — לא-מומצא</p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* גיל-הקבלה + שיטת-המדידה-שלה */}
+            <p className="truncate text-[10px] leading-5 text-zinc-600" title={receipt?.probe ?? undefined}>
+              קבלת-הביקורת בת{" "}
+              <span className="font-mono tabular-nums text-zinc-400">
+                {isFiniteNum(audit.receiptAgeMin) ? `${fmtInt(audit.receiptAgeMin)} דקות` : "—"}
+              </span>
+              {receipt?.probe && <> · מדידת-הקבלה: {receipt.probe}</>}
+            </p>
+          </div>
+        )}
+      </section>
     </Reveal>
   );
 }
@@ -701,6 +1029,9 @@ export function SovereigntyView() {
           )}
         </section>
       </Reveal>
+
+      {/* 5.5 · ביקורת-חיות-הצי (T62) — קבלת-הביקורת מול דיאל-TCP-חי, שתי-מישורי-מדידה */}
+      <FleetAuditSection audit={data.audit ?? null} />
 
       {/* 6 · ההשוואה מול הענקים — נמדדה, לא סיפור */}
       <Reveal>

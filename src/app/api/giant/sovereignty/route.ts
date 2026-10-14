@@ -5,10 +5,12 @@
  * צי-הסוכנים (כל-המקורות-האמיתיים), ליגת-הענקים, והלקחים-מהכישלונות-של-העבר.
  * חוזה-אפס-סימולציה: כל-מספר מגיע מקריאת-קובץ או מפקודת-git אמיתית;
  * מקור-שנכשל נרשם ב-errors[] והמשך-מדידה — אף-מספר לא מומצא.
+ * T62: סעיף audit — קבלת-ביקורת-הצי (FLEET-AUDIT.json) + דיאל-TCP חי ל-127.0.0.1:3000/3040.
  * cache-זיכרון 60 שניות · fail-honest · אפס-דליפת-טוקנים (רימוט-מצונזר).
  */
 import { NextResponse } from "next/server";
 import { execSync } from "node:child_process";
+import net from "node:net";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
@@ -23,8 +25,10 @@ import type {
   GiantsBook,
   Lesson,
   RepoInfo,
+  SovereigntyAudit,
   SovereigntyPayload,
 } from "@/lib/giant/sovereignty-types";
+import type { FleetAuditReceipt } from "@/lib/giant/audit-types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -49,6 +53,9 @@ const FLEET_CENSUS = path.join(
 const GIANTS_JSON = path.join(HOME, "estate", "Domain", "dex", "giants.json");
 const KEY_PROOF = path.join(HOME, "estate", "Sandbox", "proof", "out", "KEY-PROOF-STATUS.md");
 const TOKEN_TRUTH = path.join(HOME, "estate", "Sandbox", "ops", "TOKEN-TRUTH.md");
+const FLEET_AUDIT = path.join(HOME, "estate", "Sandbox", "proof", "out", "FLEET-AUDIT.json");
+const AUDIT_PORTS = [3000, 3040];
+const DIAL_TIMEOUT_MS = 800;
 
 const SKIP_DIRS = new Set(["node_modules", ".next", ".cache", ".git", "lost+found"]);
 
@@ -640,6 +647,95 @@ async function countEndpoints(errors: string[]): Promise<number> {
   }
 }
 
+/* ---------- ביקורת-הצי (T62): קבלת-FLEET-AUDIT + דיאל-TCP חי ---------- */
+
+/** דיאל-TCP אמיתי ל-127.0.0.1:port — timeout 800ms; כשל/חריגה = לא-חי. מדידה-חיה, לא ss. */
+function dialProbe(port: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    const socket = net.createConnection({ host: "127.0.0.1", port });
+    let settled = false;
+    const done = (alive: boolean): void => {
+      if (settled) return;
+      settled = true;
+      socket.destroy();
+      resolve(alive);
+    };
+    socket.setTimeout(DIAL_TIMEOUT_MS);
+    socket.on("connect", () => done(true));
+    socket.on("timeout", () => done(false));
+    socket.on("error", () => done(false));
+  });
+}
+
+/** מיפוי-הגנתי של-הקבלה-הגולמית לחוזה; קובץ-לא-תקני → זריקה (הקורא נופל-בכנות). */
+function normalizeReceipt(raw: unknown): FleetAuditReceipt {
+  const r = rec(raw);
+  if (!str(r.schema).startsWith("fleet-audit/")) throw new Error("schema mismatch");
+  const remotePlane = rec(r.remotePlane);
+  const siblingGiants = rec(r.siblingGiants);
+  const unprobable = rec(r.unprobable);
+  const freshness: Record<string, number | null> = {};
+  for (const [k, v] of Object.entries(rec(r.localFreshnessAfterSync))) {
+    freshness[k] = typeof v === "number" && Number.isFinite(v) ? v : null;
+  }
+  return {
+    schema: str(r.schema),
+    at: str(r.at),
+    probe: str(r.probe),
+    ownerMandate: str(r.ownerMandate),
+    liveServices: arr(r.liveServices).map((s) => {
+      const o = rec(s);
+      return { name: str(o.name), port: num(o.port), alive: o.alive === true, evidence: str(o.evidence) };
+    }),
+    remotePlane: {
+      doctrine: str(remotePlane.doctrine),
+      beats: arr(remotePlane.beats).map((b) => {
+        const o = rec(b);
+        return {
+          repo: str(o.repo),
+          remoteLast: str(o.remoteLast),
+          aheadBefore: num(o.aheadBefore),
+          subject: str(o.subject),
+        };
+      }),
+      externalLoopVerdict: str(remotePlane.externalLoopVerdict),
+    },
+    treatment: arr(r.treatment).map((t) => str(t)).filter((t) => t.length > 0),
+    siblingGiants: {
+      evidence: str(siblingGiants.evidence),
+      waves: arr(siblingGiants.waves).map((w) => {
+        const o = rec(w);
+        return { wave: num(o.wave), subject: str(o.subject) };
+      }),
+      verdict: str(siblingGiants.verdict),
+    },
+    localFreshnessAfterSync: freshness,
+    unprobable: { count: num(unprobable.count), note: str(unprobable.note), law: str(unprobable.law) },
+    verdict: str(r.verdict),
+    auditFix: typeof r.auditFix === "string" ? r.auditFix : undefined,
+    sha16: str(r.sha16),
+  };
+}
+
+/** סעיף-הביקורת: הדיאל-החי תמיד רץ; קבלה-שלא-נקראה = null כנה + רישום-כשל (לא-עוקפים-את-הקבלה). */
+async function measureAudit(errors: string[]): Promise<SovereigntyAudit | null> {
+  const ports = await Promise.all(
+    AUDIT_PORTS.map(async (port) => ({ port, alive: await dialProbe(port) })),
+  );
+  let receipt: FleetAuditReceipt;
+  try {
+    receipt = normalizeReceipt(JSON.parse(await fs.readFile(FLEET_AUDIT, "utf8")));
+  } catch {
+    errors.push("ביקורת-הצי: קובץ-הקבלה לא נקרא");
+    return null;
+  }
+  const atMs = Date.parse(receipt.at);
+  const receiptAgeMin = Number.isFinite(atMs)
+    ? Math.max(0, Math.floor((Date.now() - atMs) / 60_000))
+    : null;
+  return { receipt, receiptSha16: receipt.sha16 || null, ports, receiptAgeMin };
+}
+
 /* ---------- ה-handler ---------- */
 
 async function buildPayload(): Promise<SovereigntyPayload> {
@@ -652,6 +748,7 @@ async function buildPayload(): Promise<SovereigntyPayload> {
   const lessons = await measureLessons(errors);
   const archaeology = await measureArchaeology(errors);
   const endpointFiles = await countEndpoints(errors);
+  const audit = await measureAudit(errors);
 
   const dirtyRepos = repos.filter((r) => r.dirtyCount > 0).map((r) => r.name);
   const unpushed = repos.filter((r) => !r.hasRemote).map((r) => r.name);
@@ -678,6 +775,7 @@ async function buildPayload(): Promise<SovereigntyPayload> {
       files: endpointFiles,
       note: "נקודות-קצה חיות בממשק הזה (סריקת-fs)",
     },
+    audit,
   };
 
   // טביעת-אמת: sha256 של-המטען-המלא (בלי-השדה-עצמו), 16 תווים-הקסה

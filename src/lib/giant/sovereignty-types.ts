@@ -1,6 +1,9 @@
 // T61 — Sovereignty contract: ONE payload that connects ALL git folders,
 // the real agent fleet, the giants league, and the lessons of the past.
 // Zero fabrication: every number comes from a real file or a real git command.
+// T62 — adds `audit`: the fleet-audit receipt (FLEET-AUDIT.json) + a LIVE TCP dial probe.
+
+import type { FleetAuditReceipt } from "@/lib/giant/audit-types";
 
 export interface RepoInfo {
   name: string;              // e.g. "my-project"
@@ -83,6 +86,14 @@ export interface ArchaeologyEntry {
   summary: string;           // stage summary line
 }
 
+/** T62 — ביקורת-חיות-הצי: שתי-מישורי-מדידה (קבלת-הביקורת vs דיאל-TCP חי). */
+export interface SovereigntyAudit {
+  receipt: FleetAuditReceipt | null;       // read from /home/z/estate/Sandbox/proof/out/FLEET-AUDIT.json
+  receiptSha16: string | null;             // receipt.sha16
+  ports: { port: number; alive: boolean }[]; // LIVE TCP dial 127.0.0.1 · 800ms timeout (never overrides the receipt)
+  receiptAgeMin: number | null;            // now - receipt.at
+}
+
 export interface SovereigntyPayload {
   ok: boolean;
   at: string;                // ISO
@@ -102,4 +113,5 @@ export interface SovereigntyPayload {
     verdict: string;         // Hebrew honest verdict
   };
   endpoints: { files: number; note: string };
+  audit: SovereigntyAudit | null;          // T62 — fleet-audit receipt + live dial plane
 }
