@@ -71,6 +71,9 @@ export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }
       {/* פועם-הצי · פעילות-אמת-של-סוכני-הצי על ה-AMM */}
       <FleetPulse />
 
+      {/* שוק-הסקטורים M-11 · כלי-הון-מגובים-ביסודות-אמת */}
+      <SectorsPanel onTrade={onTrade} />
+
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.2fr_1fr]">
         {/* זרקור-SAOS */}
         <section className="relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-950/50 to-[#0d1312] p-5">
@@ -360,7 +363,7 @@ interface FleetState {
   fleetVol24h: number;
   fleetTrades24h: number;
   totalAllocated: number;
-  agents: { agentId: string; name: string; active: boolean; balanceUsds: number; lastTradeAt: string | null }[];
+  agents: { agentId: string; name: string; active: boolean; balanceUsds: number; vol24h: number; trades24h: number; lastTradeAt: string | null }[];
   recentTrades: { side: string; price: number; amount: number; total: number; t: string }[];
 }
 
@@ -435,7 +438,11 @@ function FleetPulse() {
                 <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 font-mono text-[10px] text-emerald-300" dir="ltr">{a.agentId}</span>
                 <span className="text-zinc-400">{a.name}</span>
               </span>
-              <span className="tabular-nums text-zinc-300" dir="ltr">{fmtMicro(a.balanceUsds)} USDS</span>
+              <span className="flex items-center gap-2 tabular-nums" dir="ltr">
+                <span className="text-emerald-400">{fmtMicro(a.vol24h)}</span>
+                <span className="text-zinc-600">·</span>
+                <span className="text-zinc-300">{fmtMicro(a.balanceUsds)}</span>
+              </span>
             </div>
           ))}
           {st && st.recentTrades.length > 0 && (
@@ -455,3 +462,88 @@ function FleetPulse() {
   );
 }
 
+
+/* ==================== שוק-הסקטורים · M-11 ==================== */
+// כל-סקטור = מערכת-אמיתית באחוזה. היסודות נמדדים-חי (דיסק/DB) — לא-נרטבים.
+
+interface SectorRow {
+  pairId: string;
+  base: string;
+  name: string;
+  system: string;
+  description: string;
+  price: number;
+  change24h: number;
+  vol24h: number;
+  liquidity: number;
+  metrics: { label: string; value: string }[];
+}
+
+function SectorsPanel({ onTrade }: { onTrade?: (pairId: string) => void }) {
+  const [rows, setRows] = useState<SectorRow[] | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    const load = async () => {
+      try {
+        const res = await fetch("/api/sectors", { cache: "no-store" });
+        const d = (await res.json()) as { sectors?: SectorRow[] };
+        if (alive) setRows(d.sectors ?? []);
+      } catch {
+        // שקט
+      }
+    };
+    void load();
+    const t = setInterval(() => void load(), 15_000);
+    return () => {
+      alive = false;
+      clearInterval(t);
+    };
+  }, []);
+
+  if (!rows || rows.length === 0) return null;
+
+  return (
+    <section className="rounded-2xl border border-white/5 bg-white/[0.03] p-4" aria-label="שוק-הסקטורים">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <h3 className="text-sm font-bold text-zinc-200">
+          שוק-הסקטורים · M-11 · כלי-הון-מגובים-ביסודות-אמת
+        </h3>
+        <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] text-emerald-400">
+          יסודות נמדדים-חי · מחיר-AMM-אמת
+        </span>
+      </div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {rows.map((r) => (
+          <button
+            key={r.pairId}
+            onClick={() => onTrade?.(r.pairId)}
+            className="rounded-xl border border-white/5 bg-black/20 p-3 text-start transition-colors hover:border-emerald-500/30 hover:bg-emerald-500/5"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-xs font-bold text-emerald-300" dir="ltr">{r.base}</span>
+              <span className={cn("rounded px-1.5 py-0.5 text-[10px] font-bold tabular-nums", trendBg(r.change24h))} dir="ltr">
+                {fmtPct(r.change24h)}
+              </span>
+            </div>
+            <div className="mt-0.5 text-[10px] text-zinc-500">{r.name} · {r.system}</div>
+            <div className="mt-1.5 text-lg font-black tabular-nums text-white" dir="ltr">
+              {fmtPrice(r.price)}
+            </div>
+            <div className="text-[10px] text-zinc-600 tabular-nums" dir="ltr">
+              נזילות {fmtMicro(r.liquidity)} · נפח {fmtMicro(r.vol24h)}
+            </div>
+            <div className="mt-2 space-y-0.5 border-t border-white/5 pt-2">
+              {r.metrics.map((m) => (
+                <div key={m.label} className="flex items-center justify-between text-[10px]">
+                  <span className="text-zinc-500">{m.label}</span>
+                  <span className="tabular-nums text-zinc-300" dir="ltr">{m.value}</span>
+                </div>
+              ))}
+            </div>
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}

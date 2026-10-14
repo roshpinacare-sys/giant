@@ -30,6 +30,15 @@ export async function GET() {
     });
     const balMap = new Map(balances.map((b) => [b.account, b._sum.amount ?? 0]));
 
+    // לוח-הובלה: נפח-אמת-פר-סוכן ב-24h (מהעסקאות עצמן)
+    const perAgent = await db.dexTrade.groupBy({
+      by: ["sourceAgent"],
+      _sum: { total: true },
+      _count: true,
+      where: { source: "FLEET", sourceAgent: { not: null }, t: { gte: dayAgo } },
+    });
+    const volMap = new Map(perAgent.map((r) => [r.sourceAgent as string, { vol: r._sum.total ?? 0, trades: r._count }]));
+
     return NextResponse.json({
       limits: FLEET_LIMITS,
       fleetVol24h: volAgg._sum.total ?? 0,
@@ -41,6 +50,8 @@ export async function GET() {
         active: a.active,
         allocationUsds: a.allocationUsds,
         balanceUsds: balMap.get(`FLEET:${a.agentId}`) ?? 0,
+        vol24h: volMap.get(a.agentId)?.vol ?? 0,
+        trades24h: volMap.get(a.agentId)?.trades ?? 0,
         lastTradeAt: a.lastTradeAt?.toISOString() ?? null,
       })),
       recentTrades: recent.map((t) => ({

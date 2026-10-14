@@ -35,7 +35,8 @@ export async function POST(req: NextRequest) {
     if (!Number.isFinite(amountIn) || amountIn <= 0) {
       return NextResponse.json({ error: "סכום-לא-חוקי" }, { status: 400 });
     }
-    const pair = await db.dexPair.findFirst({ where: { isNative: true } });
+    // הצי סוחר על המטבע-האמיתי — SAOS/USDS מזוהה-מפורשות (לא findFirst עמום)
+    const pair = await db.dexPair.findFirst({ where: { isNative: true, base: "SAOS" } });
     if (!pair) return NextResponse.json({ error: "אין-זוג-יליד" }, { status: 503 });
 
     const slippage = Math.min(50, Math.max(0.1, Number(body.slippagePct ?? 0.5)));

@@ -48,11 +48,15 @@ export async function getWalletState(): Promise<WalletState> {
   });
   const chains: Record<string, string> = {
     USDS: "Giant Chain",
+    SAOS: "Giant Chain",
     BTC: "Ethereum",
     ETH: "Ethereum",
     SOL: "Solana",
     BNB: "BNB Chain",
   };
+  // סקטורים (M-11) — כלי-הון-ילידים של Giant Chain
+  const chainFor = (token: string): string =>
+    chains[token] ?? "Giant Chain";
   const prices = await pairPrices();
   const balances: WalletBalance[] = grouped
     .filter((g) => (g._sum.amount ?? 0) > 1e-9)
@@ -61,7 +65,7 @@ export async function getWalletState(): Promise<WalletState> {
       const priceUsd = prices.get(g.token) ?? 0;
       return {
         token: g.token,
-        chain: chains[g.token] ?? "Giant Chain",
+        chain: chainFor(g.token),
         amount,
         priceUsd,
         valueUsd: amount * priceUsd,
@@ -251,6 +255,7 @@ export async function executeSwap(
       amount: args.side === "BUY" ? quote.outAmount : args.amountIn,
       total: args.side === "BUY" ? args.amountIn : quote.outAmount,
       source: args.source,
+      sourceAgent: args.source === "FLEET" ? (args.agentId ?? null) : null,
     },
   });
   const reasonPrefix = args.source === "FLEET" ? `צי · ${args.agentId} · ` : "";

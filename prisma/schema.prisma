@@ -89,16 +89,18 @@ model DexCandle {
 }
 
 model DexTrade {
-  id     String   @id @default(cuid())
-  pairId String
-  side   String // BUY | SELL (of base)
-  price  Float
-  amount Float // base amount
-  total  Float // quote amount (USDS)
-  source String   @default("SEED") // SEED | USER | AMBIENT | WHALE | TREASURY
-  t      DateTime @default(now())
+  id          String   @id @default(cuid())
+  pairId      String
+  side        String // BUY | SELL (of base)
+  price       Float
+  amount      Float // base amount
+  total       Float // quote amount (USDS)
+  source      String   @default("SEED") // SEED | USER | FLEET
+  sourceAgent String? // מזהה-סוכן-צי כאשר source=FLEET
+  t           DateTime @default(now())
 
   @@index([pairId, t])
+  @@index([source, sourceAgent])
 }
 
 model DexLpPosition {
