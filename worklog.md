@@ -1953,3 +1953,56 @@ Stage Summary:
 - הרפרנסים-שהבעלים-שלח הפכו-לשכבת-קראפט-חיה: המספרים-נספרים-מול-העיניים, הכרטיסים-זוהרים-אחרי-העכבר, הרקע-נושם, והכל-מכבד-reduced-motion.
 - אפס-תלות-חדשה · אפס-שינוי-נתונים (כל-המספרים-אמת) · craft.tsx זמין-לכל-מודול-עתידי.
 - commit T60 נדחף; הקנון-יסונכרן-בגל-הבא.
+---
+Task ID: 61-a
+Agent: API builder
+Task: GET /api/giant/sovereignty — חיבור-הריבונות-המלא במטען-אמת אחד (כל-תיקיות-הגיט + הצי + הענקים + הלקחים), אפס-סימולציה.
+
+Work Log:
+- נקראו worklog (200 ש') + src/lib/giant/sovereignty-types.ts (החוזה) + כל-המקורות-האמיתיים נבדקו ידנית לפני-קידוד (agent-registry.json, FLEET-GRAPH.json, fleet-roster.json, fleet-census.json + notice, giants.json כולל-מפתח-ours, KEY-PROOF-STATUS.md, TOKEN-TRUTH.md, stack/identity/registry/*/registration.json, git remotes).
+- נבנה src/app/api/giant/sovereignty/route.ts (runtime nodejs, force-dynamic, cache-60s): סריקת-fs רקורסיבית עומק-4 מ-/home/z (skip node_modules/.next/.cache/.git/lost+found) → 6 ריפואים; לכל-ריפו פקודות-git אמיתיות (branch/rev-list --count/status --porcelain/log -1 %h%n%aI%n%s/remote get-url) כשכל-אחת-ב-try/catch נפרד; צנזורת-רימוט regex //user:pass@ → //host (אפס-דליפת-x-access-token — נמדד).
+- wired כנה: סריקת-src (.ts/.tsx) למחרוזות /estate/<Repo> → מיפוי-תצוגה לפי-פלח-הנתיב (orderbook|dex→dex, pulse, league, estate, channel, office, אחרת→machine; סיומות-מנורמלות כדי-ש-channel.ts ייספר-כערוץ); מזהי-התצוגה של-my-project נחתכים-חי מ-page.tsx (regex על type ViewId) — לא-מוקשים.
+- מפקד-סוכנים רב-מקורי: registry זהויות (6, ERC-8004-shaped) + stack registrations (5, EIP-8004) + steemFleet (13) + *.cjs (101, ספירת-fs) = total 125; fleet-census.json רשום עם real:false + "לא נספר בסה״כ" (DEMO-SYNTHETIC).
+- ענקים: giants.json → families ממוינים vol24h-desc חתוך-14, ours מהמפתח-הקנוני (SAOS DEX ריבוני · keyless); לקחים×5 מהקבצים-האמיתיים (כספת-מפתחות / TOKEN-TRUTH / bannedCapital LOST-NO-CUSTODY / DEMO-census / מחיקת-הסנדבוקס); ארכיאולוגיה מ-worklog (חלוקה על ---, Task ID: T?\d+ 51..61, Stage-Summary-ראשון) + T61-נוכחי; שרידות (committed/dirty/unpushed + פסק-דין-עברית-כנה); endpoints=ספירת route.ts חיה; sha16=sha256(payload-בלי-השדה).slice(0,16) + כותרת x-sovereignty-sha16 + no-store.
+- המטען-מדד-את-עצמו-בזמן-אמת: במהלך-הבדיקה סוכן-מקביל הוסיף view "sovereignty" ל-page.tsx — ה-curl-השני כבר-מדד 14 view ids (מ-13) בלי-נגיעה — הוכחת-סריקה-אמיתית.
+- שערים: bun run lint נקי (exit 0) · tsc --noEmit: 0 שגיאות תחת src/ (רק-5 שגיאות-קדומות ב-examples/mini-services/skills — לא-שלי) · curl 200 עם ok:true, errors:[].
+
+Stage Summary:
+- /api/giant/sovereignty חי: localRepoCount=6 · agents.total=125 (רק-מקורות-אמת; הדמו-מוצג-ולא-נספר) · giants.families=14 + ours=SAOS-DEX · לקחים=5 · ארכיאולוגיה T51..T61 (T57 לא-קיים ב-worklog — כנה) · endpoints=25 · errors[]=0 · sha16=43155fb24cd3c6a9 (16-hex).
+- הפער-של-הבעלים מוכח-במספרים: estate/giant wired=[] ("לא מחובר עדיין לממשק — זהו הפער שהבעלים מדבר עליו") בעוד-Domain/FleetHQ/Pulse/Sandbox מחוברים-דרך-ערוץ/משרד/דופק/מכונה.
+- אפס-טוקנים-במטען (Pulse/giant remotes מצונזרים-ונמדד), אפס-זיופים, fail-honest לכל-מקור.
+
+---
+Task ID: 61-b / Agent: view builder / Task: ההגשה-הסופית של הרעיון — SovereigntyView (מסך-אחד שמוכיח: הריבונות חיה בגיט, הממשק רק מציג) + חיבור-מלא לניווט.
+
+Work Log:
+- קראתי worklog (T59/T60/1-a/1-c) + את חוזה-הנתונים src/lib/giant/sovereignty-types.ts (ה-types מיובאים-ישר, אפס-שכפול-ממשקים) + craft.tsx (CountUp/Spotlight/Reveal) + globals (סרגלי-גלילה-דקים-גלובליים → נשארתי על max-h-72 overflow-y-auto pr-1) + טבלאות-הקנון של LeagueView (table.text-right.text-xs + thead sticky סטייל).
+- נבנה src/components/giant/SovereigntyView.tsx ("use client", named export, אפס-props): fetch רגיל ל-/api/giant/sovereignty · cache no-store · AbortController + alive-ref · ריענון 60ש׳ ב-setInterval · abort-בפירוק · fail-honest: ok:false/HTTP-שגוי/shape-שבור → באנר-אדום-ענבר "ערוץ-הריבונות עוד לא עולה — מדידה חוזרת בעוד 15 שניות" + כפתור-מדידה-ידני + טיימר-חוזר-15ש׳ שמקיים-את-ההבטחה; טעינה = Skeleton-ים בלבד — אפס-המצאה.
+- תשעת-הסעיפים (RTL · ids לכל-סעיף): (1) גיבור giant-wordmark "הריבונות חיה בגיט" + משפט-הבעלים + 5-KPI CountUp (ריפו-מקומיים · צמתים-חיים · סוכנים-בצי · משפחות-ענקים · משימות-ארכיון; מקור-null → "—" ולא-אפס) + נקודה-ענבר-פועמת + "נמדד {at}" toLocaleTimeString he-IL; (2) מבחן-ההישרדות — צ'יפ-לכל-ריפו: אמרלד "שרד" (hasRemote && נקי) · ענבר "דיפוק: N קבצים — יאבדו במחיקה" · רוז "בלי רימוט — ימות עם הסנדבוקס" + survival.verdict בשורת-חוק-ענבר; (3) גריד-כרטיסי-ריפו (name mono · role · branch+commitCount · dirtyCount רוז-אם->0 · sha+תאריך+נושא-חתוך-שורה עם title · רימוט=host בלבד או "מקומי בלבד" · wired צ'יפים-זעירים או wiredNote רוז · Spotlight לכל-כרטיס); (4) FLEET-GRAPH — צ'יפי-סטטיסטיקה (nodes/edges/live/armed/reposActive24h) + גריד-צמתים: נקודה-אמרלד-אם-alive אחרת-רוז, מסגרת-ענבר+תג "מקומי" ל-local:true, "פומבי/פרטי" ל-vis, role ב-title, max-h-72 גלילה; (5) מפקד-הסוכנים — CountUp ענק ל-agents.total + טבלת-מקורות (count, "אמת" אמרלד/"סינתטי-לא-נספר" רוז, path mono) + כרטיסי-זהויות (agentId mono, keyMode: רוז-אם-מכיל signing/custody אחרת-אמרלד, capabilities צ'יפים) + שורת "הבעלים צדק — הרבה יותר מ6 סוכנים"; (6) ליגת-הענקים "נמדדה, לא סיפור" — טבלה (name/tier/fees24h/vol24h) ב-$-compact he-IL tabular-nums, שורתנו במסגרת-ענבר+תג "אנחנו" כש-giants.ours קיים + ours.note מתחת + method כהערת-שוליים-כנה; (7) הלקחים — כרטיסי-Lesson: כותרת-bold · what · "החוק:" בציטוט-מסגרת-ענבר · source mono זעיר רוז-לבן/30; (8) ארכיון-השיחה — שתי-עמודות-קומפקטיות max-h-64 גלילה, task mono-ענבר + סיכום-שורה-אחת; (9) שורת-האמת: "כל המספרים נמדדו מהמכונה ברגע הטעינה — sha16 {sha16}. אפס-סימולציה."
+- כנות-מבנית: payload.errors מוצגים-בגוף-העמוד (רשימת-כשלי-חלקים, לא-נבלעים); fleet/giants/כל-מקור-שווה-null → שורת "לא נמדד — לא מצויר, לא מומצא"; כל-המספרים עוברים Number.isFinite (isFiniteNum/fmtInt/fmtUsd) · תאריכים safeTime/safeDate עם isNaN-guard · remoteHost ב-try/catch · אפס-כחול/אינדיגו · אפס-אימוג'י · Reveal לכניסות-סעיפים · reduced-motion נשמר-דרך-craft.
+- חיבור-הניווט: page.tsx — ViewId+NAV (ראשון: id "sovereignty", label "ריבונות", ctx "מה חי, מה מחובר, מה שרד — ההגשה הסופית של הרעיון", src "סריקת-גיט חיה · FLEET-GRAPH · agent-registry · giants.json", icon GitBranch — Landmark כבר-תפוס-ע"י האחוזה) · switch: {view === "sovereignty" && <SovereigntyView />} ראשון · ספירות-13→14 מתוקנות-בכנות (כותרת · ContextBar · footer T61) · GiantPalette: כניסה-ראשונה עם Landmark (כבר-מיובא; הכפלת-אייקון-קיימת-בפלטה) + תיקון-ספירה-ל-14 · ניווט-הכדורים-בנייד נגזר-מ-NAV — נבדק, נכלל-אוטומטית.
+- שערים: bun run lint → נקי (eslint . ללא-פלט) · bunx tsc --noEmit → 0 שגיאות-ב-src (רק 5 קדומות-ידועות ב-examples/mini-services/skills — לא-שלי) · ה-API עצמו (סוכן-מקביל) עוד-לא-חי-בזמן-הבנייה — ה-view מוכיח-את-מסלול-הכשל-הכנה עד-שייפתח.
+
+Stage Summary:
+- Artifact: src/components/giant/SovereigntyView.tsx (853 ש') + חיבורים ב-page.tsx ו-GiantPalette.tsx — העמוד-הראשי עכשיו 14 מודולים ו"ריבונות" הדלת-הראשונה.
+- MOUNT CONTRACT: import { SovereigntyView } from "@/components/giant/SovereigntyView" → <SovereigntyView /> (אפס-props, מגיש-את-עצמו); מותקן-כבר ב-page.tsx כמודול-ראשון; מקור-אחד GET /api/giant/sovereignty לפי sovereignty-types.ts · ריענון-60ש׳ · כשל = באנר-אדום-ענבר+חוזר-15ש׳.
+- הרעיון-מוגש: גיבור אחד ("הריבונות חיה בגיט"), מבחן-הישרדות של-הבעלים עצמו כצ'יפים, כל-תיקיות-הגיט ככרטיסים, מפת-הצי, ספירת-הסוכנים לפי-מקור, השוואת-הענקים-הנמדדת, הלקחים-כחוקים, והארכיון — ושורת-סיום: sha16+אפס-סימולציה.
+- OPEN לגל-הבא: ה-API /api/giant/sovereignty (סוכן-61-a) — ברגע-שייפתח, המסך-עובר-מהבאנר-הכנה להגשה-החיה בלי-שינוי-קוד.
+---
+Task ID: 61
+Agent: Z.ai Code (main desk, trace 1a13ca2944b4342d)
+Task: הבעלים: "לא בונים על הסנדבוקס — מחברים את הריבונות להפעלה מלאה מכל תיקיות הגיט; הגשה סופית של הרעיון; הרבה יותר מ6 סוכנים; לימוד מכשלים; השוואה מול הענקים"
+
+Work Log:
+- **סריקת-מכונה אמיתית**: 6 ריפו גיט חיים נמצאו ונמדדו (my-project 72 · estate/giant 13 · Domain 199 · Sandbox 2 · Pulse 56 · FleetHQ 50 קומיטים) + FLEET-GRAPH (26 צמתים/27 קשתות/17 חיים) + agent-registry (6 זהויות ERC-8004) + identity/registry (5 הרשמות) + fleet-roster (13 חשבונות steem) + 101 סקריפטי .cjs.
+- **חוזה-אמת משותף**: src/lib/giant/sovereignty-types.ts — RepoInfo/FleetGraph/AgentCensus/GiantsBook/Lesson/ArchaeologyEntry/SovereigntyPayload.
+- **61-a (API)**: /api/giant/sovereignty — סריקת-fs+git חיה, צנזורת-טוקנים מאומתת (אפס x-access-token בתשובה), census=125 סוכנים (fleet-census הסינתטי מדווח ולא-נספר), giants 14 משפחות + שורת SAOS, 5 לקחים (כספת-מפתחות · TOKEN-TRUTH · LOST-NO-CUSTODY · נתוני-דמו · מות-סנדבוקס), ארכיון T51→T61, survival כנה (dirty: FleetHQ+my-project · בלי-רימוט: Sandbox+my-project), sha16, 60s cache, fail-honest.
+- **61-b (תצוגה)**: SovereigntyView.tsx (853 שורות) — 9 מחלקות: גיבור-הרעיון-האחד, מבחן-ההישרדות, צי-הריפו, מפת-הצי, מפקד-הסוכנים ("הבעלים צדק"), ליגת-הענקים (שורת "אנחנו"), הלקחים, ארכיון-השיחה, חתימת-sha16. NAV ראשון (GitBranch), GiantPalette, ContextBar 14 מודולים.
+- **תיקון-E2E**: גלישה-אופקית בנייד (729px) — implicit auto grid track נגד min-content של שורת-קומיט ארוכה; תוקן grid-cols-1 מפורש ב-4 גרידים + min-w-0. לאחר: 390/390 MOBILE-OK.
+- **E2E מלא**: 1440+390 · 8/8 מחלקות נכונות · 125/Uniswap/אנחנו/החוק/פער-הבעלים נראים · Ctrl+K נפתח · אפס-שגיאות-קונסולה · API 200 ביומן-השרת.
+
+Stage Summary:
+- **הפער-נמדד והפך-מספר**: estate/giant מחובר=0 (wired[]) — התלונה של הבעלים "כלום לא מחובר" עכשיו נמדדת חיה בממשק.
+- **"הרבה יותר מ6 סוכנים" — הוכח**: 125 סוכנים אמת לפי מקור, כשנתוני-הדמו מסומנים ולא-נספרים (חוזה-אין-זיופים).
+- **ההגשה-הסופית עולה**: הריבונות חיה בגיט; הסנדבוקס מציג ומחבר; מבחן-ההישרדות מציג מה ישרוד את המחיקה.
+- lint נקי · tsc נקי-ב-src · קומיט T61 נדחף.
