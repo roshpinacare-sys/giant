@@ -224,3 +224,24 @@ Stage Summary:
   quote sizing (saos-dex mm.ts lane); A69 — inspector report publishing step.
 - Also noted: Actions cron slots drop (office-heartbeat not hourly in
   practice) — manual dispatch is the reliable edge-probe.
+---
+
+Task ID: 34
+Agent: zai-main (trace 1a13a00cbb249f35)
+Task: תמשיך — ראש-התור מוקלט: A31+A10 (מכונות-העוגן, lane של הבעלים). במהלך-בניית-המצב הבעלים מסר את המפתח (upload/headcorner.txt) — ה-lane השתחרר ובוצע עד-קצה-חי. עברית-בלבד.
+
+Work Log:
+- בניית-מצב: clone טרי לחמשת ה-repos (t34-fresh). תקלת-כלי-שנפתרה: pat.env מכיל את ה-PAT הגולמי בלי-קידומת `github_token=` — החילוץ-הראשון שלי חיפש קידומת-שאיננה → טוקן-ריק → "Invalid username or token"; חילוץ-נקי: API 200, private:true. headcorner.txt (52 תווים) נבדק מול-GitHub/GitLab — נדחה-שם; התברר-כסיסמת-אב.
+- מדידת-התור: Domain verifier 52/57 — האדומים A10, A31[owner], A39, A43, A69 (A39/A69 חזרו-לחיות במבנה-החדש; ה-set התחדש). Console: 48/51 (A10/A14/A43). A14 זוהה-חי: 3 מופעי em-dash חזרו-ל-index.html (הערת-JS + טקסט-kn.m6 כפול) — מוקלט-לתור.
+- אימות-מפתח: verify-owner-key.ts — 4/4 רשויות STEEM ל-@headcorner (owner/active/posting/memo), exit=0. verify-headcorner-key.ts (WIF גולמי): תקין-WIF אך אינו רשות — המחרוזת היא סיסמת-אב, לא מפתח.
+- שורש-A31+A10 נמדד ביומן-ריצה 38521034302 (שורה 293): ANCHOR-SKIP-OWNER-GATED — ה-WIF-החתום מת ברוטציה; המכונה סירבה-בכנות מאז 10-12 07:27Z. הריצות "ירוקות" מבחוץ (honest-skip).
+- תיקון: WIF-posting נגזר מהסיסמה (חוק r137, מדד-חי מול-רשות-posting החיה: true), נאטם לסוד WEAVE_STEEM_WIF ב-Domain (libsodium sealed box, HTTP 204), עותק-הביניים נמחק. dispatch weave-anchor-lines (HTTP 204).
+- עוגן-חי נמדד על-השרשרת: saos.weave.core.v1 @ 14-10T11:12:27Z, txid 2fa77ab024ae6af614b43494701841c1e4fafa29, בלוק 110431122, cp1623, 1681 אישורים (הצבר מ-cp1598 נשטף). status.json חי: FRESH 0.2h (run 38556559227).
+- שורש-שני (A31): הקביעה סרקה @owner ליטרלי (זר!). הוצבה-מחדש על קו-העדים ב-refs acct-00/01/04; הרוסטר שוחזר-מהשרשרת (acct-01=cashmachine מ-6f69b95c; acct-00=headcorner מ-2fa77ab0). Domain@0b4df55b.
+- שורש-שלישי: agent-verify.yml לא חיוור FLEET_ROSTER_MAP — refs מושהים-לנצח (נמדד run 38557571392: roster-unresolved). חיווט-ה-env נחת. Domain@e6a38442 (ls-remote==HEAD פעמיים).
+- הקבלה-הרשמית: run 38558010039 — 54/57 (היה 52/57); A10 ירוק, A31 ירוק ("עוגן 0.4h · עד @acct-00"). Sandbox ledger 109 → Sandbox@2612de24 (ls-remote==HEAD).
+
+Stage Summary:
+- העוגן-הריבוני חי שוב: מכונת-העדות חתמה cp1623 מ-@headcorner, האמת-החיה באתר עברה STALE→FRESH, וה-verifier הרשמי סוגר 54/57. הקו ממשיך-עצמאית (לוח :20 + שרשרת-זיכרון-עצמי :33).
+- תור-המשך מוקלט: A43 (SETTLE-17 — המנעול-הכלכלי נמדד במלואו: Σcredits=1.92M כולו-תקוע ב-wash; rearm-WSTEEM מותש 1M/1M; אוצר-0-STEEM; ה-primer-החד-פעמי בלי-שימוש; 11.8M WSTEEM כלואים-בבריכה שהאוצר מחזיק 100% מה-LP שלה — נתיב pool_rmw מזוהה), A14 (3 em-dash ב-index.html), A39 (T15 CR-0077), A69 (פרסום-דוח-מפקח).
+- הערת-ביטחון: המפתח לא נדפס בשום-יומן; כל-הגזירות בזיכרון/קבצים-זמניים שנמחקו (mode 600 → wiped).
