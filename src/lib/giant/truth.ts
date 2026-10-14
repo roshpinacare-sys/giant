@@ -103,7 +103,7 @@ export function loadTruth(): TruthPayload {
         maxSupplyMu: capMu,
         maxSupplyHuman: capMu !== null ? capMu / MU : null,
         note: typeof g.note === "string" ? g.note : null,
-        genesisDate: g.note ? (g.note.match(/genesis ([0-9-]+)/)?.[1] ?? null) : null,
+        genesisDate: typeof g.note === "string" ? (g.note.match(/genesis ([0-9-]+)/)?.[1] ?? null) : null,
       };
     }
 

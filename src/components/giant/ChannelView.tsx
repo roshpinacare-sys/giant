@@ -103,7 +103,7 @@ function MetaChip({ label, m }: { label: string; m?: FileMeta }) {
   return (
     <span
       className="rounded-full border border-white/5 bg-zinc-900 px-2.5 py-1 font-mono text-[10px] text-zinc-500"
-      title={`${m.path ?? ""} · bytes:${m.bytes ?? "—"} · sha16:${m.sha16 ?? "—"}`}
+      title={`${m.bytes ?? "—"} bytes · sha16:${m.sha16 ?? "—"}`}
     >
       {label}: {m.exists ? `sha16:${m.sha16?.slice(0, 8)} · ${ageHe(m.ageMinutes)}` : "חסר-כנה"}
     </span>

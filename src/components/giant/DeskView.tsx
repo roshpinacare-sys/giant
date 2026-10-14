@@ -35,7 +35,7 @@ function Sparkline({ data, height = 90 }: { data: number[]; height?: number }) {
   const path = data.map((v, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
   const zero = y(0);
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" dir="ltr" role="img" aria-label="סדרת-equity">
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ direction: "ltr" }} role="img" aria-label="סדרת-equity">
       <line x1={pad} x2={W - pad} y1={zero} y2={zero} stroke="#3f3f46" strokeDasharray="3 3" strokeWidth="1" />
       <path d={path} fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinejoin="round" />
       {data.map((v, i) => (

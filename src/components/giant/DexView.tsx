@@ -530,9 +530,9 @@ export function DexView() {
                 <span className={`mt-2 inline-block rounded-full px-2 py-0.5 text-[9px] font-bold ${c.priceUsd !== null ? "bg-zinc-800 text-zinc-400" : "bg-red-500/10 text-red-400"}`}>
                   {c.priceUsd === null
                     ? "לא נמדד · fail-honest"
-                    : data.cachedAgeMin !== null
-                      ? `נמדד לפני ${data.cachedAgeMin} ד׳ · מטמון-כנות`
-                      : `measured · live · ${data.source ?? "market"}`}
+                    : (data?.cachedAgeMin ?? null) !== null
+                      ? `נמדד לפני ${data?.cachedAgeMin} ד׳ · מטמון-כנות`
+                      : `measured · live · ${data?.source ?? "market"}`}
                 </span>
               </article>
             );

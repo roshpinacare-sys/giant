@@ -55,7 +55,7 @@ export function CandleChart({ candles, height = 320 }: { candles: Candle[]; heig
   const { W, padL, padR, volTop, volH, cs, min, max, step, bw, y, vh, maxV, gridLines } = view;
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full" dir="ltr" role="img" aria-label="גרף-נרות מחיר">
+    <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full" style={{ direction: "ltr" }} role="img" aria-label="גרף-נרות מחיר">
       {/* רשת + ציר-מחיר */}
       {Array.from({ length: gridLines + 1 }).map((_, i) => {
         const p = min + ((max - min) * i) / gridLines;

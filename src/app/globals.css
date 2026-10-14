@@ -120,3 +120,83 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ─────────────── משטר-הצבע של המשרד החי (מהמקצועי — אין כחול) ─────────────── */
+:root {
+  --surface: #f2ecdf;
+  --surface-2: #fffaf0;
+  --ink: #2a2520;
+  --ink-2: #5d5548;
+  --ink-3: #8a8172;
+  --line: #e3dac7;
+  --line-strong: #cfc4ac;
+  --accent: #b4691e;
+  --accent-dim: rgba(180, 105, 30, 0.14);
+  --shadow-soft: 0 1px 2px rgba(28, 24, 18, 0.04), 0 8px 24px rgba(28, 24, 18, 0.06);
+  --st-working: #d946ef;
+  --st-ok: #10b981;
+  --st-attention: #f59e0b;
+  --st-danger: #fb7185;
+  --st-neutral: #8a8f98;
+  --st-info: #14b8a6;
+}
+
+/* ─────────────── R58 — פאנלי-HUD של החדר (ההגדרות אבדו במיזוג — שוחזרו) ───────────────
+ * T19-c תכנן "פאנל-HUD אחד (.ln — עומק עדין במקום מסגרות-כפולות)" אבל המחלקות
+ * נשארו בלי גיליון — הטקסט צף חשוף על הסצנה. שוחזר לפי הכוונה: פאנל חם-שקוף,
+ * טשטוש-רקע עדין, צל רך; הטקסט הכהה של הצ'יפים נקרא עליו. */
+.ln,
+.sl-panel {
+  background: rgba(255, 250, 240, 0.86);
+  backdrop-filter: blur(9px) saturate(1.05);
+  -webkit-backdrop-filter: blur(9px) saturate(1.05);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+}
+.ln.rounded-full,
+.sl-panel.rounded-full {
+  border-radius: 9999px;
+}
+/* Task 40 — .sl-chip שוחזר: ההגדרה אבדה במיזוג והצ'יפים ירשו טקסט-בהיר
+ * על פאנל-קרם (נמדד: תוויות-התצפיות כמעט-בלתי-נראות). טקסט-כהה על הפאנל. */
+.sl-chip {
+  color: var(--ink-2);
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  transition: background 0.15s ease;
+}
+.sl-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  flex: none;
+  box-shadow: 0 0 6px color-mix(in srgb, currentColor 55%, transparent);
+}
+
+/* ═══ פלטת-הפקודה (T58): cmdk שקוף-על-גבי-הדיאלוג-הכהה של GIANT ═══ */
+[data-slot="dialog-content"] [cmdk-root] {
+  background: transparent;
+  color: #e4e4e7;
+}
+[data-slot="dialog-content"] [cmdk-input] {
+  background: transparent;
+  color: #e4e4e7;
+}
+[data-slot="dialog-content"] [cmdk-input]::placeholder {
+  color: #71717a;
+}
+[data-slot="dialog-content"] [cmdk-group-heading] {
+  color: #71717a;
+}
+[data-slot="dialog-content"] [cmdk-item][aria-selected="true"] {
+  background: rgba(245, 158, 11, 0.14);
+  color: #fcd34d;
+}
+[data-slot="dialog-content"] [cmdk-item] svg {
+  color: #a1a1aa;
+}
+[data-slot="dialog-content"] [cmdk-separator] {
+  background: rgba(255, 255, 255, 0.06);
+}

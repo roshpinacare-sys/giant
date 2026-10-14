@@ -1,0 +1,142 @@
+/* מכונת-האמת של SAOS — anatomy-grade isometric figure styles.
+   Adapted from the MIT-licensed anatomy kit ISO_CSS (github.com/wheresryan22/anatomy),
+   re-toned to the mission palette: lo #27272a · mid #3f3f46 · hi #71717a · lit #f59e0b · faint #18181b. */
+
+.sm-plate {
+  --anatomy-page:#09090b;--anatomy-card:#131316;--anatomy-text:#a1a1aa;--anatomy-strong:#e4e4e7;--anatomy-muted:#71717a;
+  --anatomy-paper:#131316;--anatomy-face:#1b1b1f;--anatomy-top:#1e1e23;
+  --anatomy-shade-0:#101013;--anatomy-shade-1:#141418;--anatomy-shade-2:#18181b;--anatomy-shade-3:#1d1d22;
+  --anatomy-lit-top:#2b2416;--anatomy-lit-shade:#241e12;
+  --anatomy-hi:#71717a;--anatomy-mid:#3f3f46;--anatomy-lo:#27272a;--anatomy-faint:#18181b;--anatomy-lit:#f59e0b;
+  --anatomy-halo:#050506;--anatomy-halo-opacity:.9;--anatomy-dot:#a1a1aa;
+  --anatomy-red:#ff6b6b;--anatomy-green:#6be0a0;--anatomy-blue:#6b9bff;
+  --anatomy-weight:.6px;--anatomy-ease:cubic-bezier(.32,.72,0,1);
+  --anatomy-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sm-amber:#f59e0b;--sm-amber-soft:rgba(245,158,11,.28);
+}
+
+.sm-svg{display:block;width:100%;height:auto;overflow:visible}
+.sm-svg path,.sm-svg circle{vector-effect:non-scaling-stroke}
+.sm-svg text{vector-effect:none}
+.sm-fill{fill:var(--anatomy-paper);stroke:none}
+.sm-shade,.sm-top{stroke:none}
+.sm-shade[data-shade="0"]{fill:var(--anatomy-shade-0)}
+.sm-shade[data-shade="1"]{fill:var(--anatomy-shade-1)}
+.sm-shade[data-shade="2"]{fill:var(--anatomy-shade-2)}
+.sm-shade[data-shade="3"]{fill:var(--anatomy-shade-3)}
+.sm-top{fill:var(--anatomy-top)}
+.sm-line{fill:none;stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight);stroke-linecap:round;stroke-linejoin:round}
+.sm-line[data-tone="hi"]{stroke:var(--anatomy-hi)}
+.sm-line[data-tone="mid"]{stroke:var(--anatomy-mid)}
+.sm-line[data-tone="lo"]{stroke:var(--anatomy-lo)}
+.sm-line[data-tone="faint"]{stroke:var(--anatomy-faint)}
+.sm-line[data-tone="lit"]{stroke:var(--anatomy-lit)}
+.sm-line[data-tone="red"]{stroke:var(--anatomy-red)}
+.sm-wire-end{fill:var(--anatomy-paper);stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight)}
+.sm-dot{fill:var(--anatomy-dot);stroke:none;opacity:.32}
+.sm-dot[data-tone="hi"]{opacity:.85}
+.sm-dot[data-tone="mid"]{opacity:.45}
+.sm-dot[data-tone="lo"]{opacity:.22}
+.sm-face-text{fill:var(--anatomy-mid);font-family:var(--anatomy-mono);letter-spacing:.04em}
+.sm-halo{fill:var(--anatomy-halo);stroke:none;filter:blur(9px);opacity:var(--anatomy-halo-opacity);transform:translateY(3px)}
+
+/* ── liquids: the one lit accent (amber = book total) + zinc for the rest ── */
+.sm-liq-deep{fill:var(--liq-deep);stroke:none}
+.sm-liq-band{stroke:none}
+.sm-liq-top{fill:var(--liq-top);stroke:none}
+.sm-liq-edge{fill:none;stroke:var(--liq-edge);stroke-width:var(--anatomy-weight);stroke-linejoin:round}
+.sm-liq-zinc{--liq-deep:#1f1f24;--liq-b0:#1c1c21;--liq-b1:#212127;--liq-b2:#28282f;--liq-b3:#303038;--liq-top:#3f3f46;--liq-edge:#52525b}
+.sm-liq-amber{--liq-deep:#78350f;--liq-b0:#92400e;--liq-b1:#b45309;--liq-b2:#d97706;--liq-b3:#f59e0b;--liq-top:#fbbf24;--liq-edge:#fbbf24}
+.sm-liq-band[data-band="0"]{fill:var(--liq-b0)}
+.sm-liq-band[data-band="1"]{fill:var(--liq-b1)}
+.sm-liq-band[data-band="2"]{fill:var(--liq-b2)}
+.sm-liq-band[data-band="3"]{fill:var(--liq-b3)}
+
+/* ── stage, assemblies, chip ── */
+.sm-stage{position:relative;cursor:grab;touch-action:pan-y;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+.sm-stage[data-drag]{cursor:grabbing}
+.sm-stage:focus-visible{outline:1px solid var(--anatomy-muted);outline-offset:6px}
+.sm-assembly{transition:transform .3s var(--anatomy-ease),filter .3s var(--anatomy-ease)}
+.sm-assembly:hover{transform:translateY(-2px);filter:drop-shadow(0 0 6px var(--sm-amber-soft))}
+.sm-chip{position:absolute;z-index:5;pointer-events:none;background:#0b0b0df2;border:1px solid var(--anatomy-mid);border-radius:6px;
+  padding:4px 8px;font-family:var(--anatomy-mono);font-size:10.5px;line-height:1.5;color:var(--anatomy-text);
+  white-space:nowrap;transform:translate(-50%,-130%);transition:opacity .18s var(--anatomy-ease)}
+.sm-chip b{color:var(--anatomy-strong);font-weight:500}
+.sm-chip[data-amber]{border-color:#7c4a08}
+
+/* ── plate (framed card) ── */
+.sm-figure{margin:0}
+.sm-plate{position:relative;padding:52px 24px;background:var(--anatomy-card);box-shadow:0 0 0 1px var(--anatomy-mid)}
+.sm-plate-corners{position:absolute;inset:18px 20px;pointer-events:none}
+.sm-corner{position:absolute;color:var(--anatomy-muted);font-family:var(--anatomy-mono);font-size:10.5px;line-height:1;letter-spacing:.04em;white-space:nowrap}
+.sm-corner[data-corner="fig"]{top:0;left:0;color:var(--anatomy-text)}
+.sm-corner[data-corner="title"]{top:0;right:0;letter-spacing:.08em}
+.sm-corner[data-corner="hint"]{bottom:0;left:0;letter-spacing:.08em}
+.sm-corner[data-corner="readout"]{right:0;bottom:0;color:var(--anatomy-text);font-variant-numeric:tabular-nums;white-space:normal}
+.sm-readout{display:grid;gap:3px;justify-items:end;text-align:left;direction:rtl;max-width:340px}
+.sm-readout-row{display:flex;flex-wrap:wrap;gap:2px 10px;justify-content:flex-end}
+.sm-readout-row b{color:var(--anatomy-strong);font-weight:500;font-variant-numeric:tabular-nums}
+.sm-readout-row .u{color:var(--anatomy-muted)}
+.sm-readout .meta{color:var(--anatomy-muted);font-size:9.5px}
+.sm-chip-na{display:inline-flex;align-items:center;gap:5px;color:var(--anatomy-red);border:1px solid #6b2a2a;border-radius:4px;padding:2px 6px}
+.sm-chip-na i{width:5px;height:5px;border-radius:50%;background:var(--anatomy-red);display:inline-block}
+.sm-legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;color:var(--anatomy-muted);font-size:12px;line-height:1.55;direction:rtl}
+.sm-key{display:inline-flex;align-items:center;gap:7px}
+.sm-key svg{width:16px;height:10px;flex:none;overflow:visible}
+.sm-key svg path{fill:none;stroke:var(--anatomy-hi);stroke-width:1;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+.sm-key svg[data-mark="lit"] path{stroke:var(--anatomy-lit)}
+.sm-key svg[data-mark="red"] path{stroke:var(--anatomy-red)}
+.sm-key svg[data-mark="flat"] path{stroke:var(--anatomy-mid)}
+.sm-caption{margin-top:6px;color:var(--anatomy-muted);font-size:11.5px;line-height:1.6;direction:rtl}
+
+.sm-digit{fill:var(--anatomy-strong);font-family:var(--anatomy-mono);letter-spacing:0}
+.sm-needle{fill:var(--anatomy-strong);stroke:none}
+.sm-needle-hub{fill:var(--anatomy-strong);stroke:none}
+.sm-pennant{fill:none;stroke:var(--anatomy-red);stroke-width:var(--anatomy-weight);stroke-linecap:round;stroke-linejoin:round;transition:opacity .4s var(--anatomy-ease)}
+.sm-coin-edge{stroke:var(--anatomy-hi)}
+
+@media (max-width:560px){
+  .sm-plate{padding:48px 12px 74px}
+  .sm-corner[data-corner="hint"]{bottom:18px}
+  .sm-readout{max-width:230px}
+}
+@media (prefers-reduced-motion:reduce){
+  .sm-assembly{transition:none}
+  .sm-assembly:hover{transform:none}
+  .sm-chip{transition:none}
+}
+
+/* ── iso-* kit classes (from anatomy ISO_CSS) — the SVG chunks emitted by
+   machine.ts use these names; they share the --anatomy-* vars defined above ── */
+.sm-stage .iso-fill{fill:var(--anatomy-paper);stroke:none}
+.sm-stage .iso-shade,.sm .iso-top{stroke:none}
+.sm-stage .iso-shade[data-shade="0"]{fill:var(--anatomy-shade-0)}
+.sm-stage .iso-shade[data-shade="1"]{fill:var(--anatomy-shade-1)}
+.sm-stage .iso-shade[data-shade="2"]{fill:var(--anatomy-shade-2)}
+.sm-stage .iso-shade[data-shade="3"]{fill:var(--anatomy-shade-3)}
+.sm-stage .iso-top{fill:var(--anatomy-top)}
+.sm-stage .iso-solid[data-lit]>.iso-fill{fill:var(--anatomy-face)}
+.sm-stage .iso-solid[data-lit]>.iso-top{fill:var(--anatomy-lit-top)}
+.sm-stage .iso-solid[data-lit]>.iso-shade{fill:var(--anatomy-lit-shade)}
+.sm-stage .iso-solid[data-lit]>.iso-edge{stroke:var(--anatomy-lit)}
+.sm-stage .iso-halo{fill:var(--anatomy-halo);stroke:none;filter:blur(9px);opacity:var(--anatomy-halo-opacity);transform:translateY(3px)}
+.sm-stage .iso-line{fill:none;stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight);stroke-linecap:round;stroke-linejoin:round}
+.sm-stage .iso-line[data-tone="hi"]{stroke:var(--anatomy-hi)}
+.sm-stage .iso-line[data-tone="mid"]{stroke:var(--anatomy-mid)}
+.sm-stage .iso-line[data-tone="lo"]{stroke:var(--anatomy-lo)}
+.sm-stage .iso-line[data-tone="faint"]{stroke:var(--anatomy-faint)}
+.sm-stage .iso-line[data-tone="lit"]{stroke:var(--anatomy-lit)}
+.sm-stage .iso-line[data-tone="red"]{stroke:var(--anatomy-red)}
+.sm-stage .iso-line[data-tone="green"]{stroke:var(--anatomy-green)}
+.sm-stage .iso-line[data-dotted]{stroke-dasharray:.01 3.5;stroke-width:1}
+.sm-stage .iso-line[data-dashed]{stroke-dasharray:3 3}
+.sm-stage .iso-wire-end{fill:var(--anatomy-paper);stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight)}
+.sm-stage .iso-dots circle{fill:var(--anatomy-dot);stroke:none;opacity:.32}
+.sm-stage .iso-dots[data-tone="hi"] circle{opacity:.85}
+.sm-stage .iso-dots[data-tone="mid"] circle{opacity:.45}
+.sm-stage .iso-dots[data-tone="lo"] circle{opacity:.22}
+.sm-stage .iso-dots[data-tone="faint"] circle{opacity:.12}
+.sm-stage .iso-face-text{fill:var(--anatomy-mid);font-family:var(--anatomy-mono);letter-spacing:.04em}
+.sm-stage .iso-face-text[data-tone="hi"]{fill:var(--anatomy-hi)}
+.sm-stage .iso-face-text[data-tone="lo"]{fill:var(--anatomy-lo)}
+.sm-stage .iso-face-text[data-tone="faint"]{fill:var(--anatomy-faint)}

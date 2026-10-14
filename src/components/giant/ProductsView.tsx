@@ -2,23 +2,47 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-/* ═══ המוצרים — קטלוג-אמת מ-Domain/marketing/products.json ═══════════════
- * חוק-הקטלוג: כל-טענה נושאת-קבלה משורשת; סטטוסים כנים; אפס-הבטחות-תשואה. */
+/* ═══ המוצרים — קטלוג-אמת מ-Domain/marketing/products.json (Task 40 גל-3) ═══
+ * מהדורת-ענקים: כל-מוצר = כרטיס-מלא — שם-עברי · תיאור · מדידות-חיות ·
+ * קבלות-משורשות (txid) · קישורי-משטח. אפס-הבטחות-תשואה; סטטוסים כנים. */
 
-interface ProductRow { id: string; name: string; status: string; blurb: string; repo: string; url: string }
+interface Measured { label: string; value: string }
+interface Receipt { label: string; url: string; block?: string }
+interface ProductRaw {
+  nameHe?: string; whatHe?: string; statusHe?: string;
+  measured?: Measured[]; receipts?: Receipt[]; links?: string[];
+}
+interface ProductRow {
+  id: string; name: string; status: string; blurb: string; repo: string; url: string;
+  raw: ProductRaw;
+}
 interface ProductsPayload {
   ok: boolean; note?: string; wave: string | null; generatedAt: string | null;
-  discipline: string | null; products: ProductRow[]; fetchedAt: string;
+  discipline: string | null; servedAt?: unknown; products: ProductRow[]; fetchedAt: string;
 }
 
-function statusChip(s: string): { cls: string; he: string } {
-  const base = "rounded-full px-2.5 py-0.5 text-[10px] font-bold";
-  if (s.includes("live-metered")) return { cls: `${base} bg-emerald-500/10 text-emerald-400`, he: "חי · מדוד" };
-  if (s.includes("phase1-live")) return { cls: `${base} bg-amber-500/10 text-amber-400`, he: "פאזה-1 חיה" };
-  if (s.includes("demo-live")) return { cls: `${base} bg-zinc-500/15 text-zinc-300`, he: "דמו-חי" };
-  if (s.includes("live")) return { cls: `${base} bg-emerald-500/10 text-emerald-400`, he: "חי" };
-  return { cls: `${base} bg-zinc-500/15 text-zinc-300`, he: s };
+function statusChip(status: string, statusHe?: string): { cls: string; he: string } {
+  const base = "rounded-full px-2.5 py-0.5 text-[10px] font-bold whitespace-nowrap";
+  if (statusHe) {
+    const live = status.includes("live");
+    return { cls: `${base} ${live ? "bg-emerald-500/10 text-emerald-400" : "bg-amber-500/10 text-amber-400"}`, he: statusHe };
+  }
+  if (status.includes("live-metered")) return { cls: `${base} bg-emerald-500/10 text-emerald-400`, he: "חי · מדוד" };
+  if (status.includes("phase1-live")) return { cls: `${base} bg-amber-500/10 text-amber-400`, he: "פאזה-1 חיה" };
+  if (status.includes("demo-live")) return { cls: `${base} bg-zinc-500/15 text-zinc-300`, he: "דמו-חי" };
+  if (status.includes("live")) return { cls: `${base} bg-emerald-500/10 text-emerald-400`, he: "חי" };
+  return { cls: `${base} bg-zinc-500/15 text-zinc-300`, he: status };
 }
+
+/** תווית-מדידה עברית לתצוגה — ה-labels בקנון הם מילים-אנגליות-טכניות */
+const MEASURED_HE: Record<string, string> = {
+  networks: "רשתות", milestones: "אבני-דרך", wrappedAssets: "נכסים-עטופים",
+  mintLockTxid: "txid-הטבעה", costPerRecord: "עלות-לרשומה", payloadCompression: "דחיסת-payload",
+  freeOpsMatrix: "מטריצת-חינם", tests: "מבחנים", kernelOps: "ops מנוע-ליבה",
+  measuredSpread: "פישוק-נמדד", fees: "עמלות", chaosSuite: "סולמת-כאוס",
+  invariants: "אינווריאנטות", anchors: "עיגונים", verification: "אימות",
+  sdk: "SDK", latency: "השהיה", uptime: "זמינות", accuracy: "דיוק",
+};
 
 export function ProductsView() {
   const [data, setData] = useState<ProductsPayload | null>(null);
@@ -40,31 +64,106 @@ export function ProductsView() {
     return () => clearTimeout(t0);
   }, [load]);
 
+  const live = (data?.products ?? []).filter((p) => p.status.includes("live"));
+
   return (
     <div className="space-y-4" dir="rtl">
+      {/* כותרת-הקטלוג */}
       <section className="rounded-2xl border border-white/10 bg-zinc-900/60 px-4 py-3">
-        <h2 className="text-sm font-black text-zinc-100">המוצרים הריבוניים — {data?.products.length ?? "—"} בקטלוג</h2>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="text-sm font-black text-zinc-100">
+            המוצרים הריבוניים — {data?.products.length ?? "—"} בקטלוג
+            {data && <span className="mr-2 font-mono text-[10px] font-normal text-emerald-400">{live.length} חיים</span>}
+          </h2>
+          <a
+            href="https://roshpinacare-sys.github.io/Domain/marketing/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-[10px] font-semibold text-amber-500 transition hover:text-amber-400"
+          >
+            משטח-השיווק המלא ↗
+          </a>
+        </div>
         {data?.wave && <p className="mt-0.5 text-[10px] text-zinc-500">{data.wave} · עודכן {data.generatedAt?.slice(0, 10)}</p>}
-        {data?.discipline && <p className="mt-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/[0.04] px-3 py-2 text-[10px] leading-4 text-emerald-300/90">{data.discipline}</p>}
+        {data?.discipline && (
+          <p className="mt-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/[0.04] px-3 py-2 text-[10px] leading-4 text-emerald-300/90">
+            {data.discipline}
+          </p>
+        )}
       </section>
       {err && <p className="text-xs text-red-400">{err}</p>}
 
-      <div className="grid gap-3 md:grid-cols-2">
+      {/* כרטיסי-מוצר מלאים */}
+      <div className="grid gap-4 lg:grid-cols-2">
         {(data?.products ?? []).map((p) => {
-          const chip = statusChip(p.status);
+          const chip = statusChip(p.status, p.raw?.statusHe);
+          const measured = p.raw?.measured ?? [];
+          const receipts = p.raw?.receipts ?? [];
+          const links = p.raw?.links ?? (p.url ? [p.url] : []);
           return (
-            <article key={p.id} className="rounded-2xl border border-white/10 bg-zinc-900/60 p-4 transition hover:border-amber-600/30">
-              <div className="flex items-center justify-between gap-2">
-                <h3 className="font-mono text-sm font-bold text-zinc-100">{p.name || p.id}</h3>
+            <article key={p.id} className="flex flex-col rounded-2xl border border-white/10 bg-zinc-900/60 p-5 transition hover:border-amber-600/30">
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <h3 className="text-base font-black leading-6 text-zinc-100">{p.raw?.nameHe || p.name || p.id}</h3>
+                  <p className="mt-0.5 font-mono text-[10px] text-zinc-600">{p.repo || p.id}</p>
+                </div>
                 <span className={chip.cls}>{chip.he}</span>
               </div>
-              {p.blurb && <p className="mt-2 text-xs leading-5 text-zinc-400">{p.blurb}</p>}
-              <div className="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-[10px]">
-                <span className="font-mono text-zinc-600">{p.repo || p.id}</span>
-                {p.url && (
-                  <a href={p.url} target="_blank" rel="noreferrer" className="font-semibold text-amber-500 transition hover:text-amber-400">
-                    פתח משטח ↗
-                  </a>
+
+              {(p.raw?.whatHe || p.blurb) && (
+                <p className="mt-2.5 text-xs leading-6 text-zinc-400">{p.raw?.whatHe || p.blurb}</p>
+              )}
+
+              {/* מדידות-חיות */}
+              {measured.length > 0 && (
+                <div className="mt-3.5 grid gap-1.5 sm:grid-cols-2">
+                  {measured.map((m) => (
+                    <div key={m.label} className="rounded-lg border border-white/5 bg-zinc-950 px-2.5 py-1.5">
+                      <p className="text-[9px] font-bold uppercase tracking-wide text-zinc-600">{MEASURED_HE[m.label] ?? m.label}</p>
+                      <p className="mt-0.5 break-words font-mono text-[11px] font-semibold leading-4 text-zinc-300">{m.value}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* קבלות-משורשות (txid) */}
+              {receipts.length > 0 && (
+                <div className="mt-3 space-y-1">
+                  <p className="text-[9px] font-bold uppercase tracking-wide text-zinc-600">קבלות-משורשות</p>
+                  {receipts.map((r) => (
+                    <a
+                      key={r.url}
+                      href={r.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-between gap-2 rounded-lg border border-white/5 bg-zinc-950 px-2.5 py-1.5 text-[11px] transition hover:border-amber-600/40"
+                    >
+                      <span className="font-semibold text-zinc-300">{r.label}</span>
+                      <span className="flex items-center gap-1.5">
+                        {r.block && <span className="font-mono text-[9px] text-zinc-600">block {r.block}</span>}
+                        <span className="text-amber-500">↗</span>
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {/* תחתית-הכרטיס: קישורי-משטח */}
+              <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-white/5 pt-3">
+                {links.length > 0 ? (
+                  links.map((l) => (
+                    <a
+                      key={l}
+                      href={l}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="h-8 rounded-lg border border-amber-600/40 bg-amber-500/[0.06] px-3 text-[11px] font-bold leading-8 text-amber-400 transition hover:bg-amber-500/[0.12]"
+                    >
+                      פתח משטח ↗
+                    </a>
+                  ))
+                ) : (
+                  <span className="text-[10px] text-zinc-600">משטח-ציבורי בהכנה</span>
                 )}
               </div>
             </article>
