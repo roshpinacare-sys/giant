@@ -30,3 +30,26 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// Sovereign Channel — the direct Owner <-> Sovereignty thread (T53).
+// role: sovereignty | owner | system
+// kind: request | decision | directive | answer | notice
+// source: book (agents/sovereign-requests.json) | channel-book (agents/owner-channel.jsonl) | llm | interface | rail
+model SovereignMessage {
+  id        String   @id @default(cuid())
+  role      String
+  kind      String
+  reqId     String?
+  title     String?
+  body      String
+  evidence  String?
+  status    String?
+  source    String
+  ref       String?
+  meta      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+  @@index([reqId])
+}
