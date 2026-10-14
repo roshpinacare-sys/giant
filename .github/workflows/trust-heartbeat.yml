@@ -1,0 +1,48 @@
+name: trust-heartbeat
+
+# ═══ פעימת-האמון-האוטונומית (גל-8) ═══════════════════════════════════════
+# חוק-הבעלים: "אתם סנדבוקסים-שנמחקים — לא בונים עליכם. תנו לאוטונומיה לעבוד."
+# הסריקה-המדודה של כל-ספרי-האימפריה רצה כאן — על-השרשרת של הגיט, אפס-סנדבוקס.
+# התוצר: db/trust-cache.json נדחף-חזרה ע"י github-actions[bot] — הממשק-החי
+# קורא-את-הקנון-הזה (readTrustCacheRows) והאמון-מתעדכן-לבד-כל-4-שעות.
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"   # כל-4-שעות (UTC)
+  workflow_dispatch: {}      # הפעלה-ידנית-אוטונומית
+
+permissions:
+  contents: write
+
+concurrency:
+  group: trust-heartbeat
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: סריקת-אמון-על-כל-הספרים (עצי-גיט בלבד — אפס-ריצת-קוד)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node app/scripts/trust-heartbeat.mjs
+
+      - name: דחיפת-הקנון-המעודכן
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/db/trust-cache.json
+          if git diff --cached --quiet; then
+            echo "אין-שינויים-מדודים — אין-קומיט"
+          else
+            git pull --rebase --autostash origin main
+            git commit -m "trust-heartbeat: autonomous scan (no-sandbox) — $(date -u +'%Y-%m-%dT%H:%MZ')"
+            git push origin HEAD:main
+          fi
