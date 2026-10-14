@@ -291,18 +291,60 @@ export function ChannelView() {
       {/* קול-הריבונות + רישומים */}
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-4">
-          <h3 className="mb-2 text-sm font-bold text-zinc-300">קול-הריבונות (מדיד)</h3>
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <h3 className="text-sm font-bold text-zinc-300">קול-הריבונות (מדיד)</h3>
+            {data?.voice && (
+              <span className={`rounded-full px-2 py-0.5 text-[9px] font-bold ${str(data.voice.status) === "OK" ? "bg-emerald-500/10 text-emerald-400" : "bg-amber-500/10 text-amber-400"}`}>
+                {str(data.voice.status) === "OK" ? "חי" : "טרם-נמדד"}
+              </span>
+            )}
+          </div>
           {data?.voice ? (
-            <div className="space-y-1.5 text-xs leading-5 text-zinc-400">
-              {Object.entries(data.voice)
-                .filter(([k]) => !["PARSE_ERROR"].includes(k))
-                .slice(0, 8)
-                .map(([k, v]) => (
-                  <p key={k}>
-                    <span className="font-mono text-zinc-500">{k}</span> · <span className="text-zinc-300">{String(v).slice(0, 180)}</span>
+            (() => {
+              const v = data.voice;
+              const inputs = (typeof v.inputs === "object" && v.inputs !== null ? v.inputs : {}) as Record<string, unknown>;
+              const summary = str(v.summary);
+              const model = str(v.model);
+              const reason = str(v.reason);
+              const nums: Array<[string, string]> = [
+                ["הילוך", inputs.gearsCount ? `${String(inputs.gear ?? "—")}/${String(inputs.gearsCount)}` : null],
+                ["רצף-ירוק", inputs.greenStreak != null ? String(inputs.greenStreak) : null],
+                ["פסק-אחרון", inputs.lastVerdict != null ? String(inputs.lastVerdict) : null],
+                ["Kelly", inputs.kellyMode ? `${String(inputs.kellyMode)} · תקרה ${String(inputs.kellyCap ?? "—")}%` : null],
+                ["פערים-פתוחים", inputs.gapsOpen != null ? String(inputs.gapsOpen) : null],
+                ["אוצר", inputs.treasuryVerdict ? `${String(inputs.treasuryVerdict)} · ${String(inputs.treasuryOpenOrders ?? "—")} פקודות` : null],
+                ["הצבא", inputs.armyVerdict ? `${String(inputs.armyRoster ?? "—")} סגל · ${String(inputs.armyActed ?? "—")} פעלו` : null],
+                ["ספרים", inputs.reposTotal ? `${String(inputs.reposTotal)} (${String(inputs.reposPublic ?? "—")} ציבוריים)` : null],
+                ["ראש-שרשרת", inputs.steemHead != null ? Number(inputs.steemHead).toLocaleString("en-US") : null],
+                ["ערוץ", inputs.activeDirectives != null ? `${String(inputs.activeDirectives)} הוראות · ${String(inputs.openRequests ?? "—")} פניות` : null],
+              ].filter((p): p is [string, string] => p[1] !== null);
+              return (
+                <div className="space-y-2.5">
+                  {summary ? (
+                    <p className="rounded-lg border border-white/5 bg-zinc-950 px-3 py-2.5 text-xs leading-6 text-zinc-200">{summary}</p>
+                  ) : (
+                    reason && (
+                      <p className="rounded-lg border border-amber-500/20 bg-amber-500/[0.04] px-3 py-2 text-[11px] leading-5 text-amber-300/80" title={reason}>
+                        כנות-מלאה: מחולל-הקול לא נמדד כרגע — <span className="font-mono text-[10px]">{reason.slice(0, 90)}</span>
+                      </p>
+                    )
+                  )}
+                  {nums.length > 0 && (
+                    <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-2">
+                      {nums.map(([k, val]) => (
+                        <div key={k} className="flex items-center justify-between gap-2 rounded-lg bg-zinc-950 px-2.5 py-1.5">
+                          <span className="text-[10px] text-zinc-500">{k}</span>
+                          <span className="truncate font-mono text-[10px] font-bold text-zinc-300" title={val}>{val}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <p className="text-[9px] text-zinc-600">
+                    {model && <span className="font-mono">{model} · </span>}נמדד {timeHe(str(v.at))}
                   </p>
-                ))}
-            </div>
+                </div>
+              );
+            })()
           ) : (
             <p className="text-xs text-zinc-500">קול-הריבונות טרם נמדד (UNAVAILABLE-כנה — אפס-הצגה-כמספר)</p>
           )}

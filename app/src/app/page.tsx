@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { GiantsView } from "@/components/giant/GiantsView";
 import { ChannelView } from "@/components/giant/ChannelView";
 import { DexView } from "@/components/giant/DexView";
 import { WalletView } from "@/components/giant/WalletView";
@@ -11,15 +12,17 @@ import { OfficeView } from "@/components/giant/OfficeView";
 
 /* ═══ GIANT — מערכת-האמת של הריבונות ═════════════════════════════════════
  * הפלטפורמה-המאוחדת · ערוץ-אחד · אפס-כפילויות · תקן-ענקים (R360/#42):
- * · הערוץ = הדלת-הראשית: בעלים ↔ ריבונות, זרמי-גיט קנוניים, קומיט-ישיר.
+ * · ליגת-הענקים = הדלת-הראשית: כל-מי-שמייצר-היום-ב-DeFi מולנו, נמדד-חי (R75).
+ * · הערוץ = הדלת-הראשית-לבעלים: בעלים ↔ ריבונות, זרמי-גיט קנוניים, קומיט-ישיר.
  * · הדקס = מרכז-הכובד: שטח-מסחר על מצב-המנוע מהגיט (נרות · ווליום-כנות).
  * · הארנק = 20 חשבונות-אמת · השולחן = מנדט+equity · הרישום = כל-ההחלטות.
  * · המוצרים = קטלוג-אמת · המשרד-החי = המשרד-היחיד.
  * מפתח-מנהל (headcorner) פותח-הכל. הכל נמדד-חי מהגיט; אפס-ירוק-מזויף. */
 
-type ViewId = "channel" | "dex" | "wallet" | "desk" | "ledger" | "products" | "office";
+type ViewId = "giants" | "channel" | "dex" | "wallet" | "desk" | "ledger" | "products" | "office";
 
 const NAV: Array<{ id: ViewId; label: string; he: string }> = [
+  { id: "giants", label: "ליגת-הענקים", he: "כל-מי-שמייצר-היום ב-DeFi מולנו · משטחי-הצי" },
   { id: "channel", label: "הערוץ", he: "הדלת-הראשית: בעלים ↔ ריבונות" },
   { id: "dex", label: "הדקס", he: "שטח-מסחר: נרות · ווליום · pools" },
   { id: "wallet", label: "הארנק", he: "20 חשבונות-אמת מהמנוע" },
@@ -30,7 +33,7 @@ const NAV: Array<{ id: ViewId; label: string; he: string }> = [
 ];
 
 export default function Home() {
-  const [view, setView] = useState<ViewId>("channel");
+  const [view, setView] = useState<ViewId>("giants");
   const [clock, setClock] = useState("");
 
   useEffect(() => {
@@ -93,6 +96,7 @@ export default function Home() {
             <p className="text-xs font-bold text-zinc-300">{active?.label}</p>
             <p className="text-[10px] text-zinc-500">{active?.he}</p>
           </div>
+          {view === "giants" && <GiantsView />}
           {view === "channel" && <ChannelView />}
           {view === "dex" && <DexView />}
           {view === "wallet" && <WalletView />}

@@ -158,6 +158,14 @@
 .sl-panel.rounded-full {
   border-radius: 9999px;
 }
+/* Task 40 — .sl-chip שוחזר: ההגדרה אבדה במיזוג והצ'יפים ירשו טקסט-בהיר
+ * על פאנל-קרם (נמדד: תוויות-התצפיות כמעט-בלתי-נראות). טקסט-כהה על הפאנל. */
+.sl-chip {
+  color: var(--ink-2);
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  transition: background 0.15s ease;
+}
 .sl-dot {
   display: inline-block;
   width: 8px;

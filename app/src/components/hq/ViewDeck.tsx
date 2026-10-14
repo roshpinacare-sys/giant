@@ -54,7 +54,7 @@ const ModeChip = memo(function ModeChip({ lang }: { lang: Lang }) {
       : { text: he ? 'חי — הפורמן בזמן-אמת' : 'Live — the foreman in real time', color: 'var(--st-ok)' };
   return (
     <div
-      className="sl-panel pointer-events-none absolute end-3 top-3 z-10 flex max-w-[70%] items-center gap-2 px-3 py-2"
+      className="sl-panel pointer-events-none flex w-fit max-w-full items-center gap-2 px-3 py-2"
       dir="rtl"
       role="status"
     >
@@ -136,9 +136,9 @@ const RoomStatus = memo(function RoomStatus({ lang }: { lang: Lang }) {
   const mirrorReady = useHq((s) => s.feedMode === 'mirror' && s.feedReady);
   const he = lang === 'he';
   return (
-    <div className="sl-panel pointer-events-none absolute bottom-3 left-3 z-10 hidden items-center gap-2 px-3 py-2 sm:flex" dir="rtl">
+    <div className="sl-panel pointer-events-none hidden w-fit max-w-full items-center gap-2 px-3 py-2 sm:flex" dir="rtl">
       <span className="sl-dot" style={{ backgroundColor: !ready ? 'var(--st-neutral)' : mirrorReady ? 'var(--st-info)' : connected ? 'var(--st-ok)' : 'var(--st-attention)' }} aria-hidden="true" />
-      <span className="text-[12px] font-medium text-[color:var(--ink-2)]">
+      <span className="min-w-0 truncate text-[12px] font-medium text-[color:var(--ink-2)]">
         {!ready
           ? (he ? 'החדר בהכנה…' : 'Preparing the room…')
           : mirrorReady
@@ -176,12 +176,12 @@ const TruthChip = memo(function TruthChip({ lang }: { lang: Lang }) {
     : (he ? 'אין מקור-אמת — החדר ריק מנתונים' : 'no truth source — room shows no data');
   return (
     <div
-      className="sl-panel pointer-events-none absolute right-3 bottom-3 z-10 flex max-w-[58%] items-center gap-2 px-3 py-2 sm:max-w-[46%]"
+      className="sl-panel pointer-events-none flex w-fit max-w-full items-center gap-2 px-3 py-2"
       dir="rtl"
       role="status"
     >
       <span className="sl-dot" style={{ backgroundColor: stale || !truth.foremanOk ? 'var(--st-attention)' : 'var(--st-ok)' }} aria-hidden="true" />
-      <span className="truncate text-[12px] font-medium text-[color:var(--ink-2)]" title={label}>{label}</span>
+      <span className="min-w-0 truncate text-[12px] font-medium text-[color:var(--ink-2)]" title={label}>{label}</span>
     </div>
   );
 });
@@ -252,7 +252,7 @@ const PresetDeck = memo(function PresetDeck({ lang }: { lang: Lang }) {
         onClick={() => setTour(!tourOn)}
         aria-pressed={tourOn}
         title={he ? 'סיור-מודרך בין התחנות — כל לחיצה בחדר מחזירה שליטה' : 'Guided tour between the stations — any click returns control'}
-        className="sl-chip !border-transparent !bg-transparent !text-[12px] !font-semibold hover:!bg-[color:var(--surface-2)]"
+        className="sl-chip shrink-0 whitespace-nowrap !border-transparent !bg-transparent !text-[12px] !font-semibold hover:!bg-[color:var(--surface-2)]"
         style={tourOn ? { background: 'var(--accent-dim)', color: 'var(--accent)' } : undefined}
       >
         {tourOn ? (he ? '◉ הסיור חי — לחיצה מחזירה שליטה' : '◉ Tour live — click to take control') : (he ? '▶ סיור' : '▶ Tour')}
@@ -282,13 +282,17 @@ export function ViewDeck() {
   const lang = useHq((s) => s.lang);
   return (
     <>
-      <ModeChip lang={lang} />
+      {/* Task 40 — פינת-המצב המאוחדת: מצב-חדר + סטטוס + מקור-אמת בעמודה-אחת
+          (נמדד: שלושת-השכבות-הצפות בתחתית התנגשו בסרגל-התצפיות ונראו כטקסט-שבור) */}
+      <div className="pointer-events-none absolute end-3 top-3 z-10 flex max-w-[62%] flex-col items-start gap-2">
+        <ModeChip lang={lang} />
+        <RoomStatus lang={lang} />
+        <TruthChip lang={lang} />
+      </div>
       <RoomHud lang={lang} />
       <RoomToasts />
       <PreparingVeil lang={lang} />
       <PresetDeck lang={lang} />
-      <RoomStatus lang={lang} />
-      <TruthChip lang={lang} />
     </>
   );
 }

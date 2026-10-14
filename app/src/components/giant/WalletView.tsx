@@ -123,8 +123,8 @@ export function WalletView() {
               {filtered.map((a) => (
                 <tr key={a.name} className="border-t border-white/5 transition hover:bg-white/[0.02]">
                   <td className="px-2 py-2">
-                    <span className="font-semibold text-zinc-200">{heName(a.name)}</span>
-                    <span className="mr-1.5 font-mono text-[9px] text-zinc-600">{a.name}</span>
+                    <span className="whitespace-nowrap font-semibold text-zinc-200">{heName(a.name)}</span>
+                    <span className="mr-1.5 whitespace-nowrap font-mono text-[9px] text-zinc-600">{a.name}</span>
                   </td>
                   {tokens.map((t) => {
                     const v = a.balances[t] ?? 0;
