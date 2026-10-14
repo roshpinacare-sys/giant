@@ -1677,3 +1677,19 @@ Stage Summary:
 - הפיבוט מקודד ב-git: המטבע שלנו במרכז, Steem/Hive=מסילות-חוץ במקום-אחרון (תצוגה+ביצוע), R74 בלתי-נפסק
 - SHARED LANE BOARD: [CLAIMED-T51] money.html gravity + ops/PIVOT תוכנית-על · [OPEN WS-2a] תדלוק-credits חיילים (saos-dex lane) · [OPEN WS-2b] D-023 escrow ≥1SBD · [OPEN WS-2c] grid→דקס עצימות-נמוכה · [OPEN WS-3] מדגם-מדינה: מדדי-סקטורים על saos-dex · [CLAIMED-T51 WS-4] auditor+דפדפן · [POLICY WS-5] אבטחה
 - גבולות: אפס נגיעה ב-wallet.html (R62+ תאום), index.html, FleetHQ, workflows
+
+---
+Task ID: 52
+Agent: main (Z.ai Code, trace 1a13b983f4e40421)
+Task: הוראת-בעלים דחופה — ערוץ-בעלים ישיר עם הריבונות, בלי סוכני-חוץ; הריבונות=המפעיל, מימון-עצמי ממה שיש
+
+Work Log:
+- סיור-מסילות: FleetHQ operator rail קיים וחי (/api/operator/message token-gated → operator-inbox.jsonl, recruit engine); console.html = דלת-הריבונות החיה (sovereign.html גמלה R59)
+- agents/sovereign-requests.json (חדש, sole-write): spec sovereign-requests/1.0 · דוקטרינת-מימון-עצמי EN/HE · מסילת-מענה GRANT/DECLINE · REQ-001 תדלוק-credits חיילים (עדות: rejectedLast=60, 0 חוץ) · REQ-002 D-023 אסקרו מה-fuel (עדות: +40.8% edge, 18.643 SBD קיים) — שתיהן OPEN, אפס כסף-חוץ חדש
+- console.html: פאנל #p-owner "הריבונות מבקשת, הבעלים מאשר" + loadOwnerChannel() (fail-honest) ב-refreshAll; תפוס-עצמי: תג-פתיחה של p-research שנבלע — תוקן מיידי
+- PIVOT doc §7: דוקטרינת-הערוץ (הריבונות=המפעיל · אפס-טענות-דרך-סוכנים · הערוץ הדלת-היחידה)
+- auditor PASS 166/0 · JSON OK · push 399a138 · ls-remote ✓ · דפדפן-חי: chip "2 ממתינות-להכרעה", REQ-001/002 רנדר, אפס שגיאות, מובייל 390 נקי
+
+Stage Summary:
+- ערוץ-הבעלים חי ופומבי-בכנות: היא מבקשת עם עדויות, הוא מאשר דרך מסילת-ה-operator — אפס תלות בסוכני-חוץ
+- [OPEN] desk-ריצה לחיבור בקשות-חדשות בקול-הריבונות (LLM-rail measured-only) — לוח-ליינות
