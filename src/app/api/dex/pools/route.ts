@@ -1,10 +1,12 @@
 // GET /api/dex/pools · בריכות-נזילות + עמדות-הבעלים
 // POST /api/dex/pools · הוספה/הסרה-נזילות {action:'add'|'remove', ...}
+// חוק-שער: הוספה/הסרה מזיזות-כסף-אמת מהקופה/ארנק-הבעלים — 401 בלי-אימות-headcorner.
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { ensureEngine } from "@/lib/dex-engine";
 import { getPoolRows, ownerBalance } from "@/lib/dex-server";
 import { lpQuote } from "@/lib/dex-math";
+import { isOwnerReq } from "@/lib/sovereign-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +23,12 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    if (!(await isOwnerReq(req))) {
+      return NextResponse.json(
+        { error: "ניהול-נזילות הוא פעולת-בעלים — נדרש אימות-headcorner", authRequired: true },
+        { status: 401 },
+      );
+    }
     await ensureEngine();
     const body = (await req.json()) as {
       action?: string;

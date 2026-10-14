@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { ownerFetch } from "@/lib/owner-client";
 import { chainColor, fmtAmount, fmtMicro, fmtPct, fmtPrice } from "@/lib/dex-format";
 import type { PoolRow } from "@/lib/dex-types";
 
@@ -49,13 +50,19 @@ export function PoolsView() {
     }
     setBusy(true);
     try {
-      const res = await fetch("/api/dex/pools", {
+      const res = await ownerFetch("/api/dex/pools", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "add", pairId: addPool.pairId, quoteAmount: amt }),
       });
-      const data = (await res.json()) as { error?: string; shares?: number };
-      if (!res.ok) throw new Error(data.error ?? "ההפקדה נכשלה");
+      const data = (await res.json()) as { error?: string; shares?: number; authRequired?: boolean };
+      if (!res.ok) {
+        throw new Error(
+          data.authRequired
+            ? "ניהול-נזילות הוא פעולת-בעלים — היכנס במפתח-ה-headcorner"
+            : data.error ?? "ההפקדה נכשלה",
+        );
+      }
       toast({
         title: "נזילות הופקדה",
         description: `הצטרפת לבריכה ${addPool.base}/${addPool.quote} · נפח-הון פעיל`,
@@ -78,13 +85,19 @@ export function PoolsView() {
     if (!remPool) return;
     setBusy(true);
     try {
-      const res = await fetch("/api/dex/pools", {
+      const res = await ownerFetch("/api/dex/pools", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "remove", positionId: remPool.pairId, pct: remPct }),
       });
-      const data = (await res.json()) as { error?: string };
-      if (!res.ok) throw new Error(data.error ?? "המשיכה נכשלה");
+      const data = (await res.json()) as { error?: string; authRequired?: boolean };
+      if (!res.ok) {
+        throw new Error(
+          data.authRequired
+            ? "ניהול-נזילות הוא פעולת-בעלים — היכנס במפתח-ה-headcorner"
+            : data.error ?? "המשיכה נכשלה",
+        );
+      }
       toast({
         title: "נזילות נמשכה",
         description: `${remPct}% מהעמדה ב-${remPool.base}/${remPool.quote} חזר לארנק`,

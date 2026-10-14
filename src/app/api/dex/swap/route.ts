@@ -1,15 +1,23 @@
 // POST /api/dex/swap · ביצוע-החלפה אמיתית: {pairId, side, amountIn, minOut}
 // מעדכן בריכות, רושם-עסקה, מזיז-לדג'ר-ארנק-הבעלים.
+// חוק-שער: המסחר מזיז-כסף-אמת מארנק-הבעלים — חייב-אימות-headcorner (401 בלעדיו).
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { ensureEngine } from "@/lib/dex-engine";
 import { buildQuote, ownerBalance } from "@/lib/dex-server";
+import { isOwnerReq } from "@/lib/sovereign-auth";
 import type { TradeSide } from "@/lib/dex-types";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
+    if (!(await isOwnerReq(req))) {
+      return NextResponse.json(
+        { error: "מסחר-בארנק-הבעלים דורש-אימות-headcorner", authRequired: true },
+        { status: 401 },
+      );
+    }
     await ensureEngine();
     const body = (await req.json()) as {
       pairId?: string;

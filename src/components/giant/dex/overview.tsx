@@ -178,20 +178,20 @@ export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }
               <button
                 key={p.id}
                 onClick={() => onTrade?.(p.id)}
-                className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-white/5"
+                className="flex w-full min-w-0 items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-white/5"
               >
-                <span className="flex items-center gap-2">
-                  <span className="font-bold text-white" dir="ltr">
+                <span className="flex min-w-0 items-center gap-1.5">
+                  <span className="truncate font-bold text-white" dir="ltr">
                     {p.base}/{p.quote}
                   </span>
-                  <Badge className={cn("text-[9px]", chainColor(p.chain))}>{p.chain}</Badge>
+                  <Badge className={cn("hidden shrink-0 text-[9px] sm:inline-flex", chainColor(p.chain))}>{p.chain}</Badge>
                 </span>
-                <span className="flex items-center gap-3 tabular-nums" dir="ltr">
+                <span className="flex shrink-0 items-center gap-2 tabular-nums sm:gap-3" dir="ltr">
                   <span className="text-zinc-300">{fmtPrice(p.price)}</span>
-                  <span className={cn("w-16 rounded px-1.5 py-0.5 text-center text-xs font-semibold", trendBg(p.change24h))}>
+                  <span className={cn("w-14 rounded px-1 py-0.5 text-center text-xs font-semibold sm:w-16", trendBg(p.change24h))}>
                     {fmtPct(p.change24h)}
                   </span>
-                  <span className="w-20 text-end text-xs text-zinc-500">{fmtMicro(p.vol24h)}</span>
+                  <span className="hidden w-20 text-end text-xs text-zinc-500 sm:inline">{fmtMicro(p.vol24h)}</span>
                 </span>
               </button>
             ))}

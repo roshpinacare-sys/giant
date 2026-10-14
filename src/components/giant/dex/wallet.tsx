@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { ownerFetch } from "@/lib/owner-client";
 import { chainColor, fmtAmount, fmtClock, fmtMicro, fmtPrice } from "@/lib/dex-format";
 import type { WalletState } from "@/lib/dex-types";
 
@@ -40,14 +41,20 @@ export function WalletView() {
   const faucet = async () => {
     setFaucetBusy(true);
     try {
-      const res = await fetch("/api/dex/wallet/faucet", {
+      const res = await ownerFetch("/api/dex/wallet/faucet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: "USDS" }),
       });
-      const data = (await res.json()) as { amount?: number; error?: string };
-      if (!res.ok) throw new Error(data.error ?? "הברז נסגר");
-      toast({ title: `נטענו ${fmtAmount(data.amount ?? 0)} USDS`, description: "ברז-הדמו של giant" });
+      const data = (await res.json()) as { amount?: number; error?: string; authRequired?: boolean };
+      if (!res.ok) {
+        throw new Error(
+          data.authRequired
+            ? "הברז הוא פעולת-בעלים — היכנס במפתח-ה-headcorner"
+            : data.error ?? "הברז נסגר",
+        );
+      }
+      toast({ title: `נטענו ${fmtAmount(data.amount ?? 0)} USDS`, description: "הנפקה-מתועדת · נרשמת-בפאנל-האספקה" });
       await load();
     } catch (err) {
       toast({

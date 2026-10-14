@@ -66,6 +66,7 @@ import {
   AlertTitle,
 } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
+import { ownerHeaders, clearOwnerToken, saveOwnerToken } from "@/lib/owner-client";
 import { cn } from "@/lib/utils";
 
 interface SovereignMessage {
@@ -307,15 +308,7 @@ export default function Home() {
     });
   }, []);
 
-  // אסימון-בעלים (תמיכת-iframe: העוגייה נחסמת בהטמעה — האסימון הנגזר עובר בכותרת)
-  const ownerHeaders = useCallback((): Record<string, string> => {
-    try {
-      const t = localStorage.getItem("giant_owner_token");
-      return t ? { "x-giant-owner": t } : {};
-    } catch {
-      return {};
-    }
-  }, []);
+  // אסימון-בעלים (תמיכת-iframe): עוגייה + אסימון-נגזר בכותרת — עזר-מאוחד owner-client
 
   const refresh = useCallback(async () => {
     setRefreshing(true);
@@ -609,7 +602,7 @@ export default function Home() {
       };
       if (!res.ok || !data.owner) throw new Error(data.error ?? "מפתח-לא-תקין");
       try {
-        if (data.token) localStorage.setItem("giant_owner_token", data.token);
+        if (data.token) saveOwnerToken(data.token);
       } catch {
         // סשן-זמני בלבד
       }
@@ -634,11 +627,7 @@ export default function Home() {
   }
 
   async function logout() {
-    try {
-      localStorage.removeItem("giant_owner_token");
-    } catch {
-      // המשך-יציאה
-    }
+    clearOwnerToken();
     try {
       await fetch("/api/sovereign/auth", { method: "DELETE" });
     } catch {

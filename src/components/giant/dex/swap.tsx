@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { ownerFetch } from "@/lib/owner-client";
 import { chainColor, fmtAmount, fmtMicro, fmtPct, fmtPrice, trendBg, trendColor } from "@/lib/dex-format";
 import type { PairSummary, SwapQuote } from "@/lib/dex-types";
 
@@ -95,7 +96,7 @@ export function SwapView() {
     if (!pair || !quote) return;
     setExecuting(true);
     try {
-      const res = await fetch("/api/dex/swap", {
+      const res = await ownerFetch("/api/dex/swap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -105,8 +106,14 @@ export function SwapView() {
           slippagePct: slippage,
         }),
       });
-      const data = (await res.json()) as { error?: string };
-      if (!res.ok) throw new Error(data.error ?? "ההחלפה נכשלה");
+      const data = (await res.json()) as { error?: string; authRequired?: boolean };
+      if (!res.ok) {
+        throw new Error(
+          data.authRequired
+            ? "פעולת-בעלים נדרשת — היכנס במפתח-ה-headcorner (מסחר מזיז כסף אמת)"
+            : data.error ?? "ההחלפה נכשלה",
+        );
+      }
       toast({
         title: "ההחלפה בוצעה",
         description: `${tokenIn} → ${tokenOut} · בורסת giant`,
