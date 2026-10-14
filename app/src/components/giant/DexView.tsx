@@ -121,12 +121,21 @@ function fmtVol(n: number | null): string {
   if (n >= 1e3) return `$${(n / 1e3).toFixed(0)}K`;
   return `$${n.toFixed(0)}`;
 }
-function fmtMu(v: number | null | undefined): string {
+/* קנון-יחידות (saos-dex kernel.ts:8): 1 = 1000µ · כל-מספר בספר הוא µ.
+ * תצוגה-כנה: מחיר = µ÷1000 ב-USDS · כמויות = µ÷1000 ביחידות-שלמות.
+ * העיוות-ההיסטורי (הצגת-µ כיחידה) הנפיח כל-סכום ×1000 — תוקן. */
+function fmtPrice(v: number | null | undefined): string {
   if (v === null || v === undefined || !Number.isFinite(v)) return "—";
-  if (v >= 1e9) return `${(v / 1e9).toFixed(2)}B`;
-  if (v >= 1e6) return `${(v / 1e6).toFixed(2)}M`;
-  if (v >= 1e3) return `${(v / 1e3).toFixed(1)}K`;
-  return v.toFixed(0);
+  const u = v / 1000;
+  if (u >= 1000) return u.toLocaleString("en-US", { maximumFractionDigits: 0 });
+  if (u >= 1) return u.toFixed(u >= 100 ? 2 : 3);
+  return u.toFixed(4);
+}
+function fmtAmt(v: number | null | undefined): string {
+  if (v === null || v === undefined || !Number.isFinite(v)) return "—";
+  const u = v / 1000;
+  if (Math.abs(u) >= 1e6) return `${(u / 1e6).toFixed(2)}M`;
+  return Math.round(u).toLocaleString("en-US");
 }
 function fmtInt(n: number | null | undefined): string {
   return n === null || n === undefined || !Number.isFinite(n) ? "—" : n.toLocaleString("en-US");
@@ -316,8 +325,8 @@ export function DexView() {
               </div>
               {last && (
                 <div className="flex items-baseline gap-3">
-                  <span className="font-mono text-2xl font-black text-zinc-50">{fmtMu(last.c)}</span>
-                  <span className="text-[10px] text-zinc-500">µUSDS</span>
+                  <span className="font-mono text-2xl font-black text-zinc-50">{fmtPrice(last.c)}</span>
+                  <span className="text-[10px] text-zinc-500">USDS / יחידת-בסיס</span>
                   {change !== null && (
                     <span className={`text-xs font-bold ${change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                       {change >= 0 ? "▲" : "▼"} {Math.abs(change).toFixed(2)}%
@@ -332,10 +341,10 @@ export function DexView() {
             {last && (
               <div className="grid grid-cols-3 gap-2 border-t border-white/10 px-4 py-2 text-center text-[11px] sm:grid-cols-6">
                 {[
-                  ["נפתח", fmtMu(last.o)],
-                  ["גבוה", fmtMu(last.h)],
-                  ["נמוך", fmtMu(last.l)],
-                  ["וול זוג", `${fmtMu(volSum)}µ`],
+                  ["נפתח", fmtPrice(last.o)],
+                  ["גבוה", fmtPrice(last.h)],
+                  ["נמוך", fmtPrice(last.l)],
+                  ["וול זוג", `${fmtAmt(volSum)} USDS`],
                   ["פוזיציות", fmtInt(last.n ?? null)],
                   ["מדוד", timeHe(eng.fetchedAt).split(", ")[1] ?? "—"],
                 ].map(([l, v]) => (
@@ -373,7 +382,7 @@ export function DexView() {
                 {eng.metrics.slice().reverse().map((d) => (
                   <tr key={d.day} className="border-b border-white/5 last:border-0">
                     <td className="px-2 py-1.5 font-mono text-zinc-300">{d.day}</td>
-                    <td className="px-2 py-1.5 font-mono font-bold text-amber-400">{fmtMu(d.vol24QuoteMu)}</td>
+                    <td className="px-2 py-1.5 font-mono font-bold text-amber-400">{fmtAmt(d.vol24QuoteMu)}</td>
                     <td className="px-2 py-1.5 font-mono text-zinc-300">{fmtInt(d.trades24)}</td>
                     <td className="px-2 py-1.5 font-mono text-zinc-400">{fmtInt(d.fills)}</td>
                     <td className="px-2 py-1.5 font-mono text-zinc-400">{fmtInt(d.swaps)}</td>
@@ -484,8 +493,8 @@ export function DexView() {
               <div key={p.pair} className="rounded-xl border border-white/5 bg-zinc-950 p-3">
                 <p className="font-mono text-xs font-bold text-zinc-200">{p.pair}</p>
                 <div className="mt-1 grid grid-cols-2 gap-1 text-[11px]">
-                  <span className="text-zinc-500">{p.reserves.a}: <b className="font-mono text-zinc-300">{fmtMu(p.reserves.ra)}</b></span>
-                  <span className="text-zinc-500">{p.reserves.b}: <b className="font-mono text-zinc-300">{fmtMu(p.reserves.rb)}</b></span>
+                  <span className="text-zinc-500">{p.reserves.a}: <b className="font-mono text-zinc-300">{fmtAmt(p.reserves.ra)}</b></span>
+                  <span className="text-zinc-500">{p.reserves.b}: <b className="font-mono text-zinc-300">{fmtAmt(p.reserves.rb)}</b></span>
                 </div>
               </div>
             ))}
@@ -505,9 +514,9 @@ export function DexView() {
             <Scale className="h-3.5 w-3.5" aria-hidden /> שתי-קופות · כנות-מלאה (R74)
           </h4>
           <div className="space-y-2 text-xs leading-6">
-            <p className="flex justify-between"><span className="text-zinc-500">רווח-ספר-שוטף (SIM)</span><span className="font-mono font-bold text-amber-400">{fmtMu(eng?.treasuryProfit ?? dex?.treasuryProfitSim ?? null)}</span></p>
-            <p className="flex justify-between"><span className="text-zinc-500">רווח-ספר מאז-תחילת-החיים</span><span className="font-mono text-zinc-200">{fmtMu(eng?.treasuryProfitEver ?? null)}</span></p>
-            <p className="flex justify-between"><span className="text-zinc-500">feeMeter (mu)</span><span className="font-mono text-zinc-200">{fmtMu(eng?.feeMeter ?? dex?.feeMeterMu ?? null)}</span></p>
+            <p className="flex justify-between"><span className="text-zinc-500">רווח-ספר-שוטף (SIM)</span><span className="font-mono font-bold text-amber-400">{fmtAmt(eng?.treasuryProfit ?? dex?.treasuryProfitSim ?? null)} USDS</span></p>
+            <p className="flex justify-between"><span className="text-zinc-500">רווח-ספר מאז-תחילת-החיים</span><span className="font-mono text-zinc-200">{fmtAmt(eng?.treasuryProfitEver ?? null)} USDS</span></p>
+            <p className="flex justify-between"><span className="text-zinc-500">feeMeter (µ)</span><span className="font-mono text-zinc-200">{fmtAmt(eng?.feeMeter ?? dex?.feeMeterMu ?? null)}</span></p>
             <p className="flex justify-between"><span className="text-zinc-500">gas ממומן (mu)</span><span className="font-mono text-zinc-200">{fmtInt(dex?.gasFundedMu)}</span></p>
             <p className="flex justify-between"><span className="text-zinc-500">גיבוי WSTEEM / WSBD</span><span className="font-mono text-zinc-200">{fmtInt(dex?.backingWsteem)} / {fmtInt(dex?.backingWsbd)}</span></p>
             <p className="border-t border-white/5 pt-2 text-[10px] leading-4 text-zinc-600">

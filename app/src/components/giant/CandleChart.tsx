@@ -1,6 +1,7 @@
 "use client";
 
-/* גרף-נרות — SVG טהור (אפס-תלות) · נרות-מחיר + עמודות-ווליום · נתוני-מנוע-אמת */
+/* גרף-נרות — SVG טהור (אפס-תלות) · נרות-מחיר + עמודות-ווליום · נתוני-מנוע-אמת
+ * קנון-יחידות: כל-הערכים ב-µ — הציר והתוויות מציגים ביחידות (µ÷1000). */
 
 export interface Candle {
   t: number;
@@ -15,6 +16,14 @@ export interface Candle {
 
 const UP = "#10b981";
 const DOWN = "#ef4444";
+
+/* µ → יחידה-שלמה, תווית-ציר */
+function fmtAxis(mu: number): string {
+  const u = mu / 1000;
+  if (u >= 1e6) return `${(u / 1e6).toFixed(2)}M`;
+  if (u >= 1000) return `${(u / 1e3).toFixed(1)}K`;
+  return u.toFixed(u < 10 ? 2 : 1);
+}
 
 function computeView(candles: Candle[], H: number) {
   const W = 1000;
@@ -64,7 +73,7 @@ export function CandleChart({ candles, height = 320 }: { candles: Candle[]; heig
           <g key={i}>
             <line x1={padL} x2={W - padR} y1={yy} y2={yy} stroke="#27272a" strokeWidth="1" />
             <text x={W - padR + 6} y={yy + 3.5} fill="#71717a" fontSize="11" fontFamily="monospace">
-              {p >= 1e6 ? `${(p / 1e6).toFixed(2)}M` : p >= 1e3 ? `${(p / 1e3).toFixed(2)}K` : p.toFixed(p < 100 ? 1 : 0)}
+              {fmtAxis(p)}
             </text>
           </g>
         );
@@ -108,14 +117,14 @@ export function CandleChart({ candles, height = 320 }: { candles: Candle[]; heig
             <line x1={padL} x2={W - padR} y1={yy} y2={yy} stroke="#f59e0b" strokeWidth="1" strokeDasharray="4 3" opacity="0.8" />
             <rect x={W - padR + 2} y={yy - 9} width={58} height={18} rx="3" fill="#f59e0b" />
             <text x={W - padR + 8} y={yy + 4} fill="#18181b" fontSize="11" fontWeight="bold" fontFamily="monospace">
-              {last.c >= 1e6 ? `${(last.c / 1e6).toFixed(2)}M` : last.c >= 1e3 ? `${(last.c / 1e3).toFixed(2)}K` : last.c.toFixed(last.c < 100 ? 1 : 0)}
+              {fmtAxis(last.c)}
             </text>
           </g>
         );
       })()}
       {/* תווית-ווליום */}
       <text x={padL + 2} y={volTop - 2} fill="#52525b" fontSize="10">
-        VOL max {maxV >= 1e6 ? `${(maxV / 1e6).toFixed(1)}M` : `${(maxV / 1e3).toFixed(0)}K`}
+        VOL max {maxV / 1000 >= 1000 ? `${((maxV / 1000) / 1e3).toFixed(1)}K` : `${Math.round(maxV / 1000)}`}
       </text>
     </svg>
   );

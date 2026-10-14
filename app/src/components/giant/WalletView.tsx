@@ -24,10 +24,11 @@ function heName(n: string): string {
   if (n.startsWith("bot-")) return `בוט ${n.split("-")[1].toUpperCase()}`;
   return n;
 }
+/* קנון: הספר ב-µ (1 = 1000µ) — תצוגה ביחידות (÷1000). העיוות ×1000 תוקן. */
 function fmt(v: number): string {
-  if (Math.abs(v) >= 1e6) return `${(v / 1e6).toFixed(2)}M`;
-  if (Math.abs(v) >= 1e3) return `${(v / 1e3).toFixed(1)}K`;
-  return v.toLocaleString("en-US");
+  const u = v / 1000;
+  if (Math.abs(u) >= 1e6) return `${(u / 1e6).toFixed(2)}M`;
+  return Math.round(u).toLocaleString("en-US");
 }
 function timeHe(iso: string | null): string {
   if (!iso) return "—";
@@ -83,7 +84,7 @@ export function WalletView() {
     <div className="space-y-4" dir="rtl">
       <section className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-zinc-900/60 px-4 py-3">
         <div>
-          <h2 className="text-sm font-black text-zinc-100">ארנק-הריבונות — {dex?.accounts.length ?? "—"} חשבונות מהמנוע</h2>
+          <h2 className="text-sm font-black text-zinc-100">ארנק-הספר — {dex?.accounts.length ?? "—"} חשבונות (סימולציה-מוצהרת)</h2>
           <p className="mt-0.5 text-[10px] text-zinc-500">מאזני-אמת מ-state-snapshot · גובה {dex?.height?.toLocaleString("en-US") ?? "—"} · snapshot {timeHe(dex?.savedAt ?? null)}</p>
         </div>
         <input
