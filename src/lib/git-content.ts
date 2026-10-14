@@ -56,6 +56,7 @@ const SECTION_DEFS: Array<{ id: string; title: string; description: string; entr
     title: "אמנת-giant",
     description: "חוקי-הבית, הערוץ-האחד, והפלטפורמה — האמנה-המחייבת-את-הצי",
     entries: [
+      ["Sandbox", "giant/MERGE-AGREEMENT.md"],
       ["Sandbox", "giant/README.md"],
       ["Sandbox", "giant/SPEC-CHANNEL.md"],
       ["Sandbox", "giant/SPEC-PLATFORM.md"],

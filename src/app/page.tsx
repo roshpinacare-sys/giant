@@ -25,9 +25,10 @@ import {
   Terminal,
   Users,
 } from "lucide-react";
-import { FileText, Network, TrendingUp } from "lucide-react";
+import { FileText, GitMerge, Network, TrendingUp } from "lucide-react";
 import { DexView } from "@/components/giant/dex/dex-view";
 import { EstateView } from "@/components/giant/estate";
+import { MergeView } from "@/components/giant/merge";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -263,6 +264,7 @@ function RelayProcessedChip({ processed }: { processed: boolean }) {
 }
 
 const NAV_ITEMS = [
+  { id: "merge", label: "המיזוג-הגדול", icon: GitMerge },
   { id: "dex", label: "giant DEX", icon: TrendingUp },
   { id: "estate", label: "האחוזה · מפת-אמת", icon: Network },
   { id: "channel", label: "ערוץ הריבון", icon: MessagesSquare },
@@ -296,7 +298,7 @@ export default function Home() {
   const [landText, setLandText] = useState("");
   const [landing, setLanding] = useState(false);
   const [tab, setTab] = useState("inbox");
-  const [view, setView] = useState("dex");
+  const [view, setView] = useState("merge");
   const [navOpen, setNavOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
@@ -391,6 +393,8 @@ export default function Home() {
 
   function renderView() {
     switch (view) {
+      case "merge":
+        return <MergeView onNavigate={setView} />;
       case "dex":
         return <DexView />;
       case "estate":

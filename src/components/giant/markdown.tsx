@@ -4,6 +4,7 @@
 // בטיחות: react-markdown לא מריץ HTML גולמי כברירת-מחדל.
 
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { ReactNode } from "react";
 
 function el(classes: string): (props: { children?: ReactNode }) => React.ReactElement {
@@ -78,7 +79,8 @@ const components = {
 export function MarkdownView({ content }: { content: string }) {
   return (
     <div className="text-sm text-foreground/90">
-      <ReactMarkdown components={components}>{content}</ReactMarkdown>
+      {/* remark-gfm: טבלאות-וקווים-תוחמים — הסכם-המיזוג-ומסמכים-רשמיים כוללים-טבלאות */}
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>{content}</ReactMarkdown>
     </div>
   );
 }

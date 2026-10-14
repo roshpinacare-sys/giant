@@ -139,6 +139,11 @@ export function LedgerView() {
     return <ErrorBox title="טעינת-הלדג'ר נכשלה" message={error ?? ""} onRetry={() => void load()} />;
   }
 
+  // סיכום-חי — נגזר-מהשורות-עצמן (אמת-בלבד)
+  const maxAgentCount = agents.length > 0 ? agents[0][1] : 0;
+  const firstDate = rows.length > 0 ? rows[rows.length - 1].date : null;
+  const lastDate = rows.length > 0 ? rows[0].date : null;
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-3 flex-wrap">
@@ -153,6 +158,37 @@ export function LedgerView() {
           רענון
         </Button>
       </div>
+
+      {/* סיכום-חי: תרומת-כל-סוכן — נגזר-מהשורות-עצמן */}
+      <section aria-label="סיכום-הלדג'ר" className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <Card className="p-4">
+          <div className="text-xs text-muted-foreground">סך-רישומים</div>
+          <div className="mt-1 text-2xl font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
+            {heNum.format(total)}
+          </div>
+          <div className="mt-1 text-[10px] text-muted-foreground tabular-nums">
+            {firstDate && lastDate ? `${firstDate} ← ${lastDate}` : "—"}
+          </div>
+        </Card>
+        <Card className="p-4">
+          <div className="text-xs text-muted-foreground">סוכנים-רושמים</div>
+          <div className="mt-1 text-2xl font-bold tabular-nums">{heNum.format(agents.length)}</div>
+          <div className="mt-1 text-[10px] text-muted-foreground">כל-רישום-עם-SHA-וארטיפקטים</div>
+        </Card>
+        {agents.slice(0, 2).map(([a, n]) => (
+          <Card key={a} className="p-4">
+            <div className="truncate text-xs text-muted-foreground font-mono" dir="ltr">{a}</div>
+            <div className="mt-1 text-2xl font-bold tabular-nums">{heNum.format(n)}</div>
+            <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full bg-emerald-600"
+                style={{ width: `${maxAgentCount > 0 ? Math.max(8, (n / maxAgentCount) * 100) : 0}%` }}
+                aria-hidden="true"
+              />
+            </div>
+          </Card>
+        ))}
+      </section>
 
       <div className="flex items-center gap-2 flex-wrap">
         <div className="relative min-w-56 flex-1">
