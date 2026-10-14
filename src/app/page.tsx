@@ -8,16 +8,24 @@ import { motion } from "framer-motion";
 import {
   AlertCircle,
   GitBranch,
+  Gauge,
   KeyRound,
   Landmark,
+  Library,
   Loader2,
   Lock,
   LogOut,
+  Menu,
+  MessagesSquare,
   RefreshCw,
+  ScrollText,
   Send,
   ShieldCheck,
   Stamp,
+  Terminal,
+  Users,
 } from "lucide-react";
+import { FileText } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -34,6 +42,22 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { ArchiveView, LedgerView } from "@/components/giant/views";
 import {
   Alert,
   AlertDescription,
@@ -235,6 +259,16 @@ function RelayProcessedChip({ processed }: { processed: boolean }) {
   );
 }
 
+const NAV_ITEMS = [
+  { id: "channel", label: "ערוץ הריבון", icon: MessagesSquare },
+  { id: "ledger", label: "לדג'ר-האמת", icon: ScrollText },
+  { id: "plans", label: "תוכניות-האם", icon: FileText },
+  { id: "team", label: "הצוות", icon: Users },
+  { id: "security", label: "אבטחה-וחוקים", icon: ShieldCheck },
+  { id: "systems", label: "מנועים-ומדידות", icon: Gauge },
+  { id: "archive", label: "ארכיון-מלא", icon: Library },
+] as const;
+
 export default function Home() {
   const { toast } = useToast();
   const [messages, setMessages] = useState<SovereignMessage[]>([]);
@@ -257,6 +291,9 @@ export default function Home() {
   const [landText, setLandText] = useState("");
   const [landing, setLanding] = useState(false);
   const [tab, setTab] = useState("inbox");
+  const [view, setView] = useState("channel");
+  const [navOpen, setNavOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
 
   const listRef = useRef<HTMLDivElement | null>(null);
 
@@ -326,6 +363,36 @@ export default function Home() {
   useEffect(() => {
     if (tab === "git" && !gitState && !gitLoading) void loadGit();
   }, [tab, gitState, gitLoading, loadGit]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  function renderView() {
+    switch (view) {
+      case "ledger":
+        return <LedgerView />;
+      case "plans":
+        return <ArchiveView initialSectionId="plans" />;
+      case "team":
+        return <ArchiveView initialSectionId="team" />;
+      case "security":
+        return <ArchiveView initialSectionId="security" />;
+      case "systems":
+        return <ArchiveView initialSectionId="systems" />;
+      case "archive":
+        return <ArchiveView />;
+      default:
+        return null;
+    }
+  }
 
   useEffect(() => {
     if (!loading) scrollToBottom("auto");
@@ -592,8 +659,18 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       {/* כותרת */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-        <div className="mx-auto w-full max-w-5xl px-4 py-5 flex items-start justify-between gap-4">
-          <div className="min-w-0">
+        <div className="mx-auto flex w-full max-w-7xl items-start justify-between gap-4 px-4 py-5">
+          <div className="flex min-w-0 items-start gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="mt-0.5 h-11 w-11 shrink-0 md:hidden"
+              onClick={() => setNavOpen(true)}
+              aria-label="פתיחת-תפריט"
+            >
+              <Menu className="h-5 w-5" aria-hidden="true" />
+            </Button>
+            <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-2xl font-bold tracking-tight">giant · מערכת-האמת</h1>
               <Badge className="gap-1 bg-emerald-600 text-white hover:bg-emerald-600">
@@ -604,6 +681,7 @@ export default function Home() {
             <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
               חוק-giant: ערוץ-אחד בלבד · אין טענות-סוכנים לבעלים · הריבונות היא המפעילה ומשיגה את המימון בעצמה · ניהול-הבעלים מאחורי מפתח-headcorner
             </p>
+            </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <Button
@@ -643,7 +721,44 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex-1 mx-auto w-full max-w-5xl px-4 py-6 space-y-6">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 items-stretch">
+        <aside
+          aria-label="ניווט-ראשי"
+          className="sticky top-0 hidden h-fit w-60 shrink-0 flex-col gap-1 self-start px-3 py-6 md:flex"
+        >
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setView(item.id)}
+              aria-current={view === item.id ? "page" : undefined}
+              className={cn(
+                "flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors",
+                view === item.id
+                  ? "bg-emerald-600/10 font-semibold text-emerald-700 dark:text-emerald-400"
+                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
+              )}
+            >
+              <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+              {item.label}
+            </button>
+          ))}
+          <div className="mt-2 border-t pt-2">
+            <button
+              onClick={() => setPaletteOpen(true)}
+              className="flex min-h-[44px] w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+            >
+              <Terminal className="h-4 w-4" aria-hidden="true" />
+              פלטת-פקודות
+              <kbd className="ms-auto rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px]">⌘K</kbd>
+            </button>
+          </div>
+        </aside>
+
+        <main className="min-w-0 flex-1 space-y-6 px-4 py-6">
+        {view !== "channel" ? (
+          renderView()
+        ) : (
+        <>
         {error ? (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" aria-hidden="true" />
@@ -1193,11 +1308,14 @@ export default function Home() {
             </Tabs>
           </>
         )}
+        </>
+        )}
       </main>
+      </div>
 
       <footer className="border-t mt-auto pb-[env(safe-area-inset-bottom)]">
-        <div className="mx-auto w-full max-w-5xl px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-1 text-xs text-muted-foreground">
-          <span>giant · הערוץ-האחד · הריבונות היא המפעילה · אין טענות-סוכנים לבעלים</span>
+        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-1 px-4 py-3 text-xs text-muted-foreground sm:flex-row">
+          <span>giant · הערוץ-האחד · הריבונות היא המפעילה · אין טענות-סוכנים לבעלים · ⌘K-לפלטת-פקודות</span>
           <span className="tabular-nums">
             {lastSync ? `סנכרון אחרון: ${heTime.format(lastSync)}` : "טוען…"}
           </span>
@@ -1251,6 +1369,89 @@ export default function Home() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* ניווט-מובייל */}
+      <Sheet open={navOpen} onOpenChange={setNavOpen}>
+        <SheetContent side="right" className="w-72" dir="rtl">
+          <SheetHeader>
+            <SheetTitle>ניווט · giant</SheetTitle>
+            <SheetDescription>כל-המערכת ביד-אחת</SheetDescription>
+          </SheetHeader>
+          <div className="flex flex-col gap-1 px-2 pb-6">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setView(item.id);
+                  setNavOpen(false);
+                }}
+                aria-current={view === item.id ? "page" : undefined}
+                className={cn(
+                  "flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors",
+                  view === item.id
+                    ? "bg-emerald-600/10 font-semibold text-emerald-700 dark:text-emerald-400"
+                    : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
+                )}
+              >
+                <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* פלטת-פקודות ⌘K */}
+      <CommandDialog open={paletteOpen} onOpenChange={setPaletteOpen}>
+        <CommandInput placeholder="חפש מסך או פעולה…" />
+        <CommandList>
+          <CommandEmpty>אין תוצאות.</CommandEmpty>
+          <CommandGroup heading="מסכים">
+            {NAV_ITEMS.map((item) => (
+              <CommandItem
+                key={item.id}
+                onSelect={() => {
+                  setView(item.id);
+                  setPaletteOpen(false);
+                }}
+              >
+                <item.icon className="me-2 h-4 w-4" aria-hidden="true" />
+                {item.label}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+          <CommandGroup heading="פעולות">
+            <CommandItem
+              onSelect={() => {
+                void refresh();
+                setPaletteOpen(false);
+              }}
+            >
+              <RefreshCw className="me-2 h-4 w-4" aria-hidden="true" />
+              רענון הערוץ
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                setAuthOpen(true);
+                setPaletteOpen(false);
+              }}
+            >
+              <KeyRound className="me-2 h-4 w-4" aria-hidden="true" />
+              שער-הבעלים
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                setView("channel");
+                setTab("git");
+                setPaletteOpen(false);
+              }}
+            >
+              <GitBranch className="me-2 h-4 w-4" aria-hidden="true" />
+              מנוע-הגיט
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
     </div>
   );
 }
