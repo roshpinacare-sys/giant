@@ -12,6 +12,7 @@ import { ProductsView } from "@/components/giant/ProductsView";
 import { PulseView } from "@/components/giant/PulseView";
 import { OfficeHqView } from "@/components/giant/OfficeHqView";
 import { EstateView } from "@/components/giant/EstateView";
+import { TrustView } from "@/components/giant/TrustView";
 import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
 import { Command, ShieldCheck } from "lucide-react";
@@ -28,7 +29,7 @@ import { Command, ShieldCheck } from "lucide-react";
 
 type ViewId =
   | "machine" | "dex" | "league" | "channel" | "wallet" | "desk"
-  | "ledger" | "products" | "pulse" | "office" | "estate";
+  | "ledger" | "products" | "pulse" | "office" | "estate" | "trust";
 
 /* סדר-הפתיחה (T58): המכונה דלת-הקראפט; הכסף מיד אחריה; הערוץ הדלת-הראשית. */
 const NAV: Array<{ id: ViewId; label: string; he: string }> = [
@@ -43,6 +44,7 @@ const NAV: Array<{ id: ViewId; label: string; he: string }> = [
   { id: "pulse", label: "הדופק", he: "מערכת-האמת: שערים · זרמים · טביעות" },
   { id: "office", label: "המשרד-החי", he: "החדר-התלת-מימדי · קונסולת-מפעיל" },
   { id: "estate", label: "האחוזה", he: "מפקד-הגיט: 39 ספרים · בריאות · פוטנציאל" },
+  { id: "trust", label: "האמון", he: "מפת-האמון: סריקה-מדודה של כל-הספרים · אפס-סימולציות בהוכחה" },
 ];
 
 interface TruthChip {
@@ -180,6 +182,7 @@ export default function Home() {
           {view === "pulse" && <PulseView />}
           {view === "office" && <OfficeHqView />}
           {view === "estate" && <EstateView />}
+          {view === "trust" && <TrustView />}
         </main>
       </div>
 

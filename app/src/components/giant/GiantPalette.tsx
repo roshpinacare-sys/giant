@@ -32,6 +32,7 @@ import {
   Radio,
   ScrollText,
   Sparkles,
+  ShieldCheck,
   Users,
   Wallet,
 } from "lucide-react";
@@ -56,6 +57,7 @@ const MODULES: ModuleEntry[] = [
   { id: "league", he: "ליגת-הענקים", desc: "מול-הענקים: Uniswap · דוקטרינת-כנות", en: "league giants uniswap", icon: <Users aria-hidden /> },
   { id: "machine", he: "מכונת-האמת", desc: "מכונת-האמת · מדידות", en: "machine truth engine", icon: <Gauge aria-hidden /> },
   { id: "estate", he: "האחוזה", desc: "מפקד-האחוזה: הגיט · הזרימה · העבודות", en: "estate git census repos", icon: <Building2 aria-hidden /> },
+  { id: "trust", he: "האמון", desc: "מפת-האמון: סריקה-מדודה של כל-הספרים", en: "trust scan fleet simulation audit", icon: <ShieldCheck aria-hidden /> },
 ];
 
 interface ActionEntry {
