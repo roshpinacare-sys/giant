@@ -21,6 +21,7 @@ import {
   ScrollText,
   Send,
   ShieldCheck,
+  Sparkles,
   Stamp,
   Terminal,
   Users,
@@ -29,6 +30,7 @@ import { FileText, GitMerge, Network, TrendingUp } from "lucide-react";
 import { DexView } from "@/components/giant/dex/dex-view";
 import { EstateView } from "@/components/giant/estate";
 import { MergeView } from "@/components/giant/merge";
+import { SkillsView } from "@/components/giant/skills";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -265,6 +267,7 @@ function RelayProcessedChip({ processed }: { processed: boolean }) {
 
 const NAV_ITEMS = [
   { id: "merge", label: "המיזוג-הגדול", icon: GitMerge },
+  { id: "skills", label: "מרכז-היכולות", icon: Sparkles },
   { id: "dex", label: "giant DEX", icon: TrendingUp },
   { id: "estate", label: "האחוזה · מפת-אמת", icon: Network },
   { id: "channel", label: "ערוץ הריבון", icon: MessagesSquare },
@@ -395,6 +398,8 @@ export default function Home() {
     switch (view) {
       case "merge":
         return <MergeView onNavigate={setView} />;
+      case "skills":
+        return <SkillsView />;
       case "dex":
         return <DexView />;
       case "estate":

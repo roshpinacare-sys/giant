@@ -130,6 +130,21 @@ model DexConfig {
   value String
 }
 
+// מרכז-היכולות — כל-הרצה-אמת-של-יכולת-SDK נרשמת-כאן (חוק-האמת: אין-הצהרות-ללא-הוכחה).
+// הקלט/פלט נשמרים-כתמצית-מצונזרת-בלבד; תוצרי-מדיה (תמונה/קול) נשמרים-כגודל-ולא-כ-base64.
+model SkillRun {
+  id         String   @id @default(cuid())
+  skill      String   // llm | vision | video | tts | asr | image | search | reader
+  status     String   @default("RUNNING") // RUNNING | OK | ERROR
+  input      String   // תמצית-הקלט (מקוצר)
+  output     String?  // תמצית-הפלט (מקוצר)
+  durationMs Int      @default(0)
+  error      String?
+  createdAt  DateTime @default(now())
+
+  @@index([skill, createdAt])
+}
+
 // צי-הסוכנים — כל-סוכן עם-הקצאה-אמיתית-מתועדת-בלדג'ר (TREASURY→FLEET:<id>).
 // האסימון נשמר-כ-hash בלבד; כל-עסקה-שלו מסומנת source=FLEET ב-DexTrade.
 model FleetAgent {

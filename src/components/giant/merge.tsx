@@ -17,6 +17,7 @@ import {
   MessagesSquare,
   Network,
   ScrollText,
+  Sparkles,
   TrendingUp,
 } from "lucide-react";
 
@@ -325,6 +326,7 @@ export function MergeView({ onNavigate }: MergeViewProps) {
             </span>
             <div className="flex flex-wrap gap-2">
               {[
+                { id: "skills", label: "למרכז-היכולות", icon: Sparkles },
                 { id: "dex", label: "לבורסה", icon: TrendingUp },
                 { id: "estate", label: "למפת-האמת", icon: Network },
                 { id: "ledger", label: "ללדג'ר", icon: ScrollText },
