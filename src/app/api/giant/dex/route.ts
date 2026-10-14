@@ -6,6 +6,7 @@
 // כשל = כנה. cache 45 שניות.
 import { NextResponse } from "next/server";
 import { readPat } from "@/lib/office-truth";
+import { loadTruth, MU, type FileMeta, type TruthPayload } from "@/lib/giant/truth";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -53,6 +54,19 @@ export interface DexPayload {
   ordersOpen: number | null;
   metrics: DayMetrics[];
   grid: { verdict: string; engine: string; chains: string[]; armed: boolean; real: boolean; publishedAt: string | null; hive: { ok: boolean; publishedAt: string | null } | null } | null;
+  /* היצע-אמת: הכל מדוד ב-mu (אלפיות) — הממשק מציג יחידות-אנוש */
+  supply: {
+    accountsSaosMu: number;
+    poolSaosMu: number;
+    totalSaosMu: number;
+    totalSaosHuman: number;
+    capSaosHuman: number | null;
+    genesisMintSaosHuman: number | null;
+    pctOfCap: number | null;
+    genesisNote: string | null;
+  } | null;
+  truth: TruthPayload | null;
+  truthMeta: { saosLive: FileMeta; honestEcon: FileMeta; money: FileMeta } | null;
   fetchedAt: string;
 }
 
@@ -105,10 +119,13 @@ interface GridPublic {
 export async function loadDex(force = false): Promise<DexPayload> {
   if (!force && cache && Date.now() - cache.at < CACHE_MS) return cache.data;
   const pat = await readPat();
+  const truth = loadTruth();
+  const truthMeta = { saosLive: truth.meta.saosLive, honestEcon: truth.meta.honestEcon, money: truth.meta.money };
   const empty: DexPayload = {
     ok: false, note: "מצב-המנוע לא נמדד כרגע — נסה שוב", savedAt: null, height: null,
     pairs: [], accounts: [], assets: [], poolPairs: [], treasuryProfit: null,
     treasuryProfitEver: null, feeMeter: null, ordersOpen: null, metrics: [], grid: null,
+    supply: null, truth, truthMeta,
     fetchedAt: new Date().toISOString(),
   };
   if (!pat) return empty;
@@ -132,6 +149,27 @@ export async function loadDex(force = false): Promise<DexPayload> {
     pair,
     reserves: { a: String(p.a ?? ""), b: String(p.b ?? ""), ra: Number(p.ra ?? 0), rb: Number(p.rb ?? 0) },
   }));
+
+  /* היצע-אמת: SAOS בחשבונות + SAOS ב-pools — הכל mu; מוחזר גם ביחידות-אנוש */
+  const accountsSaosMu = Object.values(st.balances ?? {}).reduce(
+    (s, b) => s + (typeof b === "object" && b !== null && typeof (b as Record<string, unknown>).SAOS === "number" ? ((b as Record<string, number>).SAOS as number) : 0), 0,
+  );
+  const poolSaosMu = poolPairs.reduce(
+    (s, p) => s + (p.reserves.a === "SAOS" ? p.reserves.ra : p.reserves.b === "SAOS" ? p.reserves.rb : 0), 0,
+  );
+  const totalSaosMu = accountsSaosMu + poolSaosMu;
+  const capHuman = truth.genesis?.maxSupplyHuman ?? null;
+  const mintHuman = truth.genesis?.initialMintHuman ?? null;
+  const supply = {
+    accountsSaosMu,
+    poolSaosMu,
+    totalSaosMu,
+    totalSaosHuman: totalSaosMu / MU,
+    capSaosHuman: capHuman,
+    genesisMintSaosHuman: mintHuman,
+    pctOfCap: capHuman && capHuman > 0 ? (totalSaosMu / MU / capHuman) * 100 : null,
+    genesisNote: truth.genesis?.note ?? null,
+  };
 
   const days = Object.values(metrics?.days ?? {})
     .map((d) => ({
@@ -171,6 +209,9 @@ export async function loadDex(force = false): Promise<DexPayload> {
           hive: grid.hive ? { ok: Boolean(grid.hive.ok), publishedAt: grid.hive.publishedAt ?? null } : null,
         }
       : null,
+    supply,
+    truth,
+    truthMeta,
     fetchedAt: new Date().toISOString(),
   };
   cache = { at: Date.now(), data: payload };

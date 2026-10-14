@@ -45,6 +45,26 @@ interface DexEnginePayload {
   feeMeter: number | null;
   ordersOpen: number | null;
   metrics: { day: string; beats: number; ticks: number; fills: number; swaps: number; height: number; vol24QuoteMu: number; trades24: number }[];
+  /* היצע-אמת (R74 · דרישת-הבעלים "אני רוצה להבין מה קורה אצלנו באמת") */
+  supply: {
+    accountsSaosMu: number;
+    poolSaosMu: number;
+    totalSaosMu: number;
+    totalSaosHuman: number;
+    capSaosHuman: number | null;
+    genesisMintSaosHuman: number | null;
+    pctOfCap: number | null;
+    genesisNote: string | null;
+  } | null;
+  truth: {
+    ok: boolean;
+    note?: string;
+    genesis: { symbol: string; initialMintHuman: number | null; maxSupplyHuman: number | null; note: string | null; genesisDate: string | null } | null;
+    externalBid: { exists: boolean; internalPriceUsdsMu: number | null; noteHe: string | null } | null;
+    doctrineHe: string | null;
+    realMoney: { lines: { asset: string; amount: number | null; markUsd: number | null; usd: number | null; source: string }[]; totalUsd: number | null; marksAt: string | null };
+    meta: { saosLive: { exists: boolean; sha16: string | null; ageMinutes: number | null }; honestEcon: { exists: boolean; sha16: string | null; ageMinutes: number | null }; money: { exists: boolean; sha16: string | null; ageMinutes: number | null } };
+  } | null;
   grid: { verdict: string; engine: string; chains: string[]; armed: boolean; real: boolean; publishedAt: string | null; hive: { ok: boolean; publishedAt: string | null } | null } | null;
   fetchedAt: string;
 }
@@ -127,6 +147,16 @@ function fmtMu(v: number | null | undefined): string {
   if (v >= 1e6) return `${(v / 1e6).toFixed(2)}M`;
   if (v >= 1e3) return `${(v / 1e3).toFixed(1)}K`;
   return v.toFixed(0);
+}
+/* יחידות-אנוש: הספר מדוד ב-mu (אלפיות) — 85,482,163 mu = 85,482 SAOS. התצוגה מומרת ÷1000. */
+function fmtHuman(v: number | null | undefined, digits = 0): string {
+  if (v === null || v === undefined || !Number.isFinite(v)) return "—";
+  const h = v / 1000;
+  return h.toLocaleString("en-US", { maximumFractionDigits: digits, minimumFractionDigits: digits });
+}
+function fmtPriceMu(v: number | null | undefined): string {
+  if (v === null || v === undefined || !Number.isFinite(v)) return "—";
+  return (v / 1000).toFixed(3);
 }
 function fmtInt(n: number | null | undefined): string {
   return n === null || n === undefined || !Number.isFinite(n) ? "—" : n.toLocaleString("en-US");
@@ -258,7 +288,7 @@ export function DexView() {
                 {eng?.grid?.armed && <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold text-emerald-400">grid {eng.grid.verdict || "ARMED-LIVE"}</span>}
               </p>
               <p className="mt-0.5 text-[11px] text-zinc-500">
-                מחיר-ספר-פנימי {saosPriceMu !== null ? `${(saosPriceMu / 1000).toFixed(3)} USDS` : "—"} · אין-ביד-חוץ (מוצהר-כנה)
+                מחיר-ספר-פנימי {saosPriceMu !== null ? `$${(saosPriceMu / 1000).toFixed(3)}` : "—"} · אין-ביד-חוץ (מוצהר-כנה)
               </p>
             </div>
           </div>
@@ -281,11 +311,97 @@ export function DexView() {
             </div>
           </div>
         </div>
+
+        {/* ═══ פס-אמת-ההיצע: התשובה הישירה ל"80 מיליון מול 100K מול 21 מיליון" ═══ */}
+        {eng?.supply && (
+          <div className="mt-4 border-t border-amber-600/20 pt-3">
+            <p className="mb-2 text-[10px] font-black uppercase tracking-wider text-amber-500/80">אמת-ההיצע · הספר מדוד ב-mu (אלפיות) — התצוגה מומרת ÷1000 ליחידות-אנוש</p>
+            <div className="flex flex-wrap gap-x-6 gap-y-2 text-[11px]">
+              <div>
+                <p className="text-zinc-500">מינט-ג׳נסיס (2026-09-05)</p>
+                <p className="font-mono font-black text-zinc-100">{fmtInt(eng.supply.genesisMintSaosHuman)} SAOS</p>
+              </div>
+              <div>
+                <p className="text-zinc-500">בחשבונות עכשיו</p>
+                <p className="font-mono font-bold text-zinc-200">{fmtHuman(eng.supply.accountsSaosMu)} SAOS</p>
+              </div>
+              <div>
+                <p className="text-zinc-500">ב-pools</p>
+                <p className="font-mono font-bold text-zinc-200">{fmtHuman(eng.supply.poolSaosMu)} SAOS</p>
+              </div>
+              <div>
+                <p className="text-zinc-500">סה״כ בספר</p>
+                <p className="font-mono font-black text-amber-400">{fmtHuman(eng.supply.totalSaosHuman)} SAOS</p>
+              </div>
+              <div>
+                <p className="text-zinc-500">תקרה (ככתוב)</p>
+                <p className="font-mono font-bold text-zinc-200">{fmtInt(eng.supply.capSaosHuman)} SAOS</p>
+              </div>
+              <div>
+                <p className="text-zinc-500">% מהתקרה</p>
+                <p className="font-mono font-bold text-emerald-400">{eng.supply.pctOfCap !== null ? `${eng.supply.pctOfCap.toFixed(2)}%` : "—"}</p>
+              </div>
+            </div>
+            {eng.supply.genesisNote && <p className="mt-2 text-[10px] leading-4 text-zinc-600">ג׳נסיס: {eng.supply.genesisNote}</p>}
+          </div>
+        )}
       </section>
 
       {dex?.halted && (
         <section className="rounded-xl border border-red-500/40 bg-red-500/[0.06] px-4 py-3">
           <p className="text-xs font-bold text-red-400">היפוך-מנוע פעיל (halted) {dex.haltReason ? `· ${dex.haltReason}` : ""} — מוצהר-כנה, אפס-הסתרה</p>
+        </section>
+      )}
+
+      {/* ═══ "מה קורה אצלנו באמת" — כסף-אמיתי מול ספר (R74 · דרישת-הבעלים) ═══ */}
+      {eng?.truth && (
+        <section className="rounded-2xl border border-emerald-600/25 bg-zinc-900/60 p-5">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <h3 className="flex items-center gap-2 text-sm font-black text-zinc-50">
+              <Scale className="h-4 w-4 text-emerald-500" aria-hidden /> מה קורה אצלנו באמת · כסף-אמיתי מול ספר-פנימי (R74)
+            </h3>
+            <span className="font-mono text-[10px] text-zinc-500">
+              honest-econ sha16:{eng.truth.meta.honestEcon.sha16?.slice(0, 8) ?? "—"} · גיל {ageHe(eng.truth.meta.honestEcon.ageMinutes)}
+            </span>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div>
+              <p className="mb-2 text-[11px] font-black uppercase tracking-wider text-zinc-500">כסף-אמיתי · יתרות-שרשרת (RPC ציבורי)</p>
+              {eng.truth.realMoney.lines.length === 0 && <p className="rounded-xl border border-white/5 bg-zinc-950/60 p-3 text-xs text-zinc-500">לא נמדד כרגע — fail-honest {eng.truth.note ?? ""}</p>}
+              {eng.truth.realMoney.lines.length > 0 && (
+                <div className="space-y-1.5">
+                  {eng.truth.realMoney.lines.map((l) => (
+                    <div key={l.asset} className="flex items-center justify-between rounded-xl border border-white/5 bg-zinc-950/60 px-3 py-2 text-xs">
+                      <span className="font-bold text-zinc-300">{l.asset}</span>
+                      <span className="font-mono text-zinc-200">
+                        {l.amount !== null ? l.amount.toLocaleString("en-US", { maximumFractionDigits: 3 }) : "—"}
+                        <span className="mr-2 text-emerald-400">{l.usd !== null ? `≈ $${l.usd.toFixed(2)}` : ""}</span>
+                      </span>
+                    </div>
+                  ))}
+                  <div className="flex items-center justify-between rounded-xl border border-emerald-600/30 bg-emerald-500/[0.06] px-3 py-2 text-xs">
+                    <span className="font-black text-emerald-400">סה״כ הכסף-האמיתי-מאחורי-המערכת</span>
+                    <span className="font-mono font-black text-emerald-400">{eng.truth.realMoney.totalUsd !== null ? `$${eng.truth.realMoney.totalUsd.toFixed(2)}` : "—"}</span>
+                  </div>
+                  <p className="text-[10px] leading-4 text-zinc-600">זהו כל הכסף-החוץ-האמיתי. כל-יתר שאינו כאן הוא ספר-פנימי (SIM) ללא תביעת-ערך-חוץ.</p>
+                </div>
+              )}
+            </div>
+            <div>
+              <p className="mb-2 text-[11px] font-black uppercase tracking-wider text-zinc-500">SAOS · ביד-חוץ</p>
+              <div className={`rounded-xl border px-3 py-2 text-xs ${eng.truth.externalBid?.exists ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" : "border-amber-600/30 bg-amber-500/[0.06]"}`}>
+                <p className={`font-black ${eng.truth.externalBid?.exists ? "text-emerald-400" : "text-amber-400"}`}>
+                  {eng.truth.externalBid?.exists ? "קיים ביד-חוץ" : "אין שוק-חוץ · אין רישום · אין ביד-קונה-חוץ"}
+                </p>
+                {eng.truth.externalBid && !eng.truth.externalBid.exists && (
+                  <p className="mt-1 leading-5 text-zinc-400">
+                    המחיר {eng.truth.externalBid.internalPriceUsdsMu !== null ? `$${(eng.truth.externalBid.internalPriceUsdsMu / 1000).toFixed(3)}` : "—"} הוא מחיר-ספר-פנימי בלבד · סימון-שוק לרווח-והפסד: אין.
+                  </p>
+                )}
+              </div>
+              {eng.truth.doctrineHe && <p className="mt-2 rounded-xl border border-white/5 bg-zinc-950/60 p-3 text-[10px] leading-4 text-zinc-500">{eng.truth.doctrineHe}</p>}
+            </div>
+          </div>
         </section>
       )}
 
@@ -316,8 +432,8 @@ export function DexView() {
               </div>
               {last && (
                 <div className="flex items-baseline gap-3">
-                  <span className="font-mono text-2xl font-black text-zinc-50">{fmtMu(last.c)}</span>
-                  <span className="text-[10px] text-zinc-500">µUSDS</span>
+                  <span className="font-mono text-2xl font-black text-zinc-50">${fmtPriceMu(last.c)}</span>
+                  <span className="text-[10px] text-zinc-500">USDS · ספר-mu: {fmtMu(last.c)}µ</span>
                   {change !== null && (
                     <span className={`text-xs font-bold ${change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                       {change >= 0 ? "▲" : "▼"} {Math.abs(change).toFixed(2)}%
@@ -332,10 +448,10 @@ export function DexView() {
             {last && (
               <div className="grid grid-cols-3 gap-2 border-t border-white/10 px-4 py-2 text-center text-[11px] sm:grid-cols-6">
                 {[
-                  ["נפתח", fmtMu(last.o)],
-                  ["גבוה", fmtMu(last.h)],
-                  ["נמוך", fmtMu(last.l)],
-                  ["וול זוג", `${fmtMu(volSum)}µ`],
+                  ["נפתח", `$${fmtPriceMu(last.o)}`],
+                  ["גבוה", `$${fmtPriceMu(last.h)}`],
+                  ["נמוך", `$${fmtPriceMu(last.l)}`],
+                  ["וול זוג", `$${fmtHuman(volSum, 0)}`],
                   ["פוזיציות", fmtInt(last.n ?? null)],
                   ["מדוד", timeHe(eng.fetchedAt).split(", ")[1] ?? "—"],
                 ].map(([l, v]) => (
@@ -353,8 +469,8 @@ export function DexView() {
       {/* מדדי-המנוע — הווליום-הכנה יום-יום (הוכחת-הווליום) */}
       {eng && eng.metrics.length > 0 && (
         <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
-          <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-zinc-200">
-            <TrendingUp className="h-4 w-4 text-amber-500" aria-hidden /> מדדי-המנוע · ימים-אחרונים (ווליום-כנות, µUSDS)
+            <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-zinc-200">
+            <TrendingUp className="h-4 w-4 text-amber-500" aria-hidden /> מדדי-המנוע · ימים-אחרונים (ווליום-כנות, USDS-אנושי)
           </h3>
           <div className="max-h-64 overflow-y-auto pr-1">
             <table className="w-full text-right text-xs">
@@ -373,7 +489,7 @@ export function DexView() {
                 {eng.metrics.slice().reverse().map((d) => (
                   <tr key={d.day} className="border-b border-white/5 last:border-0">
                     <td className="px-2 py-1.5 font-mono text-zinc-300">{d.day}</td>
-                    <td className="px-2 py-1.5 font-mono font-bold text-amber-400">{fmtMu(d.vol24QuoteMu)}</td>
+                    <td className="px-2 py-1.5 font-mono font-bold text-amber-400" title={`${d.vol24QuoteMu} mu`}>${fmtHuman(d.vol24QuoteMu, 0)}</td>
                     <td className="px-2 py-1.5 font-mono text-zinc-300">{fmtInt(d.trades24)}</td>
                     <td className="px-2 py-1.5 font-mono text-zinc-400">{fmtInt(d.fills)}</td>
                     <td className="px-2 py-1.5 font-mono text-zinc-400">{fmtInt(d.swaps)}</td>
@@ -484,8 +600,8 @@ export function DexView() {
               <div key={p.pair} className="rounded-xl border border-white/5 bg-zinc-950 p-3">
                 <p className="font-mono text-xs font-bold text-zinc-200">{p.pair}</p>
                 <div className="mt-1 grid grid-cols-2 gap-1 text-[11px]">
-                  <span className="text-zinc-500">{p.reserves.a}: <b className="font-mono text-zinc-300">{fmtMu(p.reserves.ra)}</b></span>
-                  <span className="text-zinc-500">{p.reserves.b}: <b className="font-mono text-zinc-300">{fmtMu(p.reserves.rb)}</b></span>
+                  <span className="text-zinc-500">{p.reserves.a}: <b className="font-mono text-zinc-300" title={`${p.reserves.ra} mu`}>{fmtHuman(p.reserves.ra, 1)}</b></span>
+                  <span className="text-zinc-500">{p.reserves.b}: <b className="font-mono text-zinc-300" title={`${p.reserves.rb} mu`}>{fmtHuman(p.reserves.rb, 1)}</b></span>
                 </div>
               </div>
             ))}
@@ -505,11 +621,11 @@ export function DexView() {
             <Scale className="h-3.5 w-3.5" aria-hidden /> שתי-קופות · כנות-מלאה (R74)
           </h4>
           <div className="space-y-2 text-xs leading-6">
-            <p className="flex justify-between"><span className="text-zinc-500">רווח-ספר-שוטף (SIM)</span><span className="font-mono font-bold text-amber-400">{fmtMu(eng?.treasuryProfit ?? dex?.treasuryProfitSim ?? null)}</span></p>
-            <p className="flex justify-between"><span className="text-zinc-500">רווח-ספר מאז-תחילת-החיים</span><span className="font-mono text-zinc-200">{fmtMu(eng?.treasuryProfitEver ?? null)}</span></p>
-            <p className="flex justify-between"><span className="text-zinc-500">feeMeter (mu)</span><span className="font-mono text-zinc-200">{fmtMu(eng?.feeMeter ?? dex?.feeMeterMu ?? null)}</span></p>
-            <p className="flex justify-between"><span className="text-zinc-500">gas ממומן (mu)</span><span className="font-mono text-zinc-200">{fmtInt(dex?.gasFundedMu)}</span></p>
-            <p className="flex justify-between"><span className="text-zinc-500">גיבוי WSTEEM / WSBD</span><span className="font-mono text-zinc-200">{fmtInt(dex?.backingWsteem)} / {fmtInt(dex?.backingWsbd)}</span></p>
+            <p className="flex justify-between"><span className="text-zinc-500">רווח-ספר-שוטף (SIM)</span><span className="font-mono font-bold text-amber-400" title="mu">{fmtHuman(eng?.treasuryProfit ?? dex?.treasuryProfitSim ?? null, 2)} USDS</span></p>
+            <p className="flex justify-between"><span className="text-zinc-500">רווח-ספר מאז-תחילת-החיים</span><span className="font-mono text-zinc-200" title="mu">{fmtHuman(eng?.treasuryProfitEver ?? null, 2)} USDS</span></p>
+            <p className="flex justify-between"><span className="text-zinc-500">feeMeter</span><span className="font-mono text-zinc-200" title="mu">{fmtHuman(eng?.feeMeter ?? dex?.feeMeterMu ?? null, 2)} USDS</span></p>
+            <p className="flex justify-between"><span className="text-zinc-500">gas ממומן</span><span className="font-mono text-zinc-200" title="mu">{fmtHuman(dex?.gasFundedMu, 0)} USDS</span></p>
+            <p className="flex justify-between"><span className="text-zinc-500">גיבוי WSTEEM / WSBD</span><span className="font-mono text-zinc-200">{fmtHuman(dex?.backingWsteem, 1)} / {fmtHuman(dex?.backingWsbd, 1)}</span></p>
             <p className="border-t border-white/5 pt-2 text-[10px] leading-4 text-zinc-600">
               כסף-אמיתי = יתרות-שרשרת בלבד; SAOS = יחידות-סימולציה פנימיות. רווח-בספר ≠ רווח-אמיתי — ההפרדה מוצגת-כאן בכל-מסך.
             </p>
@@ -576,7 +692,7 @@ export function DexView() {
                 <tr className="border-b border-white/5 text-[10px] uppercase tracking-wider text-zinc-500">
                   <th className="pb-2 pl-4 font-bold">נכס</th>
                   <th className="pb-2 pl-4 font-bold">מחיר-ייחוס</th>
-                  <th className="pb-2 font-bold">רשום-בספר</th>
+                  <th className="pb-2 font-bold">גובה-רישום בספר</th>
                 </tr>
               </thead>
               <tbody>
@@ -586,7 +702,7 @@ export function DexView() {
                       <span className={a.symbol === "SAOS" ? "font-mono text-sm text-amber-400" : "font-mono text-zinc-300"}>{a.symbol}</span>
                       {a.symbol === "SAOS" && <span className="mr-2 rounded-full bg-amber-500/15 px-2 py-0.5 text-[9px] font-bold text-amber-400">מטבע-הבית</span>}
                     </td>
-                    <td className="py-2.5 pl-4 font-mono text-zinc-200">{fmtInt(a.refPrice)}</td>
+                    <td className="py-2.5 pl-4 font-mono text-zinc-200">{a.refPrice !== null ? `$${fmtPriceMu(a.refPrice)}` : "—"}</td>
                     <td className="py-2.5 font-mono text-zinc-400">{fmtInt(a.listed)}</td>
                   </tr>
                 ))}

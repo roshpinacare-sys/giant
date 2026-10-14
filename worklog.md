@@ -1757,3 +1757,26 @@ Stage Summary:
 - המערכת-החיה = מיזוג-שני-הליינים ב-8-מודולים עם-הדקס-כפנים: ליגת-ענקים חיה, נרות-אמת, מפת-מוצרים, כנות-שתי-קופות.
 - הקנון (estate/giant) עודכן-ומאומת; אפס-כפילויות-חדשות (ערוץ-אחד: המשטח-רק-דרך-/api/sovereign/channel; דלת-ה-directive-של-התאומים קיימת-בקוד-ואינה-חשופה).
 - OPEN: הצגת-מפתח-המנהל-בשער-כהצגת-שני-הצורות-נעשתה; מסילת-ה-volue-החוץ-האמיתית (הוכחת-ווליום-חוץ) נשארת-הליין-הבא-של-הצי.
+
+---
+Task ID: 56
+Agent: Z.ai (orchestrator — channel/sovereign lane)
+Task: "המפתח לא מאומת · אין שום giant · תראה מה כל הסוכנים עושים תצטרף · תעשה השוואה בעצמך" — recon of all agents' work, gate fix, supply-truth fix, honest audit.
+
+Work Log:
+- Recon estate: 5 interfaces inventoried — FleetHQ (Next+3D office+OperatorGate), Domain (static hub+console.html+gate.html), Pulse/giant (static), giant/app (converged Next.js, NOT running), my-project (RUNNING on 3000 = T55 fleet-merge giant UI — what the owner actually sees).
+- Read Pulse/intel/giant-convergence-2026-10-15.md: convergence law = live instance mirrors giant/app; headcorner gate server-side (OWNER digests in /home/z/.operator/config.json outside repos).
+- DEX numbers reconciliation: saos-dex ledger is denominated in mu (thousandths). 85,482,163 mu = 85,482 SAOS (the "80M" the owner saw). Genesis mint 126,682 SAOS (saos-live.json, mirrors SAOS-NET v0 verified supply 1:1, issuer acct-00, 2026-09-05). Cap 21B mu = 21,000,000 SAOS. Book total now 185,316 SAOS = 0.88% of cap. No inflation — the UI displayed raw mu as whole coins (the actual bug).
+- Real money audit (honest-econ + money.json): total external real money = $18.02 (STEEM 124.516=$6.98, SBD 18.643=$11.04, TRX custody unmeasured). SAOS external bid: none (declared R74). DEX engine is real software (height 186,879, 86,360 fills, deterministic replay); assets are internal book money.
+- GATE ROOT CAUSE: headcorner.txt carries TWO forms (word 10 chars + token 52 chars). T55 wave registered both digests at 20:07 (after the owner's failed attempt). Reproduced owner's 401 in browser by typing concatenated-without-separator string. Verified: word→200, token→200, wrong-key→401. Added whole-file digest as extra (3 digests total). Never printed key/salt/digest.
+- Built src/lib/giant/truth.ts (server lib reading Domain saos-live/honest-econ/money with sha16+age meta) + extended /api/giant/dex (supply{} + truth{} sections).
+- DexView: supply-truth strip (genesis mint / accounts / pools / total / cap / % of cap / genesis note) + "מה קורה אצלנו באמת" real-money card (chain lines + total $18.02 + external-bid:none + doctrine). Human units everywhere (÷1000) with mu titles; prices $1.004-style; volumes $; assets refPrice humanized; listed→"גובה-רישום" label fix.
+- WalletView: THE bug — fmt() displayed raw mu ("85.48M"). Fixed to human units + unit-law banner.
+- E2E (agent-browser): page renders, no console errors, no mobile h-scroll @390px; channel gate: locked → word → "שער פתוח" ✅; sovereign voice with token → measured-only answer (fills=86360, halted=false), note N-0008 pushed to git verified commit d554908caf35 ✅; lint clean.
+- Drive link (user-pasted): public folder "bliss-making-of" — 4 JPGs + how-bliss-was-made.pdf; retro-XP composited dancer art process. Logged as the creative-quality reference for giant's identity layer (next wave: mascot/identity design language).
+
+Stage Summary:
+- Owner's two hard failures FIXED & VERIFIED in browser: (1) headcorner gate opens with word or token; (2) "80M supply" illusion explained + UI now shows human units + full supply truth (mint 126,682 / book 185,316 / cap 21M / 0.88%).
+- Real-money truth is now a first-class screen section ($18.02 total external, SAOS no external bid — declared, not hidden).
+- ONE interface policy honored: all fixes landed in the RUNNING instance (my-project = mirror of giant/app per convergence law). No new panels created.
+- Honest limits: DEX trades internal book assets only (real external money $18.02); derivatives/lending/leverage stay locked behind volume proof (R360 §4); giant/app estate copy not re-synced with today's fixes (next convergence wave); bliss reference not yet built into identity.
