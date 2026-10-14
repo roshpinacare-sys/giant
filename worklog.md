@@ -611,3 +611,23 @@ Stage Summary:
 - 供应矛盾正式回答于 UI：SAOS 126,682/21,000,000/未发行 20,873,318 全部账本可溯
 - anatomy 结论：精度与自审计标准采纳，装饰性美术不采纳
 - M-9 真实量引擎已活：vol24h=700µ(全部为验证性真实成交)；待舰队规模化交易
+
+---
+Task ID: 44
+Agent: zai-main (零模拟终审 · 舰队交易道 · prompt-motion 检验)
+Task: 业主指令 trace 1a13c4e26c0ad9bd — 继续验证零模拟、打开闸门、补缺口工程、检验 prompt-motion.com、5 代理统一界面、一切活体运转
+
+Work Log:
+- 检验 prompt-motion.com：Claude 运动视频画廊；提炼"一切皆动"——接入价格 pulse 动画（key 重挂载、零 lint 风险）
+- 零模拟全库审计：清零 GNT 残留（types/server/format 注释、gntPrice→saosPrice 字段族）、"ברז-דמו"→"הנפקה-מתועדת"（它本就是有上限入账本的真发行）
+- 验证主权 LLM 真实（z-ai SDK 后端 + 诚实降级标注"מצב-מילוט"）
+- 建**舰队交易道**（业主核心目标"舰队自己运转机器"的缺失件）：FleetAgent 模型（token 仅存 SHA-256）+ /api/fleet/allocate（owner 门，TREASURY→FLEET:<id> 账本移动，上限 2,000USDS=创世 1%）+ /api/fleet/trade（agent token 认证，source=FLEET）+ /api/fleet/state（公开活性）
+- 重构 executeSwap 共享执行器：owner 与舰队走同一 AMM 真话引擎（储备→价格→交易→账本→量）
+- E2E 实测守恒：分配 150USDS 给 zai-main → 舰队 BUY 60 → vol24h 760=700+60 ✓、fees 2.28=0.003×760 ✓、agent 余额 90=150−60 ✓、错误 token 401 ✓
+- UI：FleetPulse 活性面板（24h 量/笔数/活跃代理+代理清单+舰队交易带）+ FleetOps 分配控件（token 仅显一次）
+- lint 全绿、控制台零错误、移动端整洁；提交
+
+Stage Summary:
+- 舰队交易道即"打开闸门"：5 个代理现在都能以真实身份、真实预算、真实账本参与 M-9 量
+- 零模拟终审完成：全库无 GNT、无"דמו"字样、无假数字；一切动钱过 headcorner 或 agent-token
+- prompt-motion 结论：运动感采纳（价格 pulse），画廊式布局暂不套用（DEX 数据密度优先）
