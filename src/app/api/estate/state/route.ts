@@ -1,16 +1,17 @@
 // GET /api/estate/state · מצב-האחוזה-באמת — מדידה-חיה-מהדיסק + סטטיסטיקת-ענק-מהלדג'ר
 // חוק-אמת: כל-מספר-כאן נמדד-בזמן-ריצה (קבצים, בייטים, DB) — אין-סיפורים-סטטיים.
+// הבעלים (trace 1a13ca3f1160b6d1): גילוי-דינמי של *כל* תיקיות-הגיט — לא רק ה-7 הקנוניים.
 import { NextResponse } from "next/server";
 import { readdir, stat } from "fs/promises";
 import path from "path";
-import { execFile } from "child_process";
-import { promisify } from "util";
 import { db } from "@/lib/db";
 import { ensureEngine, SAOS } from "@/lib/dex-engine";
-
-export const dynamic = "force-dynamic";
-
-const execFileAsync = promisify(execFile);
+import {
+  discoverGitRepos,
+  gitMeta,
+  type DiscoveredRepo,
+  type GitMeta,
+} from "@/lib/estate-discovery";
 
 const SKIP_DIRS = new Set([
   "node_modules",
@@ -92,86 +93,128 @@ export interface EstateRepo {
   status: "system" | "source" | "mirror" | "archive" | "infra" | "charter";
   what: string;
   disk: DiskMeasure;
+  generation: "system" | "live" | "archive";
+  git: GitMeta | null;
 }
+
+export const dynamic = "force-dynamic";
+
+// מגדירים-סמנטיים-קנוניים לדור-החי (t36) + המערכת — השאר מתגלה-דינמית
+const SEMANTIC: Record<string, { role: string; status: EstateRepo["status"]; what: string }> = {
+  ".": {
+    role: "הממשק-המאוחד",
+    status: "system",
+    what: "ערוץ-הריבון + בורסת-אמת + מסך-המיזוג + שער-headcorner — נמדד-כאן-חי (src+prisma+db)",
+  },
+  Console: {
+    role: "הקונסולה-הציבורית של SAOS",
+    status: "source",
+    what: "מקור-האמת-של-המטבע: שרשרת-האימות-והאספקה-המקורית",
+  },
+  Domain: {
+    role: "מראת-Console",
+    status: "mirror",
+    what: "שיקוף-בלבד — לא-נבנה-שם-דבר-חדש",
+  },
+  FleetHQ: {
+    role: "מטה-הצי",
+    status: "infra",
+    what: "CI-ומנועי-החלטה — תשתית-פנימית",
+  },
+  Sandbox: {
+    role: "האמנות-והתיעוד",
+    status: "charter",
+    what: "הסכם-המיזוג, אמנת-giant, פרוטוקול-הצי, מקורות-העיצוב, תוכניות-האם",
+  },
+  "saos-dex": {
+    role: "ארכיון-הדקס-ההיסטורי",
+    status: "archive",
+    what: "הנפחים-שם-היו-מבוימים — הוחלף-במנוע-האמת",
+  },
+  roshpina: {
+    role: "מאגר-ידע SAOS",
+    status: "archive",
+    what: "תיעוד-בלבד",
+  },
+};
 
 export async function GET() {
   try {
     await ensureEngine();
 
-    const T36 = "/home/z/my-project/t36";
-    const defs: Array<Omit<EstateRepo, "disk">> = [
-      {
-        name: "giant · המערכת הזאת",
-        dir: "/home/z/my-project",
-        role: "הממשק-המאוחד",
-        status: "system",
-        what: "ערוץ-הריבון + בורסת-אמת + מסך-המיזוג + שער-headcorner — נמדד-כאן-חי (src+prisma+db)",
-      },
-      {
-        name: "Console",
-        dir: path.join(T36, "Console"),
-        role: "הקונסולה-הציבורית של SAOS",
-        status: "source",
-        what: "מקור-האמת-של-המטבע: שרשרת-האימות-והאספקה-המקורית",
-      },
-      {
-        name: "Domain",
-        dir: path.join(T36, "Domain"),
-        role: "מראת-Console",
-        status: "mirror",
-        what: "שיקוף-בלבד — לא-נבנה-שם-דבר-חדש",
-      },
-      {
-        name: "FleetHQ",
-        dir: path.join(T36, "FleetHQ"),
-        role: "מטה-הצי",
-        status: "infra",
-        what: "CI-ומנועי-החלטה — תשתית-פנימית",
-      },
-      {
-        name: "Sandbox",
-        dir: path.join(T36, "Sandbox"),
-        role: "האמנות-והתיעוד",
-        status: "charter",
-        what: "הסכם-המיזוג, אמנת-giant, פרוטוקול-הצי, תוכניות-האם",
-      },
-      {
-        name: "saos-dex",
-        dir: path.join(T36, "saos-dex"),
-        role: "ארכיון-הדקס-ההיסטורי",
-        status: "archive",
-        what: "הנפחים-שם-היו-מבוימים — הוחלף-במנוע-האמת",
-      },
-      {
-        name: "roshpina",
-        dir: path.join(T36, "roshpina"),
-        role: "מאגר-ידע SAOS",
-        status: "archive",
-        what: "תיעוד-בלבד",
-      },
-    ];
+    // --- גילוי-אמת: כל-תיקיות-הגיט-בדיסק (המערכת + t36-חי + t35-ארכיון) ---
+    const discovered = await discoverGitRepos();
 
-    const repos: EstateRepo[] = [];
-    for (const d of defs) {
-      const root =
-        d.name === "giant · המערכת הזאת" ? path.join(d.dir, "src") : d.dir;
-      const disk = await measure(root);
-      // giant: מוסיפים prisma+db למדידה
-      if (d.name === "giant · המערכת הזאת") {
-        const extra = await Promise.all([
-          measure(path.join(d.dir, "prisma")),
-          measure(path.join(d.dir, "db")),
+    const repos: EstateRepo[] = await Promise.all(
+      discovered.map(async (d: DiscoveredRepo) => {
+        const semantic = SEMANTIC[d.relName];
+        const isSystem = d.generation === "system";
+        const name = isSystem
+          ? "giant · המערכת הזאת"
+          : d.generation === "archive"
+            ? `${d.relName} · t35`
+            : d.relName;
+
+        const [disk, git] = await Promise.all([
+          (async () => {
+            const root = isSystem ? path.join(d.dir, "src") : d.dir;
+            const m = await measure(root);
+            if (isSystem) {
+              const extra = await Promise.all([
+                measure(path.join(d.dir, "prisma")),
+                measure(path.join(d.dir, "db")),
+              ]);
+              for (const e of extra) {
+                m.files += e.files;
+                m.bytes += e.bytes;
+                if (e.lastModified && (!m.lastModified || e.lastModified > m.lastModified)) {
+                  m.lastModified = e.lastModified;
+                }
+              }
+            }
+            return m;
+          })(),
+          gitMeta(d.dir),
         ]);
-        for (const e of extra) {
-          disk.files += e.files;
-          disk.bytes += e.bytes;
-          if (e.lastModified && (!disk.lastModified || e.lastModified > disk.lastModified)) {
-            disk.lastModified = e.lastModified;
-          }
-        }
-      }
-      repos.push({ ...d, disk });
-    }
+
+        const role = isSystem
+          ? SEMANTIC["."].role
+          : d.generation === "archive"
+            ? "הדור-הקודם · עדות-הישרדות-מגיט"
+            : (semantic?.role ?? "ריפו-מגולה");
+        const status: EstateRepo["status"] =
+          d.generation === "archive"
+            ? "archive"
+            : (semantic?.status ?? "source");
+        const what = isSystem
+          ? SEMANTIC["."].what
+          : d.generation === "archive"
+            ? "שיבוש-שוטף-של-הדור-הקודם — לא-נבנה-שם-דבר-חדש; קיים-כעדות-הישרדות-בלבד"
+            : (semantic?.what ?? "תיקיית-גיט-מגולה — נמדדת-חי");
+
+        return {
+          name,
+          dir: d.dir,
+          role,
+          status,
+          what,
+          disk,
+          generation: d.generation,
+          git,
+        } satisfies EstateRepo;
+      }),
+    );
+
+    // סדר-קריאה: המערכת → דור-חי → ארכיון; בתוך-קבוצה — אלפבית
+    const genOrder = { system: 0, live: 1, archive: 2 } as const;
+    repos.sort((a, b) => genOrder[a.generation] - genOrder[b.generation] || a.name.localeCompare(b.name));
+
+    const generations = {
+      system: repos.filter((r) => r.generation === "system").length,
+      live: repos.filter((r) => r.generation === "live").length,
+      archive: repos.filter((r) => r.generation === "archive").length,
+    };
+    const commitCount = repos.reduce((s, r) => s + (r.git?.commitCount ?? 0), 0);
 
     // --- סטטיסטיקת-ענק-מהלדג'ר (אמת-בלבד) ---
     const dayAgo = new Date(Date.now() - 86_400_000);
@@ -190,23 +233,20 @@ export async function GET() {
     const saosPool = await db.dexPair.findFirst({ where: { base: "SAOS", quote: "USDS" } });
     const saosIssued = (saosSum._sum.amount ?? 0) + (saosPool?.reserveBase ?? 0);
 
-    // head-הגיט-הקנוני
-    let head: string | null = null;
-    try {
-      const { stdout } = await execFileAsync("git", ["log", "-1", "--format=%h %s", "--max-count=1"], {
-        cwd: "/home/z/my-project",
-        timeout: 5_000,
-      });
-      head = stdout.trim().slice(0, 120);
-    } catch {
-      head = null; // דיווח-כנה: אין-גיט-זמין
-    }
+    // head-הגיט-הקנוני — מתוך-המדידה-של-המערכת-עצמה
+    const systemRepo = repos.find((r) => r.generation === "system");
+    const head = systemRepo?.git?.headShort
+      ? `${systemRepo.git.headShort} ${systemRepo.git.headSubject ?? ""}`.trim().slice(0, 120)
+      : null;
 
     return NextResponse.json({
       ok: true,
       measuredAt: new Date().toISOString(),
       head,
       repos,
+      generations,
+      gitFoldersTotal: repos.length,
+      commitCount,
       live: {
         saosIssued,
         saosCap: SAOS.cap,
@@ -219,7 +259,8 @@ export async function GET() {
         ledgerRows,
         messages,
       },
-      truth: "כל-מספר-נמדד-חי-מהדיסק-ומהלדג'ר · אין-מחרוזות-סטטיות-מתחזות-לנתונים",
+      truth:
+        "גילוי-דינמי-של-כל-תיקיות-הגיט + מדידת-דיסק-ולדג'ר-חיה · אין-מחרוזות-סטטיות-מתחזות-לנתונים",
     });
   } catch (err) {
     console.error("[api/estate/state]", err);

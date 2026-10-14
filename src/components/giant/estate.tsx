@@ -213,7 +213,7 @@ export function EstateView() {
           {(state?.repos ?? []).map((r) => {
             const s = STATUS_STYLE[r.status];
             return (
-              <div key={r.name} className="rounded-xl border border-white/5 bg-[#0b0f0e] p-3.5">
+              <div key={r.dir} className="rounded-xl border border-white/5 bg-[#0b0f0e] p-3.5">
                 <div className="flex items-center justify-between gap-2">
                   <span className="flex min-w-0 items-center gap-2 font-bold text-white">
                     {r.status === "system" ? (
