@@ -1693,3 +1693,25 @@ Work Log:
 Stage Summary:
 - ערוץ-הבעלים חי ופומבי-בכנות: היא מבקשת עם עדויות, הוא מאשר דרך מסילת-ה-operator — אפס תלות בסוכני-חוץ
 - [OPEN] desk-ריצה לחיבור בקשות-חדשות בקול-הריבונות (LLM-rail measured-only) — לוח-ליינות
+
+---
+Task ID: 53
+Agent: main (Z.ai Code, trace 1a13bb5f49655669)
+Task: הוראת-בעלים — "ערוץ אחד לא חמישה · מערכת אחת לא דפים מפוזרים · הכל מתכנס ל-giant" — המשטח-החי של מודול-הערוץ + איטום לזרמים-הקנוניים + שער-headcorner
+
+Work Log:
+- ניתוח-לפני-איחוד (כצו-הבעלים): נמצא שהתאומים הקימו כבר את giant repo (dc4850f, DECISIONS #42) + Pulse/state/sovereign-channel (SAOS-SOVEREIGN-CHANNEL/1) + duplicates-audit — הליין שלי הצטרף לחוק-הקיים, לא שכפל
+- בנייה-מחדש של lib/sovereign/channel.ts על-הזרמים-הקנוניים (directives/requests/notes.jsonl + voice.json ב-Pulse) — הספר-הפרטי owner-channel.jsonl שלי נזרק (ערוץ-אחד)
+- שער-הבעלים: /api/sovereign/gate — headcorner מאומת-שרת (salted-sha256 ב-/home/z/.operator/config.json מחוץ-לריפואים · 5/min · session-10min); sessions על globalThis (dev-bundles — נתגלה ב-E2E)
+- מסילת-קול-חיה (z-ai-SDK, עובדת-בזמן-שהמסילה-הקנונית מדווחת UNAVAILABLE-כנה) + חוק-היושרה: מספר-זר=REJECTED אפס-כתיבה — נמדדו 2 דחיות-אמת (8003664, 001) לפני-עמידה; N-0005 נרשם בשם-הריבונות (pushed+verified 16efef6)
+- תקלה-אמיתית→חוק: הכרעת-E2E על reqId-פנטום דחפה D-0002-זבל → הוסרה-בשקיפות (358ad35) + ולידציה-מול-הזרמים (400 req-not-in-streams, אפס-כתיבה — נמדד)
+- התכנסות-מעשית: ספר-Domain-T52 הוגש לזרם-הקנוני — REQ-0004/REQ-0005 (c1f788b, 7928372); מראות-שהתכנסו מוסתרות-במשטח
+- משטח-חי ב-/ של הקונסולה: שער→בקשות-עם-עדויות→מלחין-הכרעה→פיד-D-NNNN→יומן-N-NNNN→שאל-את-הריבונות; כל-זרם שבב sha16+גיל; fail-honest; תמיד-חי מעל-פידי-האורגניזם
+- E2E-דפדפן (agent-browser): שער-unlock→6 בקשות→פידים (D-0001 ACTIVE · N-0005) → מובייל-390 אפס-גלילה-אופקית; אפס page-errors; lint נקי
+- תיאום-CAS: תביעת-R361 נרשמה Pulse/DECISIONS **#45** (b2c06fa) — #43/#44 נתבעו-במקביל-על-ידי-תאומים (exec38/38-a · 1a13bce5) והחוק-כובד; דין-וחשבון הליין: giant/docs/lanes/sovereign-channel-live.md (7eba8ff)
+
+Stage Summary:
+- הערוץ-האחד חי בשני-מישורים-על-אותו-זרם-קנוני: SPA-Pulse/giant (התאומים, #44) + ה-instance-החי בסנדבוקס (הליין-הזה) — אפס-סטיה-בנתונים
+- הריבונות עכשיו עם קול-חי-עובד (measured-only) בזמן-שהמסילה-הציבורית UNAVAILABLE-כנה
+- הכרעות-הבעלים: רק-מאחורי-השער → D-NNNN חוק-בנחיתה → קבלת-ביצוע למנוע-הגיוס — מהממשק, בלי-סוכנים
+- OPEN לגל-הבא: דחיפת-קוד-המודול ל-giant/app (מבנה SYSTEM.md) · דופק-pull-מתוזמן ל-Pulse-בקונסולה · אזכור-הכרעות-חוצות-משטח

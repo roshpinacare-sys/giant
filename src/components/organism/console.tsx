@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { RefreshCw, ExternalLink, HeartPulse, ShieldCheck, Sparkles, Globe, Users, AlertTriangle } from "lucide-react";
+import SovereignChannel from "@/components/sovereign/channel-panel";
 
 /* ------------------------------- formatting ------------------------------- */
 
@@ -649,6 +650,13 @@ export default function OrganismConsole() {
       </header>
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
+        {/* THE ONE CHANNEL — the owner's direct door; always live, independent of other feeds */}
+        <section className="mb-8" aria-label="ערוץ ריבוני">
+          <SovereignChannel />
+        </section>
+
+        <Separator className="mb-8 bg-zinc-800" />
+
         {loading && !data && (
           <div className="grid gap-4 md:grid-cols-2">
             {Array.from({ length: 4 }).map((_, i) => (
