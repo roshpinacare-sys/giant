@@ -8,13 +8,15 @@
  */
 import { NextResponse } from "next/server";
 import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { fileMeta, type FileMeta } from "@/lib/sovereign/channel";
+import { DOMAIN_DIR } from "@/lib/giant/truth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const GIANTS_PATH = "/home/z/estate/Domain/dex/giants.json";
-const ECON_PATH = "/home/z/estate/Domain/dex/honest-econ.json";
+const GIANTS_PATH = path.join(DOMAIN_DIR, "dex", "giants.json");
+const ECON_PATH = path.join(DOMAIN_DIR, "dex", "honest-econ.json");
 
 let cache: { at: number; data: GiantsPayload } | null = null;
 const CACHE_MS = 60_000;
@@ -109,7 +111,7 @@ export async function GET() {
 
   // המדידה-שלנו: פעולות-ספר בלבד (state.json) — אפס-תביעת-ווליום-חוץ
   try {
-    const st = JSON.parse(await readFile("/home/z/estate/Domain/dex/state.json", "utf8")) as {
+    const st = JSON.parse(await readFile(path.join(DOMAIN_DIR, "dex", "state.json"), "utf8")) as {
       state?: { fills?: number; swaps?: number };
     };
     oursFills = n(st.state?.fills);

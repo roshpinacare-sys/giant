@@ -9,7 +9,9 @@
  */
 import { NextResponse } from "next/server";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
+import path from "node:path";
 import { fileMeta, type FileMeta } from "@/lib/sovereign/channel";
+import { DOMAIN_DIR, DATA_DIR } from "@/lib/giant/truth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -78,7 +80,7 @@ const COINS: Array<{ id: string; symbol: string; name: string }> = [
   { id: "tether", symbol: "USDT", name: "Tether" },
 ];
 
-const CACHE_PATH = "/home/z/my-project/db/market-cache.json";
+const CACHE_PATH = path.join(DATA_DIR, "market-cache.json");
 const CACHE_FRESH_MS = 30 * 60_000; // מטמון-כנות: עד 30 דקות עם גיל-מוצהר
 
 interface KrakenTick {
@@ -192,7 +194,7 @@ async function readCache(): Promise<{ coins: CoinRow[]; ageMin: number } | null>
 
 async function writeCache(coins: CoinRow[]): Promise<void> {
   try {
-    await mkdir("/home/z/my-project/db", { recursive: true });
+    await mkdir(DATA_DIR, { recursive: true });
     await writeFile(CACHE_PATH, JSON.stringify({ at: Date.now(), coins }), "utf8");
   } catch {
     /* אפס-שקר: כשל-מטמון לא מפיק מספרים */
@@ -226,10 +228,10 @@ function s(v: unknown): string | null {
 }
 
 async function dexEssentials(): Promise<{ dex: DexEssentials | null; assets: AssetRow[]; meta: FileMeta }> {
-  const meta = await fileMeta("/home/z/estate/Domain/dex/state.json");
+  const meta = await fileMeta(path.join(DOMAIN_DIR, "dex", "state.json"));
   if (!meta.exists) return { dex: null, assets: [], meta };
   try {
-    const raw = JSON.parse(await readFile("/home/z/estate/Domain/dex/state.json", "utf8")) as Record<string, unknown>;
+    const raw = JSON.parse(await readFile(path.join(DOMAIN_DIR, "dex", "state.json"), "utf8")) as Record<string, unknown>;
     const beat = (raw.beat ?? {}) as Record<string, unknown>;
     const st = (raw.state ?? {}) as Record<string, unknown>;
     const rej = (st.rejectedLast ?? {}) as Record<string, unknown>;

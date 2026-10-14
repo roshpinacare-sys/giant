@@ -140,6 +140,11 @@ function writeCache(c: TrustCache): void {
   }
 }
 
+/* קריאת-מטמון-זולה-לשימוש-משותף (מפת-האימפריה) — לא מריצה-סריקה, לא נוגעת-ברשת. */
+export function readTrustCacheRows(): TrustRow[] {
+  return readCache().entries.map((e) => e.row);
+}
+
 function ghHeaders(pat: string) {
   return { authorization: `Bearer ${pat}`, accept: "application/vnd.github+json" };
 }

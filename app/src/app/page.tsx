@@ -12,11 +12,12 @@ import { ProductsView } from "@/components/giant/ProductsView";
 import { PulseView } from "@/components/giant/PulseView";
 import { OfficeHqView } from "@/components/giant/OfficeHqView";
 import { EstateView } from "@/components/giant/EstateView";
+import { EmpireView } from "@/components/giant/EmpireView";
 import { TrustView } from "@/components/giant/TrustView";
 import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
 import {
-  Activity, BookOpen, Building2, Command, Cog, GitBranch, LineChart,
+  Activity, BookOpen, Building2, Command, Cog, GitBranch, LineChart, Network,
   Package, Radio, ScrollText, ShieldCheck, Trophy, Wallet,
   type LucideIcon,
 } from "lucide-react";
@@ -39,7 +40,7 @@ import {
 
 type ViewId =
   | "machine" | "dex" | "league" | "channel" | "wallet" | "desk"
-  | "ledger" | "products" | "pulse" | "office" | "estate" | "trust";
+  | "ledger" | "products" | "pulse" | "office" | "estate" | "empire" | "trust";
 
 /* סדר-הפתיחה (T58): המכונה דלת-הקראפט; הכסף מיד אחריה; הערוץ הדלת-הראשית. */
 const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = [
@@ -54,6 +55,7 @@ const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = 
   { id: "pulse", label: "הדופק", he: "מערכת-האמת: שערים · זרמים · טביעות", icon: Activity },
   { id: "office", label: "המשרד-החי", he: "החדר-התלת-מימדי · קונסולת-מפעיל", icon: Building2 },
   { id: "estate", label: "האחוזה", he: "מפקד-הגיט: 39 ספרים · בריאות · פוטנציאל", icon: GitBranch },
+  { id: "empire", label: "החיבור", he: "מפת-האימפריה: כל-הספרים × תפקידם × דלתם — הפעלה-מלאה", icon: Network },
   { id: "trust", label: "האמון", he: "מפת-האמון: סריקה-מדודה של כל-הספרים · אפס-סימולציות בהוכחה", icon: ShieldCheck },
 ];
 
@@ -316,6 +318,7 @@ export default function Home() {
             {view === "pulse" && <PulseView />}
             {view === "office" && <OfficeHqView />}
             {view === "estate" && <EstateView />}
+            {view === "empire" && <EmpireView onNavigate={(id) => { if (NAV.some((n) => n.id === id)) setView(id as ViewId); }} />}
             {view === "trust" && <TrustView />}
           </div>
         </main>
@@ -361,7 +364,7 @@ export default function Home() {
           <span className="hidden sm:inline">· הריבונות מפעילה-הכל; הגיט הוא שכבת-הקיום; המערכת מתפתחת לנצח</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="font-mono text-[10px] text-zinc-600">SAOS-SOVEREIGN-CHANNEL/1 · R360 · R74 · T58-merge · גל-6-עיצוב</span>
+          <span className="font-mono text-[10px] text-zinc-600">SAOS-SOVEREIGN-CHANNEL/1 · R360 · R74 · T58-merge · גל-7-חיבור</span>
         </div>
       </footer>
     </div>
