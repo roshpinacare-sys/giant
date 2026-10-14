@@ -1576,3 +1576,30 @@ Stage Summary:
 - התשובה ל"למה אתה לא בגיט": המדינה הייתה אפמרלית; מעכשיו כל טיק = commit (wipe-proof כפול: שחזור + היסטוריה)
 - הסיפור-כסף יושר לאמת R74 בכל הדלתות; האתר לא מוכר עוד נזילות שאיננה
 - Deferred בכנות: איחוי 4 עמודי-השוואה; תרגום-עיתון; Identity playground (roadmap קיים)
+
+---
+Task ID: 48
+Agent: main (Z.ai Code, trace 1a13b59ae5f2402d)
+Task: "עדיין דף-נחיתה מבולגן" — בניית index.html מחדש ברמת-ענקים (Task 47 יישר אמת, לא בנה מחדש). פאראלליות: ליין זה = לנדינג בלבד; console/keeper/wallet-internals לסוכנים אחרים.
+
+Scope: (a) index.html → לנדינג ענקים-חדש (hero + פס-הוכחה חי + 6 משטחים + חוקי-כנות + footer מסודר); (b) הקונסולה-הישנה שורדת ב-console.html בלי לגעת בסקריפט-ה-34KB שלה; (c) חיווט: money.html/nav, sitemap; (d) אימות-דפדפן + push.
+
+Work Log:
+- סיור: אף סוכן לא נגע ב-index מאז 3cb73b6 (1085 שורות, 34KB סקריפט חי עובד — מוכח Task 41/42); עוגני-index#office/#why/#live/#map נכנסים רק מתוך index עצמו (grep: 0 חוצה-דפים) → העברה בטוחה
+
+(ממשיך — build + אימות)
+
+Task ID: 48 (סיום)
+Agent: main (Z.ai Code, trace 1a13b59ae5f2402d)
+Task: בניית index.html מחדש ברמת-ענקים — "עדיין דף-נחיתה מבולגן"
+
+Work Log:
+- console.html נוצר = העתק מדויק של ה-index הישן (1086 שורות, סקריפט-34KB שלם, head מתוקן: title/canonical/og ל-console + noindex) — הקונסולה החיה שורדת בלי שום שינוי-התנהגות (דפדפן: צ'יפ "משרד חי" רנדר, גוף 45KB, אפס שגיאות)
+- index.html חדש: 1085→~330 שורות. Hero (מערכת שמריצה את עצמה ומודדת את עצמה בגלוי) + 2 CTAs; פס-הוכחה חי 4 שבבים (משמרות משרד/דופק-גריד/ספר-פנימי/קופה-אמיתית) עם מדידות-בטוחות אפויות + סקריפט רענון מ-4 הזנות (FleetHQ office-state raw, status.json, moment.json, dex/money.json) + פיל-דופק חי ("חי · נמדד לפני N דק׳" מ-130-דקות-חוק החדר) + 6 כרטיסי-משטחים (קונסולה/עיתון/תגים/כסף/ארנק/סטטוס) + איך-זה-עובד 3 שלבים + 4 חוקי-כנות + footer מסודר 4 עמודות (מחליף את מזבלת "קטלוג-האתר")
+- חיווט: money.html nav הקונסולה→console.html; wallet.html "The console"→console.html; sitemap.xml +console.html (ET.parse OK)
+- בדיקות: איזון-תגיות OK ×4; node Function check סקריפט-לנדינג OK (2823 chars); commit 2d49c61 → push OK try-1 (אומת ls-remote e0536b8=HEAD) מול-מירוץ-הבוטים
+- דפדפן-חי (cache-bust): h1 רנדר; פיל "חי · נמדד לפני 11 דק׳"; 38 משמרות stamp 16:53Z חי-מתעדכן; 55/313; RISK_ON·794bps; ≈$18 + לייבל חי "124.516 STEEM + 18.643 SBD · acct-00" (הסקריפט החליף את האפוי — הוכחת-חיות); 6 משטחים/4 חוקים/4 עמודות; מובייל 390px בלי גלילה-אופקית; אפס page-errors
+
+Stage Summary:
+- הלנדינג עכשיו ענקים-כיתה: נקי, אפס-בלאגן, פס-הוכחה חי, כל משטח במקום אחד וברור — והקונסולה-הצפופה נשמרה כמשטח מוצר נפרד (console.html) בלי לשבור שום דבר
+- Deferred: איחוי giants/versus/standard; sitemap.html רשימת console.html (קוסמטי)
