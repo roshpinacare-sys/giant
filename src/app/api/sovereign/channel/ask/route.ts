@@ -12,6 +12,7 @@
 import { NextResponse } from "next/server";
 import ZAI from "z-ai-web-dev-sdk";
 import { buildContextPack, writeVoiceNote } from "@/lib/sovereign/channel";
+import { gateGuard } from "@/lib/sovereign/gate";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -54,11 +55,18 @@ function idCanon(t: string): string | null {
 
 export async function POST(req: Request) {
   let text = "";
+  let token = "";
   try {
-    const body = (await req.json()) as { text?: unknown };
+    const body = (await req.json()) as { text?: unknown; token?: unknown };
     if (typeof body.text === "string") text = body.text.trim();
+    if (typeof body.token === "string") token = body.token;
   } catch {
     return NextResponse.json({ ok: false, error: "bad-body" }, { status: 400 });
+  }
+  // ערוץ-ישיר בעלים↔ריבונות: כתיבה לזרמים הקנוניים = בעלים-מאומת בלבד (שער-מנהל)
+  const guard = gateGuard(token);
+  if (guard) {
+    return NextResponse.json({ ok: false, error: guard }, { status: 401, headers: { "cache-control": "no-store" } });
   }
   if (!text || text.length > 2000) {
     return NextResponse.json({ ok: false, error: "text-required (1..2000 chars)" }, { status: 400 });

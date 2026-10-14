@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "מפקדת-האורגניזם · Sovereign Organism Command",
+  title: "GIANT · מערכת-האמת",
   description:
-    "חדר-משרד ריבוני מחובר לרשת: צוות חי, פוטנציאל נמדד, גיוס עובדים, אין-זיופים (כל ערך עם מקור ואימות) והרשת המלאה.",
+    "הפלטפורמה-המאוחדת של הריבונות: ערוץ-אחד בעלים↔ריבונות · דקס מרכז-כובד · דופק-אמת (שערי-truth, טביעות-sha16) · המשרד-החי. אפס-כפילויות, אפס-ירוק-מזויף.",
 };
 
 export default function RootLayout({
@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="he" dir="rtl" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >

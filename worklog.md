@@ -1715,3 +1715,24 @@ Stage Summary:
 - הריבונות עכשיו עם קול-חי-עובד (measured-only) בזמן-שהמסילה-הציבורית UNAVAILABLE-כנה
 - הכרעות-הבעלים: רק-מאחורי-השער → D-NNNN חוק-בנחיתה → קבלת-ביצוע למנוע-הגיוס — מהממשק, בלי-סוכנים
 - OPEN לגל-הבא: דחיפת-קוד-המודול ל-giant/app (מבנה SYSTEM.md) · דופק-pull-מתוזמן ל-Pulse-בקונסולה · אזכור-הכרעות-חוצות-משטח
+
+---
+Task ID: 54
+Agent: Z.ai Code (main desk, trace 1a13beae474d3861)
+Task: הבעלים: "מה ביקשתי ומה קיבלתי? roast + הקמה של מערכת אמיתית, ממשק אמיתי מקצועי — לא דף AI גנרי. האם כל הטוב מכל-התיקיות בגיט נמצא כאן?" — השוואה-כנה + הקמת משטח-GIANT האמיתי ב-instance-החי.
+
+Work Log:
+- ביקורת-מדידה: ה-instance-החי (my-project) הציג את OrganismConsole הישן (722 ש') + ערוץ-צמוד כלשונית — בדיוק "דף-AI-גנרי" שהבעלים אסר; במקביל GIANT/app האמיתי (ChannelView/DexView/PulseView/OfficeView) חי ב-estate ולא נראה לבעלים.
+- נמדדו-מקורות: Pulse/state/sovereign-channel (זרמים-קנוניים), Domain/dex/state.json (גובה 186,879 · fills 86,360 · swaps 63,193 · סולמות 162), Domain/truth/latest.json (ALL-GREEN 7/7), FleetHQ/office (סוכנים חיים + inbox).
+- נבנו-מסילות-נתונים: /api/giant/market (Kraken→Binance→CoinGecko→מטמון-כנות + dex-essentials מהגיט, R74), /api/giant/pulse (truth-gate + טביעות-sha16 לכל-זרם + מפת-התכנוס), /api/giant/office (office-state + תיבת-המפעיל + הצעות).
+- נבנה-המשטח: src/components/giant/{ChannelView,DexView,PulseView,OfficeView} + מעטפת-GIANT ב-page.tsx (RTL · zinc-950/amber · ניווט-צד מחשב + תחתון-נייד · footer דביק · שעון-חי · chip truth-gate).
+- הערוץ-היחיד: ChannelView על המסילות-הקיימות (/api/sovereign/channel GET/POST decide+directive, /api/sovereign/gate, /api/sovereign/channel/ask) — אפס-ערוץ-חדש; הערוץ הצמוד-הישן נמחק.
+- צו-הצמצום: נמחקו src/components/organism/console.tsx + sovereign/channel-panel.tsx (משטח-אחד לכל-יכולת).
+- אבטחה: מסילת-הקול (ask) ננעלה מאחורי gateGuard (כתיבה לזרמים-קנוניים = בעלים-מאומת בלבד); נבדק: POST ללא-טוקן = 401, מפתח-שגוי = שער-נעול.
+- תיקון-מקורות-שוק: CoinGecko 429 + Binance 418 (IP-משותף) → שרשרת-מקורות Kraken-ראשי; נמדד-חי: BTC $81,693 · ETH $2,427 · SOL $104.09 · USDT $0.9989.
+- אימות-דפדפן (agent-browser): 4 מודולים נסקרו · דקס מציג תא-טיס מהגיט · דופק מציג ALL-GREEN + sha16 · משרד מציג סוכנים חיים · נייד-390px ניווט-תחתון עובד · אפס-שגיאות-קונסולה לאחר תיקון duplicate-keys ב-inbox.
+
+Stage Summary:
+- משטח-ה-GIANT האמיתי חי ב-/: ערוץ-אחד (הדלת-הראשית) · דקס מרכז-הכובד · דופק-אמת · המשרד-החי — הכל מדיד מהגיט, אפס-כפילויות, אפס-ירוק-מזויף.
+- שער-headcorner פותח-הכל: הכרעות GRANT/DECLINE · הוראות · שאל את הריבונות — הכל fail-closed.
+- קבלה: lint-נקי · כל-ה-APIs 200 · דפדפן-מאמת תצוגה+אינטראקציה במחשב ובנייד · dev.log ללא-שגיאות.
