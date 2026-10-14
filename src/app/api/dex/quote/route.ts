@@ -1,5 +1,6 @@
 // POST /api/dex/quote · הצעת-מחיר AMM {pairId, side, amountIn, slippagePct?}
 import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/lib/db";
 import { ensureEngine } from "@/lib/dex-engine";
 import { buildQuote } from "@/lib/dex-server";
 
@@ -16,6 +17,14 @@ export async function POST(req: NextRequest) {
     };
     if (!body.pairId || (body.side !== "BUY" && body.side !== "SELL")) {
       return NextResponse.json({ error: "פרמטרים-חסרים" }, { status: 400 });
+    }
+    // חוק-אמת: הצעות-מחיר רק על הזוג-היליד; זוגות-עזר הם מדדי-מחיר-חוץ
+    const refCheck = await db.dexPair.findUnique({ where: { id: body.pairId } });
+    if (refCheck && !refCheck.isNative) {
+      return NextResponse.json(
+        { error: `${refCheck.base} הוא מדד-מחיר-חוץ (Binance) — מסחר פתוח רק ב-SAOS/USDS` },
+        { status: 403 },
+      );
     }
     const slippage = Math.min(50, Math.max(0.1, Number(body.slippagePct ?? 0.5)));
     const result = await buildQuote(body.pairId, body.side, Number(body.amountIn ?? 0), slippage);

@@ -64,6 +64,7 @@ export interface Depth {
   mid: number;
   bids: DepthLevel[];
   asks: DepthLevel[];
+  refOnly?: boolean; // מדד-מחיר-חוץ — אין-בורסה ואין-עומק
 }
 
 export interface SwapQuote {
@@ -179,13 +180,33 @@ export interface EngineStatus {
   seededAt: string | null;
 }
 
+export interface SupplyTokenInfo {
+  cap?: number;
+  issued: number;
+  issuedByGenesis?: number;
+  genesisIssued?: number;
+  treasury: number;
+  owner: number;
+  inPool?: number;
+  notYetIssued?: number;
+}
+
+export interface SupplyPanel {
+  saos: SupplyTokenInfo;
+  usds: SupplyTokenInfo;
+  marketAgeSec: number | null;
+  realOnly: boolean;
+  priceSource: string;
+}
+
 export interface Overview {
   kpis: MarketKpis;
   moversUp: Mover[];
   moversDown: Mover[];
-  sparks: Record<string, SparkPoint[]>; // מפתח: "GNT/USDS" וכו'
+  sparks: Record<string, SparkPoint[]>; // מפתח: "SAOS/USDS" וכו'
   arena: Arena;
   engine: EngineStatus;
+  supply?: SupplyPanel; // פאנל-האמת: אספקה נגזרת-לדג'ר
   topPairs: PairSummary[]; // 8 לפי vol24h
 }
 

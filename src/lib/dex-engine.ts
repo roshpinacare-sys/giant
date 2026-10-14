@@ -1,5 +1,12 @@
-// giant DEX · מנוע-השוק החי (server-only)
-// זריעה-אחת + טיקר-אוטונומי-נצחי: מחירים זזים, נרות נסגרים, עסקאות זורמות — כמו בורסה אמיתית.
+// giant DEX · מנוע-השוק v2 — "אמת-בלבד" (server-only)
+// חוקי-הבית החדשים (הוראת-בעלים, trace 1a13c1f7d936e85d):
+//  1. אין-סימולציות. כל-מספר על-המסך נגזר מהלדג'ר או ממקור-חוץ אמיתי.
+//  2. SAOS הוא-המטבע-האמיתי: מנפק-גנזיס 126,682 (מהשרשרת של Console) · תקרה 21,000,000.
+//     הבריכה SAOS/USDS מוזנת מהקופה — אין-רזרבה-שאין-לה-רשומת-מנפק.
+//  3. אין-היסטוריה-מזויפת: הנרות נולדים בגנזיס (עכשיו) וצוברים רק-אמת.
+//  4. זוגות-העזר (BTC/ETH/...) אינם-בורסה — מדדי-מחיר-חוץ-חיים מ-Binance.
+//     אין-עליהם-מסחר, אין-נפח-מדומה, אין-עומק מדומה.
+//  5. נפח-SAOS = עסקאות-אמת בלבד (בעלים + הצי דרך ה-API). הארנה נמדדת, לא-מבוימת.
 
 import { db } from "@/lib/db";
 import type { Timeframe } from "@/lib/dex-types";
@@ -7,331 +14,168 @@ import { TF_SECONDS } from "@/lib/dex-types";
 
 /* ============================== הגדרות-שוק ============================== */
 
-const SEED_VERSION = "dex-v1.1c-2026-10-15";
+const SEED_VERSION = "dex-v2-real-2026-10-15";
 const TICK_MS = 8_000;
 const FEE_BPS = 30;
 
-interface PairDef {
+// האמת-על-המטבע — ממערכת-Console (שרשרת-SAOS המאומתת):
+export const SAOS = {
+  cap: 21_000_000,
+  issued: 126_682,
+  treasury: 112_432, // קופה (מתוכם 60,000 מופקדים בבריכה)
+  owner: 14_250, // הקצאת-מייסד
+} as const;
+
+// USDS = יחידת-הסליקה-הפנימית. מנפק-גנזיס מתועד; הברז מוסיף-הנפקות-מתועדות-בלבד.
+export const USDS_GENESIS = {
+  issued: 200_000,
+  treasury: 137_600, // מתוכם 84,900 מופקדים בבריכה
+  owner: 62_400,
+} as const;
+
+// הבריכה-הגנזיס של-SAOS/USDS — כל-שקל-וכל-מטבע עם-רשומת-מקור:
+export const SAOS_POOL = {
+  base: 60_000, // SAOS מהקופה
+  quote: 84_900, // USDS מהקופה
+  price: 84_900 / 60_000, // 1.415
+} as const;
+
+interface RefDef {
   base: string;
   chain: string;
-  price: number;
-  sigma: number; // תנודתיות-יומית ממוצעת
-  dailyVol: number; // יעד-נפח-יומי ב-µ-USDS (GNT≈הארנה)
-  reserveQuote: number; // עומק בצד-quote (µ-USDS)
-  featured: boolean;
-  isNative: boolean;
+  binance: string;
+  fallback: number; // רק-אם-Binance לא-זמין-בגנזיס
   sort: number;
+  featured: boolean;
 }
 
-const PAIRS: PairDef[] = [
-  { base: "GNT", chain: "Giant Chain", price: 1.842, sigma: 0.042, dailyVol: 96_000, reserveQuote: 994_000, featured: true, isNative: true, sort: 1 },
-  { base: "BTC", chain: "Ethereum", price: 67_418, sigma: 0.026, dailyVol: 88_000, reserveQuote: 1_092_000, featured: true, isNative: false, sort: 2 },
-  { base: "ETH", chain: "Ethereum", price: 3_152.4, sigma: 0.031, dailyVol: 73_000, reserveQuote: 886_000, featured: true, isNative: false, sort: 3 },
-  { base: "SOL", chain: "Solana", price: 148.6, sigma: 0.048, dailyVol: 47_000, reserveQuote: 512_000, featured: true, isNative: false, sort: 4 },
-  { base: "BNB", chain: "BNB Chain", price: 585.2, sigma: 0.029, dailyVol: 38_500, reserveQuote: 428_000, featured: true, isNative: false, sort: 5 },
-  { base: "XRP", chain: "Ethereum", price: 0.5242, sigma: 0.036, dailyVol: 29_000, reserveQuote: 312_000, featured: false, isNative: false, sort: 6 },
-  { base: "TON", chain: "TON", price: 5.31, sigma: 0.041, dailyVol: 22_500, reserveQuote: 248_000, featured: false, isNative: false, sort: 7 },
-  { base: "DOGE", chain: "BNB Chain", price: 0.1618, sigma: 0.055, dailyVol: 21_000, reserveQuote: 226_000, featured: false, isNative: false, sort: 8 },
-  { base: "ADA", chain: "Ethereum", price: 0.4482, sigma: 0.044, dailyVol: 17_400, reserveQuote: 194_000, featured: false, isNative: false, sort: 9 },
-  { base: "AVAX", chain: "Ethereum", price: 27.9, sigma: 0.047, dailyVol: 14_200, reserveQuote: 168_000, featured: false, isNative: false, sort: 10 },
-  { base: "TRX", chain: "Tron", price: 0.1268, sigma: 0.028, dailyVol: 12_100, reserveQuote: 142_000, featured: false, isNative: false, sort: 11 },
-  { base: "LINK", chain: "Ethereum", price: 14.35, sigma: 0.038, dailyVol: 11_300, reserveQuote: 128_000, featured: false, isNative: false, sort: 12 },
-];
-
-// חלונות-הזריעה לכל טיים-פריים
-const SEED_WINDOWS: { tf: Timeframe; bars: number }[] = [
-  { tf: "1m", bars: 240 }, // 4 שעות
-  { tf: "5m", bars: 144 }, // 12 שעות
-  { tf: "15m", bars: 192 }, // 48 שעות
-  { tf: "1h", bars: 1080 }, // 45 יום
-  { tf: "4h", bars: 270 }, // 45 יום
-  { tf: "1d", bars: 120 }, // 120 יום
+const REFS: RefDef[] = [
+  { base: "BTC", chain: "Ethereum", binance: "BTCUSDT", fallback: 67_418, sort: 2, featured: true },
+  { base: "ETH", chain: "Ethereum", binance: "ETHUSDT", fallback: 3_152, sort: 3, featured: true },
+  { base: "SOL", chain: "Solana", binance: "SOLUSDT", fallback: 148.6, sort: 4, featured: true },
+  { base: "BNB", chain: "BNB Chain", binance: "BNBUSDT", fallback: 585, sort: 5, featured: true },
+  { base: "XRP", chain: "Ethereum", binance: "XRPUSDT", fallback: 0.524, sort: 6, featured: false },
+  { base: "TON", chain: "TON", binance: "TONUSDT", fallback: 5.31, sort: 7, featured: false },
+  { base: "DOGE", chain: "BNB Chain", binance: "DOGEUSDT", fallback: 0.162, sort: 8, featured: false },
+  { base: "ADA", chain: "Ethereum", binance: "ADAUSDT", fallback: 0.448, sort: 9, featured: false },
+  { base: "AVAX", chain: "Ethereum", binance: "AVAXUSDT", fallback: 27.9, sort: 10, featured: false },
+  { base: "TRX", chain: "Tron", binance: "TRXUSDT", fallback: 0.127, sort: 11, featured: false },
+  { base: "LINK", chain: "Ethereum", binance: "LINKUSDT", fallback: 14.35, sort: 12, featured: false },
 ];
 
 /* ============================== עזרים ============================== */
 
-let rngState = 0x2f6e2b1;
-function rand(): number {
-  // xorshift דטרמיניסטי-מספיק
-  rngState ^= rngState << 13;
-  rngState ^= rngState >>> 17;
-  rngState ^= rngState << 5;
-  return ((rngState >>> 0) % 1_000_000) / 1_000_000;
-}
-function randn(): number {
-  const u = Math.max(rand(), 1e-9);
-  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rand());
-}
 function bucket(tSec: number, tf: Timeframe): number {
   return Math.floor(tSec / TF_SECONDS[tf]) * TF_SECONDS[tf];
 }
-function dayScale(daysAgo: number): number {
-  // צמיחת-ארנה: ~1.0 היום → ~0.68 לפני-30-יום (עקומת-M-9 עולה)
-  const t = Math.min(30, Math.max(0, daysAgo)) / 30;
-  return 1.0 - 0.32 * t;
+
+// מחיר-אמת-חי מ-Binance (קריאה-אחת לכל-הזוגות). null = ההזנה לא-זמינה כרגע.
+async function fetchBinancePrices(): Promise<Map<string, number> | null> {
+  try {
+    const symbols = REFS.map((r) => `"${r.binance}"`).join(",");
+    const res = await fetch(
+      `https://api.binance.com/api/v3/ticker/price?symbols=[${symbols}]`,
+      { cache: "no-store", signal: AbortSignal.timeout(6_000) },
+    );
+    if (!res.ok) return null;
+    const rows = (await res.json()) as { symbol: string; price: string }[];
+    const out = new Map<string, number>();
+    for (const r of rows) out.set(r.symbol, Number(r.price));
+    return out.size ? out : null;
+  } catch {
+    return null;
+  }
 }
 
-interface RawCandle {
-  tf: Timeframe;
-  t: number;
-  o: number;
-  h: number;
-  l: number;
-  c: number;
-  v: number;
+/* ============================== גנזיס ============================== */
+
+// נר-פתיחה אחד בכל-tf — השוק-נולד עכשיו, וההיסטוריה-תיבנה-מעסקאות-אמת.
+async function openGenesisCandles(pairId: string, price: number, nowSec: number): Promise<void> {
+  for (const tf of Object.keys(TF_SECONDS) as Timeframe[]) {
+    await db.dexCandle.upsert({
+      where: { pairId_tf_t: { pairId, tf, t: bucket(nowSec, tf) } },
+      create: { pairId, tf, t: bucket(nowSec, tf), o: price, h: price, l: price, c: price, v: 0 },
+      update: {},
+    });
+  }
 }
 
-/* ============================== זריעה ============================== */
+async function seedNativeSaos(nowSec: number): Promise<void> {
+  // --- לדג'ר-גנזיס: כל-יתרה-עם-רשומת-מקור ---
+  const ledger = [
+    // SAOS — המנפק האמיתי (מהשרשרת של Console)
+    { account: "TREASURY", token: "SAOS", amount: SAOS.treasury, reason: `מנפק-גנזיס SAOS · קופת-האחוזה (מתוך הנפקה כוללת ${SAOS.issued.toLocaleString("he-IL")} · תקרה ${SAOS.cap.toLocaleString("he-IL")})` },
+    { account: "OWNER", token: "SAOS", amount: SAOS.owner, reason: "הקצאת-מייסד SAOS · Giant Chain" },
+    // USDS — יחידת-הסליקה-הפנימית
+    { account: "TREASURY", token: "USDS", amount: USDS_GENESIS.treasury, reason: "מנפק-גנזיס USDS · יחידת-סליקה-פנימית · קופת-האחוזה" },
+    { account: "OWNER", token: "USDS", amount: USDS_GENESIS.owner, reason: "טעינה-ראשונית USDS · ארנק-הבעלים" },
+    // נכסים-חוץ-מועברים (אמת-ארנק-הבעלים)
+    { account: "OWNER", token: "BTC", amount: 0.125, reason: "העברה-נכנסת · Ethereum" },
+    { account: "OWNER", token: "ETH", amount: 2.8, reason: "העברה-נכנסת · Ethereum" },
+    { account: "OWNER", token: "SOL", amount: 96.5, reason: "העברה-נכנסת · Solana" },
+  ];
+  for (const l of ledger) await db.dexLedger.create({ data: l });
 
-async function seedPair(def: PairDef, nowSec: number): Promise<void> {
-  const reserveQuote = def.reserveQuote;
-  const reserveBase = reserveQuote / def.price;
+  // --- הבריכה-האמיתית: SAOS/USDS מהקופה ---
+  const pair = await db.dexPair.create({
+    data: {
+      base: "SAOS",
+      quote: "USDS",
+      chain: "Giant Chain",
+      price: SAOS_POOL.price,
+      openPrice24h: SAOS_POOL.price,
+      high24h: SAOS_POOL.price,
+      low24h: SAOS_POOL.price,
+      reserveBase: SAOS_POOL.base,
+      reserveQuote: SAOS_POOL.quote,
+      feeBps: FEE_BPS,
+      featured: true,
+      isNative: true,
+      sort: 1,
+    },
+  });
+  // הפקדת-הקופה — מתועדת-כתנועת-לדג'ר (הכסף-עבר-מהקופה-לבריכה)
+  await db.dexLedger.create({
+    data: { account: "TREASURY", token: "SAOS", amount: -SAOS_POOL.base, reason: "הפקדת-נזילות · בריכת SAOS/USDS" },
+  });
+  await db.dexLedger.create({
+    data: { account: "TREASURY", token: "USDS", amount: -SAOS_POOL.quote, reason: "הפקדת-נזילות · בריכת SAOS/USDS" },
+  });
+  await db.dexLpPosition.create({
+    data: {
+      pairId: pair.id,
+      owner: "TREASURY",
+      shares: Math.sqrt(SAOS_POOL.base * SAOS_POOL.quote),
+      baseAmount: SAOS_POOL.base,
+      quoteAmount: SAOS_POOL.quote,
+    },
+  });
+  await openGenesisCandles(pair.id, SAOS_POOL.price, nowSec);
+}
+
+async function seedRefPair(def: RefDef, price: number, nowSec: number): Promise<void> {
   const pair = await db.dexPair.create({
     data: {
       base: def.base,
       quote: "USDS",
       chain: def.chain,
-      price: def.price,
-      openPrice24h: def.price,
-      high24h: def.price,
-      low24h: def.price,
-      reserveBase,
-      reserveQuote,
+      price,
+      openPrice24h: price,
+      high24h: price,
+      low24h: price,
+      reserveBase: 0, // אין-בורסה-על-עזר — מדד-מחיר-בלבד
+      reserveQuote: 0,
       feeBps: FEE_BPS,
       featured: def.featured,
-      isNative: def.isNative,
+      isNative: false,
       sort: def.sort,
     },
   });
-
-  // --- 1h ל-45 יום: הליכה-אקראית לאחור מהמחיר-הנוכחי ---
-  const hours = SEED_WINDOWS.find((w) => w.tf === "1h")!.bars;
-  const sigmaH = def.sigma / Math.sqrt(24);
-  const closes: number[] = new Array(hours);
-  closes[hours - 1] = def.price;
-  for (let i = hours - 2; i >= 0; i--) {
-    closes[i] = closes[i + 1] / (1 + sigmaH * randn());
-  }
-  const curHour = bucket(nowSec, "1h");
-  const hourCandles: RawCandle[] = [];
-  for (let i = 0; i < hours; i++) {
-    const t = curHour - (hours - 1 - i) * 3600;
-    const c = closes[i];
-    const o = i > 0 ? closes[i - 1] : c / (1 + sigmaH * randn());
-    const wick = Math.abs(randn()) * sigmaH * 0.6 + 1e-6;
-    const h = Math.max(o, c) * (1 + wick);
-    const l = Math.min(o, c) * (1 - wick);
-    const daysAgo = (nowSec - t) / 86_400;
-    const dayVol =
-      def.dailyVol * dayScale(daysAgo) * (0.8 + rand() * 0.4);
-    const hourWeight = 0.4 + rand() * 1.2;
-    const v = (dayVol / 24) * hourWeight;
-    hourCandles.push({ tf: "1h", t, o, h, l, c, v });
-  }
-
-  // --- 4h ו-1d מתוך-1h (עקביות-מלאה) ---
-  const fourH = aggregate(hourCandles, "4h", nowSec);
-  const oneD = aggregate(hourCandles, "1d", nowSec);
-
-  // --- 15m/5m/1m בתוך-חלון-ההורה ---
-  const m15 = subdivide(hourCandles.slice(-48), "15m", nowSec, sigmaH / 4);
-  const m5 = subdivide(hourCandles.slice(-12), "5m", nowSec, sigmaH / 12);
-  const m1 = subdivide(hourCandles.slice(-4), "1m", nowSec, sigmaH / 60);
-
-  const all: RawCandle[] = [...m1, ...m5, ...m15, ...hourCandles, ...fourH, ...oneD];
-  // הגנת-יתר: דה-דופ פנימי על (tf,t) — לעולם לא נכשל P2002 בזריעה
-  const seen = new Set<string>();
-  const unique: RawCandle[] = [];
-  for (const c of all) {
-    const k = `${c.tf}:${c.t}`;
-    if (seen.has(k)) continue;
-    seen.add(k);
-    unique.push(c);
-  }
-  const rows = unique.map((c) => ({
-    pairId: pair.id,
-    tf: c.tf,
-    t: c.t,
-    o: c.o,
-    h: c.h,
-    l: c.l,
-    c: c.c,
-    v: c.v,
-  }));
-  for (let i = 0; i < rows.length; i += 900) {
-    const chunk = rows.slice(i, i + 900);
-    try {
-      await db.dexCandle.createMany({ data: chunk });
-    } catch {
-      // נפילה-מבוקרת: הזרקה שורה-שורה (מתעלם-מקיימים)
-      for (const r of chunk) {
-        await db.dexCandle.upsert({
-          where: { pairId_tf_t: { pairId: r.pairId, tf: r.tf, t: r.t } },
-          create: r,
-          update: {},
-        });
-      }
-    }
-  }
-
-  // --- צבירי-הזוג ---
-  const last24 = hourCandles.slice(-24);
-  const high24 = Math.max(...last24.map((c) => c.h));
-  const low24 = Math.min(...last24.map((c) => c.l));
-  const open24 = last24[0].o;
-  const vol7d = oneD.slice(-7).reduce((s, c) => s + c.v, 0);
-  const vol30d = oneD.slice(-30).reduce((s, c) => s + c.v, 0);
-  await db.dexPair.update({
-    where: { id: pair.id },
-    data: {
-      openPrice24h: open24,
-      high24h: high24,
-      low24h: low24,
-      vol24h: last24.reduce((s, c) => s + c.v, 0),
-      vol7d,
-      vol30d,
-    },
-  });
-
-  // --- עסקאות-24 שעות (סרט-חי מוכן מראש) ---
-  const dayVolNow = last24.reduce((s, c) => s + c.v, 0);
-  const nTrades = Math.max(90, Math.round(dayVolNow / 320));
-  const weights: number[] = [];
-  let wSum = 0;
-  for (let i = 0; i < nTrades; i++) {
-    const w = Math.pow(rand(), 2.2) + 0.02;
-    weights.push(w);
-    wSum += w;
-  }
-  const tradeRows: {
-    pairId: string;
-    side: string;
-    price: number;
-    amount: number;
-    total: number;
-    source: string;
-    t: Date;
-  }[] = [];
-  for (let i = 0; i < nTrades; i++) {
-    const frac = rand(); // מקום ב-24h
-    const idx = Math.min(23, Math.floor((1 - frac) * 24));
-    const cn = hourCandles[hourCandles.length - 24 + idx];
-    const price = cn.l + rand() * (cn.h - cn.l);
-    const total = (dayVolNow * weights[i]) / wSum;
-    const side = rand() > 0.5 ? "BUY" : "SELL";
-    tradeRows.push({
-      pairId: pair.id,
-      side,
-      price,
-      amount: total / price,
-      total,
-      source: "SEED",
-      t: new Date((cn.t + rand() * 3600) * 1000),
-    });
-  }
-  // 12 עסקאות-טריות לסרט
-  for (let i = 0; i < 12; i++) {
-    const price = def.price * (1 + randn() * 0.0006);
-    const total = def.dailyVol * 0.004 * (0.3 + rand());
-    tradeRows.push({
-      pairId: pair.id,
-      side: rand() > 0.5 ? "BUY" : "SELL",
-      price,
-      amount: total / price,
-      total,
-      source: "AMBIENT",
-      t: new Date(nowSec * 1000 - i * 22_000),
-    });
-  }
-  for (let i = 0; i < tradeRows.length; i += 900) {
-    await db.dexTrade.createMany({ data: tradeRows.slice(i, i + 900) });
-  }
-
-  // --- LP של-הקופה (85%) ---
-  await db.dexLpPosition.create({
-    data: {
-      pairId: pair.id,
-      owner: "TREASURY",
-      shares: Math.sqrt(reserveBase * reserveQuote) * 0.85,
-      baseAmount: reserveBase * 0.85,
-      quoteAmount: reserveQuote * 0.85,
-    },
-  });
-}
-
-function aggregate(
-  src: RawCandle[],
-  tf: Timeframe,
-  nowSec: number,
-): RawCandle[] {
-  const map = new Map<number, RawCandle>();
-  for (const c of src) {
-    const b = bucket(c.t, tf);
-    const cur = map.get(b);
-    if (!cur) {
-      map.set(b, { ...c, tf, t: b });
-    } else {
-      cur.h = Math.max(cur.h, c.h);
-      cur.l = Math.min(cur.l, c.l);
-      cur.c = c.c;
-      cur.v += c.v;
-    }
-  }
-  return [...map.values()].filter((c) => c.t < bucket(nowSec, tf));
-}
-
-function subdivide(
-  parents: RawCandle[],
-  tf: Timeframe,
-  nowSec: number,
-  sigma: number,
-): RawCandle[] {
-  const sec = TF_SECONDS[tf];
-  const out: RawCandle[] = [];
-  for (const p of parents) {
-    const n = Math.max(1, Math.floor(3600 / sec));
-    let price = p.o;
-    for (let i = 0; i < n; i++) {
-      const t = p.t + i * sec;
-      if (t >= bucket(nowSec, tf)) break;
-      const target = p.c;
-      const drift = (target - price) / (n - i);
-      const step = drift + price * sigma * randn();
-      const c = Math.max(price + step, 1e-9);
-      const wick = Math.abs(randn()) * sigma * 0.5 + 1e-7;
-      const h = Math.min(p.h * 1.002, Math.max(price, c) * (1 + wick));
-      const l = Math.max(p.l * 0.998, Math.min(price, c) * (1 - wick));
-      out.push({ tf, t, o: price, h, l, c, v: (p.v / n) * (0.5 + rand()) });
-      price = c;
-    }
-  }
-  return out;
+  await openGenesisCandles(pair.id, price, nowSec);
 }
 
 async function seedWallet(): Promise<void> {
-  const entries = [
-    { token: "USDS", amount: 62_400, reason: "טעינה-ראשונית · ארנק-הבעלים" },
-    { token: "GNT", amount: 14_250, reason: "הקצאת-מייסד · Giant Chain" },
-    { token: "BTC", amount: 0.125, reason: "העברה-נכנסת · Ethereum" },
-    { token: "ETH", amount: 2.8, reason: "העברה-נכנסת · Ethereum" },
-    { token: "SOL", amount: 96.5, reason: "העברה-נכנסת · Solana" },
-  ];
-  for (const e of entries) {
-    await db.dexLedger.create({ data: { ...e, account: "OWNER" } });
-  }
-  // LP אישי של הבעלים ב-GNT/USDS
-  const gnt = await db.dexPair.findFirst({ where: { base: "GNT" } });
-  if (gnt) {
-    await db.dexLpPosition.create({
-      data: {
-        pairId: gnt.id,
-        owner: "OWNER",
-        shares: 34_800,
-        baseAmount: 8_650,
-        quoteAmount: 15_930,
-      },
-    });
-  }
+  // כל-היתרות-כבר-נרשמו-בלדג'ר-הגנזיס — אין-כאן-כלום. המקור: DexLedger.
 }
 
 /* ============================== טיקר-חי ============================== */
@@ -351,6 +195,34 @@ function tickerState(): TickerState {
   return g.__giantTicker;
 }
 
+async function upsertCandleTick(
+  pairId: string,
+  tf: Timeframe,
+  tSec: number,
+  price: number,
+  volDelta: number,
+): Promise<void> {
+  const b = bucket(tSec, tf);
+  const existing = await db.dexCandle.findUnique({
+    where: { pairId_tf_t: { pairId, tf, t: b } },
+  });
+  if (!existing) {
+    await db.dexCandle.create({
+      data: { pairId, tf, t: b, o: price, h: price, l: price, c: price, v: volDelta },
+    });
+  } else {
+    await db.dexCandle.update({
+      where: { id: existing.id },
+      data: {
+        h: Math.max(existing.h, price),
+        l: Math.min(existing.l, price),
+        c: price,
+        v: existing.v + volDelta,
+      },
+    });
+  }
+}
+
 async function tick(): Promise<void> {
   const st = tickerState();
   if (st.busy) return;
@@ -359,89 +231,61 @@ async function tick(): Promise<void> {
     const nowSec = Math.floor(Date.now() / 1000);
     st.ticks += 1;
     const pairs = await db.dexPair.findMany();
-    const defs = new Map(PAIRS.map((p) => [p.base, p]));
+    const native = pairs.filter((p) => p.isNative);
+    const refs = pairs.filter((p) => !p.isNative);
 
-    for (const pair of pairs) {
-      const def = defs.get(pair.base);
-      const sigmaTick = (def?.sigma ?? 0.04) / Math.sqrt(86_400 / (TICK_MS / 1000));
-      const drift = (def ? (def.price - pair.price) / def.price * 0.02 : 0); // משיכה-עדינה-אל-עוגן
-      const step = pair.price * (sigmaTick * randn() + drift);
-      const newPrice = Math.max(pair.price + step, 1e-9);
-
-      // עסקאות-סביבה
-      const nTr = rand() < 0.75 ? 1 + Math.floor(rand() * 3) : 0;
-      const tradeData: {
-        pairId: string;
-        side: string;
-        price: number;
-        amount: number;
-        total: number;
-        source: string;
-        t: Date;
-      }[] = [];
-      for (let i = 0; i < nTr; i++) {
-        const whale = rand() < 0.03;
-        const base = def?.dailyVol ?? 20_000;
-        const total = whale
-          ? base * (0.015 + rand() * 0.05)
-          : base * (0.0008 + rand() * 0.004);
-        const p = newPrice * (1 + randn() * 0.0004);
-        tradeData.push({
-          pairId: pair.id,
-          side: rand() > 0.5 ? "BUY" : "SELL",
-          price: p,
-          amount: total / p,
-          total,
-          source: whale ? "WHALE" : "AMBIENT",
-          t: new Date(),
+    // --- זוגות-עזר: מחיר-חוץ-אמת מ-Binance (מדד-בלבד; אין-מסחר, אין-נפח) ---
+    const live = await fetchBinancePrices();
+    if (live) {
+      for (const ref of refs) {
+        const def = REFS.find((r) => r.base === ref.base);
+        const p = def ? live.get(def.binance) : undefined;
+        if (!p || !Number.isFinite(p) || p <= 0) continue;
+        for (const tf of Object.keys(TF_SECONDS) as Timeframe[]) {
+          await upsertCandleTick(ref.id, tf, nowSec, p, 0);
+        }
+        await db.dexPair.update({
+          where: { id: ref.id },
+          data: {
+            price: p,
+            high24h: Math.max(ref.high24h, p),
+            low24h: Math.min(ref.low24h, p),
+          },
         });
       }
-      const tickVol = tradeData.reduce((s, t) => s + t.total, 0);
-      if (tradeData.length) await db.dexTrade.createMany({ data: tradeData });
+    }
+    // אם-Binance-לא-זמין: משאירים-את-המחיר-האמיתי-האחרון. לא-ממציאים-תנועה.
 
-      // נרות: עדכון/יצירת-הנר-הנוכחי בכל-tf
+    // --- SAOS: המחיר-זז-רק-מעסקאות-אמת (route-ה-swap מעדכן-רזרבות-ומחיר).
+    // הטיקר-רק-מציב-את-הנר-הנוכחי-וסופר-את-נפח-האמת-שנצבר-בדלי-הזמן:
+    for (const pair of native) {
+      const bucketStart = bucket(nowSec, "1m");
+      const agg = await db.dexTrade.aggregate({
+        _sum: { total: true },
+        where: { pairId: pair.id, t: { gte: new Date(bucketStart * 1000) } },
+      });
+      const realVol = agg._sum.total ?? 0;
+      for (const tf of Object.keys(TF_SECONDS) as Timeframe[]) {
+        await upsertCandleTick(pair.id, tf, nowSec, pair.price, 0);
+      }
+      // נפח-הנר-הנוכחי = עסקאות-אמת-בלבד (בכל-tf, לפי-תחום-הדלי)
       for (const tf of Object.keys(TF_SECONDS) as Timeframe[]) {
         const b = bucket(nowSec, tf);
+        const tv = await db.dexTrade.aggregate({
+          _sum: { total: true },
+          where: { pairId: pair.id, t: { gte: new Date(b * 1000) } },
+        });
         const existing = await db.dexCandle.findUnique({
           where: { pairId_tf_t: { pairId: pair.id, tf, t: b } },
         });
-        if (!existing) {
-          await db.dexCandle.create({
-            data: {
-              pairId: pair.id,
-              tf,
-              t: b,
-              o: pair.price,
-              h: Math.max(pair.price, newPrice),
-              l: Math.min(pair.price, newPrice),
-              c: newPrice,
-              v: tickVol,
-            },
-          });
-        } else {
-          await db.dexCandle.update({
-            where: { id: existing.id },
-            data: {
-              h: Math.max(existing.h, newPrice),
-              l: Math.min(existing.l, newPrice),
-              c: newPrice,
-              v: existing.v + tickVol,
-            },
-          });
+        if (existing && existing.v !== (tv._sum.total ?? 0)) {
+          await db.dexCandle.update({ where: { id: existing.id }, data: { v: tv._sum.total ?? 0 } });
         }
       }
-
-      await db.dexPair.update({
-        where: { id: pair.id },
-        data: {
-          price: newPrice,
-          high24h: Math.max(pair.high24h, newPrice),
-          low24h: Math.min(pair.low24h, newPrice),
-        },
-      });
+      void realVol;
     }
 
-    // כל-75-טיקים (~10 דק׳): חישוב-מחדש-כנה של נפחים ו-open24h
+    // כל-75-טיקים (~10 דק׳): חישוב-מחדש-כנה של נפחים-ושער-פתיחה מהעסקאות-האמת
     if (st.ticks % 75 === 0) {
       const dayAgo = new Date(Date.now() - 86_400_000);
       for (const pair of pairs) {
@@ -449,7 +293,6 @@ async function tick(): Promise<void> {
           _sum: { total: true },
           where: { pairId: pair.id, t: { gte: dayAgo } },
         });
-        const vol24h = agg._sum.total ?? pair.vol24h;
         const openCandle = await db.dexCandle.findFirst({
           where: {
             pairId: pair.id,
@@ -461,7 +304,7 @@ async function tick(): Promise<void> {
         await db.dexPair.update({
           where: { id: pair.id },
           data: {
-            vol24h,
+            vol24h: agg._sum.total ?? 0,
             openPrice24h: openCandle?.c ?? pair.openPrice24h,
           },
         });
@@ -501,7 +344,7 @@ async function sumDays(n: number): Promise<number> {
   const from = Math.floor((Date.now() - n * 86_400_000) / 1000);
   const agg = await db.dexCandle.aggregate({
     _sum: { v: true },
-    where: { tf: "1d", t: { gte: from } },
+    where: { tf: "1d", t: { gte: from }, pairId: { not: "" } },
   });
   return agg._sum.v ?? 0;
 }
@@ -542,15 +385,18 @@ export async function ensureSeeded(): Promise<void> {
       }
       const cfg = await db.dexConfig.findUnique({ where: { key: "seedVersion" } });
       if (cfg?.value === SEED_VERSION) return;
-      // איפוס-וזריעה-מלאה
+      // איפוס-וגנזיס-מלא
       await db.dexTrade.deleteMany();
       await db.dexCandle.deleteMany();
       await db.dexLpPosition.deleteMany();
       await db.dexLedger.deleteMany();
       await db.dexPair.deleteMany();
       const nowSec = Math.floor(Date.now() / 1000);
-      for (const def of PAIRS) {
-        await seedPair(def, nowSec);
+      await seedNativeSaos(nowSec);
+      const binance = await fetchBinancePrices();
+      for (const def of REFS) {
+        const p = binance?.get(def.binance) ?? def.fallback;
+        await seedRefPair(def, p, nowSec);
       }
       await seedWallet();
       await db.dexConfig.upsert({
@@ -563,7 +409,7 @@ export async function ensureSeeded(): Promise<void> {
         create: { key: "seededAt", value: new Date().toISOString() },
         update: { value: new Date().toISOString() },
       });
-      console.log("[dex-engine] seeded:", SEED_VERSION);
+      console.log("[dex-engine] genesis v2-real seeded:", SEED_VERSION);
     })().catch((err) => {
       gSeed.__giantSeedPromise = undefined;
       throw err;

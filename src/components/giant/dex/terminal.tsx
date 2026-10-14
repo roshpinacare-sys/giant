@@ -63,7 +63,7 @@ export function TerminalView({ initialPairId }: TerminalProps) {
         const data = (await res.json()) as { pairs: PairSummary[] };
         setPairs(data.pairs);
         if (!pairId && data.pairs.length) {
-          const gnt = data.pairs.find((p) => p.base === "GNT") ?? data.pairs[0];
+          const gnt = data.pairs.find((p) => p.isNative) ?? data.pairs[0];
           setPairId(gnt.id);
         }
         if (initialPairId) setPairId(initialPairId);
@@ -195,9 +195,13 @@ export function TerminalView({ initialPairId }: TerminalProps) {
                     <span className="flex items-center gap-2">
                       <span className="font-semibold text-white">{p.base}</span>
                       <span className="text-xs text-zinc-500">/{p.quote}</span>
-                      {p.isNative && (
+                      {p.isNative ? (
                         <Badge className="bg-emerald-500/15 text-[10px] text-emerald-400 hover:bg-emerald-500/15">
-                          שלנו
+                          מסחר-אמת
+                        </Badge>
+                      ) : (
+                        <Badge className="bg-sky-500/10 text-[10px] text-sky-300/90 hover:bg-sky-500/10">
+                          מדד-Binance
                         </Badge>
                       )}
                     </span>
@@ -261,7 +265,7 @@ export function TerminalView({ initialPairId }: TerminalProps) {
         </div>
 
         {/* טופס-מסחר */}
-        {pair && <TradeForm pair={pair} onDone={loadCandles} />}
+        {pair && (pair.isNative ? <TradeForm pair={pair} onDone={loadCandles} /> : <RefOnlyNotice base={pair.base} />)}
       </div>
 
       {/* ספר-הזמנות + סרט */}
@@ -284,6 +288,18 @@ function Stat({ label, value, mono }: { label: string; value: string; mono?: boo
   );
 }
 
+/** הודעת-אמת: זוג-עזר אינו-בורסה */
+function RefOnlyNotice({ base }: { base: string }) {
+  return (
+    <div className="rounded-lg border border-sky-500/20 bg-sky-500/[0.04] p-4 text-center">
+      <p className="text-sm font-semibold text-sky-200">{base} · מדד-מחיר-חוץ (Binance)</p>
+      <p className="mt-1 text-xs text-zinc-400">
+        אין-מסחר-על-מדדים. טופס-המסחר-האמיתי פתוח על SAOS/USDS — המטבע-שלנו, עם-רזרבות-מהלדג'ר.
+      </p>
+    </div>
+  );
+}
+
 /* ============================== ספר-הזמנות ============================== */
 
 function OrderBook({ depth, pair }: { depth: Depth | null; pair: PairSummary | null }) {
@@ -291,6 +307,19 @@ function OrderBook({ depth, pair }: { depth: Depth | null; pair: PairSummary | n
     return (
       <div className="rounded-lg border border-white/5 bg-white/[0.03] p-4 text-center text-sm text-zinc-500">
         טוען ספר-הזמנות…
+      </div>
+    );
+  }
+  // חוק-אמת: לזוגות-עזר אין-בורסה — אין-עומק-מדומה
+  if (depth.refOnly || (depth.bids.length === 0 && depth.asks.length === 0)) {
+    return (
+      <div className="rounded-lg border border-white/5 bg-white/[0.03] p-4 text-center">
+        <p className="text-sm font-semibold text-zinc-300">מדד-מחיר-חוץ · Binance</p>
+        <p className="mt-1 text-xs text-zinc-500">
+          {pair.base} אינו-נסחר כאן — זהו מדד-מחיר-חי-אמיתי בלבד.
+          <br />
+          המסחר-האמיתי פתוח בבריכת SAOS/USDS.
+        </p>
       </div>
     );
   }

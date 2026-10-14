@@ -37,6 +37,13 @@ export async function POST(req: NextRequest) {
       }
       const pair = await db.dexPair.findUnique({ where: { id: body.pairId } });
       if (!pair) return NextResponse.json({ error: "זוג-לא-נמצא" }, { status: 404 });
+      // חוק-אמת: בריכות-נזילות רק על המטבע-האמיתי (SAOS/USDS)
+      if (!pair.isNative) {
+        return NextResponse.json(
+          { error: `${pair.base} הוא מדד-מחיר-חוץ — בריכות נזילות פתוחות רק ב-SAOS/USDS` },
+          { status: 403 },
+        );
+      }
 
       const bal = await ownerBalance(pair.quote);
       if (bal < quoteAmount) {

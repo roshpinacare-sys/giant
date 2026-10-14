@@ -48,9 +48,9 @@ export function SwapView() {
       try {
         const res = await fetch("/api/dex/pairs", { cache: "no-store" });
         const data = (await res.json()) as { pairs: PairSummary[] };
-        setPairs(data.pairs);
-        const gnt = data.pairs.find((p) => p.base === "GNT");
-        if (gnt) setPairId(gnt.id);
+        setPairs(data.pairs.filter((p) => p.isNative)); // חוק-אמת: סוואפ רק על המטבע-האמיתי
+        const native = data.pairs.find((p) => p.isNative);
+        if (native) setPairId(native.id);
       } catch {
         // שקט
       }

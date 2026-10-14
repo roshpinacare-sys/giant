@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     }
     const amount = Math.min(AMOUNT, CAP - bal);
     const entry = await db.dexLedger.create({
-      data: { account: "OWNER", token, amount, reason: `ברז-דמו · טעינת ${token}` },
+      data: { account: "OWNER", token, amount, reason: `הנפקת-USDS-מתועדת · ברז-בעלים · ${token}` },
     });
     return NextResponse.json({ ok: true, amount, token, id: entry.id });
   } catch (err) {

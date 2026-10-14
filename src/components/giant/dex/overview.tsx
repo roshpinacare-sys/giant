@@ -1,9 +1,9 @@
 "use client";
 
-// giant DEX · סקירת-שוק: KPIs-חיים, GNT-זרקור, ארנת-הווליום (M-9), מובילים, טופ-זוגות
+// giant DEX · סקירת-שוק: KPIs-חיים, SAOS-זרקור, פאנל-אספקת-אמת, ארנת-הווליום (M-9), מובילים, טופ-זוגות
 
 import { useCallback, useEffect, useState } from "react";
-import { Activity, Flame, Gauge, TrendingDown, TrendingUp, Zap } from "lucide-react";
+import { Activity, Flame, Gauge, Landmark, TrendingDown, TrendingUp, Zap } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ import {
   trendBg,
   trendColor,
 } from "@/lib/dex-format";
-import type { Overview, PairSummary } from "@/lib/dex-types";
+import type { Overview, PairSummary, SupplyPanel } from "@/lib/dex-types";
 
 export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }) {
   const [data, setData] = useState<Overview | null>(null);
@@ -52,33 +52,36 @@ export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }
     );
   }
 
-  const { kpis, moversUp, moversDown, arena, engine, topPairs, sparks } = data;
+  const { kpis, moversUp, moversDown, arena, engine, topPairs, sparks, supply } = data;
 
   return (
     <div className="space-y-4">
       {/* KPI-ראשי */}
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
-        <Kpi label="נפח-24 שעות" value={fmtMicro(kpis.vol24h)} icon={<Activity className="h-4 w-4" />} tone="up" />
-        <Kpi label="TVL · נזילות-כוללת" value={fmtMicro(kpis.tvl)} icon={<Gauge className="h-4 w-4" />} />
-        <Kpi label="עמלות-24h" value={fmtMicro(kpis.fees24h)} icon={<Flame className="h-4 w-4" />} tone="warn" />
-        <Kpi label="זוגות-פעילים" value={String(kpis.pairsCount)} icon={<Zap className="h-4 w-4" />} />
+        <Kpi label="נפח-אמת · 24 שעות" value={fmtMicro(kpis.vol24h)} icon={<Activity className="h-4 w-4" />} tone="up" />
+        <Kpi label="TVL · נזילות-אמת" value={fmtMicro(kpis.tvl)} icon={<Gauge className="h-4 w-4" />} />
+        <Kpi label="עמלות-אמת · 24h" value={fmtMicro(kpis.fees24h)} icon={<Flame className="h-4 w-4" />} tone="warn" />
+        <Kpi label="זוגות" value={String(kpis.pairsCount)} icon={<Zap className="h-4 w-4" />} />
       </div>
 
+      {/* פאנל-האמת: אספקת-המטבע — נגזר-לדג'ר, אפס-סימולציות */}
+      {supply && <SupplyTruth supply={supply} />}
+
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.2fr_1fr]">
-        {/* זרקור-GNT */}
+        {/* זרקור-SAOS */}
         <section className="relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-950/50 to-[#0d1312] p-5">
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-center gap-2">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/20 text-lg font-black text-emerald-300" aria-hidden="true">
-                  G
+                  S
                 </span>
                 <div>
                   <div className="flex items-center gap-2 text-xl font-black text-white" dir="ltr">
-                    GNT
-                    <Badge className="bg-emerald-500/15 text-[10px] text-emerald-300 hover:bg-emerald-500/15">המטבע-שלנו</Badge>
+                    SAOS
+                    <Badge className="bg-emerald-500/15 text-[10px] text-emerald-300 hover:bg-emerald-500/15">המטבע-האמיתי</Badge>
                   </div>
-                  <div className="text-xs text-zinc-500">Giant Chain · הריבונות</div>
+                  <div className="text-xs text-zinc-500">Giant Chain · מנופק-מהלדג'ר · מסחר-אמת-בלבד</div>
                 </div>
               </div>
               <div className="mt-4 flex items-end gap-3">
@@ -90,7 +93,7 @@ export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }
                 </span>
               </div>
             </div>
-            <Spark data={sparks["GNT/USDS"] ?? []} />
+            <Spark data={sparks["SAOS/USDS"] ?? []} />
           </div>
           <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
             <MiniStat label="נפח-24h" value={fmtMicro(kpis.vol24h)} />
@@ -104,7 +107,7 @@ export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }
           <div className="mb-3 flex items-center justify-between">
             <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-200">
               <Activity className="h-4 w-4 text-emerald-400" aria-hidden="true" />
-              ארנת-הווליום · M-9
+              ארנת-הווליום · M-9 · נפח-אמת-בלבד
             </h3>
             <Badge
               className={
@@ -196,6 +199,54 @@ export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }
         </section>
       </div>
     </div>
+  );
+}
+
+/** פאנל-האמת · אספקת-המטבע — כל-מספר נגזר-מהלדג'ר. אין-הנפקה-סמויה, אין-סימולציה. */
+function SupplyTruth({ supply }: { supply: SupplyPanel }) {
+  const saos = supply.saos;
+  const usds = supply.usds;
+  const ageH = supply.marketAgeSec !== null ? supply.marketAgeSec / 3600 : null;
+  const ageLabel =
+    ageH === null
+      ? "—"
+      : ageH < 1
+        ? `${Math.round(supply.marketAgeSec! / 60)} דקות`
+        : ageH < 48
+          ? `${ageH.toFixed(1)} שעות`
+          : `${(ageH / 24).toFixed(1)} ימים`;
+  const fillPct = saos.cap ? Math.min(100, (saos.issued / saos.cap) * 100) : 0;
+
+  return (
+    <section className="rounded-2xl border border-white/10 bg-[#0b0f0e] p-4" aria-label="פאנל-אספקת-המטבע">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-200">
+          <Landmark className="h-4 w-4 text-amber-400" aria-hidden="true" />
+          אספקת-המטבע · נגזר-מהלדג'ר
+        </h3>
+        <div className="flex items-center gap-2 text-[11px] text-zinc-500">
+          <Badge className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/10">אמת-בלבד · אפס-סימולציות</Badge>
+          <span>גיל-השוק: {ageLabel}</span>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+        <MiniStat label="תקרת-SAOS" value={saos.cap?.toLocaleString("he-IL") ?? "—"} />
+        <MiniStat label="מנופק-באמת" value={saos.issued.toLocaleString("he-IL")} />
+        <MiniStat label="קופה (אחרי-בריכה)" value={saos.treasury.toLocaleString("he-IL")} />
+        <MiniStat label="ארנק-הבעלים" value={saos.owner.toLocaleString("he-IL")} />
+        <MiniStat label="נעול-בבריכה" value={(saos.inPool ?? 0).toLocaleString("he-IL")} />
+      </div>
+      <div className="mt-3 space-y-1.5">
+        <Progress value={fillPct} className="h-2" aria-label={`מנופק ${fillPct.toFixed(2)}% מהתקרה`} />
+        <div className="flex items-center justify-between text-[11px] text-zinc-500">
+          <span dir="ltr">{`${saos.issued.toLocaleString("he-IL")} / ${saos.cap?.toLocaleString("he-IL")}`}</span>
+          <span>
+            טרם-מנופק: {(saos.notYetIssued ?? 0).toLocaleString("he-IL")} · USDS-פנימי: {usds.issued.toLocaleString("he-IL")}
+          </span>
+        </div>
+        <div className="text-[11px] text-zinc-600">מקורות-מחיר: {supply.priceSource}</div>
+      </div>
+    </section>
   );
 }
 

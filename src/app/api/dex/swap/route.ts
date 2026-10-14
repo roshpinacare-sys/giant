@@ -28,6 +28,13 @@ export async function POST(req: NextRequest) {
     }
     const pair = await db.dexPair.findUnique({ where: { id: body.pairId } });
     if (!pair) return NextResponse.json({ error: "זוג-לא-נמצא" }, { status: 404 });
+    // חוק-אמת: מסחר-פתוח רק על המטבע-האמיתי. זוגות-העזר הם מדדי-מחיר-חוץ (Binance) — לא בורסה.
+    if (!pair.isNative) {
+      return NextResponse.json(
+        { error: `${pair.base} הוא מדד-מחיר-חוץ (Binance) — מסחר פתוח רק ב-SAOS/USDS` },
+        { status: 403 },
+      );
+    }
 
     const tokenIn = side === "BUY" ? pair.quote : pair.base;
     const tokenOut = side === "BUY" ? pair.base : pair.quote;

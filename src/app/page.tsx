@@ -25,8 +25,9 @@ import {
   Terminal,
   Users,
 } from "lucide-react";
-import { FileText, TrendingUp } from "lucide-react";
+import { FileText, Network, TrendingUp } from "lucide-react";
 import { DexView } from "@/components/giant/dex/dex-view";
+import { EstateView } from "@/components/giant/estate";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -262,6 +263,7 @@ function RelayProcessedChip({ processed }: { processed: boolean }) {
 
 const NAV_ITEMS = [
   { id: "dex", label: "giant DEX", icon: TrendingUp },
+  { id: "estate", label: "האחוזה · מפת-אמת", icon: Network },
   { id: "channel", label: "ערוץ הריבון", icon: MessagesSquare },
   { id: "ledger", label: "לדג'ר-האמת", icon: ScrollText },
   { id: "plans", label: "תוכניות-האם", icon: FileText },
@@ -398,6 +400,8 @@ export default function Home() {
     switch (view) {
       case "dex":
         return <DexView />;
+      case "estate":
+        return <EstateView />;
       case "ledger":
         return <LedgerView />;
       case "plans":
