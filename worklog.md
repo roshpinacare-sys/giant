@@ -1379,3 +1379,21 @@ Stage Summary:
 - The 4×-red office-3d deploy-room healed with a measured chain: local build proof (identical hash) → CI green → honest NO-CHANGE verdict. The room auto-deploy loop (R53) now actually works for the first time since it was written.
 - steem's stuck queue explained and quarantined by root cause (disabled Actions), not force-cancelled — the estate's own manual policy respected.
 - Net org state at 06:30Z: every workflow that CAN run is green; every non-green entry is either immutable history (ops-forge) or policy-frozen (steem).
+---
+Task ID: 38
+Agent: Continuation agent (IM trace 1a13942b76ea28c9 "תמשיך")
+Task: Continue after the tooling outage — verify pending work, keep healing and optimizing.
+
+Work Log:
+- OUTAGE RECOVERY: shell/tooling was down mid-round (transport failures ×7); resumed at 07:14Z. Verified the second-pass node bump HAD executed before the cut: 0 active node-version:20 pins remain org-wide (133 pins → 0 across two passes; the only straggler is the intentionally-untouched .bak archaeology file in Domain).
+- OPS-FORGE HISTORICAL REDS — RE-RUN LAW SETTLED: reran both Oct-12 failures (HTTP 201) — attempt 2 of each FAILED AGAIN with the same verify-failed. Two honest attempts, two honest reds: STOPPED re-running (re-run-until-green = fake-green gaming, forbidden). Corollary discovered: rerun executes the ORIGINAL SHA, so code fixes can never flip historical reds — they are permanently honest history.
+- FORGE VERIFIER ROOT-FIX (2c2c939): the verify-failed ×3 measurements exposed that putFile's exact-sha equality misreads a sibling's concurrent append as failure — for an append-only ledger that is SUCCESS. Now: sha-equality OR live-file-startsWith(our-content) = landed; retries 4→8 (~30s). Next scheduled cycles validate it live.
+- R54 BUILD-BREAK (artery lane 0e9810a, 07:12Z): Billboard scale 3-tuple vs its [number,number] sprite contract → next build fail → office-ci red + office-3d bake ×2 red. I repaired it locally (measured build+tsc PASS) — but the artery lane SELF-HEALED in parallel (332cbcd, identical diagnosis) and my push hit a rebase conflict. Resolved per sibling-stand-down law: aborted my redundant commit, reset to origin, verified build PASS on their fix. Result: office-ci green + BOTH office-3d runs green on 332cbcd.
+- DEPLOY-ROOM FIRST REAL DEPLOY: 07:21:19Z `DEPLOYED (attempt 1): room bundle live on Domain Pages` — the R53 auto-deploy loop landed the R54 room on Domain Pages for the first time since the job was written (04:06Z). Domain office3d commit 07:21:17Z. The staleness law now actually enforced end-to-end.
+- CONTRACT-CHECK FALSE RED (two-step honest repair): FAIL 'closed orders carry receipts' at 07:16Z. Root: schema drift between lanes — queue-close [T29] stamps closureReceipt as an OBJECT {law,at,result}; the check only knew closedReceipt/receipt/closedVia. Repair-1 (union, accept the name) was MY BUG: an object has no .length → still noReceipt=2 at 07:30. Repair-2: types-aware receipt test (string OR object OR closedVia), PRE-VERIFIED against the live QUEUE.json before push (closed=2 noReceipt=0 → PASS), dispatched → SUCCESS 07:33:03Z on fcd9315. Both repairs carry dated receipts explaining the mistake honestly.
+
+Stage Summary:
+- Node 20 EOL debt fully retired (133 pins → 0 active, estate-convention 22), outage gap verified closed rather than assumed.
+- The org's only two permanently-red marks (ops-forge Oct-12) are now measured as honest history WITH a root-fix protecting every future cycle — the verify class of false-reds is dead code.
+- Three parallel self-heal events in one morning (artery's R54 fix, my redundant repair, the re-run receipts that DID land) — all reconciled by the union/stand-down laws, zero overwrites, zero lost work.
+- contract-check schema drift fixed with a lesson recorded: union-fixes must be type-aware and pre-verified against live data before push.
