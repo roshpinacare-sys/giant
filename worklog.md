@@ -1622,3 +1622,40 @@ Stage Summary:
 - 25 עמודי-שורש → 18 משטחים אמיתיים + 7 גמלות-הפניה חיות: ה-IA מתנהג כמו ענקים (דלת אחת לכל נושא, אפס כפילויות) בלי שום קישור-שבור בשרשרת
 - קבלת-ה-audit ירוקה; הלנדינג, הקונסולה, הכסף, הארנק — כולם באותו דור-ממשק אחד
 - Deferred נותר: תרגום-העיתון ל-EN, Identity playground, sitemap.html +console.html (קוסמטי)
+
+---
+Task ID: 50
+Agent: main (Z.ai Code, trace 1a13b69be7038785)
+Task: "בדיקה מקיפה + תכנון לפני ביצוע" + דוקטרינת-מות-הסוכנים — הריבונות חייבת להנדס, לוודא ולהציג את עצמה לבד, בלי סוכנים
+
+GRILL DECISION TABLE v2 (re-baseline אחרי pull — origin הקדים אותנו, זרם R60–R67 של תאומים):
+| שאלה | פסק | ראיה |
+|---|---|---|
+| לבנות ארנק מחדש? | לא — נתבע ע"י תאום | wallet.html head: "R62+ grade, aligned with index.html"; origin+10 commits מ-b2eda9d |
+| מה פער-הדוקטרינה הגדול? | הוולידציה-המבנית לא מקודדת | site-auditor.mjs=152 שורות, בודק רק קישורים-חיים; איזון-תגיות/סינטקס/parity/גמלות/canonical/מדדי-אמת בוצעו ידנית בכל גל (47/48/49) |
+| workflow חדש? | לא — הרחבת ה-auditor הקיים | site-link-audit.yml כבר רץ יומית+on-push(html)+manual, מפרסם קבלה, push-race-hardened. אפס תשתית-חדשה |
+| landing.html? | גמלה→index | שכפול-hero מדויק של ה-index החדש; 1 קישור-נכנס בלבד (sitemap.html) |
+| defi/dev/net/deposits/reports/badges/runner-kit? | חיים | כל אחד שאלה-יחידה ייחודית; 2–5 קישורים-נכנסים כל אחד |
+| תיאום-תאומים? | claim-board כאן + ביצוע מיידי | entry-אחרון ב-worklog=49; זרם R60+ לא מתועד כאן |
+
+SHARED LANE BOARD (לכל הסוכנים — עדכנו claim שלכם כאן לפני עבודה):
+- [CLAIMED-by-Task-50] agents/site-auditor.mjs הרחבה מבנית + landing.html גמלה + agents/SELF-CHECKS.md
+- [TAKEN-twin] wallet.html R62+ (כבר על origin — אל-תיגעו)
+- [OUT-OF-SCOPE] FleetHQ workflows (חלוקת-תפקידים מאושרת: FleetHQ=מנוע · Domain=תצוגה) · תרגומי-עיתון · Identity playground
+
+Work Log:
+- re-baseline: git pull (b2eda9d→515b24b, 10 bot-ticks); סיור מלא: 8 גמלות בריאות (refresh+noindex ×8), truth-מדדים חולצו (money: id=sim-saos+R74, wallet: id=truth-banner+R74), landing ב-sitemap.xml+html לטיהור
+- 50-b auditor battery: site-auditor.mjs 152→~330 שורות — 6 חוקים מקודדים (R-BALANCE parser-סטאק עם raw-text/void/self-closing · R-SCRIPT new Function לכל classic-inline · R-CANONICAL עם נרמול-index+פטור-404+חוק-המראות-Console · R-STUB עם פתרון-נתיבים-יחסיים+מרכאות-מעורבות · R-SITEMAP parity דו-כיווני · R-TRUTH מדדי-R74); verdict.structural חדש, overall=FAIL כולל מבני, --structural-only (exit 2, בלי קבלה)
+- 50-c כיול ×3: ריצה-1 תפסה 2 טעויות-כיול שלי (SVG self-closing, canonical-תיקיות); ריצה-2 חשפה רקבון-אמיתי בזנב: 5 סטאבים (hub/developers+hub/products×2, market×2) עם canonical יחסי, roast.html canonical=שורש במקום truth.html, `<account>` לא-מאוזן ב-hub/fact-sheet.html, index.html נעלם מ-sitemap.xml — הכל תוקן; ריצה-סופית findings=0 exit-0
+- 50-d landing.html → גמלה R58-סטייל → index.html (שכפול-hero מדויק); sitemap.xml: +index.html −landing; sitemap.html: −landing li, ספירה 8→7
+- 50-e agents/SELF-CHECKS.md — ספר-הוולידציה-העצמית: איך מריצים, ששת החוקים, גבולות-אמת, מקורות
+- workflow site-link-audit: paths +agents/site-auditor.mjs (שינוי-מציל = בדיקה-עצמית)
+- 50-f ריצה-מלאה חיה: PASS · pages=86 checked=167 findings=0 extBlocked=6 · structural 86 עמודים/26 סקריפטים/67 indexed/15 סטאבים; commit d7b1e69 → rebase try-2 → push OK; ls-remote e77312c=LOCAL ✓
+- 50-g דפדפן-חי: landing.html→meta-refresh→נחת על index.html ✓; hero רנדר + שבב "חי · נמדד לפני 46 דק׳" + 6 משטחים ✓; money.html truth-strip חי (sim-saos) ✓; sitemap.xml חי עם index ראשון ✓; מובייל 390px NO-HORIZONTAL-SCROLL ✓; אפס page-errors ✓
+
+Stage Summary:
+- דוקטרינת-מות-הסוכנים מקודדת בפועל: כל בדיקה-ידנית של גלים 47–49 הפכה חוק-מקודד שהאורגניזם מריץ על עצמו יומית+בכל-push עם קבלה חתומה — סוכן שעוזב לא משאיר חור
+- ריצת-הכיול הראשונה כבר הצדיקה את עצמה: 9 רקבונות-אמת בזנב האתר (hub/market/roast/sitemap) נתפסו ותוקנו באותו גל
+- הקבלה החיה: PASS 167/0; ה-IA: landing.html הגמלה ה-9, 86 עמודים — דלת אחת לכל שאלה
+- תיאום-תאומים: re-baseline חובה לפני claim (origin זז בלי הסנדבוקס — wallet R62+ נתבע ע"י תאום ונחסך עימות); לוח-המסלולים לעיל פתוח לעדכון
+- Deferred: תרגום-עיתון EN (תאומים), Identity playground, R-SCRIPT ל-module scripts (דפדפן=הבודק)
