@@ -712,7 +712,11 @@ export default function Home() {
             </Button>
             <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl font-bold tracking-tight sm:text-2xl">giant · מערכת-האמת</h1>
+              <h1 className="text-xl font-black tracking-tight sm:text-2xl">
+                <span className="text-gradient-brand" dir="ltr">giant</span>
+                <span className="mx-1.5 font-light text-muted-foreground/50">·</span>
+                מערכת-האמת
+              </h1>
               <Badge className="gap-1 bg-emerald-600 text-white hover:bg-emerald-600">
                 <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
                 הערוץ-האחד · בעלים ↔ ריבונות
@@ -772,13 +776,19 @@ export default function Home() {
               onClick={() => setView(item.id)}
               aria-current={view === item.id ? "page" : undefined}
               className={cn(
-                "flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors",
+                "group relative flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200",
                 view === item.id
                   ? "bg-emerald-600/10 font-semibold text-emerald-700 dark:text-emerald-400"
                   : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
               )}
             >
-              <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+              {view === item.id && (
+                <span
+                  className="absolute inset-y-2 start-0 w-0.5 rounded-full bg-gradient-to-b from-emerald-500 to-amber-400"
+                  aria-hidden="true"
+                />
+              )}
+              <item.icon className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
               {item.label}
             </button>
           ))}
@@ -794,7 +804,14 @@ export default function Home() {
           </div>
         </aside>
 
-        <main className="min-w-0 flex-1 space-y-6 px-4 py-6">
+        <main className="min-w-0 flex-1 px-4 py-6">
+        <motion.div
+          key={view}
+          className="space-y-6"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.28, ease: "easeOut" }}
+        >
         {view !== "channel" ? (
           renderView()
         ) : (
@@ -1350,6 +1367,7 @@ export default function Home() {
         )}
         </>
         )}
+        </motion.div>
       </main>
       </div>
 
@@ -1427,12 +1445,18 @@ export default function Home() {
                 }}
                 aria-current={view === item.id ? "page" : undefined}
                 className={cn(
-                  "flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors",
+                  "relative flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200",
                   view === item.id
                     ? "bg-emerald-600/10 font-semibold text-emerald-700 dark:text-emerald-400"
                     : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
                 )}
               >
+                {view === item.id && (
+                  <span
+                    className="absolute inset-y-2 start-0 w-0.5 rounded-full bg-gradient-to-b from-emerald-500 to-amber-400"
+                    aria-hidden="true"
+                  />
+                )}
                 <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
                 {item.label}
               </button>

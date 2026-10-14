@@ -16,6 +16,7 @@ import {
   Loader2,
   MessagesSquare,
   Network,
+  Palette,
   ScrollText,
   Sparkles,
   TrendingUp,
@@ -50,6 +51,37 @@ function fmtTime(iso: string | null): string {
     hour: "2-digit",
     minute: "2-digit",
   }).format(d);
+}
+
+/* count-up (60fps.design לקח: המספרים-האמיתיים-הם-העיצוב — והם-נכנסים-חיים) */
+function useCountUp(target: number, durationMs = 900): number {
+  const [val, setVal] = useState(() => (Number.isFinite(target) ? 0 : target));
+  useEffect(() => {
+    if (!Number.isFinite(target)) return; // ערך-לא-מספרי: המסך-יציג "—" דרך-fmtNum
+    let raf = 0;
+    const t0 = performance.now();
+    const step = (t: number) => {
+      const p = Math.min(1, (t - t0) / durationMs);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setVal(target * eased);
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [target, durationMs]);
+  return val;
+}
+
+function AnimatedNumber({ value, suffix }: { value: number; suffix?: string }) {
+  const v = useCountUp(value);
+  return (
+    <span className="tabular-nums">
+      {fmtNum(v)}
+      {suffix ? (
+        <span className="ms-1 text-[0.6em] font-semibold text-zinc-400">{suffix}</span>
+      ) : null}
+    </span>
+  );
 }
 
 /* ------------------------------- טיפוסים ------------------------------- */
@@ -155,19 +187,26 @@ export function MergeView({ onNavigate }: MergeViewProps) {
   const [fleet, setFleet] = useState<FleetState | null>(null);
   const [agreement, setAgreement] = useState<string | null>(null);
   const [agreeMeta, setAgreeMeta] = useState<{ repo: string; path: string } | null>(null);
+  const [designSrc, setDesignSrc] = useState<string | null>(null);
+  const [designMeta, setDesignMeta] = useState<{ repo: string; path: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [agreeOpen, setAgreeOpen] = useState(false);
+  const [designOpen, setDesignOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   const load = useCallback(async () => {
     setRefreshing(true);
     try {
-      const [estateRes, fleetRes, agreeRes] = await Promise.all([
+      const [estateRes, fleetRes, agreeRes, designRes] = await Promise.all([
         fetch("/api/estate/state", { cache: "no-store" }),
         fetch("/api/fleet/state", { cache: "no-store" }),
         fetch(
           "/api/git/content?repo=Sandbox&path=giant%2FMERGE-AGREEMENT.md",
+          { cache: "no-store" },
+        ),
+        fetch(
+          "/api/git/content?repo=Sandbox&path=giant%2FDESIGN-SOURCES.md",
           { cache: "no-store" },
         ),
       ]);
@@ -189,6 +228,18 @@ export function MergeView({ onNavigate }: MergeViewProps) {
         if (a.ok && a.content) {
           setAgreement(a.content);
           setAgreeMeta({ repo: a.repo ?? "Sandbox", path: a.path ?? "giant/MERGE-AGREEMENT.md" });
+        }
+      }
+      if (designRes.ok) {
+        const d = (await designRes.json()) as {
+          ok: boolean;
+          content?: string;
+          repo?: string;
+          path?: string;
+        };
+        if (d.ok && d.content) {
+          setDesignSrc(d.content);
+          setDesignMeta({ repo: d.repo ?? "Sandbox", path: d.path ?? "giant/DESIGN-SOURCES.md" });
         }
       }
       setError(null);
@@ -233,40 +284,48 @@ export function MergeView({ onNavigate }: MergeViewProps) {
   const totalBytes = estate.repos.reduce((s, r) => s + r.disk.bytes, 0);
   const issuedPct = Math.min(100, (estate.live.saosIssued / estate.live.saosCap) * 100);
 
-  const stats: Array<{ label: string; value: string; sub?: string; icon: React.ComponentType<{ className?: string }> }> = [
+  const stats: Array<{
+    label: string;
+    num?: number;
+    suffix?: string;
+    str?: string;
+    sub?: string;
+    icon: React.ComponentType<{ className?: string }>;
+  }> = [
     {
       label: "SAOS מנופק",
-      value: fmtNum(estate.live.saosIssued),
+      num: estate.live.saosIssued,
       sub: `מתוך ${fmtNum(estate.live.saosCap)} · ${issuedPct.toFixed(2)}%`,
       icon: Landmark,
     },
     {
       label: "נפח-24h אמת",
-      value: `${fmtNum(estate.live.vol24h)} USDS`,
+      num: estate.live.vol24h,
+      suffix: "USDS",
       sub: `${fmtNum(estate.live.trades24h)} עסקאות אמת`,
       icon: TrendingUp,
     },
     {
       label: "הצי",
-      value: `${fmtNum(estate.live.fleetActive)}/${fmtNum(estate.live.fleetAgents)}`,
+      str: `${fmtNum(estate.live.fleetActive)}/${fmtNum(estate.live.fleetAgents)}`,
       sub: fleet ? `${fmtNum(fleet.totalAllocated)} USDS תקציב-אמת` : undefined,
       icon: Bot,
     },
     {
       label: "לדג'ר-האמת",
-      value: fmtNum(estate.live.ledgerRows),
+      num: estate.live.ledgerRows,
       sub: "רישומי-משמרת",
       icon: ScrollText,
     },
     {
       label: "ערוץ-הריבון",
-      value: fmtNum(estate.live.messages),
+      num: estate.live.messages,
       sub: "הודעות-רשומות",
       icon: MessagesSquare,
     },
     {
       label: "האחוזה-נמדדה",
-      value: fmtNum(totalFiles),
+      num: totalFiles,
       sub: `קבצים · ${fmtBytes(totalBytes)} ב-${fmtNum(estate.repos.length)} ריפו-ים`,
       icon: Network,
     },
@@ -288,10 +347,13 @@ export function MergeView({ onNavigate }: MergeViewProps) {
         <div className="relative flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 text-lg font-black text-emerald-400" aria-hidden="true">
+              <span
+                className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-amber-300 text-lg font-black text-emerald-950 shadow-lg shadow-emerald-500/20"
+                aria-hidden="true"
+              >
                 G
               </span>
-              <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
+              <h2 className="text-2xl font-black tracking-tight text-white sm:text-4xl">
                 המיזוג-הגדול
               </h2>
               <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-400">
@@ -357,14 +419,14 @@ export function MergeView({ onNavigate }: MergeViewProps) {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: i * 0.05, ease: "easeOut" }}
-              className="rounded-xl border border-white/5 bg-[#0b100f] p-3.5"
+              className="card-lift rounded-xl border border-white/5 bg-[#0b100f] p-3.5 hover:border-emerald-500/30"
             >
               <div className="flex items-center gap-1.5 text-[11px] text-zinc-500">
                 <s.icon className="h-3.5 w-3.5 text-emerald-400" aria-hidden="true" />
                 {s.label}
               </div>
-              <div className="mt-1.5 text-xl font-bold tabular-nums leading-tight text-white sm:text-2xl">
-                {s.value}
+              <div className="mt-1.5 text-xl font-bold leading-tight text-white sm:text-2xl">
+                {s.num != null ? <AnimatedNumber value={s.num} suffix={s.suffix} /> : s.str}
               </div>
               {s.sub && <div className="mt-1 truncate text-[10px] text-zinc-500">{s.sub}</div>}
             </motion.div>
@@ -541,6 +603,53 @@ export function MergeView({ onNavigate }: MergeViewProps) {
               ) : (
                 <p className="py-6 text-center text-sm text-zinc-500">
                   קריאת-ההסכם-מהגיט-נכשלה — מדווח-כנה. ההסכם-עצמו-נחתם-בגיט-ושמור-ב-Sandbox/giant.
+                </p>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </section>
+
+      {/* ======== מקורות-העיצוב · נשמרים-חי-מהגיט ("שומרים" — הוראת-הבעלים) ======== */}
+      <section aria-label="מקורות-העיצוב" className="overflow-hidden rounded-2xl border border-amber-500/20 bg-[#0b100f]">
+        <button
+          className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-start transition-colors hover:bg-white/[0.03]"
+          onClick={() => setDesignOpen((v) => !v)}
+          aria-expanded={designOpen}
+        >
+          <span className="flex min-w-0 items-center gap-2">
+            <Palette className="h-4 w-4 shrink-0 text-amber-300" aria-hidden="true" />
+            <span className="truncate text-sm font-bold text-white">מקורות-העיצוב · עשרת-הרפרנסים של הבעלים</span>
+            {designMeta && (
+              <Badge variant="outline" className="shrink-0 font-mono text-[10px] text-zinc-500" dir="ltr">
+                git:{designMeta.repo}/{designMeta.path}
+              </Badge>
+            )}
+          </span>
+          <span className="flex shrink-0 items-center gap-2 text-[11px] text-zinc-500">
+            {designSrc ? "נשמר-בגיט · נקרא-חי" : "הקריאה-נכשלה"}
+            {designOpen ? (
+              <ChevronUp className="h-4 w-4" aria-hidden="true" />
+            ) : (
+              <ChevronDown className="h-4 w-4" aria-hidden="true" />
+            )}
+          </span>
+        </button>
+        {designOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            <div
+              className="max-h-[70vh] overflow-y-auto border-t border-white/5 px-4 py-2 text-zinc-300 [&_a]:text-emerald-300 [&_code]:text-emerald-300 [&_div.border]:border-white/10 [&_h1]:text-white [&_h2]:text-white [&_h3]:text-white [&_h4]:text-white [&_hr]:border-white/10 [&_li]:text-zinc-300 [&_ol]:text-zinc-300 [&_p]:text-zinc-300 [&_strong]:text-white [&_table]:text-zinc-300 [&_td]:text-zinc-300 [&_th]:bg-white/5 [&_th]:text-zinc-200 [&_ul]:text-zinc-300"
+              dir="rtl"
+            >
+              {designSrc ? (
+                <MarkdownView content={designSrc} />
+              ) : (
+                <p className="py-6 text-center text-sm text-zinc-500">
+                  קריאת-מסמך-מקורות-העיצוב-מהגיט-נכשלה — מדווח-כנה. המסמך-עצמו-נחתם-בגיט-ושמור-ב-Sandbox/giant.
                 </p>
               )}
             </div>
