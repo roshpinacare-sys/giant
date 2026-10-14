@@ -1446,3 +1446,37 @@ Stage Summary:
 - Domain live page reconnected to all feeds: one stray quote from a well-meaning typography wave had killed the whole measurement script; fixed, syntax-proven, deployed, browser-verified end-to-end.
 - New standing lesson recorded: automated glyph/text transformations must never run over code contexts without a parse-check afterward — 1 corrupted line out of 134 replacements was enough to blind every live card on the site.
 - Organism keeper meanwhile self-verified: tick cadence stable, status=ok, 13 repos, feeds written every 2 minutes.
+
+---
+Task ID: 41
+Agent: main (Z.ai Code, trace 1a13a5f23892b625)
+Task: ביקורת-אימות חיה מאפס של כל הטענות העומדות (דרישת-משתמש מפורשת: "90% מהטענות היו טעות בפועל")
+
+Work Log:
+- keeper: תהליך חי (bun --hot :3040), tick advancing 42→43→44, /health תקין
+- feeds: נקראו ונבדקו מול GitHub API עצמאי — 13 repos, כל ספירות-issues ו-push-ages תואמים בדיוק ל-potential.json
+- ops-forge "סתירה" הוכרעה בכנות: 2 אדומות ב-48h = היסטוריה קבועה ב-SHA ישנים (חוק re-run); 6 הסבבים המתוכננים ירוקים; קומיט-התיקון 2c2c939 עצמו רץ success ב-10:31Z — התיקון מאומת-חי
+- office-state נמדד 2.6h ותאם את ה-feed; dashboard מקומי מרנדר tick חי
+
+Stage Summary:
+- כל הטענות העומדות אומתו מדידה-חוזרת עצמאית; לא נמצא זיוף. פרט אחד תוקן במהלך: keeper מדד Pages-CDN ישן-כוזב (ר' Task 42)
+
+---
+Task ID: 42
+Agent: main (Z.ai Code, trace 1a13a5f23892b625)
+Task: חקירת "האתר של הדומיין לא מחובר למידע" — שורש, תיקון, אימות
+
+Work Log:
+- האתר הראשי (Domain/): כל 11 מקורות-המידע 200, פאנלים טריים, badge "המשדר פעולה" — חי לחלוטין
+- החדר (Domain/office3d/): לוח ה-feeds הציג פורמן אדום 2ש' + גיוס/מיזמים אפורים "—" → זה מה שנקרא "לא מחובר"
+- שורש 1: GitHub schedule-throttling — office-heartbeat (cron שעתי) ירה 3 פעמים ב-15h (21:31, 01:22-fail, 09:41); מאז 09:41 אף shift → office-state חצה את חוק-130 הדק׳ של החדר
+- שורש 2: אי-התאמת שדות — ה-bundle מחשב גיל רק מ-capturedAt/generatedAt; recruitment.json/ventures.json נושאים רק `at` → גיל null → "—"
+- שורש 3: חלון-דופק — office-pulse cron 20 דק׳ מושתק ל-~44 דק׳; התאומה מכסה רק מעל 35 דק׳ ובמשבצות :03/:33; חוק-החדר 30 דק׳
+- שורש 4 (התגלה בדרך): Pages CDN מציג עותק office-state בן 5 ש׳ בזמן ש-raw main טרי; raw.githubusercontent מחזיר text/plain ודרש parsing סלחני
+- תיקונים שנדחפו: Domain agents/recruit.cjs + agents/venture-desk.cjs (generatedAt לצד `at`, 15c1e48); FleetHQ office-heartbeat.yml (שורת-cron שנייה '13 */2 * * *', fd0ca2d)
+- keeper הורחב: מדידת office-state (מ-raw — אותו מקור שהחדר קורא) + דופק כל 120 שניות; חריגה מסף → dispatch אמיתי עם קירור (2.5h/2h פורמן, 32 דק׳/30 דק׳ דופק); הכל נרשם ב-feeds
+- ריפוי-חי: dispatch heartbeat 12:40Z → shift אמיתי → capturedAt 12:47:54, 38 משמרות; dispatch recruit → feeds עם generatedAt; dispatch office-pulse → דופק טרי
+
+Stage Summary:
+- מצב-סופי (אומת דפדפן): לוח החדר 5 ירוקים + הון צהוב-כן (בתוך חוק-95 שלו), verdict "צוות חי" ירוק; keeper tick #2 ok reasons-clean; console מרנדר חי
+- שאריות-כנות: GitHub throttling הסתברותי — הוקטן (2 שורות-cron + keeper-heal + תאומות-הצי) לא חוסל; run heartbeat עודף אחד (12:53) ישלים shift idempotent

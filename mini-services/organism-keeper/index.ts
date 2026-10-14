@@ -24,7 +24,23 @@ const OUT_STATE = path.join(ESTATE, "Sandbox", "state", "network-state.json");
 const OUT_POTENTIAL = path.join(ESTATE, "Sandbox", "ops", "office", "potential.json");
 const KEYS_FILE = "/home/z/.secrets/keys";
 const DEV_SERVER = "http://127.0.0.1:3000/";
-const OFFICE_STATE_URL = "https://roshpinacare-sys.github.io/FleetHQ/office-state.json";
+// מודדים את raw-main — אותו מקור בדיוק שהחדר והאתר הציבורי קוראים (נמדד 2026-10-14:
+// עותק ה-Pages CDN התעכב 5 ש׳ מאחורי raw וגרם ל-keeper לראות ישן-כוזב)
+const OFFICE_STATE_URL = "https://raw.githubusercontent.com/roshpinacare-sys/FleetHQ/main/office/state/office-state.json";
+const HEARTBEAT_DISPATCH_URL = `https://api.github.com/repos/${ORG}/FleetHQ/actions/workflows/office-heartbeat.yml/dispatches`;
+const PULSE_URL = "https://roshpinacare-sys.github.io/Domain/office/data.json";
+const PULSE_DISPATCH_URL = `https://api.github.com/repos/${ORG}/Domain/actions/workflows/office-pulse.yml/dispatches`;
+// חוק-הטריות של חדר-המשרד לפיד הפורמן הוא 130 דק׳ (2.17 ש׳, נמדד מה-bundle);
+// GitHub מדלג על הרצות-cron באופן הסתברותי (נמדד 2026-10-14: 3 הרצות-schedule ב-15 ש׳),
+// אז ה-keeper מרפא: חריגה מהסף → dispatch אמיתי של office-heartbeat, עם קירור.
+const HEAL_THRESHOLD_H = 2.5;
+const HEAL_COOLDOWN_MS = 2 * 3600_000;
+// הדופק (office/data.json): חוק-החדר 30 דק׳, התאומה של הצי נכנסת רק מעל 35 דק׳ ובמשבצות :03/:33 —
+// ה-keeper סוגר את חלון-הביניים: מעל 32 דק׳ → dispatch של office-pulse (הכותב המקורי, keyless same-repo).
+const PULSE_THRESHOLD_MIN = 32;
+const PULSE_COOLDOWN_MS = 30 * 60_000;
+let lastHealDispatch: string | null = null;
+let lastPulseDispatch: string | null = null;
 
 let tickCount = 0;
 let lastTick: string | null = null;
@@ -72,7 +88,19 @@ async function jfetch(url: string, token: string | null, timeoutMs = 10_000): Pr
         ? { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" }
         : { Accept: "application/vnd.github+json" },
     });
-    const json = res.headers.get("content-type")?.includes("json") ? await res.json() : null;
+    // raw.githubusercontent מחזיר text/plain גם ל-JSON תקני — מפענחים לפי תוכן, לא רק לפי כותרת
+    let json: unknown = null;
+    const ct = res.headers.get("content-type") ?? "";
+    if (ct.includes("json")) {
+      json = await res.json();
+    } else {
+      try {
+        const text = await res.text();
+        json = text.length > 0 && (text[0] === "{" || text[0] === "[") ? JSON.parse(text) : null;
+      } catch {
+        json = null;
+      }
+    }
     return { ok: res.ok, status: res.status, json, err: null };
   } catch (e) {
     return { ok: false, status: null, json: null, err: e instanceof Error ? e.message.slice(0, 120) : "fetch-error" };
@@ -159,6 +187,58 @@ async function measure() {
     }
   }
 
+  // 3-b) self-heal: office-state past the room's freshness law → real dispatch
+  let healDispatchedThisTick: string | null = null;
+  if (officeAgeH !== null && officeAgeH > HEAL_THRESHOLD_H && token) {
+    const cooled = !lastHealDispatch || Date.now() - Date.parse(lastHealDispatch) > HEAL_COOLDOWN_MS;
+    if (cooled) {
+      const res = await fetch(HEARTBEAT_DISPATCH_URL, {
+        method: "POST",
+        cache: "no-store",
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" },
+        body: JSON.stringify({ ref: "main" }),
+      });
+      if (res.status === 204) {
+        lastHealDispatch = new Date().toISOString();
+        healDispatchedThisTick = lastHealDispatch;
+        reasons.push(`office-state בן ${officeAgeH} ש׳ (מעבר לחוק 130 הדק׳ של החדר) — office-heartbeat הופעל ב-dispatch אמיתי לריפוי הפיד`);
+      } else {
+        reasons.push(`heal-dispatch נכשל (status=${res.status}) — לא מזויף כהצלחה`);
+      }
+    }
+  }
+
+  // 3-c) pulse freshness + self-heal (חוק-החדר 30 דק׳; התאומה של הצי מכסה רק מעל 35 דק׳)
+  let pulseAgeMin: number | null = null;
+  let pulseDispatchedThisTick: string | null = null;
+  {
+    const pf = await jfetch(PULSE_URL, null);
+    if (pf.ok && pf.json && typeof pf.json === "object") {
+      const h = hoursSince((pf.json as Record<string, unknown>).generatedAt);
+      pulseAgeMin = h === null ? null : Math.round(h * 60);
+    } else {
+      reasons.push(`office/data.json לא נטען (status=${pf.status ?? "?"} ${pf.err ?? ""})`);
+    }
+    if (pulseAgeMin !== null && pulseAgeMin > PULSE_THRESHOLD_MIN && token) {
+      const cooled = !lastPulseDispatch || Date.now() - Date.parse(lastPulseDispatch) > PULSE_COOLDOWN_MS;
+      if (cooled) {
+        const res = await fetch(PULSE_DISPATCH_URL, {
+          method: "POST",
+          cache: "no-store",
+          headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" },
+          body: JSON.stringify({ ref: "main" }),
+        });
+        if (res.status === 204) {
+          lastPulseDispatch = new Date().toISOString();
+          pulseDispatchedThisTick = lastPulseDispatch;
+          reasons.push(`דופק office/data.json בן ${pulseAgeMin} דק׳ (מעבר לחוק 30) — office-pulse הופעל ב-dispatch אמיתי לריפוי`);
+        } else {
+          reasons.push(`pulse-dispatch נכשל (status=${res.status}) — לא מזויף כהצלחה`);
+        }
+      }
+    }
+  }
+
   // 4) dev server health
   let devUp: boolean | null = null;
   {
@@ -174,8 +254,19 @@ async function measure() {
       topActions.push(`${r.repo}: ${r.reds_48h} הרצות אדומות ב-48 שעות — בדיקת-שורש וטיפול`);
     }
   }
-  if (officeAgeH !== null && officeAgeH > 12) {
-    topActions.push(`הזנת office-state מיושנת (${officeAgeH} ש׳) — בדיקת חלון-המשרד והפעלת-האפייה מחדש`);
+  if (officeAgeH !== null && officeAgeH > 2.2) {
+    topActions.push(
+      healDispatchedThisTick
+        ? `הזנת office-state מיושנת (${officeAgeH} ש׳) — keeper כבר הפעיל office-heartbeat בריפוי (${healDispatchedThisTick})`
+        : `הזנת office-state מיושנת (${officeAgeH} ש׳) — בדיקת חלון-המשרד והפעלת-האפייה מחדש`
+    );
+  }
+  if (pulseAgeMin !== null && pulseAgeMin > 30) {
+    topActions.push(
+      pulseDispatchedThisTick
+        ? `דופק המשרד מיושן (${pulseAgeMin} דק׳) — keeper כבר הפעיל office-pulse בריפוי (${pulseDispatchedThisTick})`
+        : `דופק המשרד מיושן (${pulseAgeMin} דק׳) — הפעלת office-pulse מחדש`
+    );
   }
   if (devUp === false) {
     topActions.push("שרת-הפיתוח של הקונסולה לא מגיב — הפעלה מחדש של next-dev");
@@ -184,7 +275,7 @@ async function measure() {
     topActions.push("אין פעולות דחופות — המערך ירוק, ההזנות טריות והשרת חי (נמדד בטיק זה)");
   }
 
-  return { repoRows, officeAgeH, officeOk, devUp, orgOk, reasons, topActions };
+  return { repoRows, officeAgeH, officeOk, devUp, orgOk, reasons, topActions, healDispatchedThisTick, pulseAgeMin, pulseDispatchedThisTick };
 }
 
 /* ---------------------------------- writers ---------------------------------- */
@@ -223,6 +314,15 @@ async function tick() {
         devServer: m.devUp === true ? "up" : m.devUp === false ? "down" : "unknown",
       },
       officeStateAgeH: m.officeAgeH,
+      pulseAgeMin: m.pulseAgeMin,
+      heal: {
+        lastHeartbeatDispatchAt: lastHealDispatch,
+        heartbeatDispatchedThisTick: m.healDispatchedThisTick,
+        lastPulseDispatchAt: lastPulseDispatch,
+        pulseDispatchedThisTick: m.pulseDispatchedThisTick,
+        thresholdH: HEAL_THRESHOLD_H,
+        pulseThresholdMin: PULSE_THRESHOLD_MIN,
+      },
     },
     machines: [
       { name: "organism-keeper", kind: "keeper", status: "up", tick: tickCount },
