@@ -1603,3 +1603,22 @@ Work Log:
 Stage Summary:
 - הלנדינג עכשיו ענקים-כיתה: נקי, אפס-בלאגן, פס-הוכחה חי, כל משטח במקום אחד וברור — והקונסולה-הצפופה נשמרה כמשטח מוצר נפרד (console.html) בלי לשבור שום דבר
 - Deferred: איחוי giants/versus/standard; sitemap.html רשימת console.html (קוסמטי)
+
+---
+Task ID: 49
+Agent: main (Z.ai Code, trace 1a13b61c7dee5c2d)
+Task: "עדיין בלאגן" שלישי — אבחון-ראייה (צילום-מסך) + הוצאת-ה-deferred לפועל: איחוי-IA של הגמלאים
+
+Work Log:
+- אבחון: צילום-מסך של הלנדינג החדש = מקצועי ונקי → ה"בלאגן" שנותר הוא ה-sprawl (25 עמודי-שורש) — בדיוק ה-deferred של 47/48. נמצא גם site-audit:FAIL (045e9fe) — console.html 404 = race של Pages-deploy (עבר מעצמו, 200 בבדיקה חיה), לא שבר
+- חקירת קישורים-נכנסים ל-9 מועמדים → מפת-גמלאות בטוחה. תקדים-הבית R58 (roast.html): גמלה = stub-הפניה עם URL חי → כל הקישורים מ-console.html השמורה ומכל שאר האתר ממשיכים לעבוד בלי לגעת בקובץ-אחד
+- 7 גמלות R59 (אותו עיצוב-בית, noindex, meta-refresh, סיבה ב-HE+EN): giant-standard+versus+readiness→giants.html · standard+gate→console.html · sovereign→truth.html · acid→products.html
+- products.html: קישורים ישירים ליעדים-חיים (standard→console, sovereign→truth, gate→console); sitemap.xml: −7 URLs (ET.parse OK); sitemap.html: −7 li + ספירות 9→4/8→7/2→1, residual: none
+- בדיקות: איזון-תגיות OK (products/sitemap.html/7 סטאבים); commit 2d64162 push OK try-1 (ls-remote b2eda9d=HEAD)
+- דפדפן-חי: versus.html → meta-refresh → נחת על giants.html (ליגת-החזית) ✓
+- site-audit: receipt חדש 17:11:10Z — **findings: 0, checked: 184** (היה FAIL) — פני-השטח הציבורי נסרק נקי מקישור-מת
+
+Stage Summary:
+- 25 עמודי-שורש → 18 משטחים אמיתיים + 7 גמלות-הפניה חיות: ה-IA מתנהג כמו ענקים (דלת אחת לכל נושא, אפס כפילויות) בלי שום קישור-שבור בשרשרת
+- קבלת-ה-audit ירוקה; הלנדינג, הקונסולה, הכסף, הארנק — כולם באותו דור-ממשק אחד
+- Deferred נותר: תרגום-העיתון ל-EN, Identity playground, sitemap.html +console.html (קוסמטי)
