@@ -1,40 +1,44 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { GiantsView } from "@/components/giant/GiantsView";
 import { ChannelView } from "@/components/giant/ChannelView";
 import { DexView } from "@/components/giant/DexView";
 import { WalletView } from "@/components/giant/WalletView";
 import { DeskView } from "@/components/giant/DeskView";
 import { LedgerView } from "@/components/giant/LedgerView";
 import { ProductsView } from "@/components/giant/ProductsView";
+import { PulseView } from "@/components/giant/PulseView";
 import { OfficeView } from "@/components/giant/OfficeView";
+import { ShieldCheck } from "lucide-react";
 
-/* ═══ GIANT — מערכת-האמת של הריבונות ═════════════════════════════════════
- * הפלטפורמה-המאוחדת · ערוץ-אחד · אפס-כפילויות · תקן-ענקים (R360/#42):
- * · ליגת-הענקים = הדלת-הראשית: כל-מי-שמייצר-היום-ב-DeFi מולנו, נמדד-חי (R75).
- * · הערוץ = הדלת-הראשית-לבעלים: בעלים ↔ ריבונות, זרמי-גיט קנוניים, קומיט-ישיר.
- * · הדקס = מרכז-הכובד: שטח-מסחר על מצב-המנוע מהגיט (נרות · ווליום-כנות).
- * · הארנק = 20 חשבונות-אמת · השולחן = מנדט+equity · הרישום = כל-ההחלטות.
- * · המוצרים = קטלוג-אמת · המשרד-החי = המשרד-היחיד.
- * מפתח-מנהל (headcorner) פותח-הכל. הכל נמדד-חי מהגיט; אפס-ירוק-מזויף. */
+/* ═══ GIANT — מערכת-האמת של הריבונות (R360 · מיזוג-צי T55) ═══════════════
+ * מיזוג-הליינים: שטח-מסחר+נרות+ארנק+שולחן+רישום+מוצרים (התאומים) ∪
+ * ליגת-ענקים+דופק-אמת+משרד-חי+שער-headcorner (הליין-החי).
+ * משטח-אחד-לכל-יכולת · ערוץ-אחד · אפס-כפילויות · הכל נמדד-חי מהגיט. */
 
-type ViewId = "giants" | "channel" | "dex" | "wallet" | "desk" | "ledger" | "products" | "office";
+type ViewId = "dex" | "channel" | "wallet" | "desk" | "ledger" | "products" | "pulse" | "office";
 
+/* סדר-הפתיחה (T55): הדקס ראשון — הכסף הוא הפנים-של-המערכת; הערוץ הדלת-הראשית אחריו. */
 const NAV: Array<{ id: ViewId; label: string; he: string }> = [
-  { id: "giants", label: "ליגת-הענקים", he: "כל-מי-שמייצר-היום ב-DeFi מולנו · משטחי-הצי" },
+  { id: "dex", label: "הדקס", he: "מרכז-הכובד: נרות · ליגת-ענקים · ווליום" },
   { id: "channel", label: "הערוץ", he: "הדלת-הראשית: בעלים ↔ ריבונות" },
-  { id: "dex", label: "הדקס", he: "שטח-מסחר: נרות · ווליום · pools" },
-  { id: "wallet", label: "הארנק", he: "20 חשבונות-אמת מהמנוע" },
+  { id: "wallet", label: "הארנק", he: "חשבונות-אמת מהמנוע" },
   { id: "desk", label: "השולחן", he: "מנדט · equity · אסטרטגיות" },
   { id: "ledger", label: "הרישום", he: "כל-ההחלטות · חיפוש" },
   { id: "products", label: "המוצרים", he: "קטלוג-אמת · סטטוסים-כנים" },
+  { id: "pulse", label: "הדופק", he: "מערכת-האמת: שערים · זרמים · טביעות" },
   { id: "office", label: "המשרד-החי", he: "המשרד-היחיד של הריבונות" },
 ];
 
+interface TruthChip {
+  verdict: string | null;
+  ageMinutes: number | null;
+}
+
 export default function Home() {
-  const [view, setView] = useState<ViewId>("giants");
+  const [view, setView] = useState<ViewId>("dex");
   const [clock, setClock] = useState("");
+  const [truth, setTruth] = useState<TruthChip | null>(null);
 
   useEffect(() => {
     const tick = () => setClock(new Date().toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
@@ -43,7 +47,27 @@ export default function Home() {
     return () => clearInterval(iv);
   }, []);
 
+  useEffect(() => {
+    let alive = true;
+    const load = async () => {
+      try {
+        const res = await fetch("/api/giant/pulse", { cache: "no-store" });
+        const d = (await res.json()) as { truth?: { verdict: string | null } | null; truthMeta?: { ageMinutes: number | null } };
+        if (alive) setTruth({ verdict: d.truth?.verdict ?? null, ageMinutes: d.truthMeta?.ageMinutes ?? null });
+      } catch {
+        /* הדופק עצמו יציג-כשל-כנה */
+      }
+    };
+    load();
+    const iv = setInterval(load, 60_000);
+    return () => {
+      alive = false;
+      clearInterval(iv);
+    };
+  }, []);
+
   const active = NAV.find((n) => n.id === view);
+  const truthGreen = truth?.verdict?.includes("GREEN") ?? false;
 
   return (
     <div className="flex min-h-dvh flex-col bg-zinc-950 text-zinc-100">
@@ -53,29 +77,40 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-600 font-black text-zinc-950" aria-hidden>G</span>
             <div>
-              <h1 className="text-base font-black leading-5">GIANT <span className="text-amber-500">·</span> מערכת-האמת</h1>
+              <h1 className="text-base font-black leading-5">
+                GIANT <span className="text-amber-500">·</span> מערכת-האמת
+              </h1>
               <p className="hidden text-[10px] leading-3 text-zinc-500 sm:block">הפלטפורמה-המאוחדת של הריבונות · ערוץ-אחד · אפס-כפילויות</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="hidden items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/5 px-2.5 py-1 text-[10px] font-bold text-emerald-400 sm:flex">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" aria-hidden />
+          <div className="flex items-center gap-2.5">
+            {truth && (
+              <span
+                className={`hidden items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold sm:flex ${truthGreen ? "border-emerald-500/25 bg-emerald-500/5 text-emerald-400" : "border-zinc-700 bg-zinc-900 text-zinc-400"}`}
+                title={truth.verdict ? `truth-gate: ${truth.verdict}` : "truth-gate לא נמדד"}
+              >
+                <ShieldCheck className="h-3 w-3" aria-hidden />
+                truth-gate: {truth.verdict ?? "לא-נמדד"}
+              </span>
+            )}
+            <span className="flex items-center gap-1.5 rounded-full border border-amber-500/25 bg-amber-500/5 px-2.5 py-1 text-[10px] font-bold text-amber-400">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-500" aria-hidden />
               ריבונות חיה · 24/7
             </span>
-            <span className="font-mono text-xs text-zinc-500" aria-label="שעון-המערכת">{clock}</span>
+            <span className="hidden font-mono text-xs text-zinc-500 md:inline" aria-label="שעון-המערכת">{clock}</span>
           </div>
         </div>
       </header>
 
       {/* ═══ גוף: ניווט-צד (מחשב) + תוכן ═══ */}
       <div className="mx-auto flex w-full max-w-7xl flex-1 gap-5 px-4 py-5" dir="rtl">
-        <nav aria-label="מודולי-המערכת" className="hidden w-60 shrink-0 flex-col gap-1 md:flex">
+        <nav aria-label="מודולי-המערכת" className="hidden w-60 shrink-0 flex-col gap-1.5 md:flex">
           {NAV.map((n) => (
             <button
               key={n.id}
               onClick={() => setView(n.id)}
               aria-current={view === n.id ? "page" : undefined}
-              className={`rounded-xl border px-4 py-2.5 text-right transition ${
+              className={`rounded-xl border px-4 py-3 text-right transition ${
                 view === n.id
                   ? "border-amber-600/40 bg-amber-500/[0.06] text-zinc-100"
                   : "border-white/5 bg-zinc-900/40 text-zinc-400 hover:border-white/15 hover:text-zinc-200"
@@ -86,43 +121,53 @@ export default function Home() {
             </button>
           ))}
           <div className="mt-4 rounded-xl border border-white/5 bg-zinc-900/40 p-4 text-[10px] leading-5 text-zinc-500">
-            <b className="text-zinc-400">מפתח-מנהל (headcorner)</b> פותח-הכל: הערוץ, עמדת-המפעיל והניהול.
-            המערכת לעולם אינה גמורה — האוטונומיה בודקת, מתקנת, בונה, משפרת, פורצת דרך.
+            <b className="text-zinc-300">מפתח-מנהל (headcorner)</b> פותח-הכל: הכרעות · הוראות · קול-הריבונות.
+            המערכת לעולם אינה גמורה — האוטונומיה בודקת, מתקנת, בונה, משפרת, פורצת-דרך.
+          </div>
+          <div className="rounded-xl border border-white/5 bg-zinc-900/40 p-4 text-[10px] leading-5 text-zinc-600">
+            זרמי-האמת: <span className="font-mono text-zinc-500">Domain/dex</span> · <span className="font-mono text-zinc-500">Pulse/sovereign-channel</span> · <span className="font-mono text-zinc-500">FleetHQ/office</span>
           </div>
         </nav>
 
-        <main className="min-w-0 flex-1 pb-20 md:pb-0">
+        <main className="min-w-0 flex-1 pb-24 md:pb-4">
           <div className="mb-3 md:hidden" dir="rtl">
             <p className="text-xs font-bold text-zinc-300">{active?.label}</p>
             <p className="text-[10px] text-zinc-500">{active?.he}</p>
           </div>
-          {view === "giants" && <GiantsView />}
-          {view === "channel" && <ChannelView />}
           {view === "dex" && <DexView />}
+          {view === "channel" && <ChannelView />}
           {view === "wallet" && <WalletView />}
           {view === "desk" && <DeskView />}
           {view === "ledger" && <LedgerView />}
           {view === "products" && <ProductsView />}
+          {view === "pulse" && <PulseView />}
           {view === "office" && <OfficeView />}
         </main>
       </div>
 
-      {/* ═══ ניווט-תחתון (נייד) — גליל-אופקי ═══ */}
+      {/* ═══ ניווט-תחתון (נייד) ═══ */}
       <nav
         aria-label="מודולי-המערכת (נייד)"
-        className="fixed inset-x-0 bottom-0 z-40 flex overflow-x-auto border-t border-white/10 bg-zinc-950/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 flex border-t border-white/10 bg-zinc-950/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
         dir="rtl"
       >
-        {NAV.map((n) => (
+        {NAV.slice(0, 5).map((n) => (
           <button
             key={n.id}
             onClick={() => setView(n.id)}
             aria-current={view === n.id ? "page" : undefined}
-            className={`min-h-[44px] flex-1 whitespace-nowrap px-3 py-2 text-center text-xs font-bold transition ${view === n.id ? "text-amber-500" : "text-zinc-500"}`}
+            className={`min-h-[44px] flex-1 py-2 text-center text-xs font-bold transition ${view === n.id ? "text-amber-500" : "text-zinc-500"}`}
           >
             {n.label}
           </button>
         ))}
+        <button
+          onClick={() => setView(view === "office" ? "dex" : "office")}
+          aria-label="עוד-מודולים"
+          className={`min-h-[44px] flex-1 py-2 text-center text-xs font-bold transition ${view === "office" ? "text-amber-500" : "text-zinc-500"}`}
+        >
+          {view === "office" ? "◀ הדקס" : "עוד ▶"}
+        </button>
       </nav>
 
       {/* ═══ תחתית-המערכת (דביקה) ═══ */}
@@ -132,9 +177,7 @@ export default function Home() {
           <span className="hidden sm:inline">· הריבונות מפעילה-הכל; הגיט הוא שכבת-הקיום; המערכת מתפתחת לנצח</span>
         </div>
         <div className="flex items-center gap-3">
-          <a className="transition-colors hover:text-amber-500" href="https://roshpinacare-sys.github.io/Domain/marketing/" target="_blank" rel="noreferrer">המוצרים</a>
-          <a className="transition-colors hover:text-amber-500" href="https://roshpinacare-sys.github.io/Pulse/sovereign.html" target="_blank" rel="noreferrer">המשטח-הסטטי</a>
-          <a className="transition-colors hover:text-amber-500" href="https://github.com/roshpinacare-sys" target="_blank" rel="noreferrer">GitHub</a>
+          <span className="font-mono text-[10px] text-zinc-600">SAOS-SOVEREIGN-CHANNEL/1 · R360 · R74</span>
         </div>
       </footer>
     </div>
