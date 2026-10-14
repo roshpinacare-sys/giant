@@ -1342,3 +1342,23 @@ Stage Summary:
 - Four false-red/false-alarm classes killed by measurement (phantom report path, verdict conflation, brake-as-red double counting, undiagnosable vault book) and one real self-inflicted regression healed with consecutive-success receipts.
 - The remaining 2 reds are both HONEST: one resolves mechanically on the runner's next beat (code already pushed + selftest-proven), one needs exactly one operator action that the estate cannot take by law (pass material off-repo) — documented with a self-diagnosing book so the next run proves the diagnosis.
 - The estate's own sentinel/pacemaker patterns now carry the Domain arteries without platform-clock dependence; the sandbox-down and twin-audit issues remain triage's territory by design.
+---
+Task ID: 36
+Agent: Continuation agent (IM trace 1a138655343fc711 "תמשיך תטפל גם באדום שנשאר")
+Task: Handle the remaining red across the whole roshpinacare-sys org (user-approved: "find more solutions, optimize, fix"), then a systematic optimization pass.
+
+Work Log:
+- FULL-ORG RED SWEEP (13 repos via Actions API): every failing workflow was triaged to root cause:
+  (a) FleetHQ/office-heartbeat (01:22/01:37/02:00Z) — already root-fixed by the 9b9d027→96ac0b4→22dc0b8 chain (Task 35); verified 3 consecutive greens post-fix (02:23/02:37/02:40Z). No action.
+  (b) FleetHQ/identity-patrol ×4 + office-ci ×1 (Oct 13 evening) — self-recovered since 23:06Z, all green. No action.
+  (c) Autonomy/sovereign-state 02:50Z — leak-scan gate blocked REGISTRY.json:177,394 (key-pointer strings in `where`/`note` fields, exit 123 via xargs). Source fix b45dde0 already landed 02:56Z; verified clean locally (node engine/leak-scan.mjs → exit 0) + post-fix run 03:04:16Z SUCCESS + chain re-dispatching. Secret discipline kept: field shapes inspected with values redacted, no key material ever printed.
+  (d) sovereign-lighthouse/lighthouse-pulse ×8 (Oct 13 08:00–10:30Z) — NameError 're' not defined in scrub_text; import re already landed (all runs green since 20:00Z, schedule 13,43 cron firing). No action.
+  (e) ops-forge/forge ×2 (Oct 12) — recovery run 23:48Z green, everything since green. Historical UI red, immutable history, honest.
+- NODE20→NODE24 RUNTIME BUMP (the optimization pass): GitHub deprecation warnings across the fleet ("Node.js 20 is deprecated... forced to run on Node.js 24" on every checkout/setup-node step). Inventory: 203×checkout@v4, 139×setup-node@v4, 3×setup-python@v5, 6×upload-artifact@v4, 2×cache@v4, 1×download-artifact@v4 (354 usages / 12 repos). Release notes VERIFIED before choosing targets: checkout v5.0.0 = pure node24 runtime (runner ≥2.327.1, GH-hosted auto-current); setup-node v5.0.0 = pure runtime; setup-python v6.0.0, upload-artifact v5.0.0, cache v5.0.0 = pure runtime; download-artifact v5 = by-name pattern download only (our single usage is `pattern:` based → safe). Deliberately NOT jumping to v6/v7/v8 (checkout v6 credential-file change, v7 fork-PR block, setup-node v5+/v6 auto-cache behavior) — smallest change that solves the problem on an autonomous fleet. oven-sh/setup-bun@v2 already latest, untouched.
+- ROLLOUT: 12 repos bumped (~185 workflow files), commits tagged [skip ci] to avoid a 12-repo CI storm; push-reject→rebase retry logic in /home/z/estate/bump-actions.sh; steem discovered as a 13th repo missing from the org list query — bumped too (4 files); roshpinacare-sys.github.io has zero workflows (nothing to do); Domain office-pulse.yml.pre-immune-system.bak left untouched (backup archaeology, GitHub ignores it — falsifying history for cosmetics is wrong).
+- VERIFICATION: post-bump sweep 36+ runs across 11 repos = 0 failures; GridWatch identity-guard post-bump log grep = 0 Node20 deprecation warnings, actions/checkout@v5 live in the log; final org sweep = 0 active failures anywhere (only ops-forge's 2 historical Oct-12 entries remain, unfixable by design).
+
+Stage Summary:
+- Org red count: every active red eliminated or already healed-and-verified; the only remaining red marks on the Actions UI are immutable historical entries (ops-forge Oct 12), with their recovery runs green on record.
+- Fleet-wide Node20 deprecation debt retired in one verified pass: 12 repos, ~185 workflow files, 354 action-ref bumps, zero behavior change (majors chosen per release notes, not per latest-version reflex), zero post-bump failures, deprecation warnings confirmed gone from live run logs.
+- The 840s chain-sleep design in Autonomy sovereign-state was inspected and intentionally left alone: it is the state-slot chain semantics, not waste; touching sovereignty mechanics for minutes-savings is not a trade this estate should make.
