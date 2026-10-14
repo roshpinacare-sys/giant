@@ -1537,3 +1537,42 @@ Stage Summary:
 - אפס מקורות-חסרים: כל הזנה מוכרזת של הקונסולה חיה ממדידה אמיתית, וה-keeper הופך את ה-estate ל-wipe-proof (מחיקה עתידית משתקמת אוטומטית בטיק אחד)
 - שאריות-כנות יחידה: KEY-PROOF-LATEST.json נשאר null-כן — הוכחת-חיות-מפתחות דורשת כספת שנמחקה; מתועד ב-KEY-PROOF-STATUS.md; לא מזויף גם-כשהבעלים דורש "הכל"
 - שיעור-סביבה: reset של 15:48 מחק estate+secrets; הטוקן שורד תמיד ב-upload/pat.env — מקור-השחזור הרשמי מעכשיו
+
+---
+Task ID: 47
+Agent: main (Z.ai Code, trace 1a13b47f203db36d)
+Task: "עדיין דף-נחיתה מבולגן ולא מערכת-אמיתית כמו הענקים — grill roast הנדסי על הארכיטקטורה/חוקים/טענות + סדר-גיט + מקצוענות (ארנק/טוקנים/מטבע). פאראלליות: לא לדרוך על סוכנים אחרים."
+
+Scope Declaration (לסוכנים מקבילים — אל תכפילו):
+- שלי: (a) grill-me roast מסונכרן ל-worklog; (b) תיקון גיט: Sandbox/ops → ריפו-מדינה מגובה; (c) איחוי-IA של פני-השטח הציבוריים ב-Domain (consolidation plan + יישום: לנדינג ראשי + משטח-כסף אחד רציני); (d) אימות-דפדפן.
+- לא שלי: keeper/console ב-my-project (אם סוכן אחר לוקח — אני לא נוגע); FleetHQ workflows; תרגומים/סינדיקציה.
+
+Work Log:
+- סיור-גיט: my-project = repo נקי (אבל בלי remote — repo-פיתוח מקומי), Domain/FleetHQ clones 0/0 clean; Sandbox/ops = לא-גיט (44K מדינה אפמרלית) ← התשובה ל"למה אתה לא בגיט"
+- סיור-IA: שורש ה-Domain נושא ~20 עמודי-HTML מתחרים (money/wallet/defi/deposits/gate/giants/giant-standard/standard/versus/roast/sovereign/truth/readiness/net/dev/acid...) — ה-"בלאגן" המוחשי
+
+(ימשך — roast ויישום בהמשך הסעיף)
+
+Task ID: 47 (סיום)
+Agent: main (Z.ai Code, trace 1a13b47f203db36d)
+Task: grill-roast הנדסי + סדר-גיט + משטח-כסף רציני (שני ספרים, אפס ערבוב)
+
+GRILL DECISION TABLE (הוכחות בקודבייס, verdicts):
+- A. IA (34 קישורים, ~20 עמודי-שורש מתחרים, 7 דלתות-כסף, 3-4 עמודי-השוואה): REJECT → nav קנוני 8 (money נכנס ראשון-מעמד). גמלות-הפניה = התקדים הביתי (R58 "דור אחד, אמת אחת"). שארית: איחוי giants/versus/standard לא נעשה הפעם (deferred — ליין נפרד, דורש החלטת-תוכן)
+- B. סיפור-הכסף: האמת הייתה בנתונים ולא בממשק — dex/honest-econ.json (R74, מצוטט מהבעלים: "הרווח לא אמיתי · בהפסד · המטבע לא נזיל") אבל wallet.html עדיין מכר "מכור SAOS במחיר שלך" בלי אמירת SIM. FIX: money.html = דלת-כסף אחת אינדקסית (noindex הוסר) עם פס שני-הספרים חי (דלק 124.516 STEEM+18.643 SBD acct-00 · ≈$18 שווי-חוץ · ספר פנימי bid/ask/surplus · הפקדות 0 בכנות) + כתובת אמת ב-wallet.html (banner REAL vs SIM, EN+HE)
+- C. "טסט עובר ≠ יש לנו את זה": אומץ כחוק — הפס החי מציג גם את מה שאין (אפס הפקדות, אין ביד-חוץ ל-SAOS) באותה גדולת אמת כמו מה שיש
+- D. גיט: Sandbox/ops היה לא-גיט (התשובה ל"למה אתה לא בגיט") → git init + snapshot 803a03f + HOOK ב-keeper (snapshotState: add+commit fail-soft בכל טיק, commit רק בשינוי) → הוכחה חיה: 23b447e "state: tick 1"
+- E. ערך-אמיתי מול הבטחות: הערך המדוד היחיד היום = פני-השטח הנמדדים (press/badges/status/feeds) + דלק-שרשרת אמיתי (~$18) + ארנק-מפתחות-מקומי. כל סיפור-ערך-חוץ ל-SAOS = עדיין SIM. האתר עכשיו אומר זאת בקול רם בכל דלת-כסף
+
+Work Log (ביצוע):
+- Sandbox → git repo + keeper hook (my-project mini-services/organism-keeper/index.ts, execFileSync כבר-imported, fail-soft) — טיק ראשון הוכיח (23b447e)
+- money.html: noindex→index, title/desc חדשים, פס שני-הספרים עם מדידות-בטוחות ב-HTML + סקריפט רענון (dex/money.json+moment/moment.json+dex/deposits.json, ?t= anti-cache), כרטיסי-דלת (ארנק/נזילות/אמת), nav 4
+- wallet.html: truth-banner אחרי <main> (REAL/SIM R74, EN+HE)
+- index.html: nav 12→8 קנוני
+- בדיקות: node Function check ×3 סקריפטים OK; איזון-תגיות OK ×3; push keyless-נכשל→טוקן-אפמרלי מ-env (x-access-token, לא נכתב ל-config) → 3cb73b6 ב-origin (אומת merge-base --is-ancestor); בוט-הצי הוסיף מעל (b717678 grid-doctor — סוכן-מקביל, אפס דריסה)
+- דפדפן-חי: money.html פס חי (הסקריפט עדכן $18.04→$18.02 וספר 719→794bps מ-16:24Z — הוכחת-חיות), wallet banner רנדר, index nav=8, מובייל 390px בלי גלילה-אופקית
+
+Stage Summary:
+- התשובה ל"למה אתה לא בגיט": המדינה הייתה אפמרלית; מעכשיו כל טיק = commit (wipe-proof כפול: שחזור + היסטוריה)
+- הסיפור-כסף יושר לאמת R74 בכל הדלתות; האתר לא מוכר עוד נזילות שאיננה
+- Deferred בכנות: איחוי 4 עמודי-השוואה; תרגום-עיתון; Identity playground (roadmap קיים)

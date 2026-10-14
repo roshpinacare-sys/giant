@@ -587,9 +587,32 @@ async function tick() {
     return [] as string[];
   });
 
+  // state-versioning — המדינה תמיד בגיט (Task 47: "למה אתה לא בגיט")
+  const snap = snapshotState(at);
+
   console.log(
-    `[keeper] tick #${tickCount} at ${at} — status=${status} repos=${m.repoRows.length} officeAgeH=${m.officeAgeH} state=${stateOk ? "written" : "FAILED"} potential=${potentialOk ? "written" : "skipped"} truth=${truthDone.join("+") || "none"} reasons=${m.reasons.length}`
+    `[keeper] tick #${tickCount} at ${at} — status=${status} repos=${m.repoRows.length} officeAgeH=${m.officeAgeH} state=${stateOk ? "written" : "FAILED"} potential=${potentialOk ? "written" : "skipped"} truth=${truthDone.join("+") || "none"} snapshot=${snap} reasons=${m.reasons.length}`
   );
+}
+
+/* state snapshot — git-commit של Sandbox (המדינה של האורגניזם) אחרי כל טיק.
+   fail-soft לחלוטין: גיט שנכשל לא מפיל טיק; commit רק כשיש שינוי אמיתי. */
+function snapshotState(at: string): string {
+  try {
+    const sb = "/home/z/estate/Sandbox";
+    execFileSync("git", ["add", "-A"], { cwd: sb, timeout: 20000 });
+    const staged = execFileSync("git", ["status", "--porcelain"], { cwd: sb, timeout: 10000 }).toString().trim();
+    if (!staged) return "clean";
+    execFileSync(
+      "git",
+      ["-c", "user.name=saos-state", "-c", "user.email=state@saos.local", "commit", "-m", `state: tick ${tickCount} at ${at}`],
+      { cwd: sb, timeout: 20000 }
+    );
+    return "committed";
+  } catch (e) {
+    console.error("[keeper] snapshot-failed:", e instanceof Error ? e.message.slice(0, 100) : e);
+    return "failed";
+  }
 }
 
 /* ----------------------------------- server ----------------------------------- */
