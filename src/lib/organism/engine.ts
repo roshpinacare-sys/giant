@@ -247,8 +247,12 @@ export async function scanEstate(): Promise<{ clones: RepoScan[]; refsSource: st
     return { clones: [], refsSource: "estate-dir-missing" };
   }
 
-  const scans = await Promise.all(
-    dirs.map(async (repo): Promise<RepoScan> => {
+  // linked places = git repos only. State/feed dirs (e.g. Sandbox/) are not
+  // clones — they are declared honestly in refsSource, never shown as repos.
+  const scans: RepoScan[] = [];
+  let nonGitDirs = 0;
+  await Promise.all(
+    dirs.map(async (repo): Promise<void> => {
       const dir = path.join(ESTATE_DIR, repo);
       const base: RepoScan = {
         repo,
@@ -265,7 +269,10 @@ export async function scanEstate(): Promise<{ clones: RepoScan[]; refsSource: st
       };
       try {
         const isRepo = await execGit(["rev-parse", "--is-inside-work-tree"], dir).catch(() => "false");
-        if (isRepo.trim() !== "true") return { ...base, error: "not-a-git-repo" };
+        if (isRepo.trim() !== "true") {
+          nonGitDirs += 1;
+          return;
+        }
 
         const branch = (await execGit(["rev-parse", "--abbrev-ref", "HEAD"], dir)).trim();
         const logOut = await execGit(["log", "-1", "--format=%H%x09%h%x09%cI%x09%s"], dir).catch(() => "");
@@ -287,7 +294,7 @@ export async function scanEstate(): Promise<{ clones: RepoScan[]; refsSource: st
           /* no upstream ref — honest null */
         }
 
-        return {
+        scans.push({
           repo,
           branch,
           head: head || null,
@@ -301,17 +308,20 @@ export async function scanEstate(): Promise<{ clones: RepoScan[]; refsSource: st
           ahead,
           behind,
           error: null,
-        };
+        });
       } catch (e) {
-        return { ...base, error: e instanceof Error ? e.message.slice(0, 120) : "scan-error" };
+        scans.push({ ...base, error: e instanceof Error ? e.message.slice(0, 120) : "scan-error" });
       }
     })
   );
 
+  scans.sort((a, b) => a.repo.localeCompare(b.repo));
+
   return {
     clones: scans,
-    // honest labeling: we read locally cached remote refs, we do NOT fetch here
-    refsSource: "local-refs (no fetch in this call)",
+    // honest labeling: we read locally cached remote refs, we do NOT fetch here;
+    // non-git dirs (state/feed storage like Sandbox/) are counted, not listed
+    refsSource: `local-refs (no fetch in this call; non-git dirs excluded: ${nonGitDirs})`,
   };
 }
 

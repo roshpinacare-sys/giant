@@ -1413,3 +1413,20 @@ Stage Summary:
 - All four Task 38 pending items executed and closed; one Task 38 claim corrected with a real fix (Autonomy straggler pin).
 - Org state at ~07:50Z: zero red across all 13 repos, node-22 debt fully retired including archaeology, office-3d pipeline proven green end-to-end (bake → publish → first real Domain deploy), forge verifier root-fix live awaiting its first scheduled exercise.
 - Nothing force-cancelled, nothing faked green: every non-green historical mark is either measured-honest history (ops-forge ×2) or policy-frozen (steem disabled Actions).
+---
+Task ID: 40
+Agent: Continuation agent (IM trace 1a13a0f9d8353d69 "כן תמשיך")
+Task: The owner approved wiring the two suspended Sandbox feeds to real sources (the improvement offered after the Task-39 dashboard audit).
+
+Work Log:
+- DASHBOARD AUDIT FIRST (owner asked "is what I see normal?"): the office-ci FAIL on screen was stale-local — the FleetHQ clone was 33 commits behind origin, whose verdict.json was already PASS (08:20:32Z, all 5 checks). Pulled with --ff-only; the card flipped to PASS live. The "3 חסות" crew tasks had self-resolved in parallel (169→171 synced). All 5 tabs browser-verified (office/worlds/recruit/no-fake/network) — rendering clean, live fetches 200+sha256.
+- ORGANISM KEEPER BORN (mini-services/organism-keeper, :3040, bun --hot): measures the estate for real every 120s — GitHub repos API (orgs 404s → measured that roshpinacare-sys is a USER account → users endpoint with fallback), per-repo runs API for reds_48h, public office-state freshness, next-dev health — and atomically (tmp+rename) writes the two feeds the console declares: Sandbox/state/network-state.json (keeper{tickCount,lastTick,status} + measured sources + machines) and Sandbox/ops/office/potential.json (measured_at, estate rows, top_actions).
+- ZERO-FAKE PRESERVED: top_actions are derived ONLY from the current tick's measurements (reds>0 → "בדיקת-שורש וטיפול"; office-state >12h stale → "בדיקת חלון-המשרד"; dev down → "הפעלה מחדש"; nothing → "אין פעולות דחופות — נמדד בטיק זה"). work_orders_open/token_days_left stay null (no declared source; key material never read). Writes skipped entirely when the org measurement fails (fail-honest, tick #1 proved it).
+- The keeper's first honest measurement immediately found real signal: ops-forge 2 red runs in 48h window (the documented permanent false-positives) and office-state 13.4h stale — both surfaced as derived actions on the dashboard.
+- ENGINE FIX: scanEstate now excludes non-git dirs from the clones list (Sandbox is a state dir, not a clone) and declares the exclusion count honestly in refsSource; clones sorted by name.
+- VERIFIED END-TO-END IN BROWSER: keeper card = tick #1 + PASS badge with real lastTick; צעדי-הערך card = the two derived actions; "1 מקורות חסרים" banner GONE (0 missing); lint clean; dev.log clean; tick #2 fired on schedule (status=ok, 13 repos, 0 reasons).
+
+Stage Summary:
+- The organism console now has zero missing declared sources: every card is either live-measured or honestly-null, and the keeper keeps it that way autonomously every 2 minutes.
+- Both improvement debts from the Task-39 audit are closed; the dashboard is fully self-sustaining (office-ci PASS via fresh clone, keeper PASS via real ticks).
+- Known honest residual: office-state feed staleness (~13h) remains flagged until the office window's next bake; ops-forge's 2 permanent historical reds remain visible-as-truth with root-cause already fixed for future cycles.
