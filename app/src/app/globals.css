@@ -200,3 +200,99 @@
 [data-slot="dialog-content"] [cmdk-separator] {
   background: rgba(255, 255, 255, 0.06);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   גל-6 · חוקי-העיצוב של הענקים — מדוד מ-10 אתרי-רפרנס (5 נמדדו-חי, 5 חסומי-מדידה)
+   · designspells  (נמדד) → מיקרו-אינטראקציות: ריחוף-חי, הרמת-כרטיס, נשימת-חיים
+   · 60fps.design  (נמדד) → תנועה-חלקה: cubic-bezier מוקפד, reduced-motion תמיד
+   · awwwards      (נמדד) → משמעת-ביצוע: focus-ring, רשת, היררכיה-טיפוגרפית
+   · godly.website (נמדד) → ארט-דיירקשן: עומק-אמביינט (זוהר-ענבר + גרעין-סרט)
+   · supahero.io   (נמדד) → hero שתופס: הצהרה-גדולה + CTA אחד-ברור + מספרים-חיים
+   · saaspo · layers.to · mobbin · cosmos.so · curated.design — לא-נמדדו (fetch-כשל,
+     רשום-כנה ב-docs/design/design-laws.md — "לא הצלחנו להסתכל" ≠ "הסתכלנו ולא ראינו")
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes g-view-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.995); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes g-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes g-breathe {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5); }
+  50% { opacity: 0.6; box-shadow: 0 0 0 5px rgba(245, 158, 11, 0); }
+}
+@keyframes g-line-in {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ארט-דיירקשן אמביינט (godly): זוהר-ענבר עדין + גרעין-סרט — שכבת-רקע-בלבד */
+.g-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(52rem 30rem at 85% -8%, rgba(245, 158, 11, 0.07), transparent 62%),
+    radial-gradient(46rem 26rem at 6% 106%, rgba(180, 105, 30, 0.055), transparent 58%);
+}
+.g-ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+}
+
+/* מיקרו-אינטראקציה (designspells): הרמת-כרטיס + זוהר-גבול בריחוף */
+.g-card {
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.g-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 158, 11, 0.32);
+  box-shadow: 0 14px 34px -14px rgba(245, 158, 11, 0.2), 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* נשימת-חיים: נקודת-מצב חיה (מחליף animate-pulse הגנרי) */
+.g-breathe { animation: g-breathe 2.6s ease-in-out infinite; }
+
+/* כניסת-מודול (60fps): 300ms ease-out-expo, פעם-אחת */
+.g-view-in { animation: g-view-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.g-rise { animation: g-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.g-rise-1 { animation-delay: 0.05s; }
+.g-rise-2 { animation-delay: 0.1s; }
+.g-rise-3 { animation-delay: 0.16s; }
+
+/* קו-נשימה תחת-פריט-פעיל (awwwards: משמעת-מדויקת) */
+.g-active-line { transform-origin: right; animation: g-line-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* סקרולר מעוצב (חוק-ממשק: רשימות ארוכות = max-h + scroll + scrollbar-מעוצב) */
+.g-scroll {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 158, 11, 0.28) transparent;
+}
+.g-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.g-scroll::-webkit-scrollbar-track { background: transparent; }
+.g-scroll::-webkit-scrollbar-thumb { background: rgba(245, 158, 11, 0.25); border-radius: 999px; }
+.g-scroll::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.45); }
+
+/* focus-ring של מקצוענים (awwwards) — מקלדת-רואה-הכל */
+:where(button, a, input, textarea, select, [role="button"]):focus-visible {
+  outline: 2px solid rgba(245, 158, 11, 0.65);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* תנועה-מכובדת (60fps): reduced-motion = קיפאון-מכובד, לא-ריקון */
+@media (prefers-reduced-motion: reduce) {
+  .g-view-in, .g-rise, .g-rise-1, .g-rise-2, .g-rise-3, .g-breathe, .g-active-line {
+    animation: none !important;
+  }
+  .g-card, .g-card:hover { transition: none; transform: none; }
+}
