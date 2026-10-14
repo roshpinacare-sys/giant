@@ -57,15 +57,25 @@ for (const f of existsSync(CLAIMS) ? readdirSync(CLAIMS) : []) {
   try { const c = JSON.parse(readFileSync(`${CLAIMS}/${f}`, 'utf8')); claimsSeen.set(c.sig, c); } catch { /* torn file — skip, rescan rewrites */ }
 }
 
-const state = { generatedAt: stamp, runUrl: RUN_URL, repos: {}, workflows: {}, newClaims: [], newCapabilities: [], counts: { green: 0, red: 0, disabled: 0, stale: 0 } };
+const state = { generatedAt: stamp, runUrl: RUN_URL, repos: {}, workflows: {}, newClaims: [], newCapabilities: [], counts: { green: 0, red: 0, disabled: 0, stale: 0, archived: 0 } };
+// run names are unstable: push-event runs can carry the PATH as name while
+// dispatch/schedule carry the display name. Normalize once, module-level.
+const disp = (n) => String(n || '').replace(/^\.github\/workflows\//, '').replace(/\.ya?ml$/, '');
+// ARCHIVED (2026-10-14, trace 1a137fbff7c7c4ad): a workflow whose file was deleted
+// (state `deleted` / `deleted_inactivity`) can NEVER run again — its last failed run
+// is archaeology, not a live problem. Counting it red forever made the book lie
+// (measured: saos-runtime repair-rot2-custody red 1634m with state=deleted) and
+// starved its claim of any resolution path. Honesty is re-homed, not deleted: the
+// row stays visible with 🗄️, the count gets its own bucket, and an open claim
+// resolves with evidence ("nothing left to heal").
 const lines = [];
 lines.push('# Network STATE — the sovereign self-scan');
 lines.push('');
 lines.push(`- generatedAt: \`${stamp}\``);
 lines.push(`- scan run: ${RUN_URL}`);
 lines.push('');
-lines.push('| repo | last push | push age | workflows | green | red | disabled |');
-lines.push('|---|---|---|---|---|---|---|');
+lines.push('| repo | last push | push age | workflows | green | red | disabled | archived |');
+lines.push('|---|---|---|---|---|---|---|---|');
 
 for (const repo of REPOS) {
   try {
@@ -82,32 +92,46 @@ for (const repo of REPOS) {
       runs = [...p1, ...p2];
     } catch (e) { lines.push(`| ${repo} | \`${pushedAt}\` | ${pushAgeMin}m | runs-api-error: ${String(e.message).slice(0, 40)} | | | |`); continue; }
     const runsInWindow = new Map();
-    for (const r of runs) runsInWindow.set(r.name, (runsInWindow.get(r.name) || 0) + 1);
+    for (const r of runs) runsInWindow.set(disp(r.name), (runsInWindow.get(disp(r.name)) || 0) + 1);
 
-    // latest run per workflow name
-    const latest = new Map();
+    // Judged run per WORKFLOW (keyed by workflow_id — run names are unstable:
+    // push-event runs can carry the PATH as name while dispatch/schedule carry the
+    // display name; keyed by name, one workflow became two rows and a dead push
+    // ghost out-voted two newer successes — measured: Autonomy selfhood red 63m
+    // while its last two runs succeeded). Judgement prefers the newest run whose
+    // conclusion is not 'cancelled' — a cancel means a sibling superseded the run
+    // (concurrency), it is NOT evidence of failure (measured: saos-runtime
+    // grid-watchdog cancelled while a dispatch success landed 6m earlier).
+    const byWf = new Map(); // workflow_id -> { best (newest non-cancelled), newest }
     for (const r of runs) {
-      if (r.event === 'workflow_dispatch' && (latest.get(r.name)?.event === 'schedule')) continue;
-      const cur = latest.get(r.name);
-      if (!cur || Date.parse(r.created_at) > Date.parse(cur.created_at)) latest.set(r.name, r);
+      const k = String(r.workflow_id || disp(r.name));
+      const e = byWf.get(k) || { best: null, newest: null };
+      if (!e.newest || Date.parse(r.created_at) > Date.parse(e.newest.created_at)) e.newest = r;
+      if ((r.conclusion || '') !== 'cancelled' && (!e.best || Date.parse(r.created_at) > Date.parse(e.best.created_at))) e.best = r;
+      byWf.set(k, e);
     }
+    const latest = new Map();
+    for (const [k, e] of byWf) latest.set(k, e.best || e.newest);
 
-    let g = 0, red = 0, dis = 0, stale = 0;
+    let g = 0, red = 0, dis = 0, stale = 0, arch = 0;
     const wfRows = [];
-    for (const [name, r] of latest) {
+    for (const [, r] of latest) {
+      const name = disp(r.name); // stable display name regardless of the run's event
       const ageMin = Math.round((now - Date.parse(r.created_at)) / 60000);
       const wfMeta = await (async () => {
         try { return await gh(`/repos/${OWNER}/${repo}/actions/workflows/${r.workflow_id}`); } catch { return { state: 'unknown' }; }
       })();
       const wstate = wfMeta.state || 'active';
       const key = `${repo}|${name}`;
-      const failing = r.conclusion && r.conclusion !== 'success' && r.conclusion !== 'skipped' && wstate !== 'disabled_manually' && wstate !== 'disabled_inactivity';
+      const archived = wstate === 'deleted' || wstate === 'deleted_inactivity';
+      const failing = r.conclusion && r.conclusion !== 'success' && r.conclusion !== 'skipped' && !archived && wstate !== 'disabled_manually' && wstate !== 'disabled_inactivity';
       // cadence-aware staleness: a scheduled beat silent 48h is effectively dead
       // (worldbeat would never be); low-frequency jobs (weekly retros) are never
       // "stale" — their runsInWindow count protects them from false quarantine.
       const isStale = ageMin > 2880;
 
       if (wstate === 'disabled_manually') { dis++; state.counts.disabled++; }
+      else if (archived) { arch++; state.counts.archived++; }
       else if (failing) { red++; state.counts.red++; }
       else if (isStale) { stale++; state.counts.stale++; }
       else { g++; state.counts.green++; }
@@ -134,16 +158,24 @@ for (const repo of REPOS) {
           writeFileSync(`${CLAIMS}/claim-${prior.sig}.json`, JSON.stringify(prior, null, 2));
         }
       } else if (!failing && !isStale) {
-        // honest resolution: if an open claim for this pair exists, mark resolved (the scan saw it green)
+        // honest resolution: a claim whose subject is no longer failing resolves with
+        // evidence — the scan saw it green (workflow recovered) or archived/deleted
+        // (nothing left to heal). This includes escalated needs-operator claims: the
+        // operator issue closes WITH the evidence via triage's lifecycle (anti-storm
+        // law §2 — resolution closes the claim, the inbox stays clean). Moot
+        // skill-repair proposals (harness) retire the same way.
         for (const [s, c] of claimsSeen) {
-          if (c.status === 'open' && c.repo === repo && c.workflow === name && c.kind === 'failing') {
-            c.status = 'resolved'; c.resolvedAt = stamp; c.resolveEvidence = { runUrl: r.html_url, conclusion: r.conclusion };
+          if ((c.status === 'open' || c.status === 'needs-operator') && c.repo === repo && disp(c.workflow) === name && (c.kind === 'failing' || c.kind === 'skill-repair')) {
+            c.status = 'resolved'; c.resolvedAt = stamp;
+            c.resolveEvidence = { runUrl: r.html_url, conclusion: r.conclusion };
+            if (archived) c.resolveEvidence.note = `workflow state=${wstate} (archived) at HEAD — the failure is archaeological, the file no longer exists, nothing left to heal`;
+            else if (c.status === 'needs-operator' || c.kind === 'skill-repair') c.resolveEvidence.note = `subject workflow recovered — measured conclusion=${r.conclusion} at scan time; the escalation is retired by observation`;
             writeFileSync(`${CLAIMS}/claim-${s}.json`, JSON.stringify(c, null, 2));
           }
         }
       }
 
-      const mark = wstate === 'disabled_manually' ? '⏸' : failing ? '❌' : isStale ? '⏳' : '✅';
+      const mark = wstate === 'disabled_manually' ? '⏸' : archived ? '🗄️' : failing ? '❌' : isStale ? '⏳' : '✅';
       wfRows.push(`| ${mark} ${name} | ${r.conclusion || '—'} | ${ageMin}m | ${wstate} |`);
 
       // NEW-CAPABILITY awareness: a workflow the owner added since the last scan
@@ -161,19 +193,51 @@ for (const repo of REPOS) {
       }
     }
 
-    lines.push(`| [${repo}](https://github.com/${OWNER}/${repo}) | \`${pushedAt}\` | ${pushAgeMin}m${pushAgeMin > budget ? ' ⚠️STALE' : ''} | ${latest.size} | ${g} | ${red} | ${dis} |`);
+    lines.push(`| [${repo}](https://github.com/${OWNER}/${repo}) | \`${pushedAt}\` | ${pushAgeMin}m${pushAgeMin > budget ? ' ⚠️STALE' : ''} | ${latest.size} | ${g} | ${red} | ${dis} | ${arch} |`);
     lines.push('');
     if (wfRows.length) { lines.push(`<details><summary>${repo} workflow detail</summary>`, '', '| workflow | conclusion | age | state |', '|---|---|---|---|', ...wfRows, '', '</details>', ''); }
 
-    state.repos[repo] = { pushedAt, pushAgeMin, fresh: pushAgeMin <= budget, workflows: latest.size, green: g, red, disabled: dis, stale };
+    state.repos[repo] = { pushedAt, pushAgeMin, fresh: pushAgeMin <= budget, workflows: latest.size, green: g, red, disabled: dis, stale, archived: arch };
   } catch (e) {
-    lines.push(`| ${repo} | ERROR | — | ${String(e.message).slice(0, 60)} | | | |`);
+    lines.push(`| ${repo} | ERROR | — | ${String(e.message).slice(0, 60)} | | | | |`);
     state.repos[repo] = { error: String(e.message) };
   }
 }
 
+// OUT-OF-WINDOW CLAIM MEASUREMENT (2026-10-14): dispatch-only, quiet workflows
+// (anchor-execute, operator-console…) have NO runs inside the ~200-run window —
+// they never appear in the judged map above, so claims about them would linger
+// forever. Absence in the window is NOT evidence either way, so we go LOOK at
+// each such subject directly (bounded: one 3-run call per unresolved claim).
+for (const [s, c] of claimsSeen) {
+  try {
+    if (c.status !== 'open' && c.status !== 'needs-operator') continue;
+    if (c.kind !== 'failing' && c.kind !== 'skill-repair') continue;
+    const dispName = disp(c.workflow);
+    if (state.workflows[`${c.repo}|${dispName}`]) continue; // in-window — already judged above
+    const wfRef = String(c.workflow || '').includes('/') ? c.workflow : `${dispName}.yml`;
+    const res = await gh(`/repos/${OWNER}/${c.repo}/actions/workflows/${wfRef}/runs?per_page=3`).catch(() => null);
+    if (!res || !Array.isArray(res.workflow_runs)) {
+      // the workflow object itself is gone (deleted/archived) — nothing left to heal or repair
+      c.status = 'resolved'; c.resolvedAt = stamp;
+      c.resolveEvidence = { note: `subject workflow not found at HEAD (archived/deleted) — measured directly, out-of-window`, runUrl: c.runUrl || RUN_URL };
+      writeFileSync(`${CLAIMS}/claim-${s}.json`, JSON.stringify(c, null, 2));
+      continue;
+    }
+    const last = res.workflow_runs.find((r) => (r.conclusion || '') !== 'cancelled');
+    if (!last) continue; // all cancelled — no signal; leave the claim as-is
+    if (last.conclusion === 'success' || last.conclusion === 'skipped') {
+      c.status = 'resolved'; c.resolvedAt = stamp;
+      c.resolveEvidence = { runUrl: last.html_url, conclusion: last.conclusion, note: `subject measured GREEN outside the scan window (out-of-window direct check)` };
+      writeFileSync(`${CLAIMS}/claim-${s}.json`, JSON.stringify(c, null, 2));
+    }
+    // still failing outside the window: leave the claim — the subject's own repo scan
+    // will surface it in-window when runs accumulate (honesty never retired by silence)
+  } catch { /* one claim's direct check failing must not kill the scan */ }
+}
+
 lines.push('');
-lines.push(`## Totals — green ${state.counts.green} · red ${state.counts.red} · disabled(quarantined) ${state.counts.disabled} · stale ${state.counts.stale}`);
+lines.push(`## Totals — green ${state.counts.green} · red ${state.counts.red} · disabled(quarantined) ${state.counts.disabled} · stale ${state.counts.stale} · archived(deleted-file, never-runs-again) ${state.counts.archived}`);
 lines.push('');
 lines.push('This page is the network looking at itself. RED here is honesty, not alarm: every red has a claim in `ops/claims/`, triage decides, the operator gets ONE issue per new signature — never a storm.');
 lines.push('');

@@ -1297,3 +1297,27 @@ Stage Summary:
 - The network now carries its own cadence: the platform clock is demoted to cold-start net; 33 lanes are sensed every cycle; every stack completion re-arms the carrier. The immune system can no longer go silently blind — and if the pacemaker itself dies, its receipt commits stop advancing, which is itself an alarm (meta-voice law).
 - The standing DEX mandate is alive and honestly measured on both rails; the owner's giants table displays growth (fees>0, 133 fills/24h, sum-of-rails labeled).
 - Residuals on record: 3 reds (triage's territory, escalated items); saos-dex (private) workflows remain API-scanned only; on-chain ERC-721 mint + funded deployer still staged (rail proven via the 10-13 anchor).
+
+---
+Task ID: 34
+Agent: Book-honesty & policy-lifecycle agent (IM trace 1a137fbff7c7c4ad "תמשיך")
+Task: Continue — drive the estate to TRUE green: fix the book's lying artifacts, close the claim/issue lifecycle end-to-end, amend the policy gate on a measured live reject, harden the publishers.
+
+Work Log:
+- BOOK HONESTY (selfscan.mjs, commits 3578dda, 2f86ae0, ebf752a, 9532fd2, 2b338d9, c1e7852, 6d455e6 — kit mirror synced each time):
+  (1) ARCHIVED bucket — workflows with state deleted/deleted_inactivity can never run again; their last failure is archaeology (measured: repair-rot2-custody red 1634m state=deleted). Own 🗄️ marker + count column; open claims resolve ("nothing left to heal").
+  (2) workflow_id keying — push-event runs carry the PATH as name; keyed by name one workflow became TWO rows and a dead push ghost out-voted two newer successes (measured: Autonomy selfhood red 63m while last two runs succeeded).
+  (3) cancelled ≠ failure — judge by newest non-cancelled run (measured: grid-watchdog cancelled while a dispatch success landed 6m earlier).
+  (4) OUT-OF-WINDOW claim measurement — dispatch-only quiet subjects (anchor-execute, operator-console) never enter the 200-run window; each unresolved claim about an unobserved subject gets a direct 3-run check. Absence in window is NOT evidence.
+  (5) observation retirement — needs-operator claims resolve when the subject is measured green/archived; triage closes the stale operator issues WITH the evidence.
+  (6) SELF-CAUGHT TDZ (honesty receipt): disp used before declaration — the book itself fail-louded ("Cannot access 'disp' before initialization") instead of lying; fixed in one commit; offline logic probe verified all three measured judgments.
+- POLICY AMENDMENT (f014905): the policy-gate REJECTED a live inverted leg (base=USDS quote=SAOS — the market SAOS/USDS is whitelisted). Refuse-then-escalate worked; the gap was orientation-strictness. AMENDMENT: ORIENTATION-NEUTRAL MARKET LAW (a market is a market; both orientations of an allowed base×quote pass; notional prices against the stable side wherever it sits). Selftest 12→14 vectors (inverted PASS, foreign REJECT) — verified live in the 01:56 gate flight. Moot fill-reject claim resolved with amendment evidence.
+- TRIAGE LIFECYCLE COMPLETION: subjectLabel() renders ref-bearing claims honestly (fill-reject escalated as "undefined/undefined" before); fill-reject got its true ladder semantics (refuse-to-sign IS the enforcement — the notice is the receipt).
+- PUBLISHER HARDENING (office-heartbeat, 237d3f4 + 51cbe6c): all 3 push sites were single-attempt (died exit 1 on a lost push race, measured run 38495330705) → §5 retry+defer terminal; second failure (exit 128) exposed the masked half-rebase (pull || true left the tree unmerged) → abort-first loop: every attempt clears rebase/merge half-states, terminal state always clean.
+- INBOX CONVERGENCE MEASURED: 11 open → 4 → **1** (only #2, the watchdog's own transition-state SILENCE ALARM). Every [FAILING] and [NEEDS-OPERATOR] issue closed WITH evidence comments (issues #14, #23–#29, #31–#33). Book: green 89–95, red 0, archived 1 — TRUE green, first time.
+- Pacemaker steady at 33 lanes, zero ignitions needed (carrier healthy).
+
+Stage Summary:
+- The book no longer lies: ghosts, race-cancels, and archaeology are honestly bucketed; claims resolve by observation with evidence; the operator inbox is at its floor (1 transition alarm). The claim→decision→evidence→close lifecycle is complete for every claim shape the network produces (failing, stale, skill-repair, fill-reject, new-capability).
+- The policy gate is now orientation-neutral with a dated amendment and live selftest receipts — and the gate's first live-day reject became the amendment's evidence trail (PolicyAVS semantics working as designed: refuse → escalate → amend → prove).
+- Honest residuals: office-heartbeat abort-first verification still booting at snapshot time (cadence 120min); #2 SILENCE ALARM belongs to the watchdog's own state machine; saos-dex private-repo scanning still API-window-only; on-chain ERC-721 mint still staged on a funded deployer.

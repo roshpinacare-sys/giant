@@ -42,7 +42,19 @@ function decide(c) { // the decision ladder — deterministic, evidence-based
   // R4: stale beat — re-ignite via dispatch; escalate after 3 dead attempts
   if (c.kind === 'stale' && (c.attempts ?? 0) < 3) return { action: 'redispatch', reason: `stale beat, ignite attempt ${(c.attempts ?? 0) + 1}/3` };
   if (c.kind === 'stale') return { action: 'escalate', reason: 'beat dead after 3 ignitions — operator or code-fix needed' };
+  // fill-reject: the validator network REFUSED to sign — the enforcement already
+  // happened (refuse-to-sign is the PolicyAVS semantic). The operator notice is the
+  // receipt of the refusal, not a request for help.
+  if (c.kind === 'fill-reject') return { action: 'escalate', reason: 'validator refused to sign (refuse-to-sign is the enforcement; this notice is the receipt)' };
   return { action: 'escalate', reason: 'unknown claim shape' };
+}
+
+// claims come in several shapes: repo-scoped (repo+workflow), corridor-scoped
+// (ref), etc. Render the subject honestly whatever shape arrived.
+function subjectLabel(c) {
+  if (c.repo && c.workflow) return `${c.repo}/${c.workflow}`;
+  if (c.ref) return `${c.kind || 'claim'} ${c.ref}`;
+  return c.kind || 'claim';
 }
 
 mkdirSync(CLAIMS, { recursive: true });
@@ -119,7 +131,7 @@ for (const f of files) {
     if (d.action === 'escalate') {
       c.status = 'needs-operator'; c.escalatedAt = stamp;
       const iss = await findIssue(c.sig);
-      if (!iss) await openIssue(`[NEEDS-OPERATOR] ${c.repo}/${c.workflow} — ${d.reason}`, `signature: \`sig:${c.sig}\`\nevidence: ${c.evidence?.runUrl}`, ['operator-needed']);
+      if (!iss) await openIssue(`[NEEDS-OPERATOR] ${subjectLabel(c)} — ${d.reason}`, `signature: \`sig:${c.sig}\`\nevidence: ${c.evidence?.runUrl || c.runUrl || 'n/a'}`, ['operator-needed']);
     }
     c.lastAction = { action: d.action, reason: d.reason, at: stamp, runUrl: RUN_URL };
     writeFileSync(`${CLAIMS}/${f}`, JSON.stringify(c, null, 2));
@@ -134,7 +146,7 @@ for (const f of files) {
       c.status = 'needs-operator'; c.escalatedAt = stamp; escalated++;
       try {
         const iss = await findIssue(c.sig);
-        if (!iss) await openIssue(`[NEEDS-OPERATOR] ${c.repo}/${c.workflow} — not dispatchable (422): self-heal impossible`, `signature: \`sig:${c.sig}\`\nreason: workflow has no workflow_dispatch trigger or is disabled — needs a code fix or schedule-based recovery\nevidence: ${c.evidence?.runUrl}`, ['operator-needed']);
+        if (!iss) await openIssue(`[NEEDS-OPERATOR] ${subjectLabel(c)} — not dispatchable (422): self-heal impossible`, `signature: \`sig:${c.sig}\`\nreason: workflow has no workflow_dispatch trigger or is disabled — needs a code fix or schedule-based recovery\nevidence: ${c.evidence?.runUrl || c.runUrl || 'n/a'}`, ['operator-needed']);
       } catch { /* issue path failing — the ledger line below stays loud */ }
       c.lastAction = { action: 'escalate', reason: 'not dispatchable (422)', at: stamp, runUrl: RUN_URL };
       writeFileSync(`${CLAIMS}/${f}`, JSON.stringify(c, null, 2));
