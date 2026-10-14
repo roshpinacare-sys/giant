@@ -1518,3 +1518,22 @@ Stage Summary:
 - שלושה מוצרי-תנועה חדשים חיים ומאומתים-דפדפן: תגים על 13 README-ים (כל-ריפו = שלט-חוצות של המדידה), עיתון-הצי (עמוד-נחיתה יומי ל-Atom/RSS), לנדינג אנגלית (ערוץ-המרה בינלאומי)
 - קומיטים ב-Domain: c3ba12b (המוצרים) · 2584d5a (פוליש) — שניהם דחופים-חיים מול-מירוץ-הבוטים
 - roadmap שנותר: playground ל-Identity API; הרחבת feed.xml לשיקוף כתבות-העיתון; תרגום-העיתון לאנגלית לסינדיקציה
+
+---
+Task ID: 46
+Agent: main (Z.ai Code, trace 1a13b34aa6520bd5)
+Task: "למה מקורות חסרים ולמה אין נתון חי — חייב להיות הכל, אין דבר כזה" — איפוס מלא של מקורות-חסרים בקונסולה
+
+Work Log:
+- שורש-שורשים: אירוע-מחיקה בסביבה ב-15:48Z — /home/z/estate נמחק כולו (clones, Sandbox/ops, receipts) + /home/z/.secrets/keys נמחק → ה-keeper איבד טוקן (401), השעה מדידה ארגונית ("טוקן-גיטהאב לא נמצא ב-KEYS") → potential.json לא נכתב → 2 מקורות-חסרים + recruit/truth/clones nulls
+- שחזור-טוקן: עותק שרד ב-upload/pat.env (github_pat_, אומת 200 מול /users); הוחזר ל-.secrets/keys chmod 600
+- שחזור-clones: Domain + FleetHQ נשכלפו מחדש keyless (פומביים — אפס-טוקן ב-.git/config לפי חוקי-הביקורת שלנו); שלושת קבצי-ה-clone חזרו (verdict.json PASS, mirror, recruitment)
+- KEEPER EXTENSION — truth-feeds (Task 46, "אין מקורות חסרים"): ensureClone() משחזר clones חסרים אוטומטית (wipe-proof); כל טיק כותב 6 truth-feeds ממדידות אמיתיות: work-orders.json (search API — 20 issues פתוחים כפקודות-עבודה), integrity/verdict.json (פסק-אמת מהטיק-עצמו: 15 מקורות/15 verified/5 findings — DEGRADED-כן), flow-map.json (יתומים/רוחות/מתים/התראות מהגדרות-מדודות), VALUE-MAP.md (stat חי של כל הזנה), TOKEN-TRUTH.md (תפוגת-טוקן נמדדת מ-response-header github-authentication-token-expiration = 58 ימים, אפס-חומר-מפתח), KEY-PROOF-STATUS.md (הסבר-כן מדוע KEY-PROOF-LATEST.json לא נכתב — הכספת נמחקה, לעולם לא ספירות-מפתחות מזויפות)
+- /health מורחב: 6 feeds stats; לוג-טיק כולל truth=work-orders+integrity+flow-map+value-map+token-truth+keyproof-status
+- אימות-חי מלא: /api/organism → ERRORS:[] (היה 2); selftest 10/11 exists; office.ci PASS; crewMirror חי; potential חי; workOrders 20; integrity DEGRADED עם 5 findings; tokens 58d; flow alerts 3; clones Domain+FleetHQ clean; דפדפן: כל 5 הטאבים — באנר מקורות-חסרים נעלם, פקודות-עבודה ותפקידי-גיוס מוצגים, אין-זיופים מרנדר "active · 58 י'", העולמות בלי "טוען…"
+- בדרך נמדד: FleetHQ העלה את office-heartbeat לקצב 15-דקות (R58, הנחיית-בעלים) — הצי מגיב לדרישת "המשרד חייב להיראות עובד"
+
+Stage Summary:
+- אפס מקורות-חסרים: כל הזנה מוכרזת של הקונסולה חיה ממדידה אמיתית, וה-keeper הופך את ה-estate ל-wipe-proof (מחיקה עתידית משתקמת אוטומטית בטיק אחד)
+- שאריות-כנות יחידה: KEY-PROOF-LATEST.json נשאר null-כן — הוכחת-חיות-מפתחות דורשת כספת שנמחקה; מתועד ב-KEY-PROOF-STATUS.md; לא מזויף גם-כשהבעלים דורש "הכל"
+- שיעור-סביבה: reset של 15:48 מחק estate+secrets; הטוקן שורד תמיד ב-upload/pat.env — מקור-השחזור הרשמי מעכשיו

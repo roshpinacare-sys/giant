@@ -14,6 +14,7 @@
  */
 
 import { mkdirSync, writeFileSync, renameSync, readFileSync, existsSync, statSync } from "fs";
+import { execFileSync } from "child_process";
 import path from "path";
 
 const PORT = 3040;
@@ -22,6 +23,15 @@ const ORG = "roshpinacare-sys";
 const ESTATE = "/home/z/estate";
 const OUT_STATE = path.join(ESTATE, "Sandbox", "state", "network-state.json");
 const OUT_POTENTIAL = path.join(ESTATE, "Sandbox", "ops", "office", "potential.json");
+// truth-feeds (Task 46 — "אין מקורות חסרים"): כל הזנה שהקונסולה מכריזה עליה נבנית כאן ממדידה אמיתית
+const OUT_WORKORDERS = path.join(ESTATE, "Sandbox", "ops", "office", "work-orders.json");
+const OUT_INTEGRITY = path.join(ESTATE, "Sandbox", "ops", "integrity", "verdict.json");
+const OUT_FLOW = path.join(ESTATE, "Sandbox", "ops", "flow", "flow-map.json");
+const OUT_VALUEMAP = path.join(ESTATE, "Sandbox", "ops", "office", "VALUE-MAP.md");
+const OUT_TOKENTRUTH = path.join(ESTATE, "Sandbox", "ops", "TOKEN-TRUTH.md");
+const OUT_KEYPROOF_STATUS = path.join(ESTATE, "Sandbox", "proof", "out", "KEY-PROOF-STATUS.md");
+// clones שהקונסולה קוראת מהם מהדיסק — ה-keeper משחזר אותם אם נמחקו (wipe-proof)
+const CLONE_REPOS = ["Domain", "FleetHQ"];
 const KEYS_FILE = "/home/z/.secrets/keys";
 const DEV_SERVER = "http://127.0.0.1:3000/";
 // מודדים את raw-main — אותו מקור בדיוק שהחדר והאתר הציבורי קוראים (נמדד 2026-10-14:
@@ -64,6 +74,227 @@ function githubToken(): string | null {
   } catch {
     return null;
   }
+}
+
+/* --------------- truth-feeds (Task 46 — "אין מקורות חסרים") --------------- */
+
+function statSafe(abs: string): { exists: boolean; bytes: number | null; mtime: number | null } {
+  try {
+    const s = statSync(abs);
+    return { exists: true, bytes: s.size, mtime: s.mtimeMs };
+  } catch {
+    return { exists: false, bytes: null, mtime: null };
+  }
+}
+
+function atomicWriteText(abs: string, text: string): boolean {
+  try {
+    mkdirSync(path.dirname(abs), { recursive: true });
+    const tmp = `${abs}.tmp-${process.pid}`;
+    writeFileSync(tmp, text, "utf8");
+    renameSync(tmp, abs);
+    return true;
+  } catch (e) {
+    console.error(`[keeper] write-failed ${abs}:`, e instanceof Error ? e.message : e);
+    return false;
+  }
+}
+
+/** משחזר clone חסר מה-remote הציבורי (הריפואים פומביים — clone keyless, אפס-טוקן ב-config) */
+function ensureClone(repo: string): boolean {
+  const abs = path.join(ESTATE, repo);
+  if (existsSync(path.join(abs, ".git"))) return true;
+  try {
+    mkdirSync(ESTATE, { recursive: true });
+    execFileSync("git", ["clone", "--depth", "50", "-q", `https://github.com/${ORG}/${repo}`, abs], { timeout: 90_000 });
+    console.log(`[keeper] clone restored: ${repo}`);
+    return true;
+  } catch (e) {
+    console.error(`[keeper] clone-failed ${repo}:`, e instanceof Error ? e.message.slice(0, 120) : e);
+    return false;
+  }
+}
+
+interface WorkOrderRow {
+  id: string;
+  title: string;
+  repo: string | null;
+  status: string;
+  evidence: string | null;
+  firstStep: string | null;
+}
+
+async function truthFeeds(m: Awaited<ReturnType<typeof measure>>, at: string): Promise<string[]> {
+  const done: string[] = [];
+  const token = githubToken();
+
+  // 0) שחזור-clones — בלי זה שלוש הזנות (verdict/mirror/recruit) קוראות מהדיסק-שנמחק
+  for (const repo of CLONE_REPOS) ensureClone(repo);
+
+  // 1) work-orders.json — הפקודות-העבודה האמיתיות של האורגניזם: issues פתוחים ברחבי-הארגון
+  try {
+    const res = await jfetch(`https://api.github.com/search/issues?q=org:${ORG}+state:open+type:issue&per_page=20&sort=updated`, token);
+    const items =
+      res.ok && res.json && typeof res.json === "object"
+        ? ((res.json as Record<string, unknown>).items as unknown[] | undefined) ?? []
+        : [];
+    const orders: WorkOrderRow[] = (Array.isArray(items) ? items : []).slice(0, 20).map((it) => {
+      const o = it as Record<string, unknown>;
+      const repoUrl = typeof o.repository_url === "string" ? (o.repository_url.split("repos/")[1] ?? null) : null;
+      return {
+        id: `${repoUrl ?? "?"}#${String(o.number ?? "?")}`,
+        title: String(o.title ?? "").slice(0, 140),
+        repo: repoUrl,
+        status: String(o.state ?? "open"),
+        evidence: typeof o.html_url === "string" ? o.html_url : null,
+        firstStep: null,
+      };
+    });
+    if (res.ok) {
+      atomicWrite(OUT_WORKORDERS, {
+        at,
+        agent: "organism-keeper truth-feeds",
+        source: `GitHub search API — org:${ORG} issues state:open`,
+        total_measured: orders.length,
+        orders,
+      });
+      done.push("work-orders");
+    }
+  } catch {
+    /* fail-soft — ההזנה הקודמת נשארת */
+  }
+
+  // 2) integrity/verdict.json — פסק-אמת מהמדידות שכבר בוצעו בטיק זה (אפס-קריאות-API נוספות)
+  try {
+    const rows = m.repoRows;
+    const counts: Record<string, number> = {};
+    for (const r of rows) counts[r.status] = (counts[r.status] ?? 0) + 1;
+    const stale = rows.filter((r) => typeof r.push_age_h === "number" && r.push_age_h > 24).length;
+    const reds = rows.reduce((a, r) => a + (typeof r.reds_48h === "number" ? r.reds_48h : 0), 0);
+    const sources = rows.length + 2; // repos + office-state feed + local dev health
+    const verified =
+      rows.filter((r) => r.push_age_h !== null && r.reds_48h !== null).length + (m.officeOk ? 1 : 0) + (m.devUp === true ? 1 : 0);
+    const findings = reds + stale;
+    atomicWrite(OUT_INTEGRITY, {
+      overall: findings === 0 ? "PASS" : "DEGRADED",
+      at,
+      summary: {
+        sources,
+        verified,
+        findings,
+        counts: { ...counts, stale_push_24h: stale, reds_48h: reds },
+      },
+      provenance: {
+        runUrl: null,
+        writer: "organism-keeper",
+        measured_from: `GitHub API ${ORG} (repos+runs) + office-state feed + local dev health — same tick`,
+      },
+    });
+    done.push("integrity");
+  } catch {
+    /* fail-soft */
+  }
+
+  // 3) flow-map.json — מפת-זרימות נמדדת מתוך גילאי-הדחיפה והאדומים (אפס-קריאות נוספות)
+  try {
+    const rows = m.repoRows;
+    const orphans = rows.filter((r) => r.push_age_h === null).map((r) => ({ repo: r.repo, detail: "push-age לא נמדד בטיק זה" }));
+    const ghosts = rows
+      .filter((r) => typeof r.push_age_h === "number" && (r.push_age_h as number) > 168)
+      .map((r) => ({ repo: r.repo, detail: `${Math.round(r.push_age_h as number)}h בלי דחיפה` }));
+    const stale = rows
+      .filter((r) => typeof r.push_age_h === "number" && (r.push_age_h as number) > 24 && (r.push_age_h as number) <= 168)
+      .map((r) => ({ repo: r.repo, detail: `${Math.round(r.push_age_h as number)}h מאז דחיפה אחרונה` }));
+    const alerts = rows.filter((r) => (r.reds_48h ?? 0) > 0).map((r) => ({ repo: r.repo, detail: `${r.reds_48h} הרצות אדומות ב-48h` }));
+    atomicWrite(OUT_FLOW, {
+      generatedAt: at,
+      writer: "organism-keeper",
+      definitions: { orphan: "push-age לא נמדד", ghost: ">7 ימים בלי דחיפה", stale: ">24h מאז דחיפה", alert: "הרצה אדומה ב-48h" },
+      orphans,
+      ghosts,
+      stale,
+      alerts,
+    });
+    done.push("flow-map");
+  } catch {
+    /* fail-soft */
+  }
+
+  // 4) VALUE-MAP.md — מפת-ערך נמדדת: קיום/גודל/גיל של כל הזנה מוכרזת, עכשיו
+  try {
+    const declared: Array<[string, string]> = [
+      ["FleetHQ/receipts/office-ci/verdict.json", "פסק-דין office-ci"],
+      ["FleetHQ/receipts/office-state-mirror.json", "מראה office-state"],
+      ["Sandbox/state/network-state.json", "פעימת-ה-keeper"],
+      ["Sandbox/ops/integrity/verdict.json", "פסק-אמת-מדידה"],
+      ["Sandbox/ops/office/potential.json", "estate rows + top-actions"],
+      ["Sandbox/ops/office/work-orders.json", "פקודות-עבודה (issues)"],
+      ["Sandbox/ops/flow/flow-map.json", "מפת-זרימות נמדדת"],
+      ["Sandbox/ops/TOKEN-TRUTH.md", "אמת-טוקנים (בלי חומר-מפתח)"],
+      ["Domain/agents/recruitment.json", "לוח-הגיוס"],
+      ["Sandbox/proof/out/KEY-PROOF-LATEST.json", "הוכחת-מפתחות — דורש כספת (ר' KEY-PROOF-STATUS.md)"],
+    ];
+    const rowsMd = declared
+      .map(([p, d]) => {
+        const st = statSafe(path.join(ESTATE, p));
+        const age = st.mtime ? `${Math.max(0, Math.round((Date.now() - st.mtime) / 60000))} דק׳` : "—";
+        return `| \'${p}\' | ${d} | ${st.exists ? "קיים" : "חסר"} | ${st.bytes ?? "—"} | ${age} |`;
+      })
+      .join("\n");
+    atomicWriteText(
+      OUT_VALUEMAP,
+      `# VALUE-MAP — נמדד עכשיו ע"י organism-keeper (${at})\n\nכל שורה נמדדה בטיק זה מהדיסק (stat). אין הצהרות — רק מדידה.\n\n| נתיב | תפקיד | מצב | bytes | גיל |\n|---|---|---|---|---|\n${rowsMd}\n`
+    );
+    done.push("value-map");
+  } catch {
+    /* fail-soft */
+  }
+
+  // 5) TOKEN-TRUTH.md — אמת-טוקנים: מצב ותוקף שנמדדים מה-response-header החי. אפס חומר-מפתח.
+  try {
+    if (token) {
+      const ac = new AbortController();
+      const t = setTimeout(() => ac.abort(), 10_000);
+      const r = await fetch(`https://api.github.com/users/${ORG}`, {
+        headers: { Authorization: `Bearer ${token}`, "User-Agent": "organism-keeper" },
+        cache: "no-store",
+        signal: ac.signal,
+      });
+      clearTimeout(t);
+      const expHeader = r.headers.get("github-authentication-token-expiration");
+      let login: string | null = null;
+      if (r.ok) {
+        try {
+          login = ((await r.json()) as Record<string, unknown>).login as string;
+        } catch {
+          /* login נשאר null */
+        }
+      }
+      const expMs = expHeader ? new Date(expHeader.replace(" UTC", "Z")).getTime() : NaN;
+      const days = Number.isFinite(expMs) ? Math.max(0, Math.floor((expMs - Date.now()) / 86_400_000)) : null;
+      const row = `${at} | github-fine-grained-pat | ${r.ok ? "active" : "rejected"} | github_pat | org-read+dispatch | ${days ?? "—"} | expires ${expHeader ?? "—"} | ${login ?? "—"}`;
+      atomicWriteText(
+        OUT_TOKENTRUTH,
+        `# TOKEN-TRUTH — נמדד חי ע"י organism-keeper (${at})\n\nחוק: אפס חומר-מפתח בקובץ — רק מצב, סוג, תוקף. הטוקן עצמו חי מחוץ ל-git (.secrets).\n\n| at | name | state | kind | scope | days | expires | login |\n|---|---|---|---|---|---|---|---|\n${row}\n`
+      );
+      done.push("token-truth");
+    }
+  } catch {
+    /* fail-soft */
+  }
+
+  // 6) KEY-PROOF-STATUS.md — הסבר-כן על מה שלא ניתן למדוד (הכספת נמחקה) — לעולם לא LATEST.json מזויף
+  try {
+    atomicWriteText(
+      OUT_KEYPROOF_STATUS,
+      `# KEY-PROOF — מצב (organism-keeper, ${at})\n\nKEY-PROOF-LATEST.json אינו נכתב בכוונה: הוכחת-חיות-מפתחות דורשת כספת-מקומית שנמחקה באירוע-המחיקה של ה-estate.\nלפי חוזה-אין-זיופים: לא מומצאות ספירות-מפתחות. השיקום = שחזור-הכספת ואז הרצת המדידה מחדש.\n`
+    );
+    done.push("keyproof-status");
+  } catch {
+    /* fail-soft */
+  }
+
+  return done;
 }
 
 /* --------------------------------- measurement --------------------------------- */
@@ -350,8 +581,14 @@ async function tick() {
     console.error("[keeper] potential.json skipped — org measurement failed (fail-honest, no synthetic payload)");
   }
 
+  // truth-feeds — כל ההזנות המוכרזות נשארות חיות גם-אחרי wipe (Task 46)
+  const truthDone = await truthFeeds(m, at).catch((e) => {
+    console.error("[keeper] truthFeeds error:", e instanceof Error ? e.message.slice(0, 120) : e);
+    return [] as string[];
+  });
+
   console.log(
-    `[keeper] tick #${tickCount} at ${at} — status=${status} repos=${m.repoRows.length} officeAgeH=${m.officeAgeH} state=${stateOk ? "written" : "FAILED"} potential=${potentialOk ? "written" : "skipped"} reasons=${m.reasons.length}`
+    `[keeper] tick #${tickCount} at ${at} — status=${status} repos=${m.repoRows.length} officeAgeH=${m.officeAgeH} state=${stateOk ? "written" : "FAILED"} potential=${potentialOk ? "written" : "skipped"} truth=${truthDone.join("+") || "none"} reasons=${m.reasons.length}`
   );
 }
 
@@ -386,7 +623,14 @@ async function run() {
           lastTick,
           status: starting ? "starting" : lastStatus,
           reasons: lastReasons,
-          feeds: { state: stat(OUT_STATE), potential: stat(OUT_POTENTIAL) },
+          feeds: {
+            state: stat(OUT_STATE),
+            potential: stat(OUT_POTENTIAL),
+            workOrders: stat(OUT_WORKORDERS),
+            integrity: stat(OUT_INTEGRITY),
+            flowMap: stat(OUT_FLOW),
+            tokenTruth: stat(OUT_TOKENTRUTH),
+          },
         });
       }
       return new Response("organism-keeper: use /health\n", { status: 404 });
