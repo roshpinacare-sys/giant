@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 let cache: { at: number; data: MarketPayload } | null = null;
-const CACHE_MS = 90_000;
+const CACHE_MS = 180_000;
 
 export interface CoinRow {
   id: string;
@@ -55,6 +55,48 @@ async function jsonFetch<T>(url: string, pat?: string | null): Promise<T | null>
   }
 }
 
+interface BinanceTicker {
+  symbol?: string;
+  lastPrice?: string;
+  priceChangePercent?: string;
+  quoteVolume?: string;
+}
+
+/** מקור-ראשי: Binance (נתוני-בורסה אמיתיים, ללא-מפתח) · גיבוי: CoinGecko */
+async function fetchCoins(): Promise<CoinRow[]> {
+  const base: CoinRow[] = COINS.map((c) => ({ ...c, priceUsd: null, change24h: null, vol24hUsd: null }));
+  const bin = await jsonFetch<BinanceTicker[]>(
+    `https://api.binance.com/api/v3/ticker/24hr?symbols=${encodeURIComponent(JSON.stringify(["BTCUSDT", "ETHUSDT", "SOLUSDT"]))}`,
+  );
+  if (Array.isArray(bin)) {
+    for (const t of bin) {
+      const sym = (t.symbol ?? "").replace("USDT", "");
+      const row = base.find((c) => c.symbol === sym);
+      if (!row) continue;
+      const p = Number(t.lastPrice);
+      const ch = Number(t.priceChangePercent);
+      const v = Number(t.quoteVolume);
+      if (Number.isFinite(p) && p > 0) row.priceUsd = p;
+      if (Number.isFinite(ch)) row.change24h = ch;
+      if (Number.isFinite(v) && v > 0) row.vol24hUsd = v;
+    }
+  }
+  const missing = base.filter((c) => c.priceUsd === null).map((c) => c.id);
+  if (missing.length) {
+    const cg = await jsonFetch<Record<string, { usd?: number; usd_24h_change?: number; usd_24h_vol?: number }>>(
+      `https://api.coingecko.com/api/v3/simple/price?ids=${missing.join(",")}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true`,
+    );
+    for (const c of base) {
+      if (c.priceUsd !== null) continue;
+      const p = cg?.[c.id];
+      if (typeof p?.usd === "number") c.priceUsd = p.usd;
+      if (typeof p?.usd_24h_change === "number") c.change24h = p.usd_24h_change;
+      if (typeof p?.usd_24h_vol === "number") c.vol24hUsd = p.usd_24h_vol;
+    }
+  }
+  return base;
+}
+
 interface GhCommit {
   sha?: string;
   commit?: { committer?: { date?: string } };
@@ -63,22 +105,7 @@ interface GhCommit {
 export async function loadMarket(force = false): Promise<MarketPayload> {
   if (!force && cache && Date.now() - cache.at < CACHE_MS) return cache.data;
 
-  const ids = COINS.map((c) => c.id).join(",");
-  const price = await jsonFetch<Record<string, { usd?: number; usd_24h_change?: number; usd_24h_vol?: number }>>(
-    `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true`,
-  );
-
-  const coins: CoinRow[] = COINS.map((c) => {
-    const p = price?.[c.id];
-    return {
-      id: c.id,
-      symbol: c.symbol,
-      name: c.name,
-      priceUsd: typeof p?.usd === "number" ? p.usd : null,
-      change24h: typeof p?.usd_24h_change === "number" ? p.usd_24h_change : null,
-      vol24hUsd: typeof p?.usd_24h_vol === "number" ? p.usd_24h_vol : null,
-    };
-  });
+  const coins = await fetchCoins();
 
   const pat = await readPat();
   const [dexCommits, marketsCommits] = await Promise.all([
@@ -112,7 +139,7 @@ export async function loadMarket(force = false): Promise<MarketPayload> {
     fetchedAt: new Date().toISOString(),
   };
 
-  cache = { at: Date.now(), data: payload };
+  cache = coins.some((c) => c.priceUsd !== null) ? { at: Date.now(), data: payload } : null; // כשל לא נשמר — מדידה-חוזרת מיד
   return payload;
 }
 

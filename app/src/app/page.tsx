@@ -3,22 +3,29 @@
 import { useEffect, useState } from "react";
 import { ChannelView } from "@/components/giant/ChannelView";
 import { DexView } from "@/components/giant/DexView";
-import { PulseView } from "@/components/giant/PulseView";
+import { WalletView } from "@/components/giant/WalletView";
+import { DeskView } from "@/components/giant/DeskView";
+import { LedgerView } from "@/components/giant/LedgerView";
+import { ProductsView } from "@/components/giant/ProductsView";
 import { OfficeView } from "@/components/giant/OfficeView";
 
 /* ═══ GIANT — מערכת-האמת של הריבונות ═════════════════════════════════════
- * הפלטפורמה-המאוחדת · ערוץ-אחד · אפס-כפילויות · תקן-ענקים (R360/DECISIONS #42):
- * · הערוץ = הדלת-הראשית: בעלים ↔ ריבונות, זרמי-גיט קנוניים, קומיט-ישיר-מהמשטח.
- * · הדקס = מרכז-הכובד: מטבעות-גדולים, ווליום-כנות, steem/hive = עגין-בלבד.
- * · הדופק = 39 ספרי-האחזקה + רישום-ההחלטות. המשרד-החי = המשרד-היחיד.
+ * הפלטפורמה-המאוחדת · ערוץ-אחד · אפס-כפילויות · תקן-ענקים (R360/#42):
+ * · הערוץ = הדלת-הראשית: בעלים ↔ ריבונות, זרמי-גיט קנוניים, קומיט-ישיר.
+ * · הדקס = מרכז-הכובד: שטח-מסחר על מצב-המנוע מהגיט (נרות · ווליום-כנות).
+ * · הארנק = 20 חשבונות-אמת · השולחן = מנדט+equity · הרישום = כל-ההחלטות.
+ * · המוצרים = קטלוג-אמת · המשרד-החי = המשרד-היחיד.
  * מפתח-מנהל (headcorner) פותח-הכל. הכל נמדד-חי מהגיט; אפס-ירוק-מזויף. */
 
-type ViewId = "channel" | "dex" | "pulse" | "office";
+type ViewId = "channel" | "dex" | "wallet" | "desk" | "ledger" | "products" | "office";
 
 const NAV: Array<{ id: ViewId; label: string; he: string }> = [
   { id: "channel", label: "הערוץ", he: "הדלת-הראשית: בעלים ↔ ריבונות" },
-  { id: "dex", label: "הדקס", he: "מרכז-הכובד: מטבע · נזילות · ווליום" },
-  { id: "pulse", label: "הדופק", he: "39 ספרים · החלטות · בריאות" },
+  { id: "dex", label: "הדקס", he: "שטח-מסחר: נרות · ווליום · pools" },
+  { id: "wallet", label: "הארנק", he: "20 חשבונות-אמת מהמנוע" },
+  { id: "desk", label: "השולחן", he: "מנדט · equity · אסטרטגיות" },
+  { id: "ledger", label: "הרישום", he: "כל-ההחלטות · חיפוש" },
+  { id: "products", label: "המוצרים", he: "קטלוג-אמת · סטטוסים-כנים" },
   { id: "office", label: "המשרד-החי", he: "המשרד-היחיד של הריבונות" },
 ];
 
@@ -59,13 +66,13 @@ export default function Home() {
 
       {/* ═══ גוף: ניווט-צד (מחשב) + תוכן ═══ */}
       <div className="mx-auto flex w-full max-w-7xl flex-1 gap-5 px-4 py-5" dir="rtl">
-        <nav aria-label="מודולי-המערכת" className="hidden w-60 shrink-0 flex-col gap-1.5 md:flex">
+        <nav aria-label="מודולי-המערכת" className="hidden w-60 shrink-0 flex-col gap-1 md:flex">
           {NAV.map((n) => (
             <button
               key={n.id}
               onClick={() => setView(n.id)}
               aria-current={view === n.id ? "page" : undefined}
-              className={`rounded-xl border px-4 py-3 text-right transition ${
+              className={`rounded-xl border px-4 py-2.5 text-right transition ${
                 view === n.id
                   ? "border-amber-600/40 bg-amber-500/[0.06] text-zinc-100"
                   : "border-white/5 bg-zinc-900/40 text-zinc-400 hover:border-white/15 hover:text-zinc-200"
@@ -88,15 +95,18 @@ export default function Home() {
           </div>
           {view === "channel" && <ChannelView />}
           {view === "dex" && <DexView />}
-          {view === "pulse" && <PulseView />}
+          {view === "wallet" && <WalletView />}
+          {view === "desk" && <DeskView />}
+          {view === "ledger" && <LedgerView />}
+          {view === "products" && <ProductsView />}
           {view === "office" && <OfficeView />}
         </main>
       </div>
 
-      {/* ═══ ניווט-תחתון (נייד) ═══ */}
+      {/* ═══ ניווט-תחתון (נייד) — גליל-אופקי ═══ */}
       <nav
         aria-label="מודולי-המערכת (נייד)"
-        className="fixed inset-x-0 bottom-0 z-40 flex border-t border-white/10 bg-zinc-950/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 flex overflow-x-auto border-t border-white/10 bg-zinc-950/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
         dir="rtl"
       >
         {NAV.map((n) => (
@@ -104,7 +114,7 @@ export default function Home() {
             key={n.id}
             onClick={() => setView(n.id)}
             aria-current={view === n.id ? "page" : undefined}
-            className={`min-h-[44px] flex-1 py-2 text-center text-xs font-bold transition ${view === n.id ? "text-amber-500" : "text-zinc-500"}`}
+            className={`min-h-[44px] flex-1 whitespace-nowrap px-3 py-2 text-center text-xs font-bold transition ${view === n.id ? "text-amber-500" : "text-zinc-500"}`}
           >
             {n.label}
           </button>
