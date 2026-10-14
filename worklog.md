@@ -163,3 +163,64 @@ Live-edge verification (same task, measured after landing):
   review gate — the healthy path). The provider-wall-era parked tasks COMPLETED
   on their first honest re-probe in the healed environment — the law's intent,
   measured. D2 drains to clean on the next decider beat.
+
+---
+
+Task ID: 33
+Agent: zai-main (trace 1a1397cb0d36b789)
+Task: תמשיך — the recorded queue head: the three self-verify failures (A10
+freshness STALE, A14 em-dash pattern, A43 markets.1.bestAsk=0) routed by D4
+as repair lanes. Diagnose, fix at the root, prove, land. Hebrew-only.
+
+---
+
+Task ID: 33
+Agent: zai-main (trace 1a1397cb0d36b789)
+Task: תמשיך — the recorded queue head: the three self-verify failures (A10/A14/
+A43) routed by D4. Hebrew-only. Discovery widened it: the live verifier now
+measures 18 reds — the real work was classifying 7 root-cause families and
+closing the two that were MY lane, at the root.
+
+Work Log:
+- State: fresh clones (Sandbox@83fa090 GREEN D1–D7, FleetHQ, Domain, Console).
+  The failure snapshot had MOVED (48/51@05:42Z → 39/57@07:55Z) — a living
+  network, not three static bugs.
+- Classified all 18 into 7 families: (1) 11 stale-target console assertions,
+  (2) A14 typography violation IN the new landing page, (3) A10 schema
+  collision, (4) A39 T15 CR-0077, (5) A43 SETTLE-17 engine, (6) A31 weave
+  anchor machines, (7) A69 inspector publishing.
+- Family-1 evidence: the task-10 wave (10-11 19:20Z) replaced the home page
+  and archived the full console to archive/2026-10-11/; measured EVERY expected
+  marker alive at the new address (6 data-console-section, 10 loop-gate,
+  4 terminal, 2 wallet, 1 rails, 2 kn-miles) → CR R66 re-points 11 assertions.
+- A10 root: grid-sentinel (every 20min, since 10-12 19:58Z) displaced the
+  weave-console-chain-v1 shape from Domain status.json (two writers one file);
+  the anchor-line freshness truth lives in the Console repo's own status.json
+  (measured live: STALE 48.5h — consistent with A31) → re-homed to the chain
+  truth, honestly red.
+- A14 root: the NEW landing violates the standing typography law — 134 banned
+  glyphs counted locally, matching the verifier exactly (133 em-dashes: 47
+  HTML placeholders + 86 in JS/comments/prose, + 1 unicode arrow). Fixed in
+  the page: pending-ellipsis for placeholders, house middot for prose/labels
+  (R315/FIX-2 convention), ASCII for the comment arrow. NOT in the contract.
+- A54 root: the new landing stopped signing 3 live doors (gate.html,
+  wallet.html, bare hub/) — R61 full-map law restored in the map cards.
+- Proofs: local verifier 18→7 (CR family green vs live archive) → push →
+  Pages rebuild measured (0 banned glyphs live, 3 links live) → local verifier
+  52/57 → official Actions run #258 (dispatch HTTP 204): 52/57 passed, 5
+  honest reds, ancestry verified.
+- Landed: Domain@205d6a9b (0c77b35d..205d6a9b after one worldbeat race —
+  rehearsed handler; ls-remote == HEAD exact); Sandbox ledger 108 (fields=5,
+  D1=108, GREEN D1–D7) → Sandbox@61e7f4f (ls-remote == HEAD).
+
+Stage Summary:
+- C-2e CLOSED: the verify contract measures WHERE the surfaces actually live;
+  the landing page obeys the house typography law; the full-map law signs its
+  doors again. Official receipt: 39/57 → 52/57 (+13, minus 13 reds to 5).
+- Honest open lanes (recorded, not muted): A31+A10 — the weave anchor machines
+  are 48.5h silent (owner-custody of the Steem posting authority; revival is
+  the owner/ops lane); A39 — T15's CR-0077 rail-floor re-anchor (needs the
+  regenesis evidence chain + engine fundedEverMu); A43 — SETTLE-17 engine
+  quote sizing (saos-dex mm.ts lane); A69 — inspector report publishing step.
+- Also noted: Actions cron slots drop (office-heartbeat not hourly in
+  practice) — manual dispatch is the reliable edge-probe.
