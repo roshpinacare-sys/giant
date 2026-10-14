@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CandleChart } from "./CandleChart";
-import { Activity, Coins, Flame, Gauge, TrendingUp, Trophy, Layers, Scale, Rocket, CandlestickChart } from "lucide-react";
+import { Recipe } from "./Recipe";
+import { AnimatedNumber } from "./AnimatedNumber";
+import { Activity, Coins, Flame, Gauge, TrendingUp, Trophy, Layers, Scale, Rocket, CandlestickChart, Globe2 } from "lucide-react";
 
 /* ═══ הדקס — מרכז-הכובד של הריבונות (GIANT · R360 · V3 מיזוג-צי) ══════════
  * מיזוג-הליינים (T55): שטח-המסחר-עם-נרות-אמת (התאומים, api/giant/dex) +
@@ -82,7 +84,22 @@ interface MarketPayload {
   anchors: { name: string; note: string }[];
   dex: DexEssentials | null;
   assets: AssetRow[];
+  klines: { symbol: string; source: string; candles: { t: number; o: number; h: number; l: number; c: number; v: number }[] }[];
   dexMeta: { exists: boolean; sha16: string | null; ageMinutes: number | null };
+  fetchedAt: string;
+}
+interface ProductRow {
+  id: string;
+  name: string;
+  status: string;
+  blurb: string;
+  repo: string;
+  url: string;
+}
+interface ProductsPayload {
+  ok: boolean;
+  note?: string;
+  products: ProductRow[];
   fetchedAt: string;
 }
 interface GiantRow {
@@ -186,45 +203,33 @@ function Bar({ label, value, max, color }: { label: string; value: number | null
   );
 }
 
-const PRODUCTS: Array<{ name: string; state: "ACTIVE" | "PLANNED" | "TESTNET"; ref: string; desc: string }> = [
-  { name: "מנוע-מכפל-נזילות (MM)", state: "ACTIVE", ref: "R358 · גל-G", desc: "עומד-על-קביעות על הדקס; עמלות-AMM מדודות" },
-  { name: "גיר-בוקס אוצר (Grid)", state: "ACTIVE", ref: "BOOK-LAW", desc: "הילוך-1 מתוך 3; שינוי-הילוך = קבלות-סולם-בלבד" },
-  { name: "EVM-Lab", state: "TESTNET", ref: "R358", desc: "paper/testnet בלבד; מיינט = אישור-דו-מפתח" },
-  { name: "נגזרות (Derivatives)", state: "PLANNED", ref: "R360 §4", desc: "פיוצ'רס על זוגות-הליבה; אחרי הוכחת-ווליום" },
-  { name: "הלוואות (Lending)", state: "PLANNED", ref: "R360 §4", desc: "שוק-כסף על USDS/WSBD; דו-מפתח-בעלים למיינט" },
-  { name: "מינוף (Leverage)", state: "PLANNED", ref: "R360 §4", desc: "מינוף-מדוד-Kelly בלבד; probation→cap" },
-];
-
-function ProductChip({ state }: { state: string }) {
-  const cls =
-    state === "ACTIVE"
-      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
-      : state === "TESTNET"
-        ? "border-sky-500/30 bg-sky-500/10 text-sky-400"
-        : "border-zinc-600/40 bg-zinc-800/60 text-zinc-400";
-  return <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black ${cls}`}>{state}</span>;
-}
+/* המוצרים נשלפים-חי מהקטלוג (Domain/marketing/products.json) — אפס-מערך-סטטי */
 
 export function DexView() {
   const [data, setData] = useState<MarketPayload | null>(null);
   const [giants, setGiants] = useState<GiantsPayload | null>(null);
   const [eng, setEng] = useState<DexEnginePayload | null>(null);
+  const [prods, setProds] = useState<ProductsPayload | null>(null);
   const [err, setErr] = useState("");
   const [pair, setPair] = useState<string | null>(null);
+  const [mktPair, setMktPair] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
-      const [m, g, e] = await Promise.all([
+      const [m, g, e, p] = await Promise.all([
         fetch("/api/giant/market", { cache: "no-store" }),
         fetch("/api/giant/giants", { cache: "no-store" }),
         fetch("/api/giant/dex", { cache: "no-store" }),
+        fetch("/api/giant/products", { cache: "no-store" }),
       ]);
       const d = (await m.json()) as MarketPayload;
       const gl = (await g.json()) as GiantsPayload;
       const en = (await e.json()) as DexEnginePayload;
+      const pr = (await p.json()) as ProductsPayload;
       setData(d);
       setGiants(gl);
       setEng(en);
+      setProds(pr);
       setErr(d.ok || en.ok ? "" : d.note ?? en.note ?? "לא נמדד");
     } catch {
       setErr("השרת לא נגיש כרגע");
@@ -252,8 +257,30 @@ export function DexView() {
   const change = last && prev && prev.c > 0 ? ((last.c - prev.c) / prev.c) * 100 : null;
   const volSum = active ? active.candles.reduce((s, c) => s + (c.qMu ?? 0), 0) : 0;
 
+  /* השוק-האמיתי: נרות-Binance-חיים של מטבעות-גדולים */
+  const mkt = useMemo(() => {
+    const list = data?.klines ?? [];
+    if (list.length === 0) return null;
+    const chosen = list.find((k) => k.symbol === mktPair) ?? list[0];
+    const lc = chosen.candles[chosen.candles.length - 1] ?? null;
+    const pc = chosen.candles[chosen.candles.length - 2] ?? null;
+    const ch = lc && pc && pc.c > 0 ? ((lc.c - pc.c) / pc.c) * 100 : null;
+    const vol = chosen.candles.reduce((s, c) => s + c.v * (c.c || 0), 0); // ≈ quote-USD (נגזר משני-מדידים)
+    return { chosen, last: lc, change: ch, vol };
+  }, [data, mktPair]);
+
   return (
     <div className="space-y-5" dir="rtl">
+      <Recipe
+        sources={[
+          "saos-dex/db/state-snapshot.json · klines.json · dex-metrics.json · grid-public.json (raw-GitHub · PAT שרת-בלבד)",
+          "Kraken → Binance → CoinGecko (שרשרת-מקורות · keyless) + מטמון-כנות עם גיל-מוצהר",
+          "Binance /api/v3/klines (נרות-אמת · keyless) · api.llama.fi (ליגה)",
+          "Domain/estate: dex/state.json · dex/giants.json · honest-econ.json",
+        ]}
+        measuredAt={data?.fetchedAt ?? null}
+        failNote="חוזה-כשל: כל-מקור שנכשל מוצג 'לא נמדד' — אפס מספרים-מצוירים."
+      />
       {/* פס-פיקוד: המטבע-שלנו קודם */}
       <section className="overflow-hidden rounded-2xl border border-amber-600/30 bg-gradient-to-l from-amber-500/[0.07] via-zinc-900/60 to-zinc-900/60 p-5">
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -273,19 +300,19 @@ export function DexView() {
           </div>
           <div className="flex flex-wrap gap-5 text-center">
             <div>
-              <p className="font-mono text-xl font-black text-zinc-50">{fmtInt(dex?.fills ?? giants?.oursFills ?? null)}</p>
+              <AnimatedNumber className="font-mono text-xl font-black text-zinc-50" value={dex?.fills ?? giants?.oursFills ?? null} format={(n) => Math.round(n).toLocaleString("en-US")} />
               <p className="text-[10px] font-bold text-zinc-500">fills · ספר-חי</p>
             </div>
             <div>
-              <p className="font-mono text-xl font-black text-zinc-50">{fmtInt(dex?.swaps ?? giants?.oursSwaps ?? null)}</p>
+              <AnimatedNumber className="font-mono text-xl font-black text-zinc-50" value={dex?.swaps ?? giants?.oursSwaps ?? null} format={(n) => Math.round(n).toLocaleString("en-US")} />
               <p className="text-[10px] font-bold text-zinc-500">swaps</p>
             </div>
             <div>
-              <p className="font-mono text-xl font-black text-emerald-400">{fmtInt(eng?.ordersOpen ?? dex?.liveOrders ?? null)}</p>
+              <AnimatedNumber className="font-mono text-xl font-black text-emerald-400" value={eng?.ordersOpen ?? dex?.liveOrders ?? null} format={(n) => Math.round(n).toLocaleString("en-US")} />
               <p className="text-[10px] font-bold text-zinc-500">הזמנות-חיות</p>
             </div>
             <div>
-              <p className="font-mono text-xl font-black text-amber-400">{fmtInt(eng?.height ?? dex?.height ?? null)}</p>
+              <AnimatedNumber className="font-mono text-xl font-black text-amber-400" value={eng?.height ?? dex?.height ?? null} format={(n) => Math.round(n).toLocaleString("en-US")} />
               <p className="text-[10px] font-bold text-zinc-500">גובה-שרשרת</p>
             </div>
           </div>
@@ -357,6 +384,52 @@ export function DexView() {
             )}
           </>
         )}
+      </section>
+
+      {/* ═══ השוק-האמיתי: נרות-אמת של מטבעות-גדולים (Binance keyless) ═══ */}
+      <section className="rounded-2xl border border-emerald-600/20 bg-zinc-900/60">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 px-4 py-2.5">
+          <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-200">
+            <Globe2 className="h-4 w-4 text-emerald-500" aria-hidden /> השוק-האמיתי · מטבעות-גדולים · נרות-שעה-חיים
+          </h3>
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold text-emerald-400">נרות-אמת · לא-ספר-פנימי</span>
+            {mkt?.last && (
+              <div className="flex items-baseline gap-2">
+                <span className="font-mono text-lg font-black text-zinc-50">{fmtUsd(mkt.last.c)}</span>
+                {mkt.change !== null && (
+                  <span className={`text-xs font-bold ${mkt.change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                    {mkt.change >= 0 ? "▲" : "▼"} {Math.abs(mkt.change).toFixed(2)}%
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+        {(data?.klines ?? []).length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5 border-b border-white/5 px-4 py-2">
+            {(data?.klines ?? []).map((k) => (
+              <button
+                key={k.symbol}
+                onClick={() => setMktPair(k.symbol)}
+                aria-pressed={k.symbol === mkt?.chosen.symbol}
+                className={`h-9 rounded-lg px-3 font-mono text-xs font-bold transition ${k.symbol === mkt?.chosen.symbol ? "bg-emerald-600 text-zinc-950" : "border border-white/10 text-zinc-400 hover:text-zinc-200"}`}
+              >
+                {k.symbol}
+              </button>
+            ))}
+            <span className="mr-auto font-mono text-[10px] text-zinc-500">ווליום-48ש׳ ≈ {fmtVol(mkt?.vol ?? null)} · {mkt?.chosen.source ?? "—"} · keyless</span>
+          </div>
+        )}
+        <div className="p-2" style={{ height: 300 }}>
+          {mkt ? (
+            <CandleChart candles={mkt.chosen.candles.map((c) => ({ t: c.t, o: c.o, h: c.h, l: c.l, c: c.c, vMu: c.v, qMu: c.v * c.c, n: 0 }))} height={290} unit="plain" />
+          ) : (
+            <div className="flex h-full items-center justify-center text-xs text-zinc-500">
+              {data ? "נרות-השוק לא נמדדו כרגע — fail-honest (Binance לא הגיב)" : "טוען נרות-אמת…"}
+            </div>
+          )}
+        </div>
       </section>
 
       {/* מדדי-המנוע — הווליום-הכנה יום-יום (הוכחת-הווליום) */}
@@ -552,20 +625,29 @@ export function DexView() {
         </section>
       )}
 
-      {/* מפת-מוצרים */}
+      {/* מפת-מוצרים — חיה מהקטלוג (Domain/marketing/products.json) */}
       <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
-        <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-zinc-200">
-          <Layers className="h-4 w-4 text-amber-500" aria-hidden /> מפת-המוצרים · כמו-הענקים, רק-טוב-יותר
-        </h3>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-200">
+            <Layers className="h-4 w-4 text-amber-500" aria-hidden /> מפת-המוצרים · כמו-הענקים, רק-טוב-יותר
+          </h3>
+          {prods && <span className="font-mono text-[10px] text-zinc-500">{prods.products.length} מוצרים · קטלוג-חי{prods.products.length === 0 ? " · fail-honest" : ""}</span>}
+        </div>
+        {!prods && <Skeleton className="h-24 w-full rounded-xl bg-zinc-900" />}
+        {prods && prods.products.length === 0 && <p className="rounded-xl border border-white/5 bg-zinc-950/60 p-4 text-xs text-zinc-500">הקטלוג לא נמדד כרגע — fail-honest {prods.note ?? ""}</p>}
         <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
-          {PRODUCTS.map((p) => (
-            <article key={p.name} className="rounded-xl border border-white/10 bg-zinc-950/50 p-3.5 transition hover:border-amber-600/30">
+          {(prods?.products ?? []).slice(0, 9).map((p) => (
+            <article key={p.id || p.name} className="rounded-xl border border-white/10 bg-zinc-950/50 p-3.5 transition hover:border-amber-600/30">
               <div className="flex items-center justify-between gap-2">
-                <p className="text-xs font-black text-zinc-100">{p.name}</p>
-                <ProductChip state={p.state} />
+                <p className="truncate text-xs font-black text-zinc-100">{p.name}</p>
+                {p.status && <span className="shrink-0 rounded-full border border-zinc-600/40 bg-zinc-800/60 px-2 py-0.5 text-[9px] font-black text-zinc-400">{p.status}</span>}
               </div>
-              <p className="mt-1.5 text-[10px] leading-4 text-zinc-500">{p.desc}</p>
-              <p className="mt-1 font-mono text-[9px] text-zinc-600">{p.ref}</p>
+              <p className="mt-1.5 line-clamp-2 text-[10px] leading-4 text-zinc-500">{p.blurb || "—"}</p>
+              {p.url && (
+                <a href={p.url} target="_blank" rel="noreferrer" className="mt-1.5 inline-block font-mono text-[9px] text-amber-500/80 hover:text-amber-400">
+                  {p.url.replace(/^https?:\/\//, "")} ↗
+                </a>
+              )}
             </article>
           ))}
         </div>

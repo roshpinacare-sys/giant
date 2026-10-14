@@ -58,6 +58,19 @@ export interface DexEssentials {
   backingWsbd: number | null;
 }
 
+export interface KlineRow {
+  t: number;
+  o: number;
+  h: number;
+  l: number;
+  c: number;
+  v: number;
+}
+export interface KlinesRow {
+  symbol: string;
+  source: string;
+  candles: KlineRow[];
+}
 export interface MarketPayload {
   ok: boolean;
   note?: string;
@@ -67,6 +80,7 @@ export interface MarketPayload {
   anchors: { name: string; note: string }[];
   dex: DexEssentials | null;
   assets: AssetRow[];
+  klines: KlinesRow[];
   dexMeta: FileMeta;
   fetchedAt: string;
 }
@@ -199,6 +213,91 @@ async function writeCache(coins: CoinRow[]): Promise<void> {
   }
 }
 
+/* נרות-אמת: Binance public klines (keyless) — 1 שעה × 48, מטבעות-גדולים.
+ * גיבוי: Kraken OHLC (keyless) — ה-IP-המשותף נחסם-לסירוגין; שרשרת-מקורות.
+ * כשל-סמל = רשימה-ריקה-כנה; אפס נרות-מצוירים. */
+type BinanceKline = Array<string | number>;
+
+const KRAKEN_PAIRS: Record<string, string> = {
+  BTCUSDT: "XBTUSD",
+  ETHUSDT: "ETHUSD",
+  SOLUSDT: "SOLUSD",
+};
+
+async function binanceKlines(symbol: string, interval: string, limit: number): Promise<KlineRow[]> {
+  try {
+    const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(9000),
+    });
+    if (!res.ok) return [];
+    const raw = (await res.json()) as BinanceKline[];
+    if (!Array.isArray(raw)) return [];
+    return raw
+      .filter((k) => Array.isArray(k) && k.length >= 6)
+      .map((k) => ({
+        t: Number(k[0]),
+        o: parseFloat(String(k[1])),
+        h: parseFloat(String(k[2])),
+        l: parseFloat(String(k[3])),
+        c: parseFloat(String(k[4])),
+        v: parseFloat(String(k[5])),
+      }))
+      .filter((k) => Number.isFinite(k.c) && Number.isFinite(k.o) && k.t > 0);
+  } catch {
+    return [];
+  }
+}
+
+async function krakenKlines(symbol: string, limit: number): Promise<KlineRow[]> {
+  try {
+    const pair = KRAKEN_PAIRS[symbol];
+    if (!pair) return [];
+    const res = await fetch(`https://api.kraken.com/0/public/OHLC?pair=${pair}&interval=60`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(9000),
+    });
+    if (!res.ok) return [];
+    const j = (await res.json()) as { result?: Record<string, Array<Array<string | number>>> };
+    const series = j.result ? Object.values(j.result).find((v) => Array.isArray(v)) : undefined;
+    if (!Array.isArray(series)) return [];
+    return series
+      .slice(-limit)
+      .filter((k) => Array.isArray(k) && k.length >= 6)
+      .map((k) => ({
+        t: Number(k[0]) * 1000,
+        o: parseFloat(String(k[1])),
+        h: parseFloat(String(k[2])),
+        l: parseFloat(String(k[3])),
+        c: parseFloat(String(k[4])),
+        v: parseFloat(String(k[6])),
+      }))
+      .filter((k) => Number.isFinite(k.c) && Number.isFinite(k.o) && k.t > 0);
+  } catch {
+    return [];
+  }
+}
+
+async function realKlines(): Promise<KlinesRow[]> {
+  const specs: Array<[string, string]> = [
+    ["BTCUSDT", "BTC/USDT"],
+    ["ETHUSDT", "ETH/USDT"],
+    ["SOLUSDT", "SOL/USDT"],
+  ];
+  const rows = await Promise.all(
+    specs.map(async ([sym, label]) => {
+      let candles = await binanceKlines(sym, "1h", 48);
+      let source = "Binance";
+      if (candles.length === 0) {
+        candles = await krakenKlines(sym, 48);
+        source = "Kraken";
+      }
+      return { symbol: label, source, candles };
+    }),
+  );
+  return rows.filter((r) => r.candles.length > 0);
+}
+
 async function coinsLive(): Promise<{ coins: CoinRow[]; source: string | null; cachedAgeMin: number | null }> {
   // שרשרת-מקורות: Kraken → Binance → CoinGecko → מטמון-כנות (עם גיל-מוצהר) → null.
   // ה-IP-המשותף נחסם לסירוגין (418/429) — לכן שרשרת + מטמון; אפס מספרים-מצוירים.
@@ -276,7 +375,7 @@ export async function GET() {
   if (cache && Date.now() - cache.at < CACHE_MS) {
     return NextResponse.json(cache.data, { headers: { "cache-control": "no-store" } });
   }
-  const [coinPack, dexPack] = await Promise.all([coinsLive(), dexEssentials()]);
+  const [coinPack, dexPack, klines] = await Promise.all([coinsLive(), dexEssentials(), realKlines()]);
   const okCoins = coinPack.coins.some((c) => c.priceUsd !== null);
   const payload: MarketPayload = {
     ok: okCoins || dexPack.dex !== null,
@@ -294,6 +393,7 @@ export async function GET() {
     ],
     dex: dexPack.dex,
     assets: dexPack.assets,
+    klines,
     dexMeta: dexPack.meta,
     fetchedAt: new Date().toISOString(),
   };

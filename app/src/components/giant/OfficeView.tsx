@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Recipe } from "./Recipe";
+import { AnimatedNumber } from "./AnimatedNumber";
 import { Building2, Inbox, ScrollText, Users } from "lucide-react";
 
 /* ═══ המשרד-החי — המשרד-היחיד של הריבונות (GIANT · צו-הצמצום) ═══════════
@@ -23,6 +25,8 @@ interface OfficePayload {
   connected: boolean | null;
   backend: string | null;
   capturedAt: string | null;
+  verdict: string | null;
+  verdictChecks: { name: string; state: string; detail: string }[];
   agents: OfficeAgent[];
   tasks: { id: string; title: string }[];
   inbox: { at: string; id: string; text: string }[];
@@ -78,6 +82,15 @@ export function OfficeView() {
 
   return (
     <div className="space-y-5" dir="rtl">
+      <Recipe
+        sources={[
+          "FleetHQ/office/state/office-state.json (סוכנים · משימות · סטטוס)",
+          "FleetHQ/office/state/operator-inbox.jsonl (תיבת-המפעיל · sha16)",
+          "Domain/office/data.json (פעימת-המשרד · verdict + בדיקות)",
+        ]}
+        measuredAt={data?.fetchedAt ?? null}
+        failNote="חוזה-כשל: מקור-שנכשל = שדה-כנה ריק; אפס-סינתזה."
+      />
       <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -89,6 +102,11 @@ export function OfficeView() {
             </p>
           </div>
           <div className="flex items-center gap-2">
+            {data?.verdict && (
+              <span className={`rounded-full border px-2.5 py-1 text-[10px] font-black ${data.verdict.includes("ALIVE") || data.verdict.includes("GREEN") ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" : "border-amber-500/30 bg-amber-500/10 text-amber-400"}`}>
+                פעימת-Domain: {data.verdict}
+              </span>
+            )}
             {data?.connected !== null && data?.connected !== undefined && (
               <span className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-black ${data.connected ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" : "border-red-500/30 bg-red-500/10 text-red-400"}`}>
                 <span className={`h-1.5 w-1.5 animate-pulse rounded-full ${data.connected ? "bg-emerald-500" : "bg-red-500"}`} aria-hidden />
@@ -105,7 +123,7 @@ export function OfficeView() {
         {/* סוכנים-במשמרת */}
         <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
           <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-zinc-200">
-            <Users className="h-4 w-4 text-amber-500" aria-hidden /> סוכנים-במשמרת {data && <Badge variant="outline" className="border-white/10 text-zinc-400">{data.agents.length}</Badge>}
+            <Users className="h-4 w-4 text-amber-500" aria-hidden /> סוכנים-במשמרת {data && <Badge variant="outline" className="border-white/10 text-zinc-400"><AnimatedNumber value={data.agents.length} format={(n) => String(Math.round(n))} /></Badge>}
           </h3>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             {!data && [1, 2, 3, 4, 5, 6].map((i) => <Skeleton key={i} className="h-16 rounded-xl bg-zinc-950" />)}
@@ -165,15 +183,30 @@ export function OfficeView() {
       {/* הצעות-משרד */}
       <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
         <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-zinc-200">
-          <ScrollText className="h-4 w-4 text-amber-500" aria-hidden /> הצעות-המשרד — אחרונות
+          <ScrollText className="h-4 w-4 text-amber-500" aria-hidden /> עורקי-המשרד · בדיקות-הפעימה
         </h3>
-        <div className="flex flex-wrap gap-2">
-          {!data && [1, 2, 3].map((i) => <Skeleton key={i} className="h-7 w-56 rounded-full bg-zinc-950" />)}
-          {(data?.proposals ?? []).map((p) => (
-            <span key={p} className="rounded-full border border-white/5 bg-zinc-950/60 px-3 py-1.5 font-mono text-[10px] text-zinc-400">{p}</span>
+        <div className="grid max-h-56 gap-1.5 overflow-y-auto pr-1 sm:grid-cols-2">
+          {!data && [1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-9 rounded-lg bg-zinc-950" />)}
+          {(data?.verdictChecks ?? []).map((c) => (
+            <div key={c.name} className="flex items-center justify-between gap-2 rounded-lg border border-white/5 bg-zinc-950/60 px-3 py-2">
+              <span className="truncate text-xs font-bold text-zinc-300">{c.name}</span>
+              <span className={`shrink-0 rounded-full px-2 py-0.5 text-[9px] font-black ${c.detail.includes("FAIL") ? "bg-red-500/15 text-red-400" : "bg-emerald-500/15 text-emerald-400"}`} title={c.detail}>
+                {c.detail.includes("FAIL") ? "FAIL" : "PASS"}
+              </span>
+            </div>
           ))}
-          {data && data.proposals.length === 0 && <p className="text-xs text-zinc-500">אין הצעות-פתוחות</p>}
+          {data && data.verdictChecks.length === 0 && <p className="col-span-full text-xs text-zinc-500">פעימת-Domain לא נמדדה כרגע — fail-honest</p>}
         </div>
+        {data && data.proposals.length > 0 && (
+          <div className="mt-4 border-t border-white/5 pt-3">
+            <h4 className="mb-2 text-[10px] font-black uppercase tracking-wider text-zinc-600">הצעות-משרד — אחרונות</h4>
+            <div className="flex flex-wrap gap-2">
+              {data.proposals.map((p) => (
+                <span key={p} className="rounded-full border border-white/5 bg-zinc-950/60 px-3 py-1.5 font-mono text-[10px] text-zinc-400">{p}</span>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );

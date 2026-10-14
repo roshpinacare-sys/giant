@@ -18,11 +18,11 @@ const UP = "#10b981";
 const DOWN = "#ef4444";
 
 /* µ → יחידה-שלמה, תווית-ציר */
-function fmtAxis(mu: number): string {
-  const u = mu / 1000;
-  if (u >= 1e6) return `${(u / 1e6).toFixed(2)}M`;
-  if (u >= 1000) return `${(u / 1e3).toFixed(1)}K`;
-  return u.toFixed(u < 10 ? 2 : 1);
+function fmtAxis(mu: number, unit: "mu" | "plain"): string {
+  const u = unit === "mu" ? mu / 1000 : mu;
+  if (u >= 1e6) return `$${(u / 1e6).toFixed(2)}M`;
+  if (u >= 1000) return `$${(u / 1e3).toFixed(1)}K`;
+  return unit === "mu" ? u.toFixed(u < 10 ? 2 : 1) : `$${u.toFixed(u < 10 ? 4 : 2)}`;
 }
 
 function computeView(candles: Candle[], H: number) {
@@ -50,7 +50,16 @@ function computeView(candles: Candle[], H: number) {
   return { W, padL, padR, priceH, volTop, volH, cs, min, max, step, bw, y, vh, maxV, gridLines: 4 };
 }
 
-export function CandleChart({ candles, height = 320 }: { candles: Candle[]; height?: number }) {
+export function CandleChart({
+  candles,
+  height = 320,
+  unit = "mu",
+}: {
+  candles: Candle[];
+  height?: number;
+  /** "mu" = קנון-המנוע (÷1000 להצגה) · "plain" = יחידות-שוק-אמת (USD מלא) */
+  unit?: "mu" | "plain";
+}) {
   const H = height;
   const view = computeView(candles, H);
 
@@ -73,7 +82,7 @@ export function CandleChart({ candles, height = 320 }: { candles: Candle[]; heig
           <g key={i}>
             <line x1={padL} x2={W - padR} y1={yy} y2={yy} stroke="#27272a" strokeWidth="1" />
             <text x={W - padR + 6} y={yy + 3.5} fill="#71717a" fontSize="11" fontFamily="monospace">
-              {fmtAxis(p)}
+              {fmtAxis(p, unit)}
             </text>
           </g>
         );
@@ -117,14 +126,14 @@ export function CandleChart({ candles, height = 320 }: { candles: Candle[]; heig
             <line x1={padL} x2={W - padR} y1={yy} y2={yy} stroke="#f59e0b" strokeWidth="1" strokeDasharray="4 3" opacity="0.8" />
             <rect x={W - padR + 2} y={yy - 9} width={58} height={18} rx="3" fill="#f59e0b" />
             <text x={W - padR + 8} y={yy + 4} fill="#18181b" fontSize="11" fontWeight="bold" fontFamily="monospace">
-              {fmtAxis(last.c)}
+              {fmtAxis(last.c, unit)}
             </text>
           </g>
         );
       })()}
       {/* תווית-ווליום */}
       <text x={padL + 2} y={volTop - 2} fill="#52525b" fontSize="10">
-        VOL max {maxV / 1000 >= 1000 ? `${((maxV / 1000) / 1e3).toFixed(1)}K` : `${Math.round(maxV / 1000)}`}
+        VOL max {unit === "mu" ? (maxV / 1000 >= 1000 ? `${((maxV / 1000) / 1e3).toFixed(1)}K` : `${Math.round(maxV / 1000)}`) : maxV >= 1000 ? `${(maxV / 1e3).toFixed(1)}K` : maxV.toFixed(1)}
       </text>
     </svg>
   );

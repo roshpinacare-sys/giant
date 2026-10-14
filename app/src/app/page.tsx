@@ -137,15 +137,17 @@ export default function Home() {
             <p className="text-xs font-bold text-zinc-300">{active?.label}</p>
             <p className="text-[10px] text-zinc-500">{active?.he}</p>
           </div>
-          {view === "machine" && <MachineView onNavigate={setView} />}
-          {view === "dex" && <DexView />}
-          {view === "channel" && <ChannelView />}
-          {view === "wallet" && <WalletView />}
-          {view === "desk" && <DeskView />}
-          {view === "ledger" && <LedgerView />}
-          {view === "products" && <ProductsView />}
-          {view === "pulse" && <PulseView />}
-          {view === "office" && <OfficeView />}
+          <div key={view} className="view-in">
+            {view === "machine" && <MachineView onNavigate={setView} />}
+            {view === "dex" && <DexView />}
+            {view === "channel" && <ChannelView />}
+            {view === "wallet" && <WalletView />}
+            {view === "desk" && <DeskView />}
+            {view === "ledger" && <LedgerView />}
+            {view === "products" && <ProductsView />}
+            {view === "pulse" && <PulseView />}
+            {view === "office" && <OfficeView />}
+          </div>
         </main>
       </div>
 

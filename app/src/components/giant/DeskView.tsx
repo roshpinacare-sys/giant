@@ -80,6 +80,9 @@ export function DeskView() {
             </span>
             {desk.liveOwnerArmed && <span className="rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-bold text-red-400">LIVE-ARMED (דו-מפתח)</span>}
             <span className="font-mono text-[10px] text-zinc-500">beat {desk.beat ?? "—"} · head {desk.chainHead ?? "—"}</span>
+            <span className="font-mono text-[10px] text-zinc-600" title={desk.fetchedAt}>
+              נמדד לפני {Math.max(0, Math.round((Date.now() - Date.parse(desk.fetchedAt)) / 60000))} ד׳
+            </span>
           </>
         )}
       </section>

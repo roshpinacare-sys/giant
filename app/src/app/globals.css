@@ -286,3 +286,8 @@
 .iso-part{cursor:pointer;outline:none}
 .iso-part:focus-visible .iso-edge{stroke:var(--anatomy-lit)}
 .iso-part:hover .iso-edge{stroke:var(--anatomy-hi)}
+
+/* ═══ תנועה-חיה (דפוס prompt-motion · GIANT) — מעברי-תצוגה ═══ */
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.view-in{animation:viewIn .38s cubic-bezier(.22,.61,.36,1) both}
+@media (prefers-reduced-motion:reduce){.view-in{animation:none}}

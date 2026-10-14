@@ -94,6 +94,11 @@ export function GiantsView() {
             <span className="rounded-full border border-amber-500/25 bg-amber-500/5 px-2.5 py-1 text-[10px] font-bold text-amber-400">הגריד ARMED-LIVE</span>
           )}
           <span className="font-mono text-[10px] text-zinc-600">{data?.source ?? "api.llama.fi"}</span>
+          {data && (
+            <span className="font-mono text-[10px] text-zinc-600" title={data.fetchedAt}>
+              נמדד לפני {Math.max(0, Math.round((Date.now() - Date.parse(data.fetchedAt)) / 60000))} ד׳
+            </span>
+          )}
         </div>
       </section>
       {err && <p className="text-xs text-red-400">{err}</p>}

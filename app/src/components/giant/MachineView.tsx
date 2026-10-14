@@ -11,6 +11,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import * as K from "@/lib/anatomy/iso-kit";
 import { Solid, Line, Wire, Dots, FaceText, IsoFigure, Plate } from "@/lib/anatomy/react/draw";
 import { useReadout, useEased } from "@/lib/anatomy/react/live";
+import { Recipe } from "./Recipe";
 
 /* ─── מדידה: מבני-ה-API האמיתיים ─── */
 interface Candle { t: number; c: number }
@@ -23,6 +24,7 @@ interface DexPayload {
   metrics?: DayMetrics[];
   treasuryProfitEver?: number | null;
   grid?: { armed?: boolean; real?: boolean; filledTotal?: number | null; inventory?: Record<string, number | undefined> | null; externalFlowUsd?: number | null } | null;
+  fetchedAt?: string;
 }
 interface ChannelPayload { ok: boolean; directives?: { id: string; title: string; status: string }[] }
 interface PulsePayload {
@@ -37,7 +39,7 @@ interface MachineData {
   gridArmed: boolean | null; gridReal: boolean | null; gridFilled: number | null; gridFlow: number | null;
   directives: number | null; lastDirective: string | null;
   truthVerdict: string | null; reqOpen: number | null; reqTotal: number | null;
-  at: string; notes: string[];
+  at: string; measuredAt: string | null; notes: string[];
 }
 
 const MU = 1000; /* חוק-היחידות (Task-42): כל-הספרים ב-µ — התצוגה תמיד ביחידות-אמת */
@@ -84,6 +86,7 @@ function derive(dex: DexPayload | null, ch: ChannelPayload | null, pulse: PulseP
     reqOpen: pulse?.channel?.requestsOpen ?? null,
     reqTotal: pulse?.channel?.requestsCanonical ?? null,
     at: new Date().toISOString(),
+    measuredAt: dex?.fetchedAt ?? pulse?.fetchedAt ?? ch?.fetchedAt ?? null,
     notes,
   };
 }
@@ -253,6 +256,15 @@ export function MachineView({ onNavigate }: { onNavigate: (v: "dex" | "channel" 
 
   return (
     <section className="flex flex-col gap-4" dir="rtl" aria-label="מכונת-הריבונות">
+      <Recipe
+        sources={[
+          "saos-dex/db/state-snapshot.json + klines.json (מחיר · כספת · גריד)",
+          "Pulse/state/sovereign-channel/*.jsonl (ערוץ-ההוראות · טביעות)",
+          "Domain/truth/latest.json (שער-האמת · פניות-פתוחות)",
+        ]}
+        measuredAt={data?.measuredAt ?? null}
+        failNote="חוזה-כשל: כל-מספר על-המכונה מהמדידה-שמזיזה-את-החלקים — אפס-קישוט-מדומה."
+      />
       <div className="iso" dir="ltr">
         <Plate
           fig="FIG 01 · MEASURED-LIVE"
