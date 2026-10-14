@@ -588,3 +588,26 @@ Work Log:
 Stage Summary:
 - הסימולציה-מתה: כל-מספר-נגזר-מהלדג'ר-או-ממקור-חוץ-חי. הארנה-מתחילה-מ-0-אמת.
 - ממשק-אחד: giant. שאר-הריפו-ים-ממלאי-תפקידים-מוגדרים-ולא-ממשקים.
+
+---
+Task ID: 43
+Agent: zai-main (统一界面收口 · headcorner 安全 · anatomy 检验)
+Task: 业主指令 trace 1a13c36d2c8d4031 — "5 个代理最终抵达统一界面 + 检验 https://github.com/wheresryan22/anatomy"
+
+Work Log:
+- 审计 git 与 t36/Sandbox：确认 18 小时代理 SPEC-PLATFORM.md（git→产品、一状态机、front-גלוי/back-חסוי）已成体系；确认 v2"真话版"dex-engine（SAOS 创世 126,682/21M、Binance 真实喂价、辅助对零假量）已上线跳动
+- 浏览器端到端验证统一界面 9 视图：DEX(总览/交易/swap/池/钱包)、estate 真相图(6 代理诚实面板)、ledger(118 真实 commits 按代理过滤)、主权频道(LLM 闭环回复 21:20)、供应真相面板直接回答业主 80M/100K/21M 质问
+- 真实交易验证：swap 100µ→+50µ→+50µ 全部落账；vol24h=700 精确守恒(500+100+50+50)；fees24h=2.1=30bps×700；SAOS 池/钱包 AMM 守恒到小数
+- 发现并修复严重安全漏洞：swap/faucet/pools 三路由无认证即可动 OWNER 钱包（业主此前怒斥"钥匙没有认证"的根源）
+- 修复：新建 src/lib/owner-client.ts 共享 owner 头助手；三路由加 isOwnerReq 门(401+authRequired)；swap/wallet/pools 组件改 ownerFetch+诚实 401 提示；faucet 废除 GNT→仅 USDS 且禁铸 SAOS；page.tsx 统一用共享助手
+- 浏览器验证完整认证闭环：登出态 swap 被拒(红色 toast、余额分毫未动)→headcorner 钥匙登录成功→认证态 swap 执行落账
+- 修复移动端市场行横向溢出(390px 完整无切割)；页脚吸附验证
+- 检验 anatomy 仓库并落地结论到 t36/Sandbox/giant/ANATOMY-REFERENCE.md："对象即解释"映射为 giant 真相法则；--audit 精神→浏览器+账本不变量双重验收
+- lint src 全绿；主仓提交(9 文件)+Sandbox 子仓提交
+
+Stage Summary:
+- 统一界面真实可用：一个界面、一个状态机、零模拟、真交易、真账本、真守恒
+- 安全闭环：一切动钱操作必须 headcorner；401 诚实拒绝；iframe 支持 x-giant-owner 头
+- 供应矛盾正式回答于 UI：SAOS 126,682/21,000,000/未发行 20,873,318 全部账本可溯
+- anatomy 结论：精度与自审计标准采纳，装饰性美术不采纳
+- M-9 真实量引擎已活：vol24h=700µ(全部为验证性真实成交)；待舰队规模化交易
