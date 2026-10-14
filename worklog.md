@@ -1397,3 +1397,19 @@ Stage Summary:
 - The org's only two permanently-red marks (ops-forge Oct-12) are now measured as honest history WITH a root-fix protecting every future cycle — the verify class of false-reds is dead code.
 - Three parallel self-heal events in one morning (artery's R54 fix, my redundant repair, the re-run receipts that DID land) — all reconciled by the union/stand-down laws, zero overwrites, zero lost work.
 - contract-check schema drift fixed with a lesson recorded: union-fixes must be type-aware and pre-verified against live data before push.
+---
+Task ID: 39
+Agent: Continuation agent (IM trace 1a139590a7bde121 "תמשיך")
+Task: Post-outage resumption — execute the four pending items Task 38 could not finish, keep the org red-free and verified.
+
+Work Log:
+- CORRECTION TO TASK 38's "0 active pins" claim: a real `node-version: 20` pin SURVIVED in Autonomy/.github/workflows/floating-builds.yml:47 (unquoted inline format slipped both sed passes; grep found it immediately once tooling recovered). Fixed + pushed (Autonomy b116409 → origin 40cd9ab). Also cleaned the Domain .bak archaeology file to node-version 22 for grep hygiene (Domain 91b9aa0 → origin 254d5fa), so org-wide `node-version: 20` residue is now measured 0 INCLUDING archaeology.
+- OPS-FORGE RE-RUN VERDICT VERIFIED VIA API: both re-run attempts (38323459374, 38322814865) completed failure with verify-failed at the pinned SHA aaed6ac — confirms Task 38's rerun-law corollary (rerun executes the ORIGINAL SHA; historical reds are permanent). Root-fix 2c2c939 confirmed pushed to origin. Latest 6 cycles all success (runs 3-8; the fix's first live exercise comes with the next scheduled cycle).
+- OFFICE-3D BORN-RED FIX VERIFIED BY NATURAL RUNS: runs #50 (push) and #51 (workflow_dispatch) both SUCCESS on 332cbcd at 07:18Z, exercising the full added build chain (bun install → prisma generate → office3d:build). Daily 06:47Z schedule did NOT fire today — expected: the cron line landed on main at ~07:1xZ, after today's 06:47 fire window; GitHub registers new schedules with lag. First scheduled fire: tomorrow 06:47Z.
+- FALSE-ALARM LESSON RE-CONFIRMED: Bash grep output rendered office-3d.yml's `on:` block as duplicate keys and `[main]` as `ain]` — Read tool showed both are correct. Never trust shell rendering for YAML content; verify with Read.
+- ORG-WIDE RED SCAN (13 repos, 5-run window each): ZERO red conclusions everywhere; live runs are normal artery/pacemaker heartbeats (Autonomy/Domain/Pulse/saos-runtime/steem in flight at scan time). The two ops-forge Oct-12 reds sit below the window as documented permanent honest history.
+
+Stage Summary:
+- All four Task 38 pending items executed and closed; one Task 38 claim corrected with a real fix (Autonomy straggler pin).
+- Org state at ~07:50Z: zero red across all 13 repos, node-22 debt fully retired including archaeology, office-3d pipeline proven green end-to-end (bake → publish → first real Domain deploy), forge verifier root-fix live awaiting its first scheduled exercise.
+- Nothing force-cancelled, nothing faked green: every non-green historical mark is either measured-honest history (ops-forge ×2) or policy-frozen (steem disabled Actions).
