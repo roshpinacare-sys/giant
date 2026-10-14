@@ -13,7 +13,7 @@ export function fmtMicro(v: number): string {
   return `${heNum0.format(v)} µ`;
 }
 
-/** מחיר עם דיוק-דינמי: BTC 67,418.2 · GNT 1.8420 · DOGE 0.1618 */
+/** מחיר עם דיוק-דינמי: BTC 67,418.2 · SAOS 1.8420 · DOGE 0.1618 */
 export function fmtPrice(p: number): string {
   if (!isFinite(p)) return "—";
   const a = Math.abs(p);

@@ -76,6 +76,16 @@ export async function GET() {
     const saosInPool = saosPairBase(pairs);
     const usdsInPool = usdsPairQuote(pairs);
 
+    // --- צי-הסוכנים: נפח-אמת-של-הצי ב-24h ---
+    const dayAgoFleet = new Date(Date.now() - 86_400_000);
+    const fleetAgg = await db.dexTrade.aggregate({
+      _sum: { total: true },
+      _count: true,
+      where: { source: "FLEET", t: { gte: dayAgoFleet } },
+    });
+    const [fleetVol24h, fleetTrades24h] = [fleetAgg._sum.total ?? 0, fleetAgg._count ?? 0];
+    const fleetAgents = await db.fleetAgent.count({ where: { active: true } });
+
     const engine = await engineStatus();
     const seededAt = engine.seededAt ? new Date(engine.seededAt).getTime() : null;
     const marketAgeSec = seededAt ? Math.max(0, Math.floor(Date.now() / 1000) - Math.floor(seededAt / 1000)) : null;
@@ -88,8 +98,8 @@ export async function GET() {
         vol30d,
         fees24h: vol24h * 0.003,
         pairsCount: pairs.length,
-        gntPrice: saos?.price ?? 0,
-        gntChange24h: saos?.change24h ?? 0,
+        saosPrice: saos?.price ?? 0,
+        saosChange24h: saos?.change24h ?? 0,
       },
       moversUp,
       moversDown,
@@ -102,6 +112,11 @@ export async function GET() {
         goal7dPct: Math.min(100, (vol24h / target7d) * 100),
         goal30dPct: Math.min(100, (vol24h / target30d) * 100),
         bestDayVol,
+      },
+      fleet: {
+        vol24h: fleetVol24h,
+        trades24h: fleetTrades24h,
+        activeAgents: fleetAgents,
       },
       // פאנל-האמת: מה-באמת-קיים. תקרה-לא-מנופקת-מוצגת-בנפרד. אפס-הבטחות.
       supply: {

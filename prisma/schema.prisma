@@ -127,3 +127,16 @@ model DexConfig {
   key   String @id
   value String
 }
+
+// צי-הסוכנים — כל-סוכן עם-הקצאה-אמיתית-מתועדת-בלדג'ר (TREASURY→FLEET:<id>).
+// האסימון נשמר-כ-hash בלבד; כל-עסקה-שלו מסומנת source=FLEET ב-DexTrade.
+model FleetAgent {
+  id             String   @id @default(cuid())
+  agentId        String   @unique
+  name           String
+  tokenHash      String
+  allocationUsds Float
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  lastTradeAt    DateTime?
+}

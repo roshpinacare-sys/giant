@@ -48,7 +48,6 @@ export async function getWalletState(): Promise<WalletState> {
   });
   const chains: Record<string, string> = {
     USDS: "Giant Chain",
-    GNT: "Giant Chain",
     BTC: "Ethereum",
     ETH: "Ethereum",
     SOL: "Solana",
@@ -189,4 +188,94 @@ export async function getPoolRows(): Promise<PoolRow[]> {
       myQuote: my.quote,
     };
   });
+}
+
+/* ==================== מנוע-ביצוע-משותף (OWNER + FLEET) ==================== */
+// כל-הסחר במערכת עובר-כאן — בורסה-אחת, חוק-אמת-אחד:
+// רזרבות → מחיר → עסקה (עם-מקור) → לדג'ר (חובה/זיכוי) → נפח-24h.
+
+export async function accountBalance(account: string, token: string): Promise<number> {
+  const agg = await db.dexLedger.aggregate({
+    _sum: { amount: true },
+    where: { account, token },
+  });
+  return agg._sum.amount ?? 0;
+}
+
+export interface ExecuteSwapArgs {
+  pairId: string;
+  side: TradeSide;
+  amountIn: number;
+  slippagePct: number;
+  source: "USER" | "FLEET";
+  account: string; // OWNER או FLEET:<agentId>
+  agentId?: string;
+}
+
+export async function executeSwap(
+  args: ExecuteSwapArgs,
+): Promise<{ trade: { id: string; side: string; price: number; amount: number; total: number; source: string; t: string }; quote: SwapQuote; newPrice: number } | { error: string; status: number }> {
+  const pair = await db.dexPair.findUnique({ where: { id: args.pairId } });
+  if (!pair) return { error: "זוג-לא-נמצא", status: 404 };
+  // חוק-אמת: מסחר-פתוח רק על המטבע-האמיתי; עזרים הם מדדי-Binance
+  if (!pair.isNative) {
+    return { error: `${pair.base} הוא מדד-מחיר-חוץ (Binance) — מסחר פתוח רק ב-SAOS/USDS`, status: 403 };
+  }
+  const tokenIn = args.side === "BUY" ? pair.quote : pair.base;
+  const tokenOut = args.side === "BUY" ? pair.base : pair.quote;
+
+  const bal = await accountBalance(args.account, tokenIn);
+  if (bal < args.amountIn) {
+    return { error: `אין-מספיק ${tokenIn} בחשבון (יש ${bal.toLocaleString("he-IL", { maximumFractionDigits: 2 })})`, status: 400 };
+  }
+
+  const q = await buildQuote(pair.id, args.side, args.amountIn, args.slippagePct);
+  if ("error" in q) return q;
+  const quote = q.quote;
+
+  const updated = await db.dexPair.update({
+    where: { id: pair.id },
+    data: {
+      reserveBase: quote.reservesAfter.base,
+      reserveQuote: quote.reservesAfter.quote,
+      price: quote.reservesAfter.quote / quote.reservesAfter.base,
+      high24h: Math.max(pair.high24h, quote.reservesAfter.quote / quote.reservesAfter.base),
+      low24h: Math.min(pair.low24h, quote.reservesAfter.quote / quote.reservesAfter.base),
+    },
+  });
+  const trade = await db.dexTrade.create({
+    data: {
+      pairId: pair.id,
+      side: args.side,
+      price: quote.effectivePrice,
+      amount: args.side === "BUY" ? quote.outAmount : args.amountIn,
+      total: args.side === "BUY" ? args.amountIn : quote.outAmount,
+      source: args.source,
+    },
+  });
+  const reasonPrefix = args.source === "FLEET" ? `צי · ${args.agentId} · ` : "";
+  await db.dexLedger.create({
+    data: { account: args.account, token: tokenIn, amount: -args.amountIn, reason: `${reasonPrefix}החלפה · ${args.side === "BUY" ? "קניית" : "מכירת"} ${tokenOut}`, ref: trade.id },
+  });
+  await db.dexLedger.create({
+    data: { account: args.account, token: tokenOut, amount: quote.outAmount, reason: `${reasonPrefix}החלפה · קבלת ${tokenOut}`, ref: trade.id },
+  });
+  await db.dexPair.update({
+    where: { id: pair.id },
+    data: { vol24h: { increment: args.amountIn } },
+  });
+
+  return {
+    trade: {
+      id: trade.id,
+      side: trade.side,
+      price: trade.price,
+      amount: trade.amount,
+      total: trade.total,
+      source: trade.source,
+      t: trade.t.toISOString(),
+    },
+    quote,
+    newPrice: updated.price,
+  };
 }

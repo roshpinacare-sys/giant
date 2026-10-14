@@ -2,7 +2,7 @@
 
 // giant DEX · סקירת-שוק: KPIs-חיים, SAOS-זרקור, פאנל-אספקת-אמת, ארנת-הווליום (M-9), מובילים, טופ-זוגות
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Activity, Flame, Gauge, Landmark, TrendingDown, TrendingUp, Zap } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { Bot } from "lucide-react";
 import {
   chainColor,
   fmtMicro,
@@ -67,6 +68,9 @@ export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }
       {/* פאנל-האמת: אספקת-המטבע — נגזר-לדג'ר, אפס-סימולציות */}
       {supply && <SupplyTruth supply={supply} />}
 
+      {/* פועם-הצי · פעילות-אמת-של-סוכני-הצי על ה-AMM */}
+      <FleetPulse />
+
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.2fr_1fr]">
         {/* זרקור-SAOS */}
         <section className="relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-950/50 to-[#0d1312] p-5">
@@ -85,11 +89,15 @@ export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }
                 </div>
               </div>
               <div className="mt-4 flex items-end gap-3">
-                <span className="text-4xl font-black tabular-nums text-white" dir="ltr">
-                  {fmtPrice(kpis.gntPrice)}
+                <span
+                  key={kpis.saosPrice}
+                  className="animate-price-pulse text-4xl font-black tabular-nums text-white"
+                  dir="ltr"
+                >
+                  {fmtPrice(kpis.saosPrice)}
                 </span>
-                <span className={cn("rounded-lg px-2 py-1 text-sm font-bold tabular-nums", trendBg(kpis.gntChange24h))} dir="ltr">
-                  {fmtPct(kpis.gntChange24h)}
+                <span className={cn("rounded-lg px-2 py-1 text-sm font-bold tabular-nums", trendBg(kpis.saosChange24h))} dir="ltr">
+                  {fmtPct(kpis.saosChange24h)}
                 </span>
               </div>
             </div>
@@ -344,3 +352,106 @@ function Spark({ data }: { data: { t: number; v: number }[] }) {
     </svg>
   );
 }
+
+/* ==================== פועם-הצי · FleetPulse ==================== */
+// פעילות-הצי — כל-שורה עסקת-AMM-אמיתית של סוכן-מאומת. אפס-סימולציה.
+
+interface FleetState {
+  fleetVol24h: number;
+  fleetTrades24h: number;
+  totalAllocated: number;
+  agents: { agentId: string; name: string; active: boolean; balanceUsds: number; lastTradeAt: string | null }[];
+  recentTrades: { side: string; price: number; amount: number; total: number; t: string }[];
+}
+
+function FleetPulse() {
+  const [st, setSt] = useState<FleetState | null>(null);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    const load = async () => {
+      try {
+        const res = await fetch("/api/fleet/state", { cache: "no-store" });
+        const d = (await res.json()) as FleetState;
+        if (alive) setSt(d);
+      } catch {
+        // שקט — הפאנל הבא ינסה שוב
+      }
+    };
+    void load();
+    const t = setInterval(() => void load(), 10_000);
+    return () => {
+      alive = false;
+      clearInterval(t);
+    };
+  }, []);
+
+  const active = st?.agents.filter((a) => a.active) ?? [];
+
+  return (
+    <section className="rounded-2xl border border-white/5 bg-white/[0.03] p-4" aria-label="פועם-הצי">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-200">
+          <Bot className="h-4 w-4 text-emerald-400" aria-hidden="true" />
+          פועם-הצי · סוכנים-מסחרים-באמת
+          <span className="relative flex h-1.5 w-1.5" aria-hidden="true">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+          </span>
+        </h3>
+        <button
+          onClick={() => setOpen((o) => !o)}
+          className="rounded-md px-2 py-1 text-xs text-zinc-500 transition-colors hover:bg-white/5 hover:text-zinc-300"
+          aria-expanded={open}
+        >
+          {open ? "הסתר-פירוט" : "פירוט-סוכנים"}
+        </button>
+      </div>
+      <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
+        <div className="rounded-lg bg-black/20 p-2">
+          <div className="text-[10px] text-zinc-500">נפח-צי · 24h</div>
+          <div className="font-bold tabular-nums text-emerald-300" dir="ltr">{fmtMicro(st?.fleetVol24h ?? 0)}</div>
+        </div>
+        <div className="rounded-lg bg-black/20 p-2">
+          <div className="text-[10px] text-zinc-500">עסקאות-צי · 24h</div>
+          <div className="font-bold tabular-nums text-white" dir="ltr">{String(st?.fleetTrades24h ?? 0)}</div>
+        </div>
+        <div className="rounded-lg bg-black/20 p-2">
+          <div className="text-[10px] text-zinc-500">סוכנים-פעילים</div>
+          <div className="font-bold tabular-nums text-white" dir="ltr">{String(active.length)}</div>
+        </div>
+      </div>
+      {open && (
+        <div className="mt-3 max-h-64 space-y-1.5 overflow-y-auto" role="list">
+          {active.length === 0 && (
+            <p className="py-2 text-center text-xs text-zinc-600">
+              אין סוכנים-פעילים עדיין · הבעלים מקצה דרך מסך-הארנק
+            </p>
+          )}
+          {active.map((a) => (
+            <div key={a.agentId} role="listitem" className="flex items-center justify-between rounded-lg bg-black/20 px-3 py-2 text-xs">
+              <span className="flex items-center gap-2">
+                <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 font-mono text-[10px] text-emerald-300" dir="ltr">{a.agentId}</span>
+                <span className="text-zinc-400">{a.name}</span>
+              </span>
+              <span className="tabular-nums text-zinc-300" dir="ltr">{fmtMicro(a.balanceUsds)} USDS</span>
+            </div>
+          ))}
+          {st && st.recentTrades.length > 0 && (
+            <div className="pt-2">
+              <div className="mb-1 text-[10px] font-bold text-zinc-500">עסקאות-צי-אחרונות</div>
+              {st.recentTrades.slice(0, 6).map((t, i) => (
+                <div key={`${t.t}-${i}`} className="flex items-center justify-between px-1 py-0.5 text-[11px] tabular-nums">
+                  <span className={t.side === "BUY" ? "text-emerald-400" : "text-red-400"} dir="ltr">{t.side}</span>
+                  <span className="text-zinc-500" dir="ltr">{fmtPrice(t.price)} · {fmtMicro(t.total)}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </section>
+  );
+}
+

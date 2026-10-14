@@ -78,7 +78,7 @@ export interface SwapQuote {
   priceImpactPct: number;
   feePct: number; // למשל 0.3
   slippagePct: number;
-  route: string[]; // למשל ["USDS", "GNT"]
+  route: string[]; // למשל ["USDS", "SAOS"]
   reservesAfter: { base: number; quote: number };
 }
 
@@ -142,8 +142,8 @@ export interface MarketKpis {
   vol30d: number;
   fees24h: number;
   pairsCount: number;
-  gntPrice: number;
-  gntChange24h: number;
+  saosPrice: number;
+  saosChange24h: number;
 }
 
 export interface Mover {
@@ -199,6 +199,12 @@ export interface SupplyPanel {
   priceSource: string;
 }
 
+export interface FleetBrief {
+  vol24h: number;
+  trades24h: number;
+  activeAgents: number;
+}
+
 export interface Overview {
   kpis: MarketKpis;
   moversUp: Mover[];
@@ -208,6 +214,7 @@ export interface Overview {
   engine: EngineStatus;
   supply?: SupplyPanel; // פאנל-האמת: אספקה נגזרת-לדג'ר
   topPairs: PairSummary[]; // 8 לפי vol24h
+  fleet: FleetBrief;
 }
 
 /* ------------------------------ תשובות-API ------------------------------ */

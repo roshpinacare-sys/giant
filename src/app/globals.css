@@ -164,3 +164,10 @@
 .sovereign-unread-dot {
   animation: sovereign-pulse 1.6s ease-in-out infinite;
 }
+
+/* giant · price-flash (prompt-motion לקח: הכל-חי) */
+@keyframes price-pulse {
+  0% { color: #6ee7b7; text-shadow: 0 0 14px rgba(52, 211, 153, 0.55); }
+  100% { }
+}
+.animate-price-pulse { animation: price-pulse 0.9s ease-out; }
