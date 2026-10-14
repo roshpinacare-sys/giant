@@ -1480,3 +1480,21 @@ Work Log:
 Stage Summary:
 - מצב-סופי (אומת דפדפן): לוח החדר 5 ירוקים + הון צהוב-כן (בתוך חוק-95 שלו), verdict "צוות חי" ירוק; keeper tick #2 ok reasons-clean; console מרנדר חי
 - שאריות-כנות: GitHub throttling הסתברותי — הוקטן (2 שורות-cron + keeper-heal + תאומות-הצי) לא חוסל; run heartbeat עודף אחד (12:53) ישלים shift idempotent
+
+---
+Task ID: 44
+Agent: main (Z.ai Code, trace 1a13aa5645e884dd)
+Task: ביקורת-עומק של הדף הציבורי + בניית מוצרים חדשים שנותנים יתרון מול הענקים ומזיזים תנועה אמיתית
+
+Work Log:
+- ביקורת: 22 עמודים + robots + sitemap.xml — הכל 200; מטא חברתי כמעט מלא (products.html חסר og:image — תוקן); נמצאו שני פערים אמיתיים: badge.svg 404 (אין תגי-הוכחה) ו-feed.xml/rss 404 (אין RSS/Atom למרות עשרות קבלות-יומיות)
+- נבנה tools/bake-public-loops.mjs — אופה badge/office.svg (מ-FleetHQ raw office-state, כולל חוק-130 דק׳ עם צבע-אדום-כנה), badge/fleet.svg (מ-status.json), badge/edge.svg (מ-moment.json: bidSurplusBps+regime), feed.xml (Atom 12 כתבות: פוסטי-שרשרת כותרות-בלבד לפי מדיניות-חשיפה + מדידות חיות); fail-soft, atomic tmp+rename, write-on-change (אומת: הרצה שנייה = all "same")
+- נבנה badges.html — עמוד-מוצר: תצוגה חיה + מקטעי-README להעתקה + כפתורי-העתקה + מקורות-מקושרים + חוקי-הכנות
+- נבנה .github/workflows/public-loops-bake.yml — cron 23,53 * * * * (מחוץ לעדר), keyless, commit [skip ci], push-retry×3 מול-מירוץ-הבוטים
+- חיווט: index.html head Atom-link + nav "תגי-הוכחה"; sitemap.xml + sitemap.html (מוצרים 6→7); products.html og:image
+- dogfood: התגים על README של ה-Domain עצמו (0ebbbf3)
+- אימות-חי: run 38575485341 success ב-CI; badges.html + 3 SVGs + feed.xml — הכל 200 ומרנדר בדפדפן (office "live · 38 shifts"); Atom-discovery ב-head נבדק
+
+Stage Summary:
+- שני מוצרי-תנועה חדשים חיים: תגי-הוכחה (לולאת-צמיחה למפתחים) + פיד-Atom (ערוץ-חזרה); הענקים לא מציעים תגים נמדדים-כנים ולא ריבונות-RSS
+- roadmap שהוצע למשתמש: לנדינג אנגלית, תגים על 13 README-ים של הצי, playground ל-Identity API, עיתון-הצי יומי
