@@ -3,7 +3,7 @@
 /* ═══ פלטת-הפקודה · Ctrl+K (GIANT) ═════════════════════════════════════════
  * מנוע: cmdk דרך רכיבי shadcn CommandDialog (Dialog+cmdk).
  * · קיצור גלובלי אחד: Ctrl/Cmd+K מציג-מסתיר; "/" פותח כשלא-בתוך-שדה-קלט.
- * · (א) מודולים — 11 מזהי-מערכת עם תוויות עבריות+אנגליות (חיפוש-דו-לשוני).
+ * · (א) מודולים — 13 מזהי-מערכת עם תוויות עבריות+אנגליות (חיפוש-דו-לשוני).
  * · (ב) פעולות — מחרוזות-פעולה "action:*" שהמתזמן מפרש.
  * · (ג) זרמי-אמת — הנתיבים הקנוניים האמיתיים; העתקה-ללוח עם טוסט-כנה.
  * אפס-זיופים: הרשימה סטטית-מוצהרת; הנתיבים מהקוד השרת (lib/sovereign/channel.ts). */
@@ -23,9 +23,11 @@ import { useToast } from "@/hooks/use-toast";
 import {
   Activity,
   Banknote,
+  Boxes,
   Building2,
   ClipboardCopy,
   Coffee,
+  Compass,
   Gauge,
   Landmark,
   Package,
@@ -45,6 +47,7 @@ interface ModuleEntry {
 }
 
 const MODULES: ModuleEntry[] = [
+  { id: "overview", he: "הסקירה", desc: "מה-המערכת · מי-מי · מפת-החיבור-החיה", en: "overview context map system", icon: <Compass aria-hidden /> },
   { id: "dex", he: "הדקס", desc: "מרכז-הכובד: נרות · ליגה · ווליום", en: "dex exchange trading candles", icon: <Landmark aria-hidden /> },
   { id: "channel", he: "הערוץ-הריבוני", desc: "הערוץ-היחיד: הוראות · פניות · רישומים", en: "channel sovereign gate", icon: <Radio aria-hidden /> },
   { id: "wallet", he: "הארנק", desc: "משמורת · ספרים · יחידות-אנוש", en: "wallet custody books", icon: <Wallet aria-hidden /> },
@@ -56,6 +59,7 @@ const MODULES: ModuleEntry[] = [
   { id: "league", he: "ליגת-הענקים", desc: "מול-הענקים: Uniswap · דוקטרינת-כנות", en: "league giants uniswap", icon: <Users aria-hidden /> },
   { id: "machine", he: "מכונת-האמת", desc: "מכונת-האמת · מדידות", en: "machine truth engine", icon: <Gauge aria-hidden /> },
   { id: "estate", he: "האחוזה", desc: "מפקד-האחוזה: הגיט · הזרימה · העבודות", en: "estate git census repos", icon: <Building2 aria-hidden /> },
+  { id: "capabilities", he: "מאגר-היכולות", desc: "כל-היכולות · נסרק-ונבדק-חי", en: "capabilities registry probe", icon: <Boxes aria-hidden /> },
 ];
 
 interface ActionEntry {

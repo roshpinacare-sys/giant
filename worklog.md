@@ -1839,3 +1839,100 @@ Stage Summary:
 - **ה"חוקים" שהבעלים לא נתן הוסרו** ממסילת-הקול; כנות-המדידה נשארת (היא אמת, לא חסימה).
 - **הדקס כמכונה**: ההיצע-מול-התקרה נראה עכשיו בעיניים — 185K מתוך 21M (0.88%), בלי-שקר, בלי-סימולציה-מוצגת-כאמת.
 - OPEN: קונסולת-המפעיל דורשת-key-מפעיל (ops/login); directive כותב ל-Pulse-קנון דרך-PAT; ה-404-הכנה של Domain-דף-הנחיתה נשאר ירוק-במקרה-כשל.
+---
+Task ID: 1-b
+Agent: voice-builder
+Task: give the sovereignty's voice REAL SPEECH (TTS) — measure Hebrew TTS support first, build /api/sovereign/channel/speak (fail-honest), add השמע buttons to ChannelView voice answers, zero simulation.
+
+Work Log:
+- Read worklog (tasks 58 + GiantPalette/EstateView wave) + ChannelView.tsx in full (495 lines) before touching anything.
+- STEP 1 Hebrew-TTS measurement (both paths, this machine, 2026-10-14T22:21Z):
+  · CLI `z-ai tts` (voice tongtong), "שלום, אני הריבונות. המנוע חי." → 198,096 B · RIFF/WAVE PCM 16-bit mono 24 kHz · 4.12 s · rms 1728.4 · peak 23196 → REAL speech energy.
+  · SDK-in-Node `zai.audio.tts.create` (voice xiaochen, the route's voice) → 227,856 B · RIFF/WAVE PCM · 4.74 s · rms 2009.8 · peak 23196 → REAL speech energy.
+  · VERDICT: hebrew-tts-measured-ok — the route ATTEMPTS real synthesis; the 501 "hebrew-tts-not-measured" honest-verdict branch is coded (guarded by HEBREW_TTS_MEASURED const with evidence in header) but measured-true, so never fires today.
+- Built src/app/api/sovereign/channel/speak/route.ts: POST { text } → trim → 400 "text-required (1..1024 chars)" / 400 "text-too-long (N > 1024 — TTS API constraint)"; ZAI.create → zai.audio.tts.create({ input, voice:"xiaochen", speed:1.0, response_format:"wav", stream:false }) → Buffer(arrayBuffer) → honest-output guards (refuse 0-byte / non-RIFF / <1000 B bodies — no fake success) → 200 audio/wav + Content-Length + no-store; runtime nodejs, dynamic force-dynamic, maxDuration 60; try/catch → console.error(real) + 502 { ok:false, error:"<real>" }; in-memory dedupe cache Map text→Buffer, max 20, LRU-ish (hit refreshes order, trims oldest). No LLM call, no gate change, speaks existing answer text only.
+- Upgraded src/components/giant/ChannelView.tsx (ONLY the voice-answers area + plumbing): useToast + useRef/Loader2/Volume2 imports; hidden single-ref <audio>; stopSpeak() (pause+rewind+revokeObjectURL) + unmount cleanup; speak(text): POST → 501 → destructive toast "הדיבור לא זמין / hebrew-tts-not-measured…", !ok → toast "הדיבור נכשל" + real error (route error string or HTTP status), ok → blob → createObjectURL → stop previous → play, revoke on ended; per-answer button "השמע" with Volume2 icon, spinner (Loader2 animate-spin, "מדברת…") while busy, disabled during any speak; answer panel polished to tokens: rounded-2xl border-white/[0.07] bg-white/[0.035] backdrop-blur-xl, heading "תשובת-הריבונות" font-black emerald-400, fail text rose-400. Gate/requests/directives/ask flow/note receipts untouched; no page.tsx, no globals.css, no ask-route changes.
+- Verified: bun run lint clean; npx tsc --noEmit | grep -iE "channel|speak" → zero (fixed one real TS2345 Buffer→BodyInit by new Uint8Array(buf)). Live on :3000: "בדיקה" → 200 audio/wav 0.95 s (35,856 B, dur 0.74 s, rms 2724 → real energy); repeat → 200 in 0.0099 s byte-identical (cache verified); whitespace → 400; 1025 chars → 400 with honest constraint text; realistic 185-char answer → 200 in 3.8 s (633,936 B ≈ 13 s speech). Toaster confirmed mounted in layout.tsx so failure toasts render.
+
+Stage Summary:
+- Hebrew TTS: MEASURED-WORKING (real WAV, real speech energy, both CLI tongtong and SDK xiaochen) — not a 501 situation; verdict + evidence recorded in the route header and HEBREW_TTS_MEASURED const for future re-measures.
+- Endpoint contract: POST /api/sovereign/channel/speak { text: string (1..1024 after trim) } → 200 audio/wav (Content-Length, no-store; xiaochen, speed 1.0, wav, non-stream) | 400 text-required/text-too-long | 400 bad-body | 501 hebrew-tts-not-measured (armed, measured-false today) | 502 { ok:false, error:"<real rail error>" } fail-honest. 20-entry LRU-ish dedupe cache = repeat speaks ~10 ms.
+- UI: השמע button (Volume2/spinner) on each sovereignty voice answer; single hidden audio ref stops previous before new; destructive toasts carry the real error verbatim; answer panel aligned to amber/emerald/rose + rounded-2xl white/[0.07] tokens.
+---
+Task ID: 1-d
+Agent: orderbook-builder (subagent)
+Task: Kraken real orderbook (external market depth) into the DEX view — "מה העולם-החוץ מוכן-לשלם, עכשיו". BUILD 1 new route + 1 additive edit to DexView, zero simulation.
+
+Work Log:
+- Read worklog (T56/1-a/1-b/58) + DexView.tsx (737 lines, fully) + market route (Kraken fetch pattern, 9s timeouts, fail-honest chain) for house conventions.
+- NEW src/app/api/giant/orderbook/route.ts (runtime nodejs, force-dynamic): chain Kraken Depth XBTUSDT → Kraken XXBTZUSD (on error/empty book) → Binance BTCUSDT (may 418 from this IP); source-answered recorded honestly. Kraken strings normalized via Number(), bids sorted descending / asks ascending, spread=bestAsk−bestBid, mid=(bestAsk+bestBid)/2, bestBid/bestAsk, ts (Kraken exchange-side level timestamps ×1000; Binance=fetch time), fetchedAt. 15s module-level Map cache; total failure = {ok:false, error} with 502 — no book ever synthesized.
+- DexView.tsx additive edit ONLY: +useRef/+BookOpen/+framer-motion imports; new file-local ExternalOrderbook component (self-contained, like Kpi/Bar pattern) + LadderRow + fmt helpers; one mount line <ExternalOrderbook /> placed right AFTER the "מטבעות-גדולים ורשתות-מוכרות" section and BEFORE ליגת-הענקים. All existing sections (supply-truth strip, candles, engine metrics, league, pools/קופות, תא-הטיס, products, assets, anchors) untouched; DexView export/props unchanged.
+- Panel: "ספר-הפקודות-החוץ · Kraken חי" / subtitle "העומק-האמיתי מחוץ-לקיר · BTC/USDT"; polls /api/giant/orderbook every 20s (no-store, AbortController, alive-ref unmount guard, 5s age tick); two ladders side-by-side (stack sm): מוכרים asks rose-400 ascending, קונים bids emerald-400 descending; each row price (mono dir=ltr) + qty (mono) + depth bar (absolute inset-y right, width ∝ qty/maxQty, rose-500/10 or emerald-500/10); header stats פיזור spread + שווי-מרכזי mid (mono 2 decimals dir=ltr, bestBid/bestAsk as titles) + source chip (source·pair) + age chip "עודכן N שנ׳" (→"לא נמדד" chip on poll failure, full honest failure card when no data ever); rounded-2xl border-white/[0.07] bg-white/[0.035] backdrop-blur-xl p-5; label rows text-[10px] uppercase tracking-[0.18em] zinc-500; max-h-80 overflow-y-auto thin custom scrollbars; framer-motion subtle entrance (opacity/y). No blue/indigo, no emoji, no fake numbers.
+- Live verify: curl localhost:3000/api/giant/orderbook → HTTP 200, ok:true, source "kraken XBTUSDT", pair XBTUSDT, bestBid 81,599.70 / bestAsk 81,599.80 → spread $0.10, mid $81,599.75, 14 bids + 14 asks, ts=exchange stamps, fetchedAt recorded. Second measurement (browser session): spread $3.50, mid $81,636.25 — market moved, both real.
+- E2E (agent-browser): opened :3000 → clicked "הדקס" module → panel renders with live Kraken book (verified ascending asks/descending bids in DOM: 28 rows, 30 depth-bar spans, 2 scroll areas), age chip live ("עודכן 0 שנ׳" → refresh on poll), zero page errors, console clean (dev HMR noise only). Screenshot /tmp/orderbook-panel.png.
+- tsc --noEmit: zero errors for DexView/orderbook (5 pre-existing errors elsewhere, incl. mini-services Bun types — not mine). bun run lint: clean (exit 0). Only my 2 files touched (ChannelView.tsx workdir changes + speak/ route = parallel agents in-flight).
+
+Stage Summary:
+- The DEX now shows the REAL external orderbook: source that answered = Kraken XBTUSDT (primary; no fallback needed), measured spread $0.10 / mid $81,599.75 on first live fetch ($3.50 / $81,636.25 minutes later — live market). Panel sits in DexView between "מטבעות-גדולים ורשתות-מוכרות" and "ליגת-הענקים".
+- Artifacts: src/app/api/giant/orderbook/route.ts (new) · src/components/giant/DexView.tsx (additive panel only).
+- Honesty intact: fail-honest 502 + "לא נמדד" states, source/pair/age evidence chips, exchange-side ts in tooltip, zero synthetic book rows.
+---
+Task ID: 1-c
+Agent: capability-registry-builder
+Task: port the awesome-dsh-plugin PATTERN (capability cards + tags + redLines + trust scanning) onto OUR OWN platform as a real, runtime-measured capability registry — 2 new files: /api/giant/capabilities route + giant/CapabilityView.tsx. Zero fabrication; every card measured at runtime.
+
+Work Log:
+- Read worklog (last entries) + /tmp/dshplug reference: data/capabilities.json shape {repo → {version, capabilities[], redLines[], scannedAt, tool}} + README badge/count pattern — ported the PATTERN, none of the content.
+- Walked all 21+ existing route files and read their headers/code to derive HONEST per-endpoint capabilities + redLines (dex=git-read only; kraken actually lives in market+orderbook; market also fs-write cache; ask=llm+integrity-law+gate; ops= session/gate/git-write...).
+- FILE 1 — src/app/api/giant/capabilities/route.ts (nodejs, force-dynamic, 60s in-memory cache, no-store):
+  · census via node:fs recursive walk of src/app/api/**/route.ts → path + methods by regex `export async function (GET|POST|PUT|DELETE)`;
+  · streams parsed DYNAMICALLY from src/lib/sovereign/channel.ts (abs literals + path.join over DIR constants) → 7 streams measured via lib fileMeta (exists/bytes/sha16/ageMinutes); PAT_ENV_PATH deliberately never listed (secrets);
+  · Hebrew categories with deterministic order: בינה→פקודה→אמת→שוק→כסף→משרד→(מערכת default);
+  · LIVE PROBE: GET-only endpoints fetched vs 127.0.0.1:3000, 4s AbortController, Promise.allSettled, failures recorded as-is (status 0 / timeout-4s); POST-only or mixed-write → probed:null + writeDoor:true; self-probe skipped (recursion) and declared as its own redLine;
+  · fail-honest: internal error → ok:false + error (HTTP 500).
+- MID-FLIGHT DISCOVERY: parallel wave agents added /api/sovereign/channel/speak (TTS) + /api/giant/orderbook (Kraken Depth) — the census picked them up automatically on the next run (proof it is a real census). Read their code and added honest rules: speak → בינה ["tts"] redLine "עברית-אם-נמדד · כשל-501-כנה"; orderbook → כסף ["http-read","kraken"].
+- Fixed one parse bug: `src/app/api/**/route.ts` inside a block comment contains `*/` → terminated comment early; rephrased header.
+- FILE 2 — src/components/giant/CapabilityView.tsx ("use client", export function CapabilityView(), zero props): self-polls route 60s no-store + AbortController + skeletons + honest rose failure banner with retry; header "מאגר-היכולות" + subtitle + counts row (נקודות-קצה · נבדקו-חי · זרמי-אמת · בריאים, mono tabular); search input filters path/tags/category/methods (Hebrew+English, case-insensitive); category chips derived from REAL categories present (toggle); responsive 1/2/3-col card grid, framer-motion staggered entrance; card = category badge + path (mono ltr) + method badges + zinc capability tags + rose redLines rows + probe status (emerald "200 · 34ms" / rose real error / zinc "דלת-כתיבה"); streams table "זרמי-האמת (גיט קנוני)" with exists dot, human bytes, sha16 mono, age (emerald<15 ד׳ / amber<60 / zinc stale), max-h-72 overflow-y-auto with inline custom-scrollbar variants (globals.css untouched). No blue/indigo, no emoji.
+- VERIFY LIVE: started next dev (was down; only organism-keeper mini-service was running) → curl /api/giant/capabilities: ok:true, 24 endpoints / 16 probed / 7 streams / 15 healthy. Sample probes: /api 200·34ms, /api/giant/pulse 200·207ms, /api/giant/market 200·46ms, /api/giant/dex 200·356ms, /api/giant/orderbook 200·461ms, /api/office/ops/state 401·78ms (honest gate), POST ones probed:null+דלת-כתיבה, self probed:null. Streams: directives.jsonl 2523B sha16:dbc2399e44c9989a 182ד׳ · requests.jsonl 4121B · notes.jsonl 7926B · voice.json · dex/state.json 35KB · legacy-book · operator-inbox 36KB — all exists:true with sha16+age.
+- Gates: `bun run lint` → clean (exit 0); `npx tsc --noEmit | grep -i capabilit` → zero errors. No existing file touched (only 2 new files + this append).
+
+Stage Summary:
+- ROUTE CONTRACT: GET /api/giant/capabilities → { ok, generatedAt, endpoints:[{path, methods[], category(Hebrew), capabilities[], redLines[], probe:{status,ms,error?}|null, writeDoor}], streams:[{name, path, exists, bytes, sha16, ageMinutes}], counts:{endpoints, probed, streams, healthy} } · runtime nodejs · force-dynamic · 60s in-memory cache · fail-honest ok:false+error.
+- MEASURED LIVE: 24 endpoints (7 categories: בינה2 · פקודה6 · אמת3 · שוק2 · כסף4 · משרד4 · מערכת4), 16 probed with real status+ms (15 healthy; the 401 on ops/state is the gate being honest), 7 canonical truth streams with bytes+sha16+age. New routes from parallel agents auto-appear (dynamic parse of channel.ts + fs walk).
+- MOUNT CONTRACT: `import { CapabilityView } from "@/components/giant/CapabilityView"` — CapabilityView() takes NO props, self-polls /api/giant/capabilities every 60s; mount as a view body (e.g. 12th module / "capabilities" view) anywhere in page.tsx; single instance recommended (60s poll). No page.tsx/globals.css changes made.
+- HONESTY NOTES: caps derived only from code actually read; kraken tag lives on market/orderbook (not dex — dex reads git state only); registry never lists PAT path; probe failures shown as-is; self excluded from probing with declared redLine.
+---
+Task ID: 1-a
+Agent: overview-builder
+Task: בניית מודול Overview — סקירת-המערכת של GIANT שעונה על התלונה "יפה-אבל-לא-ברור-מה-אני-רואה": HERO מה-זה (5 שורות עם מדידות-חיות), מפת-מערכת-חיה (איך-הכל-מתחבר, RTL, HTML/CSS), רצועת-6-מדדים אמיתיים, ומסע-היכרות מודרך ל-4 דלתות. אפס-זיופים.
+
+Work Log:
+- קראתי worklog (T58 + 1-b) ו-page.tsx: 11 מודולים, NAV ids, מוסכמות-הפאנלים; GiantPalette/TickerTape לתבניות-הזרקת-style ו-polling.
+- סקרתי-payloads-חיים ב-curl: /api/giant/pulse (truth.verdict ALL-GREEN, truthMeta.sha16+ageMinutes, streams×5 עם sha16/age, channel ספירות), /api/giant/dex (supply.totalSaosMu 185316288 → ÷1000, pctOfCap כבר-באחוזים 0.882, height, metrics[0].fills=מילויים-היום, truth.realMoney.totalUsd=18.0183, savedAt), /api/organism (office.state.agents=6, heartbeat.lastTick, node.clones×5, growth.workOrders×20 status=open, truth.integrity), /api/giant/market (coins BTC/ETH/SOL priceUsd חי מ-Kraken).
+- נבנה src/components/giant/OverviewView.tsx ("use client", קובץ-יחיד-חדש, אפס-עריכות-לקבצים-קיימים): (1) HERO — wordmark GIANT גרדיאנט-ענבר font-black text-5xl/6xl + 5 שורות-הסבר לחיצות (Bot/Coins/ArrowLeftRight/Users/GitBranch) עם evidence מדוד-חי (ספר 185,316.288 SAOS · height · agents · sha16) ו-navigate ל-machine/wallet/dex/office/pulse; (2) מפה-חיה RTL — הבעלים(אתה-כאן)→הערוץ→הריבונות→{מנוע-הדקס,זרמי-הגיט,המשרד-החי}, מחברים-גרדיאנט עם נקודות-נתונים-נעות (keyframes giant-flow-x/y מוזרקים-אידמפוטנטית + motion-reduce), נקודת-LIVE לכל-צומת מגיל-הזרם-האמיתי (ירוק <15 ד׳/ענבר <60 ד׳/אפור), כל-צומת-לחיץ; (3) 6 כרטיסי-מדד grid 2/3/6 — ספר-הסאוס, אחוז-מהתקרה 0.882%, גובה-המנוע, שער-האמת (chip ALL-GREEN ירוק/rose/zinc), כסף-חוץ-אמיתי $18.02, BTC (מושמט-בכנות אם null); (4) מסע-ההיכרות 4 כרטיסים + "עבור" → channel/dex/machine/office.
+- Polling: כל-מקור-60s ב-fetch אחד, AbortController לכל-בקשה + alive-guard + ניקוי-מלא בפירוק; Skeleton-ים בטעינה; כרזת-כשל-כנה rose מפרטת-מקורות-חסרים; "לא-נמדד" בכרטיס-כושל.
+- E2E בדפדפן על mount זמני (src/app/tmp-1a-check — נמחק-אחרי-הבדיקה): SSR 200; כל-המספרים-חיים render (185,316.288 · 0.882% · 202,483 · ALL-GREEN 7 PASS · $18.02 · $81,536.6); 6 צמתי-מפה + 5 שורות-HERO + 4 כפתורי-עבור → onNavigate נכון (console NAV: verified); אפס-page-errors; צילום /tmp/giant-overview.png.
+- תיקון-אמת-אחד-במהלך-הבדיקה: pctOfCap מה-payload כבר-באחוזים (0.882=0.882%) — הסרתי הכפלה-×100 שהייתה-מציגה 88.246% (זיוף-יחידות). ותיקנתי שער-האמת-כרטיס ל-chip אמיתי במקום Skeleton תקוע.
+
+Stage Summary:
+- Artifact: src/components/giant/OverviewView.tsx (named export, "use client", self-polling, אפס-תלות-בקבצים-אחרים-פרט-ל-Skeleton של-shadcn).
+- MOUNT CONTRACT: `import { OverviewView } from "@/components/giant/OverviewView";` → `<OverviewView onNavigate={(viewId: string) => void} />` — onNavigate נדרש-לניווט (כל-6 ה-ids החוקיים נשלחים: "channel" | "dex" | "pulse" | "office" | "machine" | "wallet"; כל-השאר-אופציונלי). מומלץ-ב-page.tsx: view === "overview" && <OverviewView onNavigate={setView} /> (הוסיפו "overview" ל-ViewId+NAV-ראשון — הוא-שורש-ההקשר). הרכיב-עצמאי-לגמרי: מביא-בעצמו-את-כל-הנתונים (pulse/dex/organism/market, 60s), מזריק-keyframes משלו לפי-מזהה giant-overview-flow ומנקה-בפירוק; אל-תריצו-שני-מופעים.
+- מספרים-מוצגים (כולם-מדידה-חיה בזמן-הבדיקה): ספר-SAOS 185,316.288 (mu÷1000) · 0.882% מ-21,000,000 · גובה 202,483 · מילויים-היום 2,165 · verdict ALL-GREEN (7 PASS · 0 FAIL · 2 SKIP) · כסף-חוץ $18.02 (RPC) · BTC ~$81,536 · 6 סוכנים · 5 ספרי-גיט · 20 הזמנות-עבודה · sha16 טביעות-זרמים.
+- בדיקות: bun run lint נקי · tsc --noEmit: 0 שגיאות בקובץ (5 שגיאות-קדומות ב-examples/mini-services/skills — לא-שלי) · page.tsx/globals.css לא-נגעו · נתיב-הזמני-נמחק.
+- הפתעות-payload: pctOfCap כבר-יחידות-אחוז (לא-fraction) · /api/organism שונה-מהתיעוד (integrity/keyProof/workOrders תחת truth./growth., לא-בשורש) · metrics[0] עם day:"" = היום · dex.savedAt = טריות-המנוע הטובה-ביותר לנקודת-LIVE של-הדקס.
+---
+Task ID: 59
+Agent: Z.ai Code (main desk, trace 1a13c7ab9b910eb5)
+Task: הבעלים: "נחמד אבל לא הכי יפה שחור · לא ברור הקשר · רוצה הרבה יותר · בחן skillry.dev/ai-videos/opus-5-5 + awesome-dsh-plugin · מקצועי ומושקע ביכולות"
+
+Work Log:
+- **שני-המקורות-החדשים-נבחנו**: skillry opus-5-5 = 418 סרטוני-Opus עם-הפרומפטים — ה-DNA שנשאב: typography-משמעתי (weight-900 + tracking-לייבלים), motion-רגוע, "cut-it-open" explainers (המכונה כבר חיה על-זה). awesome-dsh-plugin = קטלוג-שוק-תוספים — התבנית שהועתקה: כרטיסי-יכולת עם capabilities[]/redLines[]/trust-probe חי.
+- **Wave-1 (4 סוכנים-מקבילים)**: 1-a OverviewView (גיבורה+מפת-המערכת-החיה+6-KPI+סיור-מודרך, onNavigate) · 1-b speak-route+ChannelView (עברית-TTS נמדד-עובד: RIFF/WAVE 24kHz, xiaochen, cache-LRU-20, משועבד-לחוק-השלמות-הקיים) · 1-c מאגר-היכולות (סריקת-fs של api/**/route.ts + פרובת-GET-חיה עם-ms + 7-זרמי-אמת-sha16; 24-נקודות-קצה·16-נבדקו·15-בריאים) · 1-d ספר-הפקודות-החוץ (Kraken Depth XBTUSDT→XXBTZUSD→Binance; נמדד-חי: spread $0.10, mid $81,599.75).
+- **Wave-2 (עמדה-ראשית)**: globals.css שכבת-זהות (גלילה-דקה, בחירה-ענברית, wordmark-גרדיאנט, אור-סביבה fixed-blur, giant-lift) · page.tsx מהיסוד (13-מודולים, ניווט-אייקונים, **ContextBar-לכל-מודול** — מה-רואים+מקור-הנתונים, סרט-מחירים, נייד-13-כדורים-גלילה, framer-motion-מעברי-מודול, footer-דביק) · GiantPalette +overview+capabilities.
+- **E2E-דפדפן**: סקירה (גיבורה+KPI-6-אמת: 185,316.288-SAOS · 0.882% · גובה 202,483 · ALL-GREEN-7-PASS · $18.02 · BTC-Kraken) · מכונה-Fig1 · דקס+סדר-הפקודות-החי (28-מדרגות+עומק) · ליגה (Uniswap $2.72B) · מאגר-יכולות (כרטיסים+redLines+ms) · ערוץ (שער+קול) · Ctrl+K-מנווט · נייד-390 אפס-גלילה-אופקית · אפס-שגיאות-קונסולה · כל-ה-APIs-200 · speak-נמדד-שוב: HTTP-200 audio/wav 247KB עברית-אמיתית.
+
+Stage Summary:
+- **ההקשר-נפתר**: סקירה-ראשונה-עם-מפת-חיבור-חיה + ContextBar-קבוע-לכל-מודול (מה-זה + מאיפה-הנתונים) — הבעלים תמיד-יודע-על-מה-הוא-מסתכל ומאיפה-זה-בא.
+- **היופי-שודרג**: wordmark-גרדיאנט, אור-סביבה, זכוכית-שכבתית, אייקונים, motion — שחור-עשיר-לא-שטוח.
+- **3-יכולות-אמת-חדשות**: קול-מדבר-עברית (TTS) · מאגר-יכולות-נסרק-חי (תבנית-dsh) · ספר-פקודות-חוץ-אמיתי (Kraken). אפס-סימולציה.
+- נדחף: my-project commit T59; קנון-estate יסונכרן-בגל-הבא.

@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CandleChart } from "./CandleChart";
-import { Activity, Coins, Flame, Gauge, TrendingUp, Trophy, Layers, Scale, Rocket, CandlestickChart } from "lucide-react";
+import { Activity, BookOpen, Coins, Flame, Gauge, TrendingUp, Trophy, Layers, Scale, Rocket, CandlestickChart } from "lucide-react";
+import { motion } from "framer-motion";
 
 /* ═══ הדקס — מרכז-הכובד של הריבונות (GIANT · R360 · V3 מיזוג-צי) ══════════
  * מיזוג-הליינים (T55): שטח-המסחר-עם-נרות-אמת (התאומים, api/giant/dex) +
@@ -224,6 +225,194 @@ function ProductChip({ state }: { state: string }) {
         ? "border-sky-500/30 bg-sky-500/10 text-sky-400"
         : "border-zinc-600/40 bg-zinc-800/60 text-zinc-400";
   return <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black ${cls}`}>{state}</span>;
+}
+
+/* ═══ ספר-הפקודות-החוץ · Kraken חי ═══════════════════════════════════════════
+ * עומק-השוק-האמיתי מחוץ-לקיר (BTC/USDT) — "מה-העולם-החוץ מוכן-לשלם, עכשיו".
+ * מדידה-חיה כל 20 שניות מ-/api/giant/orderbook (Kraken ראשי, Binance גיבוי);
+ * אפס-ספר-מצויר: כשל-מדידה = שבב-כנה ״לא נמדד״. */
+interface BookLevel {
+  price: number;
+  qty: number;
+}
+interface OrderbookPayload {
+  ok: boolean;
+  error?: string;
+  source: string | null;
+  pair: string | null;
+  bids: BookLevel[];
+  asks: BookLevel[];
+  spread: number | null;
+  mid: number | null;
+  bestBid: number | null;
+  bestAsk: number | null;
+  ts: number | null;
+  fetchedAt: string;
+}
+
+const OB_POLL_MS = 20_000;
+const OB_SCROLL = "max-h-80 overflow-y-auto pr-1 [scrollbar-width:thin] [scrollbar-color:rgb(82_82_91)_transparent] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-600/70 [&::-webkit-scrollbar-track]:bg-transparent";
+
+function fmtBookPrice(p: number): string {
+  return p.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function fmtBookQty(q: number): string {
+  if (q >= 100) return q.toFixed(1);
+  if (q >= 1) return q.toFixed(3);
+  return q.toFixed(5);
+}
+function fmtBookMoney(p: number): string {
+  return p.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+/* שורת-סולם: מחיר (mono, ltr) + כמות (mono) + פס-עומק (רקע-השורה, יחסי-לכמות) */
+function LadderRow({ level, maxQty, tone }: { level: BookLevel; maxQty: number; tone: "ask" | "bid" }) {
+  const pct = maxQty > 0 ? Math.max(2, Math.min(100, (level.qty / maxQty) * 100)) : 2;
+  return (
+    <div className="relative flex items-center justify-between rounded-md px-2 py-[3px]">
+      <span
+        aria-hidden
+        className={`absolute inset-y-0 right-0 rounded-md ${tone === "ask" ? "bg-rose-500/10" : "bg-emerald-500/10"}`}
+        style={{ width: `${pct}%` }}
+      />
+      <span dir="ltr" className={`relative z-10 font-mono text-[11px] ${tone === "ask" ? "text-rose-400" : "text-emerald-400"}`}>
+        {fmtBookPrice(level.price)}
+      </span>
+      <span dir="ltr" className="relative z-10 font-mono text-[11px] text-zinc-400">
+        {fmtBookQty(level.qty)}
+      </span>
+    </div>
+  );
+}
+
+function ExternalOrderbook() {
+  const [book, setBook] = useState<OrderbookPayload | null>(null);
+  const [failed, setFailed] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
+  const alive = useRef(true);
+
+  const load = useCallback(async (signal?: AbortSignal) => {
+    try {
+      const res = await fetch("/api/giant/orderbook", { cache: "no-store", signal });
+      const j = (await res.json()) as OrderbookPayload;
+      if (!alive.current) return;
+      if (j.ok) {
+        setBook(j);
+        setFailed(false);
+      } else {
+        setFailed(true);
+      }
+    } catch {
+      if (alive.current) setFailed(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    alive.current = true;
+    const ctl = new AbortController();
+    const t0 = setTimeout(() => void load(ctl.signal), 0);
+    const iv = setInterval(() => void load(), OB_POLL_MS);
+    const tick = setInterval(() => alive.current && setNow(Date.now()), 5000); // רענון-שבב-גיל
+    return () => {
+      alive.current = false;
+      clearTimeout(t0);
+      clearInterval(iv);
+      clearInterval(tick);
+      ctl.abort();
+    };
+  }, [load]);
+
+  const asks = useMemo(() => (book ? [...book.asks].sort((a, b) => a.price - b.price) : []), [book]);
+  const bids = useMemo(() => (book ? [...book.bids].sort((a, b) => b.price - a.price) : []), [book]);
+  const maxQty = useMemo(() => Math.max(0, ...asks.map((l) => l.qty), ...bids.map((l) => l.qty)), [asks, bids]);
+
+  const ageSec = book?.fetchedAt ? Math.max(0, Math.round((now - new Date(book.fetchedAt).getTime()) / 1000)) : null;
+  const ageLabel = ageSec === null || Number.isNaN(ageSec) ? "עודכן —" : ageSec >= 120 ? `עודכן ${Math.round(ageSec / 60)} ד׳` : `עודכן ${ageSec} שנ׳`;
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease: "easeOut" }}
+      className="rounded-2xl border border-white/[0.07] bg-white/[0.035] p-5 backdrop-blur-xl"
+      dir="rtl"
+    >
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-100">
+            <BookOpen className="h-4 w-4 text-zinc-400" aria-hidden /> ספר-הפקודות-החוץ · Kraken חי
+          </h3>
+          <p className="mt-0.5 text-[11px] text-zinc-500">העומק-האמיתי מחוץ-לקיר · BTC/USDT</p>
+        </div>
+        {book && (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full border border-white/10 bg-zinc-900/80 px-2 py-0.5 text-[9px] font-bold text-zinc-400">{book.source} · {book.pair}</span>
+            {failed ? (
+              <span className="rounded-full border border-amber-600/40 bg-amber-500/10 px-2 py-0.5 text-[9px] font-bold text-amber-400">לא נמדד</span>
+            ) : (
+              <span className="rounded-full bg-zinc-800/80 px-2 py-0.5 text-[9px] font-bold text-zinc-400" title={book.ts !== null ? new Date(book.ts).toISOString() : undefined}>
+                {ageLabel}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      {book && (
+        <div className="mt-3 flex flex-wrap items-baseline gap-x-6 gap-y-1">
+          <p className="text-[11px] text-zinc-500">
+            פיזור <span dir="ltr" className="font-mono text-sm font-black text-zinc-100" title={`bestAsk ${fmtBookMoney(book.bestAsk ?? 0)} − bestBid ${fmtBookMoney(book.bestBid ?? 0)}`}>${fmtBookMoney(book.spread ?? 0)}</span>
+          </p>
+          <p className="text-[11px] text-zinc-500">
+            שווי-מרכזי <span dir="ltr" className="font-mono text-sm font-black text-zinc-100" title={`bestBid ${fmtBookMoney(book.bestBid ?? 0)} · bestAsk ${fmtBookMoney(book.bestAsk ?? 0)}`}>${fmtBookMoney(book.mid ?? 0)}</span>
+          </p>
+        </div>
+      )}
+
+      {!book && !failed && (
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <Skeleton className="h-64 rounded-xl bg-zinc-900/80" />
+          <Skeleton className="h-64 rounded-xl bg-zinc-900/80" />
+        </div>
+      )}
+      {!book && failed && (
+        <p className="mt-4 rounded-xl border border-red-500/30 bg-red-500/[0.05] px-3 py-3 text-xs font-bold text-red-400">
+          ספר-הפקודות-החוץ: לא נמדד — שום-מקור-חוץ לא ענה (fail-honest, אפס-ספר-מסונתז)
+        </p>
+      )}
+
+      {book && (
+        <div className="mt-4 grid gap-5 sm:grid-cols-2">
+          <div>
+            <div className="mb-1.5 flex items-center justify-between">
+              <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
+                <span className="h-1.5 w-1.5 rounded-full bg-rose-400" aria-hidden /> מוכרים · asks
+              </span>
+              <span className="text-[10px] uppercase tracking-[0.18em] text-zinc-500">מחיר $ / כמות</span>
+            </div>
+            <div className={OB_SCROLL}>
+              {asks.map((l, i) => (
+                <LadderRow key={`a-${l.price}-${i}`} level={l} maxQty={maxQty} tone="ask" />
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="mb-1.5 flex items-center justify-between">
+              <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden /> קונים · bids
+              </span>
+              <span className="text-[10px] uppercase tracking-[0.18em] text-zinc-500">מחיר $ / כמות</span>
+            </div>
+            <div className={OB_SCROLL}>
+              {bids.map((l, i) => (
+                <LadderRow key={`b-${l.price}-${i}`} level={l} maxQty={maxQty} tone="bid" />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </motion.section>
+  );
 }
 
 export function DexView() {
@@ -539,6 +728,9 @@ export function DexView() {
           })}
         </div>
       </section>
+
+      {/* ═══ ספר-הפקודות-החוץ · Kraken חי — עומק-השוק-האמיתי מחוץ-לקיר ═══ */}
+      <ExternalOrderbook />
 
       {/* ליגת-הענקים */}
       <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
