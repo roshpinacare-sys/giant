@@ -1817,3 +1817,25 @@ Work Log:
 Stage Summary:
 - Artifacts: src/components/giant/GiantPalette.tsx · src/components/giant/TickerTape.tsx · src/components/giant/EstateView.tsx (all "use client", fail-honest, zero fabricated numbers).
 - Integration notes for orchestrator: exports GiantPalette({ onNavigate: (viewId: string) => void }) — mount ONCE near the shell root (e.g. beside header in page.tsx); it self-registers its key listener. Interpret action:* strings from onNavigate ("action:refresh-pulse" → re-trigger pulse fetch/nav, "action:gate.open" → open channel gate, "action:sovereign.ask" → jump to channel voice) and plain ids (dex/channel/wallet/desk/ledger/products/pulse/office/league/machine/estate) — note page.tsx currently only routes the first 8 ids; league/machine/estate views land in a later task. TickerTape() (no props) — mount in the shell header/top under the nav bar; self-polling, one instance only (it injects the giant-tape @keyframes by element id). EstateView() (no props) — mount as the "estate" view body when view === "estate" (11th module); self-polls /api/organism 60s.
+---
+Task ID: 58
+Agent: Z.ai Code (main desk, trace 1a13c392d1b9f1b5)
+Task: הבעלים: "5 הסוכנים צריכים להגיע לממשק מאוחד עם הדברים הכי טובים שיש · בחן גם https://github.com/wheresryan22/anatomy · לא נתתי חוק כזה — צריך לעשות הכל"
+
+Work Log:
+- **anatomy נבחן**: cloned wheresryan22/anatomy — סקיל קראפט של דמויות-איזומטריות. חוקי-העל חולצו: "האובייקט הוא ההסבר" · מכונה אמיתית מ-40+ חלקים מוצקים · הצללה-בארבעה-גוונים (lo/mid/hi + lit אחד) · כל-מספר מאותו-מודל-שמניע-את-החלקים · כרטיס-ממוסגר (Fig/title/hint/readout) · תנועה-רגועה · בדיקת-מבקר ב-4x.
+- **סרוק-5-הממשקים** (Explore): Domain (console.html חי, stale-law chips, saos-live.js), FleetHQ (3D Daylight Slate + Veritas + socket), Pulse/giant (Ctrl+K 1443 פריטים, ticker, נרות-שחזור-מתויג), giant/app (hq 3D + OperatorDrawer + directive-commit + league), Sandbox (יצרן-זרמי-אמת, לא ממשק), my-project (רץ, R74/mu-units). Top-10-port ranked.
+- **1-a (subagent)**: three@0.186.1 + fiber + drei הותקנו; hq/* (14) + lib/hq/* (9) + api/office-state + api/office/{state,world,ops} + api/giant/league הועתקו; OfficeHqView נבנה (Room3D ssr:false + startTruthBridge + OperatorDrawer + fail-honest); directive route הותאם ל-writeOwnerDirective הקנוני; GLB-אנשים → public/models/humans; ProductsView = מהדורת-ענקים; CandleChart LTR style-fix; globals.css +sl-tokens.
+- **1-b (subagent)**: GiantPalette (cmdk, Ctrl+K + "/" + giant-palette:open event, 11 מודולים + פעולות + זרמי-אמת-עם-clipboard) · TickerTape (marquee, Kraken חי, hover-pause, reduced-motion) · EstateView (census: KPIs + repos + flow-map + work-orders + Pages-prober).
+- **1-c (subagent, נקטע בחוף)**: הספיק kit-copy (iso/draw+live+iso-kit+machine.css) + מודל-הגיאומטריה המלא (lib/iso/machine.ts — 45+ חלקים). הרכיב-החי הושלם ידנית: MachineView (refs-attrs לפריים, spring/follow, coin-drop על fills↑, idle-tour, chips-עברית, readout-חי) — תיקוני-חיבור: projectionAt/LIQUID_Z0-Z1 exports, iso-* rules מאונדקים ל-.sm-stage, משתני --anatomy-* על .sm-plate, import css מוחלט.
+- **הסרת-החוקים-שהומצאו** (הוראת-הבעלים): SYSTEM_PROMPT של מסילת-הקול — "אסור לבקש כסף-חוץ"/"דוקטרינות-ריסון" נמחקו; מנדט-הבעלים 2026-10-15 נכתב (עושה-הכל, אין-חוקים-מעכבים); כנות-מספרית נשמרת כאמת-מדידה; מספרי-שאלת-הבעלים עצמה = בסיס-לגיטימי (packText += text) — סוף-ל-REJECTED-שווא.
+- **page.tsx = הממשק-האחד**: 11 מודולים (machine→dex→league→channel→wallet→desk→ledger→products→pulse→office→estate), TickerTape בכותרת, GiantPalette מורכב-פעם-אחת, "עוד"-נייד פותח-פלטה, OfficeHqView תחת OfficeView.
+- **תיקוני-איכות**: 7 שגיאות-tsc (ChannelView/DeskView/DexView/Stations/truth/truth-bridge) — 0; react-hooks/refs ב-live.tsx (useLoop latest-ref + useEased rewrite) — lint 0; cmdk לבן→כהה (globals.css [cmdk-*] overrides).
+- **E2E-דפדפן**: מכונה renders (בסיס-על-רגליים · 3 קופות · ממוט · מונה-גובה · מד · ספר-מגירות · דגל) · readout חי (גובה 198,582→202,483 · מילויים-היום 2,165 · ספר 185,316 · 0.882% · עמלה 8/10 · אוצר 0.846) · chip-ריחוף "מד-העמלות" ✓ · דקס (supply-truth + R74 $18.02) · ליגת-DefiLlama (Hyperliquid/Uniswap/Lido) · ערוץ (שער+sha16+REQ-0001) · משרד-3D חי (צוות-GLB, SP 2,810.8, דופק 7/7) · אחוזה (DEGRADED-7, Pages 200/404-כנה) · פלטה-כהה + ניווט-Enter ✓ · נייד-390 אפס-גלילה ✓ · אפס-page-errors.
+- **קנון**: push ce7d672 ל-giant/app (28 קבצים: page + iso-kit + machine + 5 רכיבים + ask-route + organism); ls-remote מאומת; my-project git 57cf687.
+
+Stage Summary:
+- **ממשק-אחד-אמיתי**: כל-מה שהיה-טוב ב-5 הממשקים חי עכשיו בשטח-אחד — והמכונה (anatomy) דלת-הקראפט.
+- **ה"חוקים" שהבעלים לא נתן הוסרו** ממסילת-הקול; כנות-המדידה נשארת (היא אמת, לא חסימה).
+- **הדקס כמכונה**: ההיצע-מול-התקרה נראה עכשיו בעיניים — 185K מתוך 21M (0.88%), בלי-שקר, בלי-סימולציה-מוצגת-כאמת.
+- OPEN: קונסולת-המפעיל דורשת-key-מפעיל (ops/login); directive כותב ל-Pulse-קנון דרך-PAT; ה-404-הכנה של Domain-דף-הנחיתה נשאר ירוק-במקרה-כשל.
