@@ -47,3 +47,83 @@ model SovereignMessage {
   createdAt      DateTime  @default(now())
   repliedAt      DateTime?
 }
+
+/* ===================== giant DEX · בורסה-חיה (v1.1) ===================== */
+
+model DexPair {
+  id           String   @id @default(cuid())
+  base         String // GNT, BTC, ETH...
+  quote        String   @default("USDS")
+  chain        String // Giant Chain, Ethereum, Solana...
+  price        Float
+  openPrice24h Float
+  high24h      Float
+  low24h       Float
+  vol24h       Float    @default(0)
+  vol7d        Float    @default(0)
+  vol30d       Float    @default(0)
+  reserveBase  Float
+  reserveQuote Float
+  feeBps       Int      @default(30)
+  featured     Boolean  @default(false)
+  isNative     Boolean  @default(false)
+  sort         Int      @default(99)
+  createdAt    DateTime @default(now())
+
+  @@unique([base, quote])
+}
+
+model DexCandle {
+  id     String @id @default(cuid())
+  pairId String
+  tf     String // 1m | 5m | 15m | 1h | 4h | 1d
+  t      Int // epoch seconds (open)
+  o      Float
+  h      Float
+  l      Float
+  c      Float
+  v      Float
+
+  @@unique([pairId, tf, t])
+  @@index([pairId, tf])
+}
+
+model DexTrade {
+  id     String   @id @default(cuid())
+  pairId String
+  side   String // BUY | SELL (of base)
+  price  Float
+  amount Float // base amount
+  total  Float // quote amount (USDS)
+  source String   @default("SEED") // SEED | USER | AMBIENT | WHALE | TREASURY
+  t      DateTime @default(now())
+
+  @@index([pairId, t])
+}
+
+model DexLpPosition {
+  id          String   @id @default(cuid())
+  pairId      String
+  owner       String   @default("OWNER")
+  shares      Float
+  baseAmount  Float
+  quoteAmount Float
+  createdAt   DateTime @default(now())
+}
+
+model DexLedger {
+  id      String   @id @default(cuid())
+  account String   @default("OWNER")
+  token   String
+  amount  Float // signed
+  reason  String
+  ref     String?
+  t       DateTime @default(now())
+
+  @@index([account, token])
+}
+
+model DexConfig {
+  key   String @id
+  value String
+}
