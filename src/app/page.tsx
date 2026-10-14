@@ -23,14 +23,15 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-/* ═══ GIANT — הממשק-המאוחד של כל-הצי (T59 · שדרוג-זהות+הקשר+יכולות) ══════════════
+/* ═══ GIANT — הממשק-המאוחד של כל-הצי (T60 · גל-הקראפט) ══════════════
  * מה-מי:
  *  · הסקירה — מה-זה, מי-מי, ואיך-הכל-מחובר (שכבת-ההקשר שהבעלים ביקש)
  *  · מכונת-האמת (anatomy-grade: האובייקט=ההסבר) · הדקס + ספר-הפקודות-החוץ (Kraken חי)
  *  · ליגת-הענקים (DefiLlama חי) · הערוץ-האחד + שער-headcorner + קול-הריבונות-מדבר (TTS אמיתי)
  *  · מאגר-היכולות (תבנית awesome-dsh-plugin: כרטיסי-יכולת נסרקים-ונבדקים-חי)
  *  · המשרד-החי התלת-מימדי + קונסולת-מפעיל · דופק-אמת · האחוזה · ארנק/שולחן/רישום/מוצרים
- *  · Ctrl+K פלטת-פקודה על-כל-המערכת · סרט-מחירים חי · ContextBar לכל-מודול (ההקשר-תמיד-ברור)
+ *  · Ctrl+K פלטת-פקודה · סרט-מחירים חי · ContextBar לכל-מודול
+ *  · T60-קראפט (DNA: designspells/60fps/supahero/godly): אורורה-חיה · גרגר-סרט · ספוטלייט-מצביע · ספקולר · CountUp
  * משטח-אחד-לכל-יכולת · ערוץ-אחד · אפס-כפילויות · הכל נמדד-חי מהגיט. */
 
 type ViewId =
@@ -115,7 +116,13 @@ export default function Home() {
   const truthGreen = truth?.verdict?.includes("GREEN") ?? false;
 
   return (
-    <div className="giant-ambient relative flex min-h-dvh flex-col bg-zinc-950 text-zinc-100">
+    <div className="relative flex min-h-dvh flex-col bg-zinc-950 text-zinc-100">
+      {/* אורורה-חיה + גרגר-סרט (T60) — מאחורי-הכל, לא-לוחצים-עליהם */}
+      <div aria-hidden className="g-aur a1" />
+      <div aria-hidden className="g-aur a2" />
+      <div aria-hidden className="g-aur a3" />
+      <div aria-hidden className="giant-grain" />
+
       <GiantPalette onNavigate={onPaletteNavigate} />
 
       {/* ═══ ראש-המערכת ═══ */}
@@ -125,7 +132,7 @@ export default function Home() {
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 font-black text-lg text-zinc-950 shadow-lg shadow-amber-600/20" aria-hidden>G</span>
             <div>
               <h1 className="text-lg font-black leading-6 tracking-tight">
-                <span className="giant-wordmark text-xl">GIANT</span>
+                <span className="giant-wordmark giant-wordmark-anim text-xl">GIANT</span>
                 <span className="mx-2 text-amber-600/60">·</span>
                 <span className="text-zinc-100">הממשק-המאוחד</span>
               </h1>
@@ -206,7 +213,7 @@ export default function Home() {
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="mb-4 rounded-2xl border border-white/[0.07] bg-gradient-to-l from-amber-500/[0.07] via-white/[0.03] to-transparent p-4 backdrop-blur-xl"
+            className="mb-4 rounded-2xl border border-white/[0.07] bg-gradient-to-l from-amber-500/[0.07] via-white/[0.03] to-transparent p-4 backdrop-blur-xl giant-spec"
             dir="rtl"
           >
             <div className="flex items-start gap-3">
@@ -287,7 +294,7 @@ export default function Home() {
           <span className="hidden sm:inline">· הריבונות מפעילה-הכל; הגיט הוא שכבת-הקיום; המערכת מתפתחת לנצח</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="font-mono text-[10px] text-zinc-600">T59 · 13 מודולים · TTS-חי · ספר-פקודות-חוץ · מאגר-יכולות · R360 · R74</span>
+          <span className="font-mono text-[10px] text-zinc-600">T60 · 13 מודולים · TTS-חי · ספר-פקודות-חוץ · מאגר-יכולות · R360 · R74</span>
         </div>
       </footer>
     </div>

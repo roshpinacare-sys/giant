@@ -12,6 +12,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CountUp, Spotlight } from "@/components/giant/craft";
 import {
   ArrowLeft,
   ArrowLeftRight,
@@ -200,38 +201,45 @@ function MapNode({
   );
 }
 
-/* ─── כרטיס-מדד: שלד-טעינה / ערך-אמיתי / "לא-נמדד" כנה · chip=תוכן-מותאם (שער-האמת) ─── */
+/* ─── כרטיס-מדד: שלד-טעינה / ערך-אמיתי / "לא-נמדד" כנה · chip=תוכן-מותאם (שער-האמת)
+ * T60: numeric=מונה-חי (CountUp) · Spotlight=זוהר-עוקב-מצביע · giant-spec=קו-עליון-ספקולרי ─── */
 function KpiCard({
   label,
   value,
+  numeric,
   chip,
   sub,
   failed,
 }: {
   label: string;
   value: string | null;
+  numeric?: { target: number; format: (n: number) => string };
   chip?: React.ReactNode;
   sub?: React.ReactNode;
   failed: boolean;
 }): React.ReactElement {
+  const body =
+    chip !== undefined ? (
+      chip
+    ) : numeric !== undefined ? (
+      <CountUp target={numeric.target} format={numeric.format} className="font-mono text-xl font-bold tabular-nums text-zinc-50" />
+    ) : value !== null ? (
+      <span className="font-mono text-xl font-bold tabular-nums text-zinc-50" dir="ltr">
+        {value}
+      </span>
+    ) : failed ? (
+      <span className="text-xs font-bold text-rose-400">לא-נמדד</span>
+    ) : (
+      <Skeleton className="h-7 w-24" />
+    );
   return (
-    <div className={`p-5 transition hover:border-white/[0.12] ${PANEL}`}>
+    <Spotlight className={`giant-spec p-5 transition hover:border-white/[0.12] ${PANEL}`}>
       <p className={LABEL}>{label}</p>
       <div className="mt-1.5 min-h-[30px]">
-        {chip !== undefined ? (
-          chip
-        ) : value !== null ? (
-          <span className="font-mono text-xl font-bold tabular-nums text-zinc-50" dir="ltr">
-            {value}
-          </span>
-        ) : failed ? (
-          <span className="text-xs font-bold text-rose-400">לא-נמדד</span>
-        ) : (
-          <Skeleton className="h-7 w-24" />
-        )}
+        {body}
       </div>
       {sub !== undefined && sub !== null && <p className="mt-1 text-[10px] leading-4 text-zinc-500">{sub}</p>}
-    </div>
+    </Spotlight>
   );
 }
 
@@ -566,18 +574,21 @@ export function OverviewView({ onNavigate }: { onNavigate?: (viewId: string) => 
           <KpiCard
             label="ספר-הסאוס"
             value={bookHuman !== null ? fmtBook(bookHuman) : null}
+            numeric={bookHuman !== null ? { target: bookHuman, format: fmtBook } : undefined}
             failed={errs.dex !== ""}
             sub="SAOS יחידות-אנוש (mu÷1000)"
           />
           <KpiCard
             label="אחוז-מהתקרה"
             value={pctOfCap !== null ? `${pctOfCap.toFixed(3)}%` : null}
+            numeric={pctOfCap !== null ? { target: pctOfCap, format: (n) => `${n.toFixed(3)}%` } : undefined}
             failed={errs.dex !== ""}
             sub={cap !== null ? <>מתוך תקרה <span dir="ltr" className="font-mono tabular-nums">{fmtInt(cap)}</span></> : null}
           />
           <KpiCard
             label="גובה-המנוע"
             value={height !== null ? fmtInt(height) : null}
+            numeric={height !== null ? { target: height, format: fmtInt } : undefined}
             failed={errs.dex !== ""}
             sub={fillsToday != null ? <>מילויים-היום <span dir="ltr" className="font-mono tabular-nums">{fmtInt(fillsToday)}</span></> : null}
           />
@@ -617,11 +628,12 @@ export function OverviewView({ onNavigate }: { onNavigate?: (viewId: string) => 
           <KpiCard
             label="כסף-חוץ-אמיתי"
             value={money !== null ? fmtUsd(money) : null}
+            numeric={money !== null ? { target: money, format: fmtUsd } : undefined}
             failed={errs.dex !== ""}
             sub="מדידת-RPC-ציבורי · מחוץ-לספר"
           />
           {btc !== null ? (
-            <KpiCard label="BTC" value={fmtUsd(btc)} failed={errs.mkt !== ""} sub={mkt?.source ? <>מקור: <span dir="ltr">{mkt.source}</span></> : null} />
+            <KpiCard label="BTC" value={fmtUsd(btc)} numeric={{ target: btc, format: fmtUsd }} failed={errs.mkt !== ""} sub={mkt?.source ? <>מקור: <span dir="ltr">{mkt.source}</span></> : null} />
           ) : null}
         </div>
         {/* שבריר-כנה: אין-BTC → הכרטיס-מושמט; ורק-אם-השוק-נכשל-לגמרי מצהירים */}
@@ -633,7 +645,7 @@ export function OverviewView({ onNavigate }: { onNavigate?: (viewId: string) => 
         <p className={`${LABEL} mb-2`}>מסע-ההיכרות · ארבע-דלתות</p>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {tour.map((t) => (
-            <div key={t.id} className={`flex flex-col p-5 transition hover:border-white/[0.12] ${PANEL}`}>
+            <Spotlight key={t.id} className={`giant-lift flex flex-col p-5 transition hover:border-white/[0.12] ${PANEL}`}>
               <div className="flex items-center gap-2">
                 <span className="text-amber-500">{t.icon}</span>
                 <h3 className="text-sm font-black text-zinc-50">{t.title}</h3>
@@ -650,7 +662,7 @@ export function OverviewView({ onNavigate }: { onNavigate?: (viewId: string) => 
                 עבור
                 <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
               </button>
-            </div>
+            </Spotlight>
           ))}
         </div>
       </motion.section>
