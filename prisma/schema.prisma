@@ -30,3 +30,20 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model SovereignMessage {
+  id             String    @id @default(cuid())
+  from           String // OWNER | SOVEREIGNTY | AGENT_RELAY
+  kind           String // BRIEFING | FUNDING | DECISION | REPORT | REPLY | CLAIM
+  priority       String    @default("NORMAL") // NORMAL | HIGH | CRITICAL
+  subject        String
+  body           String
+  amount         Float?
+  currency       String?
+  status         String    @default("UNREAD") // UNREAD | READ | ANSWERED | ARCHIVED
+  requestStatus  String? // PENDING | APPROVED | DECLINED
+  relayProcessed Boolean   @default(false)
+  meta           String? // JSON string
+  createdAt      DateTime  @default(now())
+  repliedAt      DateTime?
+}
