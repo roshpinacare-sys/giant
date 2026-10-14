@@ -52,3 +52,48 @@ Stage Summary:
   flow-map/value-scan degraded (last row 2026-10-14T01:53Z) — next turn's
   natural queue head; also K5's C-2b note in Sandbox ledger 104 is now resolved
   by ledger 105.
+
+---
+
+Task ID: 31
+Agent: zai-main (trace 1a1391e341c7c1f1)
+Task: תמשיך — the recorded queue head: decider ledger showed engClean=false +
+degraded=[flow-map, value-scan] on every beat. Diagnose and fix in one breath.
+LANGUAGE LAW from owner: reports in Hebrew only (no Chinese).
+
+Work Log:
+- Live-measured the two degraded measures: raw.githubusercontent keyless → 404
+  on BOTH Sandbox paths (flow-map.json, VALUE-SCAN/state.json) vs FleetHQ 200 —
+  the repo went private and the decider stayed keyless-blind to its own files.
+- Discovered the substrate truth: sovereign-decider on Actions = dead by OWNER
+  DECISION (commit 1094893 "schedule silence under quota" — billing wall, all 27
+  crons dispatch-only, revival = owner billing fix + one revert, DECISIONS #11);
+  the live publisher is sovereign-decider-twin (ledger rows 17:48/22:41/01:53Z).
+- Dispatch probe returned 422 (consistent with the quota wall); old run logs
+  purged (empty zip, receipt).
+- engClean=false measured live: 0 errored agents, 3 blocked tasks in FleetHQ
+  office-state (t1083 ~2.6d, t1852 ~10h, t1971 ~4.4h; dependsOn=[] — block is
+  attempt-failure parking, rescue law exists at office.ts:1349) → office lane
+  P0, D2 routes it; NOT my lane's fix.
+- D4's 3 self-verify failures captured (A10 freshness STALE, A14 em-dash pattern,
+  A43 markets.1.bestAsk=0) → repair lanes.
+- THE FIX (C-2c): read_repo_text/read_repo_json in decider.py — (1) local
+  checkout first (decider runs inside its own repo), (2) authenticated Contents
+  API fallback (T19-fix pattern generalized), (3) honest None. All four self-repo
+  reads routed through it; T19 inline copy retired (one pattern, one truth).
+- Proofs: unit drills 3/3 (local read nodes=37, API fallback after file removal
+  nodes=37, honest None token-less); full healed run exit=0 degraded=[] and
+  D3 OBSERVING→ENFORCED (5 orphans, 0 ghosts) — first time the decider sees its
+  own flow map since privatization; invariants GREEN before push and on merged tree.
+- Landed: Sandbox@21cc275 (fix) + 560e44f (ledger 106, D1=106 rows 5-field exact);
+  push raced twice (62812c2-era handler; then cc03e09 T28-attest) — rehearsed
+  fetch+rebase+machine+push both times → LANDING-OK.
+
+Stage Summary:
+- C-2c CLOSED: the decider reads its own repo through one door; degraded=[] on a
+  full run; the healing reaches the twin wherever it runs with checkout-or-token.
+- Honest substrate limit: Actions stays dispatch-only dead-by-owner-decision;
+  the twin's env needs a checkout or GITHUB_TOKEN to benefit fully.
+- Open queue heads recorded: FleetHQ office blocked-tasks (office lane P0),
+  A10/A14/A43 self-verify failures (repair lanes), billing-wall revival (owner).
+- Language law adopted: Hebrew-only reports from this trace onward.
