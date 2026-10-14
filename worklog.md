@@ -1936,3 +1936,20 @@ Stage Summary:
 - **היופי-שודרג**: wordmark-גרדיאנט, אור-סביבה, זכוכית-שכבתית, אייקונים, motion — שחור-עשיר-לא-שטוח.
 - **3-יכולות-אמת-חדשות**: קול-מדבר-עברית (TTS) · מאגר-יכולות-נסרק-חי (תבנית-dsh) · ספר-פקודות-חוץ-אמיתי (Kraken). אפס-סימולציה.
 - נדחף: my-project commit T59; קנון-estate יסונכרן-בגל-הבא.
+---
+Task ID: 60
+Agent: Z.ai Code (main desk, trace 1a13c997b56f242d)
+Task: הבעלים שלח-מאגר-רפרנסים-למעצבים (mobbin · godly · awwwards · cosmos · curated · designspells · 60fps · supahero · saaspo · layers) — "שומרים-ושוכחים-מהמחסור-ברעיונות"
+
+Work Log:
+- **סריקת-המקורות**: designspells חסום-מאחורי-צ'קפואנט-Vercel (נמדד) — הווקבולרי-הציבורי-שלו נשאב: spotlight-כרטיסים · count-up · shimmer. 60fps נסרק (גלריית-אינטראקציות) · supahero נסרק (heroes: Better Stack/Superpower) — DNA: תנועה-חלקה-60fps · hero-חזק-עם-הצהרה-אחת.
+- **craft.tsx (חדש)**: CountUp (rAF, easeOutCubic, format=אותם-מעצבי-המערכת, מכבד-reduced-motion — תיקון-react-hooks/set-state-in-effect) · Spotlight (מצביע→CSS-vars --sx/--sy, אפס-עלות-פריסה) · Reveal (whileInView, once).
+- **globals.css שכבת-T60**: אורורה-חיה (3-גושי-אור, drift 26/32/36ש׳) · גרגר-סרט (SVG-feTurbulence, opacity 0.032, overlay) · giant-spec (קו-ספקולרי-עליון) · giant-spot · giant-wordmark-anim (גרדיאנט-נושם 9ש׳) · giant-loadbar · reduced-motion-guard מלא.
+- **page.tsx**: אורורה+גרגר-מותקנים-מאחורי-הכל · wordmark-נושם · ContextBar+giant-spec · footer-T60.
+- **OverviewView**: KpiCard — numeric→CountUp (5-מונים: ספר/אחוז/גובה/כסף-חוץ/BTC) + Spotlight + giant-spec; כרטיסי-הסיור→Spotlight+giant-lift; תיקוני-דרך: יבוא-כפול-נמחק, תג-סוגר-של-כרטיס-סיור div→Spotlight.
+- **E2E**: lint-נקי · tsc-נקי · אורורה-נראית-בעיניים · CountUp-מגיע-לערכי-האמת (185,316.288 · 206,384 · 0.882% · $18.02 · $81,596.4) · --sx-נמדד-מוגדר-בעת-ריחוף · נייד-390 אפס-גלילה · אפס-שגיאות-קונסולה · dev.log-נקי.
+
+Stage Summary:
+- הרפרנסים-שהבעלים-שלח הפכו-לשכבת-קראפט-חיה: המספרים-נספרים-מול-העיניים, הכרטיסים-זוהרים-אחרי-העכבר, הרקע-נושם, והכל-מכבד-reduced-motion.
+- אפס-תלות-חדשה · אפס-שינוי-נתונים (כל-המספרים-אמת) · craft.tsx זמין-לכל-מודול-עתידי.
+- commit T60 נדחף; הקנון-יסונכרן-בגל-הבא.
