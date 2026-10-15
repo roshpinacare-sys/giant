@@ -1,0 +1,298 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ─────────────── משטר-הצבע של המשרד החי (מהמקצועי — אין כחול) ─────────────── */
+:root {
+  --surface: #f2ecdf;
+  --surface-2: #fffaf0;
+  --ink: #2a2520;
+  --ink-2: #5d5548;
+  --ink-3: #8a8172;
+  --line: #e3dac7;
+  --line-strong: #cfc4ac;
+  --accent: #b4691e;
+  --accent-dim: rgba(180, 105, 30, 0.14);
+  --shadow-soft: 0 1px 2px rgba(28, 24, 18, 0.04), 0 8px 24px rgba(28, 24, 18, 0.06);
+  --st-working: #d946ef;
+  --st-ok: #10b981;
+  --st-attention: #f59e0b;
+  --st-danger: #fb7185;
+  --st-neutral: #8a8f98;
+  --st-info: #14b8a6;
+}
+
+/* ─────────────── R58 — פאנלי-HUD של החדר (ההגדרות אבדו במיזוג — שוחזרו) ───────────────
+ * T19-c תכנן "פאנל-HUD אחד (.ln — עומק עדין במקום מסגרות-כפולות)" אבל המחלקות
+ * נשארו בלי גיליון — הטקסט צף חשוף על הסצנה. שוחזר לפי הכוונה: פאנל חם-שקוף,
+ * טשטוש-רקע עדין, צל רך; הטקסט הכהה של הצ'יפים נקרא עליו. */
+.ln,
+.sl-panel {
+  background: rgba(255, 250, 240, 0.86);
+  backdrop-filter: blur(9px) saturate(1.05);
+  -webkit-backdrop-filter: blur(9px) saturate(1.05);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+}
+.ln.rounded-full,
+.sl-panel.rounded-full {
+  border-radius: 9999px;
+}
+/* Task 40 — .sl-chip שוחזר: ההגדרה אבדה במיזוג והצ'יפים ירשו טקסט-בהיר
+ * על פאנל-קרם (נמדד: תוויות-התצפיות כמעט-בלתי-נראות). טקסט-כהה על הפאנל. */
+.sl-chip {
+  color: var(--ink-2);
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  transition: background 0.15s ease;
+}
+.sl-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  flex: none;
+  box-shadow: 0 0 6px color-mix(in srgb, currentColor 55%, transparent);
+}
+
+/* ═══ פלטת-הפקודה (T58): cmdk שקוף-על-גבי-הדיאלוג-הכהה של GIANT ═══ */
+[data-slot="dialog-content"] [cmdk-root] {
+  background: transparent;
+  color: #e4e4e7;
+}
+[data-slot="dialog-content"] [cmdk-input] {
+  background: transparent;
+  color: #e4e4e7;
+}
+[data-slot="dialog-content"] [cmdk-input]::placeholder {
+  color: #71717a;
+}
+[data-slot="dialog-content"] [cmdk-group-heading] {
+  color: #71717a;
+}
+[data-slot="dialog-content"] [cmdk-item][aria-selected="true"] {
+  background: rgba(245, 158, 11, 0.14);
+  color: #fcd34d;
+}
+[data-slot="dialog-content"] [cmdk-item] svg {
+  color: #a1a1aa;
+}
+[data-slot="dialog-content"] [cmdk-separator] {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   גל-6 · חוקי-העיצוב של הענקים — מדוד מ-10 אתרי-רפרנס (5 נמדדו-חי, 5 חסומי-מדידה)
+   · designspells  (נמדד) → מיקרו-אינטראקציות: ריחוף-חי, הרמת-כרטיס, נשימת-חיים
+   · 60fps.design  (נמדד) → תנועה-חלקה: cubic-bezier מוקפד, reduced-motion תמיד
+   · awwwards      (נמדד) → משמעת-ביצוע: focus-ring, רשת, היררכיה-טיפוגרפית
+   · godly.website (נמדד) → ארט-דיירקשן: עומק-אמביינט (זוהר-ענבר + גרעין-סרט)
+   · supahero.io   (נמדד) → hero שתופס: הצהרה-גדולה + CTA אחד-ברור + מספרים-חיים
+   · saaspo · layers.to · mobbin · cosmos.so · curated.design — לא-נמדדו (fetch-כשל,
+     רשום-כנה ב-docs/design/design-laws.md — "לא הצלחנו להסתכל" ≠ "הסתכלנו ולא ראינו")
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes g-view-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.995); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes g-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes g-breathe {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5); }
+  50% { opacity: 0.6; box-shadow: 0 0 0 5px rgba(245, 158, 11, 0); }
+}
+@keyframes g-line-in {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ארט-דיירקשן אמביינט (godly): זוהר-ענבר עדין + גרעין-סרט — שכבת-רקע-בלבד */
+.g-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(52rem 30rem at 85% -8%, rgba(245, 158, 11, 0.07), transparent 62%),
+    radial-gradient(46rem 26rem at 6% 106%, rgba(180, 105, 30, 0.055), transparent 58%);
+}
+.g-ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+}
+
+/* מיקרו-אינטראקציה (designspells): הרמת-כרטיס + זוהר-גבול בריחוף */
+.g-card {
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.g-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 158, 11, 0.32);
+  box-shadow: 0 14px 34px -14px rgba(245, 158, 11, 0.2), 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* נשימת-חיים: נקודת-מצב חיה (מחליף animate-pulse הגנרי) */
+.g-breathe { animation: g-breathe 2.6s ease-in-out infinite; }
+
+/* כניסת-מודול (60fps): 300ms ease-out-expo, פעם-אחת */
+.g-view-in { animation: g-view-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.g-rise { animation: g-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.g-rise-1 { animation-delay: 0.05s; }
+.g-rise-2 { animation-delay: 0.1s; }
+.g-rise-3 { animation-delay: 0.16s; }
+
+/* קו-נשימה תחת-פריט-פעיל (awwwards: משמעת-מדויקת) */
+.g-active-line { transform-origin: right; animation: g-line-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* סקרולר מעוצב (חוק-ממשק: רשימות ארוכות = max-h + scroll + scrollbar-מעוצב) */
+.g-scroll {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 158, 11, 0.28) transparent;
+}
+.g-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.g-scroll::-webkit-scrollbar-track { background: transparent; }
+.g-scroll::-webkit-scrollbar-thumb { background: rgba(245, 158, 11, 0.25); border-radius: 999px; }
+.g-scroll::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.45); }
+
+/* focus-ring של מקצוענים (awwwards) — מקלדת-רואה-הכל */
+:where(button, a, input, textarea, select, [role="button"]):focus-visible {
+  outline: 2px solid rgba(245, 158, 11, 0.65);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* תנועה-מכובדת (60fps): reduced-motion = קיפאון-מכובד, לא-ריקון */
+@media (prefers-reduced-motion: reduce) {
+  .g-view-in, .g-rise, .g-rise-1, .g-rise-2, .g-rise-3, .g-breathe, .g-active-line {
+    animation: none !important;
+  }
+  .g-card, .g-card:hover { transition: none; transform: none; }
+}

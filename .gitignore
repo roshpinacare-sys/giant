@@ -1,0 +1,85 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+local-*
+.claude
+.z-ai-config
+*.log
+dev.log
+dev.out.log
+test
+prompt
+
+server.log
+# Skills directory
+/skills/
+# office operator — secrets & local ops state (never commit)
+.env.local
+.env*.local
+.ops/
+upload/
+
+# legacy paths from the early lineage (bot canon artifacts live under app/)
+app/node_modules/
+app/.next/
+app/db/
+app/upload/
+app/.secrets/
+app/tool-results/
+!.env.example
+dist-office3d/
+tool-results/
+download/
+
+# runtime data (measured locally, never book content)
+/db/
+/.zscripts/
+
+# גל-16: ארטיפקט-ריצה — המנוע-הקנוני חי ב-Domain/office/engine.mjs; העתק זה נבנה-עצמית בכל-עלייה של office-live
+/public/office3d/
+
+# גל-17: מצב-העולם-המקומי של office-live — ארטיפקט-ריצה; הקנון-חי ב-Domain/office/world-state.json (worldbeat)
+mini-services/office-live/state/
+
+# סודות-ריבוניים-נוספים (הוראת-בעלים): כל-קובץ-*.env-וגיבויי-boot
+*.env
+boot/*.sh.bak
