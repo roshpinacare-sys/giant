@@ -7,6 +7,7 @@
 import { NextResponse } from "next/server";
 import { readPat } from "@/lib/office-truth";
 import { loadTruth, MU, type FileMeta, type TruthPayload } from "@/lib/giant/truth";
+import { ensureMiniServices } from "@/lib/mini-guard";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -219,6 +220,7 @@ export async function loadDex(force = false): Promise<DexPayload> {
 }
 
 export async function GET() {
+  void ensureMiniServices(); /* המשגיחה-הפנימית — מחייה-מיני-שירותים-מתים (fire-and-forget, זול) */
   const data = await loadDex();
   return NextResponse.json(data, { headers: { "cache-control": "no-store" } });
 }

@@ -7,6 +7,7 @@
 // כשל-מקור = שדה-כנה (null/ריק); אפס-סינתזה; אפס מספרים-מצוירים. cache-זיכרון 45 שניות.
 import { NextResponse } from "next/server";
 import { sha256hex } from "@/lib/giant-integrity";
+import { ensureMiniServices } from "@/lib/mini-guard";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -149,6 +150,7 @@ export async function loadOffice(force = false): Promise<OfficePayload> {
 }
 
 export async function GET() {
+  void ensureMiniServices(); /* המשגיחה-הפנימית — מחייה-את-משדר-העולם אם-נעקר */
   const data = await loadOffice();
   return NextResponse.json(data, { headers: { "cache-control": "no-store" } });
 }
