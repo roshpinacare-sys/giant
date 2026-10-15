@@ -2096,3 +2096,23 @@ Stage Summary:
 - **הגיבוב-נאסר-בפועל**: אין-קישור-אחד בממשק שמבטיח-דבר-ומוביל-לדף-מת; כל-היעדר-דף מסומן-כנה.
 - **השער**: הדלת-החסרה-הותקנה-ונדחפה; המפתח-עצמו נשאר-כנה "לא-מאומת" עד-ריצת-ה-verifier-עם-הסוד — לא-ממציאים-אימות.
 - **הסנדבוקס-שלנו-נטהר**: אפס-סודות-בהיסטוריה; העבודה-שרדה-לקאנון-לפני-המחיקה-הבאה.
+---
+Task ID: 64
+Agent: Z.ai Code (main desk, trace 1a13cef5cee00591)
+Task: הבעלים: "וודא שגם פותח את השער כי מפתח עדיין לא מאומת" — אימות-המפתח האמיתי ופתיחת-השער בפועל (והבעלים: "יש לנו את זה")
+
+Work Log:
+- **מדידת-חומר-הבעלים על-המכונה**: /home/z/my-project/upload/ — headcorner.txt (63 תווים, 2 שורות: 10+52) · בלורט.evm (52) · ועוד. ה-PAT ב-pat.env מת (401 Bad credentials) — אין-API דרכו; נמדד כנה.
+- **גילוי-חשבון מראיית-שרשרת חיה**: anchor tx 390bcfc2586def1ef02cc40a0e983c8dd8fce177 (בלוק 109373943, custom_json saos-dex.anchor.v1) חתום required_auths:['headcorner'] — @headcorner הוא חותם-הגריד החי (עיגון-DEX + saos-pulse 00:19:39 + 51 הזמנות-גבול ב-101-ה-op-ים האחרונים + פרופיל saos-rotation/v1).
+- **ה-probe-המקומי (db/gate-probe.mjs, לא-עקוב)**: משחזר את-identifyMatrix של key-verify.mjs (אותו gate-crypto.js, אותן-גזירות) מול condenser_api.get_accounts חי; 53 מועמדים (קבצים+שורות) × 2 חשבונות × 4 תפקידים; פסק-דין-בלבד — אף ערך לא נדפס/נכתב. **תוצאה: KEY-AUTHENTIC-ACTIVE** — headcorner.txt שורה-2 === בלורט.evm (52 תווים, הושוו בזיכרון בלבד) = סיסמת-האב של @headcorner, התאמה ביט-מול-ביט בכל-ארבעת-התפקידים (owner/active/posting/memo). אפס-התאמה ל-@owner (2016, מאזן-אפס — ההנחה-הישנה של ה-verifier).
+- **שלושת-באגים בדלת מ-T63 — נמצאו ותוקנו על-הקאנון**: (1) ה-workflow קורא סוד `owner` שלא-קיים בכספת (הכספת מחזיקה HEADCORNER + HEADCORNER_CRED — הבעלים הוסיף!) → מופה owner=${{secrets.HEADCORNER}} + SOURCE_SECRET_NAME כן; (2) FLEET_ROSTER_MAP לא הועבר → ה-verifier יצא roster-unresolved → הועבר כמו-שאר-ה-workflows; (3) נקודותיים-לא-מצוטטות בשם-שלב ("gate-crypto: @noble") שברו את-פרסור-ה-yml → שתי-ריצות-ראשונות (של-הבעלים 38658015977 ב-00:05:45 על 50960b4, ושלנו 38661059945 על 4bf08bc) מתו startup_failure-אפס-jobs → תוקן ואומת yaml.safe_load. ריצה-שלישית 38661232191 (771a568): unidentified-כן — ה-matrix לא כלל את-חותם-הגריד כי ACCOUNT היה-קשיח "owner" → **תיקון-ארכיטקטוני**: ACCOUNT = process.env.FLEET_ACCOUNT (החותם-החי, עובדת-שרשרת) + העברת FLEET_ACCOUNT מהכספת כמו arb-mesh-cron; דלת owner/active נבחנת-כנגד-החותם.
+- **הזנקה רביעית — run 38661586814 על e89de38: SUCCESS → verdict=armed**: המפתח אומת ביט-מול-ביט מול ה-active החי של החותם; pub נגזר STM5HhJD5WUX… = בדיוק ה-active על-השרשרת; נאטם sealed-box לכספת saos-dex בתור STEEM_ACTIVE_WIF (updatedAt 2026-10-15T00:43:01Z — אומת ברשימת-הסודות); dispatched=false-כן: dex-grid.yml disabled_manually ב-saos-dex — מתג-הון, לא-הוצת-מכאן.
+- **קבלת-השער (db/gate-check.json, לא-עקוב)**: saos/gate-check/1 + saos/gate-arm/1 — 53 מועמדים, 2 התאמות מלאות, 4 ריצות-Actions עם-סיבות-כנות, 3 קומיטי-תיקון (4bf08bc · e497af8 · e89de38 — כולם חיים-בקאנון, הלופה ממשיכה-עליהם), אטימת-הכספת, מצב-הצתה. החוק בקובץ: פסקי-דין-בלבד.
+- **חיבור-ממשק**: /api/giant/gate (קבלה + מדידת-דלת-חיה: שורות-ה-yml/verifier נקראות-מהעותק-הקנוני-בכל-בקשה · roster/fleetAccount/secretSource/gridSignerDynamic/summaryOnly · cache-60ש׳ · sha16 · fail-honest) + GateSection ב-SovereigntyView (id="gate" בין ביקורת-הצי לליגת-הענקים): פס-פסק-דין אמרלד-פתוח, שני-מישורים (זיהוי-מקומי vs חימוש-Actions), ציר-ריצות-עם-סיבות-כישלון, צ'יפי-דלת, תיקוני-קאנון, חוק-P0-1, שגיאות-רוז.
+- **שערים**: lint-נקי (החוק set-state-in-effect דרש את-תבנית-setBusy-המלאה) · tsc-0-ב-src · E2E: כניסה-ל-ריבונות → כל-15-האימותים-על-מחלקת-השער עוברים (פתוח/KEY-AUTHENTIC-ACTIVE/53/2/headcorner.txt/בלורט.evm/armed/STEEM_ACTIVE_WIF/00:43:01Z/roster-עובר/fleet-עובר/secret-HEADCORNER/disabled_manually/P0-1/תיקוני-קאנון) · נייד 390/390-בלי-גלישה · אפס-שגיאות-קונסולה. קומיט my-project ebed9c1.
+
+Stage Summary:
+- **המפתח מאומת — בפועל, לא-בסיפור**: חומר-הבעלים על-המכונה נגזר מול השרשרת-החיה והתאים ביט-מול-ביט (כל-4-התפקידים של @headcorner), וה-verifier-ב-Actions אישר והזריק: STEEM_ACTIVE_WIF חי-בכספת saos-dex מ-00:43:01Z.
+- **השער פתוח**: שרשרת-העדות שלמה בממשק — 53 מועמדים → 2 התאמות → 4 ריצות (שתיים-מתות-מבאג-פרסור-שלי, אחת-unidentified-כנה, אחת-armed) → אטימה מאומתת. "דברים-שיהיו-מה-שכתוב-שיהיה".
+- **שלושת-הבאגים של-הדלת מ-T63 תוקנו-על-הקאנון** — הדלת-כבר-לא-דקורטיבית: היא-רצה, נכשלת-כנה-כשצריך, וחותמת-כשהאמת-מתאימה.
+- **נשאר-לבעלים-בלבד**: הצתת-הגריד (saos-dex workflows disabled_manually — מתג-הון שהופעל-ידנית-בעבר; לא-נלחץ-מכאן).
