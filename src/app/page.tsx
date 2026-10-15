@@ -19,11 +19,12 @@ import { SovereigntyView } from "@/components/giant/SovereigntyView";
 import { EmpireView } from "@/components/giant/EmpireView";
 import { TrustView } from "@/components/giant/TrustView";
 import { GapView } from "@/components/giant/GapView";
+import { AccountView } from "@/components/giant/AccountView";
 import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
 import {
   Activity, ArrowLeftRight, Banknote, Boxes, Building2, Command, Compass,
-  Gauge, GitBranch, Landmark, Network, Package, Radio, Scale, ScrollText, ShieldCheck, Trophy, Wallet,
+  Gauge, GitBranch, KeyRound, Landmark, Network, Package, Radio, Scale, ScrollText, ShieldCheck, Trophy, Wallet,
   type LucideIcon,
 } from "lucide-react";
 
@@ -42,7 +43,7 @@ import {
 
 type ViewId =
   | "sovereignty" | "empire" | "trust" | "overview" | "machine" | "dex" | "league" | "gap" | "channel" | "wallet"
-  | "desk" | "ledger" | "products" | "pulse" | "office" | "estate" | "capabilities";
+  | "account" | "desk" | "ledger" | "products" | "pulse" | "office" | "estate" | "capabilities";
 
 interface NavEntry {
   id: ViewId;
@@ -64,6 +65,7 @@ const NAV: NavEntry[] = [
   { id: "gap", label: "מפת-הפער", ctx: "ההשוואה-הכנה מול-מוצרים-אמיתיים · טענות-הסוכנים מול-מה-נמדד · מפת-איחוד M1..M6", src: "עובדות-ענקים-ציבוריות + מדידות-חי + קריאת-קוד", icon: Scale },
   { id: "channel", label: "הערוץ", ctx: "הדלת-הראשית שלך מול-הריבונות · שער-המנהל פותח-הכל", src: "Pulse/sovereign-channel · append-only", icon: Radio },
   { id: "wallet", label: "הארנק", ctx: "חשבונות-אמת מהמנוע · יחידות-אנוש", src: "המנוע מהגיט · mu÷1000", icon: Wallet },
+  { id: "account", label: "הדלת-שלי", ctx: "החשבון-שלך בריבונות · רישום-כניסה · פקודות-מול-הספר-הפנימי · קבלות", src: "אימות-ריבוני scrypt · ספר-הפקודות-הפנימי · אפס-תלות-חוץ", icon: KeyRound },
   { id: "desk", label: "השולחן", ctx: "המנדט · ה-equity · האסטרטגיות", src: "Domain/dex/honest-econ", icon: Banknote },
   { id: "ledger", label: "הרישום", ctx: "כל-ההחלטות-הרשומות · חיפוש", src: "מנוע-הרישום מהגיט", icon: ScrollText },
   { id: "products", label: "המוצרים", ctx: "קטלוג-אמת · קבלות · מדידות", src: "products.json הקנוני", icon: Package },
@@ -116,7 +118,7 @@ export default function Home() {
     else if (NAV.some((n) => n.id === id)) setView(id as ViewId);
   }, []);
 
-  /* ניווט-מהסקירה: מזהי-מודול-תקינים-בלבד (הסקירה עצמה שולחת אחד-מ-17) */
+  /* ניווט-מהסקירה: מזהי-מודול-תקינים-בלבד (הסקירה עצמה שולחת אחד-מ-18) */
   const navigate = useCallback((id: string) => {
     if (NAV.some((n) => n.id === id)) setView(id as ViewId);
   }, []);
@@ -147,7 +149,7 @@ export default function Home() {
                 <span className="text-zinc-100">הממשק-המאוחד</span>
               </h1>
               <p className="hidden text-[10px] leading-3 text-zinc-500 sm:block">
-                מיזוג-5-הסוכנים · 17 מודולים · הכל-נמדד-חי · אפס-כפילויות
+                מיזוג-5-הסוכנים · 18 מודולים · הכל-נמדד-חי · אפס-כפילויות
               </p>
             </div>
           </div>
@@ -239,7 +241,7 @@ export default function Home() {
                 <p className="mt-0.5 text-[10px] leading-4 text-zinc-500">
                   מקור-הנתונים: <span className="text-zinc-400">{active?.src}</span>
                   <span className="mx-1.5 text-zinc-700">|</span>
-                  Ctrl+K לניווט-מהיר-בין-כל-17-המודולים
+                  Ctrl+K לניווט-מהיר-בין-כל-18-המודולים
                 </p>
               </div>
             </div>
@@ -261,6 +263,7 @@ export default function Home() {
             {view === "gap" && <GapView />}
             {view === "channel" && <ChannelView />}
             {view === "wallet" && <WalletView />}
+            {view === "account" && <AccountView />}
             {view === "desk" && <DeskView />}
             {view === "ledger" && <LedgerView />}
             {view === "products" && <ProductsView />}
@@ -308,7 +311,7 @@ export default function Home() {
           <span className="hidden sm:inline">· הריבונות מפעילה-הכל; הגיט הוא שכבת-הקיום; המערכת מתפתחת לנצח</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="font-mono text-[10px] text-zinc-600">T73 · 17 מודולים · מפת-הפער-מול-הענקים · מיזוג-הענק-האח · TTS-חי · ספר-פקודות-חוץ · R360 · R74</span>
+          <span className="font-mono text-[10px] text-zinc-600">T74 · 18 מודולים · הדלת-הריבונית (הצי-הלקוח-הראשון) · מפת-הפער-מול-הענקים · R360 · R74</span>
         </div>
       </footer>
     </div>

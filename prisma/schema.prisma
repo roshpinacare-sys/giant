@@ -14,11 +14,51 @@ datasource db {
 }
 
 model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  /* T74 · הצי-הוא-הלקוח-הראשון — אימות-ריבוני (scrypt מ-node:crypto, אפס-תלות-חוץ) */
+  passwordHash String?
+  crewId       String?  /* מזהה-הסוכן-מרישום-הצי (console-agent-verify · וכו') — null = לקוח-חוץ-עתידי */
+  lastLoginAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  sessions  Session[]
+  orders    TradeOrder[]
+}
+
+/* סשן-אמיתי: בקוקי-HttpOnly נשמר-טוקן-אקראי; בבסיס רק-ה-hash שלו (sha256) */
+model Session {
   id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/* ספר-הפקודות-הפנימי של הריבונות (T74): פקודות-אמת של-חשבונות-אמת.
+ * מילוי קורה-רק-מול-פקודה-מנוחה-אמיתית-של-חשבון-אחר (price-time priority) — אפס-סימולציה.
+ * refMid = מחיר-ייחוס-חי (Kraken mid בעת-ההצבה) — כשל-חוץ לא מונע-הצבה (ריבונות). */
+model TradeOrder {
+  id         String   @id @default(cuid())
+  userId     String
+  side       String   /* buy | sell */
+  qty        Float
+  priceMu    Int      /* מחיר-מגבלה ב-mu (1mu = 1/1000 USD) */
+  remaining  Float    /* כמות-שלא-נמלאה */
+  status     String   @default("OPEN") /* OPEN | PARTIAL | FILLED */
+  refMidMu   Int?
+  fillsJson  String   @default("[]") /* קבלות-מילוי: [{priceMu,qty,counterpartyUserId,counterpartyOrderId,at}] */
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status, side, priceMu])
+  @@index([userId])
 }
 
 model Post {

@@ -3,7 +3,7 @@
 /* ═══ פלטת-הפקודה · Ctrl+K (GIANT) ═════════════════════════════════════════
  * מנוע: cmdk דרך רכיבי shadcn CommandDialog (Dialog+cmdk).
  * · קיצור גלובלי אחד: Ctrl/Cmd+K מציג-מסתיר; "/" פותח כשלא-בתוך-שדה-קלט.
- * · (א) מודולים — 17 מזהי-מערכת עם תוויות עבריות+אנגליות (חיפוש-דו-לשוני).
+ * · (א) מודולים — 18 מזהי-מערכת עם תוויות עבריות+אנגליות (חיפוש-דו-לשוני).
  * · (ב) פעולות — מחרוזות-פעולה "action:*" שהמתזמן מפרש.
  * · (ג) זרמי-אמת — הנתיבים הקנוניים האמיתיים; העתקה-ללוח עם טוסט-כנה.
  * אפס-זיופים: הרשימה סטטית-מוצהרת; הנתיבים מהקוד השרת (lib/sovereign/channel.ts). */
@@ -29,6 +29,7 @@ import {
   Coffee,
   Compass,
   Gauge,
+  KeyRound,
   Landmark,
   Network,
   Package,
@@ -57,6 +58,7 @@ const MODULES: ModuleEntry[] = [
   { id: "dex", he: "הדקס", desc: "מרכז-הכובד: נרות · ליגה · ווליום", en: "dex exchange trading candles", icon: <Landmark aria-hidden /> },
   { id: "channel", he: "הערוץ-הריבוני", desc: "הערוץ-היחיד: הוראות · פניות · רישומים", en: "channel sovereign gate", icon: <Radio aria-hidden /> },
   { id: "wallet", he: "הארנק", desc: "משמורת · ספרים · יחידות-אנוש", en: "wallet custody books", icon: <Wallet aria-hidden /> },
+  { id: "account", he: "הדלת-שלי", desc: "החשבון-שלך · פקודות-מול-הספר-הפנימי · קבלות", en: "my door account login register orders receipts", icon: <KeyRound aria-hidden /> },
   { id: "desk", he: "השולחן", desc: "שולחן-המסחר · ספר-הזמנות", en: "desk orderbook trading", icon: <Banknote aria-hidden /> },
   { id: "ledger", he: "הרישום", desc: "רישום-האמת · מילויים · גבהים", en: "ledger fills height", icon: <ScrollText aria-hidden /> },
   { id: "products", he: "המוצרים", desc: "מפת-המוצרים · רישומי-נכסים", en: "products assets map", icon: <Package aria-hidden /> },
