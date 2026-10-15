@@ -6,6 +6,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
+  Anchor,
   ArrowDownUp,
   Bot,
   CheckCircle2,
@@ -31,7 +32,30 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MarkdownView } from "@/components/giant/markdown";
+import { useToast } from "@/hooks/use-toast";
+import { ownerHeaders } from "@/lib/owner-client";
 import { cn } from "@/lib/utils";
+
+interface AnchorCloudState {
+  live: boolean;
+  siblingMain: string | null;
+  sovereignMain: string | null;
+  anchorLineageHead: string | null;
+  anchorAt: string | null;
+}
+
+interface AnchorState {
+  ok: boolean;
+  error?: string;
+  localHead: string | null;
+  cloud: AnchorCloudState;
+  anchored: boolean;
+  behind: number;
+}
+
+function shortSha(sha: string | null): string {
+  return sha ? sha.slice(0, 7) : "—";
+}
 
 const heNum = new Intl.NumberFormat("he-IL");
 
@@ -181,6 +205,55 @@ export function MergeView({ onNavigate }: MergeViewProps) {
   const [agreeOpen, setAgreeOpen] = useState(false);
   const [designOpen, setDesignOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [anchor, setAnchor] = useState<AnchorState | null>(null);
+  const [anchorBusy, setAnchorBusy] = useState(false);
+  const { toast } = useToast();
+
+  const loadAnchor = useCallback(async () => {
+    try {
+      const res = await fetch("/api/sovereign/anchor", {
+        cache: "no-store",
+        headers: ownerHeaders(),
+      });
+      if (res.ok) setAnchor((await res.json()) as AnchorState);
+    } catch {
+      // הכרטיס-מראה-מצב-לא-זמין — לא-מפיל-את-המסך
+    }
+  }, []);
+
+  async function anchorNow() {
+    if (anchorBusy) return;
+    setAnchorBusy(true);
+    try {
+      const res = await fetch("/api/sovereign/anchor", {
+        method: "POST",
+        headers: ownerHeaders(),
+      });
+      const data = (await res.json()) as {
+        ok: boolean;
+        anchorSha?: string;
+        error?: string;
+        status?: AnchorState;
+      };
+      if (data.ok && data.anchorSha && data.status) {
+        setAnchor(data.status);
+        toast({
+          title: "הריבונות-נעגנה-בענן",
+          description: `עוגן ${data.anchorSha.slice(0, 7)} נחת-ב-sovereign/main — עץ-זהה למערכת-החיה`,
+        });
+      } else {
+        toast({
+          title: "העגינה-נדחתה",
+          description: data.error ?? "שגיאת-ענן",
+          variant: "destructive",
+        });
+      }
+    } catch {
+      toast({ title: "העגינה-נדחתה", description: "שגיאת-רשת", variant: "destructive" });
+    } finally {
+      setAnchorBusy(false);
+    }
+  }
 
   const load = useCallback(async () => {
     setRefreshing(true);
@@ -245,7 +318,8 @@ export function MergeView({ onNavigate }: MergeViewProps) {
 
   useEffect(() => {
     void load();
-  }, [load]);
+    void loadAnchor();
+  }, [load, loadAnchor]);
 
   if (loading) {
     return (
@@ -325,6 +399,85 @@ export function MergeView({ onNavigate }: MergeViewProps) {
 
   return (
     <div className="space-y-4" dir="rtl">
+      {/* ======== עוגן-ההישרדות: הריבונות-בענן (מדידה-חיה · שעור-בעלים) ======== */}
+      <motion.section
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="rounded-2xl border p-4 md:p-6"
+        aria-label="עוגן-ההישרדות בענן"
+      >
+        <div className="flex flex-wrap items-center gap-3">
+          <div
+            className={cn(
+              "flex h-10 w-10 items-center justify-center rounded-xl",
+              anchor?.ok && anchor.cloud.live
+                ? "bg-emerald-500/15 text-emerald-400"
+                : "bg-amber-500/15 text-amber-400",
+            )}
+          >
+            <Anchor className="h-5 w-5" />
+          </div>
+          <div className="min-w-[200px] flex-1">
+            <h2 className="text-base font-bold md:text-lg">עוגן-ההישרדות · הריבונות-בענן</h2>
+            <p className="text-xs text-muted-foreground">
+              roshpinacare-sys/giant · כל-עגינה = עץ-מלא של המערכת-החיה — שורד-מחיקת-סנדבוקס
+            </p>
+          </div>
+          {anchor?.ok ? (
+            anchor.anchored ? (
+              <Badge className="border-emerald-500/30 bg-emerald-500/15 text-emerald-400">
+                <CheckCircle2 className="me-1 h-3.5 w-3.5" /> עגון-מלא
+              </Badge>
+            ) : (
+              <Badge className="border-amber-500/30 bg-amber-500/15 text-amber-400">
+                עגינה-חלקית{anchor.behind > 0 ? ` · ${anchor.behind} קומיטים-מאחור` : ""}
+              </Badge>
+            )
+          ) : (
+            <Badge variant="outline">לא-נמדד</Badge>
+          )}
+          <Button
+            size="sm"
+            className="h-9 bg-emerald-600 text-white hover:bg-emerald-700"
+            disabled={anchorBusy}
+            onClick={() => void anchorNow()}
+          >
+            {anchorBusy ? (
+              <Loader2 className="me-1 h-4 w-4 animate-spin" />
+            ) : (
+              <Anchor className="me-1 h-4 w-4" />
+            )}
+            עגן-עכשיו
+          </Button>
+        </div>
+        {anchor?.ok && (
+          <div className="mt-4 grid gap-2 text-xs md:grid-cols-3">
+            <div className="rounded-lg border p-3">
+              <p className="text-muted-foreground">קו-הריבונות (sovereign/main)</p>
+              <p className="mt-1 font-mono">{shortSha(anchor.cloud.sovereignMain)}</p>
+              <p className="mt-1 text-muted-foreground">
+                ראש-שושלת-בעוגן: {shortSha(anchor.cloud.anchorLineageHead)} · {anchor.cloud.anchorAt ?? "—"}
+              </p>
+            </div>
+            <div className="rounded-lg border p-3">
+              <p className="text-muted-foreground">קו-הסוכנים-המקבילים (main)</p>
+              <p className="mt-1 font-mono">{shortSha(anchor.cloud.siblingMain)}</p>
+              <p className="mt-1 text-muted-foreground">לא-נוגעים-בו — מיזוג-אמת-נפרד</p>
+            </div>
+            <div className="rounded-lg border p-3">
+              <p className="text-muted-foreground">ראש-מקומי-חי</p>
+              <p className="mt-1 font-mono">{shortSha(anchor.localHead)}</p>
+              <p className="mt-1 text-muted-foreground">
+                {anchor.anchored ? "זהה-לעוגן-בענן" : "חדש-מהעוגן — העגן-שוב"}
+              </p>
+            </div>
+          </div>
+        )}
+        {anchor && !anchor.ok && (
+          <p className="mt-3 text-xs text-amber-400">{anchor.error ?? "מדידת-הענן-נכשלה"}</p>
+        )}
+      </motion.section>
+
       {/* ======== הרואה: המיזוג הגדול ======== */}
       <motion.section
         initial={{ opacity: 0, y: 10 }}
