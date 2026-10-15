@@ -17,11 +17,12 @@ import { EstateView } from "@/components/giant/EstateView";
 import { EmpireView } from "@/components/giant/EmpireView";
 import { TrustView } from "@/components/giant/TrustView";
 import { MarketingView } from "@/components/giant/MarketingView";
+import { ApiView } from "@/components/giant/ApiView";
 import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
 import { DOORS, measureAllDoors, type DoorStatusMap } from "@/lib/giant/doors";
 import {
-  Activity, BookOpen, Building2, Coins, Command, Cog, Crown, GitBranch, LineChart, Megaphone, Network,
+  Activity, BookOpen, Building2, Coins, Command, Cog, Crown, GitBranch, KeyRound, LineChart, Megaphone, Network,
   Package, Radio, ScrollText, ShieldCheck, Trophy, Wallet,
   type LucideIcon,
 } from "lucide-react";
@@ -43,7 +44,7 @@ import {
  * משטח-אחד-לכל-יכולת · ערוץ-אחד · אפס-כפילויות · הכל נמדד-חי מהגיט. */
 
 type ViewId =
-  | "submission" | "machine" | "dex" | "league" | "channel" | "wallet" | "desk"
+  | "submission" | "machine" | "dex" | "league" | "channel" | "wallet" | "desk" | "api"
   | "capital"
   | "ledger" | "products" | "pulse" | "office" | "estate" | "empire" | "trust"
   | "marketing";
@@ -57,6 +58,7 @@ const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = 
   { id: "channel", label: "הערוץ", he: "הדלת-הראשית: בעלים ↔ ריבונות", icon: Radio },
   { id: "wallet", label: "הארנק", he: "חשבונות-אמת מהמנוע · יחידות-אנוש", icon: Wallet },
   { id: "desk", label: "השולחן", he: "מנדט · equity · אסטרטגיות", icon: ScrollText },
+  { id: "api", label: "ה-API", he: "הדלת-של-החוץ: מפתחות-API אמת · מסחר-חוץ-מאומת · מגבלות-קצב", icon: KeyRound },
   { id: "capital", label: "ההון", he: "מנוע-ההון: שבע-אסטרטגיות נמדדות-חי · תוכניות-הצבה ממתינות-לאישורך", icon: Coins },
   { id: "ledger", label: "הרישום", he: "כל-ההחלטות · חיפוש", icon: BookOpen },
   { id: "products", label: "המוצרים", he: "קטלוג-אמת · קבלות · מדידות", icon: Package },
@@ -362,6 +364,7 @@ export default function Home() {
             {view === "channel" && <ChannelView />}
             {view === "wallet" && <WalletView />}
             {view === "desk" && <DeskView />}
+            {view === "api" && <ApiView />}
             {view === "capital" && <CapitalView />}
             {view === "ledger" && <LedgerView />}
             {view === "products" && <ProductsView />}

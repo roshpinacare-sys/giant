@@ -211,7 +211,7 @@ export interface ExecuteSwapArgs {
   side: TradeSide;
   amountIn: number;
   slippagePct: number;
-  source: "USER" | "FLEET";
+  source: "USER" | "FLEET" | "API";
   account: string; // OWNER או FLEET:<agentId>
   agentId?: string;
 }
