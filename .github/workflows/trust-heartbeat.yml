@@ -8,7 +8,7 @@ name: trust-heartbeat
 
 on:
   schedule:
-    - cron: "0 */4 * * *"   # כל-4-שעות (UTC)
+    - cron: "0 */2 * * *"   # כל-שעתיים (UTC) — זרימה-כפולה על דקות-ציבור חינם (ההשקה 15.10)
   workflow_dispatch: {}      # הפעלה-ידנית-אוטונומית
 
 permissions:
