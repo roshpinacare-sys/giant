@@ -177,8 +177,18 @@ export async function performAnchor(): Promise<
       `carried upload/pat.env with the raw PAT). No secret is present in this tree.\n\n` +
       `Landed via the owner-gated anchor API from the living system.`;
     const anchorSha = (await git(["commit-tree", tree, "-m", msg])).trim();
+    // כל-עוגן-הוא-שורש-יתום → אי-אפשר-fast-forward. דורסים-רק-את-ref-העוגן-שלנו
+    // עם force-with-lease: הדחיפה-נכשלת-אם-העוגן-זז-בענן-מאז-המדידה — ואף-פעם-לא-נוגעים-ב-main.
+    const current = (await git(
+      ["ls-remote", authedUrl(token), ANCHOR_REF],
+      15_000,
+    )).trim().split(/\s+/)[0];
+    const leaseArgs =
+      /^[0-9a-f]{40}$/.test(current)
+        ? [`--force-with-lease=${ANCHOR_REF}:${current}`]
+        : ["--force"];
     await git(
-      ["push", authedUrl(token), `${anchorSha}:${ANCHOR_REF}`],
+      ["push", ...leaseArgs, authedUrl(token), `${anchorSha}:${ANCHOR_REF}`],
       30_000,
     );
     cache = null; // אנוס-מדידה-חיה-בסטטוס-הבא
