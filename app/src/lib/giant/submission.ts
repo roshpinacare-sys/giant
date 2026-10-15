@@ -194,7 +194,8 @@ export const SUBMISSION: SubmissionData = {
     { when: "גל-9", what: "ארבעת-הספרים-חוברו-חי + ההגשה-הסופית + שער-מסודר", state: "חי" },
     { when: "פעימה-ראשונה", what: "trust-heartbeat-רץ-אוטונומית-על-Actions — קומיט-הבוט-הראשון a2cee19-נמדד-success", state: "חי" },
     { when: "גל-10 (היום)", what: "המיזוג-האמיתי-הראשון בקוד: saos-markets→saos-dex/markets (a34dc6f) + הקפאת-הכפילויות (saos-markets ff3bb6b · beacon d8a6707 · lighthouse 0680f14) — 'דברים-שהם-מה-שכתוב-שיהיו'", state: "חי" },
-    { when: "גל-10-המשך", what: "rollup-Defi-למנוע · משטח-שיווק-חי ל-Adsmarket · דיוק-כל-דלת-למה-שהיא-טוענת (ראיה-על-כל-כפתור)", state: "פתוח" },
-    { when: "שרדנות", what: "runner-kit: הפעלה-במכשיר-שלנו — המכשיר-הוא-המנוע, GitHub-ספר-בלבד", state: "פתוח" },
+    { when: "גל-11 (עכשיו)", what: "משטח-השיווק-החי ל-Adsmarket: 9-קבצי-הערכה-נקראים-מהריפו-מילה-במילה (verbatim, אפס-סינתזה) · ראיה-מוצגת-על-כל-כפתור: מדידה-חיה-של-כל-דלת (ok·ms·זמן) על-הכפתור-עצמו · runner-kit: הערכת-הישרדות-בפקודה-אחת", state: "חי" },
+    { when: "גל-10-המשך", what: "rollup-Defi-למנוע · מיזוגי-המשך-ממפת-הכפילויות (Sdk→anchor-baseline)", state: "פתוח" },
+    { when: "שרדנות", what: "runner-kit-חי-בכל-סנדבוקס-חדש: node scripts/runner-kit.mjs → דוח-אמת; המכשיר-הוא-המנוע, GitHub-ספר-בלבד", state: "בתהליך" },
   ],
 };

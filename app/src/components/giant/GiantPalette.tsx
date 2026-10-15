@@ -28,6 +28,7 @@ import {
   Coffee,
   Gauge,
   Landmark,
+  Megaphone,
   Network,
   Package,
   Radio,
@@ -60,6 +61,7 @@ const MODULES: ModuleEntry[] = [
   { id: "estate", he: "האחוזה", desc: "מפקד-האחוזה: הגיט · הזרימה · העבודות", en: "estate git census repos", icon: <Building2 aria-hidden /> },
   { id: "empire", he: "החיבור", desc: "מפת-האימפריה: כל-הספרים × תפקידם × דלתם", en: "empire connection map repos roles wiring", icon: <Network aria-hidden /> },
   { id: "trust", he: "האמון", desc: "מפת-האמון: סריקה-מדודה של כל-הספרים", en: "trust scan fleet simulation audit", icon: <ShieldCheck aria-hidden /> },
+  { id: "marketing", he: "השיווק-החי", desc: "משטח-Adsmarket: מה-שכתוב-בריפו = מה-שמוצג", en: "marketing adsmarket kit brand pitch", icon: <Megaphone aria-hidden /> },
 ];
 
 interface ActionEntry {

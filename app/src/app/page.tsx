@@ -15,10 +15,12 @@ import { OfficeHqView } from "@/components/giant/OfficeHqView";
 import { EstateView } from "@/components/giant/EstateView";
 import { EmpireView } from "@/components/giant/EmpireView";
 import { TrustView } from "@/components/giant/TrustView";
+import { MarketingView } from "@/components/giant/MarketingView";
 import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
+import { DOORS, measureAllDoors, type DoorStatusMap } from "@/lib/giant/doors";
 import {
-  Activity, BookOpen, Building2, Command, Cog, Crown, GitBranch, LineChart, Network,
+  Activity, BookOpen, Building2, Command, Cog, Crown, GitBranch, LineChart, Megaphone, Network,
   Package, Radio, ScrollText, ShieldCheck, Trophy, Wallet,
   type LucideIcon,
 } from "lucide-react";
@@ -41,7 +43,8 @@ import {
 
 type ViewId =
   | "submission" | "machine" | "dex" | "league" | "channel" | "wallet" | "desk"
-  | "ledger" | "products" | "pulse" | "office" | "estate" | "empire" | "trust";
+  | "ledger" | "products" | "pulse" | "office" | "estate" | "empire" | "trust"
+  | "marketing";
 
 /* סדר-הפתיחה (T58; גל-9: ההגשה היא דלת-הפתיחה — מנדט-הבעלים "אני עוד לא רואה רבע"). */
 const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = [
@@ -54,6 +57,7 @@ const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = 
   { id: "desk", label: "השולחן", he: "מנדט · equity · אסטרטגיות", icon: ScrollText },
   { id: "ledger", label: "הרישום", he: "כל-ההחלטות · חיפוש", icon: BookOpen },
   { id: "products", label: "המוצרים", he: "קטלוג-אמת · קבלות · מדידות", icon: Package },
+  { id: "marketing", label: "השיווק", he: "משטח-Adsmarket-החי: מה-שכתוב-בריפו = מה-שמוצג · אפס-סינתזה", icon: Megaphone },
   { id: "pulse", label: "הדופק", he: "מערכת-האמת: שערים · זרמים · טביעות", icon: Activity },
   { id: "office", label: "המשרד-החי", he: "החדר-התלת-מימדי · קונסולת-מפעיל", icon: Building2 },
   { id: "estate", label: "האחוזה", he: "מפקד-הגיט: 39 ספרים · בריאות · פוטנציאל", icon: GitBranch },
@@ -83,6 +87,8 @@ export default function Home() {
   const [clock, setClock] = useState("");
   const [truth, setTruth] = useState<TruthChip | null>(null);
   const [hero, setHero] = useState<HeroStats>(HERO_EMPTY);
+  /* גל-11: ראיה-מוצגת-על-כל-כפתור — מדידה-חיה-של-כל-דלת (ok · ms · זמן) */
+  const [doors, setDoors] = useState<DoorStatusMap>({});
 
   useEffect(() => {
     const tick = () => setClock(new Date().toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
@@ -131,6 +137,21 @@ export default function Home() {
     };
     load();
     const iv = setInterval(load, 120_000);
+    return () => {
+      alive = false;
+      clearInterval(iv);
+    };
+  }, []);
+
+  /* ראיה-על-כל-כפתור (גל-11): מדידה-מקבילית של כל-דלת, כל-90ש׳ */
+  useEffect(() => {
+    let alive = true;
+    const load = async () => {
+      const m = await measureAllDoors();
+      if (alive) setDoors(m);
+    };
+    void load();
+    const iv = setInterval(load, 90_000);
     return () => {
       alive = false;
       clearInterval(iv);
@@ -214,6 +235,10 @@ export default function Home() {
           {NAV.map((n) => {
             const Icon = n.icon;
             const isActive = view === n.id;
+            const st = doors[n.id];
+            const stTitle = st?.at
+              ? `דלת-חיה · ${DOORS.find((d) => d.id === n.id)?.api} · ${st.ok ? "ok" : "כשל-כנה"} · ${st.ms}ms · ${new Date(st.at).toLocaleTimeString("he-IL")}`
+              : "טרם-נמדד — המדידה-הראשונה-בעוד-רגע";
             return (
               <button
                 key={n.id}
@@ -231,6 +256,14 @@ export default function Home() {
                     aria-hidden
                   />
                   <span className="block text-sm font-bold leading-5">{n.label}</span>
+                  {/* ראיה-חיה-על-הכפתור: נקודת-מדידה (ירוק-נושם/אדום/אפור) */}
+                  <span
+                    title={stTitle}
+                    aria-label={`מצב-הדלת: ${stTitle}`}
+                    className={`mr-auto h-1.5 w-1.5 shrink-0 rounded-full ${
+                      st?.at == null ? "bg-zinc-600" : st.ok ? "g-breathe bg-emerald-400" : "bg-red-400"
+                    }`}
+                  />
                 </span>
                 <span className="mt-0.5 block pr-[26px] text-[10px] leading-4 text-zinc-500">{n.he}</span>
                 {isActive && <span className="g-active-line absolute bottom-0 right-0 left-0 h-px bg-gradient-to-l from-transparent via-amber-500/70 to-transparent" aria-hidden />}
@@ -323,6 +356,7 @@ export default function Home() {
             {view === "estate" && <EstateView />}
             {view === "empire" && <EmpireView onNavigate={(id) => { if (NAV.some((n) => n.id === id)) setView(id as ViewId); }} />}
             {view === "trust" && <TrustView />}
+            {view === "marketing" && <MarketingView />}
           </div>
         </main>
       </div>
@@ -336,15 +370,22 @@ export default function Home() {
         {NAV.slice(0, 4).map((n) => {
           const Icon = n.icon;
           const isActive = view === n.id;
+          const st = doors[n.id];
           return (
             <button
               key={n.id}
               onClick={() => setView(n.id)}
               aria-current={isActive ? "page" : undefined}
-              className={`flex min-h-[52px] flex-1 flex-col items-center justify-center gap-0.5 py-2 text-center text-[10px] font-bold transition ${isActive ? "text-amber-500" : "text-zinc-500"}`}
+              className={`relative flex min-h-[52px] flex-1 flex-col items-center justify-center gap-0.5 py-2 text-center text-[10px] font-bold transition ${isActive ? "text-amber-500" : "text-zinc-500"}`}
             >
               <Icon className="h-4 w-4" aria-hidden />
               {n.label}
+              {/* ראיה-חיה-על-הכפתור (גל-11) */}
+              <span
+                aria-label={`מצב-הדלת: ${st?.at ? (st.ok ? "ok" : "כשל-כנה") : "טרם-נמדד"}`}
+                title={st?.at ? `${st.ok ? "ok" : "כשל-כנה"} · ${st.ms}ms` : "טרם-נמדד"}
+                className={`absolute right-2.5 top-2 h-1.5 w-1.5 rounded-full ${st?.at == null ? "bg-zinc-600" : st.ok ? "g-breathe bg-emerald-400" : "bg-red-400"}`}
+              />
             </button>
           );
         })}
@@ -367,7 +408,7 @@ export default function Home() {
           <span className="hidden sm:inline">· הריבונות מפעילה-הכל; הגיט הוא שכבת-הקיום; המערכת מתפתחת לנצח</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="font-mono text-[10px] text-zinc-600">SAOS-SOVEREIGN-CHANNEL/1 · R360 · R74 · T58-merge · גל-7-חיבור</span>
+          <span className="font-mono text-[10px] text-zinc-600">SAOS-SOVEREIGN-CHANNEL/1 · R360 · R74 · T58-merge · גל-11-ראיה-על-כל-כפתור</span>
         </div>
       </footer>
     </div>

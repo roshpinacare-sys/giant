@@ -5,7 +5,7 @@
  * כל-ספר-נקרא-חי מ-GitHub-raw (PAT שרת-בלבד, אפס-חשיפה):
  *  · saos-agents  → fleet-coordination/CLAIMS.json (FLEET-COORDINATION/1)
  *  · Defi         → fleet/KPI.json + fleet/MISSION-1000.md (משימת-1000$/יום)
- *  · Adsmarket    → README.md (ערכת-השיווק הרשמית)
+ *  · Adsmarket    → README.md (ערכת-השיווק הרשמית) + משטח-חי 9-קבצים (/api/giant/marketing, גל-11)
  *  · saos-markets → ממוזג-בקוד ל-saos-dex/markets (גל-10, a34dc6f) — נקרא מהיעד-החדש
  * חוק-אמת: כשל-מקור = ok:false כנה לאותו-ספר; אפס-סינתזה; אפס-מספרים-מצוירים.
  * cache-זיכרון 60 שניות.
@@ -133,7 +133,10 @@ export async function loadBooks(force = false): Promise<BooksPayload> {
       ok: Boolean(adsHead),
       note: adsHead ? undefined : "README לא נמדד כרגע — כשל-כנה",
       headline: headlineOf(adsHead),
-      facts: [{ k: "פתיח-הספר", v: firstMdParagraph(adsHead) ?? "—" }],
+      facts: [
+        { k: "פתיח-הספר", v: firstMdParagraph(adsHead) ?? "—" },
+        { k: "משטח-חי", v: "דלת-השיווק: 9-קבצי-הערכה-ורבטימי (גל-11)" },
+      ],
       fetchedAt: adsHead ? now : null,
     },
     {
