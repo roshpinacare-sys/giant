@@ -120,6 +120,31 @@ interface TrustCache {
 }
 const deepCache = new Map<string, { at: number; scan: DeepScan }>();
 
+/* ── זריעה-מהקנון-האוטונומי (גל-9 · “שיזרום יותר”) ──────────────────────────
+ * פעימת-האמון (Actions על giant, כל-4-שעות) דוחפת db/trust-cache.json לגיט.
+ * sandbox-טרי = מטמון-מקומי-ריק → זורעים-מהקנון-בכנות: הגילאים-האמיתיים
+ * (scannedAt-מהקנון) נשמרים, ה-TTL-הרגיל דוגם-חי כשהזרע מתיישן. כשל-קנון =
+ * מטמון-ריק כנה → סריקה-חיה-רגילה. אפס-המצאה: מה שלא-נסרק-בקנון לא-מופיע. */
+const CANON_URL = "https://raw.githubusercontent.com/roshpinacare-sys/giant/main/db/trust-cache.json";
+
+async function seedFromGitCanon(): Promise<TrustCache> {
+  try {
+    const pat = await readPat();
+    const headers: Record<string, string> = { "cache-control": "no-cache" };
+    if (pat) headers.authorization = `Bearer ${pat}`;
+    const res = await fetch(CANON_URL, { headers, cache: "no-store", signal: AbortSignal.timeout(9_000) });
+    if (!res.ok) return { version: 1, scanner: SCANNER, entries: [] };
+    const raw = (await res.json()) as TrustCache;
+    if (raw?.version !== 1 || !Array.isArray(raw.entries)) return { version: 1, scanner: SCANNER, entries: [] };
+    const entries = raw.entries.filter(
+      (e) => e && typeof e.name === "string" && typeof e.scannedAt === "string" && e.row && e.row.mode === "tree",
+    );
+    return { version: 1, scanner: SCANNER, entries };
+  } catch {
+    return { version: 1, scanner: SCANNER, entries: [] };
+  }
+}
+
 function readCache(): TrustCache {
   try {
     if (existsSync(CACHE_FILE)) {
@@ -251,7 +276,9 @@ export async function runTrustScan(force = false): Promise<TrustPayload> {
     };
   }
   const pat = await readPat();
-  const cache = readCache();
+  let cache = readCache();
+  /* sandbox-טרי: מטמון-ריק → זריעה-כנה-מהקנון-האוטונומי-של-הגיט (למעלה) */
+  if (cache.entries.length === 0) cache = await seedFromGitCanon();
   const byName = new Map(cache.entries.map((e) => [e.name, e]));
   const rows: TrustRow[] = [];
   const list = fleet.repos.filter((r) => !r.archived);

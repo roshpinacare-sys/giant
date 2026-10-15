@@ -49,7 +49,7 @@ export const SUBMISSION: SubmissionData = {
 
   chips: [
     { k: "ספרי-האימפריה", v: "39", evidence: "GitHub-API נמדד-חי (גל-9, טוקן-מלא)" },
-    { k: "נסרקו-אמון", v: "38/39", evidence: "saos-trust-check · 82-סימנים · 30-קווים-אדומים-מתועדים" },
+    { k: "נסרקו-אמון", v: "38/39", evidence: "saos-trust-check · 86-סימנים · 34-קווים-אדומים — סריקה-חיה 15.10 (sanbox-409-כנה)" },
     { k: "כשל-סנדבוקס", v: "0-חומר-אובד", evidence: "17/17-סביבות נבחנו · dirty=0 · ahead=0 (גל-8)" },
     { k: "חוק-היחידות", v: "1 USDS = 1000µ", evidence: "µ-קנון · גל-42" },
     { k: "רפרנסי-עיצוב", v: "10-נשמרו · 5-נמדדו-חי", evidence: "docs/design/design-laws.md · גל-6" },
@@ -196,6 +196,7 @@ export const SUBMISSION: SubmissionData = {
     { when: "גל-10 (היום)", what: "המיזוג-האמיתי-הראשון בקוד: saos-markets→saos-dex/markets (a34dc6f) + הקפאת-הכפילויות (saos-markets ff3bb6b · beacon d8a6707 · lighthouse 0680f14) — 'דברים-שהם-מה-שכתוב-שיהיו'", state: "חי" },
     { when: "גל-11 (עכשיו)", what: "משטח-השיווק-החי ל-Adsmarket: 9-קבצי-הערכה-נקראים-מהריפו-מילה-במילה (verbatim, אפס-סינתזה) · ראיה-מוצגת-על-כל-כפתור: מדידה-חיה-של-כל-דלת (ok·ms·זמן) על-הכפתור-עצמו · runner-kit: הערכת-הישרדות-בפקודה-אחת", state: "חי" },
     { when: "גל-12/13 (היום)", what: "הצתת-הזרימה-הכלכלית לפי-מילת-הבעלים: המנדט-חי-וחמוש (beat-42 · equity-חי) · חומת-החיוב-נשברה-בברית (artery-desk — העורק-הציבורי-כשכבת-דחיפה-למוקפים) · artery-defi-הקים-את-הצייד-הקפוא (canary-צייץ-בעורק · KPI-history-זרמה-אחרי-9-ימי-קיפאון · קבלה-מדודה sha16) · ה-crons-אומתו-חי (trust 02:02Z · desk 07:42Z · grid · estate-relay · custody-recover) · אפס-דמו-בסריקה-כפולה (src + 39/39-ריפו)", state: "חי" },
+    { when: "ההשקה (15.10)", what: "פקודת-הבעלים ‘תצית-הכל-קדימה · כל-החסמים-הכלכליים-פתח · שאין-דמו · שיזרום’: crons-מאומתים-חי (giant trust-heartbeat 2×schedule-success 02:02Z+08:38Z · Domain press-bake 11:34Z · FleetHQ office-window 11:29Z) · חומת-החיוב-אובחנה-מדויקת (28-workflows-חנותים-‘disabled_manually’-מאחורי-תקרת-הוצאה — אין-API-להרמתה; 4-קנריות-הושבו-לחיים-204-וחמושות: הרשת-מחיה-את-עצמה-ברגע-הרמת-התקרה-ע”י-הבעלים) · פעימת-האמון-תוקנת-למבנה-החדש (7db5a3a+61b45ad — הסקריפט-הישן-נמחק-ב-7d14547) · הקנון-האוטונומי-מזריע-את-מפת-האמון-בכל-סנדבוקס-טרי (seedFromGitCanon) · ביקורת-אפס-דמו-נקייה · שער-המפעיל-מאומת-401-fail-closed (headcorner-דיגסטים-חיים)", state: "חי" },
     { when: "גל-10-המשך", what: "rollup-Defi-למנוע · מיזוגי-המשך-ממפת-הכפילויות (Sdk→anchor-baseline)", state: "פתוח" },
     { when: "שרדנות", what: "runner-kit-חי-בכל-סנדבוקס-חדש: node scripts/runner-kit.mjs → דוח-אמת; המכשיר-הוא-המנוע, GitHub-ספר-בלבד", state: "בתהליך" },
   ],
