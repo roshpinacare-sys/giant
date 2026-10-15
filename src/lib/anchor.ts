@@ -178,6 +178,27 @@ export async function performAnchor(): Promise<
     const at = new Date()
       .toISOString()
       .replace(/\.\d+Z$/, "Z");
+    // מדידה-קודמת-לכל-דבר: ההודעה-וההורה-נגזרים-מהמדידה — לא-להפך (תיקון-TDZ-מגל-18b)
+    const lsOut = await git(["ls-remote", authedUrl(token), ANCHOR_REF], 15_000);
+    const current = lsOut.trim().split(/\s+/)[0] ?? "";
+    if (!/^[0-9a-f]{40}$/.test(current) && lsOut.trim() !== "") {
+      return { ok: false, error: `מדידת-העוגן-בענן-פגומה (${lsOut.trim().slice(0, 40)}) — נדחה fail-closed` };
+    }
+    /* עוגן-קיים = הורה-אמיתי (שושלת-רציפה); עוגן-חסר-לגמרי (תשובה-ריקה) = שורש-ראשון.
+     * שתי-האפשרויות-מגובות-במדידה-מוצלחת בלבד — לעולם-לא-כשל-שקט-שמתפרש-כריק.
+     * תיקון-גל-58: העוגן-הקודם-חי-בענן-בלבד (קומיטי-עוגן-יתומים) — חובה-fetch-לפני-שרשור-הורה,
+     * אחרת commit-tree -p נופל על "not a valid object". כשל-fetch = דחייה-כנה (fail-closed). */
+    const parentArgs = /^[0-9a-f]{40}$/.test(current) ? ["-p", current] : [];
+    if (parentArgs.length > 0) {
+      try {
+        await git(["fetch", authedUrl(token), ANCHOR_REF], 30_000);
+      } catch (fetchErr) {
+        return {
+          ok: false,
+          error: `לא-ניתן-להביא-את-העוגן-הקודם-מהענן (${fetchErr instanceof Error ? fetchErr.message : "fetch"}) — נדחה fail-closed`,
+        };
+      }
+    }
     const msg =
       `sovereign anchor snapshot · lineage ${head} · ${at}\n\n` +
       (parentArgs.length > 0
@@ -188,14 +209,6 @@ export async function performAnchor(): Promise<
       `(GitHub Push Protection correctly blocks the original lineage history:\n` +
       `commit c185c80 carried upload/pat.env with the raw PAT). ` +
       `Landed via the owner-gated anchor API from the living system.`;
-    const lsOut = await git(["ls-remote", authedUrl(token), ANCHOR_REF], 15_000);
-    const current = lsOut.trim().split(/\s+/)[0] ?? "";
-    if (!/^[0-9a-f]{40}$/.test(current) && lsOut.trim() !== "") {
-      return { ok: false, error: `מדידת-העוגן-בענן-פגומה (${lsOut.trim().slice(0, 40)}) — נדחה fail-closed` };
-    }
-    /* עוגן-קיים = הורה-אמיתי (שושלת-רציפה); עוגן-חסר-לגמרי (תשובה-ריקה) = שורש-ראשון.
-     * שתי-האפשרויות-מגובות-במדידה-מוצלחת בלבד — לעולם-לא-כשל-שקט-שמתפרש-כריק. */
-    const parentArgs = /^[0-9a-f]{40}$/.test(current) ? ["-p", current] : [];
     const anchorSha = (await git(["commit-tree", tree, ...parentArgs, "-m", msg])).trim();
     // force-with-lease-תמיד: הדחיפה-נכשלת-אם-העוגן-זז-בענן-מאז-המדידה — ואף-פעם-לא-נוגעים-ב-main.
     await git(
