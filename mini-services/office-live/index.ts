@@ -19,8 +19,42 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { ENGINE_ID, ENGINE_VERSION, createSeedWorld, fromJSON, stepWorld, worldFrame, advanceWorld } from '../../public/office3d/src/engine.js';
+import { fileURLToPath, pathToFileURL } from 'url';
+
+/* ריפוי-עצמי של המנוע (גל-16): המנוע הקנוני חי ב-Domain/office/engine.mjs (פעימת
+ * ה-worldbeat בגריד). העתק-מקומי תחת public/office3d/ הוא ארטיפקט-ריצה בלבד —
+ * אינו-בקנון (gitignore) ונבנה-מחדש-מהעוגן בכל-עלייה. אם-העוגן-חסר — כשל-כנה. */
+const ENGINE_LOCAL = new URL('../../public/office3d/src/engine.mjs', import.meta.url);
+const ENGINE_CANONS = [
+  '/home/z/estate/Domain/office/engine.mjs', /* עוגן estate-sync */
+];
+
+function ensureEngineFile(): string {
+  const local = fileURLToPath(ENGINE_LOCAL);
+  if (fs.existsSync(local)) return local;
+  for (const canon of ENGINE_CANONS) {
+    try {
+      fs.mkdirSync(path.dirname(local), { recursive: true });
+      fs.copyFileSync(canon, local);
+      console.log(new Date().toISOString(), '[office-live]', 'engine self-healed from canon:', canon);
+      return local;
+    } catch (e) {
+      console.log(new Date().toISOString(), '[office-live]', `canon unavailable (${canon}):`, e instanceof Error ? e.message : String(e));
+    }
+  }
+  throw new Error('engine.mjs missing and canon unavailable (honest fail) — estate-sync will heal /home/z/estate/Domain');
+}
+
+const engine = await import(pathToFileURL(ensureEngineFile()).href);
+const { ENGINE_ID, ENGINE_VERSION, createSeedWorld, fromJSON, stepWorld, worldFrame, advanceWorld } = engine as {
+  ENGINE_ID: string;
+  ENGINE_VERSION: number;
+  createSeedWorld: (tNow: number) => unknown;
+  fromJSON: (obj: unknown) => { t: number; agents: unknown[] };
+  stepWorld: (w: unknown, dtSec: number) => unknown;
+  worldFrame: (w: unknown, sinceTs?: number) => unknown;
+  advanceWorld: (w: unknown, targetMs: number, opts?: Record<string, unknown>) => { advancedMs: number; steps: number };
+};
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const STATE_FILE = path.join(HERE, 'state', 'world-state.json');
