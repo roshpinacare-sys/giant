@@ -9,7 +9,22 @@ const HEAD_PATH = "/home/z/my-project/upload/headcorner.txt";
 export const OWNER_COOKIE = "giant_owner";
 
 async function headcornerSecret(): Promise<string> {
-  return (await readFile(HEAD_PATH, "utf8")).trim();
+  // פורמט-הקובץ (מאומת-מול t35/saos-dex/scripts/verify-headcorner-key.ts):
+  //   שורה-0 = שם-החשבון/תווית ("headcorner")
+  //   שורה-1 = המפתח-עצמו
+  // לעולם-לא-קוראים-את-הקובץ-כולו-כסוד — התווית-הייתה-נדבקת-למפתח
+  // והמפתח-האמיתי-של-הבעלים-מעולם-לא-היה-מתאים.
+  const raw = await readFile(HEAD_PATH, "utf8");
+  const lines = raw
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean);
+  if (lines.length === 0) return "";
+  if (lines.length === 1) return lines[0];
+  // ריבוי-שורות: משליכים-את-שורת-התווית ולוקחים-את-השורה-הארוכה-שנותרה (המפתח)
+  const candidates = lines.filter((l) => l.toLowerCase() !== "headcorner");
+  const pool = candidates.length > 0 ? candidates : lines;
+  return pool.reduce((a, b) => (b.length > a.length ? b : a));
 }
 
 // נרמול-דו-צדדי: הסוד-בקובץ עשוי-להכיל-רווחים/שורות; הבעלים-מקליד-בכל-סגנון.
