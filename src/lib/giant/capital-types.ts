@@ -94,10 +94,19 @@ export interface StrategyRow {
   evidence: string;
 }
 
+/* ההגשה-הריבונית-בפועל — הזרם-הקנוני (SAOS-SOVEREIGN-CHANNEL/1) */
+export interface SovereignFiling {
+  reqId: string;
+  streamUrl: string;
+  filedAt: string;
+  registryRef: string;
+}
+
 export interface MmPlan {
   approved: false;
   statusLine: string;
   approvalPathHe: string;
+  filing: SovereignFiling;
   inputs: {
     spreadPct: number | null;
     totalDepthUsd: number | null;
@@ -136,6 +145,7 @@ export interface SpMatrix {
   approved: false;
   statusLine: string;
   approvalPathHe: string;
+  filing: SovereignFiling;
   aprPct: number | null;
   aprBasisHe: string;
   spHeldKnown: boolean;
