@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { KeyRound, Lock, RefreshCw, Send, ShieldCheck, Sparkles, GitCommitHorizontal } from "lucide-react";
+import { saveOwnerToken, clearOwnerToken } from "@/lib/owner-client";
 
 /* ═══ הערוץ — הדלת-הראשית של GIANT (SAOS-SOVEREIGN-CHANNEL/1) ════════════
  * הערוץ-היחיד בעלים↔ריבונות: זרמי-גיט קנוניים append-only.
@@ -166,6 +167,7 @@ export function ChannelView() {
       const d = (await res.json()) as { ok: boolean; token?: string; error?: string; reason?: string };
       if (d.ok && d.token) {
         sessionStorage.setItem(TOKEN_KEY, d.token);
+        saveOwnerToken(d.token); // מפתח-אחד-פותח-הכל: אותו-אסימון פותח-גם-את-מסכי-הבעלים-האחרים (דוכן/API)
         setToken(d.token);
       } else setGateErr(d.reason ?? (d.error === "invalid" ? "מפתח לא מאומת" : d.error === "too-many-attempts" ? "ניסיונות-יתר — המתן דקה" : "השער נדחה"));
     } catch {
@@ -177,6 +179,7 @@ export function ChannelView() {
 
   function ungate() {
     sessionStorage.removeItem(TOKEN_KEY);
+    clearOwnerToken();
     setToken(null);
   }
 
