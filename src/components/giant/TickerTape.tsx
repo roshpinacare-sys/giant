@@ -116,8 +116,8 @@ export function TickerTape() {
     };
   }, [load]);
 
-  const row = (ariaHidden: boolean) => (
-    <div className="flex shrink-0 items-center gap-6 px-3" aria-hidden={ariaHidden}>
+  const row = (copy: 0 | 1) => (
+    <div className="flex shrink-0 items-center gap-6 px-3" aria-hidden={copy === 1}>
       {source && (
         <span className="flex items-center gap-1 text-[11px] text-zinc-600">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/80" />
@@ -126,7 +126,7 @@ export function TickerTape() {
         </span>
       )}
       {(chips ?? []).map((c) => (
-        <span key={c.key} className="flex items-center gap-1.5 whitespace-nowrap font-mono text-xs tabular-nums">
+        <span key={`${copy}-${c.key}`} className="flex items-center gap-1.5 whitespace-nowrap font-mono text-xs tabular-nums">
           <span className="font-semibold text-zinc-200">{c.symbol}</span>
           <span className="text-zinc-300">{c.price}</span>
           {c.change !== null && (
@@ -165,8 +165,8 @@ export function TickerTape() {
       ) : (
         /* המסילה מכילה שתי-עותקים זהים — translateX(-50%) = לולאה-חלקה */
         <div className="giant-tape-track hover:[animation-play-state:paused] motion-reduce:animate-none flex w-max py-1.5 [animation:giant-tape_48s_linear_infinite]">
-          {row(false)}
-          {row(true)}
+          {row(0)}
+          {row(1)}
         </div>
       )}
     </div>
