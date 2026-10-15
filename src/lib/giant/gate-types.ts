@@ -71,12 +71,34 @@ export interface GateDoor {
   receiptSummaryOnly: boolean;
 }
 
+/**
+ * T66 · החסמים-הכלכליים — מצב-workflows של מנוע-הדקס, נמדד-חי מה-API בכל-בקשה.
+ * הוראת-הבעלים: "כל החסמים הכלכליים פתח" — המדידה מראה את המצב-בפועל, אפס-סיפור.
+ */
+export interface GateBarrierWorkflow {
+  path: string; // dex-grid.yml
+  name: string; // dex-grid
+  state: string; // active | disabled_manually | disabled_inactivity
+  economic: boolean; // מנוע-הזרימה-הכלכלית (דקס/גריד/שוק) מול תשתית (ci/guards)
+}
+
+export interface GateBarriers {
+  measuredAt: string;
+  repo: string;
+  workflows: GateBarrierWorkflow[];
+  active: number;
+  total: number;
+  economicActive: number;
+  economicTotal: number;
+}
+
 export interface GatePayload {
   ok: boolean;
   receipt: GateCheckReceipt | null;
   receiptAgeMin: number | null;
   door: GateDoor | null;
   gateOpen: boolean;
+  barriers: GateBarriers | null;
   errors: string[];
   sha16: string;
 }

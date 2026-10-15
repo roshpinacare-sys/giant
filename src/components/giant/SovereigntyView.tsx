@@ -808,7 +808,12 @@ function GateSection() {
                     )}
                     {actions?.gridIgnition && (
                       <p className="mt-2 rounded-lg border-r-2 border-amber-500/60 bg-amber-500/[0.05] px-3 py-2 text-[10px] leading-5 text-amber-200/90">
-                        <b className="font-black">הצתת-הגריד:</b> {actions.gridIgnition.note}
+                        <b className="font-black">הצתת-הגריד (מהקבלה):</b> {actions.gridIgnition.note}
+                        {gate?.barriers && gate.barriers.economicActive === gate.barriers.economicTotal && (
+                          <span className="mt-1 block font-black text-emerald-300">
+                            ← מיושן: המדידה-החיה למעלה מראה את-המצב-בפועל — החסמים פתוחים ({gate.barriers.economicActive}/{gate.barriers.economicTotal} כלכליים).
+                          </span>
+                        )}
                       </p>
                     )}
                   </div>
@@ -842,6 +847,62 @@ function GateSection() {
                     <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 font-mono text-zinc-400" dir="ltr">
                       secret: {door.secretSource ?? "—"}
                     </span>
+                  </div>
+                )}
+
+                {/* T66 · החסמים-הכלכליים — מדידת-חי של מצב-workflows במנוע-הדקס */}
+                {gate?.barriers && (
+                  <div
+                    className={`mt-3 rounded-xl border p-4 ${
+                      gate.barriers.economicActive === gate.barriers.economicTotal && gate.barriers.active === gate.barriers.total
+                        ? "border-emerald-500/30 bg-emerald-500/[0.07]"
+                        : gate.barriers.economicActive === 0 && gate.barriers.active === 0
+                          ? "border-rose-500/30 bg-rose-500/[0.06]"
+                          : "border-amber-500/30 bg-amber-500/[0.06]"
+                    }`}
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <h4 className="text-xs font-black text-zinc-100">
+                        החסמים-הכלכליים — מדידת-חי של מצב-המנוע
+                      </h4>
+                      <span
+                        className={`rounded-full border px-2 py-0.5 font-mono text-[9px] font-bold ${
+                          gate.barriers.economicActive === gate.barriers.economicTotal && gate.barriers.active === gate.barriers.total
+                            ? "border-emerald-500/30 bg-emerald-500/[0.07] text-emerald-400"
+                            : "border-amber-500/30 bg-amber-500/[0.07] text-amber-400"
+                        }`}
+                        dir="ltr"
+                      >
+                        {gate.barriers.active}/{gate.barriers.total} active · econ {gate.barriers.economicActive}/{gate.barriers.economicTotal}
+                      </span>
+                    </div>
+                    <p className={`mt-1 text-[11px] font-black ${gate.barriers.economicActive === gate.barriers.economicTotal ? "text-emerald-300" : "text-amber-300"}`}>
+                      {gate.barriers.economicActive === gate.barriers.economicTotal
+                        ? "כל-החסמים-הכלכליים פתוחים — הגריד, הדופק, מנוע-השוק והגשר זורמים (הוראת-הבעלים T66)"
+                        : "חסמים-כלכליים עדיין סגורים — המדידה-החיה למטה היא האמת, לא-סיפור"}
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {gate.barriers.workflows.map((w) => (
+                        <span
+                          key={w.path}
+                          className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[9px] ${
+                            w.state === "active"
+                              ? "border-emerald-500/30 bg-emerald-500/[0.07] text-emerald-400"
+                              : "border-rose-500/30 bg-rose-500/[0.07] text-rose-400"
+                          }`}
+                          dir="ltr"
+                          title={w.economic ? "מנוע-הזרימה-הכלכלית" : "תשתית/שומרים"}
+                        >
+                          {w.path}
+                          <b className="font-black">{w.state}</b>
+                          {w.economic && <span className="text-amber-500">◆</span>}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="mt-2 text-[9px] leading-4 text-zinc-500">
+                      נמדד-חי מה-API בכל-בקשה ({gate.barriers.repo}) · ◆ = מנוע-הזרימה-הכלכלית ·
+                      הריצות עצמן נשלטות-על-ידי ה-cron-של-המנוע בקאנון — כאן נמדד רק שהשער-הכלכלי פתוח.
+                    </p>
                   </div>
                 )}
 

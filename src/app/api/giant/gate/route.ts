@@ -18,7 +18,8 @@ import { execSync } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
-import type { GateCheckReceipt, GateDoor, GatePayload } from "@/lib/giant/gate-types";
+import type { GateBarriers, GateBarrierWorkflow, GateCheckReceipt, GateDoor, GatePayload } from "@/lib/giant/gate-types";
+import { readPat } from "@/lib/office-truth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,6 +31,60 @@ const RECEIPT = path.join("/home/z", "my-project", "db", "gate-check.json");
 const DOMAIN = path.join("/home/z", "estate", "Domain");
 const WORKFLOW = path.join(DOMAIN, ".github", "workflows", "key-verify.yml");
 const VERIFIER = path.join(DOMAIN, "agents", "key-verify.mjs");
+
+/** T66 · מנוע-הזרימה-הכלכלית: אלו-workflows הם הכסף (השאר = תשתית/שומרים) */
+const ECONOMIC = new Set(["dex-beat.yml", "dex-grid.yml", "grid-trigger.yml", "mm-supremacy.yml", "arb-scan.yml", "llm-bridge.yml"]);
+
+/**
+ * T66 · מדידת-החסמים-הכלכליים — מצב-workflows של saos-dex נמדד-חי מה-API.
+ * הוראת-הבעלים: "כל החסמים הכלכליים פתח" — המדידה מראה את המצב-בפועל.
+ * כישלון = כנה: barriers=null + errors[]. אפס-סודות בתשובה.
+ */
+async function measureBarriers(errors: string[]): Promise<GateBarriers | null> {
+  try {
+    const pat = await readPat();
+    if (!pat) {
+      errors.push("מדידת-החסמים: אין-גישה-מאומתת ל-API (PAT חסר) — כנה");
+      return null;
+    }
+    const res = await fetch("https://api.github.com/repos/roshpinacare-sys/saos-dex/actions/workflows?per_page=50", {
+      headers: { authorization: `Bearer ${pat}`, accept: "application/vnd.github+json" },
+      cache: "no-store",
+      signal: AbortSignal.timeout(12_000),
+    });
+    if (!res.ok) {
+      errors.push(`מדידת-החסמים נכשלה: API השיב HTTP ${res.status}`);
+      return null;
+    }
+    const j = (await res.json()) as { workflows?: { path: string; name: string; state: string }[] };
+    const list = Array.isArray(j.workflows) ? j.workflows : [];
+    if (list.length === 0) {
+      errors.push("מדידת-החסמים: ה-API החזיר אפס-workflows — כנה");
+      return null;
+    }
+    const workflows: GateBarrierWorkflow[] = list
+      .map((w) => ({
+        path: w.path.split("/").pop() ?? w.path,
+        name: w.name,
+        state: w.state,
+        economic: ECONOMIC.has(w.path.split("/").pop() ?? ""),
+      }))
+      .sort((a, b) => Number(b.economic) - Number(a.economic) || a.path.localeCompare(b.path));
+    const economic = workflows.filter((w) => w.economic);
+    return {
+      measuredAt: new Date().toISOString(),
+      repo: "roshpinacare-sys/saos-dex",
+      workflows,
+      active: workflows.filter((w) => w.state === "active").length,
+      total: workflows.length,
+      economicActive: economic.filter((w) => w.state === "active").length,
+      economicTotal: economic.length,
+    };
+  } catch (e) {
+    errors.push(`מדידת-החסמים נכשלה: ${String(e).slice(0, 90)}`);
+    return null;
+  }
+}
 
 async function measureDoor(errors: string[]): Promise<GateDoor | null> {
   try {
@@ -74,6 +129,7 @@ async function buildPayload(): Promise<GatePayload> {
   }
 
   const door = await measureDoor(errors);
+  const barriers = await measureBarriers(errors);
 
   const gateOpen =
     receipt?.verdict === "KEY-AUTHENTIC-ACTIVE" &&
@@ -87,6 +143,7 @@ async function buildPayload(): Promise<GatePayload> {
     receiptAgeMin,
     door,
     gateOpen,
+    barriers,
     errors,
     sha16: "",
   };
