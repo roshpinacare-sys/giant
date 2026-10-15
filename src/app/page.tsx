@@ -57,7 +57,7 @@ const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = 
   { id: "channel", label: "הערוץ", he: "הדלת-הראשית: בעלים ↔ ריבונות", icon: Radio },
   { id: "wallet", label: "הארנק", he: "חשבונות-אמת מהמנוע · יחידות-אנוש", icon: Wallet },
   { id: "desk", label: "השולחן", he: "מנדט · equity · אסטרטגיות", icon: ScrollText },
-  { id: "capital", label: "ההון", he: "מנוע-ההון: שבע-אסטרטגיות נמדדות-חי · תוכניות-הצבה ממתינות-לאישורך", icon: Coins },
+  { id: "capital", label: "ההון", he: "מנוע-ההון: מנדט-קידום-חי · תנועות-הון מתקדמות-בשערים-הירוקים · לולאת-תיקון-במקום-סגירה", icon: Coins },
   { id: "ledger", label: "הרישום", he: "כל-ההחלטות · חיפוש", icon: BookOpen },
   { id: "products", label: "המוצרים", he: "קטלוג-אמת · קבלות · מדידות", icon: Package },
   { id: "marketing", label: "השיווק", he: "משטח-Adsmarket-החי: מה-שכתוב-בריפו = מה-שמוצג · אפס-סינתזה", icon: Megaphone },
