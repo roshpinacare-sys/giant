@@ -20,12 +20,18 @@ model User {
   /* T74 · הצי-הוא-הלקוח-הראשון — אימות-ריבוני (scrypt מ-node:crypto, אפס-תלות-חוץ) */
   passwordHash String?
   crewId       String?  /* מזהה-הסוכן-מרישום-הצי (console-agent-verify · וכו') — null = לקוח-חוץ-עתידי */
+  /* T75 · פנקס-הקאסטודיה-הפנימי — מאזני-אמת (paper · לפני-M4):
+   * cashMu   = מזומן ב-mu (1mu = 1/1000 $) · assetSat = ביטקוין בסאטושי (1e8 sat = 1 BTC).
+   * המאזן-המוצג הוא החופשי בלבד — מה-שנעול-לפקודות יושב-על-הפקודה-עצמה (reserved*). */
+  cashMu       Int      @default(0)
+  assetSat     Int      @default(0)
   lastLoginAt  DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   sessions  Session[]
   orders    TradeOrder[]
+  ledger    LedgerEntry[]
 }
 
 /* סשן-אמיתי: בקוקי-HttpOnly נשמר-טוקן-אקראי; בבסיס רק-ה-hash שלו (sha256) */
@@ -42,7 +48,9 @@ model Session {
 
 /* ספר-הפקודות-הפנימי של הריבונות (T74): פקודות-אמת של-חשבונות-אמת.
  * מילוי קורה-רק-מול-פקודה-מנוחה-אמיתית-של-חשבון-אחר (price-time priority) — אפס-סימולציה.
- * refMid = מחיר-ייחוס-חי (Kraken mid בעת-ההצבה) — כשל-חוץ לא מונע-הצבה (ריבונות). */
+ * refMid = מחיר-ייחוס-חי (Kraken mid בעת-ההצבה) — כשל-חוץ לא מונע-הצבה (ריבונות).
+ * T75-קאסטודיה: הצבה נועלת-מראש את-מה-שהיא-דורשת (reservedCashMu/reservedAssetSat) —
+ * מילוי משלם-מהנעול-בלבד · ביטול משחרר-את-הנותר · אין-מאזן-שלילי-אף-פעם. */
 model TradeOrder {
   id         String   @id @default(cuid())
   userId     String
@@ -50,7 +58,10 @@ model TradeOrder {
   qty        Float
   priceMu    Int      /* מחיר-מגבלה ב-mu (1mu = 1/1000 USD) */
   remaining  Float    /* כמות-שלא-נמלאה */
-  status     String   @default("OPEN") /* OPEN | PARTIAL | FILLED */
+  status     String   @default("OPEN") /* OPEN | PARTIAL | FILLED | CANCELLED */
+  /* T75: הנעול-על-הפקודה — יורד-בכל-מילוי/שחרור ומגיע-ל-0 ב-FILLED/CANCELLED */
+  reservedCashMu  Int @default(0)
+  reservedAssetSat Int @default(0)
   refMidMu   Int?
   fillsJson  String   @default("[]") /* קבלות-מילוי: [{priceMu,qty,counterpartyUserId,counterpartyOrderId,at}] */
   createdAt  DateTime @default(now())
@@ -59,6 +70,24 @@ model TradeOrder {
 
   @@index([status, side, priceMu])
   @@index([userId])
+}
+
+/* T75 · פנקס-הקאסטודיה-הפנימי — כל-תנועת-מאזן-אמת-רשומה:
+ * kind: GENESIS (מאזן-פתיחה) | LOCK (נעילה-לפקודה) | TRADE (מילוי) | UNLOCK (שחרור/עודף-מחיר)
+ * deltaCashMu/deltaAssetSat = השינוי-במאזן-החופשי · counterparty = הצד-השני-במילוי. */
+model LedgerEntry {
+  id                String   @id @default(cuid())
+  userId            String
+  kind              String
+  deltaCashMu       Int      @default(0)
+  deltaAssetSat     Int      @default(0)
+  orderId           String?
+  counterpartyUserId String?
+  note              String?
+  createdAt         DateTime @default(now())
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
 }
 
 model Post {
