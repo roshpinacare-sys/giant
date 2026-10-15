@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import {
   ArrowDownUp,
   Bot,
+  CheckCircle2,
   ChevronDown,
   ChevronUp,
   FileText,
@@ -19,8 +20,11 @@ import {
   Orbit,
   Palette,
   ScrollText,
+  ShieldCheck,
   Sparkles,
   TrendingUp,
+  Users,
+  XCircle,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -133,29 +137,23 @@ interface FleetState {
   agents: FleetAgentRow[];
 }
 
-// הטוב-שהביא-כל-סוכן — מנוסח-בהסכם (המסמך-המחייב-בגיט); כאן-תמצית-הצגה
-const AGENT_BEST: Record<string, { domain: string; best: string }> = {
-  "zai-main": {
-    domain: "הממשק-המאוחד",
-    best: "מסך-אחד-חי · מנוע-האמת v2 · ערוץ-הריבון · מסך-המיזוג",
-  },
-  "zai-code-3": {
-    domain: "הנדסת-מסחר",
-    best: "טרמינל-המסחר: נרות-חיים, עומק-בורסה, גרפים-רגישים-לזוג",
-  },
-  "zai-code-5": {
-    domain: "גיט→מוצר",
-    best: "קורא-הארכיון-האמיתי, טבלת-הלדג'ר, הקטלוג-המצונן",
-  },
-  "zai-fix": {
-    domain: "כנות-תיקון",
-    best: "הדוגמה-המוסרית: SELL-נדחה-בכנות-כשאין-יתרה — אין-קישוט-של-כישלון",
-  },
-  "zai-sec": {
-    domain: "אבטחה",
-    best: "שערי-headcorner על-כל-מסלול-שמזיז-כסף · אסימונים-כ-SHA-256-בלבד",
-  },
-};
+// חוק-המסך (משימה-51): אפס-טענות-סוכנים-קשיחות.
+// "הטוב-שהביא-כל-אחד" מוצג-כטענה→הוכחה-נמדדת-חיה מ-/api/merge/truth
+// (דיסק · grep · DB · git-log) — וכל-הוכחה מקשרת-למסך-החי-שבו-הדבר-באמת-חי.
+
+interface LawRow { n: number; name: string; body: string }
+interface LaneProof { metric: string; value: string; how: string; ok: boolean }
+interface Lane { id: string; lane: string; who: string; claim: string; view: string; proofs: LaneProof[]; ok: boolean }
+interface Identity { name: string; commits: number; repos: string[] }
+
+interface TruthState {
+  ok: boolean;
+  measuredAt: string;
+  agreement: { ok: boolean; repo: string; path: string };
+  laws: LawRow[];
+  identities: Identity[];
+  lanes: Lane[];
+}
 
 const STATUS_LABEL: Record<EstateRepo["status"], { label: string; cls: string }> = {
   system: { label: "המערכת", cls: "bg-emerald-500/15 text-emerald-400" },
@@ -166,19 +164,6 @@ const STATUS_LABEL: Record<EstateRepo["status"], { label: string; cls: string }>
   charter: { label: "אמנות", cls: "bg-violet-500/10 text-violet-300" },
 };
 
-const LAWS: string[] = [
-  "ערוץ-אחד",
-  "לדג'ר-אחד",
-  "אפס-סימולציה",
-  "שער-headcorner",
-  "גיט→מוצר",
-  "המשך-אחרי-קריסה",
-  "כישלון-כנה",
-  "צי-חוקתי",
-  "תנועה-משמעותית",
-  "דיוק-על-קישוט",
-];
-
 export interface MergeViewProps {
   onNavigate?: (view: string) => void;
 }
@@ -186,6 +171,7 @@ export interface MergeViewProps {
 export function MergeView({ onNavigate }: MergeViewProps) {
   const [estate, setEstate] = useState<EstateState | null>(null);
   const [fleet, setFleet] = useState<FleetState | null>(null);
+  const [truth, setTruth] = useState<TruthState | null>(null);
   const [agreement, setAgreement] = useState<string | null>(null);
   const [agreeMeta, setAgreeMeta] = useState<{ repo: string; path: string } | null>(null);
   const [designSrc, setDesignSrc] = useState<string | null>(null);
@@ -199,7 +185,7 @@ export function MergeView({ onNavigate }: MergeViewProps) {
   const load = useCallback(async () => {
     setRefreshing(true);
     try {
-      const [estateRes, fleetRes, agreeRes, designRes] = await Promise.all([
+      const [estateRes, fleetRes, agreeRes, designRes, truthRes] = await Promise.all([
         fetch("/api/estate/state", { cache: "no-store" }),
         fetch("/api/fleet/state", { cache: "no-store" }),
         fetch(
@@ -210,6 +196,7 @@ export function MergeView({ onNavigate }: MergeViewProps) {
           "/api/git/content?repo=Sandbox&path=giant%2FDESIGN-SOURCES.md",
           { cache: "no-store" },
         ),
+        fetch("/api/merge/truth", { cache: "no-store" }),
       ]);
       const estateData = (await estateRes.json()) as EstateState;
       if (!estateRes.ok || !estateData.ok) {
@@ -242,6 +229,10 @@ export function MergeView({ onNavigate }: MergeViewProps) {
           setDesignSrc(d.content);
           setDesignMeta({ repo: d.repo ?? "Sandbox", path: d.path ?? "giant/DESIGN-SOURCES.md" });
         }
+      }
+      if (truthRes.ok) {
+        const t = (await truthRes.json()) as TruthState;
+        if (t.ok) setTruth(t);
       }
       setError(null);
     } catch (err) {
@@ -366,8 +357,8 @@ export function MergeView({ onNavigate }: MergeViewProps) {
               </span>
             </div>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-300 sm:text-base">
-              מערכת-אחת · חמישה-סוכנים · חוק-אמת-אחד. כל-אחד-הביא-את-הטוב-שלו —
-              הטוב-מנצח-וכולם-חיים-בלדג'ר-אחד-לפי{" "}
+              מערכת-אחת · זהויות-אמת-מ-git-log · חוק-אמת-אחד. הטוב-שהביא-כל-אחד-מוצג-כאן-רק-אם-הוא-נמדד —
+              כל-טענה-עם-הוכחה-חיה, וכל-הוכחה-מקשרת-למסך-החי-שבו-הדבר-באמת-חי, לפי{" "}
               <button
                 className="font-semibold text-emerald-300 underline decoration-emerald-500/40 underline-offset-4 hover:text-emerald-200"
                 onClick={() => setAgreeOpen(true)}
@@ -436,12 +427,116 @@ export function MergeView({ onNavigate }: MergeViewProps) {
         </div>
       </section>
 
+      {/* ======== המיזוג-האמיתי · טענה→הוכחה-נמדדת ======== */}
+      <section aria-label="המיזוג-האמיתי-הוכחות-נמדדות">
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-200">
+            <ShieldCheck className="h-4 w-4 text-emerald-400" aria-hidden="true" />
+            המיזוג-האמיתי · כל-טענה-עם-הוכחה-נמדדת
+          </h3>
+          {truth ? (
+            <span className="text-[11px] text-zinc-500 tabular-nums">
+              נמדד: {fmtTime(truth.measuredAt)} · דיסק · grep · DB · git-log
+            </span>
+          ) : (
+            <span className="text-[11px] text-amber-400/80">המדידה-טרם-זמינה — מדווח-בכנות, בלי-המצאה</span>
+          )}
+        </div>
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+          {(truth?.lanes ?? []).map((lane, i) => {
+            const allOk = lane.proofs.every((p) => p.ok);
+            return (
+              <motion.div
+                key={lane.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: i * 0.05, ease: "easeOut" }}
+                className={cn(
+                  "flex flex-col rounded-xl border bg-[#0b100f] p-4 transition-colors",
+                  allOk ? "border-emerald-500/25 hover:border-emerald-500/40" : "border-amber-500/30",
+                )}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="truncate text-sm font-bold text-white">{lane.lane}</div>
+                    <div className="mt-0.5 text-[11px] leading-snug text-zinc-500">{lane.claim}</div>
+                  </div>
+                  <span
+                    className={cn(
+                      "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold",
+                      allOk ? "bg-emerald-500/15 text-emerald-400" : "bg-amber-500/15 text-amber-400",
+                    )}
+                  >
+                    {allOk ? "הוכח" : "חריגה"}
+                  </span>
+                </div>
+                <ul className="mt-3 flex-1 space-y-2">
+                  {lane.proofs.map((p) => (
+                    <li key={p.metric} className="flex items-start gap-2 text-[11px]">
+                      {p.ok ? (
+                        <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-400" aria-hidden="true" />
+                      ) : (
+                        <XCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-400" aria-hidden="true" />
+                      )}
+                      <span className="min-w-0 flex-1">
+                        <span className="text-zinc-300">{p.metric}: </span>
+                        <span className="font-semibold tabular-nums text-white" dir="ltr">{p.value}</span>
+                        <span className="block truncate font-mono text-[9px] text-zinc-600" dir="ltr">{p.how}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <Button
+                  size="sm"
+                  className="mt-3 h-8 w-full border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 hover:text-emerald-200"
+                  variant="outline"
+                  onClick={() => onNavigate?.(lane.view)}
+                >
+                  ראה-את-זה-חי במסך-האמת
+                </Button>
+              </motion.div>
+            );
+          })}
+          {truth && truth.lanes.length === 0 && (
+            <div className="col-span-full rounded-xl border border-amber-500/30 bg-amber-500/[0.04] p-5 text-center text-sm text-amber-300">
+              אף-הוכחה-לא-נמדדה — לא-נציג-טענות-בלי-מדידה.
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ======== זהויות-העבודה-האמת · מgit-log ======== */}
+      {truth && truth.identities.length > 0 && (
+        <section aria-label="זהויות-העבודה-האמת" className="rounded-2xl border border-white/5 bg-white/[0.02] p-4">
+          <h3 className="mb-2.5 flex items-center gap-2 text-sm font-bold text-zinc-200">
+            <Users className="h-4 w-4 text-emerald-400" aria-hidden="true" />
+            זהויות-העבודה-האמת · מ-git-log-חי-על-פני-כל-תיקיות-הגיט
+          </h3>
+          <div className="flex flex-wrap gap-1.5">
+            {truth.identities.map((idn) => (
+              <span
+                key={idn.name}
+                className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-white/10 bg-black/30 px-2.5 py-1 text-[11px]"
+              >
+                <span className="truncate font-mono text-zinc-300" dir="ltr">{idn.name}</span>
+                <span className="shrink-0 rounded-full bg-emerald-500/10 px-1.5 font-mono text-[10px] font-semibold text-emerald-400 tabular-nums" dir="ltr">
+                  {fmtNum(idn.commits)}
+                </span>
+              </span>
+            ))}
+          </div>
+          <p className="mt-2 text-[10px] text-zinc-600">
+            עוד-מה-12-המובילות — הרשימה-המלאה-חיה-במרכז-ההפעלה. אפס-רשימה-מקודדת: כל-זהות-נמדדה-מהיסטוריית-הקומיטים-בזמן-הקריאה.
+          </p>
+        </section>
+      )}
+
       {/* ======== קונסטלציית-הסוכנים ======== */}
       <section aria-label="קונסטלציית-הסוכנים">
         <div className="mb-2 flex items-center justify-between gap-2">
           <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-200">
             <Bot className="h-4 w-4 text-emerald-400" aria-hidden="true" />
-            הצי · הטוב-שהביא-כל-אחד
+            הצי-בשוק · מספרים-נמדדים-בלבד
           </h3>
           {fleet && (
             <span className="text-[11px] text-zinc-500 tabular-nums">
@@ -451,7 +546,6 @@ export function MergeView({ onNavigate }: MergeViewProps) {
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {fleet?.agents.map((a, i) => {
-            const best = AGENT_BEST[a.agentId] ?? { domain: "חבר-צי", best: "משתתף-בשוק-בתקציב-אמת" };
             return (
               <motion.div
                 key={a.agentId}
@@ -480,8 +574,10 @@ export function MergeView({ onNavigate }: MergeViewProps) {
                     {a.active ? "פעיל" : "מושהה"}
                   </span>
                 </div>
-                <div className="mt-1.5 text-[11px] font-semibold text-emerald-300">{best.domain}</div>
-                <p className="mt-1 min-h-[3em] text-xs leading-relaxed text-zinc-400">{best.best}</p>
+                <div className="mt-1.5 text-[11px] font-semibold text-emerald-300">חבר-צי · תקציב-אמת-מהקופה</div>
+                <p className="mt-1 min-h-[3em] text-xs leading-relaxed text-zinc-400">
+                  המספרים-למטה-נמדדים-מהלדג'ר-בזמן-אמת — אין-טענות-יכולת, רק-עובדות-מוצמדות-לזהות (חוק-11).
+                </p>
                 <div className="mt-2.5 grid grid-cols-2 gap-1.5 border-t border-white/5 pt-2.5 text-[11px] tabular-nums">
                   <span className="text-zinc-500">
                     תקציב: <span className="font-semibold text-zinc-200">{fmtNum(a.allocationUsds)}</span>
@@ -510,25 +606,43 @@ export function MergeView({ onNavigate }: MergeViewProps) {
         </div>
       </section>
 
-      {/* ======== עשרת-החוקים ======== */}
-      <section aria-label="עשרת-החוקים" className="rounded-2xl border border-white/5 bg-white/[0.02] p-4">
-        <h3 className="mb-2.5 flex items-center gap-2 text-sm font-bold text-zinc-200">
-          <Landmark className="h-4 w-4 text-emerald-400" aria-hidden="true" />
-          עשרת-החוקים · מה-למדנו-מההיסטוריה-כולה
-        </h3>
-        <div className="flex flex-wrap gap-1.5">
-          {LAWS.map((law, i) => (
-            <span
-              key={law}
-              className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/[0.06] px-2.5 py-1 text-[11px] font-medium text-emerald-300"
-            >
-              <span className="font-mono text-[9px] text-emerald-500/70 tabular-nums">{i + 1}</span>
-              {law}
+      {/* ======== החוקים · נקראים-חי-מהסכם ======== */}
+      <section aria-label="החוקים-מההסכם" className="rounded-2xl border border-white/5 bg-white/[0.02] p-4">
+        <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2">
+          <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-200">
+            <Landmark className="h-4 w-4 text-emerald-400" aria-hidden="true" />
+            החוקים · נקראים-חי-מהסכם-המיזוג (מקור-אחד-בלבד)
+          </h3>
+          {truth?.agreement.ok ? (
+            <span className="font-mono text-[10px] text-zinc-500" dir="ltr">
+              {truth.agreement.repo}/{truth.agreement.path}
             </span>
-          ))}
+          ) : null}
         </div>
+        {truth && truth.laws.length > 0 ? (
+          <ol className="space-y-1.5">
+            {truth.laws.map((law) => (
+              <li
+                key={law.n}
+                className="flex items-start gap-2.5 rounded-lg border border-white/5 bg-[#0b100f] px-3 py-2"
+              >
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-emerald-500/15 font-mono text-[10px] font-bold text-emerald-400 tabular-nums">
+                  {law.n}
+                </span>
+                <span className="min-w-0 text-xs leading-relaxed">
+                  <span className="font-semibold text-emerald-300">{law.name}</span>
+                  <span className="text-zinc-400"> — {law.body}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p className="rounded-lg border border-amber-500/30 bg-amber-500/[0.04] px-3 py-2.5 text-xs text-amber-300">
+            ההסכם-לא-נמצא-בגיט — לא-נציג-חוקים-בלי-מקור-חי. כנות-עד-שהמקור-יחזור.
+          </p>
+        )}
         <p className="mt-2 text-[10px] text-zinc-600">
-          הנוסח-המחייב — בהסכם-המיזוג-למטה, נקרא-חי-מהגיט.
+          הנוסח-המחייב — בהסכם-המיזוג-למטה, נקרא-חי-מהגיט-בכל-פתיחה; שינוי-נוסח-בגיט = שינוי-במסך.
         </p>
       </section>
 
