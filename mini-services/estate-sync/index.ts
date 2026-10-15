@@ -33,6 +33,7 @@ interface Anchor {
 
 const ANCHORS: Anchor[] = [
   { name: "estate/Domain", dir: "/home/z/estate/Domain", repo: "Domain", privateRepo: false },
+  { name: "estate/Pulse", dir: "/home/z/estate/Pulse", repo: "Pulse", privateRepo: false },
   { name: "lane/saos-agents", dir: "/home/z/lane/saos-agents", repo: "saos-agents", privateRepo: true },
   { name: "lane/Defi", dir: "/home/z/lane/Defi", repo: "Defi", privateRepo: true },
   { name: "lane/Adsmarket", dir: "/home/z/lane/Adsmarket", repo: "Adsmarket", privateRepo: true },
