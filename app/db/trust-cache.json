@@ -3,40 +3,16 @@
  "scanner": "saos-trust-check@0.2.0-actions",
  "entries": [
   {
-   "name": "ops-intake",
-   "scannedAt": "2026-10-15T02:02:23.126Z",
-   "pushedAtAtScan": "2026-10-15T00:02:19Z",
-   "row": {
-    "name": "ops-intake",
-    "branch": "main",
-    "pushedAt": "2026-10-15T00:02:19Z",
-    "description": "צינור-הקליטה התפעולי של הצי — מדידה, תור עבודות מדודר ומפת-מרחב מלאה, כל 30 דק",
-    "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:23.126Z",
-    "ageMinutes": 0,
-    "files": 10,
-    "capabilities": [
-     "workflows",
-     "docs",
-     "scripts"
-    ],
-    "signals": [],
-    "redLines": [],
-    "deep": null,
-    "error": null
-   }
-  },
-  {
    "name": "giant",
-   "scannedAt": "2026-10-15T02:02:23.689Z",
-   "pushedAtAtScan": "2026-10-15T01:33:47Z",
+   "scannedAt": "2026-10-15T08:38:33.659Z",
+   "pushedAtAtScan": "2026-10-15T02:02:32Z",
    "row": {
     "name": "giant",
     "branch": "main",
-    "pushedAt": "2026-10-15T01:33:47Z",
+    "pushedAt": "2026-10-15T02:02:32Z",
     "description": "GIANT — מערכת-האמת של SAOS: הפלטפורמה המאוחדת (ערוץ-אחד · אפס-כפילויות · תקן-ענקים). קונברגנציה נדרשת לכל-הליינים (DECISIONS #42).",
     "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:23.689Z",
+    "scannedAt": "2026-10-15T08:38:33.659Z",
     "ageMinutes": 0,
     "files": 180,
     "capabilities": [
@@ -54,16 +30,40 @@
    }
   },
   {
+   "name": "ops-intake",
+   "scannedAt": "2026-10-15T08:38:34.246Z",
+   "pushedAtAtScan": "2026-10-15T05:01:24Z",
+   "row": {
+    "name": "ops-intake",
+    "branch": "main",
+    "pushedAt": "2026-10-15T05:01:24Z",
+    "description": "צינור-הקליטה התפעולי של הצי — מדידה, תור עבודות מדודר ומפת-מרחב מלאה, כל 30 דק",
+    "mode": "tree",
+    "scannedAt": "2026-10-15T08:38:34.246Z",
+    "ageMinutes": 0,
+    "files": 10,
+    "capabilities": [
+     "workflows",
+     "docs",
+     "scripts"
+    ],
+    "signals": [],
+    "redLines": [],
+    "deep": null,
+    "error": null
+   }
+  },
+  {
    "name": "sovereign-lighthouse",
-   "scannedAt": "2026-10-15T02:02:24.302Z",
-   "pushedAtAtScan": "2026-10-15T01:49:40Z",
+   "scannedAt": "2026-10-15T08:38:34.794Z",
+   "pushedAtAtScan": "2026-10-15T07:47:09Z",
    "row": {
     "name": "sovereign-lighthouse",
     "branch": "main",
-    "pushedAt": "2026-10-15T01:49:40Z",
+    "pushedAt": "2026-10-15T07:47:09Z",
     "description": "מגדלור ריבוני — Sovereign Lighthouse: זיכרון חוץ-מכונה עצמאי (RTL עברית)",
     "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:24.302Z",
+    "scannedAt": "2026-10-15T08:38:34.794Z",
     "ageMinutes": 0,
     "files": 9,
     "capabilities": [
@@ -80,15 +80,15 @@
   },
   {
    "name": "sovereign-beacon",
-   "scannedAt": "2026-10-15T02:02:24.845Z",
-   "pushedAtAtScan": "2026-10-15T00:39:03Z",
+   "scannedAt": "2026-10-15T08:38:35.338Z",
+   "pushedAtAtScan": "2026-10-15T08:00:20Z",
    "row": {
     "name": "sovereign-beacon",
     "branch": "main",
-    "pushedAt": "2026-10-15T00:39:03Z",
+    "pushedAt": "2026-10-15T08:00:20Z",
     "description": "Rosh Pina — sovereign lighthouse (out-of-machine console)",
     "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:24.845Z",
+    "scannedAt": "2026-10-15T08:38:35.338Z",
     "ageMinutes": 0,
     "files": 9,
     "capabilities": [
@@ -104,15 +104,15 @@
   },
   {
    "name": "Domain",
-   "scannedAt": "2026-10-15T02:02:25.416Z",
-   "pushedAtAtScan": "2026-10-15T01:59:59Z",
+   "scannedAt": "2026-10-15T08:38:35.851Z",
+   "pushedAtAtScan": "2026-10-15T08:36:50Z",
    "row": {
     "name": "Domain",
     "branch": "main",
-    "pushedAt": "2026-10-15T01:59:59Z",
+    "pushedAt": "2026-10-15T08:36:50Z",
     "description": "Domain — חזית-הרשת הפומבית של SAOS: דף-המוצרים, חדר-המשרד החי, ועוגני-אמת ציבוריים (GitHub Pages)",
     "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:25.416Z",
+    "scannedAt": "2026-10-15T08:38:35.851Z",
     "ageMinutes": 0,
     "files": 841,
     "capabilities": [
@@ -136,17 +136,17 @@
   },
   {
    "name": "FleetHQ",
-   "scannedAt": "2026-10-15T02:02:25.922Z",
-   "pushedAtAtScan": "2026-10-15T02:00:26Z",
+   "scannedAt": "2026-10-15T08:38:36.409Z",
+   "pushedAtAtScan": "2026-10-15T08:30:20Z",
    "row": {
     "name": "FleetHQ",
     "branch": "main",
-    "pushedAt": "2026-10-15T02:00:26Z",
+    "pushedAt": "2026-10-15T08:30:20Z",
     "description": "Fleet HQ — a live operations room where real AI agents plan, work and report on your data books in real time. מפקדת הצי",
     "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:25.922Z",
+    "scannedAt": "2026-10-15T08:38:36.409Z",
     "ageMinutes": 0,
-    "files": 631,
+    "files": 638,
     "capabilities": [
      "api",
      "front",
@@ -250,7 +250,7 @@
   },
   {
    "name": "sovereign-runner-kit",
-   "scannedAt": "2026-10-15T02:02:26.483Z",
+   "scannedAt": "2026-10-15T08:38:36.962Z",
    "pushedAtAtScan": "2026-10-14T14:23:37Z",
    "row": {
     "name": "sovereign-runner-kit",
@@ -258,7 +258,7 @@
     "pushedAt": "2026-10-14T14:23:37Z",
     "description": "שכבת-הביצוע-הריבונית — המכשיר שלנו הוא המנוע, GitHub ספר-בלבד. Device-side execution, zero GitHub minutes, blockchain-anchored receipts",
     "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:26.483Z",
+    "scannedAt": "2026-10-15T08:38:36.962Z",
     "ageMinutes": 0,
     "files": 15,
     "capabilities": [
@@ -273,7 +273,7 @@
   },
   {
    "name": "roshpinacare-sys.github.io",
-   "scannedAt": "2026-10-15T02:02:27.032Z",
+   "scannedAt": "2026-10-15T08:38:37.528Z",
    "pushedAtAtScan": "2026-10-14T20:07:04Z",
    "row": {
     "name": "roshpinacare-sys.github.io",
@@ -281,7 +281,7 @@
     "pushedAt": "2026-10-14T20:07:04Z",
     "description": "SAOS Network — front door. Live index of public sites & fleet health. Every number measured.",
     "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:27.032Z",
+    "scannedAt": "2026-10-15T08:38:37.528Z",
     "ageMinutes": 0,
     "files": 9,
     "capabilities": [
@@ -296,17 +296,17 @@
   },
   {
    "name": "saos-runtime",
-   "scannedAt": "2026-10-15T02:02:27.598Z",
-   "pushedAtAtScan": "2026-10-15T01:57:34Z",
+   "scannedAt": "2026-10-15T08:38:38.130Z",
+   "pushedAtAtScan": "2026-10-15T08:35:04Z",
    "row": {
     "name": "saos-runtime",
     "branch": "main",
-    "pushedAt": "2026-10-15T01:57:34Z",
+    "pushedAt": "2026-10-15T08:35:04Z",
     "description": "SAOS sovereign runtime host — Actions runner heartbeat; clones the private engine tree at runtime (R244). No keys, no secrets in tree.",
     "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:27.598Z",
+    "scannedAt": "2026-10-15T08:38:38.130Z",
     "ageMinutes": 0,
-    "files": 62,
+    "files": 63,
     "capabilities": [
      "workflows",
      "docs",
@@ -320,15 +320,15 @@
   },
   {
    "name": "Pulse",
-   "scannedAt": "2026-10-15T02:02:28.136Z",
-   "pushedAtAtScan": "2026-10-15T02:00:33Z",
+   "scannedAt": "2026-10-15T08:38:38.621Z",
+   "pushedAtAtScan": "2026-10-15T08:30:36Z",
    "row": {
     "name": "Pulse",
     "branch": "main",
-    "pushedAt": "2026-10-15T02:00:33Z",
+    "pushedAt": "2026-10-15T08:30:36Z",
     "description": "Pulse — איבר-הדופק של הרשת · fleet heartbeat: autonomous census every 30min on GitHub Actions (public = unlimited free minutes), task queue, sandbox-independent. §7 sanitized runner shell.",
     "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:28.136Z",
+    "scannedAt": "2026-10-15T08:38:38.621Z",
     "ageMinutes": 0,
     "files": 45,
     "capabilities": [
@@ -345,15 +345,15 @@
   },
   {
    "name": "GridWatch",
-   "scannedAt": "2026-10-15T02:02:28.695Z",
-   "pushedAtAtScan": "2026-10-15T01:41:17Z",
+   "scannedAt": "2026-10-15T08:38:39.179Z",
+   "pushedAtAtScan": "2026-10-15T08:20:40Z",
    "row": {
     "name": "GridWatch",
     "branch": "main",
-    "pushedAt": "2026-10-15T01:41:17Z",
+    "pushedAt": "2026-10-15T08:20:40Z",
     "description": "Fleet control plane: measures every repo & workflow health, auto-remediates failures, feeds the sovereign decider. The grid sees itself.",
     "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:28.695Z",
+    "scannedAt": "2026-10-15T08:38:39.179Z",
     "ageMinutes": 0,
     "files": 8,
     "capabilities": [
@@ -370,17 +370,17 @@
   },
   {
    "name": "ops-forge",
-   "scannedAt": "2026-10-15T02:02:29.185Z",
-   "pushedAtAtScan": "2026-10-15T01:43:43Z",
+   "scannedAt": "2026-10-15T08:38:39.691Z",
+   "pushedAtAtScan": "2026-10-15T07:17:55Z",
    "row": {
     "name": "ops-forge",
     "branch": "main",
-    "pushedAt": "2026-10-15T01:43:43Z",
+    "pushedAt": "2026-10-15T07:17:55Z",
     "description": "ops-forge — סדנת-התפעול של הצי: כלי-עבודה ומסילות-הפעלה פנימיות",
     "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:29.185Z",
+    "scannedAt": "2026-10-15T08:38:39.691Z",
     "ageMinutes": 0,
-    "files": 21,
+    "files": 22,
     "capabilities": [
      "workflows",
      "docs",
@@ -394,15 +394,15 @@
   },
   {
    "name": "Console",
-   "scannedAt": "2026-10-15T02:02:29.688Z",
-   "pushedAtAtScan": "2026-10-15T01:38:47Z",
+   "scannedAt": "2026-10-15T08:38:40.213Z",
+   "pushedAtAtScan": "2026-10-15T08:29:55Z",
    "row": {
     "name": "Console",
     "branch": "main",
-    "pushedAt": "2026-10-15T01:38:47Z",
+    "pushedAt": "2026-10-15T08:29:55Z",
     "description": "Console — קונסולת-ה-DEX הריבונית: dex-beat שעתי, גריד-מסחר מדוד, קבלות-ריצות חיות",
     "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:29.688Z",
+    "scannedAt": "2026-10-15T08:38:40.213Z",
     "ageMinutes": 0,
     "files": 209,
     "capabilities": [
@@ -425,17 +425,17 @@
   },
   {
    "name": "Autonomy",
-   "scannedAt": "2026-10-15T02:02:30.281Z",
-   "pushedAtAtScan": "2026-10-15T02:01:49Z",
+   "scannedAt": "2026-10-15T08:38:40.732Z",
+   "pushedAtAtScan": "2026-10-15T08:37:13Z",
    "row": {
     "name": "Autonomy",
     "branch": "main",
-    "pushedAt": "2026-10-15T02:01:49Z",
+    "pushedAt": "2026-10-15T08:37:13Z",
     "description": "המוח הריבוני על דקות-ציבור: עורקי-ההחלטה, הלמידה, הצמיחה — רץ 24/7 ללא תלות בשום סנדבוקס. Public compute, private memory.",
     "mode": "tree",
-    "scannedAt": "2026-10-15T02:02:30.281Z",
+    "scannedAt": "2026-10-15T08:38:40.732Z",
     "ageMinutes": 0,
-    "files": 299,
+    "files": 306,
     "capabilities": [
      "front",
      "workflows",
@@ -455,5 +455,5 @@
   }
  ],
  "summary": "נסרקו 14/14 · סימנים 20 · אדומים 4",
- "scannedAt": "2026-10-15T02:02:30.822Z"
+ "scannedAt": "2026-10-15T08:38:41.296Z"
 }
