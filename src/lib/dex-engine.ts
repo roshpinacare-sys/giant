@@ -12,6 +12,7 @@ import { db } from "@/lib/db";
 import type { Timeframe } from "@/lib/dex-types";
 import { TF_SECONDS } from "@/lib/dex-types";
 import { binanceTickers24h } from "@/lib/market-feed";
+import { matchOpenOrders } from "@/lib/dex-orders";
 
 /* ============================== הגדרות-שוק ============================== */
 
@@ -292,6 +293,13 @@ async function tick(): Promise<void> {
         }
       }
       void realVol;
+    }
+
+    // --- פקודות-לימיט: התאמה-מול-הבריכה-האמיתית בכל-טיק (סגירת-הפער-מול-הענקים) ---
+    try {
+      await matchOpenOrders();
+    } catch (err) {
+      console.error("[dex-engine] order match failed:", err);
     }
 
     // כל-75-טיקים (~10 דק׳): חישוב-מחדש-כנה של נפחים-ושער-פתיחה מהעסקאות-האמת.

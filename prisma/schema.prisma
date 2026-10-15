@@ -157,3 +157,24 @@ model FleetAgent {
   createdAt      DateTime @default(now())
   lastTradeAt    DateTime?
 }
+// פקודות-לימיט אמת — סוגרות-את-הפער-מול-הענקים (Jupiter/Uniswap-v4 מחזיקות; עכשיו גם אנחנו):
+// נעילת-נזילות-בלדג'ר (ESCROW) · התאמה-בטיקר מול-הבריכה האמיתית · ביטול-עם-שחרור.
+model DexOrder {
+  id          String    @id @default(cuid())
+  pairId      String
+  account     String    @default("OWNER") // OWNER | FLEET:<agentId>
+  side        String    // BUY | SELL (of base)
+  limitPrice  Float     // המחיר-האמיתי-שהמזמין קבע (USDS ליחידת-בסיס)
+  amountIn    Float     // כמות-ה-tokenIn שנעולה (USDS ב-BUY · בסיס ב-SELL)
+  status      String    @default("OPEN") // OPEN | FILLED | CANCELLED
+  source      String    @default("USER") // USER | FLEET
+  sourceAgent String?
+  tradeId     String?   // העסקה-האמיתית-שמילאה-את-הפקודה
+  fillPrice   Float?
+  fillOut     Float?
+  createdAt   DateTime  @default(now())
+  closedAt    DateTime?
+
+  @@index([status, createdAt])
+  @@index([pairId, status])
+}

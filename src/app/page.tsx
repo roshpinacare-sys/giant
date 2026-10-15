@@ -168,6 +168,16 @@ export default function Home() {
     else if (NAV.some((n) => n.id === id)) setView(id as ViewId);
   }, []);
 
+  /* ניווט-מערכתי-פנימי: דלתות-קוראות-לניווט (למשל דוכן-המסחר → שער-headcorner) */
+  useEffect(() => {
+    const onNav = (e: Event) => {
+      const id = (e as CustomEvent<string>).detail;
+      if (typeof id === "string" && NAV.some((n) => n.id === id)) setView(id as ViewId);
+    };
+    window.addEventListener("giant-navigate", onNav);
+    return () => window.removeEventListener("giant-navigate", onNav);
+  }, []);
+
   const active = NAV.find((n) => n.id === view);
   const truthGreen = truth?.verdict?.includes("GREEN") ?? false;
 
