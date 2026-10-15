@@ -17,7 +17,18 @@ export const dynamic = "force-dynamic";
 
 const GIANTS_PATH = path.join(DOMAIN_DIR, "dex", "giants.json");
 const ECON_PATH = path.join(DOMAIN_DIR, "dex", "honest-econ.json");
-const GAP_PATH = path.join(DOMAIN_DIR, "dex", "giants-gap.json");
+/* מיזוג-ענק: ספר-הפער מקונן בריפו-החי עצמו (data/giants-gap.json) —
+ * עצמאות-מלאה-מקלון-Domain-החיצוני. נפילה-ל-Domain רק-אם-העותק-הקנוני-חסר. */
+const GAP_LOCAL = path.join(process.cwd(), "data", "giants-gap.json");
+const GAP_DOMAIN = path.join(DOMAIN_DIR, "dex", "giants-gap.json");
+async function gapPath(): Promise<string> {
+  try {
+    await readFile(GAP_LOCAL, "utf8");
+    return GAP_LOCAL;
+  } catch {
+    return GAP_DOMAIN;
+  }
+}
 
 let cache: { at: number; data: GiantsPayload } | null = null;
 const CACHE_MS = 60_000;
@@ -99,13 +110,13 @@ function s(v: unknown): string | null {
 async function loadGap(): Promise<GapSection | null> {
   let meta: FileMeta | null = null;
   try {
-    meta = await fileMeta(GAP_PATH);
+    meta = await fileMeta(await gapPath());
   } catch {
     return null;
   }
   if (!meta.exists) return null;
   try {
-    const raw = JSON.parse(await readFile(GAP_PATH, "utf8")) as {
+    const raw = JSON.parse(await readFile(await gapPath(), "utf8")) as {
       book?: string;
       publishedAt?: string;
       answerHe?: string;
