@@ -327,7 +327,13 @@ export function buildStrategies(input: {
   return ranked.map((r, i) => ({ ...r, rank: i + 1 }));
 }
 
-/* ═══ תוכניות-הצבה — מסמכים-בלבד · האישור-בערוץ-הריבוני ═══ */
+/* ═══ תוכניות-הצבה — מסמכים-בלבד · ההגשה-חיה בזרם-הריבונות ═══ */
+
+/* ההגשה-בפועל: REQ-0006/REQ-0007 חיים בזרם-הקנון (Pulse · SAOS-SOVEREIGN-CHANNEL/1 · קומיט ea8458e) —
+ * הכרעת-הבעלים תנחת כהוראת-D-NNNN ב-directives.jsonl (רק-הוא-כותב-שם). אפס-נתיב-ביצוע בקוד. */
+export const SOVEREIGN_STREAM_URL =
+  "https://github.com/roshpinacare-sys/Pulse/blob/main/state/sovereign-channel/requests.jsonl";
+export const SOVEREIGN_FILED_AT = "2026-10-15T13:53:48Z";
 
 export function buildMmPlan(market: OrderBookMeasure | null, realUsd: number | null, marks: CapitalMarks | null): MmPlan {
   const depthSbd = market ? market.bidDepthSbd + market.askDepthSbd : 0;
@@ -340,8 +346,14 @@ export function buildMmPlan(market: OrderBookMeasure | null, realUsd: number | n
   const spreadPct = market?.spreadPct ?? null;
   return {
     approved: false,
-    statusLine: "טיוטה · ממתינה-לאישור-הבעלים — אין-נתיב-ביצוע-בקוד",
-    approvalPathHe: "האישור-נענה-רק-בערוץ-הריבונות (הוראת-D-XXX של-הבעלים) — לא-בכפתור, לא-ב-API, לא-בשרת",
+    statusLine: "מוגשת-ריבונית · REQ-0006 פתוח בזרם-הקנון — הכדור-אצל-הריבונות",
+    approvalPathHe: "הכרעה-רק-בהוראת-D-NNNN של-הבעלים ב-directives.jsonl (שער-הבעלים) — לא-בכפתור, לא-ב-API, לא-בשרת",
+    filing: {
+      reqId: "REQ-0006",
+      streamUrl: SOVEREIGN_STREAM_URL,
+      filedAt: SOVEREIGN_FILED_AT,
+      registryRef: "Pulse/DECISIONS.md #47 · R364",
+    },
     inputs: { spreadPct, totalDepthUsd: depthUsd, realMoneyUsd: realUsd },
     params: {
       quoteBudgetUsd,
@@ -383,8 +395,14 @@ export function buildSpMatrix(aprPct: number | null, marks: CapitalMarks | null)
   }));
   return {
     approved: false,
-    statusLine: "טיוטה · ממתינה-לאישור-הבעלים — אין-נתיב-ביצוע-בקוד",
-    approvalPathHe: "האישור-נענה-רק-בערוץ-הריבונות — כמו-כל-העברת-SP (הבעלים=הריבונות)",
+    statusLine: "מוגשת-ריבונית · REQ-0007 פתוח בזרם-הקנון — הכדור-אצל-הריבונות",
+    approvalPathHe: "הכרעה-רק-בהוראת-D-NNNN — כמו-כל-העברת-SP (הבעלים=הריבונות)",
+    filing: {
+      reqId: "REQ-0007",
+      streamUrl: SOVEREIGN_STREAM_URL,
+      filedAt: SOVEREIGN_FILED_AT,
+      registryRef: "Pulse/DECISIONS.md #47 · R364",
+    },
     aprPct,
     aprBasisHe: "אותו-אומדן-הציד מהשרשרת (נוסחה-חשופה בשורת-האסטרטגיה); הדירוג-בין-השורות-משנה-הון-מופעל ונזילות-שמורה — לא-את-ה-APR עצמו",
     spHeldKnown: false,

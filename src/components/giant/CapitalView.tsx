@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Lock, ShieldAlert, RefreshCw } from "lucide-react";
-import type { CapitalPayload, StrategyRow } from "@/lib/giant/capital-types";
+import { Lock, ShieldAlert, RefreshCw, ExternalLink, Radio } from "lucide-react";
+import type { CapitalPayload, StrategyRow, SovereignFiling } from "@/lib/giant/capital-types";
 
 /* ═══ דלת-ההון — מנוע-ההון הריבוני (מדידה-חיה · אפס-שחזור-מספרים-ישנים) ═══
  * שבע-אסטרטגיות בדירוג-ROI אחיד · תוכניות-הצבה = מסמכים-ממתינים-לאישור-הבעלים
@@ -36,13 +36,30 @@ const LIQ_HE: Record<StrategyRow["liquidity"], string> = {
 const fmt = (n: number | null | undefined, digits = 2) =>
   typeof n === "number" && Number.isFinite(n) ? n.toLocaleString("en-US", { maximumFractionDigits: digits }) : "—";
 
-function ApprovalBanner({ line, path }: { line: string; path: string }) {
+function FilingChip({ filing }: { filing: SovereignFiling }) {
+  return (
+    <a
+      href={filing.streamUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-300 transition-colors hover:bg-emerald-500/20"
+      title={`זרם-הריבונות · הוגש ${filing.filedAt} · רישום: ${filing.registryRef}`}
+    >
+      <Radio className="h-3 w-3 shrink-0" aria-hidden />
+      {filing.reqId} · פתוח בזרם-הריבונות
+      <ExternalLink className="h-2.5 w-2.5 shrink-0" aria-hidden />
+    </a>
+  );
+}
+
+function ApprovalBanner({ line, path, filing }: { line: string; path: string; filing: SovereignFiling }) {
   return (
     <div className="mb-3 flex flex-col gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/[0.07] px-3.5 py-2.5 sm:flex-row sm:items-center sm:gap-3">
       <span className="flex items-center gap-2 text-xs font-black text-amber-300">
         <Lock className="h-3.5 w-3.5 shrink-0" aria-hidden />
         {line}
       </span>
+      <FilingChip filing={filing} />
       <span className="text-[10px] leading-4 text-amber-200/70 sm:mr-auto sm:text-right">{path}</span>
     </div>
   );
@@ -152,7 +169,7 @@ export function CapitalView() {
             תוכנית-הצבה · מכשור-שוק פנימי <span className="font-mono text-[10px] text-zinc-500" dir="ltr">MM-INTERNAL</span>
           </h3>
           <p className="mb-3 text-[10px] text-zinc-500">מסמך-החלטה להבעלים — הפרמטרים-נגזרים-ממדידה-חיה ויוצגו-מחדש-בכל-מדידה</p>
-          <ApprovalBanner line={d.mmPlan.statusLine} path={d.mmPlan.approvalPathHe} />
+          <ApprovalBanner line={d.mmPlan.statusLine} path={d.mmPlan.approvalPathHe} filing={d.mmPlan.filing} />
           <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
             {[
               { k: "spread נמדד", v: d.mmPlan.inputs.spreadPct != null ? `${fmt(d.mmPlan.inputs.spreadPct)}%` : "—" },
@@ -191,7 +208,7 @@ export function CapitalView() {
             אומדן-ה-APR החי: <b className="font-mono text-amber-400" dir="ltr">{d.spMatrix.aprPct != null ? `${fmt(d.spMatrix.aprPct)}%` : "—"}</b> · {d.spMatrix.aprBasisHe}
             {d.reward?.formulaHe && <> · <span className="font-mono text-zinc-600" dir="ltr">{d.reward.formulaHe}</span></>}
           </p>
-          <ApprovalBanner line={d.spMatrix.statusLine} path={d.spMatrix.approvalPathHe} />
+          <ApprovalBanner line={d.spMatrix.statusLine} path={d.spMatrix.approvalPathHe} filing={d.spMatrix.filing} />
           <div className="space-y-2">
             {d.spMatrix.rows.map((r) => (
               <article key={r.sharePct} className="rounded-xl border border-white/5 bg-zinc-950 p-3">
