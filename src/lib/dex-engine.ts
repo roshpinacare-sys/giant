@@ -13,6 +13,7 @@ import type { Timeframe } from "@/lib/dex-types";
 import { TF_SECONDS } from "@/lib/dex-types";
 import { binanceTickers24h } from "@/lib/market-feed";
 import { matchOpenOrders } from "@/lib/dex-orders";
+import { ensureFleetLoop } from "@/lib/fleet-loop";
 
 /* ============================== הגדרות-שוק ============================== */
 
@@ -439,6 +440,8 @@ export async function ensureSeeded(): Promise<void> {
 export async function ensureEngine(): Promise<void> {
   await ensureSeeded();
   startTicker();
+  // לקוחות-האמת-הראשונים — הצי-סוחר-על-הבריכה-שלנו-ללא-הפסקה (הוראת-הבעלים)
+  void ensureFleetLoop();
 }
 
 export async function engineStatus(): Promise<{

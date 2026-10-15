@@ -3,6 +3,14 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { ensureEngine } from "@/lib/dex-engine";
 import { FLEET_LIMITS } from "@/lib/fleet-auth";
+import { fleetLoopStatus } from "@/lib/fleet-loop";
+
+interface LoopCfg {
+  sweeps?: number;
+  lastError?: string | null;
+  lastSweepAt?: string | null;
+  lastActionAt?: string | null;
+}
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +47,15 @@ export async function GET() {
     });
     const volMap = new Map(perAgent.map((r) => [r.sourceAgent as string, { vol: r._sum.total ?? 0, trades: r._count }]));
 
+    // בריאות-הלולאה-מה-DexConfig (העדות-המתפרסמת — עמידה-לריסטרטים)
+    let loopCfg: LoopCfg | null = null;
+    try {
+      const hc = await db.dexConfig.findUnique({ where: { key: "fleetLoopHealth" } });
+      loopCfg = hc ? (JSON.parse(hc.value) as LoopCfg) : null;
+    } catch {
+      loopCfg = null;
+    }
+
     return NextResponse.json({
       limits: FLEET_LIMITS,
       fleetVol24h: volAgg._sum.total ?? 0,
@@ -61,6 +78,29 @@ export async function GET() {
         total: t.total,
         t: t.t.toISOString(),
       })),
+      // בריאות-לולאת-לקוחות-האמת — מדידה-כנה (כולל-כשלים) ולא-ירוק-מזויף
+      loop: (() => {
+        const s = fleetLoopStatus();
+        const cfg = loopCfg;
+        const lastSweep = s.lastSweepAt ? Date.parse(s.lastSweepAt) : 0;
+        const lastAction = s.lastActionAt ? Date.parse(s.lastActionAt) : 0;
+        const sweepAgoSec = lastSweep ? Math.round((Date.now() - lastSweep) / 1000) : null;
+        const running =
+          (sweepAgoSec !== null && sweepAgoSec <= 60) ||
+          (lastAction && Date.now() - lastAction < 600_000) ||
+          Boolean(cfg?.lastSweepAt && Date.now() - Date.parse(cfg.lastSweepAt) < 180_000);
+        return {
+          running,
+          sweeps: s.sweeps || cfg?.sweeps || 0,
+          trades: s.trades || 0,
+          orders: s.orders || 0,
+          cancels: s.cancels || 0,
+          errors: s.errors || 0,
+          lastError: s.lastError ?? cfg?.lastError ?? null,
+          lastSweepAt: s.lastSweepAt ?? cfg?.lastSweepAt ?? null,
+          lastActionAt: s.lastActionAt ?? cfg?.lastActionAt ?? null,
+        };
+      })(),
     });
   } catch (err) {
     console.error("[api/fleet/state]", err);
