@@ -62,7 +62,7 @@ const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = 
   { id: "desk", label: "השולחן", he: "מנדט · equity · אסטרטגיות", icon: ScrollText },
   { id: "api", label: "ה-API", he: "הדלת-של-החוץ: מפתחות-API אמת · מסחר-חוץ-מאומת · מגבלות-קצב", icon: KeyRound },
   { id: "fleet", label: "הצי", he: "לקוחות-האמת-הראשונים: הסוכנים-שלנו-סוחרים-על-הבריכה-שלנו · ארנק-אמת · אפס-תלות-חוץ", icon: Ship },
-  { id: "capital", label: "ההון", he: "מנוע-ההון: שבע-אסטרטגיות נמדדות-חי · תוכניות-הצבה ממתינות-לאישורך", icon: Coins },
+  { id: "capital", label: "ההון", he: "מנוע-ההון: מנדט-קידום-חי · תנועות-הון מתקדמות-בשערים-הירוקים · לולאת-תיקון-במקום-סגירה", icon: Coins },
   { id: "ledger", label: "הרישום", he: "כל-ההחלטות · חיפוש", icon: BookOpen },
   { id: "products", label: "המוצרים", he: "קטלוג-אמת · קבלות · מדידות", icon: Package },
   { id: "marketing", label: "השיווק", he: "משטח-Adsmarket-החי: מה-שכתוב-בריפו = מה-שמוצג · אפס-סינתזה", icon: Megaphone },

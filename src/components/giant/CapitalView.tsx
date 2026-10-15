@@ -1,20 +1,23 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Lock, ShieldAlert, RefreshCw, ExternalLink, Radio } from "lucide-react";
-import type { CapitalPayload, StrategyRow, SovereignFiling } from "@/lib/giant/capital-types";
+import { Lock, ShieldAlert, RefreshCw, ExternalLink, Radio, Wrench, Gauge, Landmark, Scale } from "lucide-react";
+import type { CapitalPayload, MovementReadiness, RepairRow, StrategyRow, SovereignFiling } from "@/lib/giant/capital-types";
 
-/* ═══ דלת-ההון — מנוע-ההון הריבוני (מדידה-חיה · אפס-שחזור-מספרים-ישנים) ═══
- * שבע-אסטרטגיות בדירוג-ROI אחיד · תוכניות-הצבה = מסמכים-ממתינים-לאישור-הבעלים
- * (אין-כפתור-ביצוע ולעולם לא יהיה — האישור-בערוץ-הריבונות · הבעלים=הריבונות)
- * + כרטיס-אמת-שתי-הקופות (R74) עם-פתרון-פער-השושלת-הישנה. */
+/* ═══ דלת-ההון — מנוע-ההון הריבוני · דוקטרינת-הקידום MND-20261015 ═══
+ * "אני רוצה כן לקדם תנועות הון כאשר אנחנו מוכנים" (הבעלים):
+ *  · מנדט-עמידה חי בראש-הדלת — התקדמות-בשערים-ירוקים, לא-חסימה
+ *  · אמת-החשבון-הריבוני (headcorner) נמדדת-חי: חופשי+תחום+מלאי (התיקון-הגדול)
+ *  · לולאת-התיקון: אבחון+תיקון במקום-סגירה
+ *  · שערי-מוכנות מדודים-חי — הכרעה-אוטומטית אפס-שיקול-דעת */
 
 const STATUS_HE: Record<StrategyRow["status"], string> = {
-  ACTIVE: "פעילה",
+  ACTIVE: "פעילה-חי",
   READY: "מוכנה",
-  "NEEDS-APPROVAL": "דורשת-אישור-הבעלים",
+  "NEEDS-APPROVAL": "מסמך-הרחבה",
   DORMANT: "רדומה",
-  REJECTED: "נדחתה-במדידה",
+  REJECTED: "נדחתה",
+  REPAIRING: "בתיקון-חי",
 };
 
 const STATUS_CLS: Record<StrategyRow["status"], string> = {
@@ -23,6 +26,7 @@ const STATUS_CLS: Record<StrategyRow["status"], string> = {
   "NEEDS-APPROVAL": "bg-amber-500/15 text-amber-300",
   DORMANT: "bg-zinc-500/10 text-zinc-400",
   REJECTED: "bg-red-500/10 text-red-400",
+  REPAIRING: "bg-teal-500/10 text-teal-300",
 };
 
 const LIQ_HE: Record<StrategyRow["liquidity"], string> = {
@@ -31,6 +35,34 @@ const LIQ_HE: Record<StrategyRow["liquidity"], string> = {
   MEDIUM: "בינונית",
   "LOCKED-7D": "נעולה-7-ימים",
   NONE: "אין",
+};
+
+const GATE_CLS: Record<"GREEN" | "RED" | "AMBER", string> = {
+  GREEN: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+  RED: "bg-red-500/10 text-red-400 border-red-500/30",
+  AMBER: "bg-amber-500/10 text-amber-400 border-amber-500/30",
+};
+
+const GATE_HE: Record<"GREEN" | "RED" | "AMBER", string> = { GREEN: "ירוק", RED: "אדום", AMBER: "צהוב" };
+
+const REPAIR_STATE_CLS: Record<RepairRow["repairState"], string> = {
+  "FIXED-LIVE": "bg-emerald-500/10 text-emerald-300",
+  "IN-FLIGHT": "bg-teal-500/10 text-teal-300",
+  "MEASURED-ROUTED": "bg-amber-500/10 text-amber-300",
+  "AUTO-FLIP-ARMED": "bg-amber-500/10 text-amber-300",
+  "AWAITING-OWNER": "bg-zinc-500/10 text-zinc-300",
+};
+
+const VERDICT_CLS: Record<MovementReadiness["verdict"], string> = {
+  ADVANCE: "bg-emerald-500/15 text-emerald-300 border-emerald-500/40",
+  "ADVANCE-ABLE": "bg-teal-500/10 text-teal-300 border-teal-500/30",
+  "REPAIR-FIRST": "bg-amber-500/10 text-amber-300 border-amber-500/30",
+};
+
+const VERDICT_HE: Record<MovementReadiness["verdict"], string> = {
+  ADVANCE: "מתקדמת",
+  "ADVANCE-ABLE": "מוכנה-להתקדם",
+  "REPAIR-FIRST": "תיקון-קודם",
 };
 
 const fmt = (n: number | null | undefined, digits = 2) =>
@@ -49,19 +81,6 @@ function FilingChip({ filing }: { filing: SovereignFiling }) {
       {filing.reqId} · פתוח בזרם-הריבונות
       <ExternalLink className="h-2.5 w-2.5 shrink-0" aria-hidden />
     </a>
-  );
-}
-
-function ApprovalBanner({ line, path, filing }: { line: string; path: string; filing: SovereignFiling }) {
-  return (
-    <div className="mb-3 flex flex-col gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/[0.07] px-3.5 py-2.5 sm:flex-row sm:items-center sm:gap-3">
-      <span className="flex items-center gap-2 text-xs font-black text-amber-300">
-        <Lock className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        {line}
-      </span>
-      <FilingChip filing={filing} />
-      <span className="text-[10px] leading-4 text-amber-200/70 sm:mr-auto sm:text-right">{path}</span>
-    </div>
   );
 }
 
@@ -97,7 +116,7 @@ export function CapitalView() {
         <span className="text-sm font-black text-zinc-100">מנוע-ההון הריבוני</span>
         {d?.ok && (
           <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
-            שבע-אסטרטגיות · נמדד-חי
+            שבע-אסטרטגיות · נמדד-חי · דוקטרינת-קידום
           </span>
         )}
         {d && <span className="font-mono text-[10px] text-zinc-500">מדידה {new Date(d.measuredAt).toLocaleTimeString("he-IL")} · {d.meta?.ms ?? "—"}ms · RPC {d.meta?.rpc?.replace("https://", "") ?? "—"}</span>}
@@ -117,20 +136,169 @@ export function CapitalView() {
         </p>
       )}
 
+      {/* מנדט-העמידה — הוראת-הבעלים החיה */}
+      {d?.mandate && (
+        <section className="rounded-2xl border border-emerald-500/30 bg-emerald-500/[0.05] p-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="flex items-center gap-2 text-sm font-black text-emerald-300">
+              <span className="g-breathe h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden />
+              מנדט-עמידה {d.mandate.id} · רשום-במנוע
+            </span>
+            <span className="font-mono text-[9px] text-zinc-500" dir="ltr">{d.mandate.sourceTrace}</span>
+          </div>
+          <p className="mt-2 text-xs leading-5 text-zinc-200">{d.mandate.directiveHe}</p>
+          <p className="mt-1.5 text-[11px] leading-5 text-emerald-200/90">
+            <b>האפקט:</b> {d.mandate.effectHe}
+          </p>
+          <p className="mt-1 text-[10px] leading-4 text-zinc-400">{d.mandate.doctrineHe}</p>
+        </section>
+      )}
+
+      {/* אמת-החשבון-הריבוני — התיקון-הגדול של המלאי + המיקור-החי */}
+      {d?.sovereign && (
+        <section className="rounded-2xl border border-emerald-600/25 bg-zinc-900/60 p-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-300">
+              <Landmark className="h-4 w-4 text-emerald-400" aria-hidden />
+              אמת-החשבון-הריבוני
+            </h3>
+            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-300" dir="ltr">{d.sovereign.account}</span>
+            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold text-emerald-400">חי-על-השרשרת</span>
+          </div>
+          <p className="mb-3 mt-1 text-[10px] leading-4 text-zinc-500">{d.sovereign.treasuryBasisHe}</p>
+          <div className="grid gap-3 lg:grid-cols-2">
+            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-3">
+              <p className="mb-2 text-[11px] font-black text-emerald-400">מלאי-האמת · חופשי + תחום-בהזמנות (התיקון-הגדול)</p>
+              <p className="mb-2 font-mono text-2xl font-black text-emerald-300" dir="ltr">
+                {d.sovereign.treasuryUsdMarked != null ? `${fmt(d.sovereign.treasuryUsdMarked)}$` : "—"}
+              </p>
+              <ul className="space-y-1 font-mono text-[10px] text-zinc-300" dir="ltr">
+                <li>STEEM free {fmt(d.sovereign.holdings.steemFree, 3)} + locked {fmt(d.sovereign.holdings.steemLocked, 3)} = <b>{fmt(d.sovereign.holdings.steemTotal, 3)}</b></li>
+                <li>SBD free {fmt(d.sovereign.holdings.sbdFree, 3)} + locked {fmt(d.sovereign.holdings.sbdLocked, 3)} = <b>{fmt(d.sovereign.holdings.sbdTotal, 3)}</b></li>
+                <li className="text-zinc-500">SP own {fmt(d.sovereign.sp.ownSp, 1)} · out {fmt(d.sovereign.sp.delegatedOutSp, 1)} · in {fmt(d.sovereign.sp.receivedInSp, 1)} · net <b>{fmt(d.sovereign.sp.netWorkingSp, 1)}</b></li>
+              </ul>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-zinc-950 p-3">
+              <p className="mb-2 flex items-center gap-2 text-[11px] font-black text-zinc-300">
+                <Gauge className="h-3.5 w-3.5 text-amber-400" aria-hidden />
+                המיקור-החי (100-האופ-האחרונים)
+              </p>
+              <div className="grid grid-cols-3 gap-1.5 text-center">
+                {[
+                  { k: "fills", v: d.sovereign.ops.fills },
+                  { k: "הזמנות-חדשות", v: d.sovereign.ops.orderCreates },
+                  { k: "ביטולים", v: d.sovereign.ops.cancels },
+                  { k: "STEEM-נמכר", v: fmt(d.sovereign.ops.sellsSteem, 1) },
+                  { k: "SBD-התקבל", v: fmt(d.sovereign.ops.sbdReceived, 2) },
+                  { k: "VWAP SBD/STEEM", v: d.sovereign.ops.sellVwapSbdPerSteem != null ? d.sovereign.ops.sellVwapSbdPerSteem.toFixed(5) : "—" },
+                ].map((c) => (
+                  <div key={c.k} className="rounded-lg bg-zinc-900/80 px-2 py-1.5">
+                    <p className="text-[8px] text-zinc-500">{c.k}</p>
+                    <p className="font-mono text-xs font-bold text-zinc-100" dir="ltr">{c.v}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-2 font-mono text-[9px] text-zinc-600" dir="ltr">
+                {d.sovereign.ops.windowFrom?.slice(0, 16) ?? "—"} → {d.sovereign.ops.windowTo?.slice(0, 16) ?? "—"}
+              </p>
+              {d.sovereign.openOrders.length > 0 && (
+                <div className="mt-2 max-h-28 space-y-1 overflow-y-auto pr-1 g-scroll">
+                  {d.sovereign.openOrders.slice(0, 6).map((o) => (
+                    <p key={o.orderId} className="flex items-center gap-2 font-mono text-[9px] text-zinc-400" dir="ltr">
+                      <span className={o.side === "SELL-SBD" ? "text-emerald-500" : "text-amber-500"}>{o.side}</span>
+                      <span>{o.amountSbd != null ? `${o.amountSbd.toFixed(3)} SBD` : `${(o.amountSteem ?? 0).toFixed(3)} STEEM`}</span>
+                      <span className="text-zinc-600">@ {o.priceSbdPerSteem.toFixed(5)}</span>
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          <p className="mt-2 font-mono text-[9px] leading-4 text-zinc-500">{d.sovereign.evidenceHe}</p>
+        </section>
+      )}
+
+      {/* שערי-מוכנות — הכרעת-הקידום */}
+      {(d?.readiness ?? []).length > 0 && (
+        <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-4">
+          <h3 className="mb-1 text-sm font-bold text-zinc-300">שערי-מוכנות · ההכרעה-האוטומטית-לפי-המנדט</h3>
+          <p className="mb-3 text-[10px] text-zinc-500">כל-שער נמדד-חי בכל-מדידה — ירוק-מלא = התנועה-מתקדמת · אפס-שיקול-דעת, אפס-חסימה-יזומה</p>
+          <div className="space-y-3">
+            {(d?.readiness ?? []).map((m) => (
+              <article key={m.movementId} className="rounded-xl border border-white/5 bg-zinc-950 p-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-black text-zinc-100">{m.nameHe}</span>
+                  <span className="font-mono text-[9px] text-zinc-600" dir="ltr">{m.movementId}</span>
+                  <span className={`mr-auto rounded-full border px-2.5 py-0.5 text-[10px] font-black ${VERDICT_CLS[m.verdict]}`}>
+                    {VERDICT_HE[m.verdict]}
+                  </span>
+                </div>
+                <p className="mt-1 text-[10px] leading-4 text-zinc-400">{m.verdictHe}</p>
+                <ul className="mt-2 space-y-1.5">
+                  {m.gates.map((g) => (
+                    <li key={g.gate} className="flex flex-wrap items-start gap-x-2 gap-y-0.5">
+                      <span className={`mt-0.5 rounded border px-1.5 py-px text-[8px] font-black ${GATE_CLS[g.state]}`}>{GATE_HE[g.state]}</span>
+                      <span className="text-[10px] font-bold text-zinc-300">{g.he}</span>
+                      <span className="font-mono text-[9px] text-zinc-500" dir="ltr">{g.measured}</span>
+                      <span className="text-[9px] text-zinc-600">{g.flipHe}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* לולאת-התיקון — אבחון+תיקון במקום-סגירה */}
+      {(d?.repairs ?? []).length > 0 && (
+        <section className="rounded-2xl border border-teal-600/25 bg-zinc-900/60 p-4">
+          <h3 className="mb-1 flex items-center gap-2 text-sm font-bold text-zinc-300">
+            <Wrench className="h-4 w-4 text-teal-400" aria-hidden />
+            לולאת-התיקון · מה-שלא-מסתדר — מאובחן-ומתוקן, לא-נסגר
+          </h3>
+          <p className="mb-3 text-[10px] text-zinc-500">דוקטרינת MND-20261015: כל-אבחון נושא-מדידה-חיה · כל-תיקון נושא-נתיב-פעולה</p>
+          <div className="max-h-96 space-y-2.5 overflow-y-auto pr-1 g-scroll">
+            {(d?.repairs ?? []).map((r) => (
+              <article key={r.strategyId} className="rounded-xl border border-white/5 bg-zinc-950 p-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-black text-zinc-100">{r.nameHe}</span>
+                  <span className={`mr-auto rounded-full px-2 py-0.5 text-[9px] font-black ${REPAIR_STATE_CLS[r.repairState]}`}>
+                    {r.repairStateHe}
+                  </span>
+                </div>
+                <p className="mt-1.5 text-[10px] leading-4 text-zinc-400"><b className="text-zinc-300">אבחון:</b> {r.diagnosisHe}</p>
+                <p className="mt-1 font-mono text-[9px] leading-4 text-zinc-500" dir="ltr">{r.measuredEvidence}</p>
+                <ul className="mt-1.5 space-y-1">
+                  {r.repairsHe.map((p, i) => (
+                    <li key={i} className="flex items-start gap-2 text-[10px] leading-4 text-zinc-400">
+                      <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-teal-500" aria-hidden />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* דירוג-ROI — שבע-האסטרטגיות */}
       <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-4">
         <h3 className="mb-1 text-sm font-bold text-zinc-300">דירוג-ROI אחיד · שבע-האסטרטגיות</h3>
         <p className="mb-3 text-[10px] leading-4 text-zinc-500">
-          תשואה-נמדדת קודמת לכל-טענה · אסטרטגיה-בלי-תשואה-ניתנת-למדידה מדורגת-לפי-מצב-מוצהר · אפס-הסתרה
+          תשואה-נמדדת קודמת לכל-טענה · סטטוס-נגזר-מהמציאות-על-השרשרת (לא-מהחלטה-מנהלית) · אפס-הסתרה
         </p>
         <div className="max-h-[26rem] space-y-2 overflow-y-auto pr-1 g-scroll">
           {(d?.strategies ?? []).map((s) => (
             <article
               key={s.id}
               className={`rounded-xl border p-3 ${
-                s.status === "NEEDS-APPROVAL"
-                  ? "border-amber-600/30 bg-amber-500/[0.04]"
-                  : "border-white/5 bg-zinc-950"
+                s.status === "ACTIVE"
+                  ? "border-emerald-600/30 bg-emerald-500/[0.03]"
+                  : s.status === "REPAIRING"
+                    ? "border-teal-600/30 bg-teal-500/[0.03]"
+                    : "border-white/5 bg-zinc-950"
               }`}
             >
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -162,19 +330,26 @@ export function CapitalView() {
         </div>
       </section>
 
-      {/* תוכנית-הצבה MM-INTERNAL — מסמך-ממתין-לאישור */}
+      {/* תוכנית-ההרחבה MM-INTERNAL */}
       {d?.mmPlan && (
         <section className="rounded-2xl border border-amber-600/25 bg-zinc-900/60 p-4">
           <h3 className="mb-1 text-sm font-bold text-zinc-300">
-            תוכנית-הצבה · מכשור-שוק פנימי <span className="font-mono text-[10px] text-zinc-500" dir="ltr">MM-INTERNAL</span>
+            תוכנית-ההרחבה · מכשור-שוק פנימי <span className="font-mono text-[10px] text-zinc-500" dir="ltr">MM-INTERNAL</span>
           </h3>
-          <p className="mb-3 text-[10px] text-zinc-500">מסמך-החלטה להבעלים — הפרמטרים-נגזרים-ממדידה-חיה ויוצגו-מחדש-בכל-מדידה</p>
-          <ApprovalBanner line={d.mmPlan.statusLine} path={d.mmPlan.approvalPathHe} filing={d.mmPlan.filing} />
+          <p className="mb-3 text-[10px] text-zinc-500">המיקור-חי-כבר-על-השרשרת · המסמך = פרמטרי-ההרחבה הנגזרים-ממדידה-חיה</p>
+          <div className="mb-3 flex flex-col gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/[0.07] px-3.5 py-2.5">
+            <span className="flex items-center gap-2 text-xs font-black text-amber-300">
+              <Lock className="h-3.5 w-3.5 shrink-0" aria-hidden />
+              {d.mmPlan.statusLine}
+            </span>
+            <FilingChip filing={d.mmPlan.filing} />
+            <span className="text-[10px] leading-4 text-amber-200/70">{d.mmPlan.approvalPathHe}</span>
+          </div>
           <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
             {[
               { k: "spread נמדד", v: d.mmPlan.inputs.spreadPct != null ? `${fmt(d.mmPlan.inputs.spreadPct)}%` : "—" },
               { k: "עומק-ספר נמדד", v: d.mmPlan.inputs.totalDepthUsd != null ? `${fmt(d.mmPlan.inputs.totalDepthUsd)}$` : "—" },
-              { k: "כסף-אמת", v: d.mmPlan.inputs.realMoneyUsd != null ? `${fmt(d.mmPlan.inputs.realMoneyUsd)}$` : "—" },
+              { k: "מלאי-אמת (מתוקן)", v: d.mmPlan.inputs.realMoneyUsd != null ? `${fmt(d.mmPlan.inputs.realMoneyUsd)}$` : "—" },
               { k: "תקציב-מיקור (20%)", v: d.mmPlan.params.quoteBudgetUsd != null ? `${fmt(d.mmPlan.params.quoteBudgetUsd)}$` : "—" },
               { k: "הזמנה-מרבית", v: d.mmPlan.params.maxOrderUsd != null ? `${fmt(d.mmPlan.params.maxOrderUsd)}$` : "—" },
               { k: "דיוק-דיור-מינ' ", v: d.mmPlan.params.quoteAtSpreadPct != null ? `${fmt(d.mmPlan.params.quoteAtSpreadPct)}%` : "—" },
@@ -198,17 +373,28 @@ export function CapitalView() {
         </section>
       )}
 
-      {/* מטריצת-הדלגציה SP-DELEGATE — מסמך-ממתין-לאישור */}
+      {/* מטריצת-הדלגציה SP-DELEGATE — מוחשית על SP-אמת */}
       {d?.spMatrix && (
         <section className="rounded-2xl border border-amber-600/25 bg-zinc-900/60 p-4">
           <h3 className="mb-1 text-sm font-bold text-zinc-300">
             מטריצת-מחזור · העברת-SP <span className="font-mono text-[10px] text-zinc-500" dir="ltr">SP-DELEGATE</span>
           </h3>
           <p className="mb-3 text-[10px] leading-4 text-zinc-500">
-            אומדן-ה-APR החי: <b className="font-mono text-amber-400" dir="ltr">{d.spMatrix.aprPct != null ? `${fmt(d.spMatrix.aprPct)}%` : "—"}</b> · {d.spMatrix.aprBasisHe}
+            אומדן-ה-APR החי: <b className="font-mono text-amber-400" dir="ltr">{d.spMatrix.aprPct != null ? `${fmt(d.spMatrix.aprPct)}%` : "—"}</b>
+            {d.spMatrix.realizedCurationAprPct != null && (
+              <> · הלכידה-הממשית-נמדדה: <b className="font-mono text-teal-300" dir="ltr">{fmt(d.spMatrix.realizedCurationAprPct)}%</b> (הפער = לולאת-התיקון)</>
+            )}
+            {" · "}{d.spMatrix.aprBasisHe}
             {d.reward?.formulaHe && <> · <span className="font-mono text-zinc-600" dir="ltr">{d.reward.formulaHe}</span></>}
           </p>
-          <ApprovalBanner line={d.spMatrix.statusLine} path={d.spMatrix.approvalPathHe} filing={d.spMatrix.filing} />
+          <div className="mb-3 flex flex-col gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/[0.07] px-3.5 py-2.5">
+            <span className="flex items-center gap-2 text-xs font-black text-amber-300">
+              <Lock className="h-3.5 w-3.5 shrink-0" aria-hidden />
+              {d.spMatrix.statusLine}
+            </span>
+            <FilingChip filing={d.spMatrix.filing} />
+            <span className="text-[10px] leading-4 text-amber-200/70">{d.spMatrix.approvalPathHe}</span>
+          </div>
           <div className="space-y-2">
             {d.spMatrix.rows.map((r) => (
               <article key={r.sharePct} className="rounded-xl border border-white/5 bg-zinc-950 p-3">
@@ -231,17 +417,20 @@ export function CapitalView() {
               </article>
             ))}
           </div>
-          <p className="mt-2 text-[10px] text-zinc-500">
-            יחידות-המטריצה = לכל-1000-SP; יתרת-ה-SP-בפועל של acct-00 אינה-נמדדת-בקבצי-האמת — מוצהר-כנה, אפס-הנחה
+          <p className="mt-2 flex items-center gap-1.5 text-[10px] text-zinc-500">
+            <Scale className="h-3 w-3 shrink-0" aria-hidden />
+            {d.sovereign
+              ? `על-SP-אמת-נמדד: ${fmt(d.sovereign.sp.netWorkingSp, 1)} SP-נטו · ${fmt(d.sovereign.sp.delegatedOutSp, 1)} SP כבר-מועבר-חי — המטריצה מוחשית ולא-היפותטית`
+              : "יחידות-המטריצה = לכל-1000-SP (SP-החשבון-לא-נמדד-במדידה-זו)"}
           </p>
         </section>
       )}
 
-      {/* אמת-שתי-הקופות (R74) — כולל-פתרון-פער-השושלת-הישנה */}
+      {/* אמת-שתי-הקופות (R74) */}
       {d?.ledger && (
         <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-4">
           <h3 className="mb-1 text-sm font-bold text-zinc-300">אמת-שתי-הקופות · כסף-אמת מול ספר-פנימי</h3>
-          <p className="mb-3 text-[10px] leading-4 text-zinc-500">{d.ledger.doctrineHe ?? "דוקטרינת R74"}</p>
+          <p className="mb-3 text-[10px] leading-4 text-zinc-500">{d.ledger.doctrineHe ?? "דוקטרינת R74"}{d.ledger.residueNoteHe ? ` · ${d.ledger.residueNoteHe}` : ""}</p>
           <div className="grid gap-3 lg:grid-cols-2">
             <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-3">
               <p className="mb-2 flex items-center gap-2 text-[11px] font-black text-emerald-400">
@@ -261,7 +450,9 @@ export function CapitalView() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-2 font-mono text-[9px] text-zinc-600" dir="ltr">marksAt {d.ledger.marksAt ?? "—"}</p>
+              <p className="mt-2 rounded-lg bg-amber-500/[0.06] px-2 py-1.5 text-[9px] leading-4 text-amber-300/90">
+                השורות-כאן = הספר-הישן (חופשי-בלבד). המלאי-המתוקן-והמלא — למעלה בכרטיס-אמת-החשבון-הריבוני (חופשי+תחום).
+              </p>
             </div>
             <div className="rounded-xl border border-red-500/20 bg-red-500/[0.03] p-3">
               <p className="mb-2 text-[11px] font-black text-red-400">ספר-פנימי (SIM · אין-תביעת-ערך-חוץ)</p>
@@ -272,7 +463,6 @@ export function CapitalView() {
               <p className="mt-1 inline-block rounded-full bg-red-500/10 px-2 py-0.5 text-[9px] font-black text-red-400">
                 {d.ledger.simLabel} · אסור-המרה-לדולר
               </p>
-              <p className="mt-3 text-[10px] leading-4 text-zinc-500">{d.ledger.residueNoteHe}</p>
             </div>
           </div>
           <p className="mt-3 rounded-lg bg-zinc-950 px-3 py-2 font-mono text-[10px] text-zinc-500">
