@@ -162,7 +162,11 @@ function finish(s: AnchorStatus): AnchorStatus {
   return s;
 }
 
-// העגון-עצמו: קומיט-יתום-של-עץ-HEAD-הנוכחי + דחיפה-ל-sovereign/main
+// העגון-עצמו: קומיט-של-עץ-HEAD-הנוכחי + דחיפה-ל-sovereign/main.
+// גל-18 · שיעור-שנמדד-חי: ls-remote-שמחזיר-ריק-ברגע-חמוד (תקלה-רגעית) היה-מפיל-את
+// העגינה-ל-`--force`-לא-מוגן — ובהרצה-ידנית-אף-מחק-את-העוגן-לשתי-דקות (שוחזר).
+// מעכשיו: מדידה-ריקה/כושלת = עגינה-נדחית-בכנות (fail-closed); והעוגן-הקודם
+// מתווסף-כהורה-אמיתי (commit-tree -p) — השושלת-חיה-בהיסטוריית-הגיט-עצמה, לא-רק-בהודעה.
 export async function performAnchor(): Promise<
   { ok: true; anchorSha: string; lineageHead: string } | { ok: false; error: string }
 > {
@@ -176,23 +180,26 @@ export async function performAnchor(): Promise<
       .replace(/\.\d+Z$/, "Z");
     const msg =
       `sovereign anchor snapshot · lineage ${head} · ${at}\n\n` +
-      `Full living tree of the giant system landed as a fresh orphan root\n` +
-      `(GitHub Push Protection correctly blocks lineage history: commit c185c80\n` +
-      `carried upload/pat.env with the raw PAT). No secret is present in this tree.\n\n` +
+      (parentArgs.length > 0
+        ? `Chained onto the previous anchor (${current}) — the sovereign\n` +
+          `lineage is a real git parent chain now (wave-18 law), not message-only.\n`
+        : `First anchor: no previous anchor measured in the cloud.\n`) +
+      `The living tree of the giant system carries no secret in this tree\n` +
+      `(GitHub Push Protection correctly blocks the original lineage history:\n` +
+      `commit c185c80 carried upload/pat.env with the raw PAT). ` +
       `Landed via the owner-gated anchor API from the living system.`;
-    const anchorSha = (await git(["commit-tree", tree, "-m", msg])).trim();
-    // כל-עוגן-הוא-שורש-יתום → אי-אפשר-fast-forward. דורסים-רק-את-ref-העוגן-שלנו
-    // עם force-with-lease: הדחיפה-נכשלת-אם-העוגן-זז-בענן-מאז-המדידה — ואף-פעם-לא-נוגעים-ב-main.
-    const current = (await git(
-      ["ls-remote", authedUrl(token), ANCHOR_REF],
-      15_000,
-    )).trim().split(/\s+/)[0];
-    const leaseArgs =
-      /^[0-9a-f]{40}$/.test(current)
-        ? [`--force-with-lease=${ANCHOR_REF}:${current}`]
-        : ["--force"];
+    const lsOut = await git(["ls-remote", authedUrl(token), ANCHOR_REF], 15_000);
+    const current = lsOut.trim().split(/\s+/)[0] ?? "";
+    if (!/^[0-9a-f]{40}$/.test(current) && lsOut.trim() !== "") {
+      return { ok: false, error: `מדידת-העוגן-בענן-פגומה (${lsOut.trim().slice(0, 40)}) — נדחה fail-closed` };
+    }
+    /* עוגן-קיים = הורה-אמיתי (שושלת-רציפה); עוגן-חסר-לגמרי (תשובה-ריקה) = שורש-ראשון.
+     * שתי-האפשרויות-מגובות-במדידה-מוצלחת בלבד — לעולם-לא-כשל-שקט-שמתפרש-כריק. */
+    const parentArgs = /^[0-9a-f]{40}$/.test(current) ? ["-p", current] : [];
+    const anchorSha = (await git(["commit-tree", tree, ...parentArgs, "-m", msg])).trim();
+    // force-with-lease-תמיד: הדחיפה-נכשלת-אם-העוגן-זז-בענן-מאז-המדידה — ואף-פעם-לא-נוגעים-ב-main.
     await git(
-      ["push", ...leaseArgs, authedUrl(token), `${anchorSha}:${ANCHOR_REF}`],
+      ["push", `--force-with-lease=${ANCHOR_REF}:${current}`, authedUrl(token), `${anchorSha}:${ANCHOR_REF}`],
       30_000,
     );
     cache = null; // אנוס-מדידה-חיה-בסטטוס-הבא
