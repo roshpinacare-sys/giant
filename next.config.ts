@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  /* HMR-חי: ללא-זה Next-16 חוסם-את-שקע-ה-HMR (Blocked cross-origin /_next/hmr)
+   * → ההידרציה-ממתינה-לנצח והממשק-כולו-מת בלי-שגיאה (נמדד: renderers=0 · אפס-פיבר). */
+  allowedDevOrigins: ["127.0.0.1", "localhost"],
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,

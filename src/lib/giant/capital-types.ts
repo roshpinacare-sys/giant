@@ -79,7 +79,104 @@ export type StrategyId =
   | "SP-DELEGATE"
   | "SBD-INTEREST";
 
-export type StrategyStatus = "ACTIVE" | "READY" | "NEEDS-APPROVAL" | "DORMANT" | "REJECTED";
+export type StrategyStatus = "ACTIVE" | "READY" | "NEEDS-APPROVAL" | "DORMANT" | "REJECTED" | "REPAIRING";
+
+/* ═══ מנדט-עמידה של הבעלים (הוראה-חיה · רשומה-במנוע) ═══
+ * מקור: הודעת-הבעלים "אני רוצה כן לקדם תנועות הון כאשר אנחנו מוכנים... לא לחסום כל הזמן...
+ * לבדוק למה לא מסתדר ולסדר במקום לסגור" (trace 1a1400a00fd8d4f1 · 2026-10-15).
+ * האפקט: אסטרטגיה-כושלת = אבחון+תיקון (לא-דחייה); תנועת-הון נדחפת כשכל-השערים-הירוקים. */
+export interface StandingMandate {
+  id: string;
+  registeredAt: string;
+  sourceTrace: string;
+  directiveHe: string;
+  effectHe: string;
+  doctrineHe: string;
+}
+
+/* ═══ אמת-החשבון הריבוני — headcorner נמדד-חי מהשרשרת ═══
+ * התיקון-הגדול: הספר-הישן ספר-רק-יתרות-חופשיות (balance) והתעלם מהכסף-התחום-בהזמנות
+ * (for_sale) — המלאי-האמיתי = חופשי + תחום. נמדד-חי, אפס-הנחות. */
+export interface SovereignHoldings {
+  steemFree: number;
+  steemLocked: number;
+  steemTotal: number;
+  sbdFree: number;
+  sbdLocked: number;
+  sbdTotal: number;
+}
+
+export interface SovereignSp {
+  ownSp: number;
+  delegatedOutSp: number;
+  receivedInSp: number;
+  netWorkingSp: number;
+}
+
+export interface MmOrderRow {
+  orderId: number;
+  side: "SELL-SBD" | "SELL-STEEM";
+  amountSbd: number | null;
+  amountSteem: number | null;
+  priceSbdPerSteem: number;
+  createdAt: string;
+}
+
+export interface MmOps {
+  windowFrom: string | null;
+  windowTo: string | null;
+  orderCreates: number;
+  cancels: number;
+  fills: number;
+  sellsSteem: number;
+  sbdReceived: number;
+  buysInWindow: number;
+  sellVwapSbdPerSteem: number | null;
+  votes: number;
+  curationOps: number;
+  curationSpEarned: number;
+}
+
+export interface SovereignAccount {
+  account: string;
+  measuredAt: string;
+  onChain: boolean;
+  holdings: SovereignHoldings;
+  treasuryUsdMarked: number | null;
+  treasuryBasisHe: string;
+  sp: SovereignSp;
+  openOrders: MmOrderRow[];
+  ops: MmOps;
+  evidenceHe: string;
+}
+
+/* ═══ שערי-מוכנות — תנועת-הון נדחפת רק-כשהכל-ירוק (מדוד-חי, אפס-שיקול-דעת) ═══ */
+export interface ReadinessGate {
+  gate: string;
+  he: string;
+  state: "GREEN" | "RED" | "AMBER";
+  measured: string;
+  flipHe: string;
+}
+
+export interface MovementReadiness {
+  movementId: StrategyId;
+  nameHe: string;
+  verdict: "ADVANCE" | "ADVANCE-ABLE" | "REPAIR-FIRST";
+  verdictHe: string;
+  gates: ReadinessGate[];
+}
+
+/* ═══ לולאת-התיקון — אסטרטגיה-כושלת = אבחון+תיקון, לא-סגירה ═══ */
+export interface RepairRow {
+  strategyId: StrategyId;
+  nameHe: string;
+  diagnosisHe: string;
+  measuredEvidence: string;
+  repairsHe: string[];
+  repairState: "AUTO-FLIP-ARMED" | "IN-FLIGHT" | "MEASURED-ROUTED" | "AWAITING-OWNER";
+  repairStateHe: string;
+}
 
 export interface StrategyRow {
   id: StrategyId;
@@ -149,6 +246,7 @@ export interface SpMatrix {
   aprPct: number | null;
   aprBasisHe: string;
   spHeldKnown: boolean;
+  realizedCurationAprPct: number | null;
   rows: SpMatrixRow[];
 }
 
@@ -162,6 +260,10 @@ export interface CapitalPayload {
   reward: CapitalReward | null;
   feed: CapitalFeed | null;
   ledger: LedgerTruth;
+  sovereign: SovereignAccount | null;
+  mandate: StandingMandate;
+  readiness: MovementReadiness[];
+  repairs: RepairRow[];
   strategies: StrategyRow[];
   mmPlan: MmPlan;
   spMatrix: SpMatrix;
