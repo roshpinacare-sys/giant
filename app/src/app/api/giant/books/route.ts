@@ -6,7 +6,7 @@
  *  · saos-agents  → fleet-coordination/CLAIMS.json (FLEET-COORDINATION/1)
  *  · Defi         → fleet/KPI.json + fleet/MISSION-1000.md (משימת-1000$/יום)
  *  · Adsmarket    → README.md (ערכת-השיווק הרשמית)
- *  · saos-markets → FLEET-DOCKING.md (החלטת-הבעלים: הצי-על-הווליום-של-הדקס)
+ *  · saos-markets → ממוזג-בקוד ל-saos-dex/markets (גל-10, a34dc6f) — נקרא מהיעד-החדש
  * חוק-אמת: כשל-מקור = ok:false כנה לאותו-ספר; אפס-סינתזה; אפס-מספרים-מצוירים.
  * cache-זיכרון 60 שניות.
  */
@@ -91,7 +91,7 @@ export async function loadBooks(force = false): Promise<BooksPayload> {
     ghJson<KpiFile>(`${RAW_BASE}/Defi/main/fleet/KPI.json`, token),
     ghText(`${RAW_BASE}/Defi/main/fleet/MISSION-1000.md`, token),
     ghText(`${RAW_BASE}/Adsmarket/main/README.md`, token),
-    ghText(`${RAW_BASE}/saos-markets/main/FLEET-DOCKING.md`, token),
+    ghText(`${RAW_BASE}/saos-dex/main/markets/FLEET-DOCKING.md`, token),
     ghText(`${RAW_BASE}/saos-markets/main/README.md`, token),
   ]);
 
@@ -138,12 +138,15 @@ export async function loadBooks(force = false): Promise<BooksPayload> {
     },
     {
       book: "saos-markets",
-      role: "עצימות-הצי על הדקס: ההחלטה-הריבונית הטרייה של הבעלים",
+      role: "ממוזגת-בקוד-לתוך saos-dex/markets (המיזוג-האמיתי-הראשון) — ההחלטה-והמפנה",
       ok: Boolean(docking),
-      note: docking ? undefined : "FLEET-DOCKING.md לא נמדד כרגע — כשל-כנה",
-      headline: headlineOf(docking) ?? headlineOf(marketsHead),
-      facts: [{ k: "החלטת-הבעלים", v: quoteOf(docking) ?? "—" }],
-      fetchedAt: docking ? now : null,
+      note: docking ? undefined : "FLEET-DOCKING לא נמדד כרגע — כשל-כנה",
+      headline: headlineOf(marketsHead),
+      facts: [
+        { k: "מיזוג", v: "saos-dex/markets · a34dc6f (גל-10)" },
+        { k: "החלטת-הבעלים", v: quoteOf(docking) ?? "—" },
+      ],
+      fetchedAt: docking || marketsHead ? now : null,
     },
   ];
 

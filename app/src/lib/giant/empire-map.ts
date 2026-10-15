@@ -39,7 +39,7 @@ export const EMPIRE_MAP: Record<string, EmpireRole> = {
   giant: { role: "הממשק-המאוחד עצמו — הפלטפורמה-האחת שמציגה את כל-הצי", group: "ליבה-מחוברת", module: null, evidence: "המופע-החי · גלים 41–47" },
   Domain: { role: "עוגני-האמת של המשק: dex/state · giants · honest-econ · truth · מוצרים", group: "ליבה-מחוברת", module: "dex", evidence: "APIs חיים קוראים אותו · גלים 42–45" },
   FleetHQ: { role: "חדר-המערכות-החי: סוכנים · משימות · מצב-המשרד", group: "ליבה-מחוברת", module: "office", evidence: "/api/giant/office נמדד ALIVE · גל-44" },
-  "saos-dex": { role: "מנוע-הבורסה-הריבונית: ספר-הזמנות דטרמיניסטי + AMM 30bps + ארנק-חיילים", group: "ליבה-מחוברת", module: "dex", evidence: "DexView מציג את משטח-הדקס · T55" },
+  "saos-dex": { role: "מנוע-הבורסה-הריבונית: ספר-הזמנות דטרמיניסטי + AMM 30bps + ארנק-חיילים + markets-המנוע-הממוזג", group: "ליבה-מחוברת", module: "dex", evidence: "DexView · T55 · מיזוג-אמיתי a34dc6f (גל-10)" },
   steem: { role: "שכבת-השרשרת-האמיתית: מלאי STEEM/SBD אמת · גריד מסחר real:true", group: "ליבה-מחוברת", module: "dex", evidence: "grid ARMED-LIVE נמדד · גל-42" },
   Console: { role: "קונסולת-ה-DEX: dex-beat שעתי · קבלות-ריצות-חיות", group: "ליבה-מחוברת", module: "ledger", evidence: "קבלות-ריצות נמדדו · T55/R363" },
   "saos-desk": { role: "שולחן-המסחר-הריבוני: קבינט-מרובה-סוכנים · ליבת-סיכון דטרמיניסטית (R338)", group: "ליבה-מחוברת", module: "desk", evidence: "DeskView · מופע-התאומים" },
@@ -51,7 +51,6 @@ export const EMPIRE_MAP: Record<string, EmpireRole> = {
   "saos-agents": { role: "ליבת-תזמון-סוכנים מדדה-עצמית: גרף-משימות שאי-אפשר-לשקר-לו · FLEET-COORDINATION/1", group: "ליבה-מחוברת", module: "submission", evidence: "/api/giant/books חי · CLAIMS.json נפרסר · פעיל-14.10 (גל-9)" },
   Defi: { role: "בית שכבת-ה-DeFi: דוקטרינה · MISSION-1000 · KPI-נמדד-יום-יום", group: "ליבה-מחוברת", module: "submission", evidence: "/api/giant/books חי · KPI.json נפרסר (גל-9)" },
   Adsmarket: { role: "ערכת-השיווק הרשמית של הרשת: ערוץ-ההפצה וכלל-הראיות", group: "ליבה-מחוברת", module: "submission", evidence: "/api/giant/books חי · 105 קבצים נמדדו (גל-9)" },
-  "saos-markets": { role: "עצימות-הצי על הדקס: החלטת-הבעלים 14.10 — הצי עובד על ווליום-הדקס שלנו", group: "ליבה-מחוברת", module: "submission", evidence: "/api/giant/books חי · FLEET-DOCKING נמדד (גל-9)" },
 
   /* ── תשתית-הפעלה: ההנעה-העצמאית-מהגיט ── */
   "saos-runtime": { role: "מארח-הריצה-הריבוני: Actions-runner heartbeat · clone מנוע-הפרטי", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · trust-cache" },
@@ -60,8 +59,8 @@ export const EMPIRE_MAP: Record<string, EmpireRole> = {
   "ops-intake": { role: "צינור-הקליטה-התפעולי: מדידה · תור-עבודות מדודר · מפת-מרחב — כל-30 דק", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · trust-cache" },
   "ops-forge": { role: "סדנת-התפעול: כלי-עבודה ומסילות-הפעלה פנימיות", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · trust-cache" },
   "vault-home": { role: "כספת-המפתחות-החתומה של הצי (AES-256 · PBKDF2-200k) — מפתחות-לא-נוסעים-בקלות", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · trust-cache" },
-  "sovereign-lighthouse": { role: "זיכרון-חוץ-מכונה-עצמאי (RTL) — שרדנות-אחרי-מוות-של-סביבה", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · חוק-הבעלים" },
-  "sovereign-beacon": { role: "מגדלור-ריבוני: קונסולה-חוץ-מכונה", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · גל-43" },
+  "sovereign-lighthouse": { role: "זיכרון-חוץ-מכונה-עצמאי (RTL) — קפוא-לפי-מפת-הכפילויות סעיף-3: מתכנס-לזרם-הקנוני", group: "ארכיון-ושחזור", module: null, evidence: "מפנה-קפוא 0680f14 (גל-10) · Pulse/state/sovereign-channel" },
+  "sovereign-beacon": { role: "מגדלור-ריבוני — קפוא-לפי-מפת-הכפילויות סעיף-3: מתכנס-לזרם-הקנוני", group: "ארכיון-ושחזור", module: null, evidence: "מפנה-קפוא d8a6707 (גל-10) · Pulse/state/sovereign-channel" },
 
   /* ── מוצרים-ריבוניים: תוצרת-עומדת-בפני-עצמה ── */
   roshpina: { role: "פלטפורמת-אמון-וערך: מנוע-עמלים + ארביטרז-עלויות + הגנות", group: "מוצרים-ריבוניים", module: "products", evidence: "קטלוג-המוצרים החי · גל-42" },
@@ -78,7 +77,8 @@ export const EMPIRE_MAP: Record<string, EmpireRole> = {
   /* ── חזית-פומבית ── */
   "roshpinacare-sys.github.io": { role: "דלת-הרשת-הפומבית: אינדקס-חי של האתרים ובריאות-הצי — כל-מספר-נמדד", group: "חזית-פומבית", module: null, evidence: "תיאור-מדוד · גל-43 (חזית-ציבורית)" },
 
-  /* ── ארכיון-ושחזור: זיכרון-ארוך, לא-שער-חי ── */
+  /* ── ארכיון-ושחזור: זיכרון-ארוך, לא-שער-חי (מגל-10: כולל-הממוזגים-והקפואים) ── */
+  "saos-markets": { role: "הבורסה-המדומה של-המדינה — ממוזגת-בקוד-במלואה לתוך saos-dex/markets (המיזוג-האמיתי-הראשון)", group: "ארכיון-ושחזור", module: null, evidence: "מיזוג a34dc6f · מפנה-קפוא ff3bb6b · גל-10" },
   Zip: { role: "ארכיון-עבודה היסטורי 136MB", group: "ארכיון-ושחזור", module: null, evidence: "מועמד-פינוי (מדוד) · מראה-אחת + vault-home" },
   "Project-files": { role: "ארכיון-ZIP היסטורי ללא-קוד", group: "ארכיון-ושחזור", module: null, evidence: "מועמד-פינוי (מדוד) · נגיש-ב-vault-home" },
   Sdk: { role: "תמצית-SDK משוחזרת מבסיס anchor-5356dab", group: "ארכיון-ושחזור", module: null, evidence: "מועמד-מיזוג ל-anchor-baseline (מדוד)" },

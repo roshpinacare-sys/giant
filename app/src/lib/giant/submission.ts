@@ -79,13 +79,14 @@ export const SUBMISSION: SubmissionData = {
       kicker: "איך-זה-בנוי",
       paragraphs: [
         "כל-ריפו הוא ספר-באימפריה-עם-תפקיד-מוצהר, קבוצה-וראיה-לחיבורו — המפה-הקנונית: src/lib/giant/empire-map.ts. הממשק-החי הוא-הצגה-בלבד של-הגיט: ה-APIs קוראים-GitHub-raw-ישירות (raw.githubusercontent.com + PAT-שרתי), וכשל-מקור = שדה-כנה.",
-        "עמוד-התווך: Domain מחזיק-עוגני-האמת (dex/state · giants · honest-econ · truth); saos-dex הוא-מנוע-הבורסה-הדטרמיניסטי (ספר-הזמנות + AMM-30bps + ארנק-חיילים); steem היא-שרשרת-האמת-האמיתית (גריד real:true); Pulse דופק-כל-30-דק-על-Actions; Autonomy המוח-הריבוני על-דקות-ציבור; FleetHQ החדר-החי; giant הפנייה-החיה-של-הכל.",
+        "עמוד-התווך: Domain מחזיק-עוגני-האמת (dex/state · giants · honest-econ · truth); saos-dex הוא-מנוע-הבורסה-הדטרמיניסטי (ספר-הזמנות + AMM-30bps + ארנק-חיילים + markets-המנוע-הממוזג); steem היא-שרשרת-האמת-האמיתית (גריד real:true); Pulse דופק-כל-30-דק-על-Actions; Autonomy המוח-הריבוני על-דקות-ציבור; FleetHQ החדר-החי; giant הפנייה-החיה-של-הכל.",
       ],
       bullets: [
-        "ליבה-מחוברת (10→14 בגל-9): מזינים-ישירות-מודול-חי-בממשק",
-        "תשתית-הפעלה (8): saos-runtime · sovereign-runner-kit · GridWatch · ops-* · vault-home · lighthouse · beacon",
+        "ליבה-מחוברת (13): מזינים-ישירות-מודול-חי-בממשק — כולל-ארבעת-החוברים-בגל-9",
+        "תשתית-הפעלה (6): saos-runtime · sovereign-runner-kit · GridWatch · ops-* · vault-home",
         "מוצרים-ריבוניים (8): roshpina · Saosmartwallet · control-center · foundry · platform · jummper · TruthRail · negen",
-        "חזית-פומבית (1): roshpinacare-sys.github.io · ארכיון-ושחזור (7)",
+        "ארכיון-ושחזור (10, מגל-10): כולל saos-markets-הממוזגת-ושני-המגדלורים-הקפואים — מפנים-לקנון, לא-שערים",
+        "מיזוג-אמיתי-ראשון (גל-10): saos-markets→saos-dex/markets בקוד — לא-הצהרה (a34dc6f)",
       ],
     },
     {
@@ -190,10 +191,10 @@ export const SUBMISSION: SubmissionData = {
   ],
 
   roadmap: [
-    { when: "גל-9 (היום)", what: "ארבעת-הספרים-חוברו-חי (Adsmarket · Defi · saos-markets · saos-agents) + ההגשה-הסופית + שער-מסודר", state: "חי" },
-    { when: "פעימה-ראשונה", what: "אימות-הרצת-ה-cron-האוטונומית-הראשונה של trust-heartbeat (קומיט-ראשון של github-actions[bot])", state: "בתהליך" },
-    { when: "גל-10", what: "saos-markets→מיזוג-מלא-לתוך-saos-dex · rollup של Defi-למנוע · משטח-שיווק-חי ל-Adsmarket", state: "פתוח" },
-    { when: "שרדנות", what: "sovereign-lighthouse + runner-kit: הפעלה-במכשיר-שלנו — המכשיר-הוא-המנוע, GitHub-ספר-בלבד", state: "פתוח" },
-    { when: "חזית", what: "github.io: אינדקס-פומבי-מתעדכן-של-בריאות-הצי", state: "פתוח" },
+    { when: "גל-9", what: "ארבעת-הספרים-חוברו-חי + ההגשה-הסופית + שער-מסודר", state: "חי" },
+    { when: "פעימה-ראשונה", what: "trust-heartbeat-רץ-אוטונומית-על-Actions — קומיט-הבוט-הראשון a2cee19-נמדד-success", state: "חי" },
+    { when: "גל-10 (היום)", what: "המיזוג-האמיתי-הראשון בקוד: saos-markets→saos-dex/markets (a34dc6f) + הקפאת-הכפילויות (saos-markets ff3bb6b · beacon d8a6707 · lighthouse 0680f14) — 'דברים-שהם-מה-שכתוב-שיהיו'", state: "חי" },
+    { when: "גל-10-המשך", what: "rollup-Defi-למנוע · משטח-שיווק-חי ל-Adsmarket · דיוק-כל-דלת-למה-שהיא-טוענת (ראיה-על-כל-כפתור)", state: "פתוח" },
+    { when: "שרדנות", what: "runner-kit: הפעלה-במכשיר-שלנו — המכשיר-הוא-המנוע, GitHub-ספר-בלבד", state: "פתוח" },
   ],
 };
