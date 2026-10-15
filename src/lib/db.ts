@@ -11,4 +11,3 @@ export const db =
   })
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db
-// dex v1.1 reload marker

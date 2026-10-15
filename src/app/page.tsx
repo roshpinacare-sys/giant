@@ -1,1515 +1,416 @@
 "use client";
 
-// ערוץ הריבון — ממשק-קשר-ישיר בעלים↔ריבונות (Task 40-b)
-// חוק-הערוץ: אין טענות-סוכנים לבעלים; הריבונות היא המפעילה; הבעלים מדבר כאן ישירות עם הריבונות.
-
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useCallback, useEffect, useState } from "react";
+import { SubmissionView } from "@/components/giant/SubmissionView";
+import { MachineView } from "@/components/giant/MachineView";
+import { DexView } from "@/components/giant/DexView";
+import { GiantsView } from "@/components/giant/LeagueView";
+import { ChannelView } from "@/components/giant/ChannelView";
+import { WalletView } from "@/components/giant/WalletView";
+import { DeskView } from "@/components/giant/DeskView";
+import { LedgerView } from "@/components/giant/LedgerView";
+import { ProductsView } from "@/components/giant/ProductsView";
+import { PulseView } from "@/components/giant/PulseView";
+import { OfficeHqView } from "@/components/giant/OfficeHqView";
+import { EstateView } from "@/components/giant/EstateView";
+import { EmpireView } from "@/components/giant/EmpireView";
+import { TrustView } from "@/components/giant/TrustView";
+import { MarketingView } from "@/components/giant/MarketingView";
+import { TickerTape } from "@/components/giant/TickerTape";
+import { GiantPalette } from "@/components/giant/GiantPalette";
+import { DOORS, measureAllDoors, type DoorStatusMap } from "@/lib/giant/doors";
 import {
-  AlertCircle,
-  GitBranch,
-  KeyRound,
-  Landmark,
-  Loader2,
-  Lock,
-  LogOut,
-  Menu,
-  MessagesSquare,
-  RefreshCw,
-  ScrollText,
-  Send,
-  ShieldCheck,
-  Sparkles,
-  Stamp,
-  Terminal,
+  Activity, BookOpen, Building2, Command, Cog, Crown, GitBranch, LineChart, Megaphone, Network,
+  Package, Radio, ScrollText, ShieldCheck, Trophy, Wallet,
+  type LucideIcon,
 } from "lucide-react";
-import { Crown, GitMerge, Network, Orbit, TrendingUp } from "lucide-react";
-import { FinalView } from "@/components/giant/final";
-import { DexView } from "@/components/giant/dex/dex-view";
-import { EstateView } from "@/components/giant/estate";
-import { OpsView } from "@/components/giant/ops";
-import { MergeView } from "@/components/giant/merge";
-import { SkillsView } from "@/components/giant/skills";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { LedgerView } from "@/components/giant/views";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert";
-import { useToast } from "@/hooks/use-toast";
-import { ownerHeaders, clearOwnerToken, saveOwnerToken } from "@/lib/owner-client";
-import { cn } from "@/lib/utils";
+/* ═══ GIANT — הממשק-המאוחד של כל-הצי (T58 · מיזוג-5-הסוכנים · גל-6 עיצוב) ═══
+ * מה-מי:
+ *  · מכונת-האמת (anatomy-grade, חוקי wheresryan22/anatomy: האובייקט=ההסבר)
+ *  · הדקס + ליגת-הענקים (DefiLlama חי) — הכסף הוא הפנים (T55)
+ *  · הערוץ האחד + שער-headcorner + קול-הריבונות (T53/T56, מנדט-הבעלים: עושה-הכל)
+ *  · המשרד-החי התלת-מימדי + קונסולת-מפעיל (FleetHQ ∪ giant/app)
+ *  · דופק-אמת · האחוזה (מפקד-הגיט) · ארנק/שולחן/רישום/מוצרים (התאומים)
+ *  · Ctrl+K פלטת-פקודה על-כל-המערכת · סרט-מחירים חי (Kraken)
+ * גל-6 — חוקי-העיצוב של הענקים (מדוד מ-10 אתרי-רפרנס, docs/design/design-laws.md):
+ *  · supahero → hero-חי בדלת-הכניסה (הצהרה + CTA + מספרים-נמדדים)
+ *  · godly    → אמביינט: זוהר-ענבר + גרעין-סרט
+ *  · 60fps    → מעברי-תצוגה + reduced-motion
+ *  · designspells → מיקרו-אינטראקציות: הרמה/נשימה/קו-נשימה
+ *  · awwwards → focus-ring, היררכיה, משמעת-רשת
+ * משטח-אחד-לכל-יכולת · ערוץ-אחד · אפס-כפילויות · הכל נמדד-חי מהגיט. */
 
-interface SovereignMessage {
-  id: string;
-  from: string;
-  kind: string;
-  priority: string;
-  subject: string;
-  body: string;
-  amount: number | null;
-  currency: string | null;
-  status: string;
-  requestStatus: string | null;
-  relayProcessed: boolean;
-  meta: string | null;
-  createdAt: string;
-  repliedAt: string | null;
+type ViewId =
+  | "submission" | "machine" | "dex" | "league" | "channel" | "wallet" | "desk"
+  | "ledger" | "products" | "pulse" | "office" | "estate" | "empire" | "trust"
+  | "marketing";
+
+/* סדר-הפתיחה (T58; גל-9: ההגשה היא דלת-הפתיחה — מנדט-הבעלים "אני עוד לא רואה רבע"). */
+const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = [
+  { id: "submission", label: "ההגשה", he: "ההגשה-הסופית: הרעיון המאוחד · הארכיטקטורה · הכלכלה · הלקחים · הענקים", icon: Crown },
+  { id: "machine", label: "המכונה", he: "מכונת-האמת: הדקס כמכונה חיה (anatomy)", icon: Cog },
+  { id: "dex", label: "הדקס", he: "מרכז-הכובד: נרות · קופות · ווליום", icon: LineChart },
+  { id: "league", label: "ליגת-הענקים", he: "DefiLlama חי · השורה-שלנו בכנות", icon: Trophy },
+  { id: "channel", label: "הערוץ", he: "הדלת-הראשית: בעלים ↔ ריבונות", icon: Radio },
+  { id: "wallet", label: "הארנק", he: "חשבונות-אמת מהמנוע · יחידות-אנוש", icon: Wallet },
+  { id: "desk", label: "השולחן", he: "מנדט · equity · אסטרטגיות", icon: ScrollText },
+  { id: "ledger", label: "הרישום", he: "כל-ההחלטות · חיפוש", icon: BookOpen },
+  { id: "products", label: "המוצרים", he: "קטלוג-אמת · קבלות · מדידות", icon: Package },
+  { id: "marketing", label: "השיווק", he: "משטח-Adsmarket-החי: מה-שכתוב-בריפו = מה-שמוצג · אפס-סינתזה", icon: Megaphone },
+  { id: "pulse", label: "הדופק", he: "מערכת-האמת: שערים · זרמים · טביעות", icon: Activity },
+  { id: "office", label: "המשרד-החי", he: "החדר-התלת-מימדי · קונסולת-מפעיל", icon: Building2 },
+  { id: "estate", label: "האחוזה", he: "מפקד-הגיט: 39 ספרים · בריאות · פוטנציאל", icon: GitBranch },
+  { id: "empire", label: "החיבור", he: "מפת-האימפריה: כל-הספרים × תפקידם × דלתם — הפעלה-מלאה", icon: Network },
+  { id: "trust", label: "האמון", he: "מפת-האמון: סריקה-מדודה של כל-הספרים · אפס-סימולציות בהוכחה", icon: ShieldCheck },
+];
+
+interface TruthChip {
+  verdict: string | null;
+  ageMinutes: number | null;
 }
 
-interface Summary {
-  unreadForOwner: number;
-  pendingRequests: number;
-  pendingAmount: number;
-  pendingCurrency: string | null;
-  relayUnprocessed: number;
+/* מספרי-ה-hero — הכל נמדד-חי (supahero: hero שתופס = מספרים אמיתיים, לא מילים) */
+interface HeroStats {
+  repos: number | null;          // /api/giant/fleet → total
+  pushed24h: number | null;      // /api/giant/fleet → pushedLast24h
+  treasuryEverUsds: number | null; // /api/giant/dex → treasuryProfitEver (µ) ÷ 1000 — המצטבר, לא-היומי
 }
 
-interface GitLandInfo {
-  ok?: boolean;
-  commit?: string;
-  pushed?: boolean;
-  deduped?: boolean;
-  error?: string;
-}
+const HERO_EMPTY: HeroStats = { repos: null, pushed24h: null, treasuryEverUsds: null };
 
-interface GitInboxEntry {
-  at: string;
-  role: string;
-  source: string;
-  kind: string;
-  text: string;
-}
-
-interface GiantGitState {
-  ok: boolean;
-  error?: string;
-  head: string | null;
-  ledger: { count: number; lastLine: string | null };
-  registry: { rows: number; lastLine: string | null };
-  plans: { files: string[] };
-  giant: { files: string[] };
-  inbox: { count: number; last: GitInboxEntry[] };
-  commits: { recent: string[] };
-}
-
-const KIND_LABELS: Record<string, string> = {
-  BRIEFING: "תדריך",
-  FUNDING: "בקשת-מימון",
-  DECISION: "הכרעה",
-  REPORT: "דיווח",
-  REPLY: "תשובה",
-  CLAIM: "טענת-סוכן",
-};
-
-const heNum = new Intl.NumberFormat("he-IL");
-const heTime = new Intl.DateTimeFormat("he-IL", {
-  day: "2-digit",
-  month: "2-digit",
-  hour: "2-digit",
-  minute: "2-digit",
-});
-
-function fmtNum(n: number): string {
-  return heNum.format(n);
-}
-
-function fmtTime(iso: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "";
-  return heTime.format(d);
-}
-
-function parseMeta(meta: string | null): {
-  llmError?: boolean;
-  sources?: string[];
-  gitLand?: GitLandInfo;
-} {
-  if (!meta) return {};
-  try {
-    const parsed: unknown = JSON.parse(meta);
-    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
-      const rec = parsed as Record<string, unknown>;
-      return {
-        llmError: typeof rec.llmError === "boolean" ? rec.llmError : undefined,
-        sources: Array.isArray(rec.sources) ? rec.sources.map(String) : undefined,
-        gitLand:
-          rec.gitLand && typeof rec.gitLand === "object" && !Array.isArray(rec.gitLand)
-            ? (rec.gitLand as GitLandInfo)
-            : undefined,
-      };
-    }
-    return {};
-  } catch {
-    return {};
-  }
-}
-
-// מראה את חוקי-הסיכום של השרת — כדי-שהסטטיסטיקה-בלקוח תמיד תתלכד עם ה-API
-function computeSummary(messages: SovereignMessage[]): Summary {
-  const s: Summary = {
-    unreadForOwner: 0,
-    pendingRequests: 0,
-    pendingAmount: 0,
-    pendingCurrency: null,
-    relayUnprocessed: 0,
-  };
-  for (const m of messages) {
-    if (m.from === "SOVEREIGNTY" && m.status === "UNREAD") s.unreadForOwner += 1;
-    if (m.requestStatus === "PENDING") {
-      s.pendingRequests += 1;
-      if (typeof m.amount === "number") {
-        s.pendingAmount += m.amount;
-        if (!s.pendingCurrency && m.currency) s.pendingCurrency = m.currency;
-      }
-    }
-    if (m.from === "AGENT_RELAY" && !m.relayProcessed) s.relayUnprocessed += 1;
-  }
-  return s;
-}
-
-function mergeMessages(
-  prev: SovereignMessage[],
-  incoming: SovereignMessage[],
-): SovereignMessage[] {
-  const byId = new Map<string, SovereignMessage>();
-  for (const m of prev) byId.set(m.id, m);
-  for (const m of incoming) byId.set(m.id, m);
-  return Array.from(byId.values()).sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  );
-}
-
-function PriorityBadge({ priority }: { priority: string }) {
-  if (priority === "CRITICAL") {
-    return (
-      <Badge className="bg-red-600 text-white hover:bg-red-600">
-        דחוף
-      </Badge>
-    );
-  }
-  if (priority === "HIGH") {
-    return (
-      <Badge className="border border-amber-500/50 bg-amber-500/10 text-amber-700 hover:bg-amber-500/15 dark:text-amber-400">
-        עדיפות-גבוהה
-      </Badge>
-    );
-  }
-  return null;
-}
-
-function RequestStatusChip({ status }: { status: string | null }) {
-  if (status === "PENDING") {
-    return (
-      <Badge className="border border-amber-500/50 bg-amber-500/10 text-amber-700 hover:bg-amber-500/15 dark:text-amber-400">
-        ממתין-להכרעה
-      </Badge>
-    );
-  }
-  if (status === "APPROVED") {
-    return (
-      <Badge className="bg-emerald-600 text-white hover:bg-emerald-600">
-        אושר
-      </Badge>
-    );
-  }
-  if (status === "DECLINED") {
-    return (
-      <Badge className="bg-red-600 text-white hover:bg-red-600">
-        נדחה
-      </Badge>
-    );
-  }
-  return null;
-}
-
-function RelayProcessedChip({ processed }: { processed: boolean }) {
-  return processed ? (
-    <Badge variant="secondary">עובדה</Badge>
-  ) : (
-    <Badge className="border border-amber-500/50 bg-amber-500/10 text-amber-700 hover:bg-amber-500/15 dark:text-amber-400">
-      טרם-עובדה
-    </Badge>
-  );
-}
-
-const NAV_ITEMS = [
-  { id: "final", label: "ההגשה-הסופית", icon: Crown },
-  { id: "merge", label: "המיזוג-הגדול", icon: GitMerge },
-  { id: "ops", label: "מרכז-ההפעלה", icon: Orbit },
-  { id: "skills", label: "מרכז-היכולות", icon: Sparkles },
-  { id: "dex", label: "giant DEX", icon: TrendingUp },
-  { id: "estate", label: "האחוזה · מפת-אמת", icon: Network },
-  { id: "channel", label: "ערוץ הריבון", icon: MessagesSquare },
-  { id: "ledger", label: "לדג'ר-האמת", icon: ScrollText },
-] as const;
+const fmtInt = (n: number | null | undefined) =>
+  typeof n === "number" && Number.isFinite(n) ? n.toLocaleString("en-US") : "—";
 
 export default function Home() {
-  const { toast } = useToast();
-  const [messages, setMessages] = useState<SovereignMessage[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [refreshing, setRefreshing] = useState(false);
-  const [lastSync, setLastSync] = useState<Date | null>(null);
+  const [view, setView] = useState<ViewId>("submission");
+  const [clock, setClock] = useState("");
+  const [truth, setTruth] = useState<TruthChip | null>(null);
+  const [hero, setHero] = useState<HeroStats>(HERO_EMPTY);
+  /* גל-11: ראיה-מוצגת-על-כל-כפתור — מדידה-חיה-של-כל-דלת (ok · ms · זמן) */
+  const [doors, setDoors] = useState<DoorStatusMap>({});
 
-  const [draft, setDraft] = useState("");
-  const [sending, setSending] = useState(false);
-  const [deciding, setDeciding] = useState<string | null>(null); // `${id}:${decision}`
-  const [processingRelay, setProcessingRelay] = useState(false);
-
-  const [owner, setOwner] = useState<boolean | null>(null);
-  const [authOpen, setAuthOpen] = useState(false);
-  const [password, setPassword] = useState("");
-  const [authBusy, setAuthBusy] = useState(false);
-  const [gitState, setGitState] = useState<GiantGitState | null>(null);
-  const [gitLoading, setGitLoading] = useState(false);
-  const [landText, setLandText] = useState("");
-  const [landing, setLanding] = useState(false);
-  const [tab, setTab] = useState("inbox");
-  const [view, setView] = useState("final");
-  const [navOpen, setNavOpen] = useState(false);
-  const [paletteOpen, setPaletteOpen] = useState(false);
-
-  const listRef = useRef<HTMLDivElement | null>(null);
-
-  const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
-    requestAnimationFrame(() => {
-      listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior });
-    });
-  }, []);
-
-  // אסימון-בעלים (תמיכת-iframe): עוגייה + אסימון-נגזר בכותרת — עזר-מאוחד owner-client
-
-  const refresh = useCallback(async () => {
-    setRefreshing(true);
-    try {
-      const res = await fetch("/api/sovereign/messages", {
-        cache: "no-store",
-        headers: ownerHeaders(),
-      });
-      if (!res.ok) throw new Error("נכשלה-טעינת-הערוץ");
-      const data = (await res.json()) as { messages: SovereignMessage[] };
-      setMessages((prev) =>
-        prev.length === 0 ? data.messages : mergeMessages(prev, data.messages),
-      );
-      setError(null);
-      setLastSync(new Date());
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "שגיאת-רשת");
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
+  useEffect(() => {
+    const tick = () => setClock(new Date().toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
+    tick();
+    const iv = setInterval(tick, 1000);
+    return () => clearInterval(iv);
   }, []);
 
   useEffect(() => {
-    void refresh();
-  }, [refresh]);
-
-  useEffect(() => {
-    const t = setInterval(() => void refresh(), 20_000);
-    return () => clearInterval(t);
-  }, [refresh]);
-
-  const loadGit = useCallback(async () => {
-    setGitLoading(true);
-    try {
-      const res = await fetch("/api/git/state", { cache: "no-store" });
-      const data = (await res.json()) as GiantGitState;
-      setGitState(data);
-    } catch {
-      // דיווח-כנה בלבד: פאנל-הגיט יציג מצב-שגיאה
-    } finally {
-      setGitLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    void (async () => {
+    let alive = true;
+    const load = async () => {
       try {
-        const res = await fetch("/api/sovereign/auth", {
-          cache: "no-store",
-          headers: ownerHeaders(),
-        });
-        const data = (await res.json()) as { owner: boolean };
-        setOwner(data.owner);
-        if (data.owner) void refresh();
+        const res = await fetch("/api/giant/pulse", { cache: "no-store" });
+        const d = (await res.json()) as { truth?: { verdict: string | null } | null; truthMeta?: { ageMinutes: number | null } };
+        if (alive) setTruth({ verdict: d.truth?.verdict ?? null, ageMinutes: d.truthMeta?.ageMinutes ?? null });
       } catch {
-        setOwner(false);
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (owner) void refresh();
-  }, [owner, refresh]);
-
-  useEffect(() => {
-    if (tab === "git" && !gitState && !gitLoading) void loadGit();
-  }, [tab, gitState, gitLoading, loadGit]);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setPaletteOpen((v) => !v);
+        /* הדופק עצמו יציג-כשל-כנה */
       }
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    load();
+    const iv = setInterval(load, 60_000);
+    return () => {
+      alive = false;
+      clearInterval(iv);
+    };
   }, []);
 
-  function renderView() {
-    switch (view) {
-      case "final":
-        return <FinalView />;
-      case "merge":
-        return <MergeView onNavigate={setView} />;
-      case "ops":
-        return <OpsView onNavigate={setView} />;
-      case "skills":
-        return <SkillsView />;
-      case "dex":
-        return <DexView />;
-      case "estate":
-        return <EstateView />;
-      case "ledger":
-        return <LedgerView />;
-      default:
-        return <FinalView />;
-    }
-  }
-
+  /* מספרי-ה-hero: נמדדים-חי, כשל = "—" (אף-מספר-מזויף) */
   useEffect(() => {
-    if (!loading) scrollToBottom("auto");
-  }, [loading, scrollToBottom]);
-
-  const inbox = useMemo(
-    () => messages.filter((m) => m.from === "SOVEREIGNTY" || m.from === "OWNER"),
-    [messages],
-  );
-  const relay = useMemo(
-    () => messages.filter((m) => m.from === "AGENT_RELAY"),
-    [messages],
-  );
-  const summary = useMemo(() => computeSummary(messages), [messages]);
-
-  async function markRead(m: SovereignMessage) {
-    if (owner !== true) {
-      setAuthOpen(true);
-      return;
-    }
-    if (m.from !== "SOVEREIGNTY" || m.status !== "UNREAD") return;
-    setMessages((prev) =>
-      prev.map((x) => (x.id === m.id ? { ...x, status: "READ" } : x)),
-    );
-    try {
-      const res = await fetch(`/api/sovereign/messages/${m.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json", ...ownerHeaders() },
-        body: JSON.stringify({ action: "read" }),
-      });
-      if (!res.ok) throw new Error("נכשל-סימון-נקרא");
-    } catch {
-      void refresh();
-    }
-  }
-
-  async function decide(m: SovereignMessage, decision: "APPROVED" | "DECLINED") {
-    if (owner !== true) {
-      setAuthOpen(true);
-      return;
-    }
-    if (m.requestStatus !== "PENDING" || deciding) return;
-    setDeciding(`${m.id}:${decision}`);
-    try {
-      const res = await fetch(`/api/sovereign/messages/${m.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json", ...ownerHeaders() },
-        body: JSON.stringify({ action: "decide", requestStatus: decision }),
-      });
-      const data = (await res.json()) as {
-        message?: SovereignMessage;
-        ack?: SovereignMessage;
-        error?: string;
-      };
-      if (!res.ok || !data.message || !data.ack) {
-        throw new Error(data.error ?? "נכשל-רישום-ההכרעה");
-      }
-      setMessages((prev) => mergeMessages(prev, [data.message!, data.ack!]));
-      toast({
-        title: decision === "APPROVED" ? "ההכרעה נרשמה: אישור" : "ההכרעה נרשמה: דחייה",
-        description: "הריבונות פועלת בהתאם.",
-      });
-    } catch (err) {
-      toast({
-        title: "שגיאה",
-        description: err instanceof Error ? err.message : "שגיאת-רשת",
-        variant: "destructive",
-      });
-      void refresh();
-    } finally {
-      setDeciding(null);
-    }
-  }
-
-  async function send() {
-    if (owner !== true) {
-      setAuthOpen(true);
-      return;
-    }
-    const body = draft.trim();
-    if (!body || sending) return;
-    const tempId = `temp-${Date.now()}`;
-    setSending(true);
-    setMessages((prev) =>
-      mergeMessages(prev, [
-        {
-          id: tempId,
-          from: "OWNER",
-          kind: "REPLY",
-          priority: "NORMAL",
-          subject: "פניית בעלים",
-          body,
-          amount: null,
-          currency: null,
-          status: "UNREAD",
-          requestStatus: null,
-          relayProcessed: false,
-          meta: null,
-          createdAt: new Date().toISOString(),
-          repliedAt: null,
-        },
-      ]),
-    );
-    scrollToBottom();
-    try {
-      const res = await fetch("/api/sovereign/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...ownerHeaders() },
-        body: JSON.stringify({ from: "OWNER", body }),
-      });
-      const data = (await res.json()) as {
-        ownerMessage?: SovereignMessage;
-        reply?: SovereignMessage;
-        error?: string;
-      };
-      if (!res.ok || !data.ownerMessage || !data.reply) {
-        throw new Error(data.error ?? "נכשלה-שליחת-הפנייה");
-      }
-      setMessages((prev) =>
-        mergeMessages(
-          prev.filter((x) => x.id !== tempId),
-          [data.ownerMessage!, data.reply!],
-        ),
-      );
-      setDraft("");
-      scrollToBottom();
-      toast({ title: "הריבונות ענתה", description: "תשובתה מצורפת לתיבה." });
-    } catch (err) {
-      setMessages((prev) => prev.filter((x) => x.id !== tempId));
-      toast({
-        title: "השליחה נכשלה",
-        description: err instanceof Error ? err.message : "שגיאת-רשת",
-        variant: "destructive",
-      });
-    } finally {
-      setSending(false);
-    }
-  }
-
-  async function processRelay() {
-    if (owner !== true) {
-      setAuthOpen(true);
-      return;
-    }
-    if (processingRelay) return;
-    setProcessingRelay(true);
-    try {
-      const res = await fetch("/api/sovereign/relay/process", {
-        method: "POST",
-        headers: ownerHeaders(),
-      });
-      const data = (await res.json()) as { processed?: number; error?: string };
-      if (!res.ok || typeof data.processed !== "number") {
-        throw new Error(data.error ?? "נכשל-עיבוד-התור-הפנימי");
-      }
-      if (data.processed === 0) {
-        toast({ title: "אין טענות-טרם-עובדו", description: "התור הפנימי ריק." });
-      } else {
-        await refresh();
-        toast({
-          title: `עובדו ${data.processed} טענות`,
-          description: "עמדת הריבונות נוספה לתיבה.",
-        });
-      }
-    } catch (err) {
-      toast({
-        title: "שגיאה",
-        description: err instanceof Error ? err.message : "שגיאת-רשת",
-        variant: "destructive",
-      });
-    } finally {
-      setProcessingRelay(false);
-    }
-  }
-
-  async function login() {
-    if (authBusy || !password.trim()) return;
-    setAuthBusy(true);
-    try {
-      const res = await fetch("/api/sovereign/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
-      });
-      const data = (await res.json()) as {
-        owner: boolean;
-        token?: string;
-        error?: string;
-      };
-      if (!res.ok || !data.owner) throw new Error(data.error ?? "מפתח-לא-תקין");
+    let alive = true;
+    const load = async () => {
+      const next: HeroStats = { ...HERO_EMPTY };
       try {
-        if (data.token) saveOwnerToken(data.token);
-      } catch {
-        // סשן-זמני בלבד
-      }
-      setOwner(true);
-      setPassword("");
-      setAuthOpen(false);
-      toast({
-        title: "ניהול-הבעלים פעיל",
-        description: "שער-headcorner נפתח — הערוץ וההכרעות בידיך.",
-      });
-      void refresh();
-      void loadGit();
-    } catch (err) {
-      toast({
-        title: "כניסה נדחתה",
-        description: err instanceof Error ? err.message : "שגיאת-רשת",
-        variant: "destructive",
-      });
-    } finally {
-      setAuthBusy(false);
-    }
-  }
+        const r = await fetch("/api/giant/fleet", { cache: "no-store" });
+        const d = (await r.json()) as { total?: number | null; pushedLast24h?: number | null };
+        next.repos = typeof d.total === "number" ? d.total : null;
+        next.pushed24h = typeof d.pushedLast24h === "number" ? d.pushedLast24h : null;
+      } catch { /* כנות: "—" */ }
+      try {
+        const r = await fetch("/api/giant/dex", { cache: "no-store" });
+        const d = (await r.json()) as { treasuryProfitEver?: number | null };
+        /* יחידות-אמת (חוק-גל-42): 1 = 1000µ — מציגים את המצטבר ביחידות-אנוש */
+        next.treasuryEverUsds = typeof d.treasuryProfitEver === "number" ? d.treasuryProfitEver / 1000 : null;
+      } catch { /* כנות: "—" */ }
+      if (alive) setHero(next);
+    };
+    load();
+    const iv = setInterval(load, 120_000);
+    return () => {
+      alive = false;
+      clearInterval(iv);
+    };
+  }, []);
 
-  async function logout() {
-    clearOwnerToken();
-    try {
-      await fetch("/api/sovereign/auth", { method: "DELETE" });
-    } catch {
-      // יציאה-מקומית בכל-מקרה
-    }
-    setOwner(false);
-    toast({ title: "יצאת מניהול-הבעלים", description: "הפרונט הציבורי נשאר גלוי." });
-    void refresh();
-  }
+  /* ראיה-על-כל-כפתור (גל-11): מדידה-מקבילית של כל-דלת, כל-90ש׳ */
+  useEffect(() => {
+    let alive = true;
+    const load = async () => {
+      const m = await measureAllDoors();
+      if (alive) setDoors(m);
+    };
+    void load();
+    const iv = setInterval(load, 90_000);
+    return () => {
+      alive = false;
+      clearInterval(iv);
+    };
+  }, []);
 
-  async function landNow() {
-    const text = landText.trim();
-    if (!text || landing || owner !== true) return;
-    setLanding(true);
-    try {
-      const res = await fetch("/api/git/land", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...ownerHeaders() },
-        body: JSON.stringify({ text }),
-      });
-      const data = (await res.json()) as {
-        ok?: boolean;
-        commit?: string;
-        pushed?: boolean;
-        deduped?: boolean;
-        error?: string;
-      };
-      if (!res.ok || !data.ok) throw new Error(data.error ?? "הנחיתה-לגיט נכשלה");
-      setLandText("");
-      await loadGit();
-      toast({
-        title: data.deduped ? "ההוראה כבר נוחתה (מנע-כפילות)" : "ההוראה נחתה בגיט",
-        description: data.commit
-          ? `commit ${data.commit}${data.pushed ? " · pushed" : ""}`
-          : undefined,
-      });
-    } catch (err) {
-      toast({
-        title: "נחיתה נכשלה",
-        description: err instanceof Error ? err.message : "שגיאת-רשת",
-        variant: "destructive",
-      });
-    } finally {
-      setLanding(false);
-    }
-  }
+  /* פלטת-הפקודה: ניווט + פעולות (action:* מפורש לעמודה-הנכונה) */
+  const onPaletteNavigate = useCallback((id: string) => {
+    if (id === "action:refresh-pulse") setView("pulse");
+    else if (id === "action:gate.open" || id === "action:sovereign.ask") setView("channel");
+    else if (NAV.some((n) => n.id === id)) setView(id as ViewId);
+  }, []);
 
-  const stats: Array<{ label: string; value: string; tone: string }> = [
-    { label: "לא-נקראו", value: fmtNum(summary.unreadForOwner), tone: "text-emerald-600 dark:text-emerald-400" },
-    { label: "הכרעות-ממתינות", value: fmtNum(summary.pendingRequests), tone: "text-amber-600 dark:text-amber-400" },
-    {
-      label: "סכום-מבוקש",
-      value: `${fmtNum(summary.pendingAmount)}${summary.pendingCurrency ? ` ${summary.pendingCurrency}` : ""}`,
-      tone: "text-foreground",
-    },
-    { label: "טענות-טרם-עובדו", value: fmtNum(summary.relayUnprocessed), tone: "text-amber-600 dark:text-amber-400" },
+  const active = NAV.find((n) => n.id === view);
+  const truthGreen = truth?.verdict?.includes("GREEN") ?? false;
+
+  /* hero: מספרים-חיים + CTA (supahero) — נמדד-כנה, "—" = לא נמדד */
+  const heroChips: Array<{ k: string; v: string; live: boolean }> = [
+    { k: "truth-gate", v: truth?.verdict ?? "לא-נמדד", live: truthGreen },
+    { k: "רווחי-אוצר-מצטבר", v: hero.treasuryEverUsds != null ? `${fmtInt(hero.treasuryEverUsds)} USDS` : "—", live: hero.treasuryEverUsds != null },
+    { k: "ספרים-חיים", v: `${fmtInt(hero.repos)} ריפו · ${fmtInt(hero.pushed24h)} נדחפו/24ש׳`, live: hero.repos != null },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* כותרת */}
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-          <div className="flex min-w-0 items-start gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="mt-0.5 h-11 w-11 shrink-0 md:hidden"
-              onClick={() => setNavOpen(true)}
-              aria-label="פתיחת-תפריט"
+    <div className="relative flex min-h-dvh flex-col bg-zinc-950 text-zinc-100">
+      {/* ארט-דיירקשן אמביינט (godly) — שכבת-רקע בלבד */}
+      <div aria-hidden className="g-ambient" />
+
+      <GiantPalette onNavigate={onPaletteNavigate} />
+
+      {/* ═══ ראש-המערכת ═══ */}
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-zinc-950/90 backdrop-blur" dir="rtl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
+          <div className="flex items-center gap-3">
+            <span
+              className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-600 font-black text-zinc-950 shadow-[0_0_18px_-2px_rgba(245,158,11,0.55)]"
+              aria-hidden
             >
-              <Menu className="h-5 w-5" aria-hidden="true" />
-            </Button>
-            <div className="min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl font-black tracking-tight sm:text-2xl">
-                <span className="text-gradient-brand" dir="ltr">giant</span>
-                <span className="mx-1.5 font-light text-muted-foreground/50">·</span>
-                מערכת-האמת
+              G
+            </span>
+            <div>
+              <h1 className="text-base font-black leading-5">
+                GIANT <span className="text-amber-500">·</span> הממשק-המאוחד
               </h1>
-              <Badge className="gap-1 bg-emerald-600 text-white hover:bg-emerald-600">
-                <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
-                הערוץ-האחד · בעלים ↔ ריבונות
-              </Badge>
-            </div>
-            <p className="mt-1.5 hidden text-sm text-muted-foreground leading-relaxed md:block">
-              חוק-giant: ערוץ-אחד בלבד · אין טענות-סוכנים לבעלים · הריבונות היא המפעילה ומשיגה את המימון בעצמה · ניהול-הבעלים מאחורי מפתח-headcorner
-            </p>
+              <p className="hidden text-[10px] leading-3 text-zinc-500 sm:block">הפלטפורמה-האחת של הריבונות · מיזוג-כל-הצי · אפס-כפילויות</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0 ps-13 sm:ps-0">
-            <Button
-              variant="outline"
-              size="lg"
-              className="h-11"
-              onClick={() => void refresh()}
-              disabled={refreshing}
-              aria-label="רענון הערוץ"
-            >
-              <RefreshCw className={cn("h-4 w-4", refreshing && "animate-spin")} aria-hidden="true" />
-              רענון
-            </Button>
-            {owner === true ? (
-              <Button
-                variant="outline"
-                size="lg"
-                className="h-11 border-emerald-600/40 text-emerald-700 dark:text-emerald-400"
-                onClick={() => void logout()}
-                aria-label="יציאה מניהול-הבעלים"
+          <div className="flex items-center gap-2.5">
+            {truth && (
+              <span
+                className={`hidden items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold sm:flex ${truthGreen ? "border-emerald-500/25 bg-emerald-500/5 text-emerald-400" : "border-zinc-700 bg-zinc-900 text-zinc-400"}`}
+                title={truth.verdict ? `truth-gate: ${truth.verdict}` : "truth-gate לא נמדד"}
               >
-                <LogOut className="h-4 w-4" aria-hidden="true" />
-                בעלים · יציאה
-              </Button>
-            ) : (
-              <Button
-                size="lg"
-                className="h-11 bg-emerald-600 text-white hover:bg-emerald-700"
-                onClick={() => setAuthOpen(true)}
-                aria-label="כניסת-בעלים"
-              >
-                <KeyRound className="h-4 w-4" aria-hidden="true" />
-                כניסת-בעלים
-              </Button>
+                <ShieldCheck className="h-3 w-3" aria-hidden />
+                truth-gate: {truth.verdict ?? "לא-נמדד"}
+              </span>
             )}
+            <span className="flex items-center gap-1.5 rounded-full border border-amber-500/25 bg-amber-500/5 px-2.5 py-1 text-[10px] font-bold text-amber-400">
+              <span className="g-breathe h-1.5 w-1.5 rounded-full bg-amber-500" aria-hidden />
+              ריבונות חיה · 24/7
+            </span>
+            <button
+              onClick={() => window.dispatchEvent(new Event("giant-palette:open"))}
+              className="hidden min-h-[36px] items-center gap-1.5 rounded-lg border border-white/10 bg-zinc-900 px-2.5 text-[10px] font-bold text-zinc-400 transition hover:border-amber-600/40 hover:text-amber-400 sm:flex"
+              aria-label="פתח פלטת-פקודה (Ctrl+K)"
+              title="פלטת-פקודה · Ctrl+K"
+            >
+              <Command className="h-3 w-3" aria-hidden />
+              Ctrl+K
+            </button>
+            <span className="hidden font-mono text-xs text-zinc-500 md:inline" aria-label="שעון-המערכת">{clock}</span>
           </div>
         </div>
+        {/* סרט-המחירים החי (Kraken→Binance→CoinGecko) */}
+        <TickerTape />
       </header>
 
-      <div className="mx-auto flex w-full max-w-7xl flex-1 items-stretch">
-        <aside
-          aria-label="ניווט-ראשי"
-          className="sticky top-0 hidden h-fit w-60 shrink-0 flex-col gap-1 self-start px-3 py-6 md:flex"
-        >
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setView(item.id)}
-              aria-current={view === item.id ? "page" : undefined}
-              className={cn(
-                "group relative flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200",
-                view === item.id
-                  ? "bg-emerald-600/10 font-semibold text-emerald-700 dark:text-emerald-400"
-                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
-              )}
-            >
-              {view === item.id && (
-                <span
-                  className="absolute inset-y-2 start-0 w-0.5 rounded-full bg-gradient-to-b from-emerald-500 to-amber-400"
-                  aria-hidden="true"
-                />
-              )}
-              <item.icon className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
-              {item.label}
-            </button>
-          ))}
-          <div className="mt-2 border-t pt-2">
-            <button
-              onClick={() => setPaletteOpen(true)}
-              className="flex min-h-[44px] w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
-            >
-              <Terminal className="h-4 w-4" aria-hidden="true" />
-              פלטת-פקודות
-              <kbd className="ms-auto rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px]">⌘K</kbd>
-            </button>
+      {/* ═══ גוף: ניווט-צד (מחשב) + תוכן ═══ */}
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 gap-5 px-4 py-5" dir="rtl">
+        <nav aria-label="מודולי-המערכת" className="hidden w-60 shrink-0 flex-col gap-1 md:flex">
+          {NAV.map((n) => {
+            const Icon = n.icon;
+            const isActive = view === n.id;
+            const st = doors[n.id];
+            const stTitle = st?.at
+              ? `דלת-חיה · ${DOORS.find((d) => d.id === n.id)?.api} · ${st.ok ? "ok" : "כשל-כנה"} · ${st.ms}ms · ${new Date(st.at).toLocaleTimeString("he-IL")}`
+              : "טרם-נמדד — המדידה-הראשונה-בעוד-רגע";
+            return (
+              <button
+                key={n.id}
+                onClick={() => setView(n.id)}
+                aria-current={isActive ? "page" : undefined}
+                className={`group relative overflow-hidden rounded-xl border px-3.5 py-2.5 text-right transition-all duration-200 ${
+                  isActive
+                    ? "border-amber-600/45 bg-amber-500/[0.07] text-zinc-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_8px_24px_-12px_rgba(245,158,11,0.25)]"
+                    : "border-white/5 bg-zinc-900/40 text-zinc-400 hover:-translate-y-px hover:border-white/15 hover:bg-zinc-900/70 hover:text-zinc-200"
+                }`}
+              >
+                <span className="flex items-center gap-2.5">
+                  <Icon
+                    className={`h-4 w-4 shrink-0 transition-colors ${isActive ? "text-amber-500" : "text-zinc-500 group-hover:text-zinc-300"}`}
+                    aria-hidden
+                  />
+                  <span className="block text-sm font-bold leading-5">{n.label}</span>
+                  {/* ראיה-חיה-על-הכפתור: נקודת-מדידה (ירוק-נושם/אדום/אפור) */}
+                  <span
+                    title={stTitle}
+                    aria-label={`מצב-הדלת: ${stTitle}`}
+                    className={`mr-auto h-1.5 w-1.5 shrink-0 rounded-full ${
+                      st?.at == null ? "bg-zinc-600" : st.ok ? "g-breathe bg-emerald-400" : "bg-red-400"
+                    }`}
+                  />
+                </span>
+                <span className="mt-0.5 block pr-[26px] text-[10px] leading-4 text-zinc-500">{n.he}</span>
+                {isActive && <span className="g-active-line absolute bottom-0 right-0 left-0 h-px bg-gradient-to-l from-transparent via-amber-500/70 to-transparent" aria-hidden />}
+              </button>
+            );
+          })}
+          <div className="g-card mt-3 rounded-xl border border-white/5 bg-zinc-900/40 p-4 text-[10px] leading-5 text-zinc-500">
+            <b className="text-zinc-300">מפתח-מנהל (headcorner)</b> פותח-הכל: הכרעות · הוראות · קונסולת-מפעיל · קול-הריבונות.
+            מנדט-הבעלים: אין-חוקים-מעכבים — עושים-הכל, מדידה-קודמת-לכל-טענה.
           </div>
-        </aside>
+          <div className="rounded-xl border border-white/5 bg-zinc-900/40 p-4 text-[10px] leading-5 text-zinc-600">
+            זרמי-האמת: <span className="font-mono text-zinc-500">Domain/dex</span> · <span className="font-mono text-zinc-500">Pulse/sovereign-channel</span> · <span className="font-mono text-zinc-500">FleetHQ/office</span>
+            <br />
+            חוקי-העיצוב: 10 רפרנסים שנשמרו · <span className="text-zinc-500">5 נמדדו-חי</span> · <span className="text-zinc-500">5 לא-נמדדו (כנה)</span> — <span className="font-mono">docs/design/design-laws.md</span>
+          </div>
+        </nav>
 
-        <main className="min-w-0 flex-1 px-4 py-6">
-        <motion.div
-          key={view}
-          className="space-y-6"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.28, ease: "easeOut" }}
-        >
-        {view !== "channel" ? (
-          renderView()
-        ) : (
-        <>
-        {error ? (
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" aria-hidden="true" />
-            <AlertTitle>טעינת-הערוץ נכשלה</AlertTitle>
-            <AlertDescription className="flex flex-col items-start gap-3">
-              <span>{error} — הריבונות ממתינה לך כאן.</span>
-              <Button size="lg" className="h-11" onClick={() => void refresh()}>
-                נסה שוב
-              </Button>
-            </AlertDescription>
-          </Alert>
-        ) : loading ? (
-          <div className="space-y-6" aria-busy="true" aria-label="טוען את הערוץ">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {[0, 1, 2, 3].map((i) => (
-                <Skeleton key={i} className="h-24 rounded-lg" />
-              ))}
-            </div>
-            <Skeleton className="h-10 w-64 rounded-full" />
-            <div className="space-y-3">
-              <Skeleton className="h-28 rounded-lg" />
-              <Skeleton className="h-28 rounded-lg" />
-              <Skeleton className="h-28 rounded-lg" />
-            </div>
+        <main className="min-w-0 flex-1 pb-24 md:pb-4">
+          {/* מובייל: כותרת-מודול */}
+          <div className="mb-3 md:hidden" dir="rtl">
+            <p className="text-xs font-bold text-zinc-300">{active?.label}</p>
+            <p className="text-[10px] text-zinc-500">{active?.he}</p>
           </div>
-        ) : (
-          <>
-            {/* סטטיסטיקה */}
-            <section aria-label="מדדי-הערוץ">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {stats.map((s) => (
-                  <Card key={s.label} className="p-4">
-                    <div className="text-xs text-muted-foreground">{s.label}</div>
-                    <div className={cn("mt-1 text-2xl font-bold tabular-nums leading-tight", s.tone)}>
-                      {s.value}
-                    </div>
-                  </Card>
+
+          {/* hero-הכניסה (supahero): רק בדלת — הצהרה + CTA + מספרים-חיים */}
+          {view === "machine" && (
+            <section
+              aria-label="הצהרת-המערכת"
+              className="g-rise relative mb-4 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-l from-amber-950/25 via-zinc-950 to-zinc-950 p-5 sm:p-7"
+              dir="rtl"
+            >
+              <div aria-hidden className="pointer-events-none absolute -top-24 left-1/4 h-56 w-56 rounded-full bg-amber-500/10 blur-3xl" />
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-amber-500/90">
+                SAOS · מערכת-הפעלה ריבונית · חיה 24/7
+              </p>
+              <h2 className="mt-2 text-2xl font-black leading-tight tracking-tight sm:text-4xl">
+                מערכת-<span className="text-amber-500">האמת</span> שלי
+              </h2>
+              <p className="mt-2 max-w-xl text-xs leading-5 text-zinc-400 sm:text-sm">
+                ממשק-אחד לכל-הצי: המכונה מסבירה את הדקס, הדקס סוחר, הערוץ מחבר את הבעלים,
+                המשרד חי — וכל-מספר נמדד-חי מהגיט. אפס-סימולציות, אפס-כפילויות.
+              </p>
+              <div className="mt-4 flex flex-wrap items-center gap-2.5">
+                <button
+                  onClick={() => setView("channel")}
+                  className="group flex min-h-[44px] items-center gap-2 rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-black text-zinc-950 shadow-[0_10px_30px_-10px_rgba(245,158,11,0.6)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-500"
+                >
+                  <ShieldCheck className="h-4 w-4 transition-transform group-hover:scale-110" aria-hidden />
+                  שער-headcorner — פתח-הכל
+                </button>
+                <button
+                  onClick={() => setView("dex")}
+                  className="flex min-h-[44px] items-center gap-2 rounded-xl border border-white/10 bg-zinc-900/80 px-4 py-2.5 text-sm font-bold text-zinc-200 transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-600/40 hover:text-amber-400"
+                >
+                  <LineChart className="h-4 w-4" aria-hidden />
+                  הדקס-החי
+                </button>
+              </div>
+              {/* מספרי-ה-hero: נמדדים-חיים (כשל = "—", אף-מספר-מזויף) */}
+              <div className="mt-4 flex flex-wrap gap-2">
+                {heroChips.map((c) => (
+                  <span
+                    key={c.k}
+                    className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[11px] font-bold ${
+                      c.live ? "border-emerald-500/25 bg-emerald-500/5 text-emerald-300" : "border-zinc-700/60 bg-zinc-900/70 text-zinc-400"
+                    }`}
+                    title={`${c.k} — נמדד-חי מה-API (כשל מוצג "—")`}
+                  >
+                    <span className={`h-1.5 w-1.5 rounded-full ${c.live ? "g-breathe bg-emerald-400" : "bg-zinc-500"}`} aria-hidden />
+                    {c.k}: <span className="font-mono">{c.v}</span>
+                  </span>
                 ))}
               </div>
             </section>
+          )}
 
-            <Tabs value={tab} onValueChange={setTab}>
-              <TabsList className="h-11">
-                <TabsTrigger value="inbox" className="min-h-[44px]">
-                  תיבת הריבון
-                  {summary.unreadForOwner > 0 && (
-                    <Badge className="ms-2 h-5 min-w-5 px-1 bg-emerald-600 text-white hover:bg-emerald-600 tabular-nums">
-                      {summary.unreadForOwner}
-                    </Badge>
-                  )}
-                </TabsTrigger>
-                <TabsTrigger value="relay" className="gap-2 min-h-[44px]">
-                  טענות סוכנים · פנימי
-                  <Badge
-                    variant="outline"
-                    className="border-muted-foreground/40 px-1.5 text-[10px] text-muted-foreground"
-                  >
-                    לא-לבעלים ישירות
-                  </Badge>
-                </TabsTrigger>
-                <TabsTrigger value="git" className="gap-2 min-h-[44px]">
-                  מנוע-הגיט · חי
-                  <Badge
-                    variant="outline"
-                    className="border-muted-foreground/40 px-1.5 text-[10px] text-muted-foreground"
-                  >
-                    גיט→מוצר
-                  </Badge>
-                </TabsTrigger>
-              </TabsList>
-
-              {/* תיבת הריבון */}
-              <TabsContent value="inbox" className="mt-4 space-y-4">
-                <Card>
-                  <CardContent className="p-4">
-                    <div
-                      ref={listRef}
-                      className="sovereign-scroll max-h-[60vh] overflow-y-auto pe-1"
-                      aria-label="הודעות הערוץ"
-                    >
-                      {inbox.length === 0 ? (
-                        <p className="py-10 text-center text-sm text-muted-foreground">
-                          התיבה ריקה — כתוב לריבונות למטה.
-                        </p>
-                      ) : (
-                        inbox.map((m) => (
-                          <motion.div
-                            key={m.id}
-                            initial={{ opacity: 0, y: 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.25, ease: "easeOut" }}
-                          >
-                            <div
-                              role="button"
-                              tabIndex={0}
-                              onClick={() => void markRead(m)}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                  e.preventDefault();
-                                  void markRead(m);
-                                }
-                              }}
-                              className={cn(
-                                "mb-3 rounded-lg border p-4 cursor-pointer transition-colors outline-none focus-visible:ring-2 focus-visible:ring-emerald-600/50",
-                                m.from === "SOVEREIGNTY"
-                                  ? "border-s-4 border-s-emerald-600 hover:bg-emerald-500/5"
-                                  : "bg-muted/40 hover:bg-muted/60",
-                              )}
-                              aria-label={`הודעה: ${m.subject}`}
-                            >
-                              <div className="flex items-center gap-2 flex-wrap">
-                                {m.from === "SOVEREIGNTY" ? (
-                                  <Badge className="bg-emerald-600 text-white hover:bg-emerald-600">
-                                    הריבונות
-                                  </Badge>
-                                ) : (
-                                  <Badge variant="secondary">אתה</Badge>
-                                )}
-                                <Badge variant="outline">
-                                  {KIND_LABELS[m.kind] ?? m.kind}
-                                </Badge>
-                                <PriorityBadge priority={m.priority} />
-                                {m.from === "SOVEREIGNTY" && m.status === "UNREAD" && (
-                                  <span
-                                    className="sovereign-unread-dot h-2 w-2 rounded-full bg-emerald-600"
-                                    aria-label="לא-נקרא"
-                                  />
-                                )}
-                                <span className="ms-auto text-xs text-muted-foreground tabular-nums">
-                                  {fmtTime(m.createdAt)}
-                                </span>
-                              </div>
-                              <h3 className="mt-2 font-semibold leading-snug">{m.subject}</h3>
-                              <p className="mt-1 text-sm leading-relaxed whitespace-pre-wrap">
-                                {m.body}
-                              </p>
-                              {parseMeta(m.meta).llmError && (
-                                <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
-                                  מצב-מילוט: נוסח-שמירה (מנוע-הניסוח לא זמין בעת הניסוח)
-                                </p>
-                              )}
-                              {parseMeta(m.meta).gitLand?.commit ? (
-                                <p className="mt-2 text-xs text-muted-foreground">
-                                  נחיתה-לגיט: commit{" "}
-                                  <code className="rounded bg-muted px-1.5 py-0.5 font-mono">
-                                    {parseMeta(m.meta).gitLand?.commit}
-                                  </code>
-                                  {parseMeta(m.meta).gitLand?.pushed
-                                    ? " · pushed"
-                                    : " · מדווח-כנה בלבד"}
-                                </p>
-                              ) : parseMeta(m.meta).gitLand?.ok === false ? (
-                                <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
-                                  נחיתת-הגיט נכשלה — מדווח-כנה, אין-זיוף.
-                                </p>
-                              ) : null}
-                              {(m.kind === "FUNDING" || m.kind === "DECISION") && (
-                                <div className="mt-3 border-t pt-3 flex items-center justify-between gap-3 flex-wrap">
-                                  <div className="flex items-center gap-3 flex-wrap">
-                                    {typeof m.amount === "number" && (
-                                      <div className="text-xl font-bold tabular-nums">
-                                        {fmtNum(m.amount)}{" "}
-                                        <span className="text-sm font-normal text-muted-foreground">
-                                          {m.currency}
-                                        </span>
-                                      </div>
-                                    )}
-                                    <RequestStatusChip status={m.requestStatus} />
-                                  </div>
-                                  {m.requestStatus === "PENDING" && (
-                                    <div className="flex items-center gap-2">
-                                      <Button
-                                        size="lg"
-                                        className="h-11 bg-emerald-600 text-white hover:bg-emerald-700"
-                                        disabled={deciding !== null}
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          void decide(m, "APPROVED");
-                                        }}
-                                      >
-                                        {deciding === `${m.id}:APPROVED` && (
-                                          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                                        )}
-                                        אישור
-                                      </Button>
-                                      <Button
-                                        size="lg"
-                                        variant="outline"
-                                        className="h-11"
-                                        disabled={deciding !== null}
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          void decide(m, "DECLINED");
-                                        }}
-                                      >
-                                        {deciding === `${m.id}:DECLINED` && (
-                                          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                                        )}
-                                        דחייה
-                                      </Button>
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          </motion.div>
-                        ))
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* מחברת-פניות */}
-                <Card>
-                  <CardContent className="p-4 space-y-3">
-                    <Textarea
-                      value={draft}
-                      onChange={(e) => setDraft(e.target.value)}
-                      onKeyDown={(e) => {
-                        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-                          e.preventDefault();
-                          void send();
-                        }
-                      }}
-                      placeholder="כתוב לריבונות…"
-                      aria-label="כתיבת פנייה לריבונות"
-                      className="min-h-[96px] resize-y text-sm"
-                      dir="rtl"
-                    />
-                    <div className="flex items-center justify-between gap-3 flex-wrap">
-                      <div
-                        className="flex items-center gap-2 text-sm text-emerald-700 dark:text-emerald-400"
-                        aria-live="polite"
-                      >
-                        {sending ? (
-                          <>
-                            <span>הריבונות מנסחת תשובה</span>
-                            <span className="sovereign-dot font-bold">·</span>
-                            <span className="sovereign-dot font-bold">·</span>
-                            <span className="sovereign-dot font-bold">·</span>
-                          </>
-                        ) : owner !== true ? (
-                          <span className="text-muted-foreground">
-                            ניהול-הבעלים דורש מפתח-headcorner — שליחה תפתח את שער-הבעלים
-                          </span>
-                        ) : null}
-                      </div>
-                      <Button
-                        size="lg"
-                        className="h-11 min-w-40 bg-emerald-600 text-white hover:bg-emerald-700"
-                        onClick={() => void send()}
-                        disabled={sending || draft.trim().length === 0}
-                        aria-label="שלח לריבונות"
-                      >
-                        {sending ? (
-                          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                        ) : (
-                          <Send className="h-4 w-4" aria-hidden="true" />
-                        )}
-                        שלח לריבונות
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* טענות-סוכנים · פנימי */}
-              <TabsContent value="relay" className="mt-4 space-y-4">
-                {owner !== true && (
-                  <Alert>
-                    <Lock className="h-4 w-4" aria-hidden="true" />
-                    <AlertTitle>חסוי-בק · חוק-הפרונט/הבק</AlertTitle>
-                    <AlertDescription className="flex flex-col items-start gap-3">
-                      <span>
-                        התור-הפנימי של הריבונות גלוי לבעלים בלבד — מאחורי מפתח-headcorner.
-                      </span>
-                      <Button
-                        size="lg"
-                        className="h-11 bg-emerald-600 text-white hover:bg-emerald-700"
-                        onClick={() => setAuthOpen(true)}
-                      >
-                        <KeyRound className="h-4 w-4" aria-hidden="true" />
-                        כניסת-בעלים
-                      </Button>
-                    </AlertDescription>
-                  </Alert>
-                )}
-                <Alert className="border-amber-500/40">
-                  <Stamp className="h-4 w-4" aria-hidden="true" />
-                  <AlertTitle>חוק-התור הפנימי</AlertTitle>
-                  <AlertDescription>
-                    טענות סוכנים מגיעות לריבונות בלבד — אף טענה אינה מגיעה לבעלים ישירות.
-                    הריבונות בוחנת את התור ומעלה מכאן עמדה אחת מרוכזת לתיבת הריבון.
-                  </AlertDescription>
-                </Alert>
-
-                <div className="flex justify-start">
-                  <Button
-                    size="lg"
-                    className="h-11 bg-emerald-600 text-white hover:bg-emerald-700"
-                    onClick={() => void processRelay()}
-                    disabled={processingRelay || owner !== true}
-                  >
-                    {processingRelay ? (
-                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                    ) : null}
-                    עבד טענות → עמדת ריבונות
-                  </Button>
-                </div>
-
-                {relay.length === 0 ? (
-                  <Card className="p-4">
-                    <p className="py-8 text-center text-sm text-muted-foreground">
-                      אין טענות-סוכנים בתור הפנימי.
-                    </p>
-                  </Card>
-                ) : (
-                  relay.map((c) => (
-                    <motion.div
-                      key={c.id}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.25, ease: "easeOut" }}
-                    >
-                      <div className="mb-3 rounded-lg border bg-muted/30 p-4">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <Badge variant="outline">{KIND_LABELS.CLAIM}</Badge>
-                          <RelayProcessedChip processed={c.relayProcessed} />
-                          <span className="ms-auto text-xs text-muted-foreground tabular-nums">
-                            {fmtTime(c.createdAt)}
-                          </span>
-                        </div>
-                        <h3 className="mt-2 font-medium text-sm leading-snug">
-                          {c.subject.replace(/\(trace\s+([a-f0-9]+)\)/i, "")}
-                          {/\(trace\s+([a-f0-9]+)\)/i.test(c.subject) && (
-                            <code className="ms-1 rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
-                              trace {(/\(trace\s+([a-f0-9]+)\)/i.exec(c.subject) ?? [])[1]}
-                            </code>
-                          )}
-                        </h3>
-                        <p className="mt-1 text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                          {c.body}
-                        </p>
-                      </div>
-                    </motion.div>
-                  ))
-                )}
-              </TabsContent>
-
-              {/* מנוע-הגיט-החי (גיט→מוצר) */}
-              <TabsContent value="git" className="mt-4 space-y-4">
-                <div className="flex items-center justify-between gap-3 flex-wrap">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <GitBranch className="h-4 w-4" aria-hidden="true" />
-                    כל-מה-שיש-בגיט הופך כאן מדפים-מפוזרים למערכת-חיה · Sandbox
-                    {gitState?.head ? (
-                      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-                        {gitState.head}
-                      </code>
-                    ) : null}
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="h-11"
-                    onClick={() => void loadGit()}
-                    disabled={gitLoading}
-                    aria-label="רענון מנוע-הגיט"
-                  >
-                    <RefreshCw
-                      className={cn("h-4 w-4", gitLoading && "animate-spin")}
-                      aria-hidden="true"
-                    />
-                    רענון-מצב
-                  </Button>
-                </div>
-
-                {!gitState ? (
-                  <div className="space-y-3" aria-busy="true">
-                    <Skeleton className="h-24 rounded-lg" />
-                    <Skeleton className="h-24 rounded-lg" />
-                  </div>
-                ) : !gitState.ok ? (
-                  <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" aria-hidden="true" />
-                    <AlertTitle>קריאת-הגיט נכשלה</AlertTitle>
-                    <AlertDescription>{gitState.error ?? "שגיאה-לא-ידועה"}</AlertDescription>
-                  </Alert>
-                ) : (
-                  <>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      <Card className="p-4">
-                        <div className="text-xs text-muted-foreground">לדג'ר · D1</div>
-                        <div className="mt-1 text-2xl font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
-                          {fmtNum(gitState.ledger.count)}
-                        </div>
-                      </Card>
-                      <Card className="p-4">
-                        <div className="text-xs text-muted-foreground">סוכנים-רשומים</div>
-                        <div className="mt-1 text-2xl font-bold tabular-nums">
-                          {fmtNum(gitState.registry.rows)}
-                        </div>
-                      </Card>
-                      <Card className="p-4">
-                        <div className="text-xs text-muted-foreground">תוכניות</div>
-                        <div className="mt-1 text-2xl font-bold tabular-nums">
-                          {fmtNum(gitState.plans.files.length)}
-                        </div>
-                      </Card>
-                      <Card className="p-4">
-                        <div className="text-xs text-muted-foreground">תיבת-הוראות</div>
-                        <div className="mt-1 text-2xl font-bold tabular-nums">
-                          {fmtNum(gitState.inbox.count)}/60
-                        </div>
-                      </Card>
-                    </div>
-
-                    <Card>
-                      <CardContent className="p-4 space-y-2">
-                        <div className="flex items-center gap-2">
-                          <Landmark className="h-4 w-4" aria-hidden="true" />
-                          <h3 className="font-semibold text-sm">לדג'ר-האמת · שורה-אחרונה</h3>
-                        </div>
-                        <p className="text-xs text-muted-foreground leading-relaxed">
-                          {gitState.ledger.lastLine?.slice(0, 420) ?? "—"}
-                        </p>
-                        <div className="flex items-center gap-2 pt-1">
-                          <ShieldCheck className="h-4 w-4" aria-hidden="true" />
-                          <h3 className="font-semibold text-sm">רישום-הצוות · אחרון</h3>
-                        </div>
-                        <p className="text-xs text-muted-foreground leading-relaxed">
-                          {gitState.registry.lastLine?.slice(0, 300) ?? "—"}
-                        </p>
-                        <div className="pt-1 flex items-center gap-2 flex-wrap">
-                          <h3 className="font-semibold text-sm">תוכניות:</h3>
-                          {gitState.plans.files.slice(0, 5).map((f) => (
-                            <code
-                              key={f}
-                              className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
-                            >
-                              {f}
-                            </code>
-                          ))}
-                          {gitState.giant.files.map((f) => (
-                            <code
-                              key={f}
-                              className="rounded bg-emerald-600/10 px-1.5 py-0.5 font-mono text-[10px] text-emerald-700 dark:text-emerald-400"
-                            >
-                              giant/{f}
-                            </code>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    <Card>
-                      <CardContent className="p-4 space-y-2">
-                        <h3 className="font-semibold text-sm">
-                          תיבת-ההוראות בגיט · {fmtNum(gitState.inbox.count)} שורות (bounded 60)
-                          · קו-הבליעה-הקנוני
-                        </h3>
-                        {gitState.inbox.last.length === 0 ? (
-                          <p className="text-xs text-muted-foreground">ריקה.</p>
-                        ) : (
-                          gitState.inbox.last.map((e, i) => (
-                            <div
-                              key={`${e.at}-${i}`}
-                              className="rounded border bg-muted/30 p-2 text-xs"
-                            >
-                              <div className="flex items-center gap-2 flex-wrap text-[10px] text-muted-foreground">
-                                <Badge variant="outline" className="px-1 py-0 text-[10px]">
-                                  {e.role}
-                                </Badge>
-                                <span>{e.source}</span>
-                                <span className="tabular-nums">{e.at}</span>
-                              </div>
-                              <p className="mt-1 leading-relaxed">{e.text}</p>
-                            </div>
-                          ))
-                        )}
-                        <div className="pt-1">
-                          <h3 className="font-semibold text-sm mb-1">commits אחרונים</h3>
-                          <ul className="space-y-0.5">
-                            {gitState.commits.recent.map((c) => (
-                              <li
-                                key={c}
-                                className="font-mono text-[11px] text-muted-foreground truncate"
-                              >
-                                {c}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    <Card>
-                      <CardContent className="p-4 space-y-3">
-                        <h3 className="font-semibold text-sm flex items-center gap-2">
-                          <GitBranch className="h-4 w-4" aria-hidden="true" />
-                          נחיתת-הוראה לגיט
-                          {owner !== true && (
-                            <Badge variant="outline" className="text-[10px]">
-                              לבעלים בלבד
-                            </Badge>
-                          )}
-                        </h3>
-                        {owner !== true ? (
-                          <Alert>
-                            <Lock className="h-4 w-4" aria-hidden="true" />
-                            <AlertTitle>שער-הבעלים</AlertTitle>
-                            <AlertDescription>
-                              ההוראה תנחת ל-inbox.jsonl עם commit ו-pushed אמת — לאחר כניסה עם
-                              מפתח-headcorner.
-                            </AlertDescription>
-                          </Alert>
-                        ) : (
-                          <>
-                            <Textarea
-                              value={landText}
-                              onChange={(e) => setLandText(e.target.value)}
-                              placeholder="הוראה לצי / לריבונות — תנחת לקו-הבליעה הקנוני בגיט…"
-                              aria-label="נוסח-הוראה"
-                              className="min-h-[80px] resize-y text-sm"
-                              dir="rtl"
-                            />
-                            <Button
-                              size="lg"
-                              className="h-11 bg-emerald-600 text-white hover:bg-emerald-700"
-                              onClick={() => void landNow()}
-                              disabled={landing || landText.trim().length === 0}
-                            >
-                              {landing ? (
-                                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                              ) : (
-                                <GitBranch className="h-4 w-4" aria-hidden="true" />
-                              )}
-                              נחת-הוראה לגיט
-                            </Button>
-                          </>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </>
-                )}
-              </TabsContent>
-            </Tabs>
-          </>
-        )}
-        </>
-        )}
-        </motion.div>
-      </main>
+          {/* מעבר-תצוגה (60fps): כניסה-חלקה-פעם-אחת לכל-מודול */}
+          <div key={view} className="g-view-in">
+            {view === "submission" && <SubmissionView />}
+            {view === "machine" && <MachineView />}
+            {view === "dex" && <DexView />}
+            {view === "league" && <GiantsView />}
+            {view === "channel" && <ChannelView />}
+            {view === "wallet" && <WalletView />}
+            {view === "desk" && <DeskView />}
+            {view === "ledger" && <LedgerView />}
+            {view === "products" && <ProductsView />}
+            {view === "pulse" && <PulseView />}
+            {view === "office" && <OfficeHqView />}
+            {view === "estate" && <EstateView />}
+            {view === "empire" && <EmpireView onNavigate={(id) => { if (NAV.some((n) => n.id === id)) setView(id as ViewId); }} />}
+            {view === "trust" && <TrustView />}
+            {view === "marketing" && <MarketingView />}
+          </div>
+        </main>
       </div>
 
-      <footer className="border-t mt-auto pb-[env(safe-area-inset-bottom)]">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-1 px-4 py-3 text-xs text-muted-foreground sm:flex-row">
-          <span>giant · הערוץ-האחד · הריבונות היא המפעילה · אין טענות-סוכנים לבעלים · ⌘K-לפלטת-פקודות</span>
-          <span className="tabular-nums">
-            {lastSync ? `סנכרון אחרון: ${heTime.format(lastSync)}` : "טוען…"}
-          </span>
+      {/* ═══ ניווט-תחתון (נייד): 4-ראשונים + פלטת-פקודה ═══ */}
+      <nav
+        aria-label="מודולי-המערכת (נייד)"
+        className="fixed inset-x-0 bottom-0 z-40 flex border-t border-white/10 bg-zinc-950/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
+        dir="rtl"
+      >
+        {NAV.slice(0, 4).map((n) => {
+          const Icon = n.icon;
+          const isActive = view === n.id;
+          const st = doors[n.id];
+          return (
+            <button
+              key={n.id}
+              onClick={() => setView(n.id)}
+              aria-current={isActive ? "page" : undefined}
+              className={`relative flex min-h-[52px] flex-1 flex-col items-center justify-center gap-0.5 py-2 text-center text-[10px] font-bold transition ${isActive ? "text-amber-500" : "text-zinc-500"}`}
+            >
+              <Icon className="h-4 w-4" aria-hidden />
+              {n.label}
+              {/* ראיה-חיה-על-הכפתור (גל-11) */}
+              <span
+                aria-label={`מצב-הדלת: ${st?.at ? (st.ok ? "ok" : "כשל-כנה") : "טרם-נמדד"}`}
+                title={st?.at ? `${st.ok ? "ok" : "כשל-כנה"} · ${st.ms}ms` : "טרם-נמדד"}
+                className={`absolute right-2.5 top-2 h-1.5 w-1.5 rounded-full ${st?.at == null ? "bg-zinc-600" : st.ok ? "g-breathe bg-emerald-400" : "bg-red-400"}`}
+              />
+            </button>
+          );
+        })}
+        <button
+          onClick={() => window.dispatchEvent(new Event("giant-palette:open"))}
+          aria-label="כל-המודולים (פלטת-פקודה)"
+          className={`flex min-h-[52px] flex-1 flex-col items-center justify-center gap-0.5 py-2 text-center text-[10px] font-bold transition ${
+            view !== "machine" && view !== "dex" && view !== "league" && view !== "channel" ? "text-amber-500" : "text-zinc-500"
+          }`}
+        >
+          <Package className="h-4 w-4" aria-hidden />
+          עוד
+        </button>
+      </nav>
+
+      {/* ═══ תחתית-המערכת (דביקה) ═══ */}
+      <footer className="relative z-10 mt-auto hidden h-9 shrink-0 items-center justify-between border-t border-white/10 bg-zinc-950 px-4 text-[11px] text-zinc-500 md:flex" dir="rtl">
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-zinc-300">מפקדת הצי</span>
+          <span className="hidden sm:inline">· הריבונות מפעילה-הכל; הגיט הוא שכבת-הקיום; המערכת מתפתחת לנצח</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-[10px] text-zinc-600">SAOS-SOVEREIGN-CHANNEL/1 · R360 · R74 · T58-merge · גל-11-ראיה-על-כל-כפתור</span>
         </div>
       </footer>
-
-      {/* שער-הבעלים (headcorner) */}
-      <Dialog open={authOpen} onOpenChange={setAuthOpen}>
-        <DialogContent className="sm:max-w-md" dir="rtl">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <KeyRound className="h-4 w-4" aria-hidden="true" />
-              שער-הבעלים · מפתח-headcorner
-            </DialogTitle>
-            <DialogDescription>
-              ניהול-הבעלים (ערוץ, הכרעות, נחיתות-גיט) מאובטח מאחורי המפתח.
-              המפתח אינו נרשם ואינו נשלח לשום מקום נוסף.
-              <span className="mt-1 block text-[11px] leading-relaxed text-zinc-500">
-                סבילות-העתקה: רווחים, שורות, מרכאות ותווים-נסתרים-מהצ'אט נסלקים
-                אוטומטית · ההקלדה אינה רגישה לאותיות-גדולות · המקלדת-חייבת-אנגלית
-              </span>
-            </DialogDescription>
-          </DialogHeader>
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                void login();
-              }
-            }}
-            placeholder="מפתח-הבעלים"
-            aria-label="מפתח-הבעלים"
-            dir="ltr"
-            autoComplete="current-password"
-          />
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setAuthOpen(false)} disabled={authBusy}>
-              ביטול
-            </Button>
-            <Button
-              className="bg-emerald-600 text-white hover:bg-emerald-700"
-              onClick={() => void login()}
-              disabled={authBusy || password.length === 0}
-            >
-              {authBusy ? (
-                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-              ) : (
-                <KeyRound className="h-4 w-4" aria-hidden="true" />
-              )}
-              כניסה
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* ניווט-מובייל */}
-      <Sheet open={navOpen} onOpenChange={setNavOpen}>
-        <SheetContent side="right" className="w-72" dir="rtl">
-          <SheetHeader>
-            <SheetTitle>ניווט · giant</SheetTitle>
-            <SheetDescription>כל-המערכת ביד-אחת</SheetDescription>
-          </SheetHeader>
-          <div className="flex flex-col gap-1 px-2 pb-6">
-            {NAV_ITEMS.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setView(item.id);
-                  setNavOpen(false);
-                }}
-                aria-current={view === item.id ? "page" : undefined}
-                className={cn(
-                  "relative flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200",
-                  view === item.id
-                    ? "bg-emerald-600/10 font-semibold text-emerald-700 dark:text-emerald-400"
-                    : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
-                )}
-              >
-                {view === item.id && (
-                  <span
-                    className="absolute inset-y-2 start-0 w-0.5 rounded-full bg-gradient-to-b from-emerald-500 to-amber-400"
-                    aria-hidden="true"
-                  />
-                )}
-                <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
-                {item.label}
-              </button>
-            ))}
-          </div>
-        </SheetContent>
-      </Sheet>
-
-      {/* פלטת-פקודות ⌘K */}
-      <CommandDialog open={paletteOpen} onOpenChange={setPaletteOpen}>
-        <CommandInput placeholder="חפש מסך או פעולה…" />
-        <CommandList>
-          <CommandEmpty>אין תוצאות.</CommandEmpty>
-          <CommandGroup heading="מסכים">
-            {NAV_ITEMS.map((item) => (
-              <CommandItem
-                key={item.id}
-                onSelect={() => {
-                  setView(item.id);
-                  setPaletteOpen(false);
-                }}
-              >
-                <item.icon className="me-2 h-4 w-4" aria-hidden="true" />
-                {item.label}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-          <CommandGroup heading="פעולות">
-            <CommandItem
-              onSelect={() => {
-                void refresh();
-                setPaletteOpen(false);
-              }}
-            >
-              <RefreshCw className="me-2 h-4 w-4" aria-hidden="true" />
-              רענון הערוץ
-            </CommandItem>
-            <CommandItem
-              onSelect={() => {
-                setAuthOpen(true);
-                setPaletteOpen(false);
-              }}
-            >
-              <KeyRound className="me-2 h-4 w-4" aria-hidden="true" />
-              שער-הבעלים
-            </CommandItem>
-            <CommandItem
-              onSelect={() => {
-                setView("channel");
-                setTab("git");
-                setPaletteOpen(false);
-              }}
-            >
-              <GitBranch className="me-2 h-4 w-4" aria-hidden="true" />
-              מנוע-הגיט
-            </CommandItem>
-          </CommandGroup>
-        </CommandList>
-      </CommandDialog>
     </div>
   );
 }

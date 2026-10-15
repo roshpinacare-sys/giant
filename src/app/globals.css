@@ -6,8 +6,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-heebo);
-  --font-display: var(--font-heebo);
+  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -120,123 +119,180 @@
   body {
     @apply bg-background text-foreground;
   }
-  /* godly לקח: רקע-עם-אופי — שטיפת-אמרלד/ענבר עדינה-מאוד, קבועה-בגלילה */
-  body {
-    background-image:
-      radial-gradient(1100px 480px at 88% -12%, oklch(0.965 0.025 165 / 0.85), transparent 62%),
-      radial-gradient(900px 420px at 6% 108%, oklch(0.96 0.02 85 / 0.65), transparent 60%);
-    background-attachment: fixed;
-  }
-  html {
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
 }
 
-/* ============ מערכת-העיצוב של giant (DESIGN-SOURCES.md · נקרא-חי-מהגיט) ============ */
-
-/* wordmark-גרדיאנט: אמרלד→ענבר (הכשף-המותג) */
-.text-gradient-brand {
-  background: linear-gradient(115deg, oklch(0.52 0.12 165), oklch(0.62 0.11 155) 45%, oklch(0.66 0.12 75));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* ─────────────── משטר-הצבע של המשרד החי (מהמקצועי — אין כחול) ─────────────── */
+:root {
+  --surface: #f2ecdf;
+  --surface-2: #fffaf0;
+  --ink: #2a2520;
+  --ink-2: #5d5548;
+  --ink-3: #8a8172;
+  --line: #e3dac7;
+  --line-strong: #cfc4ac;
+  --accent: #b4691e;
+  --accent-dim: rgba(180, 105, 30, 0.14);
+  --shadow-soft: 0 1px 2px rgba(28, 24, 18, 0.04), 0 8px 24px rgba(28, 24, 18, 0.06);
+  --st-working: #d946ef;
+  --st-ok: #10b981;
+  --st-attention: #f59e0b;
+  --st-danger: #fb7185;
+  --st-neutral: #8a8f98;
+  --st-info: #14b8a6;
 }
 
-/* הרמת-כרטיס-בריחוף (designspells/60fps לקח: כשף-קטן-שמספר-משהו) */
-.card-lift {
-  transition:
-    transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
-    border-color 0.2s;
-  will-change: transform;
+/* ─────────────── R58 — פאנלי-HUD של החדר (ההגדרות אבדו במיזוג — שוחזרו) ───────────────
+ * T19-c תכנן "פאנל-HUD אחד (.ln — עומק עדין במקום מסגרות-כפולות)" אבל המחלקות
+ * נשארו בלי גיליון — הטקסט צף חשוף על הסצנה. שוחזר לפי הכוונה: פאנל חם-שקוף,
+ * טשטוש-רקע עדין, צל רך; הטקסט הכהה של הצ'יפים נקרא עליו. */
+.ln,
+.sl-panel {
+  background: rgba(255, 250, 240, 0.86);
+  backdrop-filter: blur(9px) saturate(1.05);
+  -webkit-backdrop-filter: blur(9px) saturate(1.05);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
 }
-.card-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px -14px oklch(0.35 0.06 165 / 0.28);
+.ln.rounded-full,
+.sl-panel.rounded-full {
+  border-radius: 9999px;
 }
-
-/* כניסת-אלמנט: fade-up (60fps: תנועה-חלקה-שמספרת) */
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Task 40 — .sl-chip שוחזר: ההגדרה אבדה במיזוג והצ'יפים ירשו טקסט-בהיר
+ * על פאנל-קרם (נמדד: תוויות-התצפיות כמעט-בלתי-נראות). טקסט-כהה על הפאנל. */
+.sl-chip {
+  color: var(--ink-2);
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  transition: background 0.15s ease;
 }
-.fade-up {
-  animation: fade-up 0.4s ease-out both;
-}
-
-/* נצנוץ-עדכון-למספר-שהשתנה (לצד-price-pulse) */
-@keyframes stat-flash {
-  0% {
-    color: oklch(0.72 0.13 165);
-  }
-  100% {
-  }
-}
-.animate-stat-flash {
-  animation: stat-flash 0.8s ease-out;
-}
-
-/* ערוץ-הריבון: גלילה-צנומה (Task 40-b) */
-.sovereign-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in oklab, var(--muted-foreground) 45%, transparent) transparent;
-}
-.sovereign-scroll::-webkit-scrollbar {
+.sl-dot {
+  display: inline-block;
   width: 8px;
   height: 8px;
+  border-radius: 9999px;
+  flex: none;
+  box-shadow: 0 0 6px color-mix(in srgb, currentColor 55%, transparent);
 }
-.sovereign-scroll::-webkit-scrollbar-track {
+
+/* ═══ פלטת-הפקודה (T58): cmdk שקוף-על-גבי-הדיאלוג-הכהה של GIANT ═══ */
+[data-slot="dialog-content"] [cmdk-root] {
   background: transparent;
+  color: #e4e4e7;
 }
-.sovereign-scroll::-webkit-scrollbar-thumb {
-  background: color-mix(in oklab, var(--muted-foreground) 45%, transparent);
+[data-slot="dialog-content"] [cmdk-input] {
+  background: transparent;
+  color: #e4e4e7;
+}
+[data-slot="dialog-content"] [cmdk-input]::placeholder {
+  color: #71717a;
+}
+[data-slot="dialog-content"] [cmdk-group-heading] {
+  color: #71717a;
+}
+[data-slot="dialog-content"] [cmdk-item][aria-selected="true"] {
+  background: rgba(245, 158, 11, 0.14);
+  color: #fcd34d;
+}
+[data-slot="dialog-content"] [cmdk-item] svg {
+  color: #a1a1aa;
+}
+[data-slot="dialog-content"] [cmdk-separator] {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   גל-6 · חוקי-העיצוב של הענקים — מדוד מ-10 אתרי-רפרנס (5 נמדדו-חי, 5 חסומי-מדידה)
+   · designspells  (נמדד) → מיקרו-אינטראקציות: ריחוף-חי, הרמת-כרטיס, נשימת-חיים
+   · 60fps.design  (נמדד) → תנועה-חלקה: cubic-bezier מוקפד, reduced-motion תמיד
+   · awwwards      (נמדד) → משמעת-ביצוע: focus-ring, רשת, היררכיה-טיפוגרפית
+   · godly.website (נמדד) → ארט-דיירקשן: עומק-אמביינט (זוהר-ענבר + גרעין-סרט)
+   · supahero.io   (נמדד) → hero שתופס: הצהרה-גדולה + CTA אחד-ברור + מספרים-חיים
+   · saaspo · layers.to · mobbin · cosmos.so · curated.design — לא-נמדדו (fetch-כשל,
+     רשום-כנה ב-docs/design/design-laws.md — "לא הצלחנו להסתכל" ≠ "הסתכלנו ולא ראינו")
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes g-view-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.995); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes g-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes g-breathe {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5); }
+  50% { opacity: 0.6; box-shadow: 0 0 0 5px rgba(245, 158, 11, 0); }
+}
+@keyframes g-line-in {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ארט-דיירקשן אמביינט (godly): זוהר-ענבר עדין + גרעין-סרט — שכבת-רקע-בלבד */
+.g-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(52rem 30rem at 85% -8%, rgba(245, 158, 11, 0.07), transparent 62%),
+    radial-gradient(46rem 26rem at 6% 106%, rgba(180, 105, 30, 0.055), transparent 58%);
+}
+.g-ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+}
+
+/* מיקרו-אינטראקציה (designspells): הרמת-כרטיס + זוהר-גבול בריחוף */
+.g-card {
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.g-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 158, 11, 0.32);
+  box-shadow: 0 14px 34px -14px rgba(245, 158, 11, 0.2), 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* נשימת-חיים: נקודת-מצב חיה (מחליף animate-pulse הגנרי) */
+.g-breathe { animation: g-breathe 2.6s ease-in-out infinite; }
+
+/* כניסת-מודול (60fps): 300ms ease-out-expo, פעם-אחת */
+.g-view-in { animation: g-view-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.g-rise { animation: g-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.g-rise-1 { animation-delay: 0.05s; }
+.g-rise-2 { animation-delay: 0.1s; }
+.g-rise-3 { animation-delay: 0.16s; }
+
+/* קו-נשימה תחת-פריט-פעיל (awwwards: משמעת-מדויקת) */
+.g-active-line { transform-origin: right; animation: g-line-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* סקרולר מעוצב (חוק-ממשק: רשימות ארוכות = max-h + scroll + scrollbar-מעוצב) */
+.g-scroll {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 158, 11, 0.28) transparent;
+}
+.g-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.g-scroll::-webkit-scrollbar-track { background: transparent; }
+.g-scroll::-webkit-scrollbar-thumb { background: rgba(245, 158, 11, 0.25); border-radius: 999px; }
+.g-scroll::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.45); }
+
+/* focus-ring של מקצוענים (awwwards) — מקלדת-רואה-הכל */
+:where(button, a, input, textarea, select, [role="button"]):focus-visible {
+  outline: 2px solid rgba(245, 158, 11, 0.65);
+  outline-offset: 2px;
   border-radius: 8px;
 }
-.sovereign-scroll::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in oklab, var(--muted-foreground) 70%, transparent);
-}
 
-/* נקודות-ניסוח מונפשות: "הריבונות מנסחת תשובה…" */
-@keyframes sovereign-dots {
-  0%, 60%, 100% { opacity: 0.2; }
-  30% { opacity: 1; }
-}
-.sovereign-dot {
-  animation: sovereign-dots 1.2s infinite;
-}
-.sovereign-dot:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.sovereign-dot:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-/* נקודת-לא-נקרא פועמת */
-@keyframes sovereign-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(1.25); }
-}
-.sovereign-unread-dot {
-  animation: sovereign-pulse 1.6s ease-in-out infinite;
-}
-
-/* giant · price-flash (prompt-motion לקח: הכל-חי) */
-@keyframes price-pulse {
-  0% { color: #6ee7b7; text-shadow: 0 0 14px rgba(52, 211, 153, 0.55); }
-  100% { }
-}
-.animate-price-pulse { animation: price-pulse 0.9s ease-out; }
-
-/* בפריכות-מובייל: בטל-שטיפת-רקע-קבועה (ביצועים) */
-@media (max-width: 640px) {
-  body {
-    background-attachment: scroll;
+/* תנועה-מכובדת (60fps): reduced-motion = קיפאון-מכובד, לא-ריקון */
+@media (prefers-reduced-motion: reduce) {
+  .g-view-in, .g-rise, .g-rise-1, .g-rise-2, .g-rise-3, .g-breathe, .g-active-line {
+    animation: none !important;
   }
+  .g-card, .g-card:hover { transition: none; transform: none; }
 }

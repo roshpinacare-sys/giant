@@ -52,7 +52,31 @@ prompt
 server.log
 # Skills directory
 /skills/
-# סודות-ריבוניים — אף-פעם-לא-נוטרים, אף-פעם-לא-נדחפים (הוראת-בעלים 2026-10-14)
+# office operator — secrets & local ops state (never commit)
+.env.local
+.env*.local
+.ops/
 upload/
+
+# legacy paths from the early lineage (bot canon artifacts live under app/)
+app/node_modules/
+app/.next/
+app/db/
+app/upload/
+app/.secrets/
+app/tool-results/
+!.env.example
+dist-office3d/
+tool-results/
+download/
+
+# runtime data (measured locally, never book content)
+/db/
+/.zscripts/
+
+# גל-16: ארטיפקט-ריצה — המנוע-הקנוני חי ב-Domain/office/engine.mjs; העתק זה נבנה-עצמית בכל-עלייה של office-live
+/public/office3d/
+
+# סודות-ריבוניים-נוספים (הוראת-בעלים): כל-קובץ-*.env-וגיבויי-boot
 *.env
 boot/*.sh.bak

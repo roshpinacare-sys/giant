@@ -106,10 +106,19 @@ export async function isOwner(): Promise<boolean> {
 // בדיקת-הרשאה עם תמיכת-iframe: קובץ-עוגיות נחסם בתצוגה-מקדימה-מוטמעת,
 // לכן הפרונט שולח את אסימון-ההפעלה הנגזר בכותרת x-giant-owner.
 // האסימון אינו הסוד — הוא SHA-256 נגזר ממנו ואינו חושף דבר.
+//
+// מיזוג-גיאנט (המיזוג-האמיתי): גשר-אסימונים. הממשק-המאוחד מנפיק אסימוני-שער
+// (/api/sovereign/gate — זיכרון-בלבד, 10 דק) — הם גם פותחים את APIs-הבעלים כאן.
+// שתי-מערכות-אסימון, בעלים-אחד. אין-ייבוא-מעגלי: gate.ts לא מייבא מכאן.
+import { verifyToken } from "@/lib/sovereign/gate";
+
 export async function isOwnerReq(req: Request): Promise<boolean> {
   try {
     const header = req.headers.get("x-giant-owner");
     if (header) {
+      // 1) אסימון-שער של הממשק-המאוחד (מיזוג-גיאנט)
+      if (verifyToken(header)) return true;
+      // 2) אסימון-הפעלה נגזר מהמפתח (קו-המקור)
       const expected = await ownerSessionToken();
       if (
         header.length === expected.length &&
