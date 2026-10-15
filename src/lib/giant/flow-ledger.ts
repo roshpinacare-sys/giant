@@ -55,7 +55,9 @@ export async function recordMeasurement(
 }
 
 /** מסלול-הזרימה — ההתקדמות-בין-שתי-המדידות-האמיתיות-הראשונה-והאחרונה-שנשמרו.
- * כנות: פחות-משתי-רשומות = delta null (לא-0 — 0 מרמז-על-עצירה; null אומר "טרם-נמדד"). */
+ * כנות: פחות-משתי-רשומות = delta null (לא-0 — 0 מרמז-על-עצירה; null אומר "טרם-נמדד").
+ * T71 · recent = הקצה-האחרון-של-הפנקס (עד-24 מדידות-אחרונות, סדר-כרונולוגי) —
+ * הזיכרון-העצמי-הופך-נראה; הגרף-ניזון-רק-ממדידות-שנרשמו-בפועל. */
 export async function readTrajectory(): Promise<FlowTrajectory> {
   const entries = await loadEntries();
   const first = entries[0] ?? null;
@@ -68,5 +70,5 @@ export async function readTrajectory(): Promise<FlowTrajectory> {
   const deltaMinutes = measurable
     ? Math.floor((Date.parse(last.measuredAt) - Date.parse(first.measuredAt)) / 60_000)
     : null;
-  return { entries: entries.length, first, last, deltaHeight, deltaMinutes };
+  return { entries: entries.length, first, last, deltaHeight, deltaMinutes, recent: entries.slice(-24) };
 }

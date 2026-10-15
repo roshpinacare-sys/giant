@@ -40,4 +40,6 @@ export interface FlowTrajectory {
   last: FlowTrajectoryEntry | null;
   deltaHeight: number | null; // null = פחות-משתי-רשומות — כנה
   deltaMinutes: number | null;
+  /** T71 · הקצה-האחרון-של-הפנקס (עד-24 מדידות, סדר-כרונולוגי) — ספארקליין-המסלול ניזון-מזה; אפס-זריעה */
+  recent?: FlowTrajectoryEntry[];
 }

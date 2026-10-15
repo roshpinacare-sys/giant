@@ -54,6 +54,51 @@ function TrajectoryLine({ trajectory }: { trajectory: FlowTrajectory | null }) {
   );
 }
 
+/* ═══ T71 · ספארקליין-המסלול — הזיכרון-העצמי-הופך-נראה ═══════════════════════
+ * גובה-השרשרת על-ציר-המדידות, ישר-מהפנק-עצמו (עד-24 מדידות אחרונות).
+ * כנה: נרשם-רק-כשיש-לפחות-שתי-מדידות-אמיתיות-תקינות; טווח-אפס = קו-שטוח-כנה. */
+function TrajectorySparkline({ trajectory }: { trajectory: FlowTrajectory | null }) {
+  const pts = (trajectory?.recent ?? []).filter((e) => Number.isFinite(e.height));
+  if (pts.length < 2) return null; // כנה: אין-עוד-קו-להציג
+  const W = 600, H = 34, pad = 4;
+  const heights = pts.map((e) => e.height);
+  const min = Math.min(...heights), max = Math.max(...heights);
+  const span = max - min;
+  const x = (i: number) => pad + (i / (pts.length - 1)) * (W - 2 * pad);
+  const y = (v: number) => (span === 0 ? H / 2 : H - pad - ((v - min) / span) * (H - 2 * pad));
+  const line = pts.map((e, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)},${y(e.height).toFixed(1)}`).join(" ");
+  const lastPt = pts[pts.length - 1], firstPt = pts[0];
+  return (
+    <div className="mt-2" aria-hidden={false}>
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        className="w-full"
+        style={{ direction: "ltr" }}
+        role="img"
+        aria-label={`מסלול-הזרימה: גובה-השרשרת על-פני ${pts.length} מדידות-חיות, מ-${firstPt.height} עד ${lastPt.height}`}
+      >
+        <path d={line} fill="none" stroke="#34d399" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+        {pts.map((e, i) => (
+          <circle
+            key={`${e.measuredAt}-${i}`}
+            cx={x(i)}
+            cy={y(e.height)}
+            r={i === pts.length - 1 ? 3.4 : 2.2}
+            fill={i === pts.length - 1 ? "#a7f3d0" : "#10b981"}
+          />
+        ))}
+      </svg>
+      <p className="mt-1 flex items-center justify-between font-mono text-[9px] text-zinc-500" dir="ltr">
+        <span>{firstPt.height.toLocaleString("en-US")}</span>
+        <span className="text-zinc-600">
+          {pts.length} measurements · self-ledger
+        </span>
+        <span className="font-bold text-emerald-400">{lastPt.height.toLocaleString("en-US")}</span>
+      </p>
+    </div>
+  );
+}
+
 export function FlowHeartbeat({
   flow,
   trajectory,
@@ -90,8 +135,9 @@ export function FlowHeartbeat({
           );
         })}
       </div>
-      {/* T70 · מסלול-הזרימה — התקדמות-הגובה-בין-מדידות-אמיתיות-שנרשמו-בפנקס (כנה: מוצג-רק-כשיש-מה-להראות) */}
+      {/* T70/T71 · מסלול-הזרימה — הטקסט-הכנה + הספארקליין-החי (מוצג-רק-כשיש-מה-להראות) */}
       <TrajectoryLine trajectory={trajectory ?? null} />
+      <TrajectorySparkline trajectory={trajectory ?? null} />
     </div>
   );
 }
