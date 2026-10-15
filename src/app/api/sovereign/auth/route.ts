@@ -4,6 +4,7 @@
 import { NextResponse } from "next/server";
 import {
   OWNER_COOKIE,
+  diagnoseKeyInput,
   isOwner,
   isOwnerReq,
   ownerSessionToken,
@@ -26,8 +27,16 @@ export async function POST(req: Request) {
     // גוף-לא-תקין = מפתח-ריק → 401
   }
   if (!(await verifyHeadcorner(password))) {
+    // דחייה-מאובחנת: רק-תכונות-הקלט — הסוד-ואורכו-לעולם-לא-נחשפים
+    const d = diagnoseKeyInput(password);
+    let hint = "המפתח-שונה-מהמפתח-הפעיל";
+    if (d.hebrewLayout) {
+      hint = "זוהו-אותיות-עבריות-בקלט — המפתח-באנגלית-בלבד: החלף-את-המקלדת-לאנגלית-ונסה-שוב";
+    } else if (d.normLen === 0) {
+      hint = "לא-התקבלו-תווים-תקפים — הדבק-את-המפתח-מחדש";
+    }
     return NextResponse.json(
-      { owner: false, error: "מפתח-הבעלים אינו תקין" },
+      { owner: false, error: `מפתח-הבעלים אינו תקין · ${hint}` },
       { status: 401 },
     );
   }

@@ -1381,6 +1381,10 @@ export default function Home() {
             <DialogDescription>
               ניהול-הבעלים (ערוץ, הכרעות, נחיתות-גיט) מאובטח מאחורי המפתח.
               המפתח אינו נרשם ואינו נשלח לשום מקום נוסף.
+              <span className="mt-1 block text-[11px] leading-relaxed text-zinc-500">
+                סבילות-העתקה: רווחים, שורות, מרכאות ותווים-נסתרים-מהצ'אט נסלקים
+                אוטומטית · ההקלדה אינה רגישה לאותיות-גדולות · המקלדת-חייבת-אנגלית
+              </span>
             </DialogDescription>
           </DialogHeader>
           <Input
