@@ -39,6 +39,18 @@ export function diagnoseKeyInput(input: string): {
   return { hebrewLayout, normLen: normalizeKey(input).length };
 }
 
+// אורך-המפתח-הפעיל-אחרי-נרמול — לאבחון-דחייה.
+// הבעלים-מחזיק-בקובץ-המפתח-עצמו, ולכן-האורך-אינו-מידע-חדש-עבורו;
+// ההשוואה-מאפשרת-לו-לזהות-מיד-עותק-חתוך/מוגדל/מוחלף-סדר.
+export async function expectedKeyLength(): Promise<number> {
+  try {
+    const secret = await headcornerSecret();
+    return normalizeKey(secret).length;
+  } catch {
+    return 0;
+  }
+}
+
 // אסימון-הפעלה נגזר (לא הסוד עצמו) — עוגיית-HttpOnly בלבד
 export async function ownerSessionToken(): Promise<string> {
   const secret = await headcornerSecret();
