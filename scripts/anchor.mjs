@@ -74,8 +74,10 @@ const msg =
 const anchorSha = (await g(["commit-tree", tree, ...(parent ? ["-p", parent] : []), "-m", msg])).trim();
 if (!HEX40.test(anchorSha)) fail(`commit-tree-החזיר-${anchorSha || "ריק"} — אף-דחיפה-לא-מתבצעת`);
 
-/* 5 · דחיפה-מוגנת-בלבד: ענף + טאג-עמיד, lease-על-המדידה-המאומתת */
-await g(["push", `--force-with-lease=${BRANCH}:${parent}`, URL, `${anchorSha}:${BRANCH}`, `${anchorSha}:${TAG}`], 60_000);
+/* 5 · דחיפה-מוגנת-בלבד: ענף-ב-lease · טאג-המצביע-שלנו-בכוח (הוא-מצביע-רץ-מעיקרו —
+ * נמדד-חי: דחיפה-משותפת-נדחית-"already exists" ומשאירה-ענף-עוגן-בלי-טאג) */
+await g(["push", `--force-with-lease=${BRANCH}:${parent}`, URL, `${anchorSha}:${BRANCH}`], 60_000);
+await g(["push", "--force", URL, `${anchorSha}:${TAG}`], 60_000);
 
 /* 6 · אימות-לאחר-דחיפה */
 const verify = (await g(["ls-remote", URL, BRANCH, TAG], 20_000)).trim();
