@@ -10,6 +10,8 @@
  * אפס-זיופים: כל-מספר מ-payload אמיתי (pulse/dex/organism/market); חסר = מוצהר-חסר. */
 
 import { useEffect, useState } from "react";
+import { FlowHeartbeat } from "@/components/giant/FlowHeartbeat";
+import { useFlow } from "@/hooks/use-flow";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CountUp, Spotlight } from "@/components/giant/craft";
@@ -246,6 +248,7 @@ function KpiCard({
 /* ─── הרכיב ─── */
 export function OverviewView({ onNavigate }: { onNavigate?: (viewId: string) => void }) {
   useFlowStyle();
+  const { flow, trajectory } = useFlow(); // T70-המשך · דופק-הזרימה-החי — הדופק-שמניע-את-הכל
 
   const [pulse, setPulse] = useState<PulsePayload | null>(null);
   const [dex, setDex] = useState<DexPayload | null>(null);
@@ -461,6 +464,8 @@ export function OverviewView({ onNavigate }: { onNavigate?: (viewId: string) => 
             </button>
           ))}
         </div>
+        {/* T70-המשך · דופק-הזרימה על-ה-Hero — הוכחת-החיים-של-המנוע-שמניע-את-כל-המפה (fail-honest) */}
+        <FlowHeartbeat flow={flow} trajectory={trajectory} label="דופק-הזרימה — הדופק-שמניע-את-הכל" />
       </motion.section>
 
       {/* ═══ סעיף-2 · מפת-המערכת-החיה ═══ */}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { FlowHeartbeat } from "@/components/giant/FlowHeartbeat";
+import { useFlow } from "@/hooks/use-flow";
 
 /* ═══ המוצרים — קטלוג-אמת מ-Domain/marketing/products.json (Task 40 גל-3) ═══
  * מהדורת-ענקים: כל-מוצר = כרטיס-מלא — שם-עברי · תיאור · מדידות-חיות ·
@@ -80,6 +82,7 @@ const MEASURED_HE: Record<string, string> = {
 export function ProductsView() {
   const [data, setData] = useState<ProductsPayload | null>(null);
   const [err, setErr] = useState("");
+  const { flow, trajectory } = useFlow(); // T70-המשך · דופק-הזרימה-החי גם-בקטלוג
 
   const load = useCallback(async () => {
     try {
@@ -123,6 +126,9 @@ export function ProductsView() {
         )}
       </section>
       {err && <p className="text-xs text-red-400">{err}</p>}
+
+      {/* T70-המשך · דופק-הזרימה — המנוע-שמניע-את-הקטלוג (fail-honest) */}
+      <FlowHeartbeat flow={flow} trajectory={trajectory} label="דופק-הזרימה — המנוע-שמניע-את-המוצרים" />
 
       {/* כרטיסי-מוצר מלאים */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

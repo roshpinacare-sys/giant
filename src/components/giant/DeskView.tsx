@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { FlowHeartbeat } from "@/components/giant/FlowHeartbeat";
+import { useFlow } from "@/hooks/use-flow";
 
 /* ═══ שולחן-המסחר — saos-desk (mandate + beat) ═══════════════════════════
  * מצב-ביצוע · מגבלות-סיכון · סדרת-equity · משקלי-אסטרטגיות.
@@ -48,6 +50,7 @@ function Sparkline({ data, height = 90 }: { data: number[]; height?: number }) {
 export function DeskView() {
   const [desk, setDesk] = useState<DeskPayload | null>(null);
   const [err, setErr] = useState("");
+  const { flow, trajectory } = useFlow(); // T70-המשך · דופק-הזרימה-החי גם-כאן
 
   const load = useCallback(async () => {
     try {
@@ -84,6 +87,9 @@ export function DeskView() {
         )}
       </section>
       {err && <p className="text-xs text-red-400">{err}</p>}
+
+      {/* T70-המשך · דופק-הזרימה — הוכחת-החיים של-המנוע-שמניע-את-שולחן-המסחר (fail-honest) */}
+      <FlowHeartbeat flow={flow} trajectory={trajectory} label="דופק-הזרימה — הכוח-שמניע-את-שולחן-המסחר" />
 
       <div className="grid gap-4 lg:grid-cols-2">
         {/* equity */}

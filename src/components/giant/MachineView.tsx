@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FlowHeartbeat } from "@/components/giant/FlowHeartbeat";
+import { useFlow } from "@/hooks/use-flow";
 import {
   AZIMUTH_SPAN,
   COIN_SEGS,
@@ -153,6 +155,7 @@ function coinPos(pts: Array<[number, number]>, t: number): [number, number] {
 }
 
 export function MachineView() {
+  const { flow, trajectory } = useFlow(); // T70-המשך · דופק-הזרימה-החי — המנוע-שמניע-את-המכונה
   const [live, setLive] = useState<MachineLive>(EMPTY);
   const [err, setErr] = useState<string | null>(null);
   const [hidden, setHidden] = useState(false);
@@ -478,6 +481,8 @@ export function MachineView() {
             </p>
           </div>
         </figure>
+        {/* T70-המשך · דופק-הזרימה — הוכחת-החיים-של-המנוע-עצמו, מתחת-לאיור (fail-honest) */}
+        <FlowHeartbeat flow={flow} trajectory={trajectory} label="דופק-הזרימה — המנוע-שמניע-את-המכונה" />
       </div>
     </section>
   );

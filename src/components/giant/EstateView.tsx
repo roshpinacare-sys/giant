@@ -11,6 +11,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertTriangle, GitBranch, Landmark, RefreshCw } from "lucide-react";
+import { FlowHeartbeat } from "@/components/giant/FlowHeartbeat";
+import { useFlow } from "@/hooks/use-flow";
 
 interface RepoScan {
   repo: string;
@@ -143,6 +145,7 @@ function sumField(rows: EstateRow[] | undefined, f: "reds48h" | "openIssues"): n
 }
 
 export function EstateView() {
+  const { flow: engineFlow, trajectory: engineTrajectory } = useFlow(); // T70-המשך · דופק-הזרימה-החי — המנוע-שמניע-את-האחוזה (שמות-נפרדים: לאחוזה-יש flow-משלה מ-/api/organism)
   const [data, setData] = useState<OrganismPayload | null>(null);
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
@@ -227,6 +230,9 @@ export function EstateView() {
           </button>
         </div>
       </header>
+
+      {/* T70-המשך · הכותרת-מכריזה "הזרימה" — מעכשיו-ההכרזה-נמדדת: דופק-המנוע-החי מוצג-כאן (fail-honest) */}
+      <FlowHeartbeat flow={engineFlow} trajectory={engineTrajectory} label="דופק-הזרימה — המנוע-שמניע-את-האחוזה" />
 
       {/* כשל = באנר-אדום כנה עם-השגיאה-עצמה */}
       {err && (
@@ -343,8 +349,8 @@ export function EstateView() {
         )}
       </div>
 
-      {/* מפת-הזרימה + אמת */}
-      <div className="grid gap-2 md:grid-cols-2">
+      {/* מפת-הזרימה + אמת — grid-cols-1 מפורשת: minmax(0,1fr) מנטרל-התנפחות-עקיפה של-truncate בנייד (באג-גלישה-263px) */}
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         <div className="rounded-md border border-white/10 p-3">
           <div className="mb-2 text-sm font-medium text-zinc-200">מפת-הזרימה</div>
           {flow === null ? (
