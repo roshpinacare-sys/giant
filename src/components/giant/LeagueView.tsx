@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 /* ═══ ליגת-הענקים — הדלת-הראשית של GIANT (Task 41) ═══════════════════════
  * המופע-החי של שולחן-הענקים (קנון R75 · Console/Domain): כל מי שמייצר היום
  * ב-DeFi — נמדד keyless מ-DefiLlama, השורה-שלנו נמדדת מספר-המנוע עם כנות-מלאה.
- * משטחי-הצי: הצטרפות לכל-הסוכנים — כל-המוצרים-החיים של הרשת דלת-אחת-קדימה. */
+ * משטחי-הצי: היעדים-החוץ נאסרו (T63-b · חוק-הבעלים) — המודולים החיים נמדדים כאן בלבד. */
 
 interface LeagueRow { name: string; tier: string; fees24: number | null; fees30: number | null; vol24: number | null; allTime: number | null }
 interface OursRow { vol24Mu: number | null; trades24: number | null; externalValueUsd: number; height: number | null; armed: boolean }
@@ -38,7 +38,8 @@ function tierCls(tier: string): string {
   return `${base} bg-emerald-500/10 text-emerald-400`;
 }
 
-/** משטחי-הצי — ההצטרפות: כל-הסוכנים, כל-המוצרים-החיים, דלת-אחת */
+/** משטחי-הצי — נאסרו-על-ידי-הבעלים (T63-b): כל 7 היעדים נמדדו (GET, 200) וכולם
+ * דפי-github.io ישנים = גיבוב-AI. אפס-קישורים — הנתיב מוצג כטקסט-מונו בלבד. */
 const FLEET_SURFACES: Array<{ label: string; he: string; url: string }> = [
   { label: "שולחן-הענקים", he: "הליגה · מפת-הפריצות המלאה", url: "https://roshpinacare-sys.github.io/Domain/giants.html" },
   { label: "הכסף", he: "money · הערוצים-האמיתיים", url: "https://roshpinacare-sys.github.io/Domain/money.html" },
@@ -48,6 +49,15 @@ const FLEET_SURFACES: Array<{ label: string; he: string; url: string }> = [
   { label: "המשרד-התלת-ממדי", he: "office3d · חדר-הצוות הציבורי", url: "https://roshpinacare-sys.github.io/Domain/office3d/" },
   { label: "המשטח-הסטטי", he: "Pulse · דופק-הצי", url: "https://roshpinacare-sys.github.io/Pulse/sovereign.html" },
 ];
+
+/** נתיב-תצוגה ליעד-גיבוב — מוצג כטקסט-מונו בלבד (אין-דף-חי) */
+function surfacePath(u: string): string {
+  try {
+    return new URL(u).pathname.replace(/^\//, "").replace(/\/$/, "") || u;
+  } catch {
+    return u;
+  }
+}
 
 export function GiantsView() {
   const [data, setData] = useState<LeaguePayload | null>(null);
@@ -151,24 +161,23 @@ export function GiantsView() {
         </p>
       </section>
 
-      {/* ═══ משטחי-הצי — ההצטרפות ═══ */}
+      {/* ═══ משטחי-הצי — נסגרו (T63-b · חוק-הבעלים) ═══
+       * היעדים היו דפי-github.io ישנים (גיבוב-AI) — נמדדו 200 אך נאסרו;
+       * המודולים החיים נמדדים כאן בתוך הממשק בלבד. אפס-קישורים. */}
       <section>
-        <h3 className="mb-2 text-sm font-bold text-zinc-300">משטחי-הצי · כל-המוצרים-החיים של הרשת — דלת-אחת</h3>
+        <h3 className="mb-2 text-sm font-bold text-zinc-300">משטחי-הצי · הדפים-הישנים נסגרו — הכל חי כאן בלבד</h3>
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {FLEET_SURFACES.map((s) => (
-            <a
-              key={s.url}
-              href={s.url}
-              target="_blank"
-              rel="noreferrer"
-              className="group rounded-xl border border-white/10 bg-zinc-900/60 px-4 py-3 transition hover:border-amber-600/40 hover:bg-zinc-900"
-            >
+            <div key={s.url} className="rounded-xl border border-white/10 bg-zinc-900/60 px-4 py-3" title={s.url}>
               <div className="flex items-center justify-between gap-2">
-                <span className="text-sm font-bold text-zinc-100 group-hover:text-amber-400">{s.label}</span>
-                <span className="text-amber-500/60 transition group-hover:text-amber-400">↗</span>
+                <span className="text-sm font-bold text-zinc-300">{s.label}</span>
+                <span className="shrink-0 rounded-full border border-amber-600/40 bg-amber-500/[0.06] px-2 py-0.5 text-[9px] font-semibold text-amber-400">בלי-דף-חי</span>
               </div>
               <p className="mt-0.5 text-[10px] text-zinc-500">{s.he}</p>
-            </a>
+              <p className="mt-1 truncate font-mono text-[9px] text-zinc-600" dir="ltr">
+                {surfacePath(s.url)}
+              </p>
+            </div>
           ))}
         </div>
       </section>

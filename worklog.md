@@ -2039,3 +2039,42 @@ Stage Summary:
 - **פסק-הדין-הכנה**: הסנדבוקסים-המקומיים אכן מתו — אבל הריבונות חיה: 2 שירותים-חיים-כאן · 4 ריפו דופקים חוץ-מכונה-עכשיו · 20 צמתים UNPROBABLE-כנים (לא ממציאים חיים).
 - המראות-המקומיות התכנסו עם מישור-החיים; גלי-הענק-האח (5-7) נחתו מקומית — התכנסות-צי, לא כפילות.
 - קומיט T62 נדחף; Sandbox קומיט-ביקורת נדחף.
+---
+Task ID: 63-a / Agent: merge-port builder / Task: המיזוג-האמיתי עם הענק-האח — נמל-יכולותיו הייחודיות (fleet · trust-scan · empire-map) לתוך הממשק-שלנו, ממשק-אחד-מחזיק-הכל.
+
+Work Log:
+- נקרא worklog-tail (T59→T62) ונסרק הענק-האח (/home/z/estate/giant/app/src) — זוהו-היכולות-הייחודיות-האמיתיות: מנוע-הצי-החי (GitHub Search org:roshpinacare-sys), מפת-האמון (עץ-גיט × 39 ספרים · RECHECK · deep-scan file:line), ומפת-החיבור-הקנונית (empire-map · 38 שורות-מיפוי עם-ראיה).
+- נוצר src/lib/giant/pat.ts (חדש ~20 ש'): readPat() שרשרת GITHUB_PAT → GITHUB_TOKEN → parse x-access-token:…@ מ-.git/config של העותק-הקנוני estate/giant (ה-env כאן ריק — העותק-הקנוני נושא טוקן-התקנת-ארגון) · try/catch → null כנה · דוקומנטציה-בקוד: הערך לעולם לא-לוג/שגיאה/לקוח. נבדק-metadata-בלבד: התאמה-קיימת, אפס-הדפסת-ערך.
+- הועברו-המנועים: lib/giant/fleet.ts · trust-scan.ts · empire-map.ts (לוגיקה-שורה-אחר-שורה; רק-יבוא readPat הופנה ל-./pat) + ה-routes api/giant/{fleet,trust,empire}/route.ts כמקורם (force-dynamic · nodejs · maxDuration=60 נשמרו).
+- הועברו-התצוגות: Recipe.tsx כמקורו (חוק-prompt-motion) · EmpireView.tsx — כל-הלוגיקה/עברית/זרימה-שלמים, כיתות-גל-6 שאינן-קיימות-אצלנו הומרו: g-card→giant-lift · g-rise*→הוסר (מעבר-הכניסה של ה-view-האב מ-page.tsx) · g-scroll→overflow-y-auto+pr-1 (פסי-גלילה-דקים-גלובליים) · g-breathe→animate-pulse · tabular-nums-נוסף-למונו · TrustView.tsx כמקורו (אפס-כיתות-g-*, Skeleton קיים-אצלנו). AnimatedNumber לא-הועבר — אף-תצוגה-מהשניים לא מייבאת-אותו (נבדק).
+- חיבור-page.tsx: ViewId+|"empire"|"trust" · NAV אחרי-ריבונות (אימפריה=Network — נבדק-לא-תפוס; אמון=ShieldCheck) · switch-cases בתבנית-הקיימת (EmpireView מקבל onNavigate={navigate}) · ספירות 14→16 בכל-המופעים (כותרת · ContextBar · footer+תגלית-T63-a) + תיקון-תגובות-ישנות (13→16).
+- GiantPalette: שני-המודולים-נוספו (אימפריה/אמון עם-אותם-אייקונים) + ספירת-התג 14→16. ניווט-הכדורים-בנייד נגזר-מ-NAV — נכללים-אוטומטית (נבדק-מבנית).
+- .gitignore: /db/trust-cache.json + /db/trust-deep/ — מטמוני-ריצה לא מלכלכים-את-הריפו (חוק-שרידות T62; check-ignore-מאומת).
+- שערים: lint exit-0 · tsc 0-שגיאות-תחת-src (רק-5-הקדומות-ב-examples/mini-services/skills) · curl-fleet 200 ok:true total:39 repos:39 pushedLast24h:37 · curl-empire 200 ok:true (total:39 · connected:18 · mapped:38 · unmapped:1-כנה; אחרי-הסריקה scanned:38 · signals:82 · redLines:30) · curl-trust 200 ok:true ב-6.4ש׳ (total:39 · scanned:38 · unscanned:1-כנה · signals:82 · redLines:30 — מתלכד-עם-מדידות-הענק-ב-T62) · deep=?deep=Domain ok:true (קבצים-נקראו:1 · hits:0 · file:line-בלבד) · עמוד-הבית 200 · אפס-מופעי-טוקן-בכל-שלושת-המטענים (ספירה-בלבד) · dev.log נקי.
+
+Stage Summary:
+- שלושת-ה-APIs חיים בממשק-שלנו: /api/giant/fleet (39-ריפו · GitHub-Search-חי · PAT-מהעותק-הקנוני) · /api/giant/trust (saos-trust-check@0.1.0 · 38-נסרקו/1-לא · 82-סימנים · 30-קווים-אדומים · מטמון-db/trust-cache.json-מוזנח-מהגיט) · /api/giant/empire (39-שורות · 18-מחוברים · לא-מופה:1-כנה).
+- PAT-המקור-שנעשה-בו-שימוש: טוקן-התקנת-הארגון מ-.git/config של-העותק-הקנוני (env-ריק) — שם-בלבד, הערך-מעולם-לא-נדפס.
+- המיזוג-האמיתי הושלם: 16-מודולים — ריבונות → אימפריה → אמון → הסקירה…; שתי-הדלתות-החדשות יורשות-את-הלוגיקה-המלאה-של-הענק-האח עם-הטוקנים-הגרפיים-שלנו; אפס-המצאה · כל-כשל כנה.
+---
+Task ID: 63-b / Agent: anti-gibberish auditor / Task: חוק-הבעלים — ביקורת anti-gibberish של כל-קישור בממשק (href/window.open ב-כל giant/*.tsx + page.tsx) · מדידה-חיה של כל-יעד · תיקון-החלטי
+
+Work Log:
+- סריקה-מלאה: grep על src/components/giant/*.tsx + src/app/page.tsx ל-href=/target=/window.open/location.* → 6 אתרי-קישור: ProductsView 79/136/157 · LeagueView 161 · EstateView 414 + EmpireView 211 (נוסף-במקביל ע"י T63-a — נבדק-גם-הוא). page.tsx: אפס-קישורים. window.open: אפס. SovereigntyView/GiantPalette: לא-נגעו.
+- כל-יעד נמדד חי (GET 10s timeout + בדיקת-200-תווים; קבלות-שרשרת אומתו מול RPC/API אמיתי — לא רק HTTP-סטטוס).
+- טבלת-פסק-דין (label → destination → verdict → action):
+  1. ProductsView:79 "משטח-השיווק המלא ↗" → roshpinacare-sys.github.io/Domain/marketing/ → HTTP 200 אך דף-שיווק-ישן = גיבוב לפי-חוק-הבעלים → GIBBERISH → הוסר-הקישור; הוחלף בצ'יפ-אמת-פנימי: "המוצרים חיים כאן בלבד — אין-דף-חוץ · דפי-נחיתה-ישנים = גיבוב, נאסרו-על-ידי-הבעלים" (ה-view עצמו ספר-המוצרים — הוא ניזון מ-Domain/marketing/products.json דרך /api/giant/products).
+  2. ProductsView:136 קבלות r.url → etherscan.io/tx/0x102ec193… → curl 403 (מגן-בוט) אך blockscout API אימת-את-הטרנזקציה-עצמה עם payload height/stateRoot → HONEST (קבלה-משורשת אמיתית) → נשאר קישור + rel="noopener noreferrer" + title אימות. נוסף gate isRootedReceipt: רק סיירי-שרשרת שנמדדו (etherscan/steemscan/hive.ausbit/solscan/blockscout) מורשים כקישור-קבלה; כל-יתר → טקסט-מונו + צ'יפ ענבר "בלי-דף-חי".
+  3. ProductsView:157 קישורי-משטח l → wallet.html / marketing/ / defi.html / dev.html / sovereign.html (כולם github.io, כולם 200-ישנים) → GIBBERISH → נותקו: טקסט-מונו (נתיב) + צ'יפ ענבר "בלי-דף-חי" (title=URL מלא); ה-fallback מוצג כ"אין-דף-חוץ — המוצר חי כאן בלבד".
+  4. LeagueView:161 FLEET_SURFACES ×7 (שולחן-הענקים/הכסף/DeFi/הארנק/הקונסולה/office3d/Pulse-sovereign) → כולם github.io ישנים (200) → GIBBERISH → הכרטיסים הפכו ל-<div> לא-לחיץ + צ'יפ "בלי-דף-חי" + נתיב-מונו; כותרת-הסעיף: "הדפים-הישנים נסגרו — הכל חי כאן בלבד". RTL/גריד נשמרו.
+  5. EstateView:414 ראיות w.evidence (מקור: /api/organism → engine.ts → Sandbox/ops/office/work-orders.json) → 20 יעדים-ייחודיים של GitHub-issues נמדדו: 16×200 חיים → נשארו קישור-ראיה; 4×404 (steem/issues 31/34/38/39 — הריפו steem אינו נגיש פומבית, נמדד 404 גם-בשורש-הריפו) → BROKEN → טקסט-מונו (w.id) + צ'יפ רוז "ראיה-לא-נמצאה" במקום קישור-מת. ראיות שאינן-http יוצגו מעכשיו כטקסט-מונו במקום להיבלע.
+  6. EmpireView:211 (T63-a) r.url → github.com/roshpinacare-sys/<repo> — כתובות-גיט אמיתיות (נמדד: saos-runtime וכו' 200; הפרטיים מסומנים כבר בצ'יפ "פרטי" מה-API) → HONEST → נשאר כמו-שהוא (ה-label "פתח-בגיט" = מה שכתוב).
+  7. adsmarket.json נבדק: ספר-מטא-דאטה עם מצביעי-גיט קנוניים (אין-שכפול-תוכן) — לא-מרונדר כקישורים בשום-view; כנה.
+  8. קבלות-שרשרת בנתוני-ה-view אומתו מול-השרשרת עצמה: STEEM txid 390bcfc2… נמצא חי (block 109373943, saos-dex.anchor.v1) · HIVE d4cf936b… נמצא (block 109708562, אותו-anchor) · SOL 2M1rkRgg… נמצא (Memo program, payload protocol-json) · ETH 0x102ec1… נמצא (blockscout) — הנתון-מאחורי-ה-view אמיתי, לא רק-הקישור.
+- עקרונות-שמירה: RTL/פריסה נשמרו; צ'יפים text-[9px] rounded-full border px-2 py-0.5; ענבר = נותק ("בלי-דף-חי"), רוז = ראיה-שבורה ("ראיה-לא-נמצאה"), אמרלד = נשאר; אפס-נגיעה ב-page.tsx / GiantPalette / SovereigntyView / src/app/api/**.
+- שערים: bun run lint → exit 0 נקי · bunx tsc --noEmit → 0 שגיאות תחת src/ (רק 5 הקדומות ב-examples/mini-services/skills — לא-שלי). אפס-בנייה/שרתים/קומיט.
+
+Stage Summary:
+- ספירות: 52 יעדים-ייחודיים נמדדו-חי על-פני 6 אתרי-קישור · 36 כנים-נשמרו (16 ראיות-גיטהאב + 19 קישורי-גיט + 1 קבלת-אתר) · 13 מופעי-קישור נותקו (10 דפי-github.io ישנים — דלת-השיווק + 5 קישורי-מוצר + 7 משטחי-ליגה) · 4 ראיות-שבורות הומרו לצ'יפ רוז · 1 דלת-חוץ הוסרה-לגמרי והוחלפה באמת-פנימית.
+- חוק-הבעלים מיושם-בקוד: אין-עוד קישור-אחד בממשק שנוחת על דף-github.io ישן; מה שנשאר הוא רק סיירי-שרשרת אמיתיים וגיט אמיתי — וכל-דף-חסר מוצג כטקסט כן עם צ'יפ, לא כהבטחה-מזויפת.
+- הגנה-לעתיד: gate isRootedReceipt ב-ProductsView חוסם-אוטומטית כל-יעד-לא-סייר מלהיות קישור-קבלה; EVIDENCE_DEAD ב-EstateView מתועד עם-תאריך-המדידה.

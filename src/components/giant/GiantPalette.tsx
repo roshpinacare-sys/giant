@@ -3,7 +3,7 @@
 /* ═══ פלטת-הפקודה · Ctrl+K (GIANT) ═════════════════════════════════════════
  * מנוע: cmdk דרך רכיבי shadcn CommandDialog (Dialog+cmdk).
  * · קיצור גלובלי אחד: Ctrl/Cmd+K מציג-מסתיר; "/" פותח כשלא-בתוך-שדה-קלט.
- * · (א) מודולים — 14 מזהי-מערכת עם תוויות עבריות+אנגליות (חיפוש-דו-לשוני).
+ * · (א) מודולים — 16 מזהי-מערכת עם תוויות עבריות+אנגליות (חיפוש-דו-לשוני).
  * · (ב) פעולות — מחרוזות-פעולה "action:*" שהמתזמן מפרש.
  * · (ג) זרמי-אמת — הנתיבים הקנוניים האמיתיים; העתקה-ללוח עם טוסט-כנה.
  * אפס-זיופים: הרשימה סטטית-מוצהרת; הנתיבים מהקוד השרת (lib/sovereign/channel.ts). */
@@ -30,9 +30,11 @@ import {
   Compass,
   Gauge,
   Landmark,
+  Network,
   Package,
   Radio,
   ScrollText,
+  ShieldCheck,
   Sparkles,
   Users,
   Wallet,
@@ -48,6 +50,8 @@ interface ModuleEntry {
 
 const MODULES: ModuleEntry[] = [
   { id: "sovereignty", he: "ריבונות", desc: "הריבונות-חיה-בגיט · מה-חי · מה-שרד — ההגשה-הסופית", en: "sovereignty git survival fleet", icon: <Landmark aria-hidden /> },
+  { id: "empire", he: "אימפריה", desc: "כל-הספרים על מסך-אחד · תפקיד × דלת-חיה — מיזוג-הענק-האח", en: "empire map fleet repos connection", icon: <Network aria-hidden /> },
+  { id: "trust", he: "אמון", desc: "מפת-האמון של הצי · חשיפה-לא-פסק-דין · file:line", en: "trust scan signals red lines", icon: <ShieldCheck aria-hidden /> },
   { id: "overview", he: "הסקירה", desc: "מה-המערכת · מי-מי · מפת-החיבור-החיה", en: "overview context map system", icon: <Compass aria-hidden /> },
   { id: "dex", he: "הדקס", desc: "מרכז-הכובד: נרות · ליגה · ווליום", en: "dex exchange trading candles", icon: <Landmark aria-hidden /> },
   { id: "channel", he: "הערוץ-הריבוני", desc: "הערוץ-היחיד: הוראות · פניות · רישומים", en: "channel sovereign gate", icon: <Radio aria-hidden /> },

@@ -16,11 +16,13 @@ import { OfficeHqView } from "@/components/giant/OfficeHqView";
 import { EstateView } from "@/components/giant/EstateView";
 import { CapabilityView } from "@/components/giant/CapabilityView";
 import { SovereigntyView } from "@/components/giant/SovereigntyView";
+import { EmpireView } from "@/components/giant/EmpireView";
+import { TrustView } from "@/components/giant/TrustView";
 import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
 import {
   Activity, ArrowLeftRight, Banknote, Boxes, Building2, Command, Compass,
-  Gauge, GitBranch, Landmark, Package, Radio, ScrollText, ShieldCheck, Trophy, Wallet,
+  Gauge, GitBranch, Landmark, Network, Package, Radio, ScrollText, ShieldCheck, Trophy, Wallet,
   type LucideIcon,
 } from "lucide-react";
 
@@ -34,10 +36,11 @@ import {
  *  · Ctrl+K פלטת-פקודה · סרט-מחירים חי · ContextBar לכל-מודול
  *  · T60-קראפט (DNA: designspells/60fps/supahero/godly): אורורה-חיה · גרגר-סרט · ספוטלייט-מצביע · ספקולר · CountUp
  *  · הריבונות (T61): ההגשה-הסופית של הרעיון — הריבונות חיה בגיט; הסנדבוקס נמחק, הממשק רק מציג; כל-התיקיות · הצי · הענקים · הלקחים נמדדים-מהמכונה
+ *  · האימפריה + האמון (T63-a · המיזוג-האמיתי עם הענק-האח): מפת-החיבור-המלא (39 ריפו × תפקיד × דלת-חיה) + מפת-האמון של הצי (חשיפה-לא-פסק-דין · file:line לכל-ממצא)
  * משטח-אחד-לכל-יכולת · ערוץ-אחד · אפס-כפילויות · הכל נמדד-חי מהגיט. */
 
 type ViewId =
-  | "sovereignty" | "overview" | "machine" | "dex" | "league" | "channel" | "wallet"
+  | "sovereignty" | "empire" | "trust" | "overview" | "machine" | "dex" | "league" | "channel" | "wallet"
   | "desk" | "ledger" | "products" | "pulse" | "office" | "estate" | "capabilities";
 
 interface NavEntry {
@@ -51,6 +54,8 @@ interface NavEntry {
 /* סדר-הפתיחה (T59): הסקירה דלת-ההקשר; הכסף מיד אחריה; הערוץ הדלת-הראשית. */
 const NAV: NavEntry[] = [
   { id: "sovereignty", label: "ריבונות", ctx: "מה חי, מה מחובר, מה שרד — ההגשה הסופית של הרעיון", src: "סריקת-גיט חיה · FLEET-GRAPH · agent-registry · giants.json", icon: GitBranch },
+  { id: "empire", label: "אימפריה", ctx: "כל הספרים על מסך-אחד — 39 ריפו × תפקיד × דלת-חיה · המיזוג-האמיתי עם הענק-האח", src: "GitHub-Search חי · trust-cache · empire-map קאנוני", icon: Network },
+  { id: "trust", label: "אמון", ctx: "מפת-האמון של הצי — חשיפה-לא-פסק-דין · file:line לכל-ממצא", src: "saos-trust-check@0.1.0 · עץ-גיט חי · 30 redLines", icon: ShieldCheck },
   { id: "overview", label: "הסקירה", ctx: "מה-המערכת-הזאת, מי-מי, ואיך-הכל-מחובר — במספרים-חיים", src: "דופק + דקס + אחוזה · ריענון 60ש׳", icon: Compass },
   { id: "machine", label: "המכונה", ctx: "מנוע-הדקס כמכונה-חיה · האובייקט-הוא-ההסבר (anatomy)", src: "Domain/dex/state.json · טביעת-sha16", icon: Gauge },
   { id: "dex", label: "הדקס", ctx: "הכסף: נרות · קופות · אמת-ההיצע · ספר-הפקודות-החוץ", src: "Kraken חי + המנוע מהגיט", icon: ArrowLeftRight },
@@ -109,7 +114,7 @@ export default function Home() {
     else if (NAV.some((n) => n.id === id)) setView(id as ViewId);
   }, []);
 
-  /* ניווט-מהסקירה: מזהי-מודול-תקינים-בלבד (הסקירה עצמה שולחת אחד-מ-14) */
+  /* ניווט-מהסקירה: מזהי-מודול-תקינים-בלבד (הסקירה עצמה שולחת אחד-מ-16) */
   const navigate = useCallback((id: string) => {
     if (NAV.some((n) => n.id === id)) setView(id as ViewId);
   }, []);
@@ -140,7 +145,7 @@ export default function Home() {
                 <span className="text-zinc-100">הממשק-המאוחד</span>
               </h1>
               <p className="hidden text-[10px] leading-3 text-zinc-500 sm:block">
-                מיזוג-5-הסוכנים · 14 מודולים · הכל-נמדד-חי · אפס-כפילויות
+                מיזוג-5-הסוכנים · 16 מודולים · הכל-נמדד-חי · אפס-כפילויות
               </p>
             </div>
           </div>
@@ -232,7 +237,7 @@ export default function Home() {
                 <p className="mt-0.5 text-[10px] leading-4 text-zinc-500">
                   מקור-הנתונים: <span className="text-zinc-400">{active?.src}</span>
                   <span className="mx-1.5 text-zinc-700">|</span>
-                  Ctrl+K לניווט-מהיר-בין-כל-14-המודולים
+                  Ctrl+K לניווט-מהיר-בין-כל-16-המודולים
                 </p>
               </div>
             </div>
@@ -245,6 +250,8 @@ export default function Home() {
             transition={{ duration: 0.35, ease: "easeOut" }}
           >
             {view === "sovereignty" && <SovereigntyView />}
+            {view === "empire" && <EmpireView onNavigate={navigate} />}
+            {view === "trust" && <TrustView />}
             {view === "overview" && <OverviewView onNavigate={navigate} />}
             {view === "machine" && <MachineView />}
             {view === "dex" && <DexView />}
@@ -262,7 +269,7 @@ export default function Home() {
         </main>
       </div>
 
-      {/* ═══ ניווט-תחתון (נייד): כל-13-המודולים בגלילה-אופקית ═══ */}
+      {/* ═══ ניווט-תחתון (נייד): כל-16-המודולים בגלילה-אופקית (נגזר-מ-NAV) ═══ */}
       <nav
         aria-label="מודולי-המערכת (נייד)"
         className="fixed inset-x-0 bottom-0 z-40 border-t border-white/[0.08] bg-zinc-950/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl md:hidden"
@@ -298,7 +305,7 @@ export default function Home() {
           <span className="hidden sm:inline">· הריבונות מפעילה-הכל; הגיט הוא שכבת-הקיום; המערכת מתפתחת לנצח</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="font-mono text-[10px] text-zinc-600">T61 · 14 מודולים · TTS-חי · ספר-פקודות-חוץ · מאגר-יכולות · R360 · R74</span>
+          <span className="font-mono text-[10px] text-zinc-600">T63-a · 16 מודולים · מיזוג-הענק-האח (אימפריה+אמון) · TTS-חי · ספר-פקודות-חוץ · מאגר-יכולות · R360 · R74</span>
         </div>
       </footer>
     </div>
