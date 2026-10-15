@@ -16,6 +16,7 @@ import {
   Archive,
   Check,
   GitBranch,
+  KeyRound,
   Landmark,
   Lightbulb,
   RefreshCw,
@@ -34,6 +35,7 @@ import type {
   SovereigntyAudit,
   SovereigntyPayload,
 } from "@/lib/giant/sovereignty-types";
+import type { GatePayload } from "@/lib/giant/gate-types";
 
 const POLL_MS = 60_000;
 const RETRY_MS = 15_000; /* הבאנר מבטיח "מדידה-חוזרת בעוד 15 שניות" — הקוד מקיים */
@@ -613,6 +615,283 @@ function FleetAuditSection({ audit }: { audit: SovereigntyAudit | null }) {
   );
 }
 
+/* ─── T64 · השער: מפתח-המפעיל אומת ביט-מול-ביט מול השרשרת-החיה ונאטם ─── */
+
+function GateSection() {
+  const [gate, setGate] = useState<GatePayload | null>(null);
+  const [gateErr, setGateErr] = useState("");
+  const [gateBusy, setGateBusy] = useState(false);
+  const alive = useRef(true);
+  const acRef = useRef<AbortController | null>(null);
+
+  const loadGate = useCallback(async () => {
+    acRef.current?.abort();
+    const ac = new AbortController();
+    acRef.current = ac;
+    setGateBusy(true);
+    try {
+      const res = await fetch("/api/giant/gate", { cache: "no-store", signal: ac.signal });
+      const j = (await res.json()) as GatePayload & { error?: string };
+      if (!alive.current) return;
+      if (!res.ok || j.ok === false || j.error) {
+        setGateErr(j.error ?? `ערוץ-השער השיב HTTP ${res.status}`);
+        setGate(null);
+      } else {
+        setGate(j);
+        setGateErr("");
+      }
+    } catch (e) {
+      if (!alive.current || (e instanceof DOMException && e.name === "AbortError")) return;
+      setGateErr(e instanceof Error ? e.message.slice(0, 200) : "מדידת-השער נכשלה");
+      setGate(null);
+    } finally {
+      if (alive.current) setGateBusy(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    alive.current = true;
+    void loadGate();
+    const iv = setInterval(() => void loadGate(), POLL_MS);
+    return () => {
+      alive.current = false;
+      clearInterval(iv);
+      acRef.current?.abort();
+    };
+  }, [loadGate]);
+
+  const receipt = gate?.receipt ?? null;
+  const actions = receipt?.actions ?? null;
+  const door = gate?.door ?? null;
+  const open = gate?.gateOpen ?? false;
+  const matches = receipt?.matchesByAccountRole ?? [];
+
+  return (
+    <Reveal>
+      <section
+        id="gate"
+        className="rounded-2xl border border-white/[0.07] bg-white/[0.035] p-4 backdrop-blur-xl sm:p-5"
+      >
+        <SectionHead
+          kicker="T64 · הוראת-הבעלים: וודא שגם פותח את השער — מפתח עדיין לא מאומת"
+          title="השער"
+          side={
+            gateBusy ? (
+              <RefreshCw className="h-4 w-4 animate-spin text-amber-500/60" aria-hidden />
+            ) : (
+              <KeyRound className={`h-4 w-4 ${open ? "text-emerald-400" : "text-amber-500/60"}`} aria-hidden />
+            )
+          }
+        />
+
+        {gateErr && (
+          <div className="rounded-xl border border-rose-500/25 bg-rose-500/[0.06] p-4 text-[11px] leading-6 text-rose-200">
+            <b className="font-black">ערוץ-השער לא נמדד:</b> {gateErr} — מדידה-חוזרת בעוד רגע.
+          </div>
+        )}
+
+        {!gateErr && (
+          <>
+            {/* פס-פסק-הדין */}
+            <div
+              className={`mb-3 rounded-xl border p-4 ${
+                open
+                  ? "border-emerald-500/30 bg-emerald-500/[0.07]"
+                  : "border-amber-500/30 bg-amber-500/[0.06]"
+              }`}
+            >
+              <p className={`text-sm font-black ${open ? "text-emerald-300" : "text-amber-300"}`}>
+                {open
+                  ? "השער פתוח — המפתח אומת ביט-מול-ביט מול השרשרת-החיה, ונאטם (sealed-box) לכספת-המנוע"
+                  : "השער סגור — לא כל-שרשרת-העדות הושלמה; לא מצויר, לא ממוצא"}
+              </p>
+              {receipt?.verdict && (
+                <p className="mt-1 font-mono text-[10px] text-zinc-400" dir="ltr">
+                  {receipt.verdict}
+                </p>
+              )}
+            </div>
+
+            {receipt ? (
+              <>
+                {/* שני-המישורים */}
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                  {/* מישור-הזיהוי כאן */}
+                  <div className="min-w-0 rounded-xl border border-white/[0.07] bg-black/20 p-4">
+                    <h4 className="mb-2 text-xs font-black text-zinc-100">מישור-הזיהוי — כאן, מול השרשרת-החיה</h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[9px] text-zinc-300">
+                        {receipt.source?.candidatesTested ?? "—"} מועמדים נבדקו
+                      </span>
+                      <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[9px] text-zinc-300">
+                        {(receipt.target?.accounts ?? []).map((a) => `@${a}`).join(" · ") || "—"}
+                      </span>
+                      <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 font-mono text-[9px] text-zinc-400" dir="ltr">
+                        {(receipt.target?.roles ?? []).join("/")}
+                      </span>
+                      <span
+                        className={`rounded-full border px-2 py-0.5 text-[9px] font-bold ${
+                          (receipt.matchesCount ?? 0) > 0
+                            ? "border-emerald-500/30 bg-emerald-500/[0.07] text-emerald-400"
+                            : "border-rose-500/30 bg-rose-500/[0.07] text-rose-400"
+                        }`}
+                      >
+                        {receipt.matchesCount ?? 0} התאמות מלאות
+                      </span>
+                    </div>
+                    <ul className="mt-2 space-y-1">
+                      {matches.map((m, i) => (
+                        <li key={`${m.file}#${i}`} className="flex flex-wrap items-center gap-1.5 text-[10px]">
+                          <span className="font-mono text-zinc-300" dir="ltr">
+                            {m.file}
+                          </span>
+                          <span className="text-zinc-600">{m.at}</span>
+                          <span className="rounded-full border border-emerald-500/30 bg-emerald-500/[0.07] px-1.5 py-0.5 font-mono text-[9px] font-bold text-emerald-400" dir="ltr">
+                            {m.match}
+                          </span>
+                        </li>
+                      ))}
+                      {matches.length === 0 && (
+                        <li className="text-[10px] text-zinc-500">אף מועמד לא התאים — כנה, לא מזויף</li>
+                      )}
+                    </ul>
+                    <p className="mt-2 truncate font-mono text-[9px] text-zinc-600" dir="ltr" title={receipt.target?.rpc ?? ""}>
+                      {receipt.target?.rpc ?? ""} · condenser_api.get_accounts
+                    </p>
+                    {isFiniteNum(gate?.receiptAgeMin ?? null) && (
+                      <p className="mt-1 text-[9px] text-zinc-600">
+                        הקבלה בת {fmtInt(gate?.receiptAgeMin ?? null)} דקות
+                      </p>
+                    )}
+                  </div>
+
+                  {/* מישור-החימוש ב-Actions */}
+                  <div className="min-w-0 rounded-xl border border-white/[0.07] bg-black/20 p-4">
+                    <h4 className="mb-2 text-xs font-black text-zinc-100">מישור-החימוש — GitHub Actions + הכספת</h4>
+                    <ul className="space-y-1.5">
+                      {(actions?.runs ?? []).map((r) => (
+                        <li key={r.id} className="flex flex-wrap items-center gap-1.5 text-[10px]">
+                          <span
+                            className={`rounded-full border px-1.5 py-0.5 font-mono text-[9px] font-bold ${
+                              r.conclusion === "success"
+                                ? "border-emerald-500/30 bg-emerald-500/[0.07] text-emerald-400"
+                                : "border-rose-500/30 bg-rose-500/[0.07] text-rose-400"
+                            }`}
+                            dir="ltr"
+                          >
+                            {r.conclusion === "success" ? "armed" : r.conclusion}
+                          </span>
+                          <span className="font-mono text-zinc-500" dir="ltr">
+                            #{r.id} @{r.headSha?.slice(0, 7)}
+                          </span>
+                          {(r.verdict || r.cause) && (
+                            <span className="min-w-0 break-words text-zinc-500">{r.verdict ?? r.cause}</span>
+                          )}
+                        </li>
+                      ))}
+                      {(actions?.runs ?? []).length === 0 && (
+                        <li className="text-[10px] text-zinc-500">אין-ריצות-חימוש מתועדות בקבלה</li>
+                      )}
+                    </ul>
+                    {actions?.vault && (
+                      <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                        <span className="rounded-full border border-emerald-500/30 bg-emerald-500/[0.07] px-2 py-0.5 text-[9px] font-bold text-emerald-400">
+                          נאטם לכספת
+                        </span>
+                        <span className="font-mono text-[10px] text-zinc-300" dir="ltr">
+                          {actions.vault.secret} @ {actions.vault.repo}
+                        </span>
+                        <span className="font-mono text-[9px] text-zinc-600" dir="ltr">
+                          {actions.vault.updatedAt}
+                        </span>
+                      </div>
+                    )}
+                    {actions?.gridIgnition && (
+                      <p className="mt-2 rounded-lg border-r-2 border-amber-500/60 bg-amber-500/[0.05] px-3 py-2 text-[10px] leading-5 text-amber-200/90">
+                        <b className="font-black">הצתת-הגריד:</b> {actions.gridIgnition.note}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* מדידת-הדלת החיה */}
+                {door && (
+                  <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[9px]">
+                    <span className="text-zinc-600">הדלת-בקאנון:</span>
+                    <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 font-mono text-zinc-400" dir="ltr">
+                      {door.workflowSha ?? "—"}
+                    </span>
+                    <span
+                      className={`rounded-full border px-2 py-0.5 font-bold ${
+                        door.rosterEnvPassed
+                          ? "border-emerald-500/30 bg-emerald-500/[0.07] text-emerald-400"
+                          : "border-rose-500/30 bg-rose-500/[0.07] text-rose-400"
+                      }`}
+                    >
+                      FLEET_ROSTER_MAP {door.rosterEnvPassed ? "עובר" : "חסר"}
+                    </span>
+                    <span
+                      className={`rounded-full border px-2 py-0.5 font-bold ${
+                        door.fleetAccountPassed
+                          ? "border-emerald-500/30 bg-emerald-500/[0.07] text-emerald-400"
+                          : "border-rose-500/30 bg-rose-500/[0.07] text-rose-400"
+                      }`}
+                    >
+                      FLEET_ACCOUNT {door.fleetAccountPassed ? "עובר" : "חסר"}
+                    </span>
+                    <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 font-mono text-zinc-400" dir="ltr">
+                      secret: {door.secretSource ?? "—"}
+                    </span>
+                  </div>
+                )}
+
+                {/* תיקוני-הדלת */}
+                {(actions?.commits ?? []).length > 0 && (
+                  <div className="mt-3">
+                    <p className="mb-1 text-[10px] font-black text-zinc-400">תיקוני-הדלת שהוזרקו לקאנון:</p>
+                    <ul className="space-y-1">
+                      {(actions?.commits ?? []).map((c) => (
+                        <li key={c.sha} className="flex min-w-0 flex-wrap items-baseline gap-1.5 text-[10px]">
+                          <span className="font-mono font-bold text-amber-400" dir="ltr">
+                            {c.sha.slice(0, 7)}
+                          </span>
+                          <span className="min-w-0 break-words text-zinc-400">{c.fix}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <p className="mt-3 rounded-lg border border-white/[0.06] bg-black/20 px-3 py-2 text-[9px] leading-5 text-zinc-500">
+                  <b className="font-black text-zinc-400">החוק (P0-1):</b> אף ערך-מפתח לא נכתב לדיסק, ללוג, לקבלה או לממשק —
+                  רק פסקי-דין, שמות-קבצים ועובדות-שרשרת פומביות. אטימת-ה-WIF מתבצעת ב-Actions בלבד (sealed-box מול
+                  מפתח-הציבורי של כספת-המנוע).
+                </p>
+
+                {(gate?.errors?.length ?? 0) > 0 && (
+                  <div className="mt-2 rounded-lg border border-rose-500/25 bg-rose-500/[0.06] p-3 text-[10px] text-rose-200">
+                    {(gate?.errors ?? []).map((e, i) => (
+                      <p key={i} className="break-words">
+                        {e}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              !gateErr && (
+                <div className="rounded-xl border border-amber-500/30 bg-amber-500/[0.06] p-4 text-[11px] text-amber-200">
+                  הקבלה לא נמדדה — לא-מצויר, לא-מומצא.
+                </div>
+              )
+            )}
+          </>
+        )}
+      </section>
+    </Reveal>
+  );
+}
+
 /* ═══ המסך ═══ */
 export function SovereigntyView() {
   const [data, setData] = useState<SovereigntyPayload | null>(null);
@@ -1032,6 +1311,9 @@ export function SovereigntyView() {
 
       {/* 5.5 · ביקורת-חיות-הצי (T62) — קבלת-הביקורת מול דיאל-TCP-חי, שתי-מישורי-מדידה */}
       <FleetAuditSection audit={data.audit ?? null} />
+
+      {/* 5.7 · השער (T64) — המפתח אומת ביט-מול-ביט מול השרשרת-החיה ונאטם לכספת-המנוע */}
+      <GateSection />
 
       {/* 6 · ההשוואה מול הענקים — נמדדה, לא סיפור */}
       <Reveal>
