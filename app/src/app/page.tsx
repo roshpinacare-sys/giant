@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { SubmissionView } from "@/components/giant/SubmissionView";
 import { MachineView } from "@/components/giant/MachineView";
 import { DexView } from "@/components/giant/DexView";
 import { GiantsView } from "@/components/giant/LeagueView";
@@ -17,7 +18,7 @@ import { TrustView } from "@/components/giant/TrustView";
 import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
 import {
-  Activity, BookOpen, Building2, Command, Cog, GitBranch, LineChart, Network,
+  Activity, BookOpen, Building2, Command, Cog, Crown, GitBranch, LineChart, Network,
   Package, Radio, ScrollText, ShieldCheck, Trophy, Wallet,
   type LucideIcon,
 } from "lucide-react";
@@ -39,11 +40,12 @@ import {
  * משטח-אחד-לכל-יכולת · ערוץ-אחד · אפס-כפילויות · הכל נמדד-חי מהגיט. */
 
 type ViewId =
-  | "machine" | "dex" | "league" | "channel" | "wallet" | "desk"
+  | "submission" | "machine" | "dex" | "league" | "channel" | "wallet" | "desk"
   | "ledger" | "products" | "pulse" | "office" | "estate" | "empire" | "trust";
 
-/* סדר-הפתיחה (T58): המכונה דלת-הקראפט; הכסף מיד אחריה; הערוץ הדלת-הראשית. */
+/* סדר-הפתיחה (T58; גל-9: ההגשה היא דלת-הפתיחה — מנדט-הבעלים "אני עוד לא רואה רבע"). */
 const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = [
+  { id: "submission", label: "ההגשה", he: "ההגשה-הסופית: הרעיון המאוחד · הארכיטקטורה · הכלכלה · הלקחים · הענקים", icon: Crown },
   { id: "machine", label: "המכונה", he: "מכונת-האמת: הדקס כמכונה חיה (anatomy)", icon: Cog },
   { id: "dex", label: "הדקס", he: "מרכז-הכובד: נרות · קופות · ווליום", icon: LineChart },
   { id: "league", label: "ליגת-הענקים", he: "DefiLlama חי · השורה-שלנו בכנות", icon: Trophy },
@@ -77,7 +79,7 @@ const fmtInt = (n: number | null | undefined) =>
   typeof n === "number" && Number.isFinite(n) ? n.toLocaleString("en-US") : "—";
 
 export default function Home() {
-  const [view, setView] = useState<ViewId>("machine");
+  const [view, setView] = useState<ViewId>("submission");
   const [clock, setClock] = useState("");
   const [truth, setTruth] = useState<TruthChip | null>(null);
   const [hero, setHero] = useState<HeroStats>(HERO_EMPTY);
@@ -307,6 +309,7 @@ export default function Home() {
 
           {/* מעבר-תצוגה (60fps): כניסה-חלקה-פעם-אחת לכל-מודול */}
           <div key={view} className="g-view-in">
+            {view === "submission" && <SubmissionView />}
             {view === "machine" && <MachineView />}
             {view === "dex" && <DexView />}
             {view === "league" && <GiantsView />}
