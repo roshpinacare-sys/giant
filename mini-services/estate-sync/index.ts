@@ -14,7 +14,13 @@
  *
  * כנות: הטוקן חי-רק בזיכרון-התהליך (env של-spawn · helper-חד-פעמי) — לעולם
  * לא ב-argv, לא ב-דיסק, לא ב-לוגים, לא ב-.git/config (ה-remote-נשאר-URL-נקי).
- * כשל-רשת = כנה-ולא-קטלני; בריאות-מלאה על :3021. */
+ * כשל-רשת = כנה-ולא-קטלני; בריאות-מלאה על :3021.
+ *
+ * גל-18 · התיקון-השורשי-של-הזומבי: נמדד-חי — תהליך-שרת-ענה-200-על-הבריאות
+ * במשך-80-דקות-ובפנים אפס-טיקים (ה-`void tick()`-היה-חבור-ב-callback-של-listen,
+ * ו-hot-reload/קריסה-השאירו-פורט-פתוח-בלי-עבודה). החיווט-החדש: הטיק-רץ-מיד-
+ * ברמת-המודול — לא-תלוי-ב-listen; מגן-globalThis מונע-ריבוי-מאזינים-ב-hot-reload;
+ * כשל-listen = יומן-כנה-ולא-מוות-שקט — העבודה-ממשיכה-גם-בלי-HTTP. */
 import { createServer } from "node:http";
 import { existsSync, mkdirSync, rmSync, renameSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -33,11 +39,22 @@ interface Anchor {
 
 const ANCHORS: Anchor[] = [
   { name: "estate/Domain", dir: "/home/z/estate/Domain", repo: "Domain", privateRepo: false },
+  { name: "estate/Pulse", dir: "/home/z/estate/Pulse", repo: "Pulse", privateRepo: false },
+  { name: "law/Autonomy", dir: "/home/z/autonomy-fix", repo: "Autonomy", privateRepo: false },
   { name: "lane/saos-agents", dir: "/home/z/lane/saos-agents", repo: "saos-agents", privateRepo: true },
   { name: "lane/Defi", dir: "/home/z/lane/Defi", repo: "Defi", privateRepo: true },
   { name: "lane/Adsmarket", dir: "/home/z/lane/Adsmarket", repo: "Adsmarket", privateRepo: true },
   { name: "lane/saos-markets", dir: "/home/z/lane/saos-markets", repo: "saos-markets", privateRepo: true },
   { name: "channels/giant", dir: "/home/z/channels/giant", repo: "giant", privateRepo: true },
+  /* מורשת-t36 — הקנון-ההיסטורי (ציבוריים · נמשכים-ללא-טוקן):
+   * Sandbox = ספר-הלדג'ר-והאמנות (ops/AGENT-LEDGER.md) · FleetHQ = מטה-הצי ·
+   * Console = הקונסולה-הציבורית · saos-dex = ארכיון-הדקס · roshpina = מאגר-הידע.
+   * בלעדיהם שכבת-גיט→מסך (git-content REPOS) קראה-מתיקיות-מתות — נמדד-חי-בגל-18. */
+  { name: "estate/Sandbox", dir: "/home/z/estate/Sandbox", repo: "Sandbox", privateRepo: false },
+  { name: "estate/FleetHQ", dir: "/home/z/estate/FleetHQ", repo: "FleetHQ", privateRepo: false },
+  { name: "estate/Console", dir: "/home/z/estate/Console", repo: "Console", privateRepo: false },
+  { name: "estate/saos-dex", dir: "/home/z/estate/saos-dex", repo: "saos-dex", privateRepo: false },
+  { name: "estate/roshpina", dir: "/home/z/estate/roshpina", repo: "roshpina", privateRepo: false },
 ];
 
 interface AnchorState {
@@ -176,14 +193,21 @@ async function tick() {
   }
 }
 
+const BOOTED_AT = new Date().toISOString();
+
 const health = createServer((req, res) => {
   const allOk = states.every((s) => s.ok === true);
   res.writeHead(200, { "content-type": "application/json" });
   res.end(JSON.stringify({
     ok: allOk,
     service: "estate-sync",
-    version: 2,
+    version: 3,
     selfHealing: true,
+    tickDecoupledFromListen: true,
+    pid: process.pid,
+    bootedAt: BOOTED_AT,
+    uptimeSec: Math.round((Date.now() - Date.parse(BOOTED_AT)) / 1000),
+    listen: listenState,
     anchors: states,
     ticks, heals, fails,
     lastTick,
@@ -191,8 +215,43 @@ const health = createServer((req, res) => {
   }, null, 2));
 });
 
-health.listen(PORT, "127.0.0.1", () => {
-  log(`alive v2 · self-healing · ${ANCHORS.length} anchors · every ${Math.round(INTERVAL_MS / 1000)}s · health :${PORT}`);
+interface ListenState { ok: boolean; detail: string; at: string | null; }
+const listenState: ListenState = { ok: false, detail: "starting", at: new Date().toISOString() };
+
+/* מגן-העלייה: ב-hot-reload המודול-רץ-שוב — אסור-שייווצר-מאזין-שני-או-לולאת-טיק-שנייה
+ * (אחרת-שני-ראשים-דורסים-מצב-והבריאות-משקרת). עץ-אחד, שורש-אחד. */
+const G = globalThis as { __estateSyncBooted?: boolean };
+
+function boot() {
+  if (G.__estateSyncBooted) { log("boot skipped (already booted in this process — hot-reload guard)"); return; }
+  G.__estateSyncBooted = true;
+
+  /* העבודה-קודמת-לבריאות: הטיק-רץ-מיד — לא-חבור-ב-callback-של-listen
+   * (השורש-של-הזומבי-שנמדד: שרת-200 · אפס-טיקים · 80-דקות). */
+  log(`booting v3 · self-healing · ${ANCHORS.length} anchors · every ${Math.round(INTERVAL_MS / 1000)}s · health :${PORT} · pid ${process.pid}`);
   void tick();
   setInterval(() => void tick(), INTERVAL_MS);
-});
+
+  try {
+    health.listen(PORT, "127.0.0.1", () => {
+      listenState.ok = true;
+      listenState.detail = "listening";
+      listenState.at = new Date().toISOString();
+      log(`health :${PORT} listening`);
+    });
+    /* כשל-אסינכרוני (EADDRINUSE) = יומן-כנה — הטיק-ממשיך-לעבוד-בלי-HTTP,
+     * והמשגיחה-הפונקציונלית (mini-guard) תהרוג-את-הזומבי-על-הפורט. */
+    health.on("error", (e: Error) => {
+      listenState.ok = false;
+      listenState.detail = `listen-error: ${e.message}`;
+      listenState.at = new Date().toISOString();
+      log("HEALTH-LISTEN-ERROR (work continues, honest):", e.message);
+    });
+  } catch (e) {
+    listenState.ok = false;
+    listenState.detail = `listen-throw: ${e instanceof Error ? e.message : String(e)}`;
+    log("HEALTH-LISTEN-THROW (work continues, honest):", listenState.detail);
+  }
+}
+
+boot();

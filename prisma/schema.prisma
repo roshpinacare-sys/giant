@@ -157,3 +157,42 @@ model FleetAgent {
   createdAt      DateTime @default(now())
   lastTradeAt    DateTime?
 }
+// פקודות-לימיט אמת — סוגרות-את-הפער-מול-הענקים (Jupiter/Uniswap-v4 מחזיקות; עכשיו גם אנחנו):
+// נעילת-נזילות-בלדג'ר (ESCROW) · התאמה-בטיקר מול-הבריכה האמיתית · ביטול-עם-שחרור.
+model DexOrder {
+  id          String    @id @default(cuid())
+  pairId      String
+  account     String    @default("OWNER") // OWNER | FLEET:<agentId>
+  side        String    // BUY | SELL (of base)
+  limitPrice  Float     // המחיר-האמיתי-שהמזמין קבע (USDS ליחידת-בסיס)
+  amountIn    Float     // כמות-ה-tokenIn שנעולה (USDS ב-BUY · בסיס ב-SELL)
+  status      String    @default("OPEN") // OPEN | FILLED | CANCELLED
+  source      String    @default("USER") // USER | FLEET
+  sourceAgent String?
+  tradeId     String?   // העסקה-האמיתית-שמילאה-את-הפקודה
+  fillPrice   Float?
+  fillOut     Float?
+  createdAt   DateTime  @default(now())
+  closedAt    DateTime?
+
+  @@index([status, createdAt])
+  @@index([pairId, status])
+}
+
+// מפתחות-API ציבוריים — סוגרים-את-הפער public-api מול-הענקים (כל-בורסה-אמת מחזיקה):
+// המפתח-הגולמי-מונפק-פעם-אחת-ולא-נשמר; בשרת יש רק sha256. כל-מפתח סוחר מהחשבון-שלו-בלבד
+// (API:<prefix>) — לעולם-לא-נוגע-בארנק-הבעלים. מגבלת-קצב לכל-מפתח.
+model DexApiKey {
+  id             String    @id @default(cuid())
+  keyHash        String    @unique // sha256-המפתח-הגולמי
+  prefix         String    // 14-התווים-הראשונים לתצוגה (sk-saos-xxxxxxxx…)
+  label          String    // שם-אנושי (מי-משתמש)
+  account        String    // חשבון-המסחר של-המפתח (API:<prefix>)
+  ratePerMin     Int       @default(60)
+  requestCount   Int       @default(0)
+  lastUsedAt     DateTime?
+  revokedAt      DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@index([account])
+}

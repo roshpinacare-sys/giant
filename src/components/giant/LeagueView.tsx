@@ -13,6 +13,19 @@ interface LeaguePayload {
   ok: boolean; note?: string; rows: LeagueRow[]; ours: OursRow | null;
   source: string; fetchedAt: string;
 }
+/* מד-המרחק-מהענקים — מוצר-מול-מוצר (הוראת-בעלים trace 1a13feac8b93b859: "למרות-הטענות-של-הסוכנים") */
+interface GapCap { id: string; he: string; weight: number; giant: "yes" | "partial" | "no"; giantFact: string | null; ours: "yes" | "partial" | "no"; oursProof: string | null; gapClosedAt?: string }
+interface GapPayload {
+  ok: boolean; note?: string;
+  gap: {
+    ok: boolean; note?: string; answerHe: string | null;
+    sources: Array<{ id: string; url: string; what: string }>;
+    capabilities: GapCap[];
+    score: { ours: number | null; giants: number | null; method: string | null };
+    gapPlan: Array<{ next: string; why: string; ownerDecision: boolean }>;
+    liveAudit: { engineRunning: boolean | null; engineTicks: number | null; openLimitOrders: number | null; limitOrdersTotal: number | null; realTradesTotal: number | null };
+  } | null;
+}
 
 function usd(v: number | null): string {
   if (v === null || !Number.isFinite(v)) return "—";
@@ -49,8 +62,16 @@ const FLEET_SURFACES: Array<{ label: string; he: string; url: string }> = [
   { label: "המשטח-הסטטי", he: "Pulse · דופק-הצי", url: "https://roshpinacare-sys.github.io/Pulse/sovereign.html" },
 ];
 
+function verdictChip(v: "yes" | "partial" | "no") {
+  const base = "rounded-full px-2 py-0.5 text-[9px] font-black whitespace-nowrap";
+  if (v === "yes") return <span className={`${base} bg-emerald-500/10 text-emerald-400`}>יש</span>;
+  if (v === "partial") return <span className={`${base} bg-amber-500/10 text-amber-400`}>חלקי</span>;
+  return <span className={`${base} bg-red-500/10 text-red-400`}>אין</span>;
+}
+
 export function GiantsView() {
   const [data, setData] = useState<LeaguePayload | null>(null);
+  const [gapData, setGapData] = useState<GapPayload | null>(null);
   const [err, setErr] = useState("");
 
   const load = useCallback(async () => {
@@ -62,6 +83,10 @@ export function GiantsView() {
     } catch {
       setErr("השרת לא נגיש כרגע");
     }
+    try {
+      const r2 = await fetch("/api/giant/giants", { cache: "no-store" });
+      setGapData((await r2.json()) as GapPayload);
+    } catch { /* כנה — מד-המרחק יישאר חסר */ }
   }, []);
 
   useEffect(() => {
@@ -150,6 +175,96 @@ export function GiantsView() {
           השורה-שלנו מראה את האמת-המלאה: צבירת-העמלות שלנו <b>יחידות-פנימיות בספר-סגור</b> ואין לה ערך-חוץ — עד שהגשר-החוץ ייפתח בהכרעת-בעלים.
         </p>
       </section>
+
+      {/* ═══ מד-המרחק-מהענקים · מוצר-מול-מוצר (הוראת-הבעלים: "למרות-הטענות-של-הסוכנים") ═══ */}
+      {gapData?.gap && gapData.gap.ok && (
+        <section className="rounded-2xl border border-amber-600/30 bg-gradient-to-l from-amber-950/20 via-zinc-900/60 to-zinc-900/60 p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 className="text-sm font-black text-zinc-100">מד-המרחק-מהענקים · מוצר-מול-מוצר, לא-טענה-מול-טענה</h3>
+              <p className="mt-0.5 max-w-3xl text-[11px] leading-5 text-zinc-400">{gapData.gap.answerHe}</p>
+            </div>
+            <span className="rounded-full border border-amber-500/25 bg-amber-500/5 px-2.5 py-1 text-[10px] font-bold text-amber-400">
+              {gapData.gap.capabilities.length} יכולות משוקללות
+            </span>
+          </div>
+
+          {/* ציוני-המרחק — מחושבים-מהמשקלים, לא-מוכרזים */}
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-amber-600/25 bg-zinc-950 p-4">
+              <div className="flex items-baseline justify-between">
+                <p className="text-xs font-bold text-amber-400">המרחק-שלנו (SAOS DEX)</p>
+                <p className="font-mono text-2xl font-black text-amber-400">{gapData.gap.score.ours != null ? `${gapData.gap.score.ours.toFixed(1)}%` : "—"}</p>
+              </div>
+              <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-zinc-800">
+                <div className="h-full rounded-full bg-amber-500 transition-all" style={{ width: `${gapData.gap.score.ours ?? 0}%` }} />
+              </div>
+              <p className="mt-1.5 text-[10px] text-zinc-500">כן=1 · חלקי=0.5 · אין=0 · משוקלל-לפי-חשיבות-להיות-ענק</p>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-zinc-950 p-4">
+              <div className="flex items-baseline justify-between">
+                <p className="text-xs font-bold text-zinc-300">קו-הבסיס של הענקים (Uniswap/Jupiter)</p>
+                <p className="font-mono text-2xl font-black text-zinc-100">{gapData.gap.score.giants != null ? `${gapData.gap.score.giants.toFixed(1)}%` : "—"}</p>
+              </div>
+              <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-zinc-800">
+                <div className="h-full rounded-full bg-zinc-400 transition-all" style={{ width: `${gapData.gap.score.giants ?? 0}%` }} />
+              </div>
+              <p className="mt-1.5 text-[10px] text-zinc-500">עובדות-מקור-ציבורי (docs · wallet · DefiLlama) — לא-שיווק</p>
+            </div>
+          </div>
+
+          {/* טבלת-היכולות */}
+          <div className="mt-4 max-h-96 overflow-auto rounded-xl border border-white/10" role="region" aria-label="מטריצת-היכולות">
+            <table className="w-full min-w-[720px] text-right text-[11px]">
+              <thead className="sticky top-0 bg-zinc-950/95 text-[9px] uppercase text-zinc-500 backdrop-blur">
+                <tr>
+                  <th className="px-3 py-2">יכולת</th>
+                  <th className="px-3 py-2">משקל</th>
+                  <th className="px-3 py-2">הענקים</th>
+                  <th className="px-3 py-2">העובדה-אצלם</th>
+                  <th className="px-3 py-2">אנחנו</th>
+                  <th className="px-3 py-2">ההוכחה-אצלנו</th>
+                </tr>
+              </thead>
+              <tbody>
+                {gapData.gap.capabilities.map((c) => (
+                  <tr key={c.id} className={`border-t border-white/5 ${c.gapClosedAt ? "bg-emerald-500/[0.04]" : ""}`}>
+                    <td className="px-3 py-2 font-bold text-zinc-200">
+                      {c.he}
+                      {c.gapClosedAt && <span className="mr-1.5 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[8px] font-black text-emerald-400">נסגר</span>}
+                    </td>
+                    <td className="px-3 py-2 font-mono text-zinc-500">×{c.weight}</td>
+                    <td className="px-3 py-2">{verdictChip(c.giant)}</td>
+                    <td className="px-3 py-2 leading-5 text-zinc-500">{c.giantFact}</td>
+                    <td className="px-3 py-2">{verdictChip(c.ours)}</td>
+                    <td className="px-3 py-2 leading-5 text-zinc-400">{c.oursProof}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* הצעדים-הבאים — הדרך-לענקים */}
+          <div className="mt-3 flex flex-wrap gap-2">
+            {gapData.gap.gapPlan.map((p) => (
+              <span key={p.next} className="rounded-lg border border-white/10 bg-zinc-950 px-3 py-2 text-[10px] leading-5 text-zinc-400" title={p.why}>
+                <b className="text-amber-400">→ {p.next}</b> · {p.why}
+                {p.ownerDecision && <span className="mr-1.5 rounded-full bg-amber-500/10 px-1.5 py-0.5 text-[8px] font-black text-amber-400">הכרעת-בעלים</span>}
+              </span>
+            ))}
+          </div>
+
+          {/* ביקורת-חי-עצמית + מקורות */}
+          <p className="mt-3 rounded-lg border border-white/5 bg-zinc-950 px-3 py-2 text-[10px] leading-5 text-zinc-500">
+            <b className="text-zinc-400">ביקורת-חי-עצמית:</b>{" "}
+            מנוע {gapData.gap.liveAudit.engineRunning ? <span className="font-bold text-emerald-400">חי</span> : "לא-רץ"}
+            {gapData.gap.liveAudit.engineTicks != null ? ` · ${gapData.gap.liveAudit.engineTicks.toLocaleString("en-US")} טיקים` : ""}
+            {gapData.gap.liveAudit.realTradesTotal != null ? ` · ${gapData.gap.liveAudit.realTradesTotal.toLocaleString("en-US")} עסקאות-אמת` : ""}
+            {gapData.gap.liveAudit.openLimitOrders != null ? ` · ${gapData.gap.liveAudit.openLimitOrders} פקודות-לימיט פתוחות (מתוך ${gapData.gap.liveAudit.limitOrdersTotal})` : ""}
+            {" · "}מקורות: {gapData.gap.sources.map((x) => x.url).join(" · ")}
+          </p>
+        </section>
+      )}
 
       {/* ═══ משטחי-הצי — ההצטרפות ═══ */}
       <section>

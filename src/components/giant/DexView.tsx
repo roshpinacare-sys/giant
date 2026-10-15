@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CandleChart } from "./CandleChart";
+import { TradeDesk } from "./TradeDesk";
 import { Activity, Coins, Flame, Gauge, TrendingUp, Trophy, Layers, Scale, Rocket, CandlestickChart } from "lucide-react";
 
 /* ═══ הדקס — מרכז-הכובד של הריבונות (GIANT · R360 · V3 מיזוג-צי) ══════════
@@ -370,8 +371,8 @@ export function DexView() {
               {eng.truth.realMoney.lines.length === 0 && <p className="rounded-xl border border-white/5 bg-zinc-950/60 p-3 text-xs text-zinc-500">לא נמדד כרגע — fail-honest {eng.truth.note ?? ""}</p>}
               {eng.truth.realMoney.lines.length > 0 && (
                 <div className="space-y-1.5">
-                  {eng.truth.realMoney.lines.map((l) => (
-                    <div key={l.asset} className="flex items-center justify-between rounded-xl border border-white/5 bg-zinc-950/60 px-3 py-2 text-xs">
+                  {eng.truth.realMoney.lines.map((l, i) => (
+                    <div key={`${l.asset}-${i}`} className="flex items-center justify-between rounded-xl border border-white/5 bg-zinc-950/60 px-3 py-2 text-xs">
                       <span className="font-bold text-zinc-300">{l.asset}</span>
                       <span className="font-mono text-zinc-200">
                         {l.amount !== null ? l.amount.toLocaleString("en-US", { maximumFractionDigits: 3 }) : "—"}
@@ -731,6 +732,9 @@ export function DexView() {
           <p className="mt-1 text-[11px] leading-5 text-zinc-400">נמדד-בכנות (volume-honesty, ללא-הבטחות) — ואז נגזרים · הלוואות · מינוף. הענקים מיושנים; אנחנו בונים את-מה-שהם-לא.</p>
         </section>
       </div>
+
+      {/* דוכן-המסחר — האפליקציה-האמיתית: החלפות · פקודות-לימיט · ניהול (הוראת-בעלים: אפליקציה ווב ממש, לא אתר) */}
+      <TradeDesk />
     </div>
   );
 }

@@ -11,7 +11,7 @@
  *    bytes / sha16 / mtime so the owner can verify byte-level.
  */
 import { execFile } from "child_process";
-import { promises as fs } from "fs";
+import { existsSync, promises as fs } from "fs";
 import path from "path";
 import { createHash } from "crypto";
 
@@ -239,23 +239,53 @@ function execGit(args: string[], cwd: string, timeoutMs = 6000): Promise<string>
 }
 
 export async function scanEstate(): Promise<{ clones: RepoScan[]; refsSource: string }> {
-  let dirs: string[] = [];
-  try {
-    const entries = await fs.readdir(ESTATE_DIR, { withFileTypes: true });
-    dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name).filter(Boolean).sort();
-  } catch {
-    return { clones: [], refsSource: "estate-dir-missing" };
+  /* גל-18 · טופולוגיה-מלאה: הסריקה-כיסתה-רק-את-estate/ — lane/ · channels/ · autonomy-fix
+   * היו-בלתי-נראים-למפקדת (נמדד-חי: 7 מול-14-ריפו-בדיסק).
+   * שורש-שהוא-בעצמו-ריפו (autonomy-fix) = מקום-אחד; שורש-אם = כל-בן-עם .git-משלו.
+   * זיהוי-הריפו = נוכחות-.git (חד-משמעי) — לא-rev-parse (הוא-true-גם-בתתי-תיקיות). */
+  const SCAN_ROOTS: { dir: string; prefix: string }[] = [
+    { dir: "/home/z/estate", prefix: "" },
+    { dir: "/home/z/lane", prefix: "lane/" },
+    { dir: "/home/z/channels", prefix: "channels/" },
+    { dir: "/home/z/autonomy-fix", prefix: "" },
+  ];
+  type Place = { dir: string; repo: string };
+  const places: Place[] = [];
+  let nonGitDirs = 0;
+  for (const { dir, prefix } of SCAN_ROOTS) {
+    if (existsSync(path.join(dir, ".git"))) {
+      /* שורש-שהוא-בעצמו-ריפו (למשל autonomy-fix) */
+      places.push({ dir, repo: prefix + path.basename(dir) });
+      continue;
+    }
+    let entries;
+    try {
+      entries = await fs.readdir(dir, { withFileTypes: true });
+    } catch {
+      continue; /* השורש-לא-קיים — כנות */
+    }
+    for (const e of entries) {
+      if (!e.isDirectory()) continue;
+      const full = path.join(dir, e.name);
+      if (existsSync(path.join(full, ".git"))) {
+        places.push({ dir: full, repo: prefix + e.name });
+      } else {
+        nonGitDirs += 1;
+      }
+    }
+  }
+  if (places.length === 0) {
+    return { clones: [], refsSource: "estate-dirs-missing" };
   }
 
   // linked places = git repos only. State/feed dirs (e.g. Sandbox/) are not
   // clones — they are declared honestly in refsSource, never shown as repos.
   const scans: RepoScan[] = [];
-  let nonGitDirs = 0;
   await Promise.all(
-    dirs.map(async (repo): Promise<void> => {
-      const dir = path.join(ESTATE_DIR, repo);
+    places.map(async (place): Promise<void> => {
+      const dir = place.dir;
       const base: RepoScan = {
-        repo,
+        repo: place.repo,
         branch: null,
         head: null,
         headShort: null,
@@ -268,12 +298,6 @@ export async function scanEstate(): Promise<{ clones: RepoScan[]; refsSource: st
         error: null,
       };
       try {
-        const isRepo = await execGit(["rev-parse", "--is-inside-work-tree"], dir).catch(() => "false");
-        if (isRepo.trim() !== "true") {
-          nonGitDirs += 1;
-          return;
-        }
-
         const branch = (await execGit(["rev-parse", "--abbrev-ref", "HEAD"], dir)).trim();
         const logOut = await execGit(["log", "-1", "--format=%H%x09%h%x09%cI%x09%s"], dir).catch(() => "");
         const [head, headShort, committedAt, ...rest] = logOut.trim().split("\t");
@@ -295,7 +319,7 @@ export async function scanEstate(): Promise<{ clones: RepoScan[]; refsSource: st
         }
 
         scans.push({
-          repo,
+          repo: place.repo,
           branch,
           head: head || null,
           headShort: headShort || null,
