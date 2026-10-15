@@ -3,7 +3,7 @@
 // giant DEX · סקירת-שוק: KPIs-חיים, SAOS-זרקור, פאנל-אספקת-אמת, ארנת-הווליום (M-9), מובילים, טופ-זוגות
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Activity, Flame, Gauge, Landmark, TrendingDown, TrendingUp, Zap } from "lucide-react";
+import { Activity, Flame, Gauge, Globe2, Landmark, TrendingDown, TrendingUp, Zap } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,13 +13,14 @@ import { cn } from "@/lib/utils";
 import { Bot } from "lucide-react";
 import {
   chainColor,
+  fmtAmount,
   fmtMicro,
   fmtPct,
   fmtPrice,
   trendBg,
   trendColor,
 } from "@/lib/dex-format";
-import type { Overview, PairSummary, SupplyPanel } from "@/lib/dex-types";
+import type { Overview, PairSummary, SupplyPanel, WorldRow } from "@/lib/dex-types";
 
 export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }) {
   const [data, setData] = useState<Overview | null>(null);
@@ -53,7 +54,7 @@ export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }
     );
   }
 
-  const { kpis, moversUp, moversDown, arena, engine, topPairs, sparks, supply } = data;
+  const { kpis, moversUp, moversDown, arena, engine, topPairs, sparks, supply, world } = data;
 
   return (
     <div className="space-y-4">
@@ -64,6 +65,9 @@ export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }
         <Kpi label="עמלות-אמת · 24h" value={fmtMicro(kpis.fees24h)} icon={<Flame className="h-4 w-4" />} tone="warn" />
         <Kpi label="זוגות" value={String(kpis.pairsCount)} icon={<Zap className="h-4 w-4" />} />
       </div>
+
+      {/* השוק-העולמי-החי · נתוני-שוק-אמת מ-Binance (מדדים-חוץ) */}
+      {world && world.length > 0 && <WorldMarket world={world} onTrade={onTrade} />}
 
       {/* פאנל-האמת: אספקת-המטבע — נגזר-לדג'ר, אפס-סימולציות */}
       {supply && <SupplyTruth supply={supply} />}
@@ -210,6 +214,72 @@ export function OverviewView({ onTrade }: { onTrade?: (pairId: string) => void }
         </section>
       </div>
     </div>
+  );
+}
+
+/** השוק-העולמי-החי · נתוני-שוק-אמת-מ-Binance — מחירים/שינויים/נפחים אמת, מדדים-חוץ-בלבד */
+function WorldMarket({ world, onTrade }: { world: WorldRow[]; onTrade?: (id: string) => void }) {
+  const liveCount = world.filter((w) => w.live).length;
+  return (
+    <section className="rounded-2xl border border-white/10 bg-[#0b0f0e] p-4" aria-label="השוק-העולמי-החי">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-200">
+          <Globe2 className="h-4 w-4 text-sky-400" aria-hidden="true" />
+          השוק-העולמי · נתוני-שוק-אמת
+        </h3>
+        <Badge className="bg-sky-500/10 text-[10px] text-sky-300 hover:bg-sky-500/10">
+          Binance ציבורי · {liveCount}/{world.length} חי · מדדים-חוץ-בלבד
+        </Badge>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[560px] text-sm" dir="ltr">
+          <thead>
+            <tr className="border-b border-white/5 text-[10px] uppercase tracking-wide text-zinc-600">
+              <th className="px-2 py-1.5 text-start font-semibold">Symbol</th>
+              <th className="px-2 py-1.5 text-end font-semibold">Price</th>
+              <th className="px-2 py-1.5 text-end font-semibold">24h</th>
+              <th className="hidden px-2 py-1.5 text-end font-semibold sm:table-cell">24h High</th>
+              <th className="hidden px-2 py-1.5 text-end font-semibold sm:table-cell">24h Low</th>
+              <th className="px-2 py-1.5 text-end font-semibold">Volume (USDT)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {world.map((w) => (
+              <tr
+                key={w.pairId}
+                onClick={() => onTrade?.(w.pairId)}
+                className="cursor-pointer border-b border-white/[0.03] transition-colors hover:bg-white/[0.04]"
+              >
+                <td className="px-2 py-2">
+                  <span className="flex items-center gap-1.5">
+                    <span className="font-bold text-white">{w.base}</span>
+                    <span className="text-[10px] text-zinc-600">/USDT</span>
+                    <span
+                      className={cn(
+                        "h-1.5 w-1.5 rounded-full",
+                        w.live ? "bg-emerald-400" : "bg-zinc-600",
+                      )}
+                      title={w.live ? "הזנה-חיה" : "ההזנה-לא-זמינה-כרגע"}
+                      aria-hidden="true"
+                    />
+                  </span>
+                </td>
+                <td className="px-2 py-2 text-end font-mono tabular-nums text-zinc-200">{fmtPrice(w.price)}</td>
+                <td className={cn("px-2 py-2 text-end font-mono font-semibold tabular-nums", trendColor(w.change24h))}>
+                  {fmtPct(w.change24h)}
+                </td>
+                <td className="hidden px-2 py-2 text-end font-mono tabular-nums text-zinc-500 sm:table-cell">{fmtPrice(w.high24h)}</td>
+                <td className="hidden px-2 py-2 text-end font-mono tabular-nums text-zinc-500 sm:table-cell">{fmtPrice(w.low24h)}</td>
+                <td className="px-2 py-2 text-end font-mono tabular-nums text-zinc-400">{fmtAmount(w.quoteVolume24h)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-2 px-2 text-[11px] leading-relaxed text-zinc-600">
+        אלו-מדדי-מחיר-חוץ-חיים (לא-נסחרים-כאן). המסחר-האמיתי-פתוח-על-SAOS/USDS — המטבע-שלנו.
+      </p>
+    </section>
   );
 }
 

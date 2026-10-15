@@ -8,10 +8,8 @@ import { motion } from "framer-motion";
 import {
   AlertCircle,
   GitBranch,
-  Gauge,
   KeyRound,
   Landmark,
-  Library,
   Loader2,
   Lock,
   LogOut,
@@ -24,9 +22,8 @@ import {
   Sparkles,
   Stamp,
   Terminal,
-  Users,
 } from "lucide-react";
-import { Crown, FileText, GitMerge, Network, Orbit, TrendingUp } from "lucide-react";
+import { Crown, GitMerge, Network, Orbit, TrendingUp } from "lucide-react";
 import { FinalView } from "@/components/giant/final";
 import { DexView } from "@/components/giant/dex/dex-view";
 import { EstateView } from "@/components/giant/estate";
@@ -64,7 +61,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { ArchiveView, LedgerView } from "@/components/giant/views";
+import { LedgerView } from "@/components/giant/views";
 import {
   Alert,
   AlertDescription,
@@ -276,11 +273,6 @@ const NAV_ITEMS = [
   { id: "estate", label: "האחוזה · מפת-אמת", icon: Network },
   { id: "channel", label: "ערוץ הריבון", icon: MessagesSquare },
   { id: "ledger", label: "לדג'ר-האמת", icon: ScrollText },
-  { id: "plans", label: "תוכניות-האם", icon: FileText },
-  { id: "team", label: "הצוות", icon: Users },
-  { id: "security", label: "אבטחה-וחוקים", icon: ShieldCheck },
-  { id: "systems", label: "מנועים-ומדידות", icon: Gauge },
-  { id: "archive", label: "ארכיון-מלא", icon: Library },
 ] as const;
 
 export default function Home() {
@@ -414,18 +406,8 @@ export default function Home() {
         return <EstateView />;
       case "ledger":
         return <LedgerView />;
-      case "plans":
-        return <ArchiveView initialSectionId="plans" />;
-      case "team":
-        return <ArchiveView initialSectionId="team" />;
-      case "security":
-        return <ArchiveView initialSectionId="security" />;
-      case "systems":
-        return <ArchiveView initialSectionId="systems" />;
-      case "archive":
-        return <ArchiveView />;
       default:
-        return null;
+        return <FinalView />;
     }
   }
 

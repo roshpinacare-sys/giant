@@ -101,3 +101,14 @@ export function trendBg(v: number): string {
     ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
     : "bg-red-500/10 text-red-600 dark:text-red-400";
 }
+
+/** כמות-crypto: דיוק-דינמי-לפי-גודל (0.00912 BTC לא-הופך-ל-0) */
+export function fmtQty(v: number): string {
+  if (!isFinite(v)) return "—";
+  const a = Math.abs(v);
+  if (a === 0) return "0";
+  if (a < 0.001) return v.toFixed(6);
+  if (a < 1) return v.toFixed(4);
+  if (a < 1_000) return new Intl.NumberFormat("en-US", { maximumFractionDigits: 3 }).format(v);
+  return new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(v);
+}

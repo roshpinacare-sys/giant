@@ -66,7 +66,7 @@ export function DexView() {
                 שוק-חי
               </span>
             </div>
-            <div className="text-[10px] text-zinc-500">בורסת-הריבונות · Giant Chain ורשתות-מוכרות</div>
+            <div className="text-[10px] text-zinc-500">בורסת-הריבונות · מסחר-אמת-SAOS/USDS · נתוני-שוק-עולמיים-חיים מ-Binance</div>
           </div>
         </div>
         <span className="hidden font-mono text-xs tabular-nums text-zinc-500 sm:block" dir="ltr">

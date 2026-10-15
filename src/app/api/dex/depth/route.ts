@@ -1,9 +1,12 @@
-// GET /api/dex/depth?pair= · עומק-נגזר-מהרזרבות-האמת (AMM) לזוג-היליד;
-// זוגות-עזר: אין-בורסה — מדד-מחיר-חוץ-בלבד (Binance). אין-עומק-מדומה.
+// GET /api/dex/depth?pair= · ספר-הזמנות
+// חוק-אמת: זוג-יליד (SAOS/USDS) → עומק-נגזר-מהרזרבות-האמת (פונקציית-מחיר-AMM מדויקת).
+//           זוג-עזר → ספר-הזמנות-אמת-מ-Binance (מיקום-ציבורי-חי).
+//           אין-עומק-מדומה. אם-ההזנה-נופלת — מודים-בזה-בכנות.
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { ensureEngine } from "@/lib/dex-engine";
 import { ammQuote } from "@/lib/dex-math";
+import { binanceDepth, binanceSymbolFor } from "@/lib/market-feed";
 import type { DepthLevel } from "@/lib/dex-types";
 
 export const dynamic = "force-dynamic";
@@ -19,14 +22,40 @@ export async function GET(req: NextRequest) {
     const pair = await db.dexPair.findUnique({ where: { id: pairId } });
     if (!pair) return NextResponse.json({ error: "זוג-לא-נמצא" }, { status: 404 });
 
-    // מדד-מחיר: אין-עומק. הפרונט-מציג-הודעה-כנה.
-    if (!pair.isNative || pair.reserveBase <= 0 || pair.reserveQuote <= 0) {
+    // --- זוג-עזר: ספר-הזמנות-אמת מ-Binance ---
+    if (!pair.isNative) {
+      const symbol = binanceSymbolFor(pair.base);
+      const book = symbol ? await binanceDepth(symbol, 20) : null;
+      if (book) {
+        return NextResponse.json({
+          pairId: pair.id,
+          mid: book.mid,
+          bids: book.bids,
+          asks: book.asks,
+          refOnly: false,
+          source: "binance",
+        });
+      }
+      // ההזנה-נפלה — כנות-מלאה
       return NextResponse.json({
         pairId: pair.id,
         mid: pair.price,
         bids: [],
         asks: [],
-        refOnly: !pair.isNative,
+        refOnly: true,
+        source: "binance-down",
+      });
+    }
+
+    // --- זוג-יליד: עומק-AMM מהרזרבות-האמת ---
+    if (pair.reserveBase <= 0 || pair.reserveQuote <= 0) {
+      return NextResponse.json({
+        pairId: pair.id,
+        mid: pair.price,
+        bids: [],
+        asks: [],
+        refOnly: true,
+        source: "giant-amm",
       });
     }
 
@@ -53,7 +82,14 @@ export async function GET(req: NextRequest) {
       bids.push({ price: q.effectivePrice, amount: baseIn, total: cum });
     }
 
-    return NextResponse.json({ pairId: pair.id, mid: pair.price, bids, asks, refOnly: false });
+    return NextResponse.json({
+      pairId: pair.id,
+      mid: pair.price,
+      bids,
+      asks,
+      refOnly: false,
+      source: "giant-amm",
+    });
   } catch (err) {
     console.error("[api/dex/depth]", err);
     return NextResponse.json({ error: "נכשלה-טעינת-ספר-ההזמנות" }, { status: 500 });

@@ -11,6 +11,7 @@
 import { db } from "@/lib/db";
 import type { Timeframe } from "@/lib/dex-types";
 import { TF_SECONDS } from "@/lib/dex-types";
+import { binanceTickers24h } from "@/lib/market-feed";
 
 /* ============================== הגדרות-שוק ============================== */
 
@@ -234,9 +235,14 @@ async function tick(): Promise<void> {
     const native = pairs.filter((p) => p.isNative);
     const refs = pairs.filter((p) => !p.isNative);
 
-    // --- זוגות-עזר: מחיר-חוץ-אמת מ-Binance (מדד-בלבד; אין-מסחר, אין-נפח) ---
+    // --- זוגות-עזר: מחיר-חוץ-אמת מ-Binance (מדד-בלבד; אין-מסחר, אין-נפח-עצמי) ---
+    // + סטטיסטיקת-24h-אמת (פתיחה/גבוה/נמוך/נפח-שוק) כדי-שהמסכים-יציגו-שוק-אמת.
     const live = await fetchBinancePrices();
     if (live) {
+      const symbols = refs
+        .map((r) => REFS.find((d) => d.base === r.base)?.binance)
+        .filter((s): s is string => Boolean(s));
+      const tickers = symbols.length ? await binanceTickers24h(symbols) : null;
       for (const ref of refs) {
         const def = REFS.find((r) => r.base === ref.base);
         const p = def ? live.get(def.binance) : undefined;
@@ -244,12 +250,15 @@ async function tick(): Promise<void> {
         for (const tf of Object.keys(TF_SECONDS) as Timeframe[]) {
           await upsertCandleTick(ref.id, tf, nowSec, p, 0);
         }
+        const t24 = tickers?.get(def?.binance ?? "");
         await db.dexPair.update({
           where: { id: ref.id },
           data: {
             price: p,
-            high24h: Math.max(ref.high24h, p),
-            low24h: Math.min(ref.low24h, p),
+            high24h: t24 ? t24.high : Math.max(ref.high24h, p),
+            low24h: t24 ? t24.low : Math.min(ref.low24h, p),
+            openPrice24h: t24 ? t24.open : ref.openPrice24h,
+            vol24h: t24 ? t24.quoteVolume : ref.vol24h, // נפח-השוק-האמת (USDT)
           },
         });
       }
@@ -285,10 +294,11 @@ async function tick(): Promise<void> {
       void realVol;
     }
 
-    // כל-75-טיקים (~10 דק׳): חישוב-מחדש-כנה של נפחים-ושער-פתיחה מהעסקאות-האמת
+    // כל-75-טיקים (~10 דק׳): חישוב-מחדש-כנה של נפחים-ושער-פתיחה מהעסקאות-האמת.
+    // חוק: ילידים-בלבד — נפח-העזרים שייך-לשוק-החוץ-ולא-נוגעים-בו-כאן.
     if (st.ticks % 75 === 0) {
       const dayAgo = new Date(Date.now() - 86_400_000);
-      for (const pair of pairs) {
+      for (const pair of native) {
         const agg = await db.dexTrade.aggregate({
           _sum: { total: true },
           where: { pairId: pair.id, t: { gte: dayAgo } },

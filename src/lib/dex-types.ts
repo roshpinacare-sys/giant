@@ -64,7 +64,8 @@ export interface Depth {
   mid: number;
   bids: DepthLevel[];
   asks: DepthLevel[];
-  refOnly?: boolean; // מדד-מחיר-חוץ — אין-בורסה ואין-עומק
+  refOnly?: boolean; // ההזנה-לא-זמינה — כנות-מלאה
+  source?: "giant-amm" | "binance" | "binance-down";
 }
 
 export interface SwapQuote {
@@ -151,6 +152,19 @@ export interface Mover {
   base: string;
   price: number;
   change24h: number;
+  isNative?: boolean;
+}
+
+export interface WorldRow {
+  pairId: string;
+  symbol: string;
+  base: string;
+  price: number;
+  change24h: number;
+  high24h: number;
+  low24h: number;
+  quoteVolume24h: number; // USDT — נפח-השוק-האמת
+  live: boolean; // האם-Binance-ענה-כרגע
 }
 
 export interface SparkPoint {
@@ -210,10 +224,11 @@ export interface Overview {
   moversUp: Mover[];
   moversDown: Mover[];
   sparks: Record<string, SparkPoint[]>; // מפתח: "SAOS/USDS" וכו'
+  world: WorldRow[]; // השוק-העולמי-החי — נתוני-Binance-אמת
   arena: Arena;
   engine: EngineStatus;
   supply?: SupplyPanel; // פאנל-האמת: אספקה נגזרת-לדג'ר
-  topPairs: PairSummary[]; // 8 לפי vol24h
+  topPairs: PairSummary[]; // 8 ילידים לפי vol24h
   fleet: FleetBrief;
 }
 
@@ -226,6 +241,7 @@ export type PairsResponse = {
 export type CandlesResponse = {
   candles: Candle[];
   tf: Timeframe;
+  source?: "giant-amm" | "binance" | "binance-down";
 };
 export type TradesResponse = {
   trades: TradeRow[];

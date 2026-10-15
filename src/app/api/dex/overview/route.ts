@@ -1,9 +1,11 @@
 // GET /api/dex/overview · KPIs + movers + sparks + ארנת-M-9 (אמת) + אספקת-המטבע + מצב-מנוע
-// חוק-אמת: כל-מספר כאן נגזר מהלדג'ר/הנרות/העסקאות — אין-מספר-מבוים.
+// חוק-אמת: KPIs-הבורסה = ילידים-בלבד (מה-DB). השוק-העולמי = נתוני-Binance-אמת-נפרדים.
+// אין-ערבוב: נפח-עולמי-של-מיליארדים-לא-מתלכד-עם-נפח-אמת-פנימי.
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { ensureEngine, engineStatus, SAOS, USDS_GENESIS } from "@/lib/dex-engine";
 import { toPairSummary } from "@/lib/dex-server";
+import { binanceKlines, binanceSymbolFor, binanceTickers24h } from "@/lib/market-feed";
 
 export const dynamic = "force-dynamic";
 
@@ -12,39 +14,74 @@ export async function GET() {
     await ensureEngine();
     const pairs = await db.dexPair.findMany({ orderBy: { sort: "asc" } });
     const summaries = pairs.map(toPairSummary);
+    const native = summaries.filter((p) => p.isNative);
 
-    const tvl = summaries.reduce((s, p) => s + p.liquidity, 0);
-    const vol24h = summaries.reduce((s, p) => s + p.vol24h, 0);
-    const vol7d = summaries.reduce((s, p) => s + p.vol7d, 0);
-    const vol30d = pairs.reduce((s, p) => s + p.vol30d, 0);
+    // --- KPIs-הבורסה: ילידים-בלבד (SAOS/USDS — המסחר-האמיתי-שלנו) ---
+    const tvl = native.reduce((s, p) => s + p.liquidity, 0);
+    const vol24h = native.reduce((s, p) => s + p.vol24h, 0);
+    const vol7d = native.reduce((s, p) => s + p.vol7d, 0);
+    const vol30d = pairs.filter((p) => p.isNative).reduce((s, p) => s + p.vol30d, 0);
     const saos = summaries.find((p) => p.base === "SAOS");
 
+    // --- השוק-העולמי-החי: נתוני-24h-אמת מ-Binance לזוגות-העזר ---
+    const refSymbols = pairs
+      .filter((p) => !p.isNative)
+      .map((p) => binanceSymbolFor(p.base))
+      .filter((s): s is string => Boolean(s));
+    const tickers = refSymbols.length ? await binanceTickers24h(refSymbols) : null;
+    const world = pairs
+      .filter((p) => !p.isNative)
+      .map((p) => {
+        const symbol = binanceSymbolFor(p.base);
+        const t = symbol ? tickers?.get(symbol) : undefined;
+        return {
+          pairId: p.id,
+          symbol: symbol ?? p.base,
+          base: p.base,
+          price: t ? t.last : p.price,
+          change24h: t ? t.changePct : ((p.price - p.openPrice24h) / (p.openPrice24h || 1)) * 100,
+          high24h: t ? t.high : p.high24h,
+          low24h: t ? t.low : p.low24h,
+          quoteVolume24h: t ? t.quoteVolume : p.vol24h,
+          live: Boolean(t),
+        };
+      })
+      .sort((a, b) => b.quoteVolume24h - a.quoteVolume24h);
+
+    // --- movers: מהשוק-כולו (אמת), עם-דגל-מקור ---
     const sorted = [...summaries].sort((a, b) => b.change24h - a.change24h);
-    const moversUp = sorted
-      .filter((p) => p.change24h > 0)
-      .slice(0, 3)
-      .map((p) => ({ pairId: p.id, base: p.base, price: p.price, change24h: p.change24h }));
+    const toMover = (p: (typeof summaries)[number]) => ({
+      pairId: p.id,
+      base: p.base,
+      price: p.price,
+      change24h: p.change24h,
+      isNative: p.isNative,
+    });
+    const moversUp = sorted.filter((p) => p.change24h > 0).slice(0, 3).map(toMover);
     const moversDown = sorted
       .filter((p) => p.change24h < 0)
       .reverse()
       .slice(0, 3)
-      .map((p) => ({ pairId: p.id, base: p.base, price: p.price, change24h: p.change24h }));
+      .map(toMover);
 
-    // sparks: 24 נרות-1h אחרונים לזוג-הדגל + 2 מדדי-העזר-המובילים
-    const sparkPairs = pairs.filter((p) => ["SAOS", "BTC", "ETH"].includes(p.base));
+    // --- sparks: SAOS מה-DB-האמת · BTC/ETH מהקרניים-האמת-של-Binance ---
     const sparks: Record<string, { t: number; v: number }[]> = {};
-    for (const p of sparkPairs) {
+    const saosPair = pairs.find((p) => p.base === "SAOS");
+    if (saosPair) {
       const candles = await db.dexCandle.findMany({
-        where: { pairId: p.id, tf: "1h" },
+        where: { pairId: saosPair.id, tf: "1h" },
         orderBy: { t: "desc" },
         take: 24,
       });
-      sparks[`${p.base}/${p.quote}`] = candles
-        .reverse()
-        .map((c) => ({ t: c.t, v: c.c }));
+      sparks["SAOS/USDS"] = candles.reverse().map((c) => ({ t: c.t, v: c.c }));
+    }
+    for (const base of ["BTC", "ETH"]) {
+      const symbol = binanceSymbolFor(base);
+      const k = symbol ? await binanceKlines(symbol, "1h", 24) : null;
+      if (k) sparks[`${base}/USDS`] = k.map((c) => ({ t: c.t, v: c.c }));
     }
 
-    // ארנת-M-9 — נפח-אמת בלבד (מנרות-1d שנצברו מעסקאות-אמת מאז-הגנזיס)
+    // ארנת-M-9 — נפח-אמת-פנימי בלבד (מנרות-1d שנצברו מעסקאות-אמת מאז-הגנזיס)
     const dayAgo14 = Math.floor(Date.now() / 1000) - 14 * 86_400;
     const daily = await db.dexCandle.groupBy({
       by: ["t"],
@@ -66,13 +103,12 @@ export async function GET() {
       byToken
         .filter((r) => r.token === token && (!account || r.account === account))
         .reduce((s, r) => s + (r._sum.amount ?? 0), 0);
-    const saosIssued = sumFor("SAOS"); // יתרות-חוץ-לבריכה
+    const saosIssued = sumFor("SAOS");
     const saosTreasury = sumFor("SAOS", "TREASURY");
     const saosOwner = sumFor("SAOS", "OWNER");
     const usdsIssued = sumFor("USDS");
     const usdsTreasury = sumFor("USDS", "TREASURY");
     const usdsOwner = sumFor("USDS", "OWNER");
-    // מנופק-באמת = כל-היתרות + מה-שנעול-בבריכה (הבריכה-היא-חלק-מהאספקה)
     const saosInPool = saosPairBase(pairs);
     const usdsInPool = usdsPairQuote(pairs);
 
@@ -104,6 +140,7 @@ export async function GET() {
       moversUp,
       moversDown,
       sparks,
+      world,
       arena: {
         days,
         current24h: vol24h,
@@ -141,7 +178,7 @@ export async function GET() {
         priceSource: "SAOS: AMM אמת · עזרים: Binance חי",
       },
       engine,
-      topPairs: [...summaries].sort((a, b) => b.vol24h - a.vol24h).slice(0, 8),
+      topPairs: [...native].sort((a, b) => b.vol24h - a.vol24h).slice(0, 8),
     });
   } catch (err) {
     console.error("[api/dex/overview]", err);

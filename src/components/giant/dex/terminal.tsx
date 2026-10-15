@@ -18,6 +18,7 @@ import {
   fmtMicro,
   fmtPct,
   fmtPrice,
+  fmtQty,
   trendColor,
   trendBg,
   chainColor,
@@ -43,6 +44,7 @@ export function TerminalView({ initialPairId }: TerminalProps) {
   const [tf, setTf] = useState<Timeframe>("15m");
   const [candles, setCandles] = useState<Candle[]>([]);
   const [candlesLoading, setCandlesLoading] = useState(true);
+  const [candlesSource, setCandlesSource] = useState<string>("");
   const [depth, setDepth] = useState<Depth | null>(null);
   const [trades, setTrades] = useState<TradeRow[]>([]);
   const [selectorOpen, setSelectorOpen] = useState(false);
@@ -107,8 +109,9 @@ export function TerminalView({ initialPairId }: TerminalProps) {
       const res = await fetch(`/api/dex/candles?pair=${pairId}&tf=${tf}&limit=300`, {
         cache: "no-store",
       });
-      const data = (await res.json()) as { candles: Candle[] };
+      const data = (await res.json()) as { candles: Candle[]; source?: string };
       setCandles(data.candles ?? []);
+      setCandlesSource(data.source ?? "");
     } catch {
       // שמירה-על-נתונים-קיימים
     } finally {
@@ -201,7 +204,7 @@ export function TerminalView({ initialPairId }: TerminalProps) {
                         </Badge>
                       ) : (
                         <Badge className="bg-sky-500/10 text-[10px] text-sky-300/90 hover:bg-sky-500/10">
-                          מדד-Binance
+                          שוק-אמת · Binance
                         </Badge>
                       )}
                     </span>
@@ -229,8 +232,12 @@ export function TerminalView({ initialPairId }: TerminalProps) {
                 </span>
               </div>
               <div className="hidden grid-cols-2 gap-x-6 gap-y-1 text-xs sm:grid">
-                <Stat label="נפח-24h" value={fmtMicro(pair.vol24h)} />
-                <Stat label="נזילות" value={fmtMicro(pair.liquidity)} />
+                <Stat label={pair.isNative ? "נפח-24h" : "נפח-שוק-24h"} value={pair.isNative ? fmtMicro(pair.vol24h) : `${fmtAmount(pair.vol24h)} USDT`} />
+                {pair.isNative ? (
+                  <Stat label="נזילות" value={fmtMicro(pair.liquidity)} />
+                ) : (
+                  <Stat label="מקור" value="Binance חי" />
+                )}
                 <Stat label="גבוה-24h" value={fmtPrice(pair.high24h)} mono />
                 <Stat label="נמוך-24h" value={fmtPrice(pair.low24h)} mono />
               </div>
@@ -253,7 +260,14 @@ export function TerminalView({ initialPairId }: TerminalProps) {
                 {t}
               </button>
             ))}
-            <span className="ms-auto text-xs text-zinc-600">גלגלת=זום · גרירה=הזזה</span>
+            <span className="ms-auto text-xs text-zinc-600">
+              {candlesSource === "binance"
+                ? "היסטוריית-שוק-אמת · Binance"
+                : candlesSource === "binance-down"
+                  ? "ההזנה-נפלה · מציג-את-האמת-המקומית"
+                  : "AMM-גנזיס · נולד-עכשיו · צובר-עסקאות-אמת"}
+              · גלגלת=זום · גרירה=הזזה
+            </span>
           </div>
           <CandleChart
             candles={candles}
@@ -288,13 +302,14 @@ function Stat({ label, value, mono }: { label: string; value: string; mono?: boo
   );
 }
 
-/** הודעת-אמת: זוג-עזר אינו-בורסה */
+/** הודעת-אמת: זוג-עזר אינו-נסחר-כאן — אבל-השוק-שלו-מוצג-חי-מ-Binance */
 function RefOnlyNotice({ base }: { base: string }) {
   return (
     <div className="rounded-lg border border-sky-500/20 bg-sky-500/[0.04] p-4 text-center">
-      <p className="text-sm font-semibold text-sky-200">{base} · מדד-מחיר-חוץ (Binance)</p>
+      <p className="text-sm font-semibold text-sky-200">{base} · שוק-אמת-מ-Binance (לא-נסחר-כאן)</p>
       <p className="mt-1 text-xs text-zinc-400">
-        אין-מסחר-על-מדדים. טופס-המסחר-האמיתי פתוח על SAOS/USDS — המטבע-שלנו, עם-רזרבות-מהלדג'ר.
+        הגרף, ספר-ההזמנות והסרט-למעלה = נתוני-השוק-האמת-הציבוריים. אין-מסחר-על-מדדי-חוץ.
+        טופס-המסחר-האמיתי פתוח על SAOS/USDS — המטבע-שלנו, עם-רזרבות-מהלדג'ר.
       </p>
     </div>
   );
@@ -310,19 +325,18 @@ function OrderBook({ depth, pair }: { depth: Depth | null; pair: PairSummary | n
       </div>
     );
   }
-  // חוק-אמת: לזוגות-עזר אין-בורסה — אין-עומק-מדומה
+  // חוק-אמת: מודים-בכנות-רק-כשההזנה-נפלה. כשיש-ספר-אמת — מציגים-אותו.
   if (depth.refOnly || (depth.bids.length === 0 && depth.asks.length === 0)) {
     return (
       <div className="rounded-lg border border-white/5 bg-white/[0.03] p-4 text-center">
-        <p className="text-sm font-semibold text-zinc-300">מדד-מחיר-חוץ · Binance</p>
+        <p className="text-sm font-semibold text-zinc-300">ספר-ההזמנות לא-זמין-כרגע</p>
         <p className="mt-1 text-xs text-zinc-500">
-          {pair.base} אינו-נסחר כאן — זהו מדד-מחיר-חי-אמיתי בלבד.
-          <br />
-          המסחר-האמיתי פתוח בבריכת SAOS/USDS.
+          ההזנה-החיה-מ-Binance לא-ענתה ברגע-זה. לא-מציגים-עומק-מדומה — רק-אמת.
         </p>
       </div>
     );
   }
+  const isBinance = depth.source === "binance";
   const maxTotal = Math.max(
     depth.bids[depth.bids.length - 1]?.total ?? 1,
     depth.asks[depth.asks.length - 1]?.total ?? 1,
@@ -331,18 +345,20 @@ function OrderBook({ depth, pair }: { depth: Depth | null; pair: PairSummary | n
     <div className="rounded-lg border border-white/5 bg-white/[0.03] p-3">
       <div className="mb-2 flex items-center justify-between px-1">
         <span className="text-sm font-semibold text-zinc-200">ספר-הזמנות</span>
-        <span className="text-[10px] text-zinc-600">מצטבר (µ)</span>
+        <span className="text-[10px] text-zinc-600">
+          {isBinance ? "שוק-אמת · Binance" : "בריכת-AMM · נגזר-מהרזרבות"}
+        </span>
       </div>
       <div className="space-y-0.5" dir="ltr">
         {[...depth.asks].reverse().slice(-7).map((a, i) => (
-          <BookRow key={`a${i}`} price={a.price} amount={a.amount} total={a.total} maxTotal={maxTotal} side="ask" />
+          <BookRow key={`a${i}`} price={a.price} amount={a.amount} total={a.total} maxTotal={maxTotal} side="ask" isBinance={isBinance} />
         ))}
         <div className="my-1.5 flex items-center justify-between rounded-md bg-white/5 px-2 py-1.5">
-          <span className="text-sm font-bold tabular-nums text-white">{fmtPrice(pair.price)}</span>
-          <span className="text-[10px] text-zinc-500">USDS</span>
+          <span className="text-sm font-bold tabular-nums text-white">{fmtPrice(depth.mid)}</span>
+          <span className="text-[10px] text-zinc-500">{isBinance ? "USDT" : "USDS"}</span>
         </div>
         {depth.bids.slice(0, 7).map((b, i) => (
-          <BookRow key={`b${i}`} price={b.price} amount={b.amount} total={b.total} maxTotal={maxTotal} side="bid" />
+          <BookRow key={`b${i}`} price={b.price} amount={b.amount} total={b.total} maxTotal={maxTotal} side="bid" isBinance={isBinance} />
         ))}
       </div>
     </div>
@@ -355,12 +371,14 @@ function BookRow({
   total,
   maxTotal,
   side,
+  isBinance,
 }: {
   price: number;
   amount: number;
   total: number;
   maxTotal: number;
   side: "bid" | "ask";
+  isBinance?: boolean;
 }) {
   const pct = Math.min(100, (total / maxTotal) * 100);
   return (
@@ -373,8 +391,10 @@ function BookRow({
       <span className={`relative z-10 font-mono ${side === "bid" ? "text-emerald-400" : "text-red-400"}`}>
         {fmtPrice(price)}
       </span>
-      <span className="relative z-10 font-mono text-zinc-400">{fmtAmount(amount)}</span>
-      <span className="relative z-10 w-14 text-end font-mono text-zinc-500">{fmtMicro(total)}</span>
+      <span className="relative z-10 font-mono text-zinc-400">{isBinance ? fmtQty(amount) : fmtAmount(amount)}</span>
+      <span className="relative z-10 w-16 text-end font-mono text-zinc-500">
+        {isBinance ? fmtAmount(total) : fmtMicro(total)}
+      </span>
     </div>
   );
 }
@@ -382,20 +402,30 @@ function BookRow({
 /* ============================== סרט-עסקאות ============================== */
 
 function TradeTape({ trades }: { trades: TradeRow[] }) {
+  const isBinance = trades[0]?.source === "binance";
   return (
     <div className="rounded-lg border border-white/5 bg-white/[0.03] p-3">
-      <div className="mb-2 px-1 text-sm font-semibold text-zinc-200">עסקאות אחרונות</div>
+      <div className="mb-2 flex items-center justify-between px-1">
+        <span className="text-sm font-semibold text-zinc-200">עסקאות אחרונות</span>
+        <span className="text-[10px] text-zinc-600">{isBinance ? "שוק-אמת · Binance" : "הבורסה-שלנו"}</span>
+      </div>
       <div className="max-h-64 space-y-0.5 overflow-y-auto" dir="ltr">
         {trades.slice(0, 25).map((t) => (
           <div key={t.id} className="flex items-center justify-between px-2 py-1 text-[11px] tabular-nums">
             <span className={`w-16 font-mono ${t.side === "BUY" ? "text-emerald-400" : "text-red-400"}`}>
               {fmtPrice(t.price)}
             </span>
-            <span className="w-16 text-end font-mono text-zinc-400">{fmtAmount(t.amount)}</span>
+            <span className="w-16 text-end font-mono text-zinc-400">
+              {isBinance ? fmtQty(t.amount) : fmtAmount(t.amount)}
+            </span>
             <span className="w-16 text-end font-mono text-zinc-600">{fmtClock(t.t)}</span>
           </div>
         ))}
-        {trades.length === 0 && <div className="py-4 text-center text-xs text-zinc-600">אין עסקאות</div>}
+        {trades.length === 0 && (
+          <div className="py-4 text-center text-xs text-zinc-600">
+            {isBinance ? "ההזנה-לא-זמינה-כרגע — לא-מציגים-עסקאות-מדומות" : "אין עסקאות-עדיין · השוק-נולד-בגנזיס"}
+          </div>
+        )}
       </div>
     </div>
   );
