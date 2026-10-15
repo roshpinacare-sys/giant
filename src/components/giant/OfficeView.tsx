@@ -169,8 +169,8 @@ export function OfficeView() {
         </h3>
         <div className="flex flex-wrap gap-2">
           {!data && [1, 2, 3].map((i) => <Skeleton key={i} className="h-7 w-56 rounded-full bg-zinc-950" />)}
-          {(data?.proposals ?? []).map((p) => (
-            <span key={p} className="rounded-full border border-white/5 bg-zinc-950/60 px-3 py-1.5 font-mono text-[10px] text-zinc-400">{p}</span>
+          {(data?.proposals ?? []).map((p, i) => (
+            <span key={`${p}-${i}`} className="rounded-full border border-white/5 bg-zinc-950/60 px-3 py-1.5 font-mono text-[10px] text-zinc-400">{p}</span>
           ))}
           {data && data.proposals.length === 0 && <p className="text-xs text-zinc-500">אין הצעות-פתוחות</p>}
         </div>
