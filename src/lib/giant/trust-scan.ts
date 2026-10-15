@@ -14,13 +14,15 @@
  * כשל = fail-honest עם-השגיאה. incremental: ספר נסרק מחדש רק כשנדחף אחרי-הסריקה
  * שלו (RECHECK דפוס-dsh) או שהמטמון מיושן.
  */
-import { readPat } from "@/lib/giant/pat";
+import { readPat } from "@/lib/office-truth";
+import { runtimePath, writeRuntimeIfChanged } from "@/lib/giant/runtime-store";
 import { loadFleet } from "@/lib/giant/fleet";
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 
 export const SCANNER = "saos-trust-check@0.1.0";
-const CACHE_FILE = path.join(process.cwd(), "db", "trust-cache.json");
+const CACHE_FILE = path.join(process.cwd(), "db", "trust-cache.json"); // הקנון-מהגיט (קריאה-בלבד)
+const RUNTIME_CACHE = "trust-cache.json"; // מאגר-הריצה — מחוץ-לעץ (runtime-store)
 const TREE_TTL_MS = 6 * 60 * 60 * 1000; // ספר שנסרק ונשקט — סריקה-חוזרת אחרי 6ש׳
 const DEEP_TTL_MS = 10 * 60 * 1000;
 const DEEP_FILE_CAP = 12;
@@ -120,24 +122,51 @@ interface TrustCache {
 }
 const deepCache = new Map<string, { at: number; scan: DeepScan }>();
 
+/* ── זריעה-מהקנון-האוטונומי (גל-9 · “שיזרום יותר”) ──────────────────────────
+ * פעימת-האמון (Actions על giant, כל-4-שעות) דוחפת db/trust-cache.json לגיט.
+ * sandbox-טרי = מטמון-מקומי-ריק → זורעים-מהקנון-בכנות: הגילאים-האמיתיים
+ * (scannedAt-מהקנון) נשמרים, ה-TTL-הרגיל דוגם-חי כשהזרע מתיישן. כשל-קנון =
+ * מטמון-ריק כנה → סריקה-חיה-רגילה. אפס-המצאה: מה שלא-נסרק-בקנון לא-מופיע. */
+const CANON_URL = "https://raw.githubusercontent.com/roshpinacare-sys/giant/main/db/trust-cache.json";
+
+async function seedFromGitCanon(): Promise<TrustCache> {
+  try {
+    const pat = await readPat();
+    const headers: Record<string, string> = { "cache-control": "no-cache" };
+    if (pat) headers.authorization = `Bearer ${pat}`;
+    const res = await fetch(CANON_URL, { headers, cache: "no-store", signal: AbortSignal.timeout(9_000) });
+    if (!res.ok) return { version: 1, scanner: SCANNER, entries: [] };
+    const raw = (await res.json()) as TrustCache;
+    if (raw?.version !== 1 || !Array.isArray(raw.entries)) return { version: 1, scanner: SCANNER, entries: [] };
+    const entries = raw.entries.filter(
+      (e) => e && typeof e.name === "string" && typeof e.scannedAt === "string" && e.row && e.row.mode === "tree",
+    );
+    return { version: 1, scanner: SCANNER, entries };
+  } catch {
+    return { version: 1, scanner: SCANNER, entries: [] };
+  }
+}
+
 function readCache(): TrustCache {
   try {
-    if (existsSync(CACHE_FILE)) {
-      const raw = JSON.parse(readFileSync(CACHE_FILE, "utf8")) as TrustCache;
-      if (raw?.version === 1 && Array.isArray(raw.entries)) return raw;
+    /* מאגר-הריצה-מחוץ-לעץ קודם; קנון-הגיט אחריו (מיזוג-גיאנט: לולאת-ההידור) */
+    for (const p of [runtimePath(RUNTIME_CACHE), CACHE_FILE]) {
+      try {
+        if (!existsSync(p)) continue;
+        const raw = JSON.parse(readFileSync(p, "utf8")) as TrustCache;
+        if (raw?.version === 1 && Array.isArray(raw.entries)) return raw;
+      } catch {
+        /* קובץ-שבור = כאילו-אין — הבא-בתור */
+      }
     }
   } catch {
     /* מטמון-שבור = כאילו-אין — סריקה-מלאה-כנה */
   }
   return { version: 1, scanner: SCANNER, entries: [] };
 }
-function writeCache(c: TrustCache): void {
-  try {
-    mkdirSync(path.dirname(CACHE_FILE), { recursive: true });
-    writeFileSync(CACHE_FILE, JSON.stringify(c));
-  } catch {
-    /* כשל-מטמון לא מזייף-מדידה — המדידה-החיה ממשיכה */
-  }
+async function writeCache(c: TrustCache): Promise<void> {
+  /* כתיבה-מחוץ-לעץ-ורק-כשהתוכן-באמת-השתנה — כתיבה-מיותרת = רענון-שווא-של-הממשק */
+  await writeRuntimeIfChanged(RUNTIME_CACHE, c);
 }
 
 /* קריאת-מטמון-זולה-לשימוש-משותף (מפת-האימפריה) — לא מריצה-סריקה, לא נוגעת-ברשת. */
@@ -251,7 +280,9 @@ export async function runTrustScan(force = false): Promise<TrustPayload> {
     };
   }
   const pat = await readPat();
-  const cache = readCache();
+  let cache = readCache();
+  /* sandbox-טרי: מטמון-ריק → זריעה-כנה-מהקנון-האוטונומי-של-הגיט (למעלה) */
+  if (cache.entries.length === 0) cache = await seedFromGitCanon();
   const byName = new Map(cache.entries.map((e) => [e.name, e]));
   const rows: TrustRow[] = [];
   const list = fleet.repos.filter((r) => !r.archived);
@@ -334,7 +365,7 @@ export async function runTrustScan(force = false): Promise<TrustPayload> {
       })),
     ],
   };
-  writeCache(nextCache);
+  await writeCache(nextCache);
 
   const scanned = rows.filter((r) => r.mode === "tree").length;
   const signals = rows.reduce((s, r) => s + r.signals.length, 0);

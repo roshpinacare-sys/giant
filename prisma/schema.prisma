@@ -31,25 +31,150 @@ model Post {
   updatedAt DateTime @updatedAt
 }
 
-// Sovereign Channel — the direct Owner <-> Sovereignty thread (T53).
-// role: sovereignty | owner | system
-// kind: request | decision | directive | answer | notice
-// source: book (agents/sovereign-requests.json) | channel-book (agents/owner-channel.jsonl) | llm | interface | rail
 model SovereignMessage {
-  id        String   @id @default(cuid())
-  role      String
-  kind      String
-  reqId     String?
-  title     String?
-  body      String
-  evidence  String?
-  status    String?
-  source    String
-  ref       String?
-  meta      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String    @id @default(cuid())
+  from           String // OWNER | SOVEREIGNTY | AGENT_RELAY
+  kind           String // BRIEFING | FUNDING | DECISION | REPORT | REPLY | CLAIM
+  priority       String    @default("NORMAL") // NORMAL | HIGH | CRITICAL
+  subject        String
+  body           String
+  amount         Float?
+  currency       String?
+  status         String    @default("UNREAD") // UNREAD | READ | ANSWERED | ARCHIVED
+  requestStatus  String? // PENDING | APPROVED | DECLINED
+  relayProcessed Boolean   @default(false)
+  meta           String? // JSON string
+  createdAt      DateTime  @default(now())
+  repliedAt      DateTime?
+}
 
-  @@index([createdAt])
-  @@index([reqId])
+/* ===================== giant DEX · בורסה-חיה (v1.1) ===================== */
+
+model DexPair {
+  id           String   @id @default(cuid())
+  base         String // GNT, BTC, ETH...
+  quote        String   @default("USDS")
+  chain        String // Giant Chain, Ethereum, Solana...
+  price        Float
+  openPrice24h Float
+  high24h      Float
+  low24h       Float
+  vol24h       Float    @default(0)
+  vol7d        Float    @default(0)
+  vol30d       Float    @default(0)
+  reserveBase  Float
+  reserveQuote Float
+  feeBps       Int      @default(30)
+  featured     Boolean  @default(false)
+  isNative     Boolean  @default(false)
+  sort         Int      @default(99)
+  createdAt    DateTime @default(now())
+
+  @@unique([base, quote])
+}
+
+model DexCandle {
+  id     String @id @default(cuid())
+  pairId String
+  tf     String // 1m | 5m | 15m | 1h | 4h | 1d
+  t      Int // epoch seconds (open)
+  o      Float
+  h      Float
+  l      Float
+  c      Float
+  v      Float
+
+  @@unique([pairId, tf, t])
+  @@index([pairId, tf])
+}
+
+model DexTrade {
+  id          String   @id @default(cuid())
+  pairId      String
+  side        String // BUY | SELL (of base)
+  price       Float
+  amount      Float // base amount
+  total       Float // quote amount (USDS)
+  source      String   @default("SEED") // SEED | USER | FLEET
+  sourceAgent String? // מזהה-סוכן-צי כאשר source=FLEET
+  t           DateTime @default(now())
+
+  @@index([pairId, t])
+  @@index([source, sourceAgent])
+}
+
+model DexLpPosition {
+  id          String   @id @default(cuid())
+  pairId      String
+  owner       String   @default("OWNER")
+  shares      Float
+  baseAmount  Float
+  quoteAmount Float
+  createdAt   DateTime @default(now())
+}
+
+model DexLedger {
+  id      String   @id @default(cuid())
+  account String   @default("OWNER")
+  token   String
+  amount  Float // signed
+  reason  String
+  ref     String?
+  t       DateTime @default(now())
+
+  @@index([account, token])
+}
+
+model DexConfig {
+  key   String @id
+  value String
+}
+
+// מרכז-היכולות — כל-הרצה-אמת-של-יכולת-SDK נרשמת-כאן (חוק-האמת: אין-הצהרות-ללא-הוכחה).
+// הקלט/פלט נשמרים-כתמצית-מצונזרת-בלבד; תוצרי-מדיה (תמונה/קול) נשמרים-כגודל-ולא-כ-base64.
+model SkillRun {
+  id         String   @id @default(cuid())
+  skill      String   // llm | vision | video | tts | asr | image | search | reader
+  status     String   @default("RUNNING") // RUNNING | OK | ERROR
+  input      String   // תמצית-הקלט (מקוצר)
+  output     String?  // תמצית-הפלט (מקוצר)
+  durationMs Int      @default(0)
+  error      String?
+  createdAt  DateTime @default(now())
+
+  @@index([skill, createdAt])
+}
+
+// צי-הסוכנים — כל-סוכן עם-הקצאה-אמיתית-מתועדת-בלדג'ר (TREASURY→FLEET:<id>).
+// האסימון נשמר-כ-hash בלבד; כל-עסקה-שלו מסומנת source=FLEET ב-DexTrade.
+model FleetAgent {
+  id             String   @id @default(cuid())
+  agentId        String   @unique
+  name           String
+  tokenHash      String
+  allocationUsds Float
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  lastTradeAt    DateTime?
+}
+// פקודות-לימיט אמת — סוגרות-את-הפער-מול-הענקים (Jupiter/Uniswap-v4 מחזיקות; עכשיו גם אנחנו):
+// נעילת-נזילות-בלדג'ר (ESCROW) · התאמה-בטיקר מול-הבריכה האמיתית · ביטול-עם-שחרור.
+model DexOrder {
+  id          String    @id @default(cuid())
+  pairId      String
+  account     String    @default("OWNER") // OWNER | FLEET:<agentId>
+  side        String    // BUY | SELL (of base)
+  limitPrice  Float     // המחיר-האמיתי-שהמזמין קבע (USDS ליחידת-בסיס)
+  amountIn    Float     // כמות-ה-tokenIn שנעולה (USDS ב-BUY · בסיס ב-SELL)
+  status      String    @default("OPEN") // OPEN | FILLED | CANCELLED
+  source      String    @default("USER") // USER | FLEET
+  sourceAgent String?
+  tradeId     String?   // העסקה-האמיתית-שמילאה-את-הפקודה
+  fillPrice   Float?
+  fillOut     Float?
+  createdAt   DateTime  @default(now())
+  closedAt    DateTime?
+
+  @@index([status, createdAt])
+  @@index([pairId, status])
 }

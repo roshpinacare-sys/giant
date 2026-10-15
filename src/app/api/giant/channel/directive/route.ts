@@ -1,21 +1,29 @@
 // POST /api/giant/channel/directive — הבעלים מצווה כאן (חוק-הערוץ)
-// ══════════════════════════════════════════════════════════════════════════
-// מושתל מ-giant/app (אותו חוזה: title + items[] + law?, מפתח-מנהל → D-NNNN
-// append-only בזרם-ההוראות הקנוני) — עם-התאמה-אחת למופע-החי: הכתיבה עצמה
-// עוברת דרך writeOwnerDirective (lib/sovereign/channel) — נתיב-הכתיבה
-// הקנוני שכבר-רץ כאן (Pulse/state/sovereign-channel/directives.jsonl +
-// דחיפת-גיט + קבלה לתיבת-המפעיל). אין משטח-ערוץ-שני ואין עותק-זרם נפרד:
-// אותו-קובץ קנוני, אותו-PAT שרת-בלבד, אפס-כתיבת-סוכן.
-// אפס-הצלחה-כוזבת: כשל-מדידה חוזר ככשל, מצב-הדחיפה מדווח בכנות.
+// ═════════════════════════════════════════════════════════════════════════
+// סוגר את הפריט-הפתוח "קומיט-ישיר-מהמשטח" ב-Pulse/PROTOCOL 20-c:
+// הוראת-בעלים שנכתבת בממשק ← מאומתת-שרת (מפתח-מנהל/headcorner) ← נאטמת
+// append-only אל directives.jsonl על-הגיט (GitHub Contents API, PAT שרת-בלבד).
+// אפס-כתיבה-של-סוכן: רק-סשן-בעלים מאומת כותב כאן. אפס-הצלחה-כוזבת.
 import { NextResponse } from "next/server";
 import { verifySession } from "@/lib/office-operator";
-import { writeOwnerDirective } from "@/lib/sovereign/channel";
+import { readPat } from "@/lib/office-truth";
+import { loadChannel } from "../route";
+import { sha256hex } from "@/lib/giant-integrity";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
+const REPO = "roshpinacare-sys/Pulse";
+const PATH = "state/sovereign-channel/directives.jsonl";
+
+interface GhFile {
+  sha?: string;
+  content?: string;
+  encoding?: string;
+}
+
 export async function POST(req: Request) {
-  // 1) שער-הבעלים — אפס-כתיבה-בלי-סשן-מאומת (אותו-שער של עמדת-המפעיל)
+  // 1) שער-הבעלים — אפס-כתיבה-בלי-סשן-מאומת
   const auth = req.headers.get("authorization");
   const token = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
   if (!verifySession(token)) {
@@ -25,7 +33,7 @@ export async function POST(req: Request) {
     );
   }
 
-  // 2) קלט-מאומת (חוזה-giant/app: title + items[] + law?)
+  // 2) קלט-מאומת
   let title = "";
   let items: string[] = [];
   let law: string | null = null;
@@ -44,31 +52,93 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, note: "סעיפי-הוראה: 1–12 שורות, 3–600 תווים לשורה" }, { status: 400 });
   }
 
-  // 3) הכתיבה הקנונית — D-NNNN append-only אל הזרם + קבלת-עבודה לתיבת-המפעיל
-  //    + דחיפת-גיט מאומתת (PAT נקרא בתוך הספריה, לעולם לא נחשף/נרשם)
-  const res = await writeOwnerDirective({ title, points: items, ...(law ? { law } : {}) });
-  if (!res.ok) {
+  // 3) גישת-כתיבה — PAT שרת-בלבד; כשל = כנה
+  const pat = await readPat();
+  if (!pat) {
     return NextResponse.json(
-      { ok: false, note: `ההוראה לא נשמרה (${res.error ?? "write-failed"}) — אפס-הצלחה-כוזבת` },
-      { status: 502 },
+      { ok: false, note: "אין גישת-כתיבה לשרת — ההוראה לא נשמרה (אפס-שקר)" },
+      { status: 503 },
     );
   }
 
-  // 4) כנות-מלאה: id + קומיט + טביעת-השורה — מצב-הדחיפה מדווח כמו-שהוא
-  const pushed = Boolean(res.push?.pushed && res.push?.verified);
-  const note = pushed
-    ? `${res.id} אוטם בזרם-ההוראות הקנוני ונדחף לגיט (commit ${res.push?.commit ?? "?"}) — חוק-בנחיתה`
-    : `${res.id} נשמר בזרם הקנוני המקומי; הדחיפה תרכב על הקומיט הבא (${res.push?.error ?? "לא-נדחף"}) · קבלת-עבודה: ${res.inboxId ? "נרשמה" : "לא-נרשמה"}`;
+  const headers = {
+    authorization: `Bearer ${pat}`,
+    accept: "application/vnd.github+json",
+    "content-type": "application/json",
+  };
 
-  return NextResponse.json(
-    {
+  // 4) קריאת-הזרם-הקנוני (sha + תוכן) — מהסמכות, לא מהמטמון
+  let file: GhFile;
+  try {
+    const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${PATH}?ref=main`, {
+      headers,
+      cache: "no-store",
+      signal: AbortSignal.timeout(12_000),
+    });
+    if (!res.ok) {
+      return NextResponse.json({ ok: false, note: `קריאת-הזרם נכשלה (HTTP ${res.status})` }, { status: 502 });
+    }
+    file = (await res.json()) as GhFile;
+  } catch {
+    return NextResponse.json({ ok: false, note: "השרת לא הצליח להגיע לגיט — נסה שוב" }, { status: 502 });
+  }
+  const current =
+    file.encoding === "base64" && typeof file.content === "string"
+      ? Buffer.from(file.content, "base64").toString("utf8")
+      : "";
+
+  // 5) מזהה-רציף D-NNNN (המשכיות-מהזרם-האמיתי)
+  let max = 0;
+  for (const line of current.split(/\r?\n/)) {
+    const m = line.match(/"id"\s*:\s*"D-(\d{4})"/);
+    if (m) max = Math.max(max, Number(m[1]));
+  }
+  const id = `D-${String(max + 1).padStart(4, "0")}`;
+
+  // 6) איטום append-only — שורה-אחת-JSONL
+  const row: Record<string, unknown> = {
+    id,
+    at: new Date().toISOString(),
+    by: "owner (via GIANT interface — server-authenticated headcorner session)",
+    ...(law ? { law } : {}),
+    title,
+    directive: items,
+    status: "ACTIVE",
+  };
+  const line = JSON.stringify(row);
+  const next = current.endsWith("\n") || current === "" ? `${current}${line}\n` : `${current}\n${line}\n`;
+
+  // 7) קומיט-ישיר אל-הזרם
+  try {
+    const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${PATH}`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({
+        message: `${id} — הוראת-בעלים (GIANT interface)`,
+        content: Buffer.from(next, "utf8").toString("base64"),
+        sha: file.sha,
+        branch: "main",
+      }),
+      signal: AbortSignal.timeout(15_000),
+    });
+    if (!res.ok) {
+      const detail = await res.json().catch(() => null);
+      const msg = detail && typeof detail === "object" && "message" in detail ? String((detail as { message: unknown }).message) : "";
+      return NextResponse.json(
+        { ok: false, note: `האיטום לגיט נכשל (HTTP ${res.status}) ${msg} — ההוראה לא נכנסה לזרם`.trim() },
+        { status: 502 },
+      );
+    }
+    const out = (await res.json()) as { commit?: { sha?: string } };
+    await loadChannel(true); // רענון-מיידי של-המטמון מהסמכות
+    return NextResponse.json({
       ok: true,
-      id: res.id,
-      commitSha: res.push?.commit ?? null,
-      pushed,
-      digest: res.sha16,
-      note,
-    },
-    { headers: { "cache-control": "no-store" } },
-  );
+      id,
+      commitSha: out.commit?.sha ?? null,
+      digest: sha256hex(line).slice(0, 16),
+      note: `${id} אוטם בזרם-ההוראות הקנוני — חוק-בנחיתה`,
+    });
+  } catch {
+    return NextResponse.json({ ok: false, note: "הקומיט לא הושלם בזמן — אפס-הצלחה-כוזבת" }, { status: 502 });
+  }
 }

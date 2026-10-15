@@ -51,14 +51,35 @@ prompt
 
 server.log
 # Skills directory
-/skills/db/market-cache.json
-
-# runtime caches — נכתבים-בריצה ע"י המדידות-החיות; לעולם לא מלכלכים-את-הריפו (חוק-שרידות T62 · T63-a)
-/db/trust-cache.json
-/db/trust-deep/
-.env
-upload/pat.env
+/skills/
+# office operator — secrets & local ops state (never commit)
+.env.local
+.env*.local
+.ops/
 upload/
+
+# legacy paths from the early lineage (bot canon artifacts live under app/)
+app/node_modules/
+app/.next/
+app/db/
+app/upload/
+app/.secrets/
+app/tool-results/
+!.env.example
+dist-office3d/
 tool-results/
-db/gate-check.json
-db/gate-probe.mjs
+download/
+
+# runtime data (measured locally, never book content)
+/db/
+/.zscripts/
+
+# גל-16: ארטיפקט-ריצה — המנוע-הקנוני חי ב-Domain/office/engine.mjs; העתק זה נבנה-עצמית בכל-עלייה של office-live
+/public/office3d/
+
+# גל-17: מצב-העולם-המקומי של office-live — ארטיפקט-ריצה; הקנון-חי ב-Domain/office/world-state.json (worldbeat)
+mini-services/office-live/state/
+
+# סודות-ריבוניים-נוספים (הוראת-בעלים): כל-קובץ-*.env-וגיבויי-boot
+*.env
+boot/*.sh.bak

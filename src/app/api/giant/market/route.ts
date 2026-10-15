@@ -9,7 +9,10 @@
  */
 import { NextResponse } from "next/server";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
+import path from "node:path";
 import { fileMeta, type FileMeta } from "@/lib/sovereign/channel";
+import { DOMAIN_DIR, DATA_DIR } from "@/lib/giant/truth";
+import { readRuntimeOrCanon, writeRuntimeIfChanged } from "@/lib/giant/runtime-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -78,7 +81,8 @@ const COINS: Array<{ id: string; symbol: string; name: string }> = [
   { id: "tether", symbol: "USDT", name: "Tether" },
 ];
 
-const CACHE_PATH = "/home/z/my-project/db/market-cache.json";
+/* מאגר-הריצה-מחוץ-לעץ-הפרויקט (מיזוג-גיאנט): כתיבה-בתוך-העץ = רענון-שווא-של-הממשק */
+const CACHE_NAME = "market-cache.json";
 const CACHE_FRESH_MS = 30 * 60_000; // מטמון-כנות: עד 30 דקות עם גיל-מוצהר
 
 interface KrakenTick {
@@ -180,7 +184,7 @@ async function geckoCoins(): Promise<CoinRow[] | null> {
 
 async function readCache(): Promise<{ coins: CoinRow[]; ageMin: number } | null> {
   try {
-    const raw = JSON.parse(await readFile(CACHE_PATH, "utf8")) as { at?: number; coins?: CoinRow[] };
+    const raw = (await readRuntimeOrCanon<{ at?: number; coins?: CoinRow[] }>(CACHE_NAME, path.join(DATA_DIR, CACHE_NAME))) ?? null;
     if (!raw?.at || !Array.isArray(raw.coins)) return null;
     const ageMin = Math.round((Date.now() - raw.at) / 60000);
     if (ageMin > 24 * 60) return null;
@@ -192,8 +196,7 @@ async function readCache(): Promise<{ coins: CoinRow[]; ageMin: number } | null>
 
 async function writeCache(coins: CoinRow[]): Promise<void> {
   try {
-    await mkdir("/home/z/my-project/db", { recursive: true });
-    await writeFile(CACHE_PATH, JSON.stringify({ at: Date.now(), coins }), "utf8");
+    await writeRuntimeIfChanged(CACHE_NAME, { at: Date.now(), coins });
   } catch {
     /* אפס-שקר: כשל-מטמון לא מפיק מספרים */
   }
@@ -226,10 +229,10 @@ function s(v: unknown): string | null {
 }
 
 async function dexEssentials(): Promise<{ dex: DexEssentials | null; assets: AssetRow[]; meta: FileMeta }> {
-  const meta = await fileMeta("/home/z/estate/Domain/dex/state.json");
+  const meta = await fileMeta(path.join(DOMAIN_DIR, "dex", "state.json"));
   if (!meta.exists) return { dex: null, assets: [], meta };
   try {
-    const raw = JSON.parse(await readFile("/home/z/estate/Domain/dex/state.json", "utf8")) as Record<string, unknown>;
+    const raw = JSON.parse(await readFile(path.join(DOMAIN_DIR, "dex", "state.json"), "utf8")) as Record<string, unknown>;
     const beat = (raw.beat ?? {}) as Record<string, unknown>;
     const st = (raw.state ?? {}) as Record<string, unknown>;
     const rej = (st.rejectedLast ?? {}) as Record<string, unknown>;

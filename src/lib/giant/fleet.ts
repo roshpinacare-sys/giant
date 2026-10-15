@@ -4,7 +4,7 @@
  * (ה-REST /orgs מחזיר 404 עם PAT-fine-grained; החיפוש הוא הדרך-החיה).
  * PAT שרת-בלבד · cache-זיכרון 120ש׳ · כשל = fail-honest.
  */
-import { readPat } from "@/lib/giant/pat";
+import { readPat } from "@/lib/office-truth";
 
 let cache: { at: number; data: FleetPayload } | null = null;
 const CACHE_MS = 120_000;

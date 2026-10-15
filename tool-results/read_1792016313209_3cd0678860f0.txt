@@ -1,0 +1,1493 @@
+     1→"use client";
+     2→
+     3→// ערוץ הריבון — ממשק-קשר-ישיר בעלים↔ריבונות (Task 40-b)
+     4→// חוק-הערוץ: אין טענות-סוכנים לבעלים; הריבונות היא המפעילה; הבעלים מדבר כאן ישירות עם הריבונות.
+     5→
+     6→import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+     7→import { motion } from "framer-motion";
+     8→import {
+     9→  AlertCircle,
+    10→  GitBranch,
+    11→  Gauge,
+    12→  KeyRound,
+    13→  Landmark,
+    14→  Library,
+    15→  Loader2,
+    16→  Lock,
+    17→  LogOut,
+    18→  Menu,
+    19→  MessagesSquare,
+    20→  RefreshCw,
+    21→  ScrollText,
+    22→  Send,
+    23→  ShieldCheck,
+    24→  Stamp,
+    25→  Terminal,
+    26→  Users,
+    27→} from "lucide-react";
+    28→import { FileText, GitMerge, Network, TrendingUp } from "lucide-react";
+    29→import { DexView } from "@/components/giant/dex/dex-view";
+    30→import { EstateView } from "@/components/giant/estate";
+    31→import { MergeView } from "@/components/giant/merge";
+    32→
+    33→import { Badge } from "@/components/ui/badge";
+    34→import { Button } from "@/components/ui/button";
+    35→import { Card, CardContent } from "@/components/ui/card";
+    36→import { Skeleton } from "@/components/ui/skeleton";
+    37→import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+    38→import { Textarea } from "@/components/ui/textarea";
+    39→import {
+    40→  Dialog,
+    41→  DialogContent,
+    42→  DialogDescription,
+    43→  DialogFooter,
+    44→  DialogHeader,
+    45→  DialogTitle,
+    46→} from "@/components/ui/dialog";
+    47→import { Input } from "@/components/ui/input";
+    48→import {
+    49→  Sheet,
+    50→  SheetContent,
+    51→  SheetDescription,
+    52→  SheetHeader,
+    53→  SheetTitle,
+    54→} from "@/components/ui/sheet";
+    55→import {
+    56→  CommandDialog,
+    57→  CommandEmpty,
+    58→  CommandGroup,
+    59→  CommandInput,
+    60→  CommandItem,
+    61→  CommandList,
+    62→} from "@/components/ui/command";
+    63→import { ArchiveView, LedgerView } from "@/components/giant/views";
+    64→import {
+    65→  Alert,
+    66→  AlertDescription,
+    67→  AlertTitle,
+    68→} from "@/components/ui/alert";
+    69→import { useToast } from "@/hooks/use-toast";
+    70→import { ownerHeaders, clearOwnerToken, saveOwnerToken } from "@/lib/owner-client";
+    71→import { cn } from "@/lib/utils";
+    72→
+    73→interface SovereignMessage {
+    74→  id: string;
+    75→  from: string;
+    76→  kind: string;
+    77→  priority: string;
+    78→  subject: string;
+    79→  body: string;
+    80→  amount: number | null;
+    81→  currency: string | null;
+    82→  status: string;
+    83→  requestStatus: string | null;
+    84→  relayProcessed: boolean;
+    85→  meta: string | null;
+    86→  createdAt: string;
+    87→  repliedAt: string | null;
+    88→}
+    89→
+    90→interface Summary {
+    91→  unreadForOwner: number;
+    92→  pendingRequests: number;
+    93→  pendingAmount: number;
+    94→  pendingCurrency: string | null;
+    95→  relayUnprocessed: number;
+    96→}
+    97→
+    98→interface GitLandInfo {
+    99→  ok?: boolean;
+   100→  commit?: string;
+   101→  pushed?: boolean;
+   102→  deduped?: boolean;
+   103→  error?: string;
+   104→}
+   105→
+   106→interface GitInboxEntry {
+   107→  at: string;
+   108→  role: string;
+   109→  source: string;
+   110→  kind: string;
+   111→  text: string;
+   112→}
+   113→
+   114→interface GiantGitState {
+   115→  ok: boolean;
+   116→  error?: string;
+   117→  head: string | null;
+   118→  ledger: { count: number; lastLine: string | null };
+   119→  registry: { rows: number; lastLine: string | null };
+   120→  plans: { files: string[] };
+   121→  giant: { files: string[] };
+   122→  inbox: { count: number; last: GitInboxEntry[] };
+   123→  commits: { recent: string[] };
+   124→}
+   125→
+   126→const KIND_LABELS: Record<string, string> = {
+   127→  BRIEFING: "תדריך",
+   128→  FUNDING: "בקשת-מימון",
+   129→  DECISION: "הכרעה",
+   130→  REPORT: "דיווח",
+   131→  REPLY: "תשובה",
+   132→  CLAIM: "טענת-סוכן",
+   133→};
+   134→
+   135→const heNum = new Intl.NumberFormat("he-IL");
+   136→const heTime = new Intl.DateTimeFormat("he-IL", {
+   137→  day: "2-digit",
+   138→  month: "2-digit",
+   139→  hour: "2-digit",
+   140→  minute: "2-digit",
+   141→});
+   142→
+   143→function fmtNum(n: number): string {
+   144→  return heNum.format(n);
+   145→}
+   146→
+   147→function fmtTime(iso: string): string {
+   148→  const d = new Date(iso);
+   149→  if (Number.isNaN(d.getTime())) return "";
+   150→  return heTime.format(d);
+   151→}
+   152→
+   153→function parseMeta(meta: string | null): {
+   154→  llmError?: boolean;
+   155→  sources?: string[];
+   156→  gitLand?: GitLandInfo;
+   157→} {
+   158→  if (!meta) return {};
+   159→  try {
+   160→    const parsed: unknown = JSON.parse(meta);
+   161→    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+   162→      const rec = parsed as Record<string, unknown>;
+   163→      return {
+   164→        llmError: typeof rec.llmError === "boolean" ? rec.llmError : undefined,
+   165→        sources: Array.isArray(rec.sources) ? rec.sources.map(String) : undefined,
+   166→        gitLand:
+   167→          rec.gitLand && typeof rec.gitLand === "object" && !Array.isArray(rec.gitLand)
+   168→            ? (rec.gitLand as GitLandInfo)
+   169→            : undefined,
+   170→      };
+   171→    }
+   172→    return {};
+   173→  } catch {
+   174→    return {};
+   175→  }
+   176→}
+   177→
+   178→// מראה את חוקי-הסיכום של השרת — כדי-שהסטטיסטיקה-בלקוח תמיד תתלכד עם ה-API
+   179→function computeSummary(messages: SovereignMessage[]): Summary {
+   180→  const s: Summary = {
+   181→    unreadForOwner: 0,
+   182→    pendingRequests: 0,
+   183→    pendingAmount: 0,
+   184→    pendingCurrency: null,
+   185→    relayUnprocessed: 0,
+   186→  };
+   187→  for (const m of messages) {
+   188→    if (m.from === "SOVEREIGNTY" && m.status === "UNREAD") s.unreadForOwner += 1;
+   189→    if (m.requestStatus === "PENDING") {
+   190→      s.pendingRequests += 1;
+   191→      if (typeof m.amount === "number") {
+   192→        s.pendingAmount += m.amount;
+   193→        if (!s.pendingCurrency && m.currency) s.pendingCurrency = m.currency;
+   194→      }
+   195→    }
+   196→    if (m.from === "AGENT_RELAY" && !m.relayProcessed) s.relayUnprocessed += 1;
+   197→  }
+   198→  return s;
+   199→}
+   200→
+   201→function mergeMessages(
+   202→  prev: SovereignMessage[],
+   203→  incoming: SovereignMessage[],
+   204→): SovereignMessage[] {
+   205→  const byId = new Map<string, SovereignMessage>();
+   206→  for (const m of prev) byId.set(m.id, m);
+   207→  for (const m of incoming) byId.set(m.id, m);
+   208→  return Array.from(byId.values()).sort(
+   209→    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+   210→  );
+   211→}
+   212→
+   213→function PriorityBadge({ priority }: { priority: string }) {
+   214→  if (priority === "CRITICAL") {
+   215→    return (
+   216→      <Badge className="bg-red-600 text-white hover:bg-red-600">
+   217→        דחוף
+   218→      </Badge>
+   219→    );
+   220→  }
+   221→  if (priority === "HIGH") {
+   222→    return (
+   223→      <Badge className="border border-amber-500/50 bg-amber-500/10 text-amber-700 hover:bg-amber-500/15 dark:text-amber-400">
+   224→        עדיפות-גבוהה
+   225→      </Badge>
+   226→    );
+   227→  }
+   228→  return null;
+   229→}
+   230→
+   231→function RequestStatusChip({ status }: { status: string | null }) {
+   232→  if (status === "PENDING") {
+   233→    return (
+   234→      <Badge className="border border-amber-500/50 bg-amber-500/10 text-amber-700 hover:bg-amber-500/15 dark:text-amber-400">
+   235→        ממתין-להכרעה
+   236→      </Badge>
+   237→    );
+   238→  }
+   239→  if (status === "APPROVED") {
+   240→    return (
+   241→      <Badge className="bg-emerald-600 text-white hover:bg-emerald-600">
+   242→        אושר
+   243→      </Badge>
+   244→    );
+   245→  }
+   246→  if (status === "DECLINED") {
+   247→    return (
+   248→      <Badge className="bg-red-600 text-white hover:bg-red-600">
+   249→        נדחה
+   250→      </Badge>
+   251→    );
+   252→  }
+   253→  return null;
+   254→}
+   255→
+   256→function RelayProcessedChip({ processed }: { processed: boolean }) {
+   257→  return processed ? (
+   258→    <Badge variant="secondary">עובדה</Badge>
+   259→  ) : (
+   260→    <Badge className="border border-amber-500/50 bg-amber-500/10 text-amber-700 hover:bg-amber-500/15 dark:text-amber-400">
+   261→      טרם-עובדה
+   262→    </Badge>
+   263→  );
+   264→}
+   265→
+   266→const NAV_ITEMS = [
+   267→  { id: "merge", label: "המיזוג-הגדול", icon: GitMerge },
+   268→  { id: "dex", label: "giant DEX", icon: TrendingUp },
+   269→  { id: "estate", label: "האחוזה · מפת-אמת", icon: Network },
+   270→  { id: "channel", label: "ערוץ הריבון", icon: MessagesSquare },
+   271→  { id: "ledger", label: "לדג'ר-האמת", icon: ScrollText },
+   272→  { id: "plans", label: "תוכניות-האם", icon: FileText },
+   273→  { id: "team", label: "הצוות", icon: Users },
+   274→  { id: "security", label: "אבטחה-וחוקים", icon: ShieldCheck },
+   275→  { id: "systems", label: "מנועים-ומדידות", icon: Gauge },
+   276→  { id: "archive", label: "ארכיון-מלא", icon: Library },
+   277→] as const;
+   278→
+   279→export default function Home() {
+   280→  const { toast } = useToast();
+   281→  const [messages, setMessages] = useState<SovereignMessage[]>([]);
+   282→  const [loading, setLoading] = useState(true);
+   283→  const [error, setError] = useState<string | null>(null);
+   284→  const [refreshing, setRefreshing] = useState(false);
+   285→  const [lastSync, setLastSync] = useState<Date | null>(null);
+   286→
+   287→  const [draft, setDraft] = useState("");
+   288→  const [sending, setSending] = useState(false);
+   289→  const [deciding, setDeciding] = useState<string | null>(null); // `${id}:${decision}`
+   290→  const [processingRelay, setProcessingRelay] = useState(false);
+   291→
+   292→  const [owner, setOwner] = useState<boolean | null>(null);
+   293→  const [authOpen, setAuthOpen] = useState(false);
+   294→  const [password, setPassword] = useState("");
+   295→  const [authBusy, setAuthBusy] = useState(false);
+   296→  const [gitState, setGitState] = useState<GiantGitState | null>(null);
+   297→  const [gitLoading, setGitLoading] = useState(false);
+   298→  const [landText, setLandText] = useState("");
+   299→  const [landing, setLanding] = useState(false);
+   300→  const [tab, setTab] = useState("inbox");
+   301→  const [view, setView] = useState("merge");
+   302→  const [navOpen, setNavOpen] = useState(false);
+   303→  const [paletteOpen, setPaletteOpen] = useState(false);
+   304→
+   305→  const listRef = useRef<HTMLDivElement | null>(null);
+   306→
+   307→  const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
+   308→    requestAnimationFrame(() => {
+   309→      listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior });
+   310→    });
+   311→  }, []);
+   312→
+   313→  // אסימון-בעלים (תמיכת-iframe): עוגייה + אסימון-נגזר בכותרת — עזר-מאוחד owner-client
+   314→
+   315→  const refresh = useCallback(async () => {
+   316→    setRefreshing(true);
+   317→    try {
+   318→      const res = await fetch("/api/sovereign/messages", {
+   319→        cache: "no-store",
+   320→        headers: ownerHeaders(),
+   321→      });
+   322→      if (!res.ok) throw new Error("נכשלה-טעינת-הערוץ");
+   323→      const data = (await res.json()) as { messages: SovereignMessage[] };
+   324→      setMessages((prev) =>
+   325→        prev.length === 0 ? data.messages : mergeMessages(prev, data.messages),
+   326→      );
+   327→      setError(null);
+   328→      setLastSync(new Date());
+   329→    } catch (err) {
+   330→      setError(err instanceof Error ? err.message : "שגיאת-רשת");
+   331→    } finally {
+   332→      setLoading(false);
+   333→      setRefreshing(false);
+   334→    }
+   335→  }, []);
+   336→
+   337→  useEffect(() => {
+   338→    void refresh();
+   339→  }, [refresh]);
+   340→
+   341→  useEffect(() => {
+   342→    const t = setInterval(() => void refresh(), 20_000);
+   343→    return () => clearInterval(t);
+   344→  }, [refresh]);
+   345→
+   346→  const loadGit = useCallback(async () => {
+   347→    setGitLoading(true);
+   348→    try {
+   349→      const res = await fetch("/api/git/state", { cache: "no-store" });
+   350→      const data = (await res.json()) as GiantGitState;
+   351→      setGitState(data);
+   352→    } catch {
+   353→      // דיווח-כנה בלבד: פאנל-הגיט יציג מצב-שגיאה
+   354→    } finally {
+   355→      setGitLoading(false);
+   356→    }
+   357→  }, []);
+   358→
+   359→  useEffect(() => {
+   360→    void (async () => {
+   361→      try {
+   362→        const res = await fetch("/api/sovereign/auth", {
+   363→          cache: "no-store",
+   364→          headers: ownerHeaders(),
+   365→        });
+   366→        const data = (await res.json()) as { owner: boolean };
+   367→        setOwner(data.owner);
+   368→        if (data.owner) void refresh();
+   369→      } catch {
+   370→        setOwner(false);
+   371→      }
+   372→    })();
+   373→  }, []);
+   374→
+   375→  useEffect(() => {
+   376→    if (owner) void refresh();
+   377→  }, [owner, refresh]);
+   378→
+   379→  useEffect(() => {
+   380→    if (tab === "git" && !gitState && !gitLoading) void loadGit();
+   381→  }, [tab, gitState, gitLoading, loadGit]);
+   382→
+   383→  useEffect(() => {
+   384→    const onKey = (e: KeyboardEvent) => {
+   385→      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+   386→        e.preventDefault();
+   387→        setPaletteOpen((v) => !v);
+   388→      }
+   389→    };
+   390→    window.addEventListener("keydown", onKey);
+   391→    return () => window.removeEventListener("keydown", onKey);
+   392→  }, []);
+   393→
+   394→  function renderView() {
+   395→    switch (view) {
+   396→      case "merge":
+   397→        return <MergeView onNavigate={setView} />;
+   398→      case "dex":
+   399→        return <DexView />;
+   400→      case "estate":
+   401→        return <EstateView />;
+   402→      case "ledger":
+   403→        return <LedgerView />;
+   404→      case "plans":
+   405→        return <ArchiveView initialSectionId="plans" />;
+   406→      case "team":
+   407→        return <ArchiveView initialSectionId="team" />;
+   408→      case "security":
+   409→        return <ArchiveView initialSectionId="security" />;
+   410→      case "systems":
+   411→        return <ArchiveView initialSectionId="systems" />;
+   412→      case "archive":
+   413→        return <ArchiveView />;
+   414→      default:
+   415→        return null;
+   416→    }
+   417→  }
+   418→
+   419→  useEffect(() => {
+   420→    if (!loading) scrollToBottom("auto");
+   421→  }, [loading, scrollToBottom]);
+   422→
+   423→  const inbox = useMemo(
+   424→    () => messages.filter((m) => m.from === "SOVEREIGNTY" || m.from === "OWNER"),
+   425→    [messages],
+   426→  );
+   427→  const relay = useMemo(
+   428→    () => messages.filter((m) => m.from === "AGENT_RELAY"),
+   429→    [messages],
+   430→  );
+   431→  const summary = useMemo(() => computeSummary(messages), [messages]);
+   432→
+   433→  async function markRead(m: SovereignMessage) {
+   434→    if (owner !== true) {
+   435→      setAuthOpen(true);
+   436→      return;
+   437→    }
+   438→    if (m.from !== "SOVEREIGNTY" || m.status !== "UNREAD") return;
+   439→    setMessages((prev) =>
+   440→      prev.map((x) => (x.id === m.id ? { ...x, status: "READ" } : x)),
+   441→    );
+   442→    try {
+   443→      const res = await fetch(`/api/sovereign/messages/${m.id}`, {
+   444→        method: "PATCH",
+   445→        headers: { "Content-Type": "application/json", ...ownerHeaders() },
+   446→        body: JSON.stringify({ action: "read" }),
+   447→      });
+   448→      if (!res.ok) throw new Error("נכשל-סימון-נקרא");
+   449→    } catch {
+   450→      void refresh();
+   451→    }
+   452→  }
+   453→
+   454→  async function decide(m: SovereignMessage, decision: "APPROVED" | "DECLINED") {
+   455→    if (owner !== true) {
+   456→      setAuthOpen(true);
+   457→      return;
+   458→    }
+   459→    if (m.requestStatus !== "PENDING" || deciding) return;
+   460→    setDeciding(`${m.id}:${decision}`);
+   461→    try {
+   462→      const res = await fetch(`/api/sovereign/messages/${m.id}`, {
+   463→        method: "PATCH",
+   464→        headers: { "Content-Type": "application/json", ...ownerHeaders() },
+   465→        body: JSON.stringify({ action: "decide", requestStatus: decision }),
+   466→      });
+   467→      const data = (await res.json()) as {
+   468→        message?: SovereignMessage;
+   469→        ack?: SovereignMessage;
+   470→        error?: string;
+   471→      };
+   472→      if (!res.ok || !data.message || !data.ack) {
+   473→        throw new Error(data.error ?? "נכשל-רישום-ההכרעה");
+   474→      }
+   475→      setMessages((prev) => mergeMessages(prev, [data.message!, data.ack!]));
+   476→      toast({
+   477→        title: decision === "APPROVED" ? "ההכרעה נרשמה: אישור" : "ההכרעה נרשמה: דחייה",
+   478→        description: "הריבונות פועלת בהתאם.",
+   479→      });
+   480→    } catch (err) {
+   481→      toast({
+   482→        title: "שגיאה",
+   483→        description: err instanceof Error ? err.message : "שגיאת-רשת",
+   484→        variant: "destructive",
+   485→      });
+   486→      void refresh();
+   487→    } finally {
+   488→      setDeciding(null);
+   489→    }
+   490→  }
+   491→
+   492→  async function send() {
+   493→    if (owner !== true) {
+   494→      setAuthOpen(true);
+   495→      return;
+   496→    }
+   497→    const body = draft.trim();
+   498→    if (!body || sending) return;
+   499→    const tempId = `temp-${Date.now()}`;
+   500→    setSending(true);
+   501→    setMessages((prev) =>
+   502→      mergeMessages(prev, [
+   503→        {
+   504→          id: tempId,
+   505→          from: "OWNER",
+   506→          kind: "REPLY",
+   507→          priority: "NORMAL",
+   508→          subject: "פניית בעלים",
+   509→          body,
+   510→          amount: null,
+   511→          currency: null,
+   512→          status: "UNREAD",
+   513→          requestStatus: null,
+   514→          relayProcessed: false,
+   515→          meta: null,
+   516→          createdAt: new Date().toISOString(),
+   517→          repliedAt: null,
+   518→        },
+   519→      ]),
+   520→    );
+   521→    scrollToBottom();
+   522→    try {
+   523→      const res = await fetch("/api/sovereign/messages", {
+   524→        method: "POST",
+   525→        headers: { "Content-Type": "application/json", ...ownerHeaders() },
+   526→        body: JSON.stringify({ from: "OWNER", body }),
+   527→      });
+   528→      const data = (await res.json()) as {
+   529→        ownerMessage?: SovereignMessage;
+   530→        reply?: SovereignMessage;
+   531→        error?: string;
+   532→      };
+   533→      if (!res.ok || !data.ownerMessage || !data.reply) {
+   534→        throw new Error(data.error ?? "נכשלה-שליחת-הפנייה");
+   535→      }
+   536→      setMessages((prev) =>
+   537→        mergeMessages(
+   538→          prev.filter((x) => x.id !== tempId),
+   539→          [data.ownerMessage!, data.reply!],
+   540→        ),
+   541→      );
+   542→      setDraft("");
+   543→      scrollToBottom();
+   544→      toast({ title: "הריבונות ענתה", description: "תשובתה מצורפת לתיבה." });
+   545→    } catch (err) {
+   546→      setMessages((prev) => prev.filter((x) => x.id !== tempId));
+   547→      toast({
+   548→        title: "השליחה נכשלה",
+   549→        description: err instanceof Error ? err.message : "שגיאת-רשת",
+   550→        variant: "destructive",
+   551→      });
+   552→    } finally {
+   553→      setSending(false);
+   554→    }
+   555→  }
+   556→
+   557→  async function processRelay() {
+   558→    if (owner !== true) {
+   559→      setAuthOpen(true);
+   560→      return;
+   561→    }
+   562→    if (processingRelay) return;
+   563→    setProcessingRelay(true);
+   564→    try {
+   565→      const res = await fetch("/api/sovereign/relay/process", {
+   566→        method: "POST",
+   567→        headers: ownerHeaders(),
+   568→      });
+   569→      const data = (await res.json()) as { processed?: number; error?: string };
+   570→      if (!res.ok || typeof data.processed !== "number") {
+   571→        throw new Error(data.error ?? "נכשל-עיבוד-התור-הפנימי");
+   572→      }
+   573→      if (data.processed === 0) {
+   574→        toast({ title: "אין טענות-טרם-עובדו", description: "התור הפנימי ריק." });
+   575→      } else {
+   576→        await refresh();
+   577→        toast({
+   578→          title: `עובדו ${data.processed} טענות`,
+   579→          description: "עמדת הריבונות נוספה לתיבה.",
+   580→        });
+   581→      }
+   582→    } catch (err) {
+   583→      toast({
+   584→        title: "שגיאה",
+   585→        description: err instanceof Error ? err.message : "שגיאת-רשת",
+   586→        variant: "destructive",
+   587→      });
+   588→    } finally {
+   589→      setProcessingRelay(false);
+   590→    }
+   591→  }
+   592→
+   593→  async function login() {
+   594→    if (authBusy || !password.trim()) return;
+   595→    setAuthBusy(true);
+   596→    try {
+   597→      const res = await fetch("/api/sovereign/auth", {
+   598→        method: "POST",
+   599→        headers: { "Content-Type": "application/json" },
+   600→        body: JSON.stringify({ password }),
+   601→      });
+   602→      const data = (await res.json()) as {
+   603→        owner: boolean;
+   604→        token?: string;
+   605→        error?: string;
+   606→      };
+   607→      if (!res.ok || !data.owner) throw new Error(data.error ?? "מפתח-לא-תקין");
+   608→      try {
+   609→        if (data.token) saveOwnerToken(data.token);
+   610→      } catch {
+   611→        // סשן-זמני בלבד
+   612→      }
+   613→      setOwner(true);
+   614→      setPassword("");
+   615→      setAuthOpen(false);
+   616→      toast({
+   617→        title: "ניהול-הבעלים פעיל",
+   618→        description: "שער-headcorner נפתח — הערוץ וההכרעות בידיך.",
+   619→      });
+   620→      void refresh();
+   621→      void loadGit();
+   622→    } catch (err) {
+   623→      toast({
+   624→        title: "כניסה נדחתה",
+   625→        description: err instanceof Error ? err.message : "שגיאת-רשת",
+   626→        variant: "destructive",
+   627→      });
+   628→    } finally {
+   629→      setAuthBusy(false);
+   630→    }
+   631→  }
+   632→
+   633→  async function logout() {
+   634→    clearOwnerToken();
+   635→    try {
+   636→      await fetch("/api/sovereign/auth", { method: "DELETE" });
+   637→    } catch {
+   638→      // יציאה-מקומית בכל-מקרה
+   639→    }
+   640→    setOwner(false);
+   641→    toast({ title: "יצאת מניהול-הבעלים", description: "הפרונט הציבורי נשאר גלוי." });
+   642→    void refresh();
+   643→  }
+   644→
+   645→  async function landNow() {
+   646→    const text = landText.trim();
+   647→    if (!text || landing || owner !== true) return;
+   648→    setLanding(true);
+   649→    try {
+   650→      const res = await fetch("/api/git/land", {
+   651→        method: "POST",
+   652→        headers: { "Content-Type": "application/json", ...ownerHeaders() },
+   653→        body: JSON.stringify({ text }),
+   654→      });
+   655→      const data = (await res.json()) as {
+   656→        ok?: boolean;
+   657→        commit?: string;
+   658→        pushed?: boolean;
+   659→        deduped?: boolean;
+   660→        error?: string;
+   661→      };
+   662→      if (!res.ok || !data.ok) throw new Error(data.error ?? "הנחיתה-לגיט נכשלה");
+   663→      setLandText("");
+   664→      await loadGit();
+   665→      toast({
+   666→        title: data.deduped ? "ההוראה כבר נוחתה (מנע-כפילות)" : "ההוראה נחתה בגיט",
+   667→        description: data.commit
+   668→          ? `commit ${data.commit}${data.pushed ? " · pushed" : ""}`
+   669→          : undefined,
+   670→      });
+   671→    } catch (err) {
+   672→      toast({
+   673→        title: "נחיתה נכשלה",
+   674→        description: err instanceof Error ? err.message : "שגיאת-רשת",
+   675→        variant: "destructive",
+   676→      });
+   677→    } finally {
+   678→      setLanding(false);
+   679→    }
+   680→  }
+   681→
+   682→  const stats: Array<{ label: string; value: string; tone: string }> = [
+   683→    { label: "לא-נקראו", value: fmtNum(summary.unreadForOwner), tone: "text-emerald-600 dark:text-emerald-400" },
+   684→    { label: "הכרעות-ממתינות", value: fmtNum(summary.pendingRequests), tone: "text-amber-600 dark:text-amber-400" },
+   685→    {
+   686→      label: "סכום-מבוקש",
+   687→      value: `${fmtNum(summary.pendingAmount)}${summary.pendingCurrency ? ` ${summary.pendingCurrency}` : ""}`,
+   688→      tone: "text-foreground",
+   689→    },
+   690→    { label: "טענות-טרם-עובדו", value: fmtNum(summary.relayUnprocessed), tone: "text-amber-600 dark:text-amber-400" },
+   691→  ];
+   692→
+   693→  return (
+   694→    <div className="min-h-screen flex flex-col">
+   695→      {/* כותרת */}
+   696→      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+   697→        <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+   698→          <div className="flex min-w-0 items-start gap-1">
+   699→            <Button
+   700→              variant="ghost"
+   701→              size="icon"
+   702→              className="mt-0.5 h-11 w-11 shrink-0 md:hidden"
+   703→              onClick={() => setNavOpen(true)}
+   704→              aria-label="פתיחת-תפריט"
+   705→            >
+   706→              <Menu className="h-5 w-5" aria-hidden="true" />
+   707→            </Button>
+   708→            <div className="min-w-0">
+   709→            <div className="flex items-center gap-2 flex-wrap">
+   710→              <h1 className="text-xl font-bold tracking-tight sm:text-2xl">giant · מערכת-האמת</h1>
+   711→              <Badge className="gap-1 bg-emerald-600 text-white hover:bg-emerald-600">
+   712→                <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
+   713→                הערוץ-האחד · בעלים ↔ ריבונות
+   714→              </Badge>
+   715→            </div>
+   716→            <p className="mt-1.5 hidden text-sm text-muted-foreground leading-relaxed md:block">
+   717→              חוק-giant: ערוץ-אחד בלבד · אין טענות-סוכנים לבעלים · הריבונות היא המפעילה ומשיגה את המימון בעצמה · ניהול-הבעלים מאחורי מפתח-headcorner
+   718→            </p>
+   719→            </div>
+   720→          </div>
+   721→          <div className="flex items-center gap-2 shrink-0 ps-13 sm:ps-0">
+   722→            <Button
+   723→              variant="outline"
+   724→              size="lg"
+   725→              className="h-11"
+   726→              onClick={() => void refresh()}
+   727→              disabled={refreshing}
+   728→              aria-label="רענון הערוץ"
+   729→            >
+   730→              <RefreshCw className={cn("h-4 w-4", refreshing && "animate-spin")} aria-hidden="true" />
+   731→              רענון
+   732→            </Button>
+   733→            {owner === true ? (
+   734→              <Button
+   735→                variant="outline"
+   736→                size="lg"
+   737→                className="h-11 border-emerald-600/40 text-emerald-700 dark:text-emerald-400"
+   738→                onClick={() => void logout()}
+   739→                aria-label="יציאה מניהול-הבעלים"
+   740→              >
+   741→                <LogOut className="h-4 w-4" aria-hidden="true" />
+   742→                בעלים · יציאה
+   743→              </Button>
+   744→            ) : (
+   745→              <Button
+   746→                size="lg"
+   747→                className="h-11 bg-emerald-600 text-white hover:bg-emerald-700"
+   748→                onClick={() => setAuthOpen(true)}
+   749→                aria-label="כניסת-בעלים"
+   750→              >
+   751→                <KeyRound className="h-4 w-4" aria-hidden="true" />
+   752→                כניסת-בעלים
+   753→              </Button>
+   754→            )}
+   755→          </div>
+   756→        </div>
+   757→      </header>
+   758→
+   759→      <div className="mx-auto flex w-full max-w-7xl flex-1 items-stretch">
+   760→        <aside
+   761→          aria-label="ניווט-ראשי"
+   762→          className="sticky top-0 hidden h-fit w-60 shrink-0 flex-col gap-1 self-start px-3 py-6 md:flex"
+   763→        >
+   764→          {NAV_ITEMS.map((item) => (
+   765→            <button
+   766→              key={item.id}
+   767→              onClick={() => setView(item.id)}
+   768→              aria-current={view === item.id ? "page" : undefined}
+   769→              className={cn(
+   770→                "flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors",
+   771→                view === item.id
+   772→                  ? "bg-emerald-600/10 font-semibold text-emerald-700 dark:text-emerald-400"
+   773→                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
+   774→              )}
+   775→            >
+   776→              <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+   777→              {item.label}
+   778→            </button>
+   779→          ))}
+   780→          <div className="mt-2 border-t pt-2">
+   781→            <button
+   782→              onClick={() => setPaletteOpen(true)}
+   783→              className="flex min-h-[44px] w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+   784→            >
+   785→              <Terminal className="h-4 w-4" aria-hidden="true" />
+   786→              פלטת-פקודות
+   787→              <kbd className="ms-auto rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px]">⌘K</kbd>
+   788→            </button>
+   789→          </div>
+   790→        </aside>
+   791→
+   792→        <main className="min-w-0 flex-1 space-y-6 px-4 py-6">
+   793→        {view !== "channel" ? (
+   794→          renderView()
+   795→        ) : (
+   796→        <>
+   797→        {error ? (
+   798→          <Alert variant="destructive">
+   799→            <AlertCircle className="h-4 w-4" aria-hidden="true" />
+   800→            <AlertTitle>טעינת-הערוץ נכשלה</AlertTitle>
+   801→            <AlertDescription className="flex flex-col items-start gap-3">
+   802→              <span>{error} — הריבונות ממתינה לך כאן.</span>
+   803→              <Button size="lg" className="h-11" onClick={() => void refresh()}>
+   804→                נסה שוב
+   805→              </Button>
+   806→            </AlertDescription>
+   807→          </Alert>
+   808→        ) : loading ? (
+   809→          <div className="space-y-6" aria-busy="true" aria-label="טוען את הערוץ">
+   810→            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+   811→              {[0, 1, 2, 3].map((i) => (
+   812→                <Skeleton key={i} className="h-24 rounded-lg" />
+   813→              ))}
+   814→            </div>
+   815→            <Skeleton className="h-10 w-64 rounded-full" />
+   816→            <div className="space-y-3">
+   817→              <Skeleton className="h-28 rounded-lg" />
+   818→              <Skeleton className="h-28 rounded-lg" />
+   819→              <Skeleton className="h-28 rounded-lg" />
+   820→            </div>
+   821→          </div>
+   822→        ) : (
+   823→          <>
+   824→            {/* סטטיסטיקה */}
+   825→            <section aria-label="מדדי-הערוץ">
+   826→              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+   827→                {stats.map((s) => (
+   828→                  <Card key={s.label} className="p-4">
+   829→                    <div className="text-xs text-muted-foreground">{s.label}</div>
+   830→                    <div className={cn("mt-1 text-2xl font-bold tabular-nums leading-tight", s.tone)}>
+   831→                      {s.value}
+   832→                    </div>
+   833→                  </Card>
+   834→                ))}
+   835→              </div>
+   836→            </section>
+   837→
+   838→            <Tabs value={tab} onValueChange={setTab}>
+   839→              <TabsList className="h-11">
+   840→                <TabsTrigger value="inbox" className="min-h-[44px]">
+   841→                  תיבת הריבון
+   842→                  {summary.unreadForOwner > 0 && (
+   843→                    <Badge className="ms-2 h-5 min-w-5 px-1 bg-emerald-600 text-white hover:bg-emerald-600 tabular-nums">
+   844→                      {summary.unreadForOwner}
+   845→                    </Badge>
+   846→                  )}
+   847→                </TabsTrigger>
+   848→                <TabsTrigger value="relay" className="gap-2 min-h-[44px]">
+   849→                  טענות סוכנים · פנימי
+   850→                  <Badge
+   851→                    variant="outline"
+   852→                    className="border-muted-foreground/40 px-1.5 text-[10px] text-muted-foreground"
+   853→                  >
+   854→                    לא-לבעלים ישירות
+   855→                  </Badge>
+   856→                </TabsTrigger>
+   857→                <TabsTrigger value="git" className="gap-2 min-h-[44px]">
+   858→                  מנוע-הגיט · חי
+   859→                  <Badge
+   860→                    variant="outline"
+   861→                    className="border-muted-foreground/40 px-1.5 text-[10px] text-muted-foreground"
+   862→                  >
+   863→                    גיט→מוצר
+   864→                  </Badge>
+   865→                </TabsTrigger>
+   866→              </TabsList>
+   867→
+   868→              {/* תיבת הריבון */}
+   869→              <TabsContent value="inbox" className="mt-4 space-y-4">
+   870→                <Card>
+   871→                  <CardContent className="p-4">
+   872→                    <div
+   873→                      ref={listRef}
+   874→                      className="sovereign-scroll max-h-[60vh] overflow-y-auto pe-1"
+   875→                      aria-label="הודעות הערוץ"
+   876→                    >
+   877→                      {inbox.length === 0 ? (
+   878→                        <p className="py-10 text-center text-sm text-muted-foreground">
+   879→                          התיבה ריקה — כתוב לריבונות למטה.
+   880→                        </p>
+   881→                      ) : (
+   882→                        inbox.map((m) => (
+   883→                          <motion.div
+   884→                            key={m.id}
+   885→                            initial={{ opacity: 0, y: 8 }}
+   886→                            animate={{ opacity: 1, y: 0 }}
+   887→                            transition={{ duration: 0.25, ease: "easeOut" }}
+   888→                          >
+   889→                            <div
+   890→                              role="button"
+   891→                              tabIndex={0}
+   892→                              onClick={() => void markRead(m)}
+   893→                              onKeyDown={(e) => {
+   894→                                if (e.key === "Enter" || e.key === " ") {
+   895→                                  e.preventDefault();
+   896→                                  void markRead(m);
+   897→                                }
+   898→                              }}
+   899→                              className={cn(
+   900→                                "mb-3 rounded-lg border p-4 cursor-pointer transition-colors outline-none focus-visible:ring-2 focus-visible:ring-emerald-600/50",
+   901→                                m.from === "SOVEREIGNTY"
+   902→                                  ? "border-s-4 border-s-emerald-600 hover:bg-emerald-500/5"
+   903→                                  : "bg-muted/40 hover:bg-muted/60",
+   904→                              )}
+   905→                              aria-label={`הודעה: ${m.subject}`}
+   906→                            >
+   907→                              <div className="flex items-center gap-2 flex-wrap">
+   908→                                {m.from === "SOVEREIGNTY" ? (
+   909→                                  <Badge className="bg-emerald-600 text-white hover:bg-emerald-600">
+   910→                                    הריבונות
+   911→                                  </Badge>
+   912→                                ) : (
+   913→                                  <Badge variant="secondary">אתה</Badge>
+   914→                                )}
+   915→                                <Badge variant="outline">
+   916→                                  {KIND_LABELS[m.kind] ?? m.kind}
+   917→                                </Badge>
+   918→                                <PriorityBadge priority={m.priority} />
+   919→                                {m.from === "SOVEREIGNTY" && m.status === "UNREAD" && (
+   920→                                  <span
+   921→                                    className="sovereign-unread-dot h-2 w-2 rounded-full bg-emerald-600"
+   922→                                    aria-label="לא-נקרא"
+   923→                                  />
+   924→                                )}
+   925→                                <span className="ms-auto text-xs text-muted-foreground tabular-nums">
+   926→                                  {fmtTime(m.createdAt)}
+   927→                                </span>
+   928→                              </div>
+   929→                              <h3 className="mt-2 font-semibold leading-snug">{m.subject}</h3>
+   930→                              <p className="mt-1 text-sm leading-relaxed whitespace-pre-wrap">
+   931→                                {m.body}
+   932→                              </p>
+   933→                              {parseMeta(m.meta).llmError && (
+   934→                                <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
+   935→                                  מצב-מילוט: נוסח-שמירה (מנוע-הניסוח לא זמין בעת הניסוח)
+   936→                                </p>
+   937→                              )}
+   938→                              {parseMeta(m.meta).gitLand?.commit ? (
+   939→                                <p className="mt-2 text-xs text-muted-foreground">
+   940→                                  נחיתה-לגיט: commit{" "}
+   941→                                  <code className="rounded bg-muted px-1.5 py-0.5 font-mono">
+   942→                                    {parseMeta(m.meta).gitLand?.commit}
+   943→                                  </code>
+   944→                                  {parseMeta(m.meta).gitLand?.pushed
+   945→                                    ? " · pushed"
+   946→                                    : " · מדווח-כנה בלבד"}
+   947→                                </p>
+   948→                              ) : parseMeta(m.meta).gitLand?.ok === false ? (
+   949→                                <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
+   950→                                  נחיתת-הגיט נכשלה — מדווח-כנה, אין-זיוף.
+   951→                                </p>
+   952→                              ) : null}
+   953→                              {(m.kind === "FUNDING" || m.kind === "DECISION") && (
+   954→                                <div className="mt-3 border-t pt-3 flex items-center justify-between gap-3 flex-wrap">
+   955→                                  <div className="flex items-center gap-3 flex-wrap">
+   956→                                    {typeof m.amount === "number" && (
+   957→                                      <div className="text-xl font-bold tabular-nums">
+   958→                                        {fmtNum(m.amount)}{" "}
+   959→                                        <span className="text-sm font-normal text-muted-foreground">
+   960→                                          {m.currency}
+   961→                                        </span>
+   962→                                      </div>
+   963→                                    )}
+   964→                                    <RequestStatusChip status={m.requestStatus} />
+   965→                                  </div>
+   966→                                  {m.requestStatus === "PENDING" && (
+   967→                                    <div className="flex items-center gap-2">
+   968→                                      <Button
+   969→                                        size="lg"
+   970→                                        className="h-11 bg-emerald-600 text-white hover:bg-emerald-700"
+   971→                                        disabled={deciding !== null}
+   972→                                        onClick={(e) => {
+   973→                                          e.stopPropagation();
+   974→                                          void decide(m, "APPROVED");
+   975→                                        }}
+   976→                                      >
+   977→                                        {deciding === `${m.id}:APPROVED` && (
+   978→                                          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+   979→                                        )}
+   980→                                        אישור
+   981→                                      </Button>
+   982→                                      <Button
+   983→                                        size="lg"
+   984→                                        variant="outline"
+   985→                                        className="h-11"
+   986→                                        disabled={deciding !== null}
+   987→                                        onClick={(e) => {
+   988→                                          e.stopPropagation();
+   989→                                          void decide(m, "DECLINED");
+   990→                                        }}
+   991→                                      >
+   992→                                        {deciding === `${m.id}:DECLINED` && (
+   993→                                          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+   994→                                        )}
+   995→                                        דחייה
+   996→                                      </Button>
+   997→                                    </div>
+   998→                                  )}
+   999→                                </div>
+  1000→                              )}
+  1001→                            </div>
+  1002→                          </motion.div>
+  1003→                        ))
+  1004→                      )}
+  1005→                    </div>
+  1006→                  </CardContent>
+  1007→                </Card>
+  1008→
+  1009→                {/* מחברת-פניות */}
+  1010→                <Card>
+  1011→                  <CardContent className="p-4 space-y-3">
+  1012→                    <Textarea
+  1013→                      value={draft}
+  1014→                      onChange={(e) => setDraft(e.target.value)}
+  1015→                      onKeyDown={(e) => {
+  1016→                        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+  1017→                          e.preventDefault();
+  1018→                          void send();
+  1019→                        }
+  1020→                      }}
+  1021→                      placeholder="כתוב לריבונות…"
+  1022→                      aria-label="כתיבת פנייה לריבונות"
+  1023→                      className="min-h-[96px] resize-y text-sm"
+  1024→                      dir="rtl"
+  1025→                    />
+  1026→                    <div className="flex items-center justify-between gap-3 flex-wrap">
+  1027→                      <div
+  1028→                        className="flex items-center gap-2 text-sm text-emerald-700 dark:text-emerald-400"
+  1029→                        aria-live="polite"
+  1030→                      >
+  1031→                        {sending ? (
+  1032→                          <>
+  1033→                            <span>הריבונות מנסחת תשובה</span>
+  1034→                            <span className="sovereign-dot font-bold">·</span>
+  1035→                            <span className="sovereign-dot font-bold">·</span>
+  1036→                            <span className="sovereign-dot font-bold">·</span>
+  1037→                          </>
+  1038→                        ) : owner !== true ? (
+  1039→                          <span className="text-muted-foreground">
+  1040→                            ניהול-הבעלים דורש מפתח-headcorner — שליחה תפתח את שער-הבעלים
+  1041→                          </span>
+  1042→                        ) : null}
+  1043→                      </div>
+  1044→                      <Button
+  1045→                        size="lg"
+  1046→                        className="h-11 min-w-40 bg-emerald-600 text-white hover:bg-emerald-700"
+  1047→                        onClick={() => void send()}
+  1048→                        disabled={sending || draft.trim().length === 0}
+  1049→                        aria-label="שלח לריבונות"
+  1050→                      >
+  1051→                        {sending ? (
+  1052→                          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+  1053→                        ) : (
+  1054→                          <Send className="h-4 w-4" aria-hidden="true" />
+  1055→                        )}
+  1056→                        שלח לריבונות
+  1057→                      </Button>
+  1058→                    </div>
+  1059→                  </CardContent>
+  1060→                </Card>
+  1061→              </TabsContent>
+  1062→
+  1063→              {/* טענות-סוכנים · פנימי */}
+  1064→              <TabsContent value="relay" className="mt-4 space-y-4">
+  1065→                {owner !== true && (
+  1066→                  <Alert>
+  1067→                    <Lock className="h-4 w-4" aria-hidden="true" />
+  1068→                    <AlertTitle>חסוי-בק · חוק-הפרונט/הבק</AlertTitle>
+  1069→                    <AlertDescription className="flex flex-col items-start gap-3">
+  1070→                      <span>
+  1071→                        התור-הפנימי של הריבונות גלוי לבעלים בלבד — מאחורי מפתח-headcorner.
+  1072→                      </span>
+  1073→                      <Button
+  1074→                        size="lg"
+  1075→                        className="h-11 bg-emerald-600 text-white hover:bg-emerald-700"
+  1076→                        onClick={() => setAuthOpen(true)}
+  1077→                      >
+  1078→                        <KeyRound className="h-4 w-4" aria-hidden="true" />
+  1079→                        כניסת-בעלים
+  1080→                      </Button>
+  1081→                    </AlertDescription>
+  1082→                  </Alert>
+  1083→                )}
+  1084→                <Alert className="border-amber-500/40">
+  1085→                  <Stamp className="h-4 w-4" aria-hidden="true" />
+  1086→                  <AlertTitle>חוק-התור הפנימי</AlertTitle>
+  1087→                  <AlertDescription>
+  1088→                    טענות סוכנים מגיעות לריבונות בלבד — אף טענה אינה מגיעה לבעלים ישירות.
+  1089→                    הריבונות בוחנת את התור ומעלה מכאן עמדה אחת מרוכזת לתיבת הריבון.
+  1090→                  </AlertDescription>
+  1091→                </Alert>
+  1092→
+  1093→                <div className="flex justify-start">
+  1094→                  <Button
+  1095→                    size="lg"
+  1096→                    className="h-11 bg-emerald-600 text-white hover:bg-emerald-700"
+  1097→                    onClick={() => void processRelay()}
+  1098→                    disabled={processingRelay || owner !== true}
+  1099→                  >
+  1100→                    {processingRelay ? (
+  1101→                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+  1102→                    ) : null}
+  1103→                    עבד טענות → עמדת ריבונות
+  1104→                  </Button>
+  1105→                </div>
+  1106→
+  1107→                {relay.length === 0 ? (
+  1108→                  <Card className="p-4">
+  1109→                    <p className="py-8 text-center text-sm text-muted-foreground">
+  1110→                      אין טענות-סוכנים בתור הפנימי.
+  1111→                    </p>
+  1112→                  </Card>
+  1113→                ) : (
+  1114→                  relay.map((c) => (
+  1115→                    <motion.div
+  1116→                      key={c.id}
+  1117→                      initial={{ opacity: 0, y: 8 }}
+  1118→                      animate={{ opacity: 1, y: 0 }}
+  1119→                      transition={{ duration: 0.25, ease: "easeOut" }}
+  1120→                    >
+  1121→                      <div className="mb-3 rounded-lg border bg-muted/30 p-4">
+  1122→                        <div className="flex items-center gap-2 flex-wrap">
+  1123→                          <Badge variant="outline">{KIND_LABELS.CLAIM}</Badge>
+  1124→                          <RelayProcessedChip processed={c.relayProcessed} />
+  1125→                          <span className="ms-auto text-xs text-muted-foreground tabular-nums">
+  1126→                            {fmtTime(c.createdAt)}
+  1127→                          </span>
+  1128→                        </div>
+  1129→                        <h3 className="mt-2 font-medium text-sm leading-snug">
+  1130→                          {c.subject.replace(/\(trace\s+([a-f0-9]+)\)/i, "")}
+  1131→                          {/\(trace\s+([a-f0-9]+)\)/i.test(c.subject) && (
+  1132→                            <code className="ms-1 rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
+  1133→                              trace {(/\(trace\s+([a-f0-9]+)\)/i.exec(c.subject) ?? [])[1]}
+  1134→                            </code>
+  1135→                          )}
+  1136→                        </h3>
+  1137→                        <p className="mt-1 text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+  1138→                          {c.body}
+  1139→                        </p>
+  1140→                      </div>
+  1141→                    </motion.div>
+  1142→                  ))
+  1143→                )}
+  1144→              </TabsContent>
+  1145→
+  1146→              {/* מנוע-הגיט-החי (גיט→מוצר) */}
+  1147→              <TabsContent value="git" className="mt-4 space-y-4">
+  1148→                <div className="flex items-center justify-between gap-3 flex-wrap">
+  1149→                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+  1150→                    <GitBranch className="h-4 w-4" aria-hidden="true" />
+  1151→                    כל-מה-שיש-בגיט הופך כאן מדפים-מפוזרים למערכת-חיה · Sandbox
+  1152→                    {gitState?.head ? (
+  1153→                      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+  1154→                        {gitState.head}
+  1155→                      </code>
+  1156→                    ) : null}
+  1157→                  </div>
+  1158→                  <Button
+  1159→                    variant="outline"
+  1160→                    size="lg"
+  1161→                    className="h-11"
+  1162→                    onClick={() => void loadGit()}
+  1163→                    disabled={gitLoading}
+  1164→                    aria-label="רענון מנוע-הגיט"
+  1165→                  >
+  1166→                    <RefreshCw
+  1167→                      className={cn("h-4 w-4", gitLoading && "animate-spin")}
+  1168→                      aria-hidden="true"
+  1169→                    />
+  1170→                    רענון-מצב
+  1171→                  </Button>
+  1172→                </div>
+  1173→
+  1174→                {!gitState ? (
+  1175→                  <div className="space-y-3" aria-busy="true">
+  1176→                    <Skeleton className="h-24 rounded-lg" />
+  1177→                    <Skeleton className="h-24 rounded-lg" />
+  1178→                  </div>
+  1179→                ) : !gitState.ok ? (
+  1180→                  <Alert variant="destructive">
+  1181→                    <AlertCircle className="h-4 w-4" aria-hidden="true" />
+  1182→                    <AlertTitle>קריאת-הגיט נכשלה</AlertTitle>
+  1183→                    <AlertDescription>{gitState.error ?? "שגיאה-לא-ידועה"}</AlertDescription>
+  1184→                  </Alert>
+  1185→                ) : (
+  1186→                  <>
+  1187→                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+  1188→                      <Card className="p-4">
+  1189→                        <div className="text-xs text-muted-foreground">לדג'ר · D1</div>
+  1190→                        <div className="mt-1 text-2xl font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
+  1191→                          {fmtNum(gitState.ledger.count)}
+  1192→                        </div>
+  1193→                      </Card>
+  1194→                      <Card className="p-4">
+  1195→                        <div className="text-xs text-muted-foreground">סוכנים-רשומים</div>
+  1196→                        <div className="mt-1 text-2xl font-bold tabular-nums">
+  1197→                          {fmtNum(gitState.registry.rows)}
+  1198→                        </div>
+  1199→                      </Card>
+  1200→                      <Card className="p-4">
+  1201→                        <div className="text-xs text-muted-foreground">תוכניות</div>
+  1202→                        <div className="mt-1 text-2xl font-bold tabular-nums">
+  1203→                          {fmtNum(gitState.plans.files.length)}
+  1204→                        </div>
+  1205→                      </Card>
+  1206→                      <Card className="p-4">
+  1207→                        <div className="text-xs text-muted-foreground">תיבת-הוראות</div>
+  1208→                        <div className="mt-1 text-2xl font-bold tabular-nums">
+  1209→                          {fmtNum(gitState.inbox.count)}/60
+  1210→                        </div>
+  1211→                      </Card>
+  1212→                    </div>
+  1213→
+  1214→                    <Card>
+  1215→                      <CardContent className="p-4 space-y-2">
+  1216→                        <div className="flex items-center gap-2">
+  1217→                          <Landmark className="h-4 w-4" aria-hidden="true" />
+  1218→                          <h3 className="font-semibold text-sm">לדג'ר-האמת · שורה-אחרונה</h3>
+  1219→                        </div>
+  1220→                        <p className="text-xs text-muted-foreground leading-relaxed">
+  1221→                          {gitState.ledger.lastLine?.slice(0, 420) ?? "—"}
+  1222→                        </p>
+  1223→                        <div className="flex items-center gap-2 pt-1">
+  1224→                          <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+  1225→                          <h3 className="font-semibold text-sm">רישום-הצוות · אחרון</h3>
+  1226→                        </div>
+  1227→                        <p className="text-xs text-muted-foreground leading-relaxed">
+  1228→                          {gitState.registry.lastLine?.slice(0, 300) ?? "—"}
+  1229→                        </p>
+  1230→                        <div className="pt-1 flex items-center gap-2 flex-wrap">
+  1231→                          <h3 className="font-semibold text-sm">תוכניות:</h3>
+  1232→                          {gitState.plans.files.slice(0, 5).map((f) => (
+  1233→                            <code
+  1234→                              key={f}
+  1235→                              className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
+  1236→                            >
+  1237→                              {f}
+  1238→                            </code>
+  1239→                          ))}
+  1240→                          {gitState.giant.files.map((f) => (
+  1241→                            <code
+  1242→                              key={f}
+  1243→                              className="rounded bg-emerald-600/10 px-1.5 py-0.5 font-mono text-[10px] text-emerald-700 dark:text-emerald-400"
+  1244→                            >
+  1245→                              giant/{f}
+  1246→                            </code>
+  1247→                          ))}
+  1248→                        </div>
+  1249→                      </CardContent>
+  1250→                    </Card>
+  1251→
+  1252→                    <Card>
+  1253→                      <CardContent className="p-4 space-y-2">
+  1254→                        <h3 className="font-semibold text-sm">
+  1255→                          תיבת-ההוראות בגיט · {fmtNum(gitState.inbox.count)} שורות (bounded 60)
+  1256→                          · קו-הבליעה-הקנוני
+  1257→                        </h3>
+  1258→                        {gitState.inbox.last.length === 0 ? (
+  1259→                          <p className="text-xs text-muted-foreground">ריקה.</p>
+  1260→                        ) : (
+  1261→                          gitState.inbox.last.map((e, i) => (
+  1262→                            <div
+  1263→                              key={`${e.at}-${i}`}
+  1264→                              className="rounded border bg-muted/30 p-2 text-xs"
+  1265→                            >
+  1266→                              <div className="flex items-center gap-2 flex-wrap text-[10px] text-muted-foreground">
+  1267→                                <Badge variant="outline" className="px-1 py-0 text-[10px]">
+  1268→                                  {e.role}
+  1269→                                </Badge>
+  1270→                                <span>{e.source}</span>
+  1271→                                <span className="tabular-nums">{e.at}</span>
+  1272→                              </div>
+  1273→                              <p className="mt-1 leading-relaxed">{e.text}</p>
+  1274→                            </div>
+  1275→                          ))
+  1276→                        )}
+  1277→                        <div className="pt-1">
+  1278→                          <h3 className="font-semibold text-sm mb-1">commits אחרונים</h3>
+  1279→                          <ul className="space-y-0.5">
+  1280→                            {gitState.commits.recent.map((c) => (
+  1281→                              <li
+  1282→                                key={c}
+  1283→                                className="font-mono text-[11px] text-muted-foreground truncate"
+  1284→                              >
+  1285→                                {c}
+  1286→                              </li>
+  1287→                            ))}
+  1288→                          </ul>
+  1289→                        </div>
+  1290→                      </CardContent>
+  1291→                    </Card>
+  1292→
+  1293→                    <Card>
+  1294→                      <CardContent className="p-4 space-y-3">
+  1295→                        <h3 className="font-semibold text-sm flex items-center gap-2">
+  1296→                          <GitBranch className="h-4 w-4" aria-hidden="true" />
+  1297→                          נחיתת-הוראה לגיט
+  1298→                          {owner !== true && (
+  1299→                            <Badge variant="outline" className="text-[10px]">
+  1300→                              לבעלים בלבד
+  1301→                            </Badge>
+  1302→                          )}
+  1303→                        </h3>
+  1304→                        {owner !== true ? (
+  1305→                          <Alert>
+  1306→                            <Lock className="h-4 w-4" aria-hidden="true" />
+  1307→                            <AlertTitle>שער-הבעלים</AlertTitle>
+  1308→                            <AlertDescription>
+  1309→                              ההוראה תנחת ל-inbox.jsonl עם commit ו-pushed אמת — לאחר כניסה עם
+  1310→                              מפתח-headcorner.
+  1311→                            </AlertDescription>
+  1312→                          </Alert>
+  1313→                        ) : (
+  1314→                          <>
+  1315→                            <Textarea
+  1316→                              value={landText}
+  1317→                              onChange={(e) => setLandText(e.target.value)}
+  1318→                              placeholder="הוראה לצי / לריבונות — תנחת לקו-הבליעה הקנוני בגיט…"
+  1319→                              aria-label="נוסח-הוראה"
+  1320→                              className="min-h-[80px] resize-y text-sm"
+  1321→                              dir="rtl"
+  1322→                            />
+  1323→                            <Button
+  1324→                              size="lg"
+  1325→                              className="h-11 bg-emerald-600 text-white hover:bg-emerald-700"
+  1326→                              onClick={() => void landNow()}
+  1327→                              disabled={landing || landText.trim().length === 0}
+  1328→                            >
+  1329→                              {landing ? (
+  1330→                                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+  1331→                              ) : (
+  1332→                                <GitBranch className="h-4 w-4" aria-hidden="true" />
+  1333→                              )}
+  1334→                              נחת-הוראה לגיט
+  1335→                            </Button>
+  1336→                          </>
+  1337→                        )}
+  1338→                      </CardContent>
+  1339→                    </Card>
+  1340→                  </>
+  1341→                )}
+  1342→              </TabsContent>
+  1343→            </Tabs>
+  1344→          </>
+  1345→        )}
+  1346→        </>
+  1347→        )}
+  1348→      </main>
+  1349→      </div>
+  1350→
+  1351→      <footer className="border-t mt-auto pb-[env(safe-area-inset-bottom)]">
+  1352→        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-1 px-4 py-3 text-xs text-muted-foreground sm:flex-row">
+  1353→          <span>giant · הערוץ-האחד · הריבונות היא המפעילה · אין טענות-סוכנים לבעלים · ⌘K-לפלטת-פקודות</span>
+  1354→          <span className="tabular-nums">
+  1355→            {lastSync ? `סנכרון אחרון: ${heTime.format(lastSync)}` : "טוען…"}
+  1356→          </span>
+  1357→        </div>
+  1358→      </footer>
+  1359→
+  1360→      {/* שער-הבעלים (headcorner) */}
+  1361→      <Dialog open={authOpen} onOpenChange={setAuthOpen}>
+  1362→        <DialogContent className="sm:max-w-md" dir="rtl">
+  1363→          <DialogHeader>
+  1364→            <DialogTitle className="flex items-center gap-2">
+  1365→              <KeyRound className="h-4 w-4" aria-hidden="true" />
+  1366→              שער-הבעלים · מפתח-headcorner
+  1367→            </DialogTitle>
+  1368→            <DialogDescription>
+  1369→              ניהול-הבעלים (ערוץ, הכרעות, נחיתות-גיט) מאובטח מאחורי המפתח.
+  1370→              המפתח אינו נרשם ואינו נשלח לשום מקום נוסף.
+  1371→            </DialogDescription>
+  1372→          </DialogHeader>
+  1373→          <Input
+  1374→            type="password"
+  1375→            value={password}
+  1376→            onChange={(e) => setPassword(e.target.value)}
+  1377→            onKeyDown={(e) => {
+  1378→              if (e.key === "Enter") {
+  1379→                e.preventDefault();
+  1380→                void login();
+  1381→              }
+  1382→            }}
+  1383→            placeholder="מפתח-הבעלים"
+  1384→            aria-label="מפתח-הבעלים"
+  1385→            dir="ltr"
+  1386→            autoComplete="current-password"
+  1387→          />
+  1388→          <DialogFooter className="gap-2">
+  1389→            <Button variant="outline" onClick={() => setAuthOpen(false)} disabled={authBusy}>
+  1390→              ביטול
+  1391→            </Button>
+  1392→            <Button
+  1393→              className="bg-emerald-600 text-white hover:bg-emerald-700"
+  1394→              onClick={() => void login()}
+  1395→              disabled={authBusy || password.length === 0}
+  1396→            >
+  1397→              {authBusy ? (
+  1398→                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+  1399→              ) : (
+  1400→                <KeyRound className="h-4 w-4" aria-hidden="true" />
+  1401→              )}
+  1402→              כניסה
+  1403→            </Button>
+  1404→          </DialogFooter>
+  1405→        </DialogContent>
+  1406→      </Dialog>
+  1407→
+  1408→      {/* ניווט-מובייל */}
+  1409→      <Sheet open={navOpen} onOpenChange={setNavOpen}>
+  1410→        <SheetContent side="right" className="w-72" dir="rtl">
+  1411→          <SheetHeader>
+  1412→            <SheetTitle>ניווט · giant</SheetTitle>
+  1413→            <SheetDescription>כל-המערכת ביד-אחת</SheetDescription>
+  1414→          </SheetHeader>
+  1415→          <div className="flex flex-col gap-1 px-2 pb-6">
+  1416→            {NAV_ITEMS.map((item) => (
+  1417→              <button
+  1418→                key={item.id}
+  1419→                onClick={() => {
+  1420→                  setView(item.id);
+  1421→                  setNavOpen(false);
+  1422→                }}
+  1423→                aria-current={view === item.id ? "page" : undefined}
+  1424→                className={cn(
+  1425→                  "flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors",
+  1426→                  view === item.id
+  1427→                    ? "bg-emerald-600/10 font-semibold text-emerald-700 dark:text-emerald-400"
+  1428→                    : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
+  1429→                )}
+  1430→              >
+  1431→                <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+  1432→                {item.label}
+  1433→              </button>
+  1434→            ))}
+  1435→          </div>
+  1436→        </SheetContent>
+  1437→      </Sheet>
+  1438→
+  1439→      {/* פלטת-פקודות ⌘K */}
+  1440→      <CommandDialog open={paletteOpen} onOpenChange={setPaletteOpen}>
+  1441→        <CommandInput placeholder="חפש מסך או פעולה…" />
+  1442→        <CommandList>
+  1443→          <CommandEmpty>אין תוצאות.</CommandEmpty>
+  1444→          <CommandGroup heading="מסכים">
+  1445→            {NAV_ITEMS.map((item) => (
+  1446→              <CommandItem
+  1447→                key={item.id}
+  1448→                onSelect={() => {
+  1449→                  setView(item.id);
+  1450→                  setPaletteOpen(false);
+  1451→                }}
+  1452→              >
+  1453→                <item.icon className="me-2 h-4 w-4" aria-hidden="true" />
+  1454→                {item.label}
+  1455→              </CommandItem>
+  1456→            ))}
+  1457→          </CommandGroup>
+  1458→          <CommandGroup heading="פעולות">
+  1459→            <CommandItem
+  1460→              onSelect={() => {
+  1461→                void refresh();
+  1462→                setPaletteOpen(false);
+  1463→              }}
+  1464→            >
+  1465→              <RefreshCw className="me-2 h-4 w-4" aria-hidden="true" />
+  1466→              רענון הערוץ
+  1467→            </CommandItem>
+  1468→            <CommandItem
+  1469→              onSelect={() => {
+  1470→                setAuthOpen(true);
+  1471→                setPaletteOpen(false);
+  1472→              }}
+  1473→            >
+  1474→              <KeyRound className="me-2 h-4 w-4" aria-hidden="true" />
+  1475→              שער-הבעלים
+  1476→            </CommandItem>
+  1477→            <CommandItem
+  1478→              onSelect={() => {
+  1479→                setView("channel");
+  1480→                setTab("git");
+  1481→                setPaletteOpen(false);
+  1482→              }}
+  1483→            >
+  1484→              <GitBranch className="me-2 h-4 w-4" aria-hidden="true" />
+  1485→              מנוע-הגיט
+  1486→            </CommandItem>
+  1487→          </CommandGroup>
+  1488→        </CommandList>
+  1489→      </CommandDialog>
+  1490→    </div>
+  1491→  );
+  1492→}
+  1493→

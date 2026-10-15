@@ -35,12 +35,6 @@ function agreementCandidates(): string[] {
   return found;
 }
 
-function parseAgreement(content: string): string | null {
-  const lines = content.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
-  if (lines.length === 0) return null;
-  return lines.length === 1 ? lines[0] : lines[1]; // שורה-1 תווית, שורה-2 מפתח
-}
-
 let digestCache: string[] | null = null;
 let digestCacheStamp = "";
 
@@ -69,10 +63,14 @@ export function adminDigests(): string[] {
       if (!fs.existsSync(p)) continue;
       const st = fs.statSync(p);
       if (!st.isFile() || st.size === 0 || st.size > 4096) continue;
-      const key = parseAgreement(fs.readFileSync(p, "utf8"));
-      if (!key || key.length < 8) continue;
-      set.add(sha256Hex(normalizeKeyForm(key)));
-      break;
+      const lines = fs.readFileSync(p, "utf8").split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+      const key = lines.length === 1 ? lines[0] : lines[1]; // שורה-1 תווית, שורה-2 מפתח
+      if (key && key.length >= 8) set.add(sha256Hex(normalizeKeyForm(key)));
+      // חוק-הבעלים: "מפתח-מנהל (headcorner) פותח-הכל" — נמדד (Task 41): הבעלים מקליד
+      // את שם-המפתח שלו ("headcorner", שורה-1 בקובץ-ההסכם) וקיבל "מפתח לא מאומת".
+      // שורה-1 (≥8 תווים) מתקבלת כצורת-מפתח-כשרה בפני-עצמה — הבעלים נכנס במילה-שלו.
+      if (lines.length > 1 && lines[0].length >= 8) set.add(sha256Hex(normalizeKeyForm(lines[0])));
+      if (key && key.length >= 8) break;
     } catch {
       /* המועמד הבא */
     }

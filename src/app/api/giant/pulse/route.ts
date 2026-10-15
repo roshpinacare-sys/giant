@@ -8,7 +8,9 @@
  */
 import { NextResponse } from "next/server";
 import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { fileMeta, readDirectives, readRequests, readNotes, readVoice, type FileMeta } from "@/lib/sovereign/channel";
+import { DOMAIN_DIR } from "@/lib/giant/truth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -57,7 +59,7 @@ export interface PulsePayload {
   fetchedAt: string;
 }
 
-const TRUTH_PATH = "/home/z/estate/Domain/truth/latest.json";
+const TRUTH_PATH = path.join(DOMAIN_DIR, "truth", "latest.json");
 
 async function readTruth(): Promise<{ truth: TruthState | null; meta: FileMeta }> {
   const meta = await fileMeta(TRUTH_PATH);

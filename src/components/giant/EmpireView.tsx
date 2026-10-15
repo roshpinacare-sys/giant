@@ -1,17 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ExternalLink, Network, RefreshCw, ShieldCheck, Landmark, Package, Cable } from "lucide-react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { Anchor, ExternalLink, Network, RefreshCw, ShieldCheck, Landmark, Package, Cable } from "lucide-react";
 import { Recipe } from "@/components/giant/Recipe";
 
 /* ═══ EmpireView — מפת-החיבור-המלא של האימפריה (גל-7) ══════════════════════
- * מנדט-הבעלים: "יש המון המון חומר אבל כלום לא מחובר · אני עוד לא רואה רבע ·
+ * מנדט-הבעלים: "יש המון חומר אבל כלום לא מחובר · אני עוד לא רואה רבע ·
  * מחברים את הריבונות להפעלה מלאה מכל תיקיות הגיט".
  * התשובה: כל-הספרים על מסך-אחד — תפקיד · קבוצה · הדלת-החיה-שלהם · דחיפה ·
  * סריקה · קישור-גיט. כשל = "—" ו"לא מופה" כנה. אפס-המצאת-חיבורים.
- * T63-a מיזוג-הענק-האח: הלוגיקה/הנתונים/העברית כמקורם; כיתות-ה-g-* של גל-6
- * (g-card · g-rise · g-scroll · g-breathe) הומרו לטוקנים-הקיימים-כאן:
- * giant-lift · מעבר-כניסה של ה-view האב · scrollbar-דק-גלובלי · animate-pulse. */
+ * חוקי-עיצוב גל-6: g-card · g-rise · g-scroll · Recipe (חוק-prompt-motion). */
 
 interface EmpireRow {
   name: string;
@@ -80,6 +78,146 @@ const fmtAge = (m: number | null) => {
   return `${Math.round(m / 1440)} ימ׳`;
 };
 
+const TOKEN_KEY = "giant.owner.token";
+
+interface AnchorCloud {
+  live: boolean;
+  siblingMain: string | null;
+  sovereignMain: string | null;
+  anchorLineageHead: string | null;
+  anchorAt: string | null;
+}
+interface AnchorStatus {
+  ok: boolean;
+  error?: string;
+  localHead: string | null;
+  cloud: AnchorCloud;
+  anchored: boolean;
+  behind: number;
+}
+
+const short = (sha: string | null) => (sha ? `${sha.slice(0, 7)}` : "—");
+
+/* אסימון-השער חי-ב-sessionStorage (חנות-חוץ) — useSyncExternalStore בלי-setState-באפקט */
+const subscribeNoop = () => () => {};
+const readToken = () => sessionStorage.getItem(TOKEN_KEY);
+const readTokenServer = () => null;
+
+/* ═══ כרטיס-העוגן-החי (מיזוג-גיאנט: יכולת-ההישרדות של קו-המקור נכנסת למפקדת-האימפריה) ═══
+ * מדידה-חיה של העוגן-בענן (roshpinacare-sys/giant · refs/heads/sovereign/main)
+ * ועגינה-בפועל — שעור-בעלים (אסימון-השער מהערוץ). אפס-סודות-בתשובה. */
+function AnchorCard({ onNavigate }: { onNavigate?: (id: string) => void }) {
+  const token = useSyncExternalStore(subscribeNoop, readToken, readTokenServer);
+  const [status, setStatus] = useState<AnchorStatus | null>(null);
+  const [msg, setMsg] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const apply = useCallback((d: AnchorStatus) => {
+    setStatus(d.ok ? d : null);
+    if (!d.ok) setMsg(d.error ?? "המדידה נדחתה");
+  }, []);
+
+  const measure = useCallback(
+    async (t: string) => {
+      try {
+        const r = await fetch("/api/sovereign/anchor", { cache: "no-store", headers: { "x-giant-owner": t } });
+        apply((await r.json()) as AnchorStatus);
+      } catch {
+        setMsg("השרת לא נגיש כרגע");
+      }
+    },
+    [apply],
+  );
+
+  /* מדידת-עלייה: כל-ה-setState אחרי-await — לא-סינכרוני-באפקט */
+  useEffect(() => {
+    if (!token) return;
+    let alive = true;
+    (async () => {
+      try {
+        const r = await fetch("/api/sovereign/anchor", { cache: "no-store", headers: { "x-giant-owner": token } });
+        const d = (await r.json()) as AnchorStatus;
+        if (alive) apply(d);
+      } catch {
+        if (alive) setMsg("השרת לא נגיש כרגע");
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [token, apply]);
+
+  async function anchor() {
+    if (!token || busy) return;
+    setBusy(true);
+    setMsg(null);
+    try {
+      const r = await fetch("/api/sovereign/anchor", {
+        method: "POST",
+        headers: { "x-giant-owner": token },
+      });
+      const d = (await r.json()) as { ok: boolean; anchorSha?: string; error?: string; status?: AnchorStatus };
+      if (d.ok && d.status) {
+        setStatus(d.status);
+        setMsg(`העוגן הונחת בענן · ${short(d.anchorSha ?? null)} — הריבונות שורדת גם-אם-הסנדבוקס-נמחק`);
+      } else setMsg(d.error === "401-בעלים-בלבד" ? "אסימון-השער פג — פתח את השער מחדש בערוץ" : d.error ?? "העגינה נכשלה");
+    } catch {
+      setMsg("השרת לא נגיש כרגע");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (!token) {
+    return (
+      <div className="g-card rounded-xl border border-white/5 bg-zinc-950/50 px-3.5 py-2.5">
+        <b className="flex items-center gap-1.5 font-mono text-xs text-zinc-300"><Anchor className="h-3.5 w-3.5" aria-hidden /> עוגן-ההישרדות</b>
+        <span className="mt-1 block text-[11px] leading-4 text-zinc-400">
+          שעור-בעלים — פתח את שער-המפתח בערוץ והעוגן יימדד חי כאן.
+        </span>
+        <button
+          onClick={() => onNavigate?.("channel")}
+          className="mt-2 min-h-[32px] rounded-lg border border-emerald-600/30 bg-emerald-500/[0.06] px-3 py-1.5 text-[11px] font-black text-emerald-400 transition hover:border-emerald-500/60"
+        >
+          לך-לשער
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="g-card rounded-xl border border-white/5 bg-zinc-950/50 px-3.5 py-2.5">
+      <b className="flex items-center gap-1.5 font-mono text-xs text-emerald-300">
+        <Anchor className={`h-3.5 w-3.5 ${busy ? "animate-pulse" : ""}`} aria-hidden /> עוגן-ההישרדות · חי
+      </b>
+      <span className="mt-1 block text-[11px] leading-4 text-zinc-400">
+        {status?.ok
+          ? status.cloud.sovereignMain
+            ? `ענן: ${status.cloud.live ? "חי" : "לא-נגיש"} · עוגן: ${short(status.cloud.sovereignMain)} · ${status.anchored ? "עגון-מלא" : `מקומי-מתקדם (${status.behind} קומיטים-לעגון)`} · שושלת: ${short(status.cloud.anchorLineageHead)}`
+            : `ענן: ${status.cloud.live ? "חי" : "לא-נגיש"} · טרם-עוגן-בענן — לחיצה-אחת-מנחיתה-את-העוגן`
+          : msg ?? "מודד…"}
+      </span>
+      <div className="mt-2 flex flex-wrap items-center gap-2">
+        <button
+          onClick={anchor}
+          disabled={busy}
+          className="min-h-[32px] rounded-lg border border-emerald-600/30 bg-emerald-500/[0.06] px-3 py-1.5 text-[11px] font-black text-emerald-400 transition hover:border-emerald-500/60 disabled:opacity-50"
+        >
+          עגן-עכשיו
+        </button>
+        <button
+          onClick={() => measure(token)}
+          disabled={busy}
+          className="min-h-[32px] rounded-lg border border-white/10 px-3 py-1.5 text-[11px] font-bold text-zinc-400 transition hover:text-zinc-200 disabled:opacity-50"
+        >
+          מדוד
+        </button>
+      </div>
+      {msg && status?.ok && <span className="mt-1.5 block text-[10px] leading-4 text-emerald-400/90">{msg}</span>}
+    </div>
+  );
+}
+
 export function EmpireView({ onNavigate }: { onNavigate?: (id: string) => void }) {
   const [data, setData] = useState<EmpirePayload | null>(null);
   const [busy, setBusy] = useState(false);
@@ -123,7 +261,7 @@ export function EmpireView({ onNavigate }: { onNavigate?: (id: string) => void }
   return (
     <section aria-label="מפת-החיבור-המלא של האימפריה" className="flex flex-col gap-4" dir="rtl">
       {/* כותרת + מדידה */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="g-rise flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <Network className="h-5 w-5 text-amber-500" aria-hidden />
           <h2 className="text-lg font-black">החיבור-המלא · {fmtInt(s?.total)} ספרים × תפקידם × דלתם</h2>
@@ -149,7 +287,7 @@ export function EmpireView({ onNavigate }: { onNavigate?: (id: string) => void }
       {data && s && (
         <>
           {/* מספרי-החיבור */}
-          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="g-rise-1 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
             <Kpi label="ספרים-חיים" value={`${fmtInt(s.alive24h)}/${fmtInt(s.total)}`} sub="נדחפו-ב-24ש׳" tone="green" />
             <Kpi label="מחוברים-למודול-חי" value={fmtInt(s.connected)} sub="יש-דלת-בממשק" tone="amber" />
             <Kpi label="תשתית-הפעלה" value={fmtInt(s.groups["תשתית-הפעלה"] ?? 0)} sub="ריצה-עצמאית-מהגיט" tone="emerald" />
@@ -159,7 +297,7 @@ export function EmpireView({ onNavigate }: { onNavigate?: (id: string) => void }
           </div>
 
           {/* שרדנות: איך הריבונות ממשיכה בלי-הסנדבוקס */}
-          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] p-4">
+          <div className="g-rise-2 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] p-4">
             <div className="mb-3 flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-emerald-400" aria-hidden />
               <h3 className="text-sm font-black text-emerald-300">איך הריבונות ממשיכה בלי הסנדבוקס הזה</h3>
@@ -167,16 +305,17 @@ export function EmpireView({ onNavigate }: { onNavigate?: (id: string) => void }
             </div>
             <div className="grid gap-2 sm:grid-cols-2">
               {survival.map((x) => (
-                <div key={x.k} className="giant-lift rounded-xl border border-white/5 bg-zinc-950/50 px-3.5 py-2.5">
+                <div key={x.k} className="g-card rounded-xl border border-white/5 bg-zinc-950/50 px-3.5 py-2.5">
                   <b className="block font-mono text-xs text-emerald-300">{x.k}</b>
                   <span className="block text-[11px] leading-4 text-zinc-400">{x.v}</span>
                 </div>
               ))}
+              <AnchorCard onNavigate={onNavigate} />
             </div>
           </div>
 
           {/* היתרון-המדוד מול-הענקים */}
-          <div className="rounded-2xl border border-amber-500/20 bg-amber-500/[0.04] p-4">
+          <div className="g-rise-2 rounded-2xl border border-amber-500/20 bg-amber-500/[0.04] p-4">
             <div className="mb-3 flex items-center gap-2">
               <Landmark className="h-4 w-4 text-amber-400" aria-hidden />
               <h3 className="text-sm font-black text-amber-300">היתרון-המדוד מול הענקים</h3>
@@ -184,7 +323,7 @@ export function EmpireView({ onNavigate }: { onNavigate?: (id: string) => void }
             </div>
             <div className="grid gap-2 md:grid-cols-2">
               {advantages.map((x) => (
-                <div key={x.k} className="giant-lift rounded-xl border border-white/5 bg-zinc-950/50 px-3.5 py-2.5">
+                <div key={x.k} className="g-card rounded-xl border border-white/5 bg-zinc-950/50 px-3.5 py-2.5">
                   <b className="block text-xs text-amber-200">{x.k}</b>
                   <span className="block text-[11px] leading-4 text-zinc-400">{x.v}</span>
                 </div>
@@ -193,7 +332,7 @@ export function EmpireView({ onNavigate }: { onNavigate?: (id: string) => void }
           </div>
 
           {/* המפה — קבוצות × שורות */}
-          <div className="flex flex-col gap-4">
+          <div className="g-rise-3 flex flex-col gap-4">
             {GROUP_ORDER.filter((g) => rows.some((r) => r.group === g)).map((g) => (
               <div key={g} className="rounded-2xl border border-white/10 bg-zinc-900/40">
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 px-4 py-3">
@@ -201,9 +340,9 @@ export function EmpireView({ onNavigate }: { onNavigate?: (id: string) => void }
                     <span className={`rounded-full border px-2.5 py-1 text-[11px] font-black ${GROUP_STYLE[g]}`}>{g}</span>
                     <span className="text-[11px] text-zinc-500">{GROUP_HEADLINE[g]}</span>
                   </div>
-                  <span className="font-mono text-[11px] tabular-nums text-zinc-500">{fmtInt(s.groups[g] ?? rows.filter((r) => r.group === g).length)} ספרים</span>
+                  <span className="font-mono text-[11px] text-zinc-500">{fmtInt(s.groups[g] ?? rows.filter((r) => r.group === g).length)} ספרים</span>
                 </div>
-                <div className="max-h-96 divide-y divide-white/5 overflow-y-auto pr-1">
+                <div className="g-scroll max-h-96 divide-y divide-white/5 overflow-y-auto">
                   {rows.filter((r) => r.group === g).map((r) => (
                     <div key={r.name} className="flex flex-col gap-1.5 px-4 py-3 transition hover:bg-white/[0.02] sm:flex-row sm:items-start sm:gap-3">
                       <div className="min-w-0 flex-1">
@@ -214,11 +353,11 @@ export function EmpireView({ onNavigate }: { onNavigate?: (id: string) => void }
                           </a>
                           {r.isPrivate && <span className="rounded border border-zinc-700 px-1.5 py-0.5 text-[9px] font-bold text-zinc-500">פרטי</span>}
                           {r.archived && <span className="rounded border border-zinc-700 px-1.5 py-0.5 text-[9px] font-bold text-zinc-500">ארכיון</span>}
-                          <span className={`h-1.5 w-1.5 rounded-full ${r.alive24h ? "animate-pulse bg-emerald-400" : "bg-zinc-600"}`} title={r.alive24h ? "נדחף-ב-24ש׳ — חי" : "לא נדחף-ב-24ש׳"} aria-hidden />
-                          <span className="font-mono text-[10px] tabular-nums text-zinc-500">{fmtAge(r.ageMinutes)}</span>
-                          {r.files != null && <span className="font-mono text-[10px] tabular-nums text-zinc-600">· {fmtInt(r.files)} קבצים</span>}
+                          <span className={`h-1.5 w-1.5 rounded-full ${r.alive24h ? "g-breathe bg-emerald-400" : "bg-zinc-600"}`} title={r.alive24h ? "נדחף-ב-24ש׳ — חי" : "לא נדחף-ב-24ש׳"} aria-hidden />
+                          <span className="font-mono text-[10px] text-zinc-500">{fmtAge(r.ageMinutes)}</span>
+                          {r.files != null && <span className="font-mono text-[10px] text-zinc-600">· {fmtInt(r.files)} קבצים</span>}
                           {r.signalCount != null && (r.signalCount > 0 || (r.redLineCount ?? 0) > 0) && (
-                            <span className="font-mono text-[10px] tabular-nums text-zinc-600">· סריקה: {fmtInt(r.signalCount)} סימנים / {fmtInt(r.redLineCount)} אדומים</span>
+                            <span className="font-mono text-[10px] text-zinc-600">· סריקה: {fmtInt(r.signalCount)} סימנים / {fmtInt(r.redLineCount)} אדומים</span>
                           )}
                           {r.scannedAt === null && <span className="text-[10px] font-bold text-red-400/80">· לא נסרק (כנה)</span>}
                         </div>
@@ -268,9 +407,9 @@ function Kpi({ label, value, sub, tone }: { label: string; value: string; sub: s
     red: "border-red-500/25 bg-red-500/[0.05] text-red-300",
   };
   return (
-    <div className={`giant-lift rounded-xl border p-3.5 ${tones[tone]}`}>
+    <div className={`g-card rounded-xl border p-3.5 ${tones[tone]}`}>
       <p className="text-[10px] font-bold text-zinc-500">{label}</p>
-      <p className="mt-1 font-mono text-xl font-black leading-6 tabular-nums">{value}</p>
+      <p className="mt-1 font-mono text-xl font-black leading-6">{value}</p>
       <p className="mt-0.5 text-[10px] leading-4 text-zinc-500">{sub}</p>
     </div>
   );
