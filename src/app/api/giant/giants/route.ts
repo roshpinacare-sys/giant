@@ -8,27 +8,13 @@
  */
 import { NextResponse } from "next/server";
 import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { fileMeta, type FileMeta } from "@/lib/sovereign/channel";
-import { DOMAIN_DIR } from "@/lib/giant/truth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const GIANTS_PATH = path.join(DOMAIN_DIR, "dex", "giants.json");
-const ECON_PATH = path.join(DOMAIN_DIR, "dex", "honest-econ.json");
-/* מיזוג-ענק: ספר-הפער מקונן בריפו-החי עצמו (data/giants-gap.json) —
- * עצמאות-מלאה-מקלון-Domain-החיצוני. נפילה-ל-Domain רק-אם-העותק-הקנוני-חסר. */
-const GAP_LOCAL = path.join(process.cwd(), "data", "giants-gap.json");
-const GAP_DOMAIN = path.join(DOMAIN_DIR, "dex", "giants-gap.json");
-async function gapPath(): Promise<string> {
-  try {
-    await readFile(GAP_LOCAL, "utf8");
-    return GAP_LOCAL;
-  } catch {
-    return GAP_DOMAIN;
-  }
-}
+const GIANTS_PATH = "/home/z/estate/Domain/dex/giants.json";
+const ECON_PATH = "/home/z/estate/Domain/dex/honest-econ.json";
 
 let cache: { at: number; data: GiantsPayload } | null = null;
 const CACHE_MS = 60_000;
@@ -60,43 +46,6 @@ export interface GiantsPayload {
   } | null;
   giantsMeta: FileMeta;
   econMeta: FileMeta;
-  gap: GapSection | null;
-}
-
-/* ─────────── מד-המרחק-מהענקים (giants-gap.json · ביקורת-קוד-אמת) ─────────── */
-
-export interface GapCapability {
-  id: string;
-  he: string;
-  weight: number;
-  giant: "yes" | "partial" | "no";
-  giantFact: string | null;
-  ours: "yes" | "partial" | "no";
-  oursProof: string | null;
-  gapClosedAt?: string;
-}
-
-export interface GapSection {
-  ok: boolean;
-  note?: string;
-  book: string | null;
-  publishedAt: string | null;
-  answerHe: string | null;
-  sources: Array<{ id: string; url: string; what: string }>;
-  capabilities: GapCapability[];
-  score: {
-    ours: number | null; // 0-100 · כנה: מחושב-מהמשקלים-ומהדירוגים-בקובץ
-    giants: number | null;
-    method: string | null;
-  };
-  gapPlan: Array<{ next: string; why: string; ownerDecision: boolean }>;
-  liveAudit: {
-    engineRunning: boolean | null;
-    engineTicks: number | null;
-    openLimitOrders: number | null;
-    limitOrdersTotal: number | null;
-    realTradesTotal: number | null;
-  };
 }
 
 function n(v: unknown): number | null {
@@ -104,88 +53,6 @@ function n(v: unknown): number | null {
 }
 function s(v: unknown): string | null {
   return typeof v === "string" && v.length > 0 ? v : null;
-}
-
-/* מד-המרחק: קריאת-הקובץ + ביקורת-חי-עצמית (fail-honest בכל-שכבה) */
-async function loadGap(): Promise<GapSection | null> {
-  let meta: FileMeta | null = null;
-  try {
-    meta = await fileMeta(await gapPath());
-  } catch {
-    return null;
-  }
-  if (!meta.exists) return null;
-  try {
-    const raw = JSON.parse(await readFile(await gapPath(), "utf8")) as {
-      book?: string;
-      publishedAt?: string;
-      answerHe?: string;
-      sources?: Array<{ id?: string; url?: string; what?: string }>;
-      capabilities?: Array<{
-        id?: string; he?: string; weight?: number;
-        giant?: string; giantFact?: string; ours?: string; oursProof?: string; gapClosedAt?: string;
-      }>;
-      gapPlan?: Array<{ next?: string; why?: string; ownerDecision?: boolean }>;
-      weightsNote?: string;
-    };
-    const grade = (v: string | undefined): "yes" | "partial" | "no" | "skip" =>
-      v === "yes" || v === "partial" || v === "no" ? v : "skip";
-    const capabilities: GapCapability[] = (raw.capabilities ?? [])
-      .filter((c) => grade(c.giant) !== "skip" && grade(c.ours) !== "skip" && typeof c.weight === "number")
-      .map((c) => ({
-        id: s(c.id) ?? "unknown",
-        he: s(c.he) ?? "—",
-        weight: c.weight ?? 0,
-        giant: grade(c.giant) as "yes" | "partial" | "no",
-        giantFact: s(c.giantFact),
-        ours: grade(c.ours) as "yes" | "partial" | "no",
-        oursProof: s(c.oursProof),
-        ...(c.gapClosedAt ? { gapClosedAt: c.gapClosedAt } : {}),
-      }));
-    // ציון-כנה: כן=1 · חלקי=0.5 · לא=0 — מחושב-מהקובץ, לא-מהודעת-סוכן
-    const wsum = capabilities.reduce((a, c) => a + c.weight, 0);
-    const pts = (verdict: "yes" | "partial" | "no") => (verdict === "yes" ? 1 : verdict === "partial" ? 0.5 : 0);
-    const ours = wsum > 0 ? (capabilities.reduce((a, c) => a + pts(c.ours) * c.weight, 0) / wsum) * 100 : null;
-    const giants = wsum > 0 ? (capabilities.reduce((a, c) => a + pts(c.giant) * c.weight, 0) / wsum) * 100 : null;
-
-    // ביקורת-חי-עצמית מהמנוע-האמיתי (אפס-תביעות) — מה-DB בלבד: חוצה-הקשרי-מודול,
-    // המנוע-עצמו רושם lastTickAt+ticks ב-DexConfig בכל-טיק (8ש׳) — זו-האמת-הקיימת.
-    const liveAudit: GapSection["liveAudit"] = {
-      engineRunning: null, engineTicks: null,
-      openLimitOrders: null, limitOrdersTotal: null, realTradesTotal: null,
-    };
-    try {
-      const { db } = await import("@/lib/db");
-      const cfgs = await db.dexConfig.findMany({
-        where: { key: { in: ["lastTickAt", "ticks"] } },
-      });
-      const map = new Map(cfgs.map((c) => [c.key, c.value]));
-      const last = map.get("lastTickAt") ?? null;
-      liveAudit.engineRunning = last !== null && Date.now() - new Date(last).getTime() < 60_000;
-      liveAudit.engineTicks = Number(map.get("ticks") ?? 0);
-      liveAudit.openLimitOrders = await db.dexOrder.count({ where: { status: "OPEN" } });
-      liveAudit.limitOrdersTotal = await db.dexOrder.count();
-      liveAudit.realTradesTotal = await db.dexTrade.count();
-    } catch { /* כנה — נשאר null */ }
-
-    return {
-      ok: capabilities.length > 0,
-      book: s(raw.book),
-      publishedAt: s(raw.publishedAt),
-      answerHe: s(raw.answerHe),
-      sources: (raw.sources ?? []).map((x) => ({ id: s(x.id) ?? "—", url: s(x.url) ?? "—", what: s(x.what) ?? "—" })),
-      capabilities,
-      score: { ours, giants, method: s(raw.weightsNote) },
-      gapPlan: (raw.gapPlan ?? []).map((p) => ({
-        next: s(p.next) ?? "—",
-        why: s(p.why) ?? "—",
-        ownerDecision: p.ownerDecision === true,
-      })),
-      liveAudit,
-    };
-  } catch {
-    return null;
-  }
 }
 
 interface FamilyRaw {
@@ -203,7 +70,6 @@ export async function GET() {
 
   const giantsMeta = await fileMeta(GIANTS_PATH);
   const econMeta = await fileMeta(ECON_PATH);
-  const gap = await loadGap();
 
   // הליגה מהגיט-מקומי
   let league: GiantRow[] = [];
@@ -243,7 +109,7 @@ export async function GET() {
 
   // המדידה-שלנו: פעולות-ספר בלבד (state.json) — אפס-תביעת-ווליום-חוץ
   try {
-    const st = JSON.parse(await readFile(path.join(DOMAIN_DIR, "dex", "state.json"), "utf8")) as {
+    const st = JSON.parse(await readFile("/home/z/estate/Domain/dex/state.json", "utf8")) as {
       state?: { fills?: number; swaps?: number };
     };
     oursFills = n(st.state?.fills);
@@ -294,7 +160,6 @@ export async function GET() {
     econ,
     giantsMeta,
     econMeta,
-    gap,
   };
   cache = { at: Date.now(), data: payload };
   return NextResponse.json(payload, { headers: { "cache-control": "no-store" } });

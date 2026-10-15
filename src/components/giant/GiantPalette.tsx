@@ -3,7 +3,7 @@
 /* ═══ פלטת-הפקודה · Ctrl+K (GIANT) ═════════════════════════════════════════
  * מנוע: cmdk דרך רכיבי shadcn CommandDialog (Dialog+cmdk).
  * · קיצור גלובלי אחד: Ctrl/Cmd+K מציג-מסתיר; "/" פותח כשלא-בתוך-שדה-קלט.
- * · (א) מודולים — 11 מזהי-מערכת עם תוויות עבריות+אנגליות (חיפוש-דו-לשוני).
+ * · (א) מודולים — 18 מזהי-מערכת עם תוויות עבריות+אנגליות (חיפוש-דו-לשוני).
  * · (ב) פעולות — מחרוזות-פעולה "action:*" שהמתזמן מפרש.
  * · (ג) זרמי-אמת — הנתיבים הקנוניים האמיתיים; העתקה-ללוח עם טוסט-כנה.
  * אפס-זיופים: הרשימה סטטית-מוצהרת; הנתיבים מהקוד השרת (lib/sovereign/channel.ts). */
@@ -23,19 +23,21 @@ import { useToast } from "@/hooks/use-toast";
 import {
   Activity,
   Banknote,
+  Boxes,
   Building2,
   ClipboardCopy,
   Coffee,
-  Coins,
+  Compass,
   Gauge,
+  KeyRound,
   Landmark,
-  Megaphone,
   Network,
   Package,
   Radio,
+  Scale,
   ScrollText,
-  Sparkles,
   ShieldCheck,
+  Sparkles,
   Users,
   Wallet,
 } from "lucide-react";
@@ -49,21 +51,24 @@ interface ModuleEntry {
 }
 
 const MODULES: ModuleEntry[] = [
+  { id: "sovereignty", he: "ריבונות", desc: "הריבונות-חיה-בגיט · מה-חי · מה-שרד — ההגשה-הסופית", en: "sovereignty git survival fleet", icon: <Landmark aria-hidden /> },
+  { id: "empire", he: "אימפריה", desc: "כל-הספרים על מסך-אחד · תפקיד × דלת-חיה — מיזוג-הענק-האח", en: "empire map fleet repos connection", icon: <Network aria-hidden /> },
+  { id: "trust", he: "אמון", desc: "מפת-האמון של הצי · חשיפה-לא-פסק-דין · file:line", en: "trust scan signals red lines", icon: <ShieldCheck aria-hidden /> },
+  { id: "overview", he: "הסקירה", desc: "מה-המערכת · מי-מי · מפת-החיבור-החיה", en: "overview context map system", icon: <Compass aria-hidden /> },
   { id: "dex", he: "הדקס", desc: "מרכז-הכובד: נרות · ליגה · ווליום", en: "dex exchange trading candles", icon: <Landmark aria-hidden /> },
   { id: "channel", he: "הערוץ-הריבוני", desc: "הערוץ-היחיד: הוראות · פניות · רישומים", en: "channel sovereign gate", icon: <Radio aria-hidden /> },
   { id: "wallet", he: "הארנק", desc: "משמורת · ספרים · יחידות-אנוש", en: "wallet custody books", icon: <Wallet aria-hidden /> },
+  { id: "account", he: "הדלת-שלי", desc: "החשבון-שלך · פקודות-מול-הספר-הפנימי · קבלות", en: "my door account login register orders receipts", icon: <KeyRound aria-hidden /> },
   { id: "desk", he: "השולחן", desc: "שולחן-המסחר · ספר-הזמנות", en: "desk orderbook trading", icon: <Banknote aria-hidden /> },
-  { id: "capital", he: "מנוע-ההון", desc: "שבע-אסטרטגיות נמדדות · דירוג-ROI · תוכניות-ממתינות-לאישור", en: "capital strategies roi approval plans market maker delegate", icon: <Coins aria-hidden /> },
   { id: "ledger", he: "הרישום", desc: "רישום-האמת · מילויים · גבהים", en: "ledger fills height", icon: <ScrollText aria-hidden /> },
   { id: "products", he: "המוצרים", desc: "מפת-המוצרים · רישומי-נכסים", en: "products assets map", icon: <Package aria-hidden /> },
   { id: "pulse", he: "הדופק", desc: "שער-האמת · זרמי-הערוץ", en: "pulse truth gate streams", icon: <Activity aria-hidden /> },
   { id: "office", he: "המשרד-החי", desc: "הצוות · הלב · הפעימות", en: "office live crew agents", icon: <Building2 aria-hidden /> },
   { id: "league", he: "ליגת-הענקים", desc: "מול-הענקים: Uniswap · דוקטרינת-כנות", en: "league giants uniswap", icon: <Users aria-hidden /> },
+  { id: "gap", he: "מפת-הפער", desc: "ההשוואה-הכנה מול-מוצרים-אמיתיים · טענות-מול-מדידות · M1..M6", en: "gap map giants comparison roadmap", icon: <Scale aria-hidden /> },
   { id: "machine", he: "מכונת-האמת", desc: "מכונת-האמת · מדידות", en: "machine truth engine", icon: <Gauge aria-hidden /> },
   { id: "estate", he: "האחוזה", desc: "מפקד-האחוזה: הגיט · הזרימה · העבודות", en: "estate git census repos", icon: <Building2 aria-hidden /> },
-  { id: "empire", he: "החיבור", desc: "מפת-האימפריה: כל-הספרים × תפקידם × דלתם", en: "empire connection map repos roles wiring", icon: <Network aria-hidden /> },
-  { id: "trust", he: "האמון", desc: "מפת-האמון: סריקה-מדודה של כל-הספרים", en: "trust scan fleet simulation audit", icon: <ShieldCheck aria-hidden /> },
-  { id: "marketing", he: "השיווק-החי", desc: "משטח-Adsmarket: מה-שכתוב-בריפו = מה-שמוצג", en: "marketing adsmarket kit brand pitch", icon: <Megaphone aria-hidden /> },
+  { id: "capabilities", he: "מאגר-היכולות", desc: "כל-היכולות · נסרק-ונבדק-חי", en: "capabilities registry probe", icon: <Boxes aria-hidden /> },
 ];
 
 interface ActionEntry {

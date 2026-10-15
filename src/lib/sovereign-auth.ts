@@ -1,134 +1,123 @@
-// giant · שער-הבעלים (headcorner) — חוק-הפרונט/הבק מ-giant/SPEC-CHANNEL.md
-// הסוד נקרא server-side מ-upload/headcorner.txt בלבד; אף-פעם לא בלוג, לא בפלט, לא בגיט.
-
-import { createHash, timingSafeEqual } from "crypto";
+/**
+ * אימות-ריבוני (T74 · הצי-הוא-הלקוח-הראשון)
+ *
+ * אפס-תלות-חוץ: scrypt + sha256 + randomBytes — הכל מ-node:crypto של-הריבונות-עצמה.
+ *  · סיסמאות: scrypt(64B) + salt אקראי לכל-משתמש, פורמט s1:salt:hash
+ *  · סשנים: טוקן-אקראי-32B בקוקי-HttpOnly; בבסיס רק-sha256(טוקן) — דליפת-בסיס לא מזהיבה-טוקנים
+ *  · תוקף-סשן: 30 יום; השוואה-בזמן-קבוע (timingSafeEqual) בכל-שלב
+ */
+import { createHash, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
-import { readFile } from "fs/promises";
+import { db } from "@/lib/db";
 
-const HEAD_PATH = "/home/z/my-project/upload/headcorner.txt";
-export const OWNER_COOKIE = "giant_owner";
+export const SESSION_COOKIE = "giant_session";
+const SESSION_DAYS = 30;
 
-async function headcornerSecret(): Promise<string> {
-  // פורמט-הקובץ (מאומת-מול t35/saos-dex/scripts/verify-headcorner-key.ts):
-  //   שורה-0 = שם-החשבון/תווית ("headcorner")
-  //   שורה-1 = המפתח-עצמו
-  // לעולם-לא-קוראים-את-הקובץ-כולו-כסוד — התווית-הייתה-נדבקת-למפתח
-  // והמפתח-האמיתי-של-הבעלים-מעולם-לא-היה-מתאים.
-  const raw = await readFile(HEAD_PATH, "utf8");
-  const lines = raw
-    .split(/\r?\n/)
-    .map((l) => l.trim())
-    .filter(Boolean);
-  if (lines.length === 0) return "";
-  if (lines.length === 1) return lines[0];
-  // ריבוי-שורות: משליכים-את-שורת-התווית ולוקחים-את-השורה-הארוכה-שנותרה (המפתח)
-  const candidates = lines.filter((l) => l.toLowerCase() !== "headcorner");
-  const pool = candidates.length > 0 ? candidates : lines;
-  return pool.reduce((a, b) => (b.length > a.length ? b : a));
+/* ═══ סיסמאות ═══ */
+
+export function hashPassword(password: string): string {
+  const salt = randomBytes(16).toString("hex");
+  const hash = scryptSync(password, salt, 64).toString("hex");
+  return `s1:${salt}:${hash}`;
 }
 
-// נרמול-דו-צדדי: הסוד-בקובץ עשוי-להכיל-רווחים/שורות; הבעלים-מקליד-בכל-סגנון.
-// שני-הצדדים עוברים את-אותה-פונקציה — אין-פגיעה-בהשוואה, יש-סבילות-הקלדה.
-// בעלים-מעתיק-מצ'אט-עברי: תווי-רוחב-אפס, מיון-bidi, מרכאות-מעוקלות, גרשיים-מהדגשת-קוד,
-// ותווי-וריאציה-נכנסים-בלי-ראייה — נסלקים-כאן.
-// (זו-סבילות-העתקה, לא-החלשה: המפתח-מכיל-רק a-z0-9 — תו-פיסוק-בקלט-לעולם-לא-חלק-ממנו,
-// ולכן-השמטתו-אינה-מקבלת-מפתח-שגוי; התווים-האמיתיים-נדרשים-במלואם-ובסדרם.)
-function normalizeKey(s: string): string {
-  return s
-    .replace(
-      /[\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u2069\u180E\uFE00-\uFE0F\uFEFF\u00AD\u2018-\u201F\u0060\u0027\u0022]/g,
-      "",
-    )
-    .toLowerCase()
-    .replace(/\s+/g, "");
-}
-
-// אבחון-דחייה-כנה: מה-ניתן-לומר-על-הקלט-בלי-לחשוף-את-הסוד.
-// מציג-רק-תכונות-של-הקלט-עצמו (לא-של-הסוד): האם-זוהו-אותיות-עבריות,
-// וכמה-תווים-תקפים-נותרו-אחרי-נרמול (הבעלים-יודע-את-אורך-המפתח-שלו).
-export function diagnoseKeyInput(input: string): {
-  hebrewLayout: boolean;
-  normLen: number;
-} {
-  const hebrewLayout = /[\u0590-\u05FF]/.test(input);
-  return { hebrewLayout, normLen: normalizeKey(input).length };
-}
-
-// אורך-המפתח-הפעיל-אחרי-נרמול — לאבחון-דחייה.
-// הבעלים-מחזיק-בקובץ-המפתח-עצמו, ולכן-האורך-אינו-מידע-חדש-עבורו;
-// ההשוואה-מאפשרת-לו-לזהות-מיד-עותק-חתוך/מוגדל/מוחלף-סדר.
-export async function expectedKeyLength(): Promise<number> {
+export function verifyPassword(password: string, stored: string | null): boolean {
+  if (!stored) return false;
+  const parts = stored.split(":");
+  if (parts.length !== 3 || parts[0] !== "s1") return false;
+  const [, salt, hash] = parts;
   try {
-    const secret = await headcornerSecret();
-    return normalizeKey(secret).length;
-  } catch {
-    return 0;
-  }
-}
-
-// אסימון-הפעלה נגזר (לא הסוד עצמו) — עוגיית-HttpOnly בלבד
-export async function ownerSessionToken(): Promise<string> {
-  const secret = await headcornerSecret();
-  return createHash("sha256")
-    .update(`giant-owner-v1:${normalizeKey(secret)}`)
-    .digest("hex");
-}
-
-// השוואה timing-safe דרך hash — הסוד והקלט לעולם לא נרשמים
-export async function verifyHeadcorner(input: string): Promise<boolean> {
-  try {
-    const secret = await headcornerSecret();
-    if (!secret || !input) return false;
-    const a = createHash("sha256").update(normalizeKey(input)).digest();
-    const b = createHash("sha256").update(normalizeKey(secret)).digest();
-    return timingSafeEqual(a, b);
+    const candidate = scryptSync(password, salt, 64);
+    const expected = Buffer.from(hash, "hex");
+    return candidate.length === expected.length && timingSafeEqual(candidate, expected);
   } catch {
     return false;
   }
 }
 
-// בדיקת-הרשאת-בעלים לפי עוגייה חתומה
-export async function isOwner(): Promise<boolean> {
+/* ═══ סשנים ═══ */
+
+const sha256 = (v: string) => createHash("sha256").update(v).digest("hex");
+
+export async function createSession(userId: string): Promise<{ token: string; expiresAt: Date }> {
+  const token = randomBytes(32).toString("hex");
+  const expiresAt = new Date(Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000);
+  await db.session.create({ data: { userId, tokenHash: sha256(token), expiresAt } });
+  return { token, expiresAt };
+}
+
+export interface SessionUser {
+  id: string;
+  email: string;
+  name: string | null;
+  crewId: string | null;
+  createdAt: Date;
+  lastLoginAt: Date | null;
+}
+
+/* המשתמש-הנוכחי-מהקוקי — null כנה כשאין-סשן/פג-תוקף */
+export async function getSessionUser(): Promise<SessionUser | null> {
   try {
     const store = await cookies();
-    const value = store.get(OWNER_COOKIE)?.value;
-    if (!value) return false;
-    const expected = await ownerSessionToken();
-    return (
-      value.length === expected.length &&
-      timingSafeEqual(Buffer.from(value), Buffer.from(expected))
-    );
-  } catch {
-    return false;
-  }
-}
-
-// בדיקת-הרשאה עם תמיכת-iframe: קובץ-עוגיות נחסם בתצוגה-מקדימה-מוטמעת,
-// לכן הפרונט שולח את אסימון-ההפעלה הנגזר בכותרת x-giant-owner.
-// האסימון אינו הסוד — הוא SHA-256 נגזר ממנו ואינו חושף דבר.
-//
-// מיזוג-גיאנט (המיזוג-האמיתי): גשר-אסימונים. הממשק-המאוחד מנפיק אסימוני-שער
-// (/api/sovereign/gate — זיכרון-בלבד, 10 דק) — הם גם פותחים את APIs-הבעלים כאן.
-// שתי-מערכות-אסימון, בעלים-אחד. אין-ייבוא-מעגלי: gate.ts לא מייבא מכאן.
-import { verifyToken } from "@/lib/sovereign/gate";
-
-export async function isOwnerReq(req: Request): Promise<boolean> {
-  try {
-    const header = req.headers.get("x-giant-owner");
-    if (header) {
-      // 1) אסימון-שער של הממשק-המאוחד (מיזוג-גיאנט)
-      if (verifyToken(header)) return true;
-      // 2) אסימון-הפעלה נגזר מהמפתח (קו-המקור)
-      const expected = await ownerSessionToken();
-      if (
-        header.length === expected.length &&
-        timingSafeEqual(Buffer.from(header), Buffer.from(expected))
-      ) {
-        return true;
-      }
+    const token = store.get(SESSION_COOKIE)?.value;
+    if (!token) return null;
+    const session = await db.session.findUnique({
+      where: { tokenHash: sha256(token) },
+      include: { user: true },
+    });
+    if (!session) return null;
+    if (session.expiresAt.getTime() < Date.now()) {
+      await db.session.delete({ where: { id: session.id } }).catch(() => undefined);
+      return null;
     }
+    const { user } = session;
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      crewId: user.crewId,
+      createdAt: user.createdAt,
+      lastLoginAt: user.lastLoginAt,
+    };
   } catch {
-    // נופל-לבדיקת-העוגייה
+    return null; /* fail-honest — אין-משתמש-מזויף */
   }
-  return isOwner();
 }
+
+export async function destroySession(): Promise<void> {
+  const store = await cookies();
+  const token = store.get(SESSION_COOKIE)?.value;
+  if (token) {
+    await db.session.deleteMany({ where: { tokenHash: sha256(token) } }).catch(() => undefined);
+  }
+}
+
+export const sessionCookieOptions = (expiresAt: Date) =>
+  ({
+    httpOnly: true,
+    sameSite: "lax" as const,
+    secure: false, /* sandbox-מקומי; בפריסה-חוץ יועבר-ל-secure:true */
+    path: "/",
+    expires: expiresAt,
+  }) as const;
+
+/* ═══ רישום-הצי: אימות-crewId מול-הרישום-החי ═══ */
+
+let crewCache: { at: number; ids: Set<string> } | null = null;
+const CREW_CACHE_MS = 5 * 60_000;
+
+export async function crewIdExists(crewId: string): Promise<boolean | null> {
+  try {
+    if (crewCache && Date.now() - crewCache.at < CREW_CACHE_MS) return crewCache.ids.has(crewId);
+    const { readFile } = await import("node:fs/promises");
+    const raw = await readFile("/home/z/estate/Domain/agents/registry.json", "utf8");
+    const reg = JSON.parse(raw) as { agents?: { id?: string }[] };
+    const ids = new Set((reg.agents ?? []).map((a) => a.id).filter((v): v is string => typeof v === "string"));
+    crewCache = { at: Date.now(), ids };
+    return ids.has(crewId);
+  } catch {
+    return null; /* הרישום-לא-נקרא — כנה, לא-false-מזויף */
+  }
+}
+
+export const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);

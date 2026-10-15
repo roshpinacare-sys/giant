@@ -14,12 +14,7 @@ import { readFileSync, statSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 
-/* ריבונות-נתיבים (חוק-הבעלים: "אתם תכף מתים" — לא בונים על סנדבוקס):
- * הממשק חי מכל-מקום שמושך-את-הספרים; נתיבי-האמת ניתנים-להצבעה ב-env.
- * ברירת-המחדל = מבנה-ה-estate של-הסנדבוקס; בלי-הקבצים — כל-API מידרג בכנה (fail-honest). */
-export const ESTATE_ROOT = process.env.SAOS_ESTATE_DIR?.trim() || "/home/z/estate";
-export const DOMAIN_DIR = path.join(ESTATE_ROOT, "Domain");
-export const DATA_DIR = path.join(process.cwd(), "db");
+export const DOMAIN_DIR = "/home/z/estate/Domain";
 export const MU = 1000;
 
 export interface FileMeta {

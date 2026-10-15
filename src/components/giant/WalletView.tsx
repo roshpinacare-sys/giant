@@ -1,10 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { FlowHeartbeat } from "./FlowHeartbeat";
+import type { FlowPayload } from "@/lib/giant/flow-types";
 
 /* ═══ ארנק — מאזני-20-החשבונות האמיתיים ממצב-המנוע ═══════════════════════
  * treasury · operator · arena · soldiers · bots · vaults — הכל מדיד מהסנאפשוט.
- * אפס-הבטחות; מספר שלא נמדד לא מוצג. */
+ * אפס-הבטחות; מספר שלא נמדד לא מוצג.
+ * T69 · דופק-הזרימה-חי נוסף — הכסף-מראה-את-הדופק-שמניע-אותו (fail-honest). */
 
 interface AccountRow { name: string; balances: Record<string, number> }
 interface DexPayload {
@@ -40,14 +43,20 @@ function timeHe(iso: string | null): string {
 
 export function WalletView() {
   const [dex, setDex] = useState<DexPayload | null>(null);
+  const [flow, setFlow] = useState<FlowPayload | null>(null);
   const [err, setErr] = useState("");
   const [q, setQ] = useState("");
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch("/api/giant/dex", { cache: "no-store" });
-      const d = (await res.json()) as DexPayload;
+      const [r, f] = await Promise.all([
+        fetch("/api/giant/dex", { cache: "no-store" }),
+        fetch("/api/giant/flow", { cache: "no-store" }), // T69 · דופק-הזרימה-חי
+      ]);
+      const d = (await r.json()) as DexPayload;
+      const fl = (await f.json()) as FlowPayload;
       setDex(d);
+      setFlow(fl);
       setErr(d.ok ? "" : d.note ?? "לא נמדד");
     } catch {
       setErr("השרת לא נגיש כרגע");
@@ -99,6 +108,11 @@ export function WalletView() {
         />
       </section>
       {err && <p className="text-xs text-red-400">{err}</p>}
+
+      {/* T69 · דופק-הזרימה — הכסף-מראה-את-הדופק-שמניע-אותו (fail-honest: נכשל = לא מוצג) */}
+      <section className="rounded-2xl border border-white/10 bg-zinc-900/60 px-4 py-1">
+        <FlowHeartbeat flow={flow?.flow ?? null} trajectory={flow?.trajectory ?? null} label="דופק-הזרימה — הכוח-שמניע-את-המאזנים" />
+      </section>
 
       {/* סיכום-סה"כ */}
       <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">

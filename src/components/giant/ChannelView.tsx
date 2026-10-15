@@ -1,14 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { KeyRound, Lock, RefreshCw, Send, ShieldCheck, Sparkles, GitCommitHorizontal } from "lucide-react";
-import { saveOwnerToken, clearOwnerToken } from "@/lib/owner-client";
+import { useToast } from "@/hooks/use-toast";
+import { KeyRound, Loader2, Lock, RefreshCw, Send, ShieldCheck, Sparkles, Volume2, GitCommitHorizontal } from "lucide-react";
 
 /* ═══ הערוץ — הדלת-הראשית של GIANT (SAOS-SOVEREIGN-CHANNEL/1) ════════════
  * הערוץ-היחיד בעלים↔ריבונות: זרמי-גיט קנוניים append-only.
@@ -116,6 +116,12 @@ export function ChannelView() {
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
 
+  /* השמעה-חיה של קול-הריבונות (TTS אמיתי — /api/sovereign/channel/speak) */
+  const { toast } = useToast();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const lastUrlRef = useRef<string | null>(null);
+  const [speakBusy, setSpeakBusy] = useState<string | null>(null);
+
   const [token, setToken] = useState<string | null>(null);
   const [keyField, setKeyField] = useState("");
   const [gateErr, setGateErr] = useState("");
@@ -164,12 +170,11 @@ export function ChannelView() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ key: k }),
       });
-      const d = (await res.json()) as { ok: boolean; token?: string; error?: string; reason?: string };
+      const d = (await res.json()) as { ok: boolean; token?: string; error?: string };
       if (d.ok && d.token) {
         sessionStorage.setItem(TOKEN_KEY, d.token);
-        saveOwnerToken(d.token); // מפתח-אחד-פותח-הכל: אותו-אסימון פותח-גם-את-מסכי-הבעלים-האחרים (דוכן/API)
         setToken(d.token);
-      } else setGateErr(d.reason ?? (d.error === "invalid" ? "מפתח לא מאומת" : d.error === "too-many-attempts" ? "ניסיונות-יתר — המתן דקה" : "השער נדחה"));
+      } else setGateErr(d.error === "invalid" ? "מפתח לא מאומת" : d.error === "too-many-attempts" ? "ניסיונות-יתר — המתן דקה" : "השער נדחה");
     } catch {
       setGateErr("השרת לא נגיש כרגע");
     } finally {
@@ -179,7 +184,6 @@ export function ChannelView() {
 
   function ungate() {
     sessionStorage.removeItem(TOKEN_KEY);
-    clearOwnerToken();
     setToken(null);
   }
 
@@ -272,6 +276,72 @@ export function ChannelView() {
     }
   }
 
+  function stopSpeak() {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    if (lastUrlRef.current) {
+      URL.revokeObjectURL(lastUrlRef.current);
+      lastUrlRef.current = null;
+    }
+  }
+
+  useEffect(() => stopSpeak, []); // ניקוי-כנה ביציאה: עצירה + שחרור-blob
+
+  async function speak(text: string) {
+    if (!text || speakBusy) return;
+    setSpeakBusy(text);
+    try {
+      const res = await fetch("/api/sovereign/channel/speak", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      if (res.status === 501) {
+        toast({
+          variant: "destructive",
+          title: "הדיבור לא זמין",
+          description: "hebrew-tts-not-measured — אין מדידה של קול-עברי, אין השמעה-מדומה",
+        });
+        return;
+      }
+      if (!res.ok) {
+        let detail = `HTTP ${res.status}`;
+        try {
+          const d = (await res.json()) as { error?: string };
+          if (d?.error) detail = d.error;
+        } catch {
+          /* נשארים עם קוד-ה-HTTP האמיתי */
+        }
+        toast({ variant: "destructive", title: "הדיבור נכשל", description: detail });
+        return;
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      stopSpeak(); // הפסק-הקודם לפני-החדש (ref-יחיד)
+      if (!audioRef.current) {
+        URL.revokeObjectURL(url);
+        return;
+      }
+      lastUrlRef.current = url;
+      audioRef.current.src = url;
+      audioRef.current.onended = () => {
+        URL.revokeObjectURL(url);
+        if (lastUrlRef.current === url) lastUrlRef.current = null;
+      };
+      await audioRef.current.play();
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: "הדיבור נכשל",
+        description: e instanceof Error ? e.message : "unknown",
+      });
+    } finally {
+      setSpeakBusy(null);
+    }
+  }
+
   const canonical = data?.requests?.canonical ?? [];
   const legacy = (data?.requests?.legacy ?? []).map((r) => ({ ...r, origin: "legacy-mirror" }));
   const allReqs = [...canonical, ...legacy];
@@ -280,6 +350,8 @@ export function ChannelView() {
 
   return (
     <div className="space-y-5" dir="rtl">
+      {/* אלמנט-השמעה נסתר — ref-יחיד, עוצר-את-הקודם לפני-החדש */}
+      <audio ref={audioRef} className="hidden" preload="none" />
       {/* כותרת + זרמים-מדידים */}
       <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -421,8 +493,27 @@ export function ChannelView() {
                 {askBusy ? "הריבונות מנסחת…" : "שאל"}
               </Button>
               {askRes && (
-                <div className={`rounded-xl border p-3 text-xs leading-6 ${askRes.ok ? "border-emerald-500/25 bg-emerald-500/[0.04] text-zinc-200" : "border-red-500/30 bg-red-500/5 text-red-300"}`}>
-                  <p className="whitespace-pre-line font-medium">{askRes.text}</p>
+                <div className={`rounded-2xl border border-white/[0.07] bg-white/[0.035] p-3 backdrop-blur-xl ${askRes.ok ? "" : "border-rose-400/30 bg-rose-400/[0.04]"}`}>
+                  {askRes.ok && (
+                    <div className="mb-2 flex items-center justify-between gap-2">
+                      <p className="font-black text-emerald-400">תשובת-הריבונות</p>
+                      <button
+                        onClick={() => speak(askRes.text)}
+                        disabled={speakBusy !== null}
+                        className="flex h-8 shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-zinc-900/80 px-3 text-[11px] font-bold text-zinc-200 transition hover:border-amber-500/60 hover:text-amber-400 disabled:cursor-not-allowed disabled:opacity-50"
+                        aria-label="השמע את תשובת-הריבונות"
+                        title="השמעה בקול-הריבונות (TTS אמיתי)"
+                      >
+                        {speakBusy === askRes.text ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin text-amber-500" aria-hidden />
+                        ) : (
+                          <Volume2 className="h-3.5 w-3.5" aria-hidden />
+                        )}
+                        {speakBusy === askRes.text ? "מדברת…" : "השמע"}
+                      </button>
+                    </div>
+                  )}
+                  <p className={`whitespace-pre-line text-xs font-medium leading-6 ${askRes.ok ? "text-zinc-200" : "text-rose-400"}`}>{askRes.text}</p>
                   {askRes.ok && askRes.noteId && <p className="mt-1.5 font-mono text-[10px] text-zinc-500">נאטם בזרם: {askRes.noteId}</p>}
                 </div>
               )}

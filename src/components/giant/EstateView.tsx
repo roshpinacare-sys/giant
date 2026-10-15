@@ -11,6 +11,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertTriangle, GitBranch, Landmark, RefreshCw } from "lucide-react";
+import { FlowHeartbeat } from "@/components/giant/FlowHeartbeat";
+import { useFlow } from "@/hooks/use-flow";
 
 interface RepoScan {
   repo: string;
@@ -73,6 +75,17 @@ interface OrganismPayload {
 
 const POLL_MS = 60_000;
 
+/* ═══ T63-b anti-gibberish ═══
+ * כל 20 ראיות-הגיטהאב של הזמנות-העבודה נמדדו חי (GET, נמדד 2026-10-14):
+ * 16 חיות (HTTP 200) → נשארות קישור-ראיה. 4 של הריפו 'steem' מחזירות 404 פומבית
+ * (הריפו אינו נגיש לציבור) → לא-קישור: טקסט-מונו + צ'יפ רוז "ראיה-לא-נמצאה". */
+const EVIDENCE_DEAD: ReadonlySet<string> = new Set([
+  "https://github.com/roshpinacare-sys/steem/issues/31",
+  "https://github.com/roshpinacare-sys/steem/issues/34",
+  "https://github.com/roshpinacare-sys/steem/issues/38",
+  "https://github.com/roshpinacare-sys/steem/issues/39",
+]);
+
 function fmtInt(n: number): string {
   return n.toLocaleString("en-US");
 }
@@ -132,6 +145,7 @@ function sumField(rows: EstateRow[] | undefined, f: "reds48h" | "openIssues"): n
 }
 
 export function EstateView() {
+  const { flow: engineFlow, trajectory: engineTrajectory } = useFlow(); // T70-המשך · דופק-הזרימה-החי — המנוע-שמניע-את-האחוזה (שמות-נפרדים: לאחוזה-יש flow-משלה מ-/api/organism)
   const [data, setData] = useState<OrganismPayload | null>(null);
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
@@ -216,6 +230,9 @@ export function EstateView() {
           </button>
         </div>
       </header>
+
+      {/* T70-המשך · הכותרת-מכריזה "הזרימה" — מעכשיו-ההכרזה-נמדדת: דופק-המנוע-החי מוצג-כאן (fail-honest) */}
+      <FlowHeartbeat flow={engineFlow} trajectory={engineTrajectory} label="דופק-הזרימה — המנוע-שמניע-את-האחוזה" />
 
       {/* כשל = באנר-אדום כנה עם-השגיאה-עצמה */}
       {err && (
@@ -332,8 +349,8 @@ export function EstateView() {
         )}
       </div>
 
-      {/* מפת-הזרימה + אמת */}
-      <div className="grid gap-2 md:grid-cols-2">
+      {/* מפת-הזרימה + אמת — grid-cols-1 מפורשת: minmax(0,1fr) מנטרל-התנפחות-עקיפה של-truncate בנייד (באג-גלישה-263px) */}
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         <div className="rounded-md border border-white/10 p-3">
           <div className="mb-2 text-sm font-medium text-zinc-200">מפת-הזרימה</div>
           {flow === null ? (
@@ -409,17 +426,31 @@ export function EstateView() {
                   </div>
                   <div className="mt-0.5 flex items-center gap-2 text-[10px] text-zinc-600">
                     {w.repo && <span className="truncate font-mono" dir="ltr">{w.repo}</span>}
-                    {w.evidence && w.evidence.startsWith("http") && (
+                    {w.evidence && EVIDENCE_DEAD.has(w.evidence) ? (
+                      /* ראיה-מתה (404 נמדד) — טקסט בלבד, אפס-קישור (T63-b) */
+                      <span className="flex shrink-0 items-center gap-1.5">
+                        <span className="truncate font-mono text-[9px] text-zinc-600" dir="ltr" title={w.evidence}>
+                          {w.id}
+                        </span>
+                        <span className="shrink-0 rounded-full border border-rose-500/40 bg-rose-500/10 px-2 py-0.5 text-[9px] font-semibold text-rose-400">ראיה-לא-נמצאה</span>
+                      </span>
+                    ) : w.evidence && w.evidence.startsWith("http") ? (
                       <a
                         href={w.evidence}
                         target="_blank"
                         rel="noopener noreferrer"
+                        title={w.evidence}
                         className="shrink-0 text-amber-500/80 underline-offset-2 hover:underline"
                         dir="ltr"
                       >
                         ראיה ↗
                       </a>
-                    )}
+                    ) : w.evidence ? (
+                      /* ראיה שאינה-קישור (נתיב/נימוק) — מוצגת כטקסט-מונו */
+                      <span className="shrink-0 truncate font-mono text-[9px] text-zinc-600" dir="ltr" title={w.evidence}>
+                        {w.evidence}
+                      </span>
+                    ) : null}
                   </div>
                 </li>
               ))}

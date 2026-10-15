@@ -1,0 +1,56 @@
+# sovereign-selfscan — the network's self-awareness beat (hourly).
+# Anti-storm law: this scanner ALWAYS exits 0 — its duty is measurement and record.
+# RED lives in network/STATE.md + ops/claims/ + ONE deduped issue per new signature.
+name: sovereign-selfscan
+
+on:
+  schedule:
+    - cron: "21 5 * * *"   # hourly :21 (odd minute — fleet cron hygiene)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write   # triage/self-heal powers
+  issues: write    # ONE deduped issue per NEW signature — the only escalation channel
+
+concurrency:
+  group: sovereign-selfscan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout FleetHQ (keyless, same-repo)
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 1
+
+      - name: Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Scan the whole network (measure, record, claim — never email-storm)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node assets/sovereign/selfscan.mjs
+
+      - name: Publish the self-awareness book
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "roshpinacare-sys"
+          git config user.email "326012154+roshpinacare-sys@users.noreply.github.com"
+          git add network/ ops/
+          if git diff --cached --quiet; then echo "no delta"; exit 0; fi
+          git commit -m "sovereign-selfscan: network state + claims $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
+          ok=0
+          for i in 1 2 3 4 5 6 7 8; do
+            if git pull --rebase --autostash -q origin main && git push -q origin main; then ok=1; echo "PUSH-OK attempt $i"; break; fi
+            echo "push attempt $i lost the race — rebase and retry"; sleep $((8 + RANDOM % 10))
+          done
+          [ "$ok" = "1" ] || { echo "named terminal: publish-deferred — book is on disk, next scan re-lands it"; exit 0; }
