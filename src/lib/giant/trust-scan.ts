@@ -15,12 +15,14 @@
  * שלו (RECHECK דפוס-dsh) או שהמטמון מיושן.
  */
 import { readPat } from "@/lib/office-truth";
+import { runtimePath, writeRuntimeIfChanged } from "@/lib/giant/runtime-store";
 import { loadFleet } from "@/lib/giant/fleet";
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 
 export const SCANNER = "saos-trust-check@0.1.0";
-const CACHE_FILE = path.join(process.cwd(), "db", "trust-cache.json");
+const CACHE_FILE = path.join(process.cwd(), "db", "trust-cache.json"); // הקנון-מהגיט (קריאה-בלבד)
+const RUNTIME_CACHE = "trust-cache.json"; // מאגר-הריצה — מחוץ-לעץ (runtime-store)
 const TREE_TTL_MS = 6 * 60 * 60 * 1000; // ספר שנסרק ונשקט — סריקה-חוזרת אחרי 6ש׳
 const DEEP_TTL_MS = 10 * 60 * 1000;
 const DEEP_FILE_CAP = 12;
@@ -147,22 +149,24 @@ async function seedFromGitCanon(): Promise<TrustCache> {
 
 function readCache(): TrustCache {
   try {
-    if (existsSync(CACHE_FILE)) {
-      const raw = JSON.parse(readFileSync(CACHE_FILE, "utf8")) as TrustCache;
-      if (raw?.version === 1 && Array.isArray(raw.entries)) return raw;
+    /* מאגר-הריצה-מחוץ-לעץ קודם; קנון-הגיט אחריו (מיזוג-גיאנט: לולאת-ההידור) */
+    for (const p of [runtimePath(RUNTIME_CACHE), CACHE_FILE]) {
+      try {
+        if (!existsSync(p)) continue;
+        const raw = JSON.parse(readFileSync(p, "utf8")) as TrustCache;
+        if (raw?.version === 1 && Array.isArray(raw.entries)) return raw;
+      } catch {
+        /* קובץ-שבור = כאילו-אין — הבא-בתור */
+      }
     }
   } catch {
     /* מטמון-שבור = כאילו-אין — סריקה-מלאה-כנה */
   }
   return { version: 1, scanner: SCANNER, entries: [] };
 }
-function writeCache(c: TrustCache): void {
-  try {
-    mkdirSync(path.dirname(CACHE_FILE), { recursive: true });
-    writeFileSync(CACHE_FILE, JSON.stringify(c));
-  } catch {
-    /* כשל-מטמון לא מזייף-מדידה — המדידה-החיה ממשיכה */
-  }
+async function writeCache(c: TrustCache): Promise<void> {
+  /* כתיבה-מחוץ-לעץ-ורק-כשהתוכן-באמת-השתנה — כתיבה-מיותרת = רענון-שווא-של-הממשק */
+  await writeRuntimeIfChanged(RUNTIME_CACHE, c);
 }
 
 /* קריאת-מטמון-זולה-לשימוש-משותף (מפת-האימפריה) — לא מריצה-סריקה, לא נוגעת-ברשת. */
@@ -361,7 +365,7 @@ export async function runTrustScan(force = false): Promise<TrustPayload> {
       })),
     ],
   };
-  writeCache(nextCache);
+  await writeCache(nextCache);
 
   const scanned = rows.filter((r) => r.mode === "tree").length;
   const signals = rows.reduce((s, r) => s + r.signals.length, 0);

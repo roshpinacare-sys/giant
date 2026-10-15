@@ -144,6 +144,10 @@ export async function anchorStatus(force = false): Promise<AnchorStatus> {
           ? 0
           : await countBehind(parsed.lineageHead, status.localHead);
       }
+    } else {
+      // אין-עוגן-בענן עדיין (הוארכ-לארכיון-ע"י-הצי) — זה-מצב-מוגדר, לא-שגיאה
+      status.behind = 0;
+      status.anchored = false;
     }
     status.ok = true;
     return finish(status);

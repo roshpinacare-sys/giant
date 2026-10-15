@@ -192,7 +192,9 @@ function AnchorCard({ onNavigate }: { onNavigate?: (id: string) => void }) {
       </b>
       <span className="mt-1 block text-[11px] leading-4 text-zinc-400">
         {status?.ok
-          ? `ענן: ${status.cloud.live ? "חי" : "לא-נגיש"} · עוגן: ${short(status.cloud.sovereignMain)} · עגון-${status.anchored ? "מלא" : `חלקי (${status.behind} קומיטים-אחורה)`} · שושלת: ${short(status.cloud.anchorLineageHead)}`
+          ? status.cloud.sovereignMain
+            ? `ענן: ${status.cloud.live ? "חי" : "לא-נגיש"} · עוגן: ${short(status.cloud.sovereignMain)} · ${status.anchored ? "עגון-מלא" : `מקומי-מתקדם (${status.behind} קומיטים-לעגון)`} · שושלת: ${short(status.cloud.anchorLineageHead)}`
+            : `ענן: ${status.cloud.live ? "חי" : "לא-נגיש"} · טרם-עוגן-בענן — לחיצה-אחת-מנחיתה-את-העוגן`
           : msg ?? "מודד…"}
       </span>
       <div className="mt-2 flex flex-wrap items-center gap-2">
