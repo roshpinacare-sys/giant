@@ -5,12 +5,14 @@ import { readFile, readdir, stat } from "fs/promises";
 import path from "path";
 
 export const REPOS: Record<string, string> = {
-  Sandbox: "/home/z/my-project/t36/Sandbox",
-  Domain: "/home/z/my-project/t36/Domain",
-  FleetHQ: "/home/z/my-project/t36/FleetHQ",
-  "saos-dex": "/home/z/my-project/t36/saos-dex",
-  Console: "/home/z/my-project/t36/Console",
-  roshpina: "/home/z/my-project/t36/roshpina",
+  /* גל-18 · חיווט-מחדש: העותקים-החיים-על-הדיסק-הם-עוגני-estate-sync
+   * (נמשכים-מהקנון-כל-10 דק) — לא-עוד-t36 שנמחק-עם-הסנדבוקס-הקודם. */
+  Sandbox: "/home/z/estate/Sandbox",
+  Domain: "/home/z/estate/Domain",
+  FleetHQ: "/home/z/estate/FleetHQ",
+  "saos-dex": "/home/z/estate/saos-dex",
+  Console: "/home/z/estate/Console",
+  roshpina: "/home/z/estate/roshpina",
 };
 
 // אסור-בתוקף: סודות/טוקנים/סביבה
