@@ -26,7 +26,7 @@ interface ProductsPayload {
 }
 
 function statusChip(status: string, statusHe?: string): { cls: string; he: string } {
-  const base = "rounded-full px-2.5 py-0.5 text-[10px] font-bold whitespace-nowrap";
+  const base = "rounded-full px-2.5 py-0.5 text-[10px] font-bold max-w-full truncate";
   if (statusHe) {
     const live = status.includes("live");
     return { cls: `${base} ${live ? "bg-emerald-500/10 text-emerald-400" : "bg-amber-500/10 text-amber-400"}`, he: statusHe };
@@ -125,7 +125,7 @@ export function ProductsView() {
       {err && <p className="text-xs text-red-400">{err}</p>}
 
       {/* כרטיסי-מוצר מלאים */}
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {(data?.products ?? []).map((p) => {
           const chip = statusChip(p.status, p.raw?.statusHe);
           const measured = p.raw?.measured ?? [];
@@ -147,7 +147,7 @@ export function ProductsView() {
 
               {/* מדידות-חיות */}
               {measured.length > 0 && (
-                <div className="mt-3.5 grid gap-1.5 sm:grid-cols-2">
+                <div className="mt-3.5 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
                   {measured.map((m) => (
                     <div key={m.label} className="rounded-lg border border-white/5 bg-zinc-950 px-2.5 py-1.5">
                       <p className="text-[9px] font-bold uppercase tracking-wide text-zinc-600">{MEASURED_HE[m.label] ?? m.label}</p>
