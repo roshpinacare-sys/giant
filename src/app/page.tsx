@@ -8,6 +8,7 @@ import { GiantsView } from "@/components/giant/LeagueView";
 import { ChannelView } from "@/components/giant/ChannelView";
 import { WalletView } from "@/components/giant/WalletView";
 import { DeskView } from "@/components/giant/DeskView";
+import { CapitalView } from "@/components/giant/CapitalView";
 import { LedgerView } from "@/components/giant/LedgerView";
 import { ProductsView } from "@/components/giant/ProductsView";
 import { PulseView } from "@/components/giant/PulseView";
@@ -20,7 +21,7 @@ import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
 import { DOORS, measureAllDoors, type DoorStatusMap } from "@/lib/giant/doors";
 import {
-  Activity, BookOpen, Building2, Command, Cog, Crown, GitBranch, LineChart, Megaphone, Network,
+  Activity, BookOpen, Building2, Coins, Command, Cog, Crown, GitBranch, LineChart, Megaphone, Network,
   Package, Radio, ScrollText, ShieldCheck, Trophy, Wallet,
   type LucideIcon,
 } from "lucide-react";
@@ -43,6 +44,7 @@ import {
 
 type ViewId =
   | "submission" | "machine" | "dex" | "league" | "channel" | "wallet" | "desk"
+  | "capital"
   | "ledger" | "products" | "pulse" | "office" | "estate" | "empire" | "trust"
   | "marketing";
 
@@ -55,6 +57,7 @@ const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = 
   { id: "channel", label: "הערוץ", he: "הדלת-הראשית: בעלים ↔ ריבונות", icon: Radio },
   { id: "wallet", label: "הארנק", he: "חשבונות-אמת מהמנוע · יחידות-אנוש", icon: Wallet },
   { id: "desk", label: "השולחן", he: "מנדט · equity · אסטרטגיות", icon: ScrollText },
+  { id: "capital", label: "ההון", he: "מנוע-ההון: שבע-אסטרטגיות נמדדות-חי · תוכניות-הצבה ממתינות-לאישורך", icon: Coins },
   { id: "ledger", label: "הרישום", he: "כל-ההחלטות · חיפוש", icon: BookOpen },
   { id: "products", label: "המוצרים", he: "קטלוג-אמת · קבלות · מדידות", icon: Package },
   { id: "marketing", label: "השיווק", he: "משטח-Adsmarket-החי: מה-שכתוב-בריפו = מה-שמוצג · אפס-סינתזה", icon: Megaphone },
@@ -349,6 +352,7 @@ export default function Home() {
             {view === "channel" && <ChannelView />}
             {view === "wallet" && <WalletView />}
             {view === "desk" && <DeskView />}
+            {view === "capital" && <CapitalView />}
             {view === "ledger" && <LedgerView />}
             {view === "products" && <ProductsView />}
             {view === "pulse" && <PulseView />}
