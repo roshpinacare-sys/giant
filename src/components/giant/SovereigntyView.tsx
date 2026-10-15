@@ -942,6 +942,57 @@ function GateSection() {
                         </p>
                       </div>
                     )}
+                    {/* T68 · מפקד-הצי — מצב-כל-ה-workflows בכל-המאגרים */}
+                    {gate?.census && (
+                      <div
+                        className={`mt-3 rounded-lg border p-3 ${
+                          gate.census.blocked.every((b) => b.documented)
+                            ? "border-emerald-500/25 bg-emerald-500/[0.05]"
+                            : "border-amber-500/30 bg-amber-500/[0.06]"
+                        }`}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <p className="text-[10px] font-black text-zinc-300">מפקד-הצי — כל-המאגרים:</p>
+                          <span
+                            className={`rounded-full border px-2 py-0.5 font-mono text-[9px] font-bold ${
+                              gate.census.blocked.every((b) => b.documented)
+                                ? "border-emerald-500/30 bg-emerald-500/[0.07] text-emerald-400"
+                                : "border-amber-500/30 bg-amber-500/[0.07] text-amber-400"
+                            }`}
+                            dir="ltr"
+                          >
+                            {gate.census.active}/{gate.census.totalWorkflows} active · {gate.census.reposMeasured} repos
+                          </span>
+                        </div>
+                        {gate.census.blocked.length === 0 ? (
+                          <p className="mt-1 text-[10px] font-bold text-emerald-300">
+                            אפס-חסמים בכל-הצי — הכל זורם.
+                          </p>
+                        ) : (
+                          <div className="mt-1.5 flex flex-wrap gap-1.5">
+                            {gate.census.blocked.map((b) => (
+                              <span
+                                key={`${b.repo}/${b.workflow}`}
+                                className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[9px] ${
+                                  b.documented
+                                    ? "border-zinc-600/40 bg-zinc-500/[0.08] text-zinc-400"
+                                    : "border-amber-500/30 bg-amber-500/[0.07] text-amber-400"
+                                }`}
+                                dir="ltr"
+                                title={b.documented ?? "חסם-שוגג — לא-מתועד"}
+                              >
+                                {b.repo}/{b.workflow} = {b.state}
+                                {b.documented ? " ◇" : " ⚠"}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        <p className="mt-2 text-[9px] leading-4 text-zinc-500">
+                          ◇ = הכרעה-מתועדת של-הבעלים (לא-חסם-שוגג) · ⚠ = חסם-שלא-הוסבר — יטופל ·
+                          cache 10 דק' · {gate.census.measuredAt.slice(11, 19)}Z
+                        </p>
+                      </div>
+                    )}
                     <p className="mt-2 text-[9px] leading-4 text-zinc-500">
                       נמדד-חי מה-API בכל-בקשה ({gate.barriers.repo}) · ◆ = מנוע-הזרימה-הכלכלית ·
                       הריצות עצמן נשלטות-על-ידי ה-cron-של-המנוע בקאנון — כאן נמדד רק שהשער-הכלכלי פתוח.

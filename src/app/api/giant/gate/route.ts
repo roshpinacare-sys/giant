@@ -18,7 +18,7 @@ import { execSync } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
-import type { EngineFlow, EngineFlowBeat, GateBarriers, GateBarrierWorkflow, GateCheckReceipt, GateDoor, GatePayload } from "@/lib/giant/gate-types";
+import type { EngineFlow, EngineFlowBeat, FleetBlockedWorkflow, FleetCensus, GateBarriers, GateBarrierWorkflow, GateCheckReceipt, GateDoor, GatePayload } from "@/lib/giant/gate-types";
 import { readPat } from "@/lib/office-truth";
 
 export const runtime = "nodejs";
@@ -43,6 +43,81 @@ const ECONOMIC = new Set(["dex-beat.yml", "dex-grid.yml", "grid-trigger.yml", "m
 /** T67 · המכונה-האמיתית: התאום-הציבורי ב-Domain (R71) — הקדנס-שם; saos-dex-הוא-גיבוי-dispatch */
 const FLOW_REPO = "roshpinacare-sys/Domain";
 const FLOW_BEATS = ["dex-beat.yml", "dex-grid.yml", "economy-engine.yml"];
+
+/**
+ * T68 · מפקד-הצי — מצב-workflows על-כל-המאגרים. cache-נפרד 10 דק' (15+ קריאות-API);
+ * הערת-הכרעה-מתועדת (content-campaign) מסומנת — כנות-מלאה, אפס-הסתרה.
+ */
+const CENSUS_CACHE_MS = 10 * 60_000;
+let censusCache: { at: number; data: FleetCensus | null } | null = null;
+
+async function measureFleetCensus(errors: string[]): Promise<FleetCensus | null> {
+  if (censusCache && Date.now() - censusCache.at < CENSUS_CACHE_MS) return censusCache.data;
+  try {
+    const pat = await readPat();
+    if (!pat) return null;
+    const res = await fetch("https://api.github.com/users/roshpinacare-sys/repos?per_page=100&type=owner", {
+      headers: { authorization: `Bearer ${pat}`, accept: "application/vnd.github+json" },
+      cache: "no-store",
+      signal: AbortSignal.timeout(12_000),
+    });
+    if (!res.ok) {
+      errors.push(`מפקד-הצי: רשימת-מאגרים השיבה HTTP ${res.status}`);
+      return null;
+    }
+    const repos = ((await res.json()) as { name: string }[]).map((r) => r.name);
+    repos.push("saos-dex"); // הקאנון-הפרטי — נמדד-גם-הוא
+    const blocked: FleetBlockedWorkflow[] = [];
+    let total = 0;
+    let active = 0;
+    const perRepo = await Promise.all(
+      repos.map(async (repo): Promise<{ total: number; active: number; blocked: FleetBlockedWorkflow[] } | null> => {
+        try {
+          const r = await fetch(`https://api.github.com/repos/roshpinacare-sys/${repo}/actions/workflows?per_page=100`, {
+            headers: { authorization: `Bearer ${pat}`, accept: "application/vnd.github+json" },
+            cache: "no-store",
+            signal: AbortSignal.timeout(12_000),
+          });
+          if (!r.ok) return null;
+          const j = (await r.json()) as { workflows?: { path: string; state: string }[] };
+          const list = Array.isArray(j.workflows) ? j.workflows : [];
+          const repoBlocked = list
+            .filter((w) => w.state !== "active")
+            .map((w) => ({
+              repo,
+              workflow: w.path.split("/").pop() ?? w.path,
+              state: w.state,
+              documented:
+                repo === "Domain" && w.path.endsWith("content-campaign.yml")
+                  ? "הכרעת-בעלים-מתועדת בקובץ (2026-10-13): זהות-פרסום-היא-הצפון-של-הבעלים; התאום-הבריא-מפרסם-שעתית"
+                  : undefined,
+            }));
+          return { total: list.length, active: list.filter((w) => w.state === "active").length, blocked: repoBlocked };
+        } catch {
+          return null;
+        }
+      }),
+    );
+    for (const p of perRepo) {
+      if (!p) continue;
+      total += p.total;
+      active += p.active;
+      blocked.push(...p.blocked);
+    }
+    const census: FleetCensus = {
+      measuredAt: new Date().toISOString(),
+      reposMeasured: perRepo.filter(Boolean).length,
+      totalWorkflows: total,
+      active,
+      blocked: blocked.sort((a, b) => a.repo.localeCompare(b.repo) || a.workflow.localeCompare(b.workflow)),
+    };
+    censusCache = { at: Date.now(), data: census };
+    return census;
+  } catch (e) {
+    errors.push(`מפקד-הצי נכשל: ${String(e).slice(0, 90)}`);
+    return null;
+  }
+}
 
 /**
  * T67 · מדידת-הזרימה — ריצות-אחרונות של-מנועי-הכסף-על-המכונה-האמיתית.
@@ -182,6 +257,7 @@ async function buildPayload(): Promise<GatePayload> {
 
   const door = await measureDoor(errors);
   const barriers = await measureBarriers(errors);
+  const census = await measureFleetCensus(errors);
 
   const gateOpen =
     receipt?.verdict === "KEY-AUTHENTIC-ACTIVE" &&
@@ -196,6 +272,7 @@ async function buildPayload(): Promise<GatePayload> {
     door,
     gateOpen,
     barriers,
+    census,
     errors,
     sha16: "",
   };

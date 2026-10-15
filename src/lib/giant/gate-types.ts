@@ -107,6 +107,22 @@ export interface EngineFlow {
   beats: EngineFlowBeat[];
 }
 
+/** T68 · מפקד-הצי — מצב-כל-ה-workflows בכל-המאגרים (חסמים-נותרים בשקיפות-מלאה) */
+export interface FleetBlockedWorkflow {
+  repo: string;
+  workflow: string;
+  state: string;
+  documented?: string; // הערת-הכרעה-מתועדת (לא-חסם-שוגג)
+}
+
+export interface FleetCensus {
+  measuredAt: string;
+  reposMeasured: number;
+  totalWorkflows: number;
+  active: number;
+  blocked: FleetBlockedWorkflow[];
+}
+
 export interface GatePayload {
   ok: boolean;
   receipt: GateCheckReceipt | null;
@@ -114,6 +130,7 @@ export interface GatePayload {
   door: GateDoor | null;
   gateOpen: boolean;
   barriers: GateBarriers | null;
+  census: FleetCensus | null;
   errors: string[];
   sha16: string;
 }
