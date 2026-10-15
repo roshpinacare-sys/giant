@@ -4,7 +4,8 @@
  *
  * רץ על GitHub Actions בלבד — אפס-סנדבוקס, אפס-תלות (node 22 + fetch גלובלי).
  * סורק את עצי-הגיט של כל-ספרי org:roshpinacare-sys ומפיק את הקנון:
- *   app/db/trust-cache.json  (version 1 — אותו-חוזה כמו trust-scan.ts של הממשק)
+ *   db/trust-cache.json  (version 1 — אותו-חוזה כמו trust-scan.ts של הממשק;
+ *   נדחף-בכוח-מוצהר git add -f כי db/ מנוטרל-ב-gitignore — לקח-מלכודת-ה-gitignore)
  *
  * חוקי-האמת (ממיל-אל-מיל מהסורק הקנוני src/lib/giant/trust-scan.ts):
  *  · עץ-גיט בלבד — לא מריץ קוד, לא פותח sockets, לא קורא תוכן-קבצים
@@ -18,7 +19,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ORG = "roshpinacare-sys";
-const TOKEN = process.env.GITHUB_TOKEN || "";
+// FLEET_PAT (סוד-ריפו, PAT-מלא של-הבעלים) קודם — GITHUB_TOKEN-המרוכב-של-הריפו רואה-רק-פומבי
+// ב-Search-API (נמדד 15.10: 14/39) — הקנון-המלא-דורש-את-הטוקן-המלא.
+const TOKEN = process.env.FLEET_PAT || process.env.GITHUB_TOKEN || "";
 const SCANNER = "saos-trust-check@0.2.0-actions";
 const OUT_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "db", "trust-cache.json");
 

@@ -4,7 +4,8 @@ name: trust-heartbeat
 # חוק-הבעלים: "אתם סנדבוקסים-שנמחקים — לא בונים עליכם. תנו לאוטונומיה לעבוד."
 # הסריקה-המדודה של כל-ספרי-האימפריה רצה כאן — על-השרשרת של הגיט, אפס-סנדבוקס.
 # התוצר: db/trust-cache.json נדחף-חזרה ע"י github-actions[bot] — הממשק-החי
-# קורא-את-הקנון-הזה (readTrustCacheRows) והאמון-מתעדכן-לבד-כל-4-שעות.
+# זורע-מהקנון-הזה (seedFromGitCanon) והאמון-מתעדכן-לבד-כל-שעתיים.
+# FLEET_PAT = PAT-מלא-של-הבעלים (סוד-ריפו) — בלעדיו-ה-Search-API-רואה-רק-14/39.
 
 on:
   schedule:
@@ -32,6 +33,7 @@ jobs:
       - name: סריקת-אמון-על-כל-הספרים (עצי-גיט בלבד — אפס-ריצת-קוד)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FLEET_PAT: ${{ secrets.FLEET_PAT }}
         run: node scripts/trust-heartbeat.mjs
 
       - name: דחיפת-הקנון-המעודכן
