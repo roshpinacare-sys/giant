@@ -904,7 +904,7 @@ function GateSection() {
                     {/* T69 · הרכיב-המשותף FlowHeartbeat — אפס-שכפול עם DexView · WalletView */}
                     {gate.barriers.flow && (
                       <div className="mt-3">
-                        <FlowHeartbeat flow={gate.barriers.flow} label="הזרימה-עצמה — ריצות-אחרונות על-המכונה" />
+                        <FlowHeartbeat flow={gate.barriers.flow} trajectory={gate.flowTrajectory ?? null} label="הזרימה-עצמה — ריצות-אחרונות על-המכונה" />
                         <p className="mt-1 text-[9px] leading-4 text-zinc-500">
                           המכונה-האמיתית היא התאום-הציבורי (R71 · קדנס-שעתי) — העתק-המקור ב-saos-dex הוא גיבוי-dispatch
                           בלבד והריצה-שנשלחה-ממתינה-למכסת-ריפו-פרטי (כנה). המצב-על-השרשרת מתקדם: הסנאפשוט

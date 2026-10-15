@@ -111,7 +111,7 @@ export function WalletView() {
 
       {/* T69 · דופק-הזרימה — הכסף-מראה-את-הדופק-שמניע-אותו (fail-honest: נכשל = לא מוצג) */}
       <section className="rounded-2xl border border-white/10 bg-zinc-900/60 px-4 py-1">
-        <FlowHeartbeat flow={flow?.flow ?? null} label="דופק-הזרימה — הכוח-שמניע-את-המאזנים" />
+        <FlowHeartbeat flow={flow?.flow ?? null} trajectory={flow?.trajectory ?? null} label="דופק-הזרימה — הכוח-שמניע-את-המאזנים" />
       </section>
 
       {/* סיכום-סה"כ */}

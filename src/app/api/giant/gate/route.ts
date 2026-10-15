@@ -19,7 +19,10 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import type { FleetBlockedWorkflow, FleetCensus, GateBarriers, GateBarrierWorkflow, GateCheckReceipt, GateDoor, GatePayload } from "@/lib/giant/gate-types";
+import type { FlowTrajectory } from "@/lib/giant/flow-types";
 import { measureFlow } from "@/lib/giant/flow";
+import { recordMeasurement, readTrajectory } from "@/lib/giant/flow-ledger";
+import { loadDex } from "@/app/api/giant/dex/route";
 import { readPat } from "@/lib/office-truth";
 
 export const runtime = "nodejs";
@@ -213,6 +216,19 @@ async function buildPayload(): Promise<GatePayload> {
   const barriers = await measureBarriers(errors);
   const census = await measureFleetCensus(errors);
 
+  /* T70 · מסלול-הזרימה: מדידה-עצמית-של-הגובה + רישום-בפנקס (כנה; דדופ/חנק = תקין) */
+  let flowTrajectory: FlowTrajectory | null = null;
+  try {
+    const dex = await loadDex();
+    if (dex.ok && typeof dex.height === "number" && dex.height > 0) {
+      const res = await recordMeasurement(dex.height, dex.savedAt, new Date().toISOString());
+      if (res === "failed") errors.push("רישום-המדידה-בפנקס נכשל — כנה");
+    }
+    flowTrajectory = await readTrajectory();
+  } catch (e) {
+    errors.push(`מסלול-הזרימה-בשער נכשל: ${String(e).slice(0, 90)}`);
+  }
+
   const gateOpen =
     receipt?.verdict === "KEY-AUTHENTIC-ACTIVE" &&
     !!receipt?.actions?.runs?.some((r) => r.conclusion === "success" && r.verdict === "armed") &&
@@ -227,6 +243,7 @@ async function buildPayload(): Promise<GatePayload> {
     gateOpen,
     barriers,
     census,
+    flowTrajectory,
     errors,
     sha16: "",
   };

@@ -14,7 +14,7 @@
  * T69 · טיפוסי-הזרימה (EngineFlow · EngineFlowBeat) עברו-למקור-האמת-היחיד
  * flow-types.ts — DexView · WalletView ו-gate חולקים-את-אותן-אמת, אפס-שכפול.
  */
-import type { EngineFlow } from "@/lib/giant/flow-types";
+import type { EngineFlow, FlowTrajectory } from "@/lib/giant/flow-types";
 
 export type { EngineFlow, EngineFlowBeat } from "@/lib/giant/flow-types";
 
@@ -124,6 +124,8 @@ export interface GatePayload {
   gateOpen: boolean;
   barriers: GateBarriers | null;
   census: FleetCensus | null;
+  /** T70 · מסלול-הזרימה — התקדמות-הגובה-בין-מדידות-אמיתיות-שהמערכת-רשמה-בעצמה */
+  flowTrajectory: FlowTrajectory | null;
   errors: string[];
   sha16: string;
 }

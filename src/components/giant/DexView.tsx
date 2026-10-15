@@ -508,7 +508,7 @@ export function DexView() {
         </div>
 
         {/* T69 · דופק-הזרימה — הוכחת-החיים-החיה על-משטח-המסחר-עצמו (fail-honest: נכשל = לא מוצג) */}
-        <FlowHeartbeat flow={flow?.flow ?? null} label="דופק-הזרימה — המנוע-חי עכשיו" />
+        <FlowHeartbeat flow={flow?.flow ?? null} trajectory={flow?.trajectory ?? null} label="דופק-הזרימה — המנוע-חי עכשיו" />
 
         {/* ═══ פס-אמת-ההיצע: התשובה הישירה ל"80 מיליון מול 100K מול 21 מיליון" ═══ */}
         {eng?.supply && (
