@@ -18,11 +18,12 @@ import { CapabilityView } from "@/components/giant/CapabilityView";
 import { SovereigntyView } from "@/components/giant/SovereigntyView";
 import { EmpireView } from "@/components/giant/EmpireView";
 import { TrustView } from "@/components/giant/TrustView";
+import { GapView } from "@/components/giant/GapView";
 import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
 import {
   Activity, ArrowLeftRight, Banknote, Boxes, Building2, Command, Compass,
-  Gauge, GitBranch, Landmark, Network, Package, Radio, ScrollText, ShieldCheck, Trophy, Wallet,
+  Gauge, GitBranch, Landmark, Network, Package, Radio, Scale, ScrollText, ShieldCheck, Trophy, Wallet,
   type LucideIcon,
 } from "lucide-react";
 
@@ -40,7 +41,7 @@ import {
  * משטח-אחד-לכל-יכולת · ערוץ-אחד · אפס-כפילויות · הכל נמדד-חי מהגיט. */
 
 type ViewId =
-  | "sovereignty" | "empire" | "trust" | "overview" | "machine" | "dex" | "league" | "channel" | "wallet"
+  | "sovereignty" | "empire" | "trust" | "overview" | "machine" | "dex" | "league" | "gap" | "channel" | "wallet"
   | "desk" | "ledger" | "products" | "pulse" | "office" | "estate" | "capabilities";
 
 interface NavEntry {
@@ -60,6 +61,7 @@ const NAV: NavEntry[] = [
   { id: "machine", label: "המכונה", ctx: "מנוע-הדקס כמכונה-חיה · האובייקט-הוא-ההסבר (anatomy)", src: "Domain/dex/state.json · טביעת-sha16", icon: Gauge },
   { id: "dex", label: "הדקס", ctx: "הכסף: נרות · קופות · אמת-ההיצע · ספר-הפקודות-החוץ", src: "Kraken חי + המנוע מהגיט", icon: ArrowLeftRight },
   { id: "league", label: "ליגת-הענקים", ctx: "השוואה-כנה מול-ענקי-ה-DeFi של-העולם", src: "DefiLlama API חי", icon: Trophy },
+  { id: "gap", label: "מפת-הפער", ctx: "ההשוואה-הכנה מול-מוצרים-אמיתיים · טענות-הסוכנים מול-מה-נמדד · מפת-איחוד M1..M6", src: "עובדות-ענקים-ציבוריות + מדידות-חי + קריאת-קוד", icon: Scale },
   { id: "channel", label: "הערוץ", ctx: "הדלת-הראשית שלך מול-הריבונות · שער-המנהל פותח-הכל", src: "Pulse/sovereign-channel · append-only", icon: Radio },
   { id: "wallet", label: "הארנק", ctx: "חשבונות-אמת מהמנוע · יחידות-אנוש", src: "המנוע מהגיט · mu÷1000", icon: Wallet },
   { id: "desk", label: "השולחן", ctx: "המנדט · ה-equity · האסטרטגיות", src: "Domain/dex/honest-econ", icon: Banknote },
@@ -114,7 +116,7 @@ export default function Home() {
     else if (NAV.some((n) => n.id === id)) setView(id as ViewId);
   }, []);
 
-  /* ניווט-מהסקירה: מזהי-מודול-תקינים-בלבד (הסקירה עצמה שולחת אחד-מ-16) */
+  /* ניווט-מהסקירה: מזהי-מודול-תקינים-בלבד (הסקירה עצמה שולחת אחד-מ-17) */
   const navigate = useCallback((id: string) => {
     if (NAV.some((n) => n.id === id)) setView(id as ViewId);
   }, []);
@@ -145,7 +147,7 @@ export default function Home() {
                 <span className="text-zinc-100">הממשק-המאוחד</span>
               </h1>
               <p className="hidden text-[10px] leading-3 text-zinc-500 sm:block">
-                מיזוג-5-הסוכנים · 16 מודולים · הכל-נמדד-חי · אפס-כפילויות
+                מיזוג-5-הסוכנים · 17 מודולים · הכל-נמדד-חי · אפס-כפילויות
               </p>
             </div>
           </div>
@@ -237,7 +239,7 @@ export default function Home() {
                 <p className="mt-0.5 text-[10px] leading-4 text-zinc-500">
                   מקור-הנתונים: <span className="text-zinc-400">{active?.src}</span>
                   <span className="mx-1.5 text-zinc-700">|</span>
-                  Ctrl+K לניווט-מהיר-בין-כל-16-המודולים
+                  Ctrl+K לניווט-מהיר-בין-כל-17-המודולים
                 </p>
               </div>
             </div>
@@ -256,6 +258,7 @@ export default function Home() {
             {view === "machine" && <MachineView />}
             {view === "dex" && <DexView />}
             {view === "league" && <GiantsView />}
+            {view === "gap" && <GapView />}
             {view === "channel" && <ChannelView />}
             {view === "wallet" && <WalletView />}
             {view === "desk" && <DeskView />}
@@ -305,7 +308,7 @@ export default function Home() {
           <span className="hidden sm:inline">· הריבונות מפעילה-הכל; הגיט הוא שכבת-הקיום; המערכת מתפתחת לנצח</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="font-mono text-[10px] text-zinc-600">T63-a · 16 מודולים · מיזוג-הענק-האח (אימפריה+אמון) · TTS-חי · ספר-פקודות-חוץ · מאגר-יכולות · R360 · R74</span>
+          <span className="font-mono text-[10px] text-zinc-600">T73 · 17 מודולים · מפת-הפער-מול-הענקים · מיזוג-הענק-האח · TTS-חי · ספר-פקודות-חוץ · R360 · R74</span>
         </div>
       </footer>
     </div>

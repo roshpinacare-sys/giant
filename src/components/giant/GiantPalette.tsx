@@ -3,7 +3,7 @@
 /* ═══ פלטת-הפקודה · Ctrl+K (GIANT) ═════════════════════════════════════════
  * מנוע: cmdk דרך רכיבי shadcn CommandDialog (Dialog+cmdk).
  * · קיצור גלובלי אחד: Ctrl/Cmd+K מציג-מסתיר; "/" פותח כשלא-בתוך-שדה-קלט.
- * · (א) מודולים — 16 מזהי-מערכת עם תוויות עבריות+אנגליות (חיפוש-דו-לשוני).
+ * · (א) מודולים — 17 מזהי-מערכת עם תוויות עבריות+אנגליות (חיפוש-דו-לשוני).
  * · (ב) פעולות — מחרוזות-פעולה "action:*" שהמתזמן מפרש.
  * · (ג) זרמי-אמת — הנתיבים הקנוניים האמיתיים; העתקה-ללוח עם טוסט-כנה.
  * אפס-זיופים: הרשימה סטטית-מוצהרת; הנתיבים מהקוד השרת (lib/sovereign/channel.ts). */
@@ -33,6 +33,7 @@ import {
   Network,
   Package,
   Radio,
+  Scale,
   ScrollText,
   ShieldCheck,
   Sparkles,
@@ -62,6 +63,7 @@ const MODULES: ModuleEntry[] = [
   { id: "pulse", he: "הדופק", desc: "שער-האמת · זרמי-הערוץ", en: "pulse truth gate streams", icon: <Activity aria-hidden /> },
   { id: "office", he: "המשרד-החי", desc: "הצוות · הלב · הפעימות", en: "office live crew agents", icon: <Building2 aria-hidden /> },
   { id: "league", he: "ליגת-הענקים", desc: "מול-הענקים: Uniswap · דוקטרינת-כנות", en: "league giants uniswap", icon: <Users aria-hidden /> },
+  { id: "gap", he: "מפת-הפער", desc: "ההשוואה-הכנה מול-מוצרים-אמיתיים · טענות-מול-מדידות · M1..M6", en: "gap map giants comparison roadmap", icon: <Scale aria-hidden /> },
   { id: "machine", he: "מכונת-האמת", desc: "מכונת-האמת · מדידות", en: "machine truth engine", icon: <Gauge aria-hidden /> },
   { id: "estate", he: "האחוזה", desc: "מפקד-האחוזה: הגיט · הזרימה · העבודות", en: "estate git census repos", icon: <Building2 aria-hidden /> },
   { id: "capabilities", he: "מאגר-היכולות", desc: "כל-היכולות · נסרק-ונבדק-חי", en: "capabilities registry probe", icon: <Boxes aria-hidden /> },
