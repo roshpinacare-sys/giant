@@ -899,6 +899,49 @@ function GateSection() {
                         </span>
                       ))}
                     </div>
+                    {/* T67 · הוכחת-זרימה — ריצות-מוצלחות-אחרונות על-המכונה-האמיתית (התאום-הציבורי) */}
+                    {gate.barriers.flow && (
+                      <div className="mt-3 rounded-lg border border-white/[0.06] bg-black/20 p-3">
+                        <p className="text-[10px] font-black text-zinc-300">
+                          הזרימה-עצמה — ריצות-אחרונות על-המכונה ({gate.barriers.flow.repo}):
+                        </p>
+                        <div className="mt-1.5 flex flex-wrap gap-1.5">
+                          {gate.barriers.flow.beats.map((b) => {
+                            const ageMin = b.lastSuccessAt
+                              ? Math.floor((Date.now() - Date.parse(b.lastSuccessAt)) / 60_000)
+                              : null;
+                            const fresh = ageMin !== null && ageMin <= 150;
+                            const age =
+                              ageMin === null
+                                ? "אין-הצלחה-מדודה"
+                                : ageMin < 60
+                                  ? `לפני ${ageMin} דק'`
+                                  : `לפני ${(ageMin / 60).toFixed(1)} ש'`;
+                            return (
+                              <span
+                                key={b.workflow}
+                                className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 font-mono text-[9px] ${
+                                  fresh
+                                    ? "border-emerald-500/30 bg-emerald-500/[0.07] text-emerald-400"
+                                    : "border-amber-500/30 bg-amber-500/[0.07] text-amber-400"
+                                }`}
+                                dir="ltr"
+                                title={`ריצה-אחרונה: ${b.event} · סיום: ${b.conclusion}`}
+                              >
+                                {b.workflow}
+                                <b className="font-black">{b.conclusion}</b>
+                                <span className="text-zinc-400">{age}</span>
+                              </span>
+                            );
+                          })}
+                        </div>
+                        <p className="mt-2 text-[9px] leading-4 text-zinc-500">
+                          המכונה-האמיתית היא התאום-הציבורי (R71 · קדנס-שעתי) — העתק-המקור ב-saos-dex הוא גיבוי-dispatch
+                          בלבד והריצה-שנשלחה-ממתינה-למכסת-ריפו-פרטי (כנה). המצב-על-השרשרת מתקדם: הסנאפשוט
+                          נחתם-על-ידי-הדופק-עצמו.
+                        </p>
+                      </div>
+                    )}
                     <p className="mt-2 text-[9px] leading-4 text-zinc-500">
                       נמדד-חי מה-API בכל-בקשה ({gate.barriers.repo}) · ◆ = מנוע-הזרימה-הכלכלית ·
                       הריצות עצמן נשלטות-על-ידי ה-cron-של-המנוע בקאנון — כאן נמדד רק שהשער-הכלכלי פתוח.

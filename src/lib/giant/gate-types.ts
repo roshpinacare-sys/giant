@@ -90,6 +90,21 @@ export interface GateBarriers {
   total: number;
   economicActive: number;
   economicTotal: number;
+  /** T67 · הוכחת-זרימה-חיה — ריצות-מוצלחות-אחרונות של-המכונה (התאום-הציבורי ב-Domain) */
+  flow: EngineFlow | null;
+}
+
+export interface EngineFlowBeat {
+  workflow: string; // dex-beat.yml
+  event: string; // schedule | workflow_dispatch
+  conclusion: string; // הריצה-האחרונה בפועל
+  lastSuccessAt: string | null; // ISO של-ריצת-ההצלחה-האחרונה
+}
+
+export interface EngineFlow {
+  repo: string; // roshpinacare-sys/Domain
+  measuredAt: string;
+  beats: EngineFlowBeat[];
 }
 
 export interface GatePayload {
