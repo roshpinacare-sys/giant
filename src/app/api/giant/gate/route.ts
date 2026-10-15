@@ -18,7 +18,8 @@ import { execSync } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
-import type { EngineFlow, EngineFlowBeat, FleetBlockedWorkflow, FleetCensus, GateBarriers, GateBarrierWorkflow, GateCheckReceipt, GateDoor, GatePayload } from "@/lib/giant/gate-types";
+import type { FleetBlockedWorkflow, FleetCensus, GateBarriers, GateBarrierWorkflow, GateCheckReceipt, GateDoor, GatePayload } from "@/lib/giant/gate-types";
+import { measureFlow } from "@/lib/giant/flow";
 import { readPat } from "@/lib/office-truth";
 
 export const runtime = "nodejs";
@@ -39,11 +40,10 @@ const ECONOMIC = new Set(["dex-beat.yml", "dex-grid.yml", "grid-trigger.yml", "m
  * T66 · מדידת-החסמים-הכלכליים — מצב-workflows של saos-dex נמדד-חי מה-API.
  * הוראת-הבעלים: "כל החסמים הכלכליים פתח" — המדידה מראה את המצב-בפועל.
  * כישלון = כנה: barriers=null + errors[]. אפס-סודות בתשובה.
+ *
+ * T69 · מדידת-הזרימה נתלשה-מכאן למודול-האמת-היחיד (@/lib/giant/flow) —
+ * DexView · WalletView ו-gate מודדים-עכשיו את-אותו-דופק בדיוק, אפס-שכפול.
  */
-/** T67 · המכונה-האמיתית: התאום-הציבורי ב-Domain (R71) — הקדנס-שם; saos-dex-הוא-גיבוי-dispatch */
-const FLOW_REPO = "roshpinacare-sys/Domain";
-const FLOW_BEATS = ["dex-beat.yml", "dex-grid.yml", "economy-engine.yml"];
-
 /**
  * T68 · מפקד-הצי — מצב-workflows על-כל-המאגרים. cache-נפרד 10 דק' (15+ קריאות-API);
  * הערת-הכרעה-מתועדת (content-campaign) מסומנת — כנות-מלאה, אפס-הסתרה.
@@ -115,52 +115,6 @@ async function measureFleetCensus(errors: string[]): Promise<FleetCensus | null>
     return census;
   } catch (e) {
     errors.push(`מפקד-הצי נכשל: ${String(e).slice(0, 90)}`);
-    return null;
-  }
-}
-
-/**
- * T67 · מדידת-הזרימה — ריצות-אחרונות של-מנועי-הכסף-על-המכונה-האמיתית.
- * נמדד-חי מה-API בכל-בקשה; כישלון = כנה (flow=null + errors[]).
- */
-async function measureFlow(errors: string[]): Promise<EngineFlow | null> {
-  try {
-    const pat = await readPat();
-    if (!pat) return null;
-    const beats = await Promise.all(
-      FLOW_BEATS.map(async (wf): Promise<EngineFlowBeat | null> => {
-        try {
-          const res = await fetch(`https://api.github.com/repos/${FLOW_REPO}/actions/workflows/${wf}/runs?per_page=4`, {
-            headers: { authorization: `Bearer ${pat}`, accept: "application/vnd.github+json" },
-            cache: "no-store",
-            signal: AbortSignal.timeout(10_000),
-          });
-          if (!res.ok) return null;
-          const j = (await res.json()) as {
-            workflow_runs?: { event: string; conclusion: string | null; created_at: string }[];
-          };
-          const runs = Array.isArray(j.workflow_runs) ? j.workflow_runs : [];
-          if (runs.length === 0) return null;
-          const success = runs.find((r) => r.conclusion === "success");
-          return {
-            workflow: wf,
-            event: runs[0].event ?? "",
-            conclusion: runs[0].conclusion ?? "running",
-            lastSuccessAt: success?.created_at ?? null,
-          };
-        } catch {
-          return null;
-        }
-      }),
-    );
-    const valid = beats.filter((b): b is EngineFlowBeat => b !== null);
-    if (valid.length === 0) {
-      errors.push("מדידת-הזרימה: אף-ריצה-לא-נמדדה — כנה");
-      return null;
-    }
-    return { repo: FLOW_REPO, measuredAt: new Date().toISOString(), beats: valid };
-  } catch (e) {
-    errors.push(`מדידת-הזרימה נכשלה: ${String(e).slice(0, 90)}`);
     return null;
   }
 }

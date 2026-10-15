@@ -10,7 +10,13 @@
  *
  * חוק-חשיפה: התשובה מכילה פסקי-דין, שמות-קבצים, שמות-סודות ועובדות-שרשרת
  * פומביות בלבד — אפס ערכי-מפתח, אפס מפתחות-ציבוריים-נגזרים, אפס מבנה-כספת.
+ *
+ * T69 · טיפוסי-הזרימה (EngineFlow · EngineFlowBeat) עברו-למקור-האמת-היחיד
+ * flow-types.ts — DexView · WalletView ו-gate חולקים-את-אותן-אמת, אפס-שכפול.
  */
+import type { EngineFlow } from "@/lib/giant/flow-types";
+
+export type { EngineFlow, EngineFlowBeat } from "@/lib/giant/flow-types";
 
 export interface GateCandidate {
   file: string;
@@ -90,21 +96,8 @@ export interface GateBarriers {
   total: number;
   economicActive: number;
   economicTotal: number;
-  /** T67 · הוכחת-זרימה-חיה — ריצות-מוצלחות-אחרונות של-המכונה (התאום-הציבורי ב-Domain) */
+  /** T67 · הוכחת-זרימה-חיה — ריצות-מוצלחות-אחרונות של-המכונה (התאום-הציבורי ב-Domain); T69: הטיפוס-חי-ב-flow-types */
   flow: EngineFlow | null;
-}
-
-export interface EngineFlowBeat {
-  workflow: string; // dex-beat.yml
-  event: string; // schedule | workflow_dispatch
-  conclusion: string; // הריצה-האחרונה בפועל
-  lastSuccessAt: string | null; // ISO של-ריצת-ההצלחה-האחרונה
-}
-
-export interface EngineFlow {
-  repo: string; // roshpinacare-sys/Domain
-  measuredAt: string;
-  beats: EngineFlowBeat[];
 }
 
 /** T68 · מפקד-הצי — מצב-כל-ה-workflows בכל-המאגרים (חסמים-נותרים בשקיפות-מלאה) */

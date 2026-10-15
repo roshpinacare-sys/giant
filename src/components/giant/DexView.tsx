@@ -3,8 +3,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CandleChart } from "./CandleChart";
+import { FlowHeartbeat } from "./FlowHeartbeat";
 import { Activity, BookOpen, Coins, Flame, Gauge, TrendingUp, Trophy, Layers, Scale, Rocket, CandlestickChart } from "lucide-react";
 import { motion } from "framer-motion";
+import type { FlowPayload } from "@/lib/giant/flow-types";
 
 /* ═══ הדקס — מרכז-הכובד של הריבונות (GIANT · R360 · V3 מיזוג-צי) ══════════
  * מיזוג-הליינים (T55): שטח-המסחר-עם-נרות-אמת (התאומים, api/giant/dex) +
@@ -419,22 +421,26 @@ export function DexView() {
   const [data, setData] = useState<MarketPayload | null>(null);
   const [giants, setGiants] = useState<GiantsPayload | null>(null);
   const [eng, setEng] = useState<DexEnginePayload | null>(null);
+  const [flow, setFlow] = useState<FlowPayload | null>(null);
   const [err, setErr] = useState("");
   const [pair, setPair] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
-      const [m, g, e] = await Promise.all([
+      const [m, g, e, f] = await Promise.all([
         fetch("/api/giant/market", { cache: "no-store" }),
         fetch("/api/giant/giants", { cache: "no-store" }),
         fetch("/api/giant/dex", { cache: "no-store" }),
+        fetch("/api/giant/flow", { cache: "no-store" }), // T69 · דופק-הזרימה-חי — הוכחת-החיים-על-המשטח-עצמו
       ]);
       const d = (await m.json()) as MarketPayload;
       const gl = (await g.json()) as GiantsPayload;
       const en = (await e.json()) as DexEnginePayload;
+      const fl = (await f.json()) as FlowPayload;
       setData(d);
       setGiants(gl);
       setEng(en);
+      setFlow(fl);
       setErr(d.ok || en.ok ? "" : d.note ?? en.note ?? "לא נמדד");
     } catch {
       setErr("השרת לא נגיש כרגע");
@@ -500,6 +506,9 @@ export function DexView() {
             </div>
           </div>
         </div>
+
+        {/* T69 · דופק-הזרימה — הוכחת-החיים-החיה על-משטח-המסחר-עצמו (fail-honest: נכשל = לא מוצג) */}
+        <FlowHeartbeat flow={flow?.flow ?? null} label="דופק-הזרימה — המנוע-חי עכשיו" />
 
         {/* ═══ פס-אמת-ההיצע: התשובה הישירה ל"80 מיליון מול 100K מול 21 מיליון" ═══ */}
         {eng?.supply && (
@@ -675,8 +684,9 @@ export function DexView() {
                 </tr>
               </thead>
               <tbody>
-                {eng.metrics.slice().reverse().map((d) => (
-                  <tr key={d.day} className="border-b border-white/5 last:border-0">
+                {/* T69 · תיקון-דופק-מפתחות: יומני-המנוע מכילים-שורות day:"" באמת (מדוד) — המפתח מורכב-עם-אינדקס, אפס-זיוף */}
+                {eng.metrics.slice().reverse().map((d, i) => (
+                  <tr key={`${d.day}#${i}`} className="border-b border-white/5 last:border-0">
                     <td className="px-2 py-1.5 font-mono text-zinc-300">{d.day}</td>
                     <td className="px-2 py-1.5 font-mono font-bold text-amber-400" title={`${d.vol24QuoteMu} mu`}>${fmtHuman(d.vol24QuoteMu, 0)}</td>
                     <td className="px-2 py-1.5 font-mono text-zinc-300">{fmtInt(d.trades24)}</td>
@@ -888,8 +898,9 @@ export function DexView() {
                 </tr>
               </thead>
               <tbody>
-                {data.assets.map((a) => (
-                  <tr key={a.symbol} className={`border-b border-white/5 last:border-0 ${a.symbol === "SAOS" ? "font-black" : ""}`}>
+                {/* T69 · תיקון-דופק-מפתחות: הספר-האמיתי מכיל-נכסים-ללא-סימול (symbol:null, מדוד) — המפתח מורכב-עם-אינדקס */}
+                {data.assets.map((a, i) => (
+                  <tr key={a.symbol ?? `asset#${i}`} className={`border-b border-white/5 last:border-0 ${a.symbol === "SAOS" ? "font-black" : ""}`}>
                     <td className="py-2.5 pl-4">
                       <span className={a.symbol === "SAOS" ? "font-mono text-sm text-amber-400" : "font-mono text-zinc-300"}>{a.symbol}</span>
                       {a.symbol === "SAOS" && <span className="mr-2 rounded-full bg-amber-500/15 px-2 py-0.5 text-[9px] font-bold text-amber-400">מטבע-הבית</span>}
