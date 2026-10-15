@@ -32,14 +32,14 @@ jobs:
       - name: סריקת-אמון-על-כל-הספרים (עצי-גיט בלבד — אפס-ריצת-קוד)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node app/scripts/trust-heartbeat.mjs
+        run: node scripts/trust-heartbeat.mjs
 
       - name: דחיפת-הקנון-המעודכן
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # app/db/ מנוטרל-ב-gitignore (מטמוני-ריצה-מקומיים) — הקנון-האוטונומי נדחף-בכוח-מוצהר
-          git add -f app/db/trust-cache.json
+          # db/ מנוטרל-ב-gitignore (מטמוני-ריצה-מקומיים) — הקנון-האוטונומי נדחף-בכוח-מוצהר
+          git add -f db/trust-cache.json
           if git diff --cached --quiet; then
             echo "אין-שינויים-מדודים — אין-קומיט"
           else
