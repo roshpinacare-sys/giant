@@ -1,6 +1,10 @@
 // estate-discovery · גילוי-אמת של כל-תיקיות-הגיט בדיסק + מטא-גיט-חי לכל-אחת
 // חוק-אמת: אין-רשימה-מקודדת-של-המאגרים — סריקה-אמיתית-של-השורשים בכל-קריאה.
 // הבעלים (trace 1a13ca3f1160b6d1): "מחברים את הריבונות להפעלה מלאה מכל תיקיות הגיט".
+//
+// גל-18 · חיווט-הטופולוגיה-האמיתית: נמדד-חי-שהגילוי-הציץ-רק-אל-t35/t36-שכבר-אינם
+// על-הדיסק (מחיקת-סנדבוקס-שלהם) — והמכונה-האמיתית חיה-תחת estate/ · lane/ · channels/
+// · autonomy-fix. השורשים-עודכנו-למציאות; הסריקה-עצמה-נשארה-דינמית (לא-רשימת-ריפו).
 
 import { readdir } from "fs/promises";
 import path from "path";
@@ -10,11 +14,22 @@ import { promisify } from "util";
 const execFileAsync = promisify(execFile);
 
 export const ESTATE_ROOT = "/home/z/my-project";
-export const GENERATION_ROOTS = [
+export const ESTATE_HOME = "/home/z";
+
+export const GENERATION_ROOTS: GenerationRoot[] = [
   { root: ESTATE_ROOT, generation: "system" as const, depth: 0 },
-  { root: path.join(ESTATE_ROOT, "t36"), generation: "live" as const, depth: 1 },
-  { root: path.join(ESTATE_ROOT, "t35"), generation: "archive" as const, depth: 1 },
+  { root: "/home/z/estate", generation: "live" as const, depth: 1 },      /* estate/Domain · estate/Pulse */
+  { root: "/home/z/lane", generation: "live" as const, depth: 1 },         /* lane/saos-agents · Defi · Adsmarket · saos-markets */
+  { root: "/home/z/channels", generation: "live" as const, depth: 1 },     /* channels/giant */
+  { root: "/home/z/autonomy-fix", generation: "live" as const, depth: 0 }, /* ספר-החוקים (Autonomy) */
 ];
+
+export interface GenerationRoot {
+  root: string;
+  generation: "system" | "live" | "archive";
+  /** 0 = השורש-עצמו-ריפו; 1 = כל-בן-עם .git; 2 = גם-נכדים */
+  depth: 0 | 1 | 2;
+}
 
 export interface DiscoveredRepo {
   dir: string;
@@ -22,34 +37,55 @@ export interface DiscoveredRepo {
   generation: "system" | "live" | "archive";
 }
 
-/** סריקה-אמיתית: כל-תיקייה-עם .git תחת-השורשים המוכרים */
+async function hasGit(dir: string): Promise<boolean> {
+  try {
+    await readdir(path.join(dir, ".git"));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** סריקה-אמיתית: כל-תיקייה-עם .git תחת-השורשים-המוכרים — בעומק-המוכרז-לכל-שורש */
 export async function discoverGitRepos(): Promise<DiscoveredRepo[]> {
   const found: DiscoveredRepo[] = [];
-  for (const { root, generation } of GENERATION_ROOTS) {
+  for (const { root, generation, depth } of GENERATION_ROOTS) {
     if (generation === "system") {
       // המערכת-עצמה: ריפו-אחד בשורש
-      try {
-        await readdir(path.join(root, ".git"));
-        found.push({ dir: root, relName: ".", generation });
-      } catch {
-        // אין-גיט-בשורש — מדווחים-בכנות-בהמשך
-      }
+      if (await hasGit(root)) found.push({ dir: root, relName: ".", generation });
       continue;
     }
+    if (await hasGit(root)) {
+      // שורש-שהוא-בעצמו-ריפו (depth 0 — למשל autonomy-fix)
+      found.push({ dir: root, relName: path.relative(ESTATE_HOME, root) || path.basename(root), generation });
+      continue;
+    }
+    if (depth < 1) continue;
     let entries;
     try {
       entries = await readdir(root, { withFileTypes: true });
     } catch {
-      continue; // הדור-לא-קיים-בדיסק — כנות
+      continue; // השורש-לא-קיים-בדיסק — כנות
     }
     for (const e of entries) {
       if (!e.isDirectory()) continue;
       const dir = path.join(root, e.name);
-      try {
-        await readdir(path.join(dir, ".git"));
-        found.push({ dir, relName: e.name, generation });
-      } catch {
-        // לא-ריפו
+      if (await hasGit(dir)) {
+        found.push({ dir, relName: path.relative(ESTATE_HOME, dir), generation });
+        continue;
+      }
+      if (depth >= 2) {
+        let sub;
+        try {
+          sub = await readdir(dir, { withFileTypes: true });
+        } catch {
+          continue;
+        }
+        for (const s of sub) {
+          if (!s.isDirectory()) continue;
+          const sdir = path.join(dir, s.name);
+          if (await hasGit(sdir)) found.push({ dir: sdir, relName: path.relative(ESTATE_HOME, sdir), generation });
+        }
       }
     }
   }

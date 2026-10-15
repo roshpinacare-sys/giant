@@ -99,46 +99,82 @@ export interface EstateRepo {
 
 export const dynamic = "force-dynamic";
 
-// מגדירים-סמנטיים-קנוניים לדור-החי (t36) + המערכת — השאר מתגלה-דינמית
+// מגדירים-סמנטיים-קנוניים לטופולוגיה-החיה (גל-18) — השאר מתגלה-דינמית
 const SEMANTIC: Record<string, { role: string; status: EstateRepo["status"]; what: string }> = {
   ".": {
     role: "הממשק-המאוחד",
     status: "system",
     what: "ערוץ-הריבון + בורסת-אמת + מסך-המיזוג + שער-headcorner — נמדד-כאן-חי (src+prisma+db)",
   },
-  Console: {
+  "estate/Domain": {
+    role: "עוגן-האמת-הפומבי (estate-sync)",
+    status: "mirror",
+    what: "dex/market/giants/pulse + מנוע-העולם — נשמר-בענן-ונמשך-לדיסק-כל-10 דק",
+  },
+  "estate/Pulse": {
+    role: "עורק-הפעימות-הקנוני",
+    status: "infra",
+    what: "פעימות-הדופק-וערוץ-הריבונות — עוגן-שמרפא-את-עצמו-מהקנון",
+  },
+  "autonomy-fix": {
+    role: "ספר-החוקים (Autonomy)",
+    status: "charter",
+    what: "חוקי-הריבונות-והגבולות — refs/סריקות/קבלות; נמשך-מהקנון-ללא-כתיבה",
+  },
+  "lane/saos-agents": {
+    role: "ספר-הצי",
+    status: "source",
+    what: "CLAIMS.json — ספר-התביעות-והקואורדינציה-של-הצי",
+  },
+  "lane/Defi": {
+    role: "ספר-הצייד",
+    status: "source",
+    what: "fleet/KPI.json — מדידות-הצי-בשווקים",
+  },
+  "lane/Adsmarket": {
+    role: "ערכת-השיווק",
+    status: "source",
+    what: "קמפיינים-וגישות-שוק-של-הענקים",
+  },
+  "lane/saos-markets": {
+    role: "ספר-השווקים-המוקפא",
+    status: "archive",
+    what: "מצביע-אל-saos-dex/markets (חוק-אחד-נשאר) — אין-פיתוח-כאן",
+  },
+  "channels/giant": {
+    role: "ערוץ-המפעיל",
+    status: "infra",
+    what: "ערוץ-ההפעלה-והקואורדינציה-של-הצי — נמשך-מהקנון",
+  },
+  /* מורשת-t36 — הקנון-ההיסטורי-שחזר-לדיסק-דרך-עוגני-estate-sync (גל-18) */
+  "estate/Sandbox": {
+    role: "ספר-הלדג'ר-והאמנות",
+    status: "charter",
+    what: "ops/AGENT-LEDGER.md + הסכמי-המיזוג + מדיניות-הפרסום — זיכרון-המשמעת",
+  },
+  "estate/FleetHQ": {
+    role: "מטה-הצי",
+    status: "infra",
+    what: "CI-ומנועי-החלטה — תשתית-ההפעלה-של-הצי",
+  },
+  "estate/Console": {
     role: "הקונסולה-הציבורית של SAOS",
     status: "source",
     what: "מקור-האמת-של-המטבע: שרשרת-האימות-והאספקה-המקורית",
   },
-  Domain: {
-    role: "מראת-Console",
-    status: "mirror",
-    what: "שיקוף-בלבד — לא-נבנה-שם-דבר-חדש",
-  },
-  FleetHQ: {
-    role: "מטה-הצי",
-    status: "infra",
-    what: "CI-ומנועי-החלטה — תשתית-פנימית",
-  },
-  Sandbox: {
-    role: "האמנות-והתיעוד",
-    status: "charter",
-    what: "הסכם-המיזוג, אמנת-giant, פרוטוקול-הצי, מקורות-העיצוב, תוכניות-האם",
-  },
-  "saos-dex": {
+  "estate/saos-dex": {
     role: "ארכיון-הדקס-ההיסטורי",
     status: "archive",
-    what: "הנפחים-שם-היו-מבוימים — הוחלף-במנוע-האמת",
+    what: "הנפחים-שם-היו-מבוימים — הוחלף-במנוע-האמת; קיים-כעדות",
   },
-  roshpina: {
+  "estate/roshpina": {
     role: "מאגר-ידע SAOS",
     status: "archive",
-    what: "תיעוד-בלבד",
+    what: "תיעוד-בלבד — ספריית-הידע-של-המיזם",
   },
 };
 
-// מטמון-זיכרון-קל (45ש) — מדידת-גיט-על-13-ריפו-ים יקרה; רענון-מדוד-בכל-ביקור-מחדש
+// מטמון-זיכרון-קל (45ש) — מדידת-גיט-על-14-הריפו-ים-יקרה; רענון-מדוד-בכל-ביקור-מחדש
 let estateCache: { at: number; data: unknown } | null = null;
 const ESTATE_TTL = 45_000;
 
