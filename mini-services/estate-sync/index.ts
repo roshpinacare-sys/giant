@@ -131,11 +131,30 @@ async function headAge(dir: string): Promise<number | null> {
   return Math.max(0, Math.round((Date.now() - t) / 60_000));
 }
 
-/* ריפוי-עצמי: הסגר-של-ספרייה-פגומה ואז-שיבוט-טרי */
+/* ריפוי-עצמי (גל-84 · תוקן-מקצה-לקצה): ההשמדה-הקודמת-הייתה-קטלנית —
+ * ff-pull-שנכשל (אפילו-סטייה-גרידא-מהקומיטים-של-סבבי-האטימה!) → הסגר → fallback-rm → שיבוט-שנכשל
+ * = עץ-חי-נמחק (נמדד: FleetHQ-רוקן-ב-14:4x). מעכשיו: divergence → rebase-ours (החי-מנצח-דוקטרינה),
+ * והסגר-רק-על-ריפו-שבור-אמיתית (git fsck נכשל) — לעולם-לא-על-סטייה-תקינה. */
+function repoIsCorrupt(dir: string): boolean {
+  const r = runGitSync(["fsck", "--no-progress"], dir, 30_000);
+  return r.code !== 0;
+}
+function runGitSync(args: string[], cwd: string, timeoutMs: number): { code: number; out: string } {
+  try {
+    const { execFileSync } = require("node:child_process") as typeof import("node:child_process");
+    const out = execFileSync("git", args, { cwd, timeout: timeoutMs, encoding: "utf8" });
+    return { code: 0, out };
+  } catch (e: any) {
+    return { code: e?.status ?? 1, out: String(e?.stdout ?? "") + String(e?.stderr ?? "") };
+  }
+}
+
+/* הסגר — רק-לריפו-שבור-אמיתית: שינוי-שם-בלבד; ה-fallback-ל-rm-נשלל-לגמרי (גל-84:
+ * נמדד-שהוא-מחק-עץ-חי). אם-ה-rename-נכשל — מוותרים-בכנות, הסבב-הבא-ינסה. */
 function quarantine(dir: string): string {
   const qu = `${dir}.stale-${Date.now()}`;
   try { renameSync(dir, qu); log("quarantined:", dir, "→", qu); return qu; }
-  catch { try { rmSync(dir, { recursive: true, force: true }); } catch { /* כבר-אין */ } return ""; }
+  catch { log("quarantine-rename-failed (no-destroy):", dir); return ""; }
 }
 
 async function syncAnchor(a: Anchor, st: AnchorState, pat: string | null): Promise<void> {
@@ -150,17 +169,34 @@ async function syncAnchor(a: Anchor, st: AnchorState, pat: string | null): Promi
   }
   const url = `https://github.com/${ORG}/${a.repo}.git`;
 
-  /* קיים-כריפו? → ff-pull */
+  /* קיים-כריפו? → rebase-ours (המצב-החי-מנצח — דוקטרינת-השרשרת-החיה) */
   if (existsSync(path.join(a.dir, ".git"))) {
-    const r = await runGit(["pull", "--ff-only", "--quiet"], { cwd: a.dir, token, timeoutMs: 90_000 });
+    let r = await runGit(["pull", "--rebase", "-X", "ours", "--quiet"], { cwd: a.dir, token, timeoutMs: 90_000 });
+    if (r.code !== 0) {
+      // איפוס-נקי-וניסיון-שני: מיזוג-רגיל; גם-הוא-נכשל → מוותרים-בכנות. אפס-השמדה.
+      await runGit(["rebase", "--abort"], { cwd: a.dir, token, timeoutMs: 15_000 });
+      await runGit(["merge", "--abort"], { cwd: a.dir, token, timeoutMs: 15_000 });
+      r = await runGit(["pull", "--no-rebase", "--quiet"], { cwd: a.dir, token, timeoutMs: 90_000 });
+      if (r.code !== 0) {
+        await runGit(["merge", "--abort"], { cwd: a.dir, token, timeoutMs: 15_000 });
+        await runGit(["checkout", "--ours", "."], { cwd: a.dir, token, timeoutMs: 15_000 });
+      }
+    }
     if (r.code === 0) {
       st.ok = true; st.state = st.state === "healed" ? "healed" : "fresh";
       st.headAgeMin = await headAge(a.dir);
-      st.detail = `ff-pull ok${st.headAgeMin !== null ? ` · head ${st.headAgeMin} דק` : ""}`;
+      st.detail = `pull-rebase-ours ok${st.headAgeMin !== null ? ` · head ${st.headAgeMin} דק` : ""}`;
       log("OK", a.name, st.detail);
       return;
     }
-    log("pull-failed → self-heal re-clone:", a.name, r.out.trim().slice(0, 120));
+    // כשל-אמיתי: רק-אם-הריפו-שבור-פיזית → הסגר-ושיבוט. סטייה-תקינה → מוותרים-בכנות (הסבב-הבא).
+    if (!repoIsCorrupt(a.dir)) {
+      st.ok = false; st.state = "diverged"; fails++;
+      st.detail = `pull-failed-but-tree-healthy (אין-השמדה): ${r.out.trim().slice(0, 100)}`;
+      log("SKIP-DESTRUCTION", a.name, st.detail);
+      return;
+    }
+    log("repo-corrupt → quarantine+reclone:", a.name);
   }
 
   /* חסר/פגום → הסגר-ושיבוט-טרי */
