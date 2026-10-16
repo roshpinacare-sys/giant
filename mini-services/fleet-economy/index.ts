@@ -575,6 +575,17 @@ async function sealMyProject(): Promise<void> {
 }
 
 async function sealAll(): Promise<void> {
+  // מנעול-אטימה (גל-82 · נמדד-אמת): שני-תהליכי-גיט-במקביל-על-אותו-מאגר החליפו-db-בגרסה-ישנה
+  // (אובדן-הקצאות-גל-82). אם-מנעול-טרי-קיים (עד-5-דק') — מוותרים-בכנות-על-הסבב.
+  const lock = path.join(STATE_DIR, "seal.lock");
+  try {
+    if (fs.existsSync(lock)) {
+      const age = Date.now() - fs.statSync(lock).mtimeMs;
+      if (age < 5 * 60_000) { sealLog({ action: "sweep-skipped-lock-held", ageMs: age }); return; }
+      sealLog({ action: "stale-lock-broken", ageMs: age });
+    }
+    fs.writeFileSync(lock, String(process.pid));
+  } catch { /* כנה — ממשיכים-בלי-מנעול-אם-גם-הוא-נכשל */ }
   try {
     let sealed = 0;
     for (const dir of SEAL_REPOS) { if (await sealRepo(dir)) sealed++; }
@@ -584,6 +595,9 @@ async function sealAll(): Promise<void> {
       ingestEvent({ kind: "infra", from: "FleetHQ", to: "treasury", asset: "USDS", amount: 0.2, refillFloat: true, reason: `סבב-אטימת-כספת הושלם · ${sealed}/${SEAL_REPOS.length}-מאגרים`, ref: `sealsweep-${Date.now()}` });
     } catch { /* כנה */ }
   } catch (e) { sealLog({ action: "sweep-error", error: String(e) }); }
+  finally {
+    try { fs.rmSync(lock, { force: true }); } catch { /* כנה */ }
+  }
 }
 setInterval(sealAll, 10 * 60 * 1000);
 setTimeout(sealAll, 45_000); // אטימה ראשונה דקה-אחרי-עלייה
