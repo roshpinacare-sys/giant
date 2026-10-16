@@ -94,6 +94,8 @@ let attemptsTotal = 0;
 let winAttempts = 0, winRejected = 0, lastGovAcc: number | null = null;
 let rejectedAtBoot = 0; // גל-85 · המונה-משוחזר-מהסנאפשוט — המדידה-הכנה-היא-רק-על-העלייה-הנוכחית
 function rej() { rejected++; winRejected++; }
+let skipped = 0; // גל-86b · ניסיונות-שלא-נוסו-כלל (אין-יכולת-תשלום) — לא-דחייה, לא-קבלה
+function noFund(): null { skipped++; return null; }
 let errors = 0;
 let bootedAt = Date.now();
 let lastVerify: { at: number; ok: boolean; checked: number } | null = null;
@@ -253,6 +255,7 @@ function spawnTx(): Tx | null {
     // שכר-ב-SAOS יוצר-את-צד-המכירה-האמיתי-בבריכה: חיילים-מקבלים-SAOS → מוכרים
     // → USDS חוזר-מהבריכה (נמדד: רק-קניות = הבריכה-בלעה-77K-USDS-והכספת-מתה)
     const amt = round6(0.2 + Math.random() * 0.8);
+    if (bal("treasury").saos < amt) return noFund(); // גל-86b: אין-מלאי — לא מנסים-כדי-לא-לייצר-דחייה-מלאכותית
     return apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: soldier, asset: "SAOS", amount: amt, reason: "משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת" });
   }
   if (r < 0.50) { // תשלום-שירות הדדי — עיקר-הזרימה (משתמשי-פנים משלמים זה לזה)
@@ -271,8 +274,13 @@ function spawnTx(): Tx | null {
     for (const sl of SOLDIERS) { const b = bal(sl.id); solW += b.usds + b.saos; }
     const totW = nodeW + solW;
     const nodeShare = totW > 0 ? Math.min(0.8, Math.max(0.5, nodeW / totW)) : 0.6; // גל-86b: הצמתים-משלמים-יותר (צרכני-התשתית)
-    const payer = Math.random() < nodeShare ? pick(FLEET_NODES).id : soldier;
-    const tx = apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: payer, to: receiver, asset: "USDS", amount: round6(svc.price * units), reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
+    // גל-86b · בורר-משלם-אמיתי: מנסים-את-המשלם-המשוקלל; אין-יכולת-תשלום → הצד-השני
+    // (סוכן-אמיתי-מוצא-מי-שיכול-לשלם; שני-הצדדים-ריקים = אין-ניסיון, skip-כנה)
+    const primary = Math.random() < nodeShare ? pick(FLEET_NODES).id : soldier;
+    const fallback = primary === soldier ? pick(FLEET_NODES).id : soldier;
+    const payer = bal(primary).usds >= cost ? primary : bal(fallback).usds >= cost ? fallback : null;
+    if (!payer) return noFund();
+    const tx = apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: payer, to: receiver, asset: "USDS", amount: cost, reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
     // גל-83 · מס-שירותים 2%: עסקה-נפרדת-וחתומה (מימון-אמיתי-לכספת שתוכל-לשלם-שכר)
     if (tx) apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: receiver, to: "treasury", asset: "USDS", amount: round6(tx.amount * (TAX_BPS / 10_000)), reason: `מס-שירותים ${TAX_BPS / 100}% → כספת` });
     return tx;
@@ -284,7 +292,7 @@ function spawnTx(): Tx | null {
     const b0 = bal(soldier);
     const want = buySaos ? 5 + Math.random() * 40 : 5 + Math.random() * 35;
     const amt = round6(Math.min(want, Math.max(1, (buySaos ? b0.usds : b0.saos) * 0.35)));
-    if (amt < 1) { rej(); return null; }
+    if (amt < 1) return noFund(); // גל-86b: אין-מה-לסחור — skip-כנה
     return ammSwap(soldier, buySaos ? "USDS" : "SAOS", amt, buySaos ? "רכישת SAOS לתשלומי-סטייק" : "מימוש SAOS ל-USDS תפעולי");
   }
   if (r < 0.84) { // סטייק/ביטול-סטייק
@@ -292,24 +300,30 @@ function spawnTx(): Tx | null {
     const stake = Math.random() < 0.6;
     if (stake) {
       const amt = round6(Math.min(b.saos, 0.5 + Math.random() * 6));
-      if (amt <= 0) { rej(); return null; }
+      if (amt <= 0) return noFund(); // גל-86b
       return apply({ seq: seq + 1, ts: Date.now(), kind: "stake", from: soldier, to: soldier, asset: "SAOS", amount: amt, reason: "סטייק-SAOS לאבטחת-הרשת הפנימית" });
     }
     const amt = round6(Math.min(b.saosStaked, 0.3 + Math.random() * 4));
-    if (amt <= 0) { rej(); return null; }
+    if (amt <= 0) return noFund(); // גל-86b
     return apply({ seq: seq + 1, ts: Date.now(), kind: "unstake", from: soldier, to: soldier, asset: "SAOS", amount: amt, reason: "ביטול-סטייק לצורך-תפעול" });
   }
   if (r < 0.94) { // תשלום-תשתית: חיילים-וצמתים-כאחד משלמים-לצמתי-הצי
     // גל-85 · צמתים-צורכים-תשתית-זה-מזה (נמדד: חייל-משלם-תמיד = ניקוז-חד-כיווני)
     const node = pick(FLEET_NODES).id;
     const svc = pick(SERVICES);
-    const infraPayer = Math.random() < 0.5 ? soldier : pick(FLEET_NODES).id;
-    return apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: infraPayer, to: node, asset: "USDS", amount: round6(svc.price * (1 + Math.floor(Math.random() * 5))), reason: `תשתית: ${svc.name}` });
+    const cost = round6(svc.price * (1 + Math.floor(Math.random() * 5)));
+    // גל-86b · בורר-משלם-אמיתי-לתשתית (כמו-בשירותים)
+    const p1 = Math.random() < 0.5 ? soldier : pick(FLEET_NODES).id;
+    const p2 = p1 === soldier ? pick(FLEET_NODES).id : soldier;
+    const infraPayer = bal(p1).usds >= cost ? p1 : bal(p2).usds >= cost ? p2 : null;
+    if (!infraPayer) return noFund();
+    return apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: infraPayer, to: node, asset: "USDS", amount: cost, reason: `תשתית: ${svc.name}` });
   }
   { // טיפ-SAOS על עבודה-טובה (תרבות-שימוש פנימית)
     const others = SOLDIERS.map((s) => s.id).filter((s) => s !== soldier);
     const to = pick(others);
     const amt = round6(0.05 + Math.random() * 0.4);
+    if (bal(soldier).saos < amt) return noFund(); // גל-86b
     return apply({ seq: seq + 1, ts: Date.now(), kind: "tip", from: soldier, to, asset: "SAOS", amount: amt, reason: "טיפ על עבודה-טובה בזרימה" });
   }
 }
@@ -402,7 +416,7 @@ function tick() {
     if (tickNo % 50 === 0) {
       for (const nd of FLEET_NODES) {
         const b = bal(nd.id);
-        if (b.usds > 500) {
+        if (b.usds > 2_000) { // גל-86b: הסף-הורם — הון-עבודה-מוגן, רק-עודף-נמסה
           const levy = round6(Math.min(b.usds - 500, b.usds * 0.02)); // גל-86b: 1%→2% — הצמתים-העשירים-מממנים-מהר-יותר
           if (levy >= 0.5) {
             apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: nd.id, to: "treasury", asset: "USDS", amount: levy, reason: "דיבידנד-תשתית 2% → כספת (מעגל-החזר גל-86b)" });
@@ -648,7 +662,7 @@ const server = Bun.serve({
           runRatePerHour, runProjectedPerDay: runRatePerHour !== null ? +(runRatePerHour * 24).toFixed(0) : null,
           realEvents: { ingestOk, ingestDedup, ingestFailed, ingestBadPayload: ingestBad, droppedTx: ingestFailed },
           byKind, rejected, errors, seq, lastH,
-          throughput: { attempts: attemptsTotal, rejectedCount: rejected - rejectedAtBoot, acceptancePct: attemptsTotal > 0 ? +(((attemptsTotal - (rejected - rejectedAtBoot)) / attemptsTotal) * 100).toFixed(1) : null, governor: { nBase, cap: N_CAP, min: N_MIN, windowAcceptance: lastGovAcc } },
+          throughput: { attempts: attemptsTotal, rejectedCount: rejected - rejectedAtBoot, acceptancePct: attemptsTotal > 0 ? +(((attemptsTotal - (rejected - rejectedAtBoot)) / attemptsTotal) * 100).toFixed(1) : null, skippedNoFunds: skipped, governor: { nBase, cap: N_CAP, min: N_MIN, windowAcceptance: lastGovAcc } },
           supply: { saosTotal: SAOS_SUPPLY, saosStaked: [...balances.values()].reduce((a, b) => a + b.saosStaked, 0), usdsInPool: pool.usds, saosInPool: pool.saos },
           pool: { priceUsdsPerSaos: +priceUsdsPerSaos().toFixed(6), feesUsds: +pool.feesUsds.toFixed(4), feesSaos: +pool.feesSaos.toFixed(4), k: +(pool.saos * pool.usds).toFixed(2) },
           topAccounts: top, lastVerify, lastSeal,
