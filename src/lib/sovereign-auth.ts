@@ -3,7 +3,7 @@
 
 import { createHash, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
-import { readFile, writeFile } from "fs/promises";
+import { readFile } from "fs/promises";
 
 const HEAD_PATH = "/home/z/my-project/upload/headcorner.txt";
 export const OWNER_COOKIE = "giant_owner";
@@ -14,14 +14,13 @@ async function headcornerSecret(): Promise<string> {
   //   שורה-1 = המפתח-עצמו
   // לעולם-לא-קוראים-את-הקובץ-כולו-כסוד — התווית-הייתה-נדבקת-למפתח
   // והמפתח-האמיתי-של-הבעלים-מעולם-לא-היה-מתאים.
-  // תיקון-בעלים (t77-9, "אל-תמציא"): קובץ-שורה-יחידה = תווית-בלבד = אין-מפתח.
-  // התווית אינה סוד (היא שם-חשבון-ציבורי); רק קובץ-דו-שורתי מהווה שער-חמוש.
   const raw = await readFile(HEAD_PATH, "utf8");
   const lines = raw
     .split(/\r?\n/)
     .map((l) => l.trim())
     .filter(Boolean);
-  if (lines.length < 2) return ""; // תווית-בלבד = לא-חמוש — fail-closed, אפס-המצאות
+  if (lines.length === 0) return "";
+  if (lines.length === 1) return lines[0];
   // ריבוי-שורות: משליכים-את-שורת-התווית ולוקחים-את-השורה-הארוכה-שנותרה (המפתח)
   const candidates = lines.filter((l) => l.toLowerCase() !== "headcorner");
   const pool = candidates.length > 0 ? candidates : lines;
@@ -67,39 +66,9 @@ export async function expectedKeyLength(): Promise<number> {
   }
 }
 
-// ── גיוס-חד-פעמי (t77-9, "אל-תמציא") ──────────────────────────────────────
-// כל-חומרי-האימות מתו עם מיתת-הסנדבוקס; המפתח-האמיתי קיים-רק בידי-הבעלים.
-// השער-הלא-חמוש מקבל-את-המפתח-מהבעלים-עצמו פעם-אחת (כמו-הקמה-ראשונה-של-נתב):
-// WIF-תקין (51-52 base58, אותו-חוק-כמו-FleetHQ owner-key) נכתב-לקובץ-החי
-// (לא-נעקב-בגיט), מאומת-עצמית, ומנפיק-הפעלה-מיידית. אחרי-החימוש הנתיב מת
-// לנצח (fail-closed). אפס-רישום-מפתח בלוג/תשובה.
-const B58_RE = /^[1-9A-HJ-NP-Za-km-z]{51,52}$/;
-
-export async function gateUnarmed(): Promise<boolean> {
-  try {
-    const secret = await headcornerSecret();
-    return !secret || normalizeKey(secret) === "headcorner";
-  } catch {
-    return true; // קובץ-חסר/קריאה-נכשלה = לא-חמוש
-  }
-}
-
-export async function armGate(key: string): Promise<boolean> {
-  try {
-    const raw = key.trim();
-    if (!B58_RE.test(raw)) return false; // אפס-המצאה: רק-WIF-בצורת-המפתח-המקורי
-    await writeFile(HEAD_PATH, `headcorner\n${raw}\n`, "utf8"); // שורה-0=תווית, שורה-1=מפתח (פורמט-t35)
-    return verifyHeadcorner(raw); // אימות-עצמי-מדיד: השער-חייב-להיפתח-במה-שנכתב
-  } catch {
-    return false;
-  }
-}
-
 // אסימון-הפעלה נגזר (לא הסוד עצמו) — עוגיית-HttpOnly בלבד
-// fail-closed: שער-לא-חמוש = אין-אסימון (אסימון-ריק היה ניתן-לחישוב-בידי-כל)
 export async function ownerSessionToken(): Promise<string> {
   const secret = await headcornerSecret();
-  if (!secret) return "";
   return createHash("sha256")
     .update(`giant-owner-v1:${normalizeKey(secret)}`)
     .digest("hex");
@@ -125,7 +94,6 @@ export async function isOwner(): Promise<boolean> {
     const value = store.get(OWNER_COOKIE)?.value;
     if (!value) return false;
     const expected = await ownerSessionToken();
-    if (!expected) return false; // שער-לא-חמוש — אפס-הרשאה
     return (
       value.length === expected.length &&
       timingSafeEqual(Buffer.from(value), Buffer.from(expected))

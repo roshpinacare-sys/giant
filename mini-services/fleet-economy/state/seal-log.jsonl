@@ -360,308 +360,6 @@
 {"ts":"2026-10-16T14:28:00.120Z","action":"sweep-done"}
 {"ts":"2026-10-16T14:36:24.703Z","repo":"my-project","action":"commit-fail","out":"modified:   mini-services/fleet-economy/state/snapshot.json\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tmini-services/fleet-economy/state/seal.lock\n\tmini-services/fleet-economy/state/tmp-prepull-ledger-1792161383575.jsonl\n\tmini-services/fleet-economy/state/tmp-prepull-snap-1792161383575.json\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
 {"ts":"2026-10-16T14:36:30.694Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for f367b797ad94369a71e444789402890ca7f1c52b\nCannot save the current worktree state\nfatal: stash failed"}
-<<<<<<< HEAD
-{"ts":"2026-10-16T14:36:48.163Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   aaa9c4e..ffc07b3  HEAD -> main"}
-{"ts":"2026-10-16T14:36:50.768Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:36:53.362Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:36:55.397Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:36:57.491Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:37:00.276Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:37:02.797Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:37:05.518Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:37:07.911Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:37:07.911Z","action":"sweep-done"}
-{"ts":"2026-10-16T14:46:24.731Z","repo":"my-project","action":"commit-fail","out":"-services/fleet-economy/state/tmp-prepull-snap-1792161383575.json\n\tmodified:   receipts/boot-verify.json\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tmini-services/fleet-economy/state/tmp-prepull-ledger-1792161983575.jsonl\n\tmini-services/fleet-economy/state/tmp-prepull-snap-1792161983575.json\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T14:46:29.824Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for dde43a570def49ba7e70a5cd20246c24d7a78ea5\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T14:46:35.310Z","repo":"my-project","action":"commit-fail","out":"-services/fleet-economy/state/tmp-prepull-snap-1792161383575.json\n\tmodified:   receipts/boot-verify.json\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tmini-services/fleet-economy/state/tmp-prepull-ledger-1792161983575.jsonl\n\tmini-services/fleet-economy/state/tmp-prepull-snap-1792161983575.json\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T14:46:36.915Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for f01f3ceba70a89f3c230f24a8b604fa001394b2c\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T14:46:38.538Z","repo":"my-project","action":"push-fail","out":"jected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T14:48:08.688Z","repo":"FleetHQ","action":"commit-fail","out":"On branch main\nYour branch is up to date with 'origin/main'.\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tdist-office3d/\n\tnode_modules/\n\nnothing added to commit but untracked files present (use \"git add\" to track)"}
-{"ts":"2026-10-16T14:48:10.913Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:48:14.234Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:48:17.096Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:48:19.326Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:48:22.168Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:48:24.722Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:48:27.283Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:48:29.583Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T14:48:29.583Z","action":"sweep-done"}
-{"ts":"2026-10-16T14:56:24.978Z","repo":"my-project","action":"commit-fail","out":"-services/fleet-economy/state/tmp-prepull-snap-1792161383575.json\n\tmodified:   receipts/boot-verify.json\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tmini-services/fleet-economy/state/tmp-prepull-ledger-1792162583576.jsonl\n\tmini-services/fleet-economy/state/tmp-prepull-snap-1792162583576.json\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T14:56:30.390Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 9c2b704e51dec459ee0df279a7bfa1beacbcc0d6\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T14:56:35.917Z","repo":"my-project","action":"commit-fail","out":"-services/fleet-economy/state/tmp-prepull-snap-1792161383575.json\n\tmodified:   receipts/boot-verify.json\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tmini-services/fleet-economy/state/tmp-prepull-ledger-1792162583576.jsonl\n\tmini-services/fleet-economy/state/tmp-prepull-snap-1792162583576.json\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T14:56:40.789Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   8fecdd0..3be7f92  HEAD -> main"}
-{"ts":"2026-10-16T15:00:46.674Z","repo":"FleetHQ","action":"pull-fail","out":"From https://github.com/roshpinacare-sys/FleetHQ\n * branch              main       -> FETCH_HEAD\n   3dbe869f..1ca35a20  main       -> origin/main\nRebasing (1/1)"}
-{"ts":"2026-10-16T15:00:47.969Z","repo":"FleetHQ","action":"push-fail","out":"some refs to 'https://github.com/roshpinacare-sys/FleetHQ.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T15:00:50.374Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:00:51.994Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:00:53.999Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:00:55.988Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:00:58.232Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:01:00.275Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:01:02.183Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:01:02.183Z","action":"sweep-done"}
-{"ts":"2026-10-16T15:06:26.694Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 8383abc32482d3edc6c83a9d0deccda1bbe73b6e\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T15:06:38.432Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   0ac90d0..22bb35c  HEAD -> main"}
-{"ts":"2026-10-16T15:06:40.524Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:06:42.337Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:06:43.905Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:06:45.433Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:06:47.911Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:06:49.694Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:06:51.498Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:06:52.934Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:06:52.934Z","action":"sweep-done"}
-{"ts":"2026-10-16T15:16:33.968Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   89f43c8..f08e04c  HEAD -> main"}
-{"ts":"2026-10-16T15:16:37.406Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   70083e5f..1d1089a9  HEAD -> main"}
-{"ts":"2026-10-16T15:16:41.859Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   b8d0f7d0..e5dd30c6  HEAD -> main"}
-{"ts":"2026-10-16T15:16:43.323Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:16:44.816Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:16:46.635Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:16:48.567Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:16:50.363Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:16:51.861Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:16:51.861Z","action":"sweep-done"}
-{"ts":"2026-10-16T15:20:02.554Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   ba8d48d..9111c28  HEAD -> main"}
-{"ts":"2026-10-16T15:20:05.800Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   667a9b93..250b3537  HEAD -> main"}
-{"ts":"2026-10-16T15:20:08.626Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   980136c3..8155be77  HEAD -> main"}
-{"ts":"2026-10-16T15:20:10.230Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:20:11.755Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:20:13.669Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:20:15.654Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:20:17.431Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:20:18.902Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:20:18.902Z","action":"sweep-done"}
-{"ts":"2026-10-16T15:29:10.697Z","repo":"my-project","action":"commit-fail","out":"src/components/giant/FleetView.tsx\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tmini-services/fleet-economy/state/tmp-prepull-ledger-1792164549328.jsonl\n\tmini-services/fleet-economy/state/tmp-prepull-snap-1792164549328.json\n\treceipts/fleet/\n\tsrc/app/api/giant/capabilities/\n\ttools/receipts/\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T15:29:17.513Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for ef386e1c7bf1b15da82a0f27badcbe44dea4f232\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T15:29:23.723Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 7e524c37bf3038a17bd5e7055da25967218ddf60\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T15:29:25.006Z","repo":"my-project","action":"push-fail","out":"jected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T15:29:28.095Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   b17a6e9a..dc6d5d9f  HEAD -> main"}
-{"ts":"2026-10-16T15:29:29.674Z","repo":"Domain","action":"pull-fail","out":"hint: \"git add/rm <conflicted_files>\", then run \"git rebase --continue\".\nhint: You can instead skip this commit: run \"git rebase --skip\".\nhint: To abort and get back to the state before \"git rebase\", run \"git rebase --ab"}
-{"ts":"2026-10-16T15:29:34.863Z","repo":"Domain","action":"pull-fail","out":"hint: \"git add/rm <conflicted_files>\", then run \"git rebase --continue\".\nhint: You can instead skip this commit: run \"git rebase --skip\".\nhint: To abort and get back to the state before \"git rebase\", run \"git rebase --ab"}
-{"ts":"2026-10-16T15:29:35.724Z","repo":"Domain","action":"push-fail","out":"s a ref in \"refs/{heads,tags}/\". If so we add a corresponding\n  refs/{heads,tags}/ prefix on the remote side.\n\nNeither worked, so we gave up. You must fully qualify the ref.\nhint: The <src> part of the refspec is a commit object.\nhint: Did you mean to create a new branch by pushing to\nhint: 'HEAD:refs/heads/HEAD'?\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/Domain.git'"}
-{"ts":"2026-10-16T15:29:37.222Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:29:38.919Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:29:40.806Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:29:42.788Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:29:44.690Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:29:46.483Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:29:46.483Z","action":"sweep-done"}
-{"ts":"2026-10-16T15:39:10.096Z","repo":"my-project","action":"commit-fail","out":"leet/verdict.json\n\tmodified:   tools/receipts/cockpit-candidates.json\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tmini-services/fleet-economy/state/tmp-prepull-ledger-1792165149327.jsonl\n\tmini-services/fleet-economy/state/tmp-prepull-snap-1792165149327.json\n\treports/86-fleet-capabilities.png\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T15:39:16.770Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 4e56a1cd00ab7dbe7720752792ee9a3c4f702401\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T15:39:23.383Z","repo":"my-project","action":"commit-fail","out":"leet/verdict.json\n\tmodified:   tools/receipts/cockpit-candidates.json\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tmini-services/fleet-economy/state/tmp-prepull-ledger-1792165149327.jsonl\n\tmini-services/fleet-economy/state/tmp-prepull-snap-1792165149327.json\n\treports/86-fleet-capabilities.png\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T15:39:25.734Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 268c95942595f1af9b09369047d0bb025ee9959e\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T15:39:28.530Z","repo":"my-project","action":"push-fail","out":"jected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T15:39:33.871Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   a3a00fc7..e5d1220d  HEAD -> main"}
-{"ts":"2026-10-16T15:39:37.725Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   23f0f7b8..5546357e  HEAD -> main"}
-{"ts":"2026-10-16T15:39:40.110Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:39:42.709Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:39:45.493Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:39:48.027Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:39:50.897Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:39:54.094Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:39:54.094Z","action":"sweep-done"}
-{"ts":"2026-10-16T15:49:10.009Z","repo":"my-project","action":"commit-fail","out":"leet/verdict.json\n\tmodified:   tools/receipts/cockpit-candidates.json\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tmini-services/fleet-economy/state/tmp-prepull-ledger-1792165749329.jsonl\n\tmini-services/fleet-economy/state/tmp-prepull-snap-1792165749329.json\n\treports/86-fleet-capabilities.png\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T15:49:13.071Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 8112c47c058adcb7537d6170f80dd4137a4bb119\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T15:49:29.390Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   2e19926..7ebfc05  HEAD -> main"}
-{"ts":"2026-10-16T15:49:32.541Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   e9cebabf..b7f3c0b8  HEAD -> main"}
-{"ts":"2026-10-16T15:49:39.777Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   35126521..da703d06  HEAD -> main"}
-{"ts":"2026-10-16T15:49:41.487Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:49:43.129Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:49:45.178Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:49:47.236Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:49:49.468Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:49:51.732Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:49:51.732Z","action":"sweep-done"}
-{"ts":"2026-10-16T15:51:10.138Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   7ebfc05..7d3fa89  HEAD -> main"}
-{"ts":"2026-10-16T15:51:14.181Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   38c6a5b6..60e7d25b  HEAD -> main"}
-{"ts":"2026-10-16T15:51:17.285Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   de5e1c2e..33ae5399  HEAD -> main"}
-{"ts":"2026-10-16T15:51:19.284Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:51:20.931Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:51:23.043Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:51:24.975Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:51:27.363Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:51:29.152Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T15:51:29.152Z","action":"sweep-done"}
-{"ts":"2026-10-16T16:00:29.821Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   fefae6f..2938078  HEAD -> main"}
-{"ts":"2026-10-16T16:00:32.188Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:00:35.179Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   198a5237..68689411  HEAD -> main"}
-{"ts":"2026-10-16T16:00:41.720Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:00:43.842Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:00:45.776Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:00:47.805Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:00:49.889Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:00:51.661Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:00:51.661Z","action":"sweep-done"}
-{"ts":"2026-10-16T16:03:55.827Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   682cd18..64741bd  HEAD -> main"}
-{"ts":"2026-10-16T16:04:10.550Z","repo":"FleetHQ","action":"sealed","ahead":"1","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   2d5428b2..2d799a43  HEAD -> main"}
-{"ts":"2026-10-16T16:04:13.648Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   037e36d4..3e84572c  HEAD -> main"}
-{"ts":"2026-10-16T16:04:15.418Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:04:17.319Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:04:19.368Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:04:21.533Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:04:23.533Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:04:25.456Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:04:25.457Z","action":"sweep-done"}
-{"ts":"2026-10-16T16:21:57.133Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   e4669f4..e9f0e0f  HEAD -> main"}
-{"ts":"2026-10-16T16:22:00.121Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   42d4b6fd..4bacfe09  HEAD -> main"}
-{"ts":"2026-10-16T16:22:03.504Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   1a8da2b7..67b7dfad  HEAD -> main"}
-{"ts":"2026-10-16T16:22:05.078Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:22:06.616Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:22:08.393Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:22:10.165Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:22:12.031Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:22:14.454Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:22:14.454Z","action":"sweep-done"}
-{"ts":"2026-10-16T16:31:01.784Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 2281c1a303551a969691e7f523f50f3f6b1fb746\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T16:31:15.851Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   667c723..8591e2c  HEAD -> main"}
-{"ts":"2026-10-16T16:31:15.856Z","repo":"FleetHQ","action":"status-fail","out":"fatal: not a git repository (or any of the parent directories): .git"}
-{"ts":"2026-10-16T16:31:18.444Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   f50c8be9..3765ce8f  HEAD -> main"}
-{"ts":"2026-10-16T16:31:19.901Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:31:21.632Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:31:23.860Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:31:25.626Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:31:27.662Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:31:30.268Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:31:30.269Z","action":"sweep-done"}
-{"ts":"2026-10-16T16:41:02.708Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 8d5918821aa3a299ccaeeacf4c87c76f3ef8c481\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T16:41:17.569Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   c82e0f5..4f9b475  HEAD -> main"}
-{"ts":"2026-10-16T16:41:17.573Z","repo":"FleetHQ","action":"status-fail","out":""}
-{"ts":"2026-10-16T16:41:17.617Z","repo":"Domain","action":"commit-fail","out":"On branch main\nYour branch is up to date with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   agents/office-events.jsonl\n\tmodified:   agents/office-lock.json\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T16:41:18.570Z","repo":"Domain","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T16:41:22.393Z","repo":"Domain","action":"commit-fail","out":"On branch main\nYour branch is up to date with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   agents/office-events.jsonl\n\tmodified:   agents/office-lock.json\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T16:41:23.349Z","repo":"Domain","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T16:41:24.088Z","repo":"Domain","action":"push-fail","out":"h some refs to 'https://github.com/roshpinacare-sys/Domain.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T16:41:25.530Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:41:27.024Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:41:27.038Z","repo":"Sandbox","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
-{"ts":"2026-10-16T16:41:28.707Z","repo":"Sandbox","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T16:41:32.583Z","repo":"Sandbox","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
-{"ts":"2026-10-16T16:41:34.362Z","repo":"Sandbox","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T16:41:35.228Z","repo":"Sandbox","action":"push-fail","out":"error: Could not read fe6bea66d9510377bd30f2c6eafbbb3340fa0e71\nerror: could not parse commit fe6bea66d9510377bd30f2c6eafbbb3340fa0e71"}
-{"ts":"2026-10-16T16:41:36.894Z","repo":"roshpina","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T16:41:41.966Z","repo":"roshpina","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T16:41:42.759Z","repo":"roshpina","action":"push-fail","out":"some refs to 'https://github.com/roshpinacare-sys/roshpina.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T16:41:44.723Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:41:45.672Z","repo":"autonomy-fix","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T16:41:50.435Z","repo":"autonomy-fix","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T16:41:51.226Z","repo":"autonomy-fix","action":"push-fail","out":"some refs to 'https://github.com/roshpinacare-sys/Autonomy.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T16:41:51.226Z","action":"sweep-done"}
-{"ts":"2026-10-16T16:51:03.677Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 3c8b0a28b2afe2404df7de0b5f635974d206ab80\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T16:51:18.166Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   9b28183..b92dc68  HEAD -> main"}
-{"ts":"2026-10-16T16:51:18.170Z","repo":"FleetHQ","action":"status-fail","out":""}
-{"ts":"2026-10-16T16:51:18.171Z","repo":"Domain","action":"status-fail","out":""}
-{"ts":"2026-10-16T16:51:19.984Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:51:21.451Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T16:51:21.452Z","repo":"Sandbox","action":"status-fail","out":""}
-{"ts":"2026-10-16T16:51:21.453Z","repo":"roshpina","action":"status-fail","out":""}
-{"ts":"2026-10-16T16:51:22.955Z","repo":"saos-dex","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T16:51:28.032Z","repo":"saos-dex","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T16:51:28.760Z","repo":"saos-dex","action":"push-fail","out":"some refs to 'https://github.com/roshpinacare-sys/saos-dex.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T16:51:28.761Z","repo":"autonomy-fix","action":"status-fail","out":""}
-{"ts":"2026-10-16T16:51:28.761Z","action":"sweep-done"}
-{"ts":"2026-10-16T17:01:03.617Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 49f71c1996d5ca0ae760e171cffa54a91c997ebd\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T17:01:19.542Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   fa440bf..ed1ef03  HEAD -> main"}
-{"ts":"2026-10-16T17:01:19.546Z","repo":"FleetHQ","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:01:19.546Z","repo":"Domain","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:01:20.504Z","repo":"Console","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T17:01:25.199Z","repo":"Console","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T17:01:25.942Z","repo":"Console","action":"push-fail","out":"some refs to 'https://github.com/roshpinacare-sys/Console.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T17:01:26.859Z","repo":"Pulse","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T17:01:31.645Z","repo":"Pulse","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
-{"ts":"2026-10-16T17:01:32.447Z","repo":"Pulse","action":"push-fail","out":"sh some refs to 'https://github.com/roshpinacare-sys/Pulse.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T17:01:32.448Z","repo":"Sandbox","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:01:32.449Z","repo":"roshpina","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:01:32.449Z","repo":"saos-dex","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:01:32.449Z","repo":"autonomy-fix","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:01:32.449Z","action":"sweep-done"}
-{"ts":"2026-10-16T17:11:02.780Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 3cc579200edbcef710020a5cf3dce4f32e3d13b1\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T17:11:19.587Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   6d6393f..b0edb59  HEAD -> main"}
-{"ts":"2026-10-16T17:11:19.591Z","repo":"FleetHQ","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:11:19.591Z","repo":"Domain","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:11:19.592Z","repo":"Console","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:11:19.592Z","repo":"Pulse","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:11:19.592Z","repo":"Sandbox","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:11:19.593Z","repo":"roshpina","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:11:19.593Z","repo":"saos-dex","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:11:19.593Z","repo":"autonomy-fix","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:11:19.593Z","action":"sweep-done"}
-{"ts":"2026-10-16T17:21:02.979Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 7b57edc25c501d561ccb783c96783c0a1ef27fd4\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T17:21:07.428Z","repo":"my-project","action":"commit-fail","out":"On branch main\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   db/custom.db\n\tmodified:   mini-services/fleet-economy/state/seal-log.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T17:21:16.121Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   28245d6..de738e9  HEAD -> main"}
-{"ts":"2026-10-16T17:21:16.125Z","repo":"FleetHQ","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:21:16.125Z","repo":"Domain","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:21:16.125Z","repo":"Console","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:21:16.125Z","repo":"Pulse","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:21:16.126Z","repo":"Sandbox","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:21:16.126Z","repo":"roshpina","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:21:16.126Z","repo":"saos-dex","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:21:16.126Z","repo":"autonomy-fix","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:21:16.126Z","action":"sweep-done"}
-{"ts":"2026-10-16T17:31:04.485Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for e1eb2caab0d6c3e6ed4f378d7620632d21c02857\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T17:31:10.732Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 2a064bf3e67242cfb37ef06f3e2d64e38d366b5e\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T17:31:12.010Z","repo":"my-project","action":"push-fail","out":"jected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T17:31:12.091Z","repo":"FleetHQ","action":"commit-fail","out":"erdicts.json\nU\tsovereign/stack/runtime/RUNSCORES.md\nU\tsovereign/stack/runtime/scores.json\nU\tsovereign/stack/runtime/skills.json\nU\tt19b/Domain\nU\tworklog.md\nerror: Committing is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict."}
-{"ts":"2026-10-16T17:31:12.928Z","repo":"FleetHQ","action":"pull-fail","out":"-history.jsonl\n\treceipts/books-lineage.json\n\treceipts/gateway-telemetry-latest.json\n\treceipts/host-mem.jsonl\n\treceipts/lineage-guard.json\n\treceipts/lineage-guard.jsonl\n\treceipts/recruitment/live.json\n\treceipts/shift-hist"}
-{"ts":"2026-10-16T17:31:19.564Z","repo":"FleetHQ","action":"pull-fail","out":"as resolved with\nhint: \"git add/rm <conflicted_files>\", then run \"git rebase --continue\".\nhint: You can instead skip this commit: run \"git rebase --skip\".\nhint: To abort and get back to the state before \"git rebase\", run"}
-{"ts":"2026-10-16T17:31:20.538Z","repo":"FleetHQ","action":"push-fail","out":"a ref in \"refs/{heads,tags}/\". If so we add a corresponding\n  refs/{heads,tags}/ prefix on the remote side.\n\nNeither worked, so we gave up. You must fully qualify the ref.\nhint: The <src> part of the refspec is a commit object.\nhint: Did you mean to create a new branch by pushing to\nhint: 'HEAD:refs/heads/HEAD'?\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/FleetHQ.git'"}
-{"ts":"2026-10-16T17:31:22.629Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:31:24.784Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:31:26.696Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:31:26.697Z","repo":"Sandbox","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:31:26.698Z","repo":"roshpina","action":"status-fail","out":""}
-{"ts":"2026-10-16T17:31:28.777Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:31:30.989Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:31:30.989Z","action":"sweep-done"}
-{"ts":"2026-10-16T17:41:16.726Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 5ebf8969db73017a4b8ea13e7fda006ba342a737\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T17:41:18.008Z","repo":"my-project","action":"push-fail","out":"jected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T17:41:18.012Z","repo":"FleetHQ","action":"status-fail","out":"fatal: not a git repository (or any of the parent directories): .git"}
-{"ts":"2026-10-16T17:41:19.481Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:41:21.083Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:41:22.831Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:41:25.398Z","repo":"Sandbox","action":"sealed","ahead":"1","detail":"To https://github.com/roshpinacare-sys/Sandbox.git\n   35d2cce2..c4f027be  HEAD -> main"}
-{"ts":"2026-10-16T17:41:27.229Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:41:28.627Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:41:30.629Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:41:30.633Z","action":"sweep-done"}
-{"ts":"2026-10-16T17:51:07.823Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for af9ff5130dd934177c57dd41fa288dfd744afdef\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T17:51:15.113Z","repo":"my-project","action":"commit-fail","out":"On branch main\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   db/custom.db\n\tmodified:   mini-services/fleet-economy/state/seal-log.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T17:51:17.502Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 311b1d155e6eb017b82811c86811f7a65701f908\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T17:51:20.119Z","repo":"my-project","action":"push-fail","out":"jected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T17:51:23.586Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   f080c9f6..bc2eb87e  HEAD -> main"}
-{"ts":"2026-10-16T17:51:25.883Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:51:28.469Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:51:30.889Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:51:33.431Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:51:36.520Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:51:38.722Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:51:41.199Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:51:41.199Z","action":"sweep-done"}
-{"ts":"2026-10-16T18:01:15.828Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   2cf35ca..3705c6d  HEAD -> main"}
-{"ts":"2026-10-16T18:01:18.295Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   cd59147c..1b277297  HEAD -> main"}
-{"ts":"2026-10-16T18:01:19.783Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:01:21.498Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:01:23.252Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:01:25.064Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:01:26.970Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:01:29.025Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:01:30.807Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:01:30.808Z","action":"sweep-done"}
-{"ts":"2026-10-16T18:11:02.101Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for dd58057909ad89ffddbccf822754671f96736f02\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T18:11:07.314Z","repo":"my-project","action":"commit-fail","out":"On branch main\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   db/custom.db\n\tmodified:   mini-services/fleet-economy/state/seal-log.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T18:11:08.866Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for e3eb822605fbdf58d3a722b55c46f3629824a88e\nCannot save the current worktree state\nfatal: stash failed"}
-{"ts":"2026-10-16T18:11:10.311Z","repo":"my-project","action":"push-fail","out":"jected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T18:11:12.211Z","repo":"FleetHQ","action":"pull-fail","out":"tash them before you merge.\nAborting\nhint: Could not execute the todo command\nhint:\nhint:     pick b3fe1f3a07e040d6384c8ddcb675551069179c6c vault-seal [auto-economy]: 18 files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס\nhint:\n"}
-{"ts":"2026-10-16T18:11:20.316Z","repo":"FleetHQ","action":"pull-fail","out":"tash them before you merge.\nAborting\nhint: Could not execute the todo command\nhint:\nhint:     pick b3fe1f3a07e040d6384c8ddcb675551069179c6c vault-seal [auto-economy]: 18 files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס\nhint:\n"}
-{"ts":"2026-10-16T18:11:21.229Z","repo":"FleetHQ","action":"push-fail","out":"a ref in \"refs/{heads,tags}/\". If so we add a corresponding\n  refs/{heads,tags}/ prefix on the remote side.\n\nNeither worked, so we gave up. You must fully qualify the ref.\nhint: The <src> part of the refspec is a commit object.\nhint: Did you mean to create a new branch by pushing to\nhint: 'HEAD:refs/heads/HEAD'?\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/FleetHQ.git'"}
-{"ts":"2026-10-16T18:11:23.160Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:11:24.768Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:11:26.502Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:11:28.771Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:11:31.017Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:11:32.692Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:11:34.505Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T18:11:34.506Z","action":"sweep-done"}
-=======
 {"ts":"2026-10-16T14:41:12.159Z","action":"sweep-skipped-lock-held","ageMs":29238.4716796875}
 {"ts":"2026-10-16T14:50:27.159Z","action":"stale-lock-broken","ageMs":584238.4716796875}
 {"ts":"2026-10-16T14:50:27.527Z","repo":"my-project","action":"commit-fail","out":"odified:   mini-services/fleet-economy/state/spawn-receipts.jsonl\n\tmodified:   receipts/boot-verify.json\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tmini-services/fleet-economy/state/tmp-prepull-ledger-1792162227160.jsonl\n\tmini-services/fleet-economy/state/tmp-prepull-snap-1792162227160.json\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
@@ -846,20 +544,114 @@
 {"ts":"2026-10-16T17:28:36.976Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T17:28:38.542Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T17:28:38.542Z","action":"sweep-done"}
-{"ts":"2026-10-16T17:52:11.569Z","action":"stale-lock-broken","ageMs":874101.8530273438}
-{"ts":"2026-10-16T17:52:15.871Z","repo":"my-project","action":"state-custody-restore","brokenAt":17296,"restored":true}
-{"ts":"2026-10-16T17:52:21.069Z","repo":"my-project","action":"state-custody-restore","brokenAt":17296,"restored":true}
-{"ts":"2026-10-16T17:52:21.985Z","repo":"my-project","action":"push-fail","out":"is a ref in \"refs/{heads,tags}/\". If so we add a corresponding\n  refs/{heads,tags}/ prefix on the remote side.\n\nNeither worked, so we gave up. You must fully qualify the ref.\nhint: The <src> part of the refspec is a commit object.\nhint: Did you mean to create a new branch by pushing to\nhint: 'HEAD:refs/heads/HEAD'?\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant.git'"}
-{"ts":"2026-10-16T17:52:23.201Z","repo":"FleetHQ","action":"pull-fail","out":"Created autostash: 972e5faee\nFrom https://github.com/roshpinacare-sys/FleetHQ\n * branch                main       -> FETCH_HEAD\nerror: cannot rebase: You have unstaged changes.\nerror: Please commit or stash them.\nApplyin"}
-{"ts":"2026-10-16T17:52:24.956Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   9e00f307f..8c11f7147  HEAD -> main"}
-{"ts":"2026-10-16T17:52:27.345Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:52:29.198Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:52:30.656Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:52:32.736Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:52:34.623Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:52:36.109Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:52:38.002Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T17:52:38.003Z","action":"sweep-done"}
-{"ts":"2026-10-16T18:02:18.864Z","repo":"my-project","action":"state-custody-restore","brokenAt":17296,"restored":true}
->>>>>>> cloud/main
-{"ts":"2026-10-16T18:20:58.373Z","action":"stale-lock-broken","ageMs":364355.10986328125}
+{"ts":"2026-10-16T17:39:15.303Z","action":"sweep-skipped-lock-held","ageMs":180007.31762695312}
+{"ts":"2026-10-16T17:51:50.318Z","action":"stale-lock-broken","ageMs":935022.3176269531}
+{"ts":"2026-10-16T17:51:50.408Z","repo":"my-project","action":"commit-fail","out":"fatal: Unable to create '/home/z/my-project/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue."}
+{"ts":"2026-10-16T17:52:04.450Z","repo":"my-project","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:52:07.912Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   bc2eb87e..9e00f307  HEAD -> main"}
+{"ts":"2026-10-16T17:52:09.912Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:52:11.543Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:52:13.260Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:52:15.692Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:52:17.895Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:52:20.067Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:52:21.971Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:52:21.972Z","action":"sweep-done"}
+{"ts":"2026-10-16T18:02:05.528Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant\n   3705c6d..75c68d7  HEAD -> main"}
+{"ts":"2026-10-16T18:02:09.085Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   1b277297d..301ca7b6e  HEAD -> main"}
+{"ts":"2026-10-16T18:02:16.102Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:02:18.110Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:02:19.921Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:02:21.799Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:02:23.840Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:02:25.902Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:02:27.743Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:02:27.744Z","action":"sweep-done"}
+{"ts":"2026-10-16T18:12:05.441Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant\n   25d02ef..6a20a62  HEAD -> main"}
+{"ts":"2026-10-16T18:12:08.075Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:12:10.726Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:12:12.651Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:12:14.427Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:12:16.665Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:12:18.957Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:12:21.329Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:12:23.831Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:12:23.832Z","action":"sweep-done"}
+{"ts":"2026-10-16T18:22:06.520Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant\n   e939060..41c9299  HEAD -> main"}
+{"ts":"2026-10-16T18:22:06.645Z","repo":"FleetHQ","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
+{"ts":"2026-10-16T18:22:07.676Z","repo":"FleetHQ","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:22:11.596Z","repo":"FleetHQ","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
+{"ts":"2026-10-16T18:22:12.585Z","repo":"FleetHQ","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:22:13.394Z","repo":"FleetHQ","action":"push-fail","out":"some refs to 'https://github.com/roshpinacare-sys/FleetHQ.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:22:14.337Z","repo":"Domain","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:22:19.194Z","repo":"Domain","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:22:19.935Z","repo":"Domain","action":"push-fail","out":"ted]          HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/Domain.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:22:20.833Z","repo":"Console","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:22:26.020Z","repo":"Console","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:22:26.817Z","repo":"Console","action":"push-fail","out":"ed]          HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/Console.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:22:28.331Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:22:28.345Z","repo":"Sandbox","action":"commit-fail","out":"On branch main\nYour branch is up to date with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   receipts/latest.json\n\tmodified:   receipts/ticks.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
+{"ts":"2026-10-16T18:22:29.579Z","repo":"Sandbox","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:22:33.447Z","repo":"Sandbox","action":"commit-fail","out":"On branch main\nYour branch is up to date with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   receipts/latest.json\n\tmodified:   receipts/ticks.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
+{"ts":"2026-10-16T18:22:34.725Z","repo":"Sandbox","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:22:35.644Z","repo":"Sandbox","action":"push-fail","out":"ed]          HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/Sandbox.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:22:37.697Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:22:39.627Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:22:41.683Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:22:41.684Z","action":"sweep-done"}
+{"ts":"2026-10-16T18:31:58.412Z","repo":"my-project","action":"push-fail","out":"o push some refs to 'https://github.com/roshpinacare-sys/giant'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:31:58.596Z","repo":"FleetHQ","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
+{"ts":"2026-10-16T18:31:59.747Z","repo":"FleetHQ","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:32:03.667Z","repo":"FleetHQ","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
+{"ts":"2026-10-16T18:32:04.803Z","repo":"FleetHQ","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:32:05.565Z","repo":"FleetHQ","action":"push-fail","out":"]            HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/FleetHQ.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:32:06.770Z","repo":"Domain","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:32:11.643Z","repo":"Domain","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:32:12.375Z","repo":"Domain","action":"push-fail","out":"h some refs to 'https://github.com/roshpinacare-sys/Domain.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:32:12.383Z","repo":"Console","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
+{"ts":"2026-10-16T18:32:13.334Z","repo":"Console","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:32:17.164Z","repo":"Console","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
+{"ts":"2026-10-16T18:32:18.029Z","repo":"Console","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:32:18.788Z","repo":"Console","action":"push-fail","out":"some refs to 'https://github.com/roshpinacare-sys/Console.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:32:19.747Z","repo":"Pulse","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:32:24.541Z","repo":"Pulse","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:32:25.332Z","repo":"Pulse","action":"push-fail","out":"sh some refs to 'https://github.com/roshpinacare-sys/Pulse.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:32:25.342Z","repo":"Sandbox","action":"commit-fail","out":"On branch main\nYour branch is up to date with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   receipts/latest.json\n\tmodified:   receipts/ticks.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
+{"ts":"2026-10-16T18:32:26.546Z","repo":"Sandbox","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:32:30.644Z","repo":"Sandbox","action":"commit-fail","out":"On branch main\nYour branch is up to date with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   receipts/latest.json\n\tmodified:   receipts/ticks.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
+{"ts":"2026-10-16T18:32:32.114Z","repo":"Sandbox","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:32:33.008Z","repo":"Sandbox","action":"push-fail","out":"ed]          HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/Sandbox.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:32:34.910Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:32:36.718Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:32:37.667Z","repo":"autonomy-fix","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:32:42.972Z","repo":"autonomy-fix","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:32:43.746Z","repo":"autonomy-fix","action":"push-fail","out":"ted]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/Autonomy.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:32:43.746Z","action":"sweep-done"}
+{"ts":"2026-10-16T18:42:09.762Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant\n   6d7e576..d45e310  HEAD -> main"}
+{"ts":"2026-10-16T18:42:09.870Z","repo":"FleetHQ","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
+{"ts":"2026-10-16T18:42:11.044Z","repo":"FleetHQ","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:42:14.978Z","repo":"FleetHQ","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
+{"ts":"2026-10-16T18:42:16.005Z","repo":"FleetHQ","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:42:16.810Z","repo":"FleetHQ","action":"push-fail","out":"]            HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/FleetHQ.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:42:17.778Z","repo":"Domain","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:42:22.578Z","repo":"Domain","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:42:23.310Z","repo":"Domain","action":"push-fail","out":"h some refs to 'https://github.com/roshpinacare-sys/Domain.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:42:23.323Z","repo":"Console","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
+{"ts":"2026-10-16T18:42:24.237Z","repo":"Console","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:42:28.121Z","repo":"Console","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
+{"ts":"2026-10-16T18:42:29.106Z","repo":"Console","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:42:29.842Z","repo":"Console","action":"push-fail","out":"some refs to 'https://github.com/roshpinacare-sys/Console.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:42:30.932Z","repo":"Pulse","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:42:35.636Z","repo":"Pulse","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:42:36.408Z","repo":"Pulse","action":"push-fail","out":"sh some refs to 'https://github.com/roshpinacare-sys/Pulse.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:42:36.422Z","repo":"Sandbox","action":"commit-fail","out":"te with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   receipts/grid/log.jsonl\n\tmodified:   receipts/grid/verdict.json\n\tmodified:   receipts/latest.json\n\tmodified:   receipts/ticks.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
+{"ts":"2026-10-16T18:42:37.734Z","repo":"Sandbox","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:42:41.632Z","repo":"Sandbox","action":"commit-fail","out":"te with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   receipts/grid/log.jsonl\n\tmodified:   receipts/grid/verdict.json\n\tmodified:   receipts/latest.json\n\tmodified:   receipts/ticks.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
+{"ts":"2026-10-16T18:42:42.936Z","repo":"Sandbox","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:42:43.730Z","repo":"Sandbox","action":"push-fail","out":"error: Could not read f84780cb68464076e2ba0e35510f2e37566d1ff5\nerror: could not parse commit f84780cb68464076e2ba0e35510f2e37566d1ff5"}
+{"ts":"2026-10-16T18:42:47.015Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:42:49.147Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:42:50.130Z","repo":"autonomy-fix","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:42:55.100Z","repo":"autonomy-fix","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
+{"ts":"2026-10-16T18:42:55.938Z","repo":"autonomy-fix","action":"push-fail","out":"ted]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/Autonomy.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:42:55.939Z","action":"sweep-done"}

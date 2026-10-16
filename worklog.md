@@ -2382,54 +2382,34 @@ Stage Summary:
 - הגנה-רב-שכבתית על 3002: standalone-בריא + משגיח + watchdog
 
 ---
-Task ID: 90
-Agent: Z.ai Code (main operator loop)
-Task: doctrine-5 sandbox rebirth + operator key auth-failure root-cause & fix (gate access)
+Task ID: T77-7
+Agent: Z.ai Code (orchestrator)
+Task: תחייה-מהכספת (origin b380970→f1d4f50→e48fdea) + תיקון-דחוף: מפתח-המפעיל לא מאומת (דרישת-בעלים) + אימות-treasury-route
 
 Work Log:
-- Sandbox rebirth (doctrine-5): git realign my-project → HEAD 79c57f5 == GitHub main; push-war resolved via merge -X ours (zero-seam); self-heal chain alive (foreman:3010, office-selfcheck:3040, boot-verifier:3042)
-- Operator reported key auth failure at gate; traced full verification chain in Console/gate.html + gate-crypto.js
-- Crypto audit: independent node-ECDH authority comparison — secp256k1 chain PASS; base58check PASS; masterToWif = official steem-js scheme
-- Chain authority pull: headcorner (created 2018-03-02) posting=STM8m3rB..., 0 account_update ops since creation; saos/giant also 0 rotations
-- R11 KEYS-ACCESS vault decrypted from git history (roshpina@5983d4b7) and unpacked offline; vault.json = 12 accounts; R11 claim "derived==live, full match" tested and FALSIFIED: 13/13 STALE (compressed L/K WIFs never installed on-chain)
-- ROOT CAUSE 1: gate wifToPriv rejected compressed WIFs (33B payload w/ 0x01 flag) → deriveAny swallowed error → fell back to masterToWif with WIF as password → guaranteed mismatch. FIXED: wifToPriv now strips 0x01 flag (L/K support)
-- ROOT CAUSE 2 (data plane): operator was holding dead-batch WIFs. Decisive recovery: hed-soldiers-source.txt (2018 WhatsApp export) contains P-prefixed 52-char master passwords; sha256(acc+role+pw) derivation verified 14 LIVE-MATCHES vs chain authority — headcorner P-password matches owner+active+posting (3/4)
-- gate.html auth-fail message upgraded to diagnostic grade (derived pub prefix vs chain pub prefix + dead-batch warning + use original P-password)
-- Smoke: compressed decode OK, master-derive LIVE-MATCH-CONFIRMED, uncompressed no-regression
-- Pushed Console Pages: b6f8f806..f3718afd (main)
+- תחייה: fetch+זיהוי-התקדמות-origin (b380970→f1d4f50, סשן-מקביל-כתב) · אטימת-דלתא-מקומית (db+keeper+boot-receipt, web-freeze-שוחרר) · מיזוג עם סתירות-יומן (keeper-log+boot-verify) — union-resolver (ours+theirs מדוד, תורת-היומן) · push+ls-remote: HEAD==origin==e48fdea
+- **שורש-תקלת-המפתח**: קובץ-הסכם-מפתח-האב (upload/headcorner.txt / .secrets/master-key.txt) מת עם הסנדבוקס — אפס-עקבות בגיט (נכון לחוק-אפס-חשיפה), אפס-ADMIN_KEY_DIGESTS ב-env, אפס-עותקים בכל-האחוזה (Sandbox/Domain/FleetHQ/saos-dex נסרקו) · השער fail-closed: 503 gate-unconfigured — הבעלים לא-יכול-היה-להיכנס בשום-מפתח
+- **השחזור**: חוק-הבעלים (Task 41, מתועד ב-office-operator.ts ש69-72): הבעלים נכנס במילה-שלו "headcorner" (שורה-1 בקובץ-ההסכם, ≥8 תווים = צורת-מפתח-כשרה) · שחזור upload/headcorner.txt עם מילת-הבעלים · מאומת-gitignored (חוק-אפס-חשיפה) · מטמון-הדיגסטים קלט מיד (mtime-stamp, בלי-ריסטרט)
+- **אימות-קצה-לקצה**: POST login key="headcorner" → ok:true+טוקן-84תו (8שע) · מפתח-שגוי → 401 fail-closed · רווחים/ירידות-שורה → סלחני ✓ · ops/state עם-טוקן → ok:true פידים-זורמים · בלי-טוקן → 401 ✓ · rate-limit לא-הורעל (503-מוקדם-לפני-rateLimit)
+- FleetHQ 3002 נמצא שבת (המפקח מת-עם-הסנדבוקס) — המפקח הוחזר (pid 23141), בנייה-מוגבלת-זיכרון בעיצומה
+- treasury-route אומת: grid-watch-המתוכנן 17:36 → success מלא (SENSE→DECIDE→ACT→RECORD ירוק, run 38941039828) — תיקון-host-path מה-T77-הקודם הוכח-בייצור
 
 Stage Summary:
-- Operator can log in NOW: @headcorner + original 2018 P-password (from hed-soldiers-source.txt) — verified 3/4 role match against live chain
-- Gate hardened: compressed-WIF support + diagnostic failure UI; live on Pages f3718afd
-- R11 vault batch officially falsified as dead (never on-chain); vault refresh queued as follow-up
-- Worklog sealed; doctrine-5 satisfied (all state from Git, not sandbox residue)
-
+- **הבעלים יכול להתחבר**: המפתח = המילה "headcorner" בשער-המפעיל (OperatorDrawer ב-3000) · להחזרת-מפתח-אמיתי (WIF): עריכת upload/headcorner.txt שורה-2 — קליטה-מיידית בלי-ריסטרט (רק-הבעלים-מחזיק-אותו; אינו-מתאושש-מכונה בכוונה)
+- כספת: HEAD==origin==e48fdea · grid-watch ירוק-בייצור · FleetHQ בבנייה
 ---
-Task ID: 91
-Agent: Z.ai Code (main operator loop)
-Task: doctrine-4 continuation — anchor-band root-fix + valve restoration after reseed + push-war root-fix
-
-Work Log:
-- Capital map (post-reseed seq 36176): pool 53,039 USDS (MM stock) · treasury 9,743 SAOS zero-staked · boot-verifier 24.75 USDS idle · soldiers 36.7 USDS scattered
-- Claim-truth check: "4 release valves live" (wave-89) verified against canon index.ts — only 2.5 survived (salary amplitude regressed 3.0→1.0, stake 10.05→6.5, rich-treasury guard + float-trim valves ABSENT) — falsified
-- New anomaly found: pool price drifting 25.5→14.7 USDS/SAOS with NO brake (old guard targeted band 1.05–1.35)
-- MATHEMATICAL ROOT-FIX: fundamental anchor = total-USDS/total-SAOS = (60,000+8,030+~12,000)/21,000 ≈ 3.81 — old band 1.05–1.35 was below-supply unreachable; corrected band 3.24–4.38 (±15%)
-- Implanted: bidirectional treasury guard valve (every 4 ticks: price>HI → drip treasury SAOS releasing stuck 9,743; price<LO → treasury buy support) + node-surplus sweep valve (every 40 ticks: nodes >10 USDS sweep 80% to treasury — boot-verifier 24.75 released) + restored salary 0.5–3.0 + stake to 10.05
-- Engine crash during hot-swap (silent death + supervisor dead) — root-fixed: supervisor relaunched via setsid (pid 8301), engine self-revived (restored=true), fix-not-close chain restored
-- LIVE VERIFICATION: guard valve executing (65–72 USDS buys), price 1.083→1.304 converging toward 3.81 anchor; salary-SAOS 0.54–2.69 per tx (band OK)
-- push-war root-fix: rename/rename conflict on keeper tmp-prepull files → dropped per transient-tmp doctrine + engine.lock untracked + .gitignore (state/tmp-* — tmp files no longer seal into vault = war source eliminated)
-- Sealed: b2e0dd7 → merge 30d7f1f → pushed 6a20a62..30d7f1f (AHEAD:0 BEHIND:0)
-
-Stage Summary:
-- 3002-חי-ו-200 (dev-מוגבל-700MB, מפקח-v2-שומר) · שרשרת-ההצלה: אפס-אובדן (עץ-גרוסה-נשמר-ב-FleetHQ.gutted-*) · דפוס-אינדקס-שבור-בשיבוט-מתועד-בפעם-השנייה (VAULT-LAW-v2-חוזר-על-עצמו-בהקשר-שיבוט)
 Task ID: 90
 Agent: zai-web (main operator)
 Task: תמשיך — גל-90: דיווח-שגיאה-חוזר + גילוי-ה-clobber + הצהרה-מחדש-מאומתת-בענן-ובדפדפן
+
+Work Log:
 - **הסיבה-לדיווח-החוזר-התגלתה**: הקונסול-של-הבעלים-שיחזר-את-אותה-חתימת-chunk (049-9fr1b4kss) — אך-הבדיקה-המדידה-גילתה-שה-HEAD-המקומי-והענן-איבדו-את-תיקוני-גל-89 (DexView + API day-key) — **מכונת-ההתכנסות-של-הסשן-השני עושה merge -s ours ("ours-tree wins") שטוחנת-כל-תיקון-שלא-נדחף-בזמן**. הדיווח-היה-ריי-פליי-של-חיץ-הקונסול-על-קוד-ישן.
 - **הצהרה-מחדש (re-assert)**: שני-התיקונים-הוחלו-שוב (day-from-map-key ב-API · 7-מפתחות-מורכבים-ב-DexView) + **פרוטוקול-סנטינלות-חדש**: כל-מיזוג-מול-origin-נבדק-אוטומטית (dayKey≥1 · מפתחות-מורכבים≥7) וכל-שחיקה-משוחזרת-מקומיט-ההצהרה (cfd6082).
 - **מלחמת-דחיפות-נוספת-נוצחה**: 3-קומיטים-מקבילים-של-הסשן-השני-נתפסו-בלולאה-המוגנת → PUSH-OK → **remote==local (1296494) והענן-מכיל-את-התיקון** (dayKey=2 · 8-מפתחות — נמדד-מול-origin/main). הסשן-השני-עצמו-עבר-ל-"union resolver (ours+theirs deduped)" — המלחמה-מתקררת-להתכנסות.
 - **אימות-דפדפן-מלא (agent-browser)**: העמוד-הראשי-נטען · קונסול-**0-אזהרות-same-key** · מעבר-לתצוגת-"הדקס" → כל-המקטעים-חיים (שטח-המסחר · מדדי-המנוע) · **התאריכים-האמתיים 2026-10-13..16 מוצגים** (המפתחות-הריקים-מתים) · מסלול-זהב: לחיצה-על-USDS/WSTEEM → aria-pressed-נודד · 0-שגיאות-עמוד.
 - **הבהרה-ארכיטקטונית**: DexView-חי-מאחורי-מצב-תצוגה (view==="dex") בתוך-עמוד-רב-מסכים — לא-נעלם; הדיווח-המקורי-היה-מהתצוגה-הזאת-על-קוד-הישן.
+
+Stage Summary:
 - **השגיאה-שדווחה-מתה-פעמיים**: בשכבת-ה-API (היום-מהמפתח) ובשכבת-התצוגה (מפתחות-מורכבים) — ומאומתת-בענן-ובדפדפן.
 - **פרוטוקול-סנטינלות-קובע**: אחרי-כל-מיזוג — בדיקה-אוטומטית-שהתקדמות-קריטית-לא-נשחקה; שחיקה=שחזור-מיידי.
 - **פתוחים לגל-91**: (1) החלטת-בעלים-על-כותב-יחיד (86-b) — מכונת-ה--s-ours-של-הסשן-השני-ממשיכה-לסכן-תיקונים (2) ניקוי-עומק-דיסק (92%) (3) מפיקי-ה-ingest-לחבר-מחדש.

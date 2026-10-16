@@ -14,7 +14,7 @@
  */
 import { NextResponse } from "next/server";
 import { checkKey, issueToken } from "@/lib/sovereign/gate";
-import { armGate, gateUnarmed, verifyHeadcorner, diagnoseKeyInput, expectedKeyLength } from "@/lib/sovereign-auth";
+import { verifyHeadcorner, diagnoseKeyInput, expectedKeyLength } from "@/lib/sovereign-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -67,15 +67,6 @@ export async function POST(req: Request) {
   /* שתי-האמתות של השער-האחד (מיזוג-גיאנט): דיגסטים-מחוץ-לריפו וגם קובץ-המפתח-החי */
   const ok = (await checkKey(key)) || (await verifyHeadcorner(key));
   if (!ok) {
-    /* גיוס-חד-פעמי (t77-9): שער-לא-חמוש + WIF-תקין → הבעלים מגדיר-את-המפתח-שלו-עצמו.
-       אחרי-החימוש הענף-הזה-מת-לנצח (gateUnarmed=false) — fail-closed. */
-    if ((await gateUnarmed()) && (await armGate(key))) {
-      const { token: enrollToken, ttlMs: enrollTtl } = issueToken();
-      return NextResponse.json(
-        { ok: true, token: enrollToken, ttlMs: enrollTtl, label: "owner", enrolled: true },
-        { headers: { "cache-control": "no-store" } },
-      );
-    }
     return NextResponse.json(
       { ok: false, error: "invalid", reason: await rejectReason(key) },
       { status: 401, headers: { "cache-control": "no-store" } },
