@@ -95,6 +95,7 @@ const tailRing: Tx[] = []; // last 500 for /ledger reads
 let ingestOk = 0, ingestDedup = 0, ingestFailed = 0, ingestBad = 0;
 const seenRefs = new Map<string, number>(); // ref → ts (דהיות: פקודות-כפולות של מפיקים לא נספרות פעמיים)
 const SEEN_REFS_CAP = 20_000;
+const SEEN_REFS_SNAP = 5_000; // כמה-refs-שורדים-ב-snapshot (האחרונים-ראשית — Map שומר-סדר-הכנסה)
 const INGEST_KINDS = new Set(["dex-fee", "infra", "service"]);
 const KNOWN_ACCOUNTS = new Set(ACCOUNTS.map((a) => a.id));
 function rememberRef(ref: string) {
@@ -305,6 +306,8 @@ function boot() {
       byKind = s.byKind ?? {}; byAccount = s.byAccount ?? {}; rejected = s.rejected ?? 0; errors = s.errors ?? 0;
       ledgerFileNo = s.ledgerFileNo ?? 0;
       ingestOk = s.ingestOk ?? 0; ingestDedup = s.ingestDedup ?? 0; ingestFailed = s.ingestFailed ?? 0; ingestBad = s.ingestBad ?? 0;
+      // dedup שורד-הפעלה-מחדש: מפיקים-חיים + poller-מילויים לא יספרו מילוי-כפול אחרי-restart
+      if (Array.isArray(s.seenRefs)) for (const [k, v] of s.seenRefs as [string, number][]) seenRefs.set(k, v);
       if (!balances.has("treasury")) throw new Error("snapshot corrupt");
       return { restored: true, seq };
     }
@@ -338,7 +341,7 @@ function countsWindow(ms: number) { const cutoff = Date.now() - ms; let c = 0; f
 
 function snapshotSave() {
   flush();
-  const obj = { v: 3, savedAt: Date.now(), seq, lastH, balances: Object.fromEntries(balances), pool, byKind, byAccount, rejected, errors, ledgerFileNo, ingestOk, ingestDedup, ingestFailed, ingestBad };
+  const obj = { v: 3, savedAt: Date.now(), seq, lastH, balances: Object.fromEntries(balances), pool, byKind, byAccount, rejected, errors, ledgerFileNo, ingestOk, ingestDedup, ingestFailed, ingestBad, seenRefs: Array.from(seenRefs.entries()).slice(-SEEN_REFS_SNAP) };
   const tmp = SNAP + ".tmp";
   fs.writeFileSync(tmp, JSON.stringify(obj));
   fs.renameSync(tmp, SNAP);
