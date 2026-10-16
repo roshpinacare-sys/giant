@@ -420,9 +420,9 @@ export function DexView() {
           <>
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 px-4 py-2.5">
               <div className="flex flex-wrap gap-1.5">
-                {eng.pairs.map((p) => (
+                {eng.pairs.map((p, i) => (
                   <button
-                    key={p.name}
+                    key={`${p.name}-${i}`}
                     onClick={() => setPair(p.name)}
                     aria-pressed={p.name === active?.name}
                     className={`h-9 rounded-lg px-3 font-mono text-xs font-bold transition ${p.name === active?.name ? "bg-amber-600 text-zinc-950" : "border border-white/10 text-zinc-400 hover:text-zinc-200"}`}
@@ -487,8 +487,8 @@ export function DexView() {
                 </tr>
               </thead>
               <tbody>
-                {eng.metrics.slice().reverse().map((d) => (
-                  <tr key={d.day} className="border-b border-white/5 last:border-0">
+                {eng.metrics.slice().reverse().map((d, i) => (
+                  <tr key={`${d.day}-${i}`} className="border-b border-white/5 last:border-0">
                     <td className="px-2 py-1.5 font-mono text-zinc-300">{d.day}</td>
                     <td className="px-2 py-1.5 font-mono font-bold text-amber-400" title={`${d.vol24QuoteMu} mu`}>${fmtHuman(d.vol24QuoteMu, 0)}</td>
                     <td className="px-2 py-1.5 font-mono text-zinc-300">{fmtInt(d.trades24)}</td>
@@ -513,10 +513,10 @@ export function DexView() {
         {err && <p className="mb-2 text-xs font-semibold text-red-400">{err}</p>}
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           {!data && [1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-28 rounded-2xl bg-zinc-900" />)}
-          {(data?.coins ?? []).map((c) => {
+          {(data?.coins ?? []).map((c, i) => {
             const up = (c.change24h ?? 0) >= 0;
             return (
-              <article key={c.id} className="rounded-2xl border border-white/10 bg-zinc-900/60 p-4 transition hover:border-amber-600/30">
+              <article key={`${c.id}-${i}`} className="rounded-2xl border border-white/10 bg-zinc-900/60 p-4 transition hover:border-amber-600/30">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-sm font-black text-zinc-50">{c.symbol}</span>
                   <span className="text-[10px] text-zinc-500">{c.name}</span>
@@ -559,7 +559,7 @@ export function DexView() {
         {league.length > 0 && (
           <div className="space-y-2">
             {league.map((f, i) => (
-              <div key={f.id} className="flex items-center gap-3">
+              <div key={`${f.id}-${i}`} className="flex items-center gap-3">
                 <span className="w-6 shrink-0 text-center font-mono text-xs font-black text-zinc-600">{i + 1}</span>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-baseline justify-between gap-2">
@@ -597,8 +597,8 @@ export function DexView() {
         <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
           <h4 className="mb-3 text-xs font-black uppercase tracking-wider text-zinc-500">נזילות · pools המנוע</h4>
           <div className="grid gap-2 sm:grid-cols-2">
-            {(eng?.poolPairs ?? []).map((p) => (
-              <div key={p.pair} className="rounded-xl border border-white/5 bg-zinc-950 p-3">
+            {(eng?.poolPairs ?? []).map((p, i) => (
+              <div key={`${p.pair}-${i}`} className="rounded-xl border border-white/5 bg-zinc-950 p-3">
                 <p className="font-mono text-xs font-bold text-zinc-200">{p.pair}</p>
                 <div className="mt-1 grid grid-cols-2 gap-1 text-[11px]">
                   <span className="text-zinc-500">{p.reserves.a}: <b className="font-mono text-zinc-300" title={`${p.reserves.ra} mu`}>{fmtHuman(p.reserves.ra, 1)}</b></span>
@@ -697,8 +697,8 @@ export function DexView() {
                 </tr>
               </thead>
               <tbody>
-                {data.assets.map((a) => (
-                  <tr key={a.symbol} className={`border-b border-white/5 last:border-0 ${a.symbol === "SAOS" ? "font-black" : ""}`}>
+                {data.assets.map((a, i) => (
+                  <tr key={`${a.symbol}-${i}`} className={`border-b border-white/5 last:border-0 ${a.symbol === "SAOS" ? "font-black" : ""}`}>
                     <td className="py-2.5 pl-4">
                       <span className={a.symbol === "SAOS" ? "font-mono text-sm text-amber-400" : "font-mono text-zinc-300"}>{a.symbol}</span>
                       {a.symbol === "SAOS" && <span className="mr-2 rounded-full bg-amber-500/15 px-2 py-0.5 text-[9px] font-bold text-amber-400">מטבע-הבית</span>}
@@ -718,8 +718,8 @@ export function DexView() {
         <section className="rounded-xl border border-white/5 bg-zinc-900/40 px-4 py-3">
           <p className="text-[10px] font-black uppercase tracking-wider text-zinc-600">שכבת-עגין (לא-חזית · מושתקת-בכוונה)</p>
           <div className="mt-1.5 flex flex-wrap gap-2">
-            {(data?.anchors ?? []).map((a) => (
-              <span key={a.name} className="rounded-full border border-white/5 bg-zinc-900 px-2.5 py-1 text-[10px] text-zinc-500" title={a.note}>
+            {(data?.anchors ?? []).map((a, i) => (
+              <span key={`${a.name}-${i}`} className="rounded-full border border-white/5 bg-zinc-900 px-2.5 py-1 text-[10px] text-zinc-500" title={a.note}>
                 {a.name}
               </span>
             ))}
