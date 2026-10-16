@@ -408,6 +408,23 @@ const server = Bun.serve({
       }
       if (url.pathname === "/verify") {
         const r = verifyChain();
+        if (!r.ok) {
+          // ריפוי-כנה-בזמן-ריצה (גל-82): ספר-תפור-על-הדיסק (תפר-דורות/מיזוג) —
+          // הסגר-מלא + ספר-חדש-חתום-מהמצב-החי-בזיכרון. אפס-אובדן-יתרות:
+          // המצב-בזיכרון-הוא-האמת-המחושבת; ההיסטוריה-התפורה-נשמרת-בהסגר-לביקורת.
+          try {
+            quarantineState(`runtime-heal-brokenAt-${r.brokenAt}`);
+            seq = 0; lastH = "GENESIS"; ledgerBuf = []; ledgerLines = 0; ledgerFileNo = 0;
+            const rec = apply({
+              seq: 1, ts: Date.now(), kind: "recovery", from: "treasury", to: "treasury",
+              asset: "USDS", amount: 0,
+              reason: `ריפוי-ספר-בזמן-ריצה · הסגר-תפר-brokenAt=${r.brokenAt} · יתרות-החיים-נשמרו`,
+            });
+            flush();
+            snapshotSave();
+            sealLog({ action: "runtime-book-heal", brokenAt: r.brokenAt, recoverySeq: rec?.seq ?? null });
+          } catch { /* כנה — הדיווח-על-השבר-יוצא-בכנות-בכל-מקרה */ }
+        }
         lastVerify = { at: Date.now(), ok: r.ok, checked: r.checked };
         return Response.json(r);
       }
