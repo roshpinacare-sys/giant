@@ -19,11 +19,11 @@ export async function GET() {
       quote: p.quote,
       chain: p.chain,
       price: p.price,
-      change24hPct: p.change24h,
+      change24hPct: p.openPrice24h > 0 ? ((p.price - p.openPrice24h) / p.openPrice24h) * 100 : null,
       high24h: p.high24h,
       low24h: p.low24h,
       vol24h: p.vol24h,
-      liquidity: p.liquidity,
+      liquidity: p.reserveBase + p.reserveQuote, // עומק-הבריכה-האמיתי (AMM x·y=k)
       native: p.isNative,
       tradable: p.isNative, // כנות: מסחר-פתוח רק על הבריכה-האמיתית; העזרים מדדי-Binance
     }));

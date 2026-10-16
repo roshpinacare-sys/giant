@@ -177,7 +177,8 @@ export async function GET() {
     ]);
 
     const fmtB = (b: number | null) => (b === null ? "—" : b >= 1024 ? `${(b / 1024).toFixed(1)}KB` : `${b}B`);
-    const lanes: LaneOut[] = [
+    /* שדה-ה-ok-ברמת-המסלול נגזר-מההוכחות-המדודות — אין-שיקול-דעת ואין-קישוט */
+    const laneDrafts = [
       {
         id: "unified",
         lane: "הממשק-המאוחד",
@@ -250,6 +251,8 @@ export async function GET() {
         ],
       },
     ];
+
+    const lanes: LaneOut[] = laneDrafts.map((l) => ({ ...l, ok: l.proofs.every((p) => p.ok) }));
 
     return NextResponse.json({
       ok: true,

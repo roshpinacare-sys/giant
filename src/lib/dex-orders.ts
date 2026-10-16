@@ -183,7 +183,8 @@ export async function matchOrder(orderId: string): Promise<MatchResult> {
       side,
       amountIn: order.amountIn,
       slippagePct: 0,
-      source: "ORDER",
+      /* שיוך-המקור-האמת: המילוי-יורש-את-שיוך-הפקודה (USER/FLEET/API) — אין-טיפוס-"ORDER" */
+      source: order.source === "FLEET" || order.source === "API" ? order.source : "USER",
       account: ESCROW,
       agentId: order.sourceAgent ?? undefined,
     });
