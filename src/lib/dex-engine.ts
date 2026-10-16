@@ -354,6 +354,16 @@ async function tick(): Promise<void> {
     });
   } catch (err) {
     console.error("[dex-engine] tick failed:", err);
+    /* T75-d · ריפוי-עצמי מהשורש: SQLite "readonly"/"locked" אחרי-מחיקת-סנדבוקס = מאגר-החיבורים
+     * הישן-תקוע (נמדד 2026-10-16: 1396 טיקים-כושלים · חיבור-חדש WRITE_OK). disconnect
+     * כופר-מנוע-חדש — הטיק-הבא (8ש׳) מתחבר-מחדש-ומרפא. לעולם-לא-ירוק-מזויף: הכישלון-נרשם. */
+    const msg = err instanceof Error ? `${err.message} ${String((err as { code?: string }).code ?? "")}` : String(err);
+    if (/readonly|read-only|locked|SQLITE_BUSY|SQLITE_READONLY/i.test(msg)) {
+      try {
+        await db.$disconnect();
+        console.error("[dex-engine] self-heal: stale pool dropped — next tick reconnects");
+      } catch { /* כנה — ננסה-שוב-בטיק-הבא */ }
+    }
   } finally {
     st.busy = false;
   }

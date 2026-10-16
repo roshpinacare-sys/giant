@@ -8,7 +8,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  ChevronDown, Crosshair, Gavel, Map, Scale, Smartphone,
+  ChevronDown, Crosshair, Gavel, Map, Scale, ShieldAlert, Smartphone,
   Target, TrendingUp, Users, Wifi,
 } from "lucide-react";
 import type { GapLevel } from "@/lib/giant/gap-data";
@@ -106,6 +106,45 @@ export function GapView() {
           <LiveCard icon={Users} label="משתמשי-חוץ" value="0" sub="אין-אימות-מחובר (נמדד-מהקוד)" />
           <LiveCard icon={Smartphone} label="מודולי-UI" value={num(data.live.code?.uiModules)} sub={`${num(data.live.code?.giantRoutes)} נתיבי-API ענק`} />
           <LiveCard icon={Crosshair} label="ידיים-חוץ" value={data.live.externalBidExists === false ? "0" : data.live.externalBidExists === true ? "נמדד" : "לא-נמדד"} sub="honest-econ — כנות-הקצה" />
+        </section>
+      )}
+
+      {/* ═══ חומת-המחשוב-החוץ — מודעות-כנה (T75-c) ═══ */}
+      {data?.live.computeWall && (
+        <section aria-label="חומת-המחשוב-החוץ">
+          <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 sm:p-5">
+            <div className="flex flex-wrap items-center gap-2">
+              <ShieldAlert className="h-4 w-4 text-amber-400" aria-hidden />
+              <h3 className="text-sm font-black text-zinc-100">חומת-המחשוב-החוץ (GitHub Actions · ריפו פרטיים)</h3>
+              <span
+                className={
+                  data.live.computeWall.walled === true
+                    ? "rounded-full bg-amber-500/15 px-2 py-0.5 text-[11px] font-black text-amber-300"
+                    : data.live.computeWall.walled === false
+                      ? "rounded-full bg-emerald-500/15 px-2 py-0.5 text-[11px] font-black text-emerald-300"
+                      : "rounded-full bg-zinc-500/15 px-2 py-0.5 text-[11px] font-black text-zinc-300"
+                }
+              >
+                {data.live.computeWall.walled === true ? "סגורה — הרשת-חונה-את-עצמה" : data.live.computeWall.walled === false ? "נפתחה" : "לא-נמדד"}
+              </span>
+              <span className="ms-auto text-[11px] text-zinc-500">
+                {typeof data.live.computeWall.sinceLastProbeS === "number"
+                  ? `בדיקה-אחרונה לפני ${Math.max(1, Math.round(data.live.computeWall.sinceLastProbeS / 60))} דק'`
+                  : ""}
+              </span>
+            </div>
+            <p className="mt-2 text-[13px] leading-6 text-zinc-300">{data.live.computeWall.he}</p>
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-[11px] text-zinc-500">
+              <span>חונו: {num(data.live.computeWall.parkedCount)} ריפו</span>
+              <span>בדיקת-canary אחרונה: {data.live.computeWall.lastCanaryAttempt ? data.live.computeWall.lastCanaryAttempt.replace("T", " ").slice(0, 16) + " UTC" : "—"}</span>
+              <span>תוצאתה: {data.live.computeWall.canaryConclusion ?? "—"}</span>
+              <span>יומן: {data.live.computeWall.lastJournalEvent ?? "—"}</span>
+              {data.live.computeWall.errors.length > 0 && <span className="text-amber-400/80">שגיאות-שליפה: {data.live.computeWall.errors.join(", ")}</span>}
+            </div>
+            <p className="mt-2 text-[11px] leading-5 text-zinc-500">
+              מיילי-“git failed” בקצב-נמוך = הבדיקה-המתוזמנת-של-הריבונות את-החומה (canary כל-~6ש׳) — נמדד ומתועד ביומן-ההתאוששות, לא-תקלה-חדשה. פתיחת-תקרת-הדקות אצל-גיטהאב היא-הפעולה-היחידה-שרק-הבעלים יכול; הרשת מתעוררת-מעצמה כשהיא-נפתחת.
+            </p>
+          </div>
         </section>
       )}
 
