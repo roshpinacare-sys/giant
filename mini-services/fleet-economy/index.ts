@@ -255,8 +255,10 @@ function spawnTx(): Tx | null {
   if (r < 0.06) { // משכורת/תדלוק מהכספת — **ב-SAOS** (גל-85 · מיחזור-מחסן-הכספת)
     // שכר-ב-SAOS יוצר-את-צד-המכירה-האמיתי-בבריכה: חיילים-מקבלים-SAOS → מוכרים
     // → USDS חוזר-מהבריכה (נמדד: רק-קניות = הבריכה-בלעה-77K-USDS-והכספת-מתה)
-    const amt = round6(0.2 + Math.random() * 0.8);
-    return apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: soldier, asset: "SAOS", amount: amt, reason: "משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת" });
+    // גל-89 · דוקטרינה-4 (כסף-תקוע-בלימיטים → לשלב→מקסימום): כשלכספת עתודת-SAOS גדולה —
+    // השכר-ב-SAOS מוגדל ×3 כדי-שהעתודה-התקועה (10.5K) תזרום-למחזור-אמיתי (חיילים→מוכרים→בריכה).
+    const amt = round6(bal("treasury").saos > 3000 ? 0.5 + Math.random() * 2.5 : 0.2 + Math.random() * 0.8);
+    return apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: soldier, asset: "SAOS", amount: amt, reason: "משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת (דוקטרינה-4)" });
   }
   if (r < 0.50) { // תשלום-שירות הדדי — עיקר-הזרימה (משתמשי-פנים משלמים זה לזה)
     // גל-85 · נמען-משוקלל: החיילים-הם-ספקי-העבודה-של-הרשת — 80% מהשירותים
@@ -294,9 +296,11 @@ function spawnTx(): Tx | null {
     const b = bal(soldier);
     const stake = Math.random() < 0.6;
     if (stake) {
-      const amt = round6(Math.min(b.saos, 0.5 + Math.random() * 6));
+      // גל-89 · דוקטרינה-4: סטייק-מוגדל — עד-3× התקרה-הישנה + 10% מהיתרה-הנוזלת
+      // (נמדד: סטייקים-של-≤6.5-SAOS מול-אלפי-SAOS-ביתרות = אבטחת-רשת-סרק)
+      const amt = round6(Math.min(b.saos, 0.5 + Math.random() * 6 + b.saos * 0.1));
       if (amt <= 0) { rej(); return null; }
-      return apply({ seq: seq + 1, ts: Date.now(), kind: "stake", from: soldier, to: soldier, asset: "SAOS", amount: amt, reason: "סטייק-SAOS לאבטחת-הרשת הפנימית" });
+      return apply({ seq: seq + 1, ts: Date.now(), kind: "stake", from: soldier, to: soldier, asset: "SAOS", amount: amt, reason: "סטייק-SAOS לאבטחת-הרשת הפנימית (דוקטרינה-4 · סטייק-מוגדל)" });
     }
     const amt = round6(Math.min(b.saosStaked, 0.3 + Math.random() * 4));
     if (amt <= 0) { rej(); return null; }
@@ -349,6 +353,32 @@ function tick() {
       );
       if (saosIn >= 10) {
         ammSwap("treasury", "SAOS", saosIn, `שומר-כספת-ריבוני: מכירת-עתודת-${saosIn}-SAOS-למימון-צף-השכר (כספת-יבשה נמדדה)`);
+      }
+    }
+    // גל-89 · דוקטרינה-4 (כסף-תקוע-בלימיטים → לשלב→מקסימום): שומר-כספת-עשיר — התאום-של-שומר-הכספת-היבשה.
+    // נמדד: כספת 42K-USDS + 10.5K-SAOS-עתודה שאינה נוזלת; מנגנון-היבשה (usds<200) לא-מופעל-לעולם
+    // (לוגיקה-הפוכה: כספת-עשירה = כספת-ישנה). התיקון: העתודה נמכרת-בטפטוף-מול-בריכה-יקרה-מהעוגן —
+    // העתודה-הופכת-לצד-המכירה-של-המשק (עיגון-מחיר) וה-USDS-שנכנס מממן-שכר. גדרות:
+    // רצועת-מחיר 1.05–1.35 · עתודת-מינימום 2,000-SAOS · מקס 400-SAOS-לפעולה · כל-100-טיקים.
+    if (tickNo % 100 === 0) {
+      const richPrice = pool.usds / Math.max(pool.saos, 1);
+      const richT = bal("treasury");
+      if (richPrice > 1.05 && richPrice <= 1.35 && richT.saos > 2000) {
+        const saosIn = Math.min(400, richT.saos - 2000);
+        if (saosIn >= 10) {
+          ammSwap("treasury", "SAOS", saosIn, `שומר-כספת-עשיר (דוקטרינה-4): שחרור-עתודה-תקועה ${saosIn}-SAOS-למחזור · עיגון-הבריכה`);
+        }
+      }
+    }
+    // גל-89 · דוקטרינה-4: גזירת-צף-עודף — לצמתי-הצי צטברו ~1,000-USDS מול יעד-צף 25;
+    // העודף-מעל-4×-היעד חוזר-לכספת (90% מהעודף — 10% מרגיש-שוליים-תפעוליים).
+    if (tickNo % 200 === 0) {
+      for (const nd of FLEET_NODES) {
+        const nb = bal(nd.id);
+        if (nb.usds > FLOAT_TARGET * 4) {
+          const excess = nb.usds - FLOAT_TARGET;
+          apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: nd.id, to: "treasury", asset: "USDS", amount: round6(excess * 0.9), reason: `גזירת-צף-עודף (דוקטרינה-4): ${nd.id} מחזיר-עודף-מעל-יעד-הצף → כספת` });
+        }
       }
     }
     // גל-83 · איסוף-עמלות (כל-150-טיקים): עמלות-הבריכה (הכנסת-הרשת) זורמות-לכספת
