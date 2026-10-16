@@ -2424,3 +2424,21 @@ Stage Summary:
 - Doctrine-4 second wave complete: anchor corrected to mathematical ground truth, all four valves live in canon code (not just log claims), stuck capital (treasury SAOS + node idle) entering circulation לשלב→מקסימום
 - Push-war source (tmp-file sealing) eliminated at root
 - Supervisor restored permanently (setsid) — engine no longer dies silently
+
+---
+Task ID: 91-b (keepalive layer)
+Agent: Z.ai Code (main operator loop)
+Task: permanent self-healing for fleet-economy:3016 + next-dev:3000 after measured double-failure cascade
+
+Work Log:
+- Measured cascade: engine.lock git-tracked → checkout reset stale PIDs → honest-exit war → engine dead → in-engine dev-guard dead → next-dev unreived → web dark (000 on all routes)
+- Reaper law established empirically: session-spawned processes (setsid/nohup/detached — 8301, 10660, 12943) are incrementally reaped; live-tree detached children survive (5049 proof)
+- Layered fix implanted: (1) economy-guard beat in local-beats (port-gated every 60s tick) (2) fleet-economy added to runtime-supervisor service table (3) sovereign-keepalive module in office-live (--hot hot-reload → active immediately, tree-child immunity)
+- Midwife verified: office-live hot-reload spawned both targets — 3016 HEALTH-OK uptime 97s, 3000 back to 200, stable at t+70s
+- Doctrine-4 convergence live: price 1.117 → 4.497 approaching band edge (4.38), guard txs flowing, anchor 3.81 ±15% band operational
+- Both repos sealed by keeper auto-economy (e328029 chain); FleetHQ clean
+
+Stage Summary:
+- Full self-healing chain restored: office-live keepalive (60s) + local-beats guard + runtime-supervisor table + engine's own dev-guard — four independent revival paths, all port-gated
+- Web dark cascade root-caused and structurally eliminated (engine.lock untracked + layered keepalive)
+- All work sealed in canon; AHEAD:0 BEHIND:0
