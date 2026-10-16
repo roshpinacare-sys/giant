@@ -2185,3 +2185,23 @@ Work Log:
 Stage Summary:
 - **המכונה ירוקה-מלאה-ומרופאת-מהשורש**: דיסק-נשם · אפס-זומבי-cwd · מגן-churn-בקוד · ספר-הכלכלה-שלם-ומאומת-לראשונה-עם-ארכיון-מלא · מסלול-זהב-ב-CI · API-כלים-פנימי-חי.
 - **פתוחים**: מעקב-נפילת-ה-3002-השקטה · restart-pending-ל-estate-sync-v4 (יידלק-באתחול-הבא) · decision-truth/fleet-yield-שבורים (refs.mjs-חסר-מאז-תמיד — לשחזר-או-להכריז-מת) · ליטוש-כותרת-Domain-pages · Administration-write-לפאט (מחיקת-זומבי-ענן).
+
+---
+Task ID: T77-1
+Agent: Z.ai Code (zai-web session)
+Task: תחיית-סנדבוקס מהכספת — עדכון-לחדש-ביותר לפני המשך עבודה
+
+Work Log:
+- git fetch origin: זוהו שתי שלוחות מקבילות בכספת — sovereign/main (008c3b2, שלוחתנו) ו-main (37d6d2a, wave-79 של סשן קודם)
+- זוהה state-ריצה חי שלא נאטם: ledger.jsonl ממשיך להיכתב (המנוע הכלכלי חי — PID 21946 bun index.ts, פורט משלו)
+- חתימת-חילוץ 03cf3a7: 3233 רשומות חיות (48 עסקאות/דקה ≈ 69k/יום)
+- איתור כותב ה-ledger דרך /proc — fleet-economy מיני-שירות חי + עותק FleetHQ.stale רץ מה-estate (לא מזיק, אבל לתעד)
+- השהיה זמנית (SIGSTOP) של 13 תהליכי-repo לאיחוי-נקי, שחרור (SIGCONT) מיד אחרי
+- איחוי מלא origin/main ← main: קונפליקטים נפתרו לפי עיקרון שרשרת-כי-ארוכה-תקפה (הספר שלנו 3233+ מול ספר-שיקום שלהם 96), worklog+seal-log איחוד, קוד wave-79 (tools API, estate-sync re-home guard, capital, CI gate) נכנס
+- אימות: fsck נקי, tsc src/=0 שגיאות, lint=0, כל 14 נקודות-קצה של giant = 200
+- חתימה-כפולה: main = sovereign/main = a4b6fa2 (ls-remote אומת)
+
+Stage Summary:
+- הכספת מאוחדת ואטומה — אפס אובדן משתי השלוחות
+- המנוע הכלכלי חי ומייצר ~872 tx/שעה ≈ 21k/יום (מדידה-כנה)
+- סיכון שזוהה: עותק FleetHQ.stale-1792147002230 עדיין מריץ שירותים (agent-hq/office-selfcheck/office-recruit) — דרוש re-home של התהליכים
