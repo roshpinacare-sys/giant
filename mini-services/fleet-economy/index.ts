@@ -620,7 +620,13 @@ async function sealAll(): Promise<void> {
   } catch { /* כנה — ממשיכים-בלי-מנעול-אם-גם-הוא-נכשל */ }
   try {
     let sealed = 0;
-    for (const dir of SEAL_REPOS) { if (await sealRepo(dir)) sealed++; }
+    // גל-83 · שחזור-הדוקטרינה: my-project (הספר-החי) נאטם-דרך-sealMyProject —
+    // freeze (SIGSTOP-ל-next-server) + גיבוי-prepull + custody-restore-אחרי-הריבוז.
+    // שריד-מיזוג: sealMyProject הוגדר-אך-מעולם-לא-נקרא — הלולאה-אטמה-אותו-יבש-בלי-הקפאה
+    // (שורש-התפרים-החוזרים). היתר-המאגרים — בלולאה-הרגילה.
+    const rest = SEAL_REPOS.filter((d) => d !== "/home/z/my-project");
+    try { await sealMyProject(); sealed++; } catch (e) { sealLog({ repo: "my-project", action: "custody-seal-fail", error: String(e).slice(0, 160) }); }
+    for (const dir of rest) { if (await sealRepo(dir)) sealed++; }
     sealLog({ action: "sweep-done" });
     // אירוע-אמת → עסקת-תשתית: סבב-אטימה הושלם (N מאגרים נאטמו בפועל)
     try {
