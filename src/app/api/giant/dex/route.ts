@@ -172,9 +172,14 @@ export async function loadDex(force = false): Promise<DexPayload> {
     genesisNote: truth.genesis?.note ?? null,
   };
 
-  const days = Object.values(metrics?.days ?? {})
-    .map((d) => ({
-      day: String(d.day ?? ""),
+  /* תיקון-מפתחות-כפולים (גל-88): התאריך הוא מפתח-המפה ב-dex-metrics.json —
+   * בונה-המדדים (cloud-beat.ts) לא מטמיע שדה-day בתוך האובייקט, ולכן
+   * הקריאה-הקודמת d.day החזירה "" לכל-השורות החדשות → מפתחות-React כפולים.
+   * מעתה: היום נגזר ממפתח-המפה; שדה-day פנימי (כותב-ישן) נשאר fallback.
+   * שורות שעדיין לא-נפתרות לתאריך מושמטות — כנות-מול-נתונים-שבורים. */
+  const days = Object.entries(metrics?.days ?? {})
+    .map(([dayKey, d]) => ({
+      day: String(d.day ?? "") || String(dayKey ?? ""),
       beats: Number(d.beats ?? 0),
       ticks: Number(d.ticks ?? 0),
       fills: Number(d.fills ?? d.dFills ?? 0),
@@ -183,6 +188,7 @@ export async function loadDex(force = false): Promise<DexPayload> {
       vol24QuoteMu: Number(d.vol24QuoteMu ?? 0),
       trades24: Number(d.trades24 ?? 0),
     }))
+    .filter((d) => d.day !== "")
     .sort((a, b) => a.day.localeCompare(b.day))
     .slice(-7);
 
