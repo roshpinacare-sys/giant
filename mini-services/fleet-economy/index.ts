@@ -713,6 +713,36 @@ function git(dir: string, args: string[]): Promise<{ ok: boolean; out: string }>
     });
   });
 }
+/* גל-91 · מסילת-קוד: אחרי קישור-היסטוריה במיזוג-אפס-תפרים (-s ours) העץ-החי שלנו
+ * מנצח — אבל שינויי-קוד שהגיעו-מהענן (תיקונים/גלים של-הסשן-השני) נשארים-שם
+ * בהיסטוריה ונשפכים-מהטיפ (נמדד: R364-fix של DexView נשפך 19:01). המסילה-הזאת
+ * מגישה-מ-FETCH_HEAD רק קבצי-קוד — לעולם-לא מצב-חי (db/state/receipts/worklog) —
+ * כך קוד-מהענן זורם-פנימה בעוד-הספר-החי נשאר אדון-בל-יעקור. */
+const LIVE_STATE_PREFIXES = ["db/", "receipts/", "worklog.md", "tool-results/"];
+function isLiveStatePath(f: string): boolean {
+  if (LIVE_STATE_PREFIXES.some((p) => f === p || f.startsWith(p))) return true;
+  if (/(^|\/)state\//.test(f)) return true; // mini-services/*/state/** — הספר-החי
+  if (/(^|\/)(seal|engine)\.lock$/.test(f)) return true; // מנעולים-חיים
+  return false;
+}
+async function codeLaneSync(dir: string, name: string): Promise<void> {
+  const df = await git(dir, ["diff", "--name-only", "HEAD", "FETCH_HEAD", "--", "."]);
+  if (!df.ok) return;
+  const codeFiles = df.out.split("\n").map((s) => s.trim()).filter(Boolean).filter((f) => !isLiveStatePath(f));
+  if (codeFiles.length === 0) return;
+  let applied = 0;
+  for (const f of codeFiles) {
+    const co = await git(dir, ["checkout", "FETCH_HEAD", "--", f]);
+    if (!co.ok) { sealLog({ repo: name, action: "code-lane-file-fail", file: f, out: co.out.slice(0, 120) }); continue; }
+    applied++;
+  }
+  if (applied > 0) {
+    await git(dir, ["add", "-A"]);
+    const cc = await git(dir, ["commit", "-q", "-m", `vault-sync [auto-economy]: code-lane — ${applied} code files flow-in from cloud (zero-seam, live-state untouched)`]);
+    sealLog({ repo: name, action: "code-lane", applied, committed: cc.ok });
+  }
+}
+
 async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opts?: { strategyOurs?: boolean }): Promise<boolean> {
   // גל-83 · תיקון-תפר-מיזוג: הפרמטר afterPull נמחק-מהחתימה-במיזוג-אך-הקריאה-ב-sealMyProject
   // המשיכה-להעביר-אותו + הגוף-התייחס-אליו → ReferenceError שהרג-את-כל-סבב-האטימה
@@ -754,6 +784,8 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
       if (!mg.ok && !mg.out.includes("Already up to date") && !mg.out.includes("up to date")) {
         sealLog({ repo: name, action: "merge-fail", out: mg.out.slice(0, 200) });
       }
+      // גל-91 · אחרי קישור-ההיסטוריה: קוד-מהענן זורם-פנימה דרך מסילת-הקוד.
+      if (mg.ok || /up to date/i.test(mg.out)) { await codeLaneSync(dir, name); }
     } else {
       // גל-83 · autoStash-חובה + refspec-מפורש (נמדד: pull-בלי-branch נכשל-בלי-upstream).
       const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote, "main"]);
@@ -767,6 +799,8 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
         const mg2 = await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins (pull-conflict fallback)", "FETCH_HEAD"]);
         if (!mg2.ok && !mg2.out.includes("up to date")) {
           sealLog({ repo: name, action: "merge-fallback-fail", out: mg2.out.slice(0, 160) });
+        } else if (mg2.ok || /up to date/i.test(mg2.out)) {
+          await codeLaneSync(dir, name);
         }
       }
     }
