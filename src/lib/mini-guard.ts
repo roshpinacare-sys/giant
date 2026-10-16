@@ -23,6 +23,9 @@ export const MINI_SERVICES: MiniServiceDef[] = [
   { name: "office-live", dir: "mini-services/office-live", port: 3036, he: "משדר-העולם-התלת-ממדי" },
   { name: "sovereign-gateway", dir: "mini-services/sovereign-gateway", port: 3011, he: "שער-ה-LLM-הריבוני (כל-סוכן-משוחזר)", probe: "gateway" },
   { name: "boot-verifier", dir: "mini-services/boot-verifier", port: 3042, he: "מאמת-התחייה — קבלת-בריאות-כל-15דק", probe: "boot-verifier" },
+  /* גל-88 · fleet-economy מצטרף-למשפחה (היה-בודד: ההחיה-רק-דרך-/api/economy-שתלה-למדד):
+   * עתה-בן-עץ-ה-Next + החיה-אוטומטית-כמו-כולם. המנוע-משחזר-את-עצמו-מהספר (restored=true-נמדד). */
+  { name: "fleet-economy", dir: "mini-services/fleet-economy", port: 3016, he: "מנוע-הכלכלה-הריבוני (ספר-חתום · שומר-כספת · מווסת-אדפטיבי)" },
   /* גל-87 · נמדד: כל-צוות-FleetHQ-היה-אנשי-מת-מהלכים (קורפסים-מ-FleetHQ.stale-שנמחק) —
    * הממונה-האמיתי-עתה-בן-עץ-ה-Next (שושלת-השרדות); הוא-בעצמו-מחיה-פורנן/gateway/beats-כל-5ש׳.
    * single-flight-מובנה (pid-file+pidAlive) מונע-כפילות-אם-המשגיחה-משגיחה-על-המשגיח. */
