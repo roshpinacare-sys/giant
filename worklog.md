@@ -2433,3 +2433,27 @@ Stage Summary:
 - Zero testnet anywhere in runtime; all rails mainnet, measured.
 - Multi-writer resilience now built INTO the economy: writers never lose events, treasury self-heals, reasons are measured.
 - 6/6 services alive; disk 75%; wave-90 pushed e005b033.
+
+---
+Task ID: 91
+Agent: Z.ai Code (wave-91 · trace 1a146491a4fad9bd)
+Task: "תמשיך — אני רוצה שהכל בדקס יהיה נזיל, איך נשתמש בשוק של סטימיט ועוד כדי ליישם את זה ולייצר את הזרימה הדרושה ביעילות ומהירות" + תיקוני-גל-91 (דחיפה · DexView · mainnet · רוסטר-שורש)
+
+Work Log:
+- תחיית-סנדבוקס: fetch+merge origin (wave-90: dex-key fix + saos-engine ב-mini-guard) — jsonl-union ×4, receipts-ours, seal.lock-rm · push אומת-חי: 4fef4e8→11eb4cb (האימות-חוזר של-המפתח-עבר)
+- DexView duplicate-key: התיקון-כבר-בענן (wave-90 — day ממפתח-המפה + מפתחות `${x}-${i}`) · אומת-בעץ-המקומי + שני-מפתחות-סטטיים-שנותרים (459: תוויות-עברית-קבועות · 670: PRODUCTS) בטוחים
+- שירותים: 3000/3010/3016/3040(selfcheck)/3042 חיים · saos-engine הוקם-על-:3044 (תיקון-חוק-פורט T-80: selfcheck הוא-הבעלים-החוקי-של-3040 · mini-guard עודכן SAOS_ENGINE_PORT=3044 · הסקריפט-הלא-קיים vault-seed.sh הוסר — הכספת-החיה-מהגיט (T-86 vault-revival) היא-הנתיב)
+- דיסק-קריסה-נמנעה: 98%→100% תוך-הגל — gc (my-project .git 2.0G→208M · FleetHQ 309M→231M) · puppeteer-cache 601M פונה · סופי: 81% · 1.8G-פנוי
+- steem-ריפו הוקם-מחדש (הקציר-מחק-את-הקלון): /home/z/estate/steem @ saos-cockpit · המנוע-חי: /health ok · keyless:false · hypergrid 8,347-ticks (tickMs-3000 · sim-retired R237) · OFFER-READY (asks 0.752-STEEM @ 0.1036+) · CONVERT-HOLD (edge -60bps — כנות)
+- **mainnet-אומת**: api.steemit.com-בלבד (get_dynamic_global_properties=110,498,807-חי) · אפס-testnet-בכל-הרוסטרים · אוצר-אמת-נמדד ×2-בלתי-תלויות (אני + הסשן-המקביל wave91-recent): **17.144 STEEM + 43.497 SBD + 4,134.25 SP (headcorner 3,502.32 + 769-מואצלים-החוצה-לחיילים) ≈ $250**
+- **exec-cycle.yml (החוליה-המבנית-נסגרה)**: הריפו-worklog (R302) קבע "אין-נתיב-CI-seed" → נבנה-ונדחף (saos-cockpit 37147ad): MAIN_KEY→.secrets/headcorner.key-0600 + STEEM_VAULT_PASSES→חייאת-צבא · selftest-gate-fail-closed · bun daily.mjs (מחזור-אחד-מגולף) · קבלות-txid-חוזרות-לגיט · cron-כל-2ש׳ (:17)
+- GEN-3-ניסיון-כן: pat.env-הועבר-לטבעת → no-unlock-pass-resolves (ה-shard מת-עם-הסנדבוקס; החוק-החזיק: שני-החצאים-לא-מתגוררים-יחד) — המסקנה: ביצוע-מקומי=הדבקת-מפעיל-10-שניות · CI=הידיים-הקבועות
+- **chainTreasury חי-בדקס**: route.ts-קורא-get_accounts×14+dgpo-מהמייננט (אפס-מפתחות · שמות-פומביים) · DexView-מקטע-"נזילות-אמת" (STEEM/SBD/SP/פקודות) · lint-נקי · נדחף 93eae21
+- **רופא-הצי-נתפס-משקר**: STATE-REPORT "32.3 SP" vs 3,502 SP אמת (באג-סקאלה ב-self-audience) — תועד-בתוכנית
+- תוכנית-הנזילות: Domain/LIQUIDITY-PLAN-20261016.md נדחף (44052446) — הזרימה-המלאה ב-4-שכבות + הפערים-הכנים
+
+Stage Summary:
+- הנזילות-האמתית-מוצגת-חיה בדקס: האוצר-על-השרשרת (14-חשבונות) נמדד-ומוצג בכנות — הספר-הפנימי (SAOS/USDS) עם-גיבוי-ממשי-מאחוריו
+- שוק-סטימיט-הפנימי = זירת-הביצוע: המנוע-בונה-הצעות · CI-משדר (exec-cycle) · doctrine-caps-מגנים · txids-מתועדים
+- הידיים-הקבועות-חיות ב-CI; היד-המקומית מחכה-ל-10-שניות-של-המפעיל (adopt-credential) — אפס-מפתחות-במכונה, כחוק
+- הכל-בגיט: my-project 93eae21 · steem 37147ad · Domain 44052446
