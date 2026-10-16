@@ -82,9 +82,12 @@ export function FleetView() {
   }, []);
 
   useEffect(() => {
-    void load();
+    const t0 = window.setTimeout(() => void load(), 0);
     const iv = setInterval(() => void load(), 45_000);
-    return () => clearInterval(iv);
+    return () => {
+      window.clearTimeout(t0);
+      clearInterval(iv);
+    };
   }, [load]);
 
   const loop = state?.loop ?? null;

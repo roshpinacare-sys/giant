@@ -235,7 +235,8 @@ export function EmpireView({ onNavigate }: { onNavigate?: (id: string) => void }
   };
 
   useEffect(() => {
-    load();
+    const id = window.setTimeout(() => void load(), 0);
+    return () => window.clearTimeout(id);
   }, []);
 
   const s = data?.summary ?? null;

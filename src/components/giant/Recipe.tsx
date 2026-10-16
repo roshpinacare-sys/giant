@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronDown, FlaskConical } from "lucide-react";
 
 /* ═══ המתכון-הגלוי (דפוס prompt-motion · GIANT) ══════════════════════════
@@ -29,11 +29,10 @@ export interface RecipeProps {
 
 export function Recipe({ sources, measuredAt, ageMinutes, failNote }: RecipeProps) {
   const [open, setOpen] = useState(false);
-  const [age, setAge] = useState<string>(ageHe(ageMinutes ?? (measuredAt ? (Date.now() - Date.parse(measuredAt)) / 60_000 : null)));
-
-  useEffect(() => {
-    setAge(ageHe(ageMinutes ?? (measuredAt ? (Date.now() - Date.parse(measuredAt)) / 60_000 : null)));
-  }, [measuredAt, ageMinutes]);
+  const age = useMemo(
+    () => ageHe(ageMinutes ?? (measuredAt ? (Date.now() - Date.parse(measuredAt)) / 60_000 : null)),
+    [measuredAt, ageMinutes],
+  );
 
   return (
     <div className="rounded-xl border border-white/5 bg-zinc-950/50" dir="rtl">

@@ -107,10 +107,11 @@ export function TickerTape() {
   useEffect(() => {
     alive.current = true;
     const ac = new AbortController();
-    void load(ac.signal);
+    const t0 = window.setTimeout(() => void load(ac.signal), 0);
     const t = setInterval(() => void load(ac.signal), POLL_MS);
     return () => {
       alive.current = false;
+      window.clearTimeout(t0);
       clearInterval(t);
       ac.abort();
     };

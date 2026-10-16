@@ -165,10 +165,11 @@ export function EstateView() {
 
   useEffect(() => {
     alive.current = true;
-    void load();
+    const t0 = window.setTimeout(() => void load(), 0);
     const t = setInterval(() => void load(), POLL_MS);
     return () => {
       alive.current = false;
+      window.clearTimeout(t0);
       clearInterval(t);
       acRef.current?.abort();
     };
