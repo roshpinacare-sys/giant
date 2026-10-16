@@ -225,6 +225,72 @@ async function persist(v: BootVerify): Promise<void> {
 
 let latest: BootVerify | null = null;
 
+/* ═══ גל-86 · שומר-ה-keeper ═════════════════════════════════════════════════
+ * organism-keeper הוא מחייה-ה-estate (selfcheck+recruit → מרפאים app:3002+foreman:3010).
+ * בגלגול-הסנדבוקס הזה הוא לעולם לא נולד (לא היה ב-boot). מעכשיו: ה-verifier
+ * (צאצא-boot בן-אלמוות, --hot) משגיח עליו ומקים אותו כצאצא-שרת-חי — התבנית
+ * היחידה-ששרדה מדידית (worklog 46/85-b: spawn-דרך-API = שורד).
+ * אפס-הדמיות: כל-החייאה נמדדת (lockfile + /proc) ונרשמת.
+ */
+const KEEPER_LOCK = join(ROOT, "mini-services/organism-keeper/state/keeper.lock");
+const KEEPER_DIR = join(ROOT, "mini-services/organism-keeper");
+let keeperRevives = 0;
+
+async function keeperAlivePid(): Promise<number | null> {
+  try {
+    const raw = await readFile(KEEPER_LOCK, "utf8");
+    const pid = parseInt(raw.trim(), 10);
+    if (pid && (await Bun.file(`/proc/${pid}/cmdline`).exists())) return pid;
+  } catch { /* אין-מנעול = לא-חי */ }
+  return null;
+}
+
+async function reviveKeeper(): Promise<boolean> {
+  // ניסיון-1: spawn דרך השער-החי (API route) — התבנית-ששרדה
+  try {
+    const res = await fetch("http://127.0.0.1:3000/api/boot/spawn", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ service: "organism-keeper" }),
+      signal: AbortSignal.timeout(8_000),
+    });
+    const j = await res.json().catch(() => ({}));
+    if (res.ok && (j as { ok?: boolean }).ok) {
+      keeperRevives++;
+      console.log(`[keeper-watchdog] הוקם דרך-השער: ${JSON.stringify(j).slice(0, 160)}`);
+      return true;
+    }
+  } catch { /* השער-סגור — ניסיון-2 */ }
+  // ניסיון-2: spawn ישיר (צאצא-verifier = גם-צאצא-boot = שורד)
+  try {
+    const { spawn } = await import("node:child_process");
+    const out = Bun.file("/tmp/organism-keeper-revive.log").writer({ append: true });
+    const child = spawn("bash", ["-c", "exec setsid nohup bun index.ts >> /tmp/organism-keeper-revive.log 2>&1 < /dev/null"], {
+      cwd: KEEPER_DIR, detached: true, stdio: ["ignore", "pipe", "pipe"],
+    });
+    child.stdout?.pipeTo(out as unknown as WritableStream).catch(() => {});
+    child.unref();
+    keeperRevives++;
+    console.log(`[keeper-watchdog] הוקם ישירות pid=${child.pid}`);
+    return true;
+  } catch (e) {
+    console.error("[keeper-watchdog] spawn-ישיר-נכשל:", e);
+    return false;
+  }
+}
+
+async function keeperWatchdog(): Promise<void> {
+  try {
+    const pid = await keeperAlivePid();
+    if (!pid) {
+      console.log("[keeper-watchdog] ה-keeper מת/לא-נולד — מחייה");
+      await reviveKeeper();
+    }
+  } catch (e) {
+    console.error("[keeper-watchdog] error:", e);
+  }
+}
+
 async function tick(): Promise<void> {
   try {
     latest = await measure();
@@ -236,6 +302,7 @@ async function tick(): Promise<void> {
     console.log(
       `[boot-verifier] measured → all_ok=${latest.all_ok}${downs.length ? ` DOWN: ${downs.join(",")}` : ""} (${latest.at})`,
     );
+    await keeperWatchdog(); // גל-86: אחרי-כל-מדידה — דופק-על-מחייה-ה-estate
   } catch (e) {
     console.error("[boot-verifier] measure FAILED (fail-loud):", e);
   }
@@ -246,7 +313,7 @@ Bun.serve({
   async fetch(req) {
     const url = new URL(req.url);
     if (url.pathname === "/health") {
-      return Response.json({ ok: latest !== null, service: "boot-verifier", port: PORT, at: latest?.at ?? null, economyTx: verifierTx });
+      return Response.json({ ok: latest !== null, service: "boot-verifier", port: PORT, at: latest?.at ?? null, economyTx: verifierTx, keeperRevives });
     }
     if (url.pathname === "/scan") await tick();
     if (url.pathname === "/latest" && latest) {
@@ -264,3 +331,4 @@ Bun.serve({
 console.log(`[boot-verifier] listening :${PORT} → receipts/boot-verify.json (every ${SCAN_INTERVAL_MS / 60000}min)`);
 await tick();
 setInterval(tick, SCAN_INTERVAL_MS);
+setInterval(keeperWatchdog, 30_000); // גל-86: שומר-ה-keeper — כל-30ש׳
