@@ -550,7 +550,9 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>): Pr
     const remote = rm.out.split("\n").map((s) => s.trim()).filter(Boolean)[0] ?? "origin";
     // גל-83 · autoStash-חובה: המנוע-החי מלכלך-קבצי-מצב-כל-טיק/ingest — pull --rebase
     // מסרב-לרוץ-על-עץ-מלוכלך-והכשל-היה-שקט (רק-push-fail-נרשם) → כל-סוופ-החמיץ-את-הריבוז.
-    const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote]);
+    // גל-83 · refspec-מפורש: pull-בלי-branch נכשל ("did not specify a branch") כשאין
+    // upstream-tracking — נמדד-בסוופ-11:59. cloud main מפורש מבטיח-ריבוז-אמיתי.
+    const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote, "main"]);
     if (!pull.ok && !pull.out.includes("Already up to date") && !pull.out.includes("up to date")) {
       sealLog({ repo: name, action: "pull-fail", out: pull.out.slice(0, 220) });
     }
