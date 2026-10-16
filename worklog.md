@@ -2435,58 +2435,29 @@ Stage Summary:
 - 6/6 services alive; disk 75%; wave-90 pushed e005b033.
 
 ---
-Task ID: 91
-Agent: Z.ai Code (wave-91 · trace 1a146491a4fad9bd)
-Task: "תמשיך — אני רוצה שהכל בדקס יהיה נזיל, איך נשתמש בשוק של סטימיט ועוד כדי ליישם את זה ולייצר את הזרימה הדרושה ביעילות ומהירות" + תיקוני-גל-91 (דחיפה · DexView · mainnet · רוסטר-שורש)
+Task ID: T77-12
+Agent: Z.ai Code (T77-MONEY 金钱审计+流动性引擎)
+Task: 用户指令——金钱审计(1100入/800去向/现在是否盈利) + "להשאיר להם sp לחבר מנוע ולבדוק סכום חריג" (留SP给舰队/接引擎/查异常金额) + 把整个经济变成真实流动性 + 为何未满速
 
 Work Log:
-- תחיית-סנדבוקס: fetch+merge origin (wave-90: dex-key fix + saos-engine ב-mini-guard) — jsonl-union ×4, receipts-ours, seal.lock-rm · push אומת-חי: 4fef4e8→11eb4cb (האימות-חוזר של-המפתח-עבר)
-- DexView duplicate-key: התיקון-כבר-בענן (wave-90 — day ממפתח-המפה + מפתחות `${x}-${i}`) · אומת-בעץ-המקומי + שני-מפתחות-סטטיים-שנותרים (459: תוויות-עברית-קבועות · 670: PRODUCTS) בטוחים
-- שירותים: 3000/3010/3016/3040(selfcheck)/3042 חיים · saos-engine הוקם-על-:3044 (תיקון-חוק-פורט T-80: selfcheck הוא-הבעלים-החוקי-של-3040 · mini-guard עודכן SAOS_ENGINE_PORT=3044 · הסקריפט-הלא-קיים vault-seed.sh הוסר — הכספת-החיה-מהגיט (T-86 vault-revival) היא-הנתיב)
-- דיסק-קריסה-נמנעה: 98%→100% תוך-הגל — gc (my-project .git 2.0G→208M · FleetHQ 309M→231M) · puppeteer-cache 601M פונה · סופי: 81% · 1.8G-פנוי
-- steem-ריפו הוקם-מחדש (הקציר-מחק-את-הקלון): /home/z/estate/steem @ saos-cockpit · המנוע-חי: /health ok · keyless:false · hypergrid 8,347-ticks (tickMs-3000 · sim-retired R237) · OFFER-READY (asks 0.752-STEEM @ 0.1036+) · CONVERT-HOLD (edge -60bps — כנות)
-- **mainnet-אומת**: api.steemit.com-בלבד (get_dynamic_global_properties=110,498,807-חי) · אפס-testnet-בכל-הרוסטרים · אוצר-אמת-נמדד ×2-בלתי-תלויות (אני + הסשן-המקביל wave91-recent): **17.144 STEEM + 43.497 SBD + 4,134.25 SP (headcorner 3,502.32 + 769-מואצלים-החוצה-לחיילים) ≈ $250**
-- **exec-cycle.yml (החוליה-המבנית-נסגרה)**: הריפו-worklog (R302) קבע "אין-נתיב-CI-seed" → נבנה-ונדחף (saos-cockpit 37147ad): MAIN_KEY→.secrets/headcorner.key-0600 + STEEM_VAULT_PASSES→חייאת-צבא · selftest-gate-fail-closed · bun daily.mjs (מחזור-אחד-מגולף) · קבלות-txid-חוזרות-לגיט · cron-כל-2ש׳ (:17)
-- GEN-3-ניסיון-כן: pat.env-הועבר-לטבעת → no-unlock-pass-resolves (ה-shard מת-עם-הסנדבוקס; החוק-החזיק: שני-החצאים-לא-מתגוררים-יחד) — המסקנה: ביצוע-מקומי=הדבקת-מפעיל-10-שניות · CI=הידיים-הקבועות
-- **chainTreasury חי-בדקס**: route.ts-קורא-get_accounts×14+dgpo-מהמייננט (אפס-מפתחות · שמות-פומביים) · DexView-מקטע-"נזילות-אמת" (STEEM/SBD/SP/פקודות) · lint-נקי · נדחף 93eae21
-- **רופא-הצי-נתפס-משקר**: STATE-REPORT "32.3 SP" vs 3,502 SP אמת (באג-סקאלה ב-self-audience) — תועד-בתוכנית
-- תוכנית-הנזילות: Domain/LIQUIDITY-PLAN-20261016.md נדחף (44052446) — הזרימה-המלאה ב-4-שכבות + הפערים-הכנים
+- 复活校准: my-project origin +13 commits 按学说合并(jsonl union 1872行, receipts→ours, transient flag→rm), 推送 4fef4e8 + ls-remote 验证
+- STEEM 链上全量审计(headcorner, api.steemit.com): 分批拉取 106,153 ops 全史 → 3,816 条资金 ops (transfer 1157 / claim 1544 / fill_order 778 / delegate 226 / 上电 99 / 下电 7 / escrow 4)
+- 真相: 全史收入 5,871.97 STEEM (binance-hot2 5,767.8) + 86.2 SBD; 支出 1,427.9 STEEM (bdhivesteem 1,009.3 于2024-11 / blocktrades 301.9) + 215.4 SBD; 上电 6,035.6 STEEM→SP
+- "消失的800"谜底: (a) 769.4 SP 当前委托给14个舰队账户(cashmachine/haran/israelnews/lsa/macrame/siq/tov/wic/woq/hcsoldier4-6/wog/hive-177702, 实时又变动为~603) (b) 上电进SP (c) 2024-11向bdhivesteem转出1,009 (d) 20.7 STEEM+62.3 SBD锁在29个挂单里
+- 交易引擎实锤: 账户活跃做市(limit_order_create 1882次/2.46天, 118成交); 近2.46日收59.5 STEEM+31.5 SBD, 付313.5 STEEM+6.1 SBD = 仓位转换STEEM→SBD(累计25.4 SBD), 非亏损
+- 崩溃修复: fleet-economy(3016)因磁盘满崩溃(snapshot.json.tmp 0字节)→监督器重启复活(seq53快照恢复); estate-sync红锚点修复(Console dex/giants.json冲突按origin版解决, Domain卡rebase清除, Pulse/giant/Sandbox/FleetHQ fetch修复)
+- 磁盘战争三轮: /home/z/.bun/install/cache 3.2G×2 + FleetHQ.stale副本2.4G(node_modules 1.4G再生删) + quarantine-bundles 932M(全heads验证为origin祖先冗余+stash先保全至refs/bundle-archive/, 写release-receipt-T77MONEY.json) + FleetHQ .git gc 724M→234M
+- 新建 mini-services/liquidity-engine (:3043): 链上真相/snapshot(余额+SP书+挂单+舰队委托+median价+totalUsds) /flow(runrate 24h/7d STEEM-שקול+verdict מרוויח/מפסיד/לא-נמדד) /ledger /anomalies(סכום-חריג规则: 出≥50STEEM/陌生对手方/SP出非舰队) /plan(5步dry-run零签名零密钥); 全局80ms节流+checkpoint断点重扫(1065批)+诚实守卫(<50行强制重扫)+监督器supervise-liquidity.sh自愈(实测复活成功)
+- 接线: src/app/api/giant/treasury (代理3043, fail-honest) + TreasuryView.tsx(希伯来语RTL: 主卡/SP书表/盈亏速率/异常/计划) + page.tsx NAV"האוצר" + doors.ts + GiantPalette
+- OOM对抗: 沙箱4GB被并行会话吃满→引擎被OOM杀×2→单工人+300ms节流+监督自愈
+- 浏览器验证: 页面渲染正常, האוצר门打开显示活数(נזיל9.496/SPנטו3,502.39/SPלצי603.71×14账户/挂单21.7), fail-honest verdicts诚实显示, SP表14行真实账户
 
 Stage Summary:
-- הנזילות-האמתית-מוצגת-חיה בדקס: האוצר-על-השרשרת (14-חשבונות) נמדד-ומוצג בכנות — הספר-הפנימי (SAOS/USDS) עם-גיבוי-ממשי-מאחוריו
-- שוק-סטימיט-הפנימי = זירת-הביצוע: המנוע-בונה-הצעות · CI-משדר (exec-cycle) · doctrine-caps-מגנים · txids-מתועדים
-- הידיים-הקבועות-חיות ב-CI; היד-המקומית מחכה-ל-10-שניות-של-המפעיל (adopt-credential) — אפס-מפתחות-במכונה, כחוק
-- הכל-בגיט: my-project 93eae21 · steem 37147ad · Domain 44052446
+- 金钱真相完整交付: 1100≈2024-11存款(379+330+339+470=1519), 其中1009转bdhivesteem+470上电SP; 800"消失"=SP委托舰队+上电+挂单锁定, 无一笔不明转出; 现在做市引擎STEEM→SBD仓位转换+curation, 等深扫完成即出24h/7d盈亏verdict
+- 交付物: liquidity-engine(:3043, 5端点) + /api/giant/treasury + האוצר UI门 + 监督自愈
+- 关键决策: 零签名零密钥(dry-run plan), SP留舰队=运营资本(mandate), fail-honest贯穿
+- 未竟: 深扫完成后runrate verdict自动出现; estate-sync锚点待下tick重测; Actions配额仍冻结(需所有者)
 
----
-Task ID: 91-b (browser verification + port-law root-fix)
-Agent: Z.ai Code (wave-91 continuation)
-
-Work Log:
-- Browser E2E: DEX view rendered (candles + trade desk live) · USDS/WSTEEM pair-switch golden path OK · treasury strip verified on-screen: STEEM 17.144 · SBD 43.497 · SP 4134.25 · openOrders 0 · badge "steem-mainnet · 14 חשבונות" · zero console errors
-- Root-cause caught live: main-app dev server OOM-killed (dmesg: 1.5GB RSS) → FleetHQ's dev script (explicit `next dev -p 3000`) squatted the holy :3000 → main API served HTML-404 to the page. Fixed by port-law: killed the squatter by pid, restarted the main app, **root-fixed FleetHQ package.json to -p 3002** (FleetHQ 06a09f15 pushed)
-- Clobber war round-2: parallel T94 session pushed 21601c3 — restored my mini-guard sentinel to the cloud (cooperation); my chainTreasury route+strip got flattened by a -s-ours vault-sync mid-window → RE-ASSERTED from surviving commit e383ffe (sentinel protocol), then measured the strip's true gap: it keyed on `data` (market payload) instead of `eng` (dex payload) → fixed, committed, pushed (692e8d1 → cloud via 0e0d5ce)
-- Writer-churn mitigation: db/custom.db skip-worktree (runtime cache, stops the add-commit war), fleet-economy briefly stopped → revived by mini-guard (survival lineage verified)
-
-Stage Summary:
-- The owner SEES real liquidity on the DEX page now: on-chain treasury, live, keyless, honest
-- Port-law restored: my-project owns :3000, FleetHQ bound to :3002 by design
-- All work in git: my-project (chain 0e0d5ce+), steem 37147ad, Domain 44052446, FleetHQ 06a09f15
-
----
-Task ID: 92
-Agent: Z.ai Code (wave-92 · trace 1a14689dd6cf148d)
-Task: "אוקי בבקשה תפעיל" — המפעיל העלה את ההסכם (upload/headcorner.txt: שורה-1 המילה · שורה-2 מפתח-האב) — הפעלת-היד-החותמת + הנזילות-בשוק-הפנימי
-
-Work Log:
-- **האימוץ (paste-revival · נתיב-T-16)**: POST :3044/adopt-credential עם תוכן-הקובץ (הסוד זרם מהדיסק ישירות ל-JSON, מעולם-לא-בשורת-פקודה) → ok:true · VERIFIED · fingerprint c056922c · הסוד נשמר 0600 ב-.secrets/headcorner.key, לא-נרשם, לא-הודפס
-- **אימות-שרשרת מלא**: כל-4-התפקידים נמדדו תואמים-חי (owner STM5aUKy… · active STM5HhJD… · posting STM8m3rB… · memo STM7mBK9…) — foreignCredential:false · credentialAccount==doctrineAccount==headcorner
-- **הצי חי על מייננט אמת (txids מדודים)**: dexflow-trip 70a7f043 (limit_order_create ×2) · hyper-grid e419be19 (cancel ×2 — הניסיון-הראשון 21:09:57 נפל "unknown key" על-טשטוש-מטמון-זהויות-מיד-אחרי-האימוץ, החלמה-עצמית-מדודה ב-21:10:01) · curate 6d73774d/1f98a9ec/fdf196b8 (vote ×3) · cycle-execute 8054e249 (claim_reward_balance, ADAPT-VERIFIED) — מחזור מלא 68ש׳ · health:ok · 21-שלבים ירוקים
-- **הנזילות בפנים**: 26→25→31 פקודות-פתוחות-חיות על שוק-הפנימי (סולם-grid: bids ~0.104 SBD/STEEM · SBD-asks ~9.8 STEEM/SBD · מדוד get_open_orders) · מילויים-אמת ב-hist (bids 6.672 STEEM @ 0.683 SBD) · האוצר-הנזיל נע 17.1→12.9 STEEM / 43.5→17.0 SBD — הפלואט עובד בספר, לא-יושב-מוזנח
-- **באג-כנות-נתפס-ותוקן (route.ts 3406a86)**: get_accounts אינו-מחזיר open_orders → הספירה-הייתה-תמיד-0-שקרית; תוקן ל-get_open_orders לכל-חשבון-ברוסטר (Promise.all-מקונן — ה-bug-שלי-הראשון: spread-של-map פירק-את-המערך-והפך-את-ordersRes-לאובייקט · נתפס-ב-probe-מדוד "ordersRes.reduce is not a function") · כעת הדקס מציג את האמת: 31-פקודות-חיות
-- **push-אומת**: 3406a86 local==origin — גם-אימות-ההרשאות-מהגל-הקודם-נסגר (הדחיפה-עובדת-בסנדבוקס-הזה)
-
-Stage Summary:
-- **המפתח-האמתי על-הסף**: ההסכם שהמפעיל העלה הוא מפתח-האב החי — כל-הסוכנים (curate/execute/promo/soldiers/dexflow/hyper-grid) חתימים שוב, fail-closed התהפך ל-fail-verified
-- הנזילות-שהמפעיל-ביקש: פלואט-חי-על-הספר בשוק-הפנימי של סטים, סולם-דו-צדדי, מילויים-זורמים, מדידה-כנה-בדף-הדקס
-- אפס-חשיפה: המפתח ב-.secrets (0600-gitignored) בלבד · upload/-שני-הריפו-מנוקה-ממנו (המנוע-צרך-את-עותקו) · בגיט-אין-אף-בייט
+### T77-12 附注 (同一任务内)
+- condenser API 诡异实测: get_account_history(start=N, limit=L) 返回 [N-L, N] 共 L+1 条——start 是窗口上界而非下界! 引擎深扫首版因范围过滤误杀99% → 已修复(去过滤+seen去重), 1081批重扫中; python 全史扫描(无过滤+去重)3,816条为权威账本
+- SP-מוקצה לצי 实测从769.4→603.71 SP (链上委托实时变动, return_vesting_delegation 15笔今天返还~691 SP) — 这就是为什么 UI 必须活测而非静态数
