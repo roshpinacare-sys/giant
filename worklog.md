@@ -2190,3 +2190,25 @@ Stage Summary:
 - **האתר-בן-אלמוות**: dev-guard-במנוע = השער-קם-מעצמו-אחרי-כל-מיתה (וגם-מפשיר-קפואים) — שתי-התלונות-של-הבעלים (live view + ממשק) נבדקו-בדפדפן-ועובדות
 - **הכלכלה-מחזורית-אמיתית**: SAOS-שכר→מכירות→USDS-חוזר — המשק-סוף-סוף-סגור; מילויים-מדויקים; הנפקות-גלויות-בספר
 - פתוחים: קבלה-להגיע->90% (המווסת-בדרך) · autonomy-fix-lock · חיווט forge+skills+tools/fleet+airgap (78-a) · פריימים-4..6-ב-bake
+
+---
+Task ID: T77-4
+Agent: zai-web (sovereign session)
+Task: תרגיל-התעוררות T77 מלא — כיול-mול-git, חקירת-חור-הדיסק-השורשי, תיקון-estate-sync, ריפוי-Domain
+
+Work Log:
+- התעוררות: sandbox חי · דיסק 89% (1.1G) · origin התקדם 4622ffe→89f43c8→f08e04c — כיול-מלא-mול-הכספת
+- pause-seal-merge-resume: SIGSTOP 45 תהליכים · אטימת-delta (10d5c66) · מיזוג f08e04c (db=ours, keeper-log=union) · דחיפה ba8d48d + ls-remote ✓
+- FleetHQ 3002: מנעול-.next-תקול → ניקוי-והתחלה · התגלה-node_modules-חסר (next/dist/bin נעלם!)
+- שורש-חור-הדיסק שנמדד: estate-sync v3 הסגיר-ריפו-שלם על כשל-pull-יחיד → FleetHQ.stale=2.6G + wiped=675M + Sandbox.stale×2 + Console/Pulse.stale — ~3.4G מתים
+- תיקון-שורשי estate-sync v4 (סולם-מדורג): retry-3s → fetch+rebase --autostash (שומר-קומיטים-מקומיים) → diverged-honest (אין-הסגר-על-התנגדות) → הסגר-רק-על-מוות-מבני → ניקוי-אוטומטי-של-הסגר-אחרי-שיבוט → quarantine-rename-כשל לא מוחק-מקור
+- lint נקי · הפעלה-מחדש (kill זומבי-13683) · v4 חי על 3021
+- טיק-ראשון: 12/13 ירוק-מיד · FleetHQ ff-pull-ok ללא-הסגר · דיווח-כן: Domain diverged (office-lock.json needs-merge)
+- Domain: קונפליקט-office-lock (pid-דד-מול-חי) · live-pid-14613-מנצח · rebase-התנגש-עם-כותב-חי-שני · abort+merge-doctrine · auto-economy-סשן-אחר-סימן-במקביל (23f0f7b87) · סופית: HEAD==origin מושלם · agent-hq הוחזר
+- ניקוי-דיסק: FleetHQ.stale-2.6G נמחק + wiped-675M + Sandbox.stale×2 + Console/Pulse.stale → 2.7G-פנוי (72%)
+
+Stage Summary:
+- estate-sync v4 = הסולם-המדורג-החדש: כשל-pull-רגעי לא עוד מוחק-ריפו-שלם — החור-השחור-הכרוני-של-הדיסק נסתם-בקוד
+- 12/13 עוגנים-ירוקים · 5/5 ריפו-פרטיים ff-pull-ok (T75-מימוש-חלקי)
+- Domain מיושר HEAD==origin · אפס-אובדן בכל-הדרך
+- ba8d48d על-הכספת (ls-remote-מאומת)
