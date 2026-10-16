@@ -1,5 +1,5 @@
 // wave-91: parallel full account-history puller (page=100, 6 workers), cache as JSONL
-import { mkdirSync, appendFileSync, writeFileSync, existsSync } from "fs";
+import { mkdirSync, appendFileSync, writeFileSync, existsSync, readFileSync } from "fs";
 import { join } from "path";
 
 const RPCS = ["https://api.steemit.com", "https://api.justyy.com", "https://steem-rpc.publicnode.com"];
@@ -46,7 +46,7 @@ async function pull(account: string) {
   const seen = new Set<number>();
   let lowest = Infinity;
   if (existsSync(outFile)) {
-    const lines = require("fs").readFileSync(outFile, "utf8").split("\n").filter(Boolean);
+    const lines = readFileSync(outFile, "utf8").split("\n").filter(Boolean);
     for (const l of lines) { try { const i = JSON.parse(l)[0]; seen.add(i); if (i < lowest) lowest = i; } catch {} }
   }
 
