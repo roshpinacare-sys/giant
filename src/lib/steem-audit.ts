@@ -459,9 +459,12 @@ export async function steemAudit(): Promise<{ audit: SteemAudit; building: boole
   // אין-נתון-רענן — בונים-עכשיו (הבקשה-הראשונה-עלולה-להיות-איטית; כנה)
   try {
     const a = await buildAudit();
-    c.data = a;
-    c.builtAt = Date.now();
-    return { audit: a, building: false };
+    // כשל-שרשרת לא נכנס-למטמון — הקריאה-הבאה מנסה-שוב (fail-honest, אין-הדבקת-כשל)
+    if (a.live) {
+      c.data = a;
+      c.builtAt = Date.now();
+    }
+    return { audit: a, building: !a.live };
   } catch (err) {
     if (c.data) return { audit: c.data, building: true };
     const failed: SteemAudit = {

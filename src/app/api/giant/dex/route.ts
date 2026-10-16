@@ -95,6 +95,9 @@ interface SteemTruth {
   sbd: number | null;
   ownSp: number | null;
   delegatedOutSp: number | null;
+  lockedSteem: number | null;
+  lockedSbd: number | null;
+  openOrders: number | null;
 }
 let steemTruthCache: SteemTruth | null = null;
 const STEEM_TRUTH_MS = 10 * 60_000;
@@ -115,13 +118,33 @@ async function steemTruth(): Promise<SteemTruth | null> {
         cache: "no-store",
         signal: AbortSignal.timeout(8_000),
       }).then((r) => (r.ok ? (r.json() as Promise<{ result?: unknown }>) : null));
-    const [accRes, dgpRes] = await Promise.all([
+    const [accRes, dgpRes, ordersRes] = await Promise.all([
       rpc("condenser_api.get_accounts", [["headcorner"]]),
       rpc("condenser_api.get_dynamic_global_properties", []),
+      rpc("condenser_api.get_open_orders", ["headcorner"]),
     ]);
     const acc = (accRes?.result as Array<Record<string, string>> | undefined)?.[0];
     const dgp = dgpRes?.result as Record<string, string> | undefined;
     if (!acc) return steemTruthCache;
+    // תחום-בהזמנות (R366-money-truth-2): for_sale הוא-שלם-בדיוק-3 (עודפי-ריבוא) —
+    // המלאי-האמיתי = חופשי + תחום (דוקטרינת-MND-20261015).
+    let lockedSteem: number | null = null;
+    let lockedSbd: number | null = null;
+    const orders = (ordersRes?.result as Array<Record<string, unknown>> | undefined) ?? [];
+    let lSteem = 0;
+    let lSbd = 0;
+    for (const o of orders) {
+      const base = String((o.sell_price as { base?: string } | undefined)?.base ?? "");
+      const [amt, asset] = base.split(" ");
+      const v = parseFloat(amt ?? "0");
+      if (!Number.isFinite(v)) continue;
+      if (asset === "STEEM") lSteem += v;
+      else if (asset === "SBD") lSbd += v;
+    }
+    if (orders.length > 0) {
+      lockedSteem = lSteem;
+      lockedSbd = lSbd;
+    }
     const totalVests = rpcNum(dgp?.total_vesting_shares);
     const totalFund = rpcNum(dgp?.total_vesting_fund_steem);
     const spPerVest = Number.isFinite(totalVests) && Number.isFinite(totalFund) && totalVests > 0 ? totalFund / totalVests : NaN;
@@ -132,6 +155,9 @@ async function steemTruth(): Promise<SteemTruth | null> {
       sbd: Number.isFinite(rpcNum(acc.sbd_balance)) ? rpcNum(acc.sbd_balance) : null,
       ownSp: Number.isFinite(spPerVest) && Number.isFinite(ownVests) ? ownVests * spPerVest : null,
       delegatedOutSp: Number.isFinite(spPerVest) && Number.isFinite(rpcNum(acc.delegated_vesting_shares)) ? rpcNum(acc.delegated_vesting_shares) * spPerVest : null,
+      lockedSteem,
+      lockedSbd,
+      openOrders: orders.length,
     };
     steemTruthCache = t;
     return t;
@@ -183,11 +209,23 @@ export async function loadDex(force = false): Promise<DexPayload> {
   const chainMoney = await steemTruth();
   if (chainMoney && (chainMoney.liquid !== null || chainMoney.sbd !== null || chainMoney.ownSp !== null)) {
     const steemMark = truth.realMoney.lines.find((l) => l.asset.startsWith("STEEM"))?.markUsd ?? null;
-    const sbdMark = truth.realMoney.lines.find((l) => l.asset.startsWith("SBD"))?.markUsd ?? null;
+    // SBD-סימון-חסר: המוניטור לפעמים לא נותן סימן-SBD — נופלים-לאורקל-החי (מדוד, מוצלב)
+    let sbdMark = truth.realMoney.lines.find((l) => l.asset.startsWith("SBD"))?.markUsd ?? null;
+    if (sbdMark === null) {
+      try {
+        const { steemMarketSnapshot } = await import("@/lib/steem-feed");
+        const snap = await steemMarketSnapshot();
+        if (snap.oracle.sbdUsds !== null) sbdMark = snap.oracle.sbdUsds;
+      } catch {
+        /* כנה — השורות ממשיכות בלי-סימון-דולרי */
+      }
+    }
     const fresh: typeof truth.realMoney.lines = [];
     if (chainMoney.liquid !== null) fresh.push({ asset: "STEEM · headcorner-נזיל", amount: chainMoney.liquid, markUsd: steemMark, usd: steemMark !== null ? chainMoney.liquid * steemMark : null, source: "chain-live · get_accounts" });
     if (chainMoney.sbd !== null) fresh.push({ asset: "SBD · headcorner-נזיל", amount: chainMoney.sbd, markUsd: sbdMark, usd: sbdMark !== null ? chainMoney.sbd * sbdMark : null, source: "chain-live · get_accounts" });
     if (chainMoney.ownSp !== null) fresh.push({ asset: "SP · headcorner (נעול-וסטינג)", amount: chainMoney.ownSp, markUsd: steemMark, usd: steemMark !== null ? chainMoney.ownSp * steemMark : null, source: chainMoney.delegatedOutSp !== null ? `chain-live · מופקד-החוצה ${chainMoney.delegatedOutSp.toFixed(0)} SP` : "chain-live · get_accounts" });
+    if (chainMoney.lockedSteem !== null) fresh.push({ asset: "STEEM · headcorner-תחום-בהזמנות", amount: chainMoney.lockedSteem, markUsd: steemMark, usd: steemMark !== null ? chainMoney.lockedSteem * steemMark : null, source: `chain-live · ${chainMoney.openOrders ?? 0} הזמנות-פתוחות על השוק-הפנימי` });
+    if (chainMoney.lockedSbd !== null) fresh.push({ asset: "SBD · headcorner-תחום-בהזמנות", amount: chainMoney.lockedSbd, markUsd: sbdMark, usd: sbdMark !== null ? chainMoney.lockedSbd * sbdMark : null, source: `chain-live · ${chainMoney.openOrders ?? 0} הזמנות-פתוחות על השוק-הפנימי` });
     if (fresh.length > 0) {
       truth = { ...truth, realMoney: { lines: fresh, totalUsd: fresh.reduce((s, l) => s + (l.usd ?? 0), 0), marksAt: truth.realMoney.marksAt } };
     }
