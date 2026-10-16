@@ -229,12 +229,12 @@ export async function matchOrder(orderId: string): Promise<MatchResult> {
   }
 }
 
-/** התאמת-כל-הפקודות-הפתוחות — נקרא מהטיקר (8 שניות) ואחרי-כל-הצבה */
+/** התאמת-כל-הפקודות-הפתוחות — נקרא מהמתאים-הייעודי (כל-2ש׳ · גל-80) ואחרי-כל-הצבה */
 export async function matchOpenOrders(): Promise<{ checked: number; filled: number }> {
   const open = await db.dexOrder.findMany({
     where: { status: "OPEN" },
     orderBy: { createdAt: "asc" },
-    take: 100,
+    take: 300,
   });
   let filled = 0;
   for (const o of open) {

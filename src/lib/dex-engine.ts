@@ -18,7 +18,8 @@ import { ensureFleetLoop } from "@/lib/fleet-loop";
 /* ============================== הגדרות-שוק ============================== */
 
 const SEED_VERSION = "dex-v2-real-2026-10-15";
-const TICK_MS = 8_000;
+const TICK_MS = 8_000; // טיק-נרות/מדדים — 8 שניות
+const MATCH_MS = 2_000; // טיק-מתאים — כל-2 שניות (מנוע-התדירות גל-80: לימיטים-מתמלאים-בזמן-אמת)
 const FEE_BPS = 30;
 
 // האמת-על-המטבע — ממערכת-Console (שרשרת-SAOS המאומתת):
@@ -296,12 +297,7 @@ async function tick(): Promise<void> {
       void realVol;
     }
 
-    // --- פקודות-לימיט: התאמה-מול-הבריכה-האמיתית בכל-טיק (סגירת-הפער-מול-הענקים) ---
-    try {
-      await matchOpenOrders();
-    } catch (err) {
-      console.error("[dex-engine] order match failed:", err);
-    }
+    // --- פקודות-לימיט: עברו-למתאים-הייעודי (MATCH_MS=2ש׳) — ראה startMatcher ---
 
     // כל-75-טיקים (~10 דק׳): חישוב-מחדש-כנה של נפחים-ושער-פתיחה מהעסקאות-האמת.
     // חוק: ילידים-בלבד — נפח-העזרים שייך-לשוק-החוץ-ולא-נוגעים-בו-כאן.
@@ -386,6 +382,64 @@ function startTicker(): void {
   setTimeout(() => void tick(), 1_500);
 }
 
+/* ═══════════ המתאים-הייעודי (גל-80 · מנוע-התדירות) ═══════════
+ * matchOpenOrders נפרד-מטיק-הנרות: כל-2 שניות-בלי-תלות-ב-Binance-ובכתיבת-נרות.
+ * למה: הלימיטים-של-הצי-מוצבים-ב-0.04..0.12%-מהמיד — מילוי-תלוי-בלאטנטיות-המתאים.
+ * מתאים-איטי = ספר-עומק-שלם-שלא-חוצה; מתאים-של-2ש׳ = הצפה-רציפה-של-מילויים.
+ * ריפוי-עצמי כמו-הטיקר: readonly/locked → disconnect — הריצה-הבאה-מתחברת-מחדש. */
+interface MatcherHealth {
+  timer: ReturnType<typeof setInterval> | null;
+  busy: boolean;
+  runs: number;
+  filled: number;
+  lastError: string | null;
+  lastRunAt: string | null;
+}
+const gM = globalThis as unknown as { __giantMatcher?: MatcherHealth };
+
+function matcherState(): MatcherHealth {
+  if (!gM.__giantMatcher) {
+    gM.__giantMatcher = { timer: null, busy: false, runs: 0, filled: 0, lastError: null, lastRunAt: null };
+  }
+  return gM.__giantMatcher;
+}
+
+async function matchTick(): Promise<void> {
+  const st = matcherState();
+  if (st.busy) return;
+  st.busy = true;
+  try {
+    const r = await matchOpenOrders();
+    st.runs += 1;
+    st.filled += r.filled;
+    st.lastRunAt = new Date().toISOString();
+  } catch (err) {
+    st.lastError = err instanceof Error ? err.message : String(err);
+    console.error("[dex-engine] matcher failed:", err);
+    const msg = `${err instanceof Error ? err.message : String(err)} ${String((err as { code?: string }).code ?? "")}`;
+    if (/readonly|read-only|locked|SQLITE_BUSY|SQLITE_READONLY/i.test(msg)) {
+      try {
+        await db.$disconnect();
+        console.error("[dex-engine] matcher self-heal: stale pool dropped — next run reconnects");
+      } catch { /* כנה — ננסה-שוב */ }
+    }
+  } finally {
+    st.busy = false;
+  }
+}
+
+function startMatcher(): void {
+  const st = matcherState();
+  if (st.timer) return;
+  st.timer = setInterval(() => void matchTick(), MATCH_MS);
+  setTimeout(() => void matchTick(), 2_500);
+}
+
+export function matcherStatus(): MatcherHealth {
+  const st = matcherState();
+  return { timer: st.timer, busy: st.busy, runs: st.runs, filled: st.filled, lastError: st.lastError, lastRunAt: st.lastRunAt };
+}
+
 /* ============================== API-שער ============================== */
 
 const gSeed = globalThis as unknown as {
@@ -397,7 +451,8 @@ export async function ensureSeeded(): Promise<void> {
     gSeed.__giantSeedPromise = (async () => {
       // לוק-DB אטומי: מונע-זריעה-כפולה-בין-מופעי-מודול/תהליכים
       try {
-        await db.dexConfig.create({ data: { key: "seedLock", value: String(Date.now()) } });
+        // upsert — לא create: הבוט (instrumentation) והבקשה-הראשונה-יכולים-להתחרות-על-המנעול
+        await db.dexConfig.upsert({ where: { key: "seedLock" }, create: { key: "seedLock", value: String(Date.now()) }, update: { value: String(Date.now()) } });
       } catch {
         // מישהו-אחר זורע — חכה-שיסיים
         for (let i = 0; i < 120; i++) {
@@ -450,6 +505,7 @@ export async function ensureSeeded(): Promise<void> {
 export async function ensureEngine(): Promise<void> {
   await ensureSeeded();
   startTicker();
+  startMatcher(); // מתאים-2ש׳ — לימיטים-חוצים-בזמן-אמת (גל-80)
   // לקוחות-האמת-הראשונים — הצי-סוחר-על-הבריכה-שלנו-ללא-הפסקה (הוראת-הבעלים)
   void ensureFleetLoop();
 }

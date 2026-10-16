@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useHq } from "@/lib/hq/store";
 import { startTruthBridge } from "@/lib/hq/truth-bridge";
+import { startOfficeLiveFeed } from "@/lib/hq/live-feed";
 import { OperatorDrawer } from "@/components/hq/OperatorDrawer";
 import { OfficeView } from "@/components/giant/OfficeView";
 
@@ -57,8 +58,16 @@ export function OfficeHqView() {
   const sceneFailed = useHq((s) => s.sceneFailed);
 
   // גשר-האמת: סקר /api/office-state → syncSnapshot/syncGit/setTruth בחנות.
-  // נעצר בניתוק-הרכיב (startTruthBridge מחזיר פונקציית-עצירה).
-  useEffect(() => startTruthBridge(45_000), []);
+  // + השידור-החי: socket.io → office-live :3036 ב-4Hz (גל-80) — העולם-המתמשך
+  //   נכנס-לחנות בזמן-אמת במקום-להמתין-לסקר. שניהם-נעצרים-בניתוק-הרכיב.
+  useEffect(() => {
+    const stopTruth = startTruthBridge(45_000);
+    const stopLive = startOfficeLiveFeed();
+    return () => {
+      stopTruth();
+      stopLive();
+    };
+  }, []);
 
   return (
     <div className="space-y-5" dir="rtl">
