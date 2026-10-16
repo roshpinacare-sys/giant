@@ -128,24 +128,14 @@
 {"ts":"2026-10-16T10:19:20.975Z","repo":"giant","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T10:19:22.384Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T10:19:22.384Z","action":"sweep-done"}
-{"ts":"2026-10-16T10:55:33.893Z","repo":"my-project","action":"commit-fail","out":"rigin/main' have diverged,\nand have 8 and 2 different commits each, respectively.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   db/custom.db\n\tmodified:   mini-services/fleet-economy/state/ledger.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
-{"ts":"2026-10-16T10:55:34.647Z","repo":"my-project","action":"push-fail","out":"jected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
-{"ts":"2026-10-16T10:55:37.150Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   f574509d..0d72895e  HEAD -> main"}
-{"ts":"2026-10-16T10:55:38.551Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T10:55:39.989Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T10:55:41.402Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T10:55:43.219Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T10:55:45.047Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T10:55:46.809Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T10:55:48.580Z","repo":"giant","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T10:55:50.317Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T10:55:50.318Z","action":"sweep-done"}
-{"ts":"2026-10-16T11:05:37.633Z","repo":"my-project","action":"sealed","ahead":"9","detail":"To https://github.com/roshpinacare-sys/giant.git\n   e848c4f8..5447762   HEAD -> main"}
-{"ts":"2026-10-16T11:05:40.904Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   d61076e5..6fecae6b  HEAD -> main"}
-{"ts":"2026-10-16T11:05:42.295Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T11:05:43.786Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T11:05:45.488Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T11:05:47.547Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T11:05:49.373Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T11:05:51.124Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
-{"ts":"2026-10-16T11:05:54.125Z","repo":"giant","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:58:51.022Z","repo":"my-project","action":"push-fail","out":"[rejected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T10:58:54.022Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   f50cc7cc..6465d533  HEAD -> main"}
+{"ts":"2026-10-16T10:58:59.872Z","repo":"Domain","action":"push-fail","out":"s a ref in \"refs/{heads,tags}/\". If so we add a corresponding\n  refs/{heads,tags}/ prefix on the remote side.\n\nNeither worked, so we gave up. You must fully qualify the ref.\nhint: The <src> part of the refspec is a commit object.\nhint: Did you mean to create a new branch by pushing to\nhint: 'HEAD:refs/heads/HEAD'?\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/Domain.git'"}
+{"ts":"2026-10-16T10:59:01.317Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:59:02.740Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:59:04.632Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:59:06.442Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:59:08.144Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:59:10.003Z","repo":"giant","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:59:11.773Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:59:11.773Z","action":"sweep-done"}
