@@ -2133,3 +2133,24 @@ Stage Summary:
 - **גל-83 · ערוץ-המפיקים-נרפא**: POST /tx/ingest דחה-אף-קריאה (http-403, 88-נשרו, sent:0) — Bun `requestIP` מחזיר `::ffff:127.0.0.1` והשומר-לא-ניתח-אותו. תוקף (normalize-של-מיפוי-IPv4) + מאומת: probe-לופבק-נקלט-seq. ה-ingestOk-ההיסטורי-היה-רק-מה-poller-הפנימי; מפיקי-ה-HTTP (מילויי-דקס) מעולם-לא-עברו. מעכשיו-הערוץ-חי.
 - **גל-83 · office3d/legacy מתוקן-בענן**: ה-push f50cc7cc (10:57:51Z) הצית-את office-3d.yml → ה-bake-הענני פרסם-dcec0577 (10:59:34Z) עם-legacy/=החדר-האינטראקטיבי-הטרי (אימות-גיט: כותרת-חדשה ✓). **Pages-build-תקוע "building" 18דק'** → build-חוזר-נדרש-דרך-API (201) — ממתין-לאימות-CDN.
 - UI: InternalEconomy מציג-את-סוגי-tax/recovery/dex-fee בעברית (KIND_HE). lint-0.
+
+---
+Task ID: 84
+Agent: zai-main (trace 1a14480010d53f5d · "תבחן היטב איפה עצרת ותמשיך")
+Task: תיקון-שורשי-של-מנוע-האטימה (vault-seal) — 5-פגמים-שנחשפו-ברצף-על-ידי-לוג-כנה
+
+Work Log:
+- **המשך-מ-83**: הסוופים-נכשלו-על-my-project שוב-ושוב. הוספתי-לוג-כן-לכשלי-pull (היה-נקודה-עיוורת — רק-push-fail-נרשם) → הלוג-חשף-שרשרת-של-5-פגמים-אמיתיים:
+  1. **remote-שגוי**: האטימה-קראה-ל-`origin` — my-project משתמש-ב-`cloud` ("'origin' does not appear to be a git repository" בכל-סוופ). תוקן: זיהוי-remote-דינמי.
+  2. **צ'קאאוט-כפול**: /home/z/channels/giant הוא-צ'קאאוט-שני-של-אותו-ריפו-בגיטהאב (roshpinacare-sys/giant) — הסוופ-אטם-את-שניהם; העותק-השני-דחף-מצב-ישן-וקידם-את-הענן (נמדד: 37→47→50-קומיטים-של-פער) — **מכונת-התפרים-ההיסטורית**. הוצא-מ-SEAL_REPOS (my-project-הבעלים-הקנוני).
+  3. **עץ-מלוכלך**: בין-commit-ל-pull, ingest/persist מלכלך-את-העץ → `pull --rebase` מסרב → autoStash-חובה.
+  4. **pull-ללא-branch**: "did not specify a branch" בלי-upstream → refspec-מפורש `cloud main`.
+  5. **ריבוז-תקוע-על-קונפליקטי-delete/modify** (הסשן-השני-על-הריפו! נראו-קומיטים "vault-seal [zai-web] · epoch-2 · איחוי-כספת") → השאיר-rebase-merge-תקוע-ששבר-סבבים. **הפתרון-השורשי ל-my-project: `merge -s ours`** — אסטרטגיה-שלא-נוגעת-בעץ-העבודה-כלל (אפס-תפר-מובטח לספר-החי), ההיסטוריה-מקושרת, התוכן-שלנו-מנצח. יתר-המאגרים: rebase-כרגיל.
+- **"unstable object source data"**: נמדד-שקורה-רק-בפעולות-git-ידניות — git קורא-db/custom.db-בזמן-ש-Prisma-כותב. המנוע-מקפיא-next-server-בסוופים-שלו; הריפוי-הידני-בוצע-עם-SIGSTOP→sync→SIGCONT.
+- **סנכרון-כספת-מלא**: rebase-abort → commit (wave-83 מלא) → merge -s ours → push → **behind:0 · ahead:0 מאומת**.
+- **חוזק-מנוע**: rebase --abort-מונע-כניקול-עצמי לפני-כל-sync · sealMyProject→strategyOurs · לוגי-pull-fail/merge-fail.
+
+Stage Summary:
+- מנוע-האטימה-עמיד-מאומת: dynamic-remote · zero-seam-merge לכספת-החיה · self-clean-rebase · לוג-כן-מלא · מנעול-TTL-עובד (sweep-skipped-lock-held-נרשם-כנה) · צ'קאאוט-כפול-הוצא-מהמשחק.
+- הענן-מסונכרן (0/0) עם-כל-גל-83. הסשן-השני (zai-web) ממשיך-לדחוף-לאותו-ריפו — ה-merge -s ours קושר-את-ההיסטוריות-בלי-דריכה.
+- פתוח: אימות-סוופ-מלא-עם-הקפאה-אחרי-פקיעת-המנעול (~12:15).

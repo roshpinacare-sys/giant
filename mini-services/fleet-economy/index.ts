@@ -527,7 +527,7 @@ function git(dir: string, args: string[]): Promise<{ ok: boolean; out: string }>
     });
   });
 }
-async function sealRepo(dir: string, afterPull?: () => void | Promise<void>): Promise<boolean> {
+async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opts?: { strategyOurs?: boolean }): Promise<boolean> {
   // גל-83 · תיקון-תפר-מיזוג: הפרמטר afterPull נמחק-מהחתימה-במיזוג-אך-הקריאה-ב-sealMyProject
   // המשיכה-להעביר-אותו + הגוף-התייחס-אליו → ReferenceError שהרג-את-כל-סבב-האטימה
   // (ובכך-ביטל-בשקט-את-משמורת-המדינה: freeze+custody-restore — שורש-קריעות-הספר-החוזרות).
@@ -542,19 +542,30 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>): Pr
       const cm = await git(dir, ["commit", "-q", "-m", `vault-seal [auto-economy]: ${dirtyLines.length} files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס`]);
       if (!cm.ok && !cm.out.includes("nothing to commit")) { sealLog({ repo: name, action: "commit-fail", out: cm.out }); }
     }
+    // גל-83 · ניקוי-עצמי: rebase-תקוע-מסוופ-קודם (קונפליקטי-delete/modify מהסשן-השני)
+    // היה-שובר-את-כל-הסבבים-הבאים — abort-בכנה-אם-יש, no-op-אם-אין.
+    await git(dir, ["rebase", "--abort"]);
     // גל-83 · תיקון-שורשי: ה-remote-אינו-תמיד "origin" — my-project משתמש-ב-"cloud".
     // נמדד: כל-הסוופים-נכשלו-על-my-project ("'origin' does not appear to be a git repository")
     // → הכספת-המקומית-נשארה-לא-דחופה-37-קומיטים, והעותק-ב-channels/giant (אותו-ריפו-בגיטהאב!)
     // דחף-במקומה-מצב-ישן-וקידם-את-הענן — מקור-תפרי-הספר-ההיסטוריים.
     const rm = await git(dir, ["remote"]);
     const remote = rm.out.split("\n").map((s) => s.trim()).filter(Boolean)[0] ?? "origin";
-    // גל-83 · autoStash-חובה: המנוע-החי מלכלך-קבצי-מצב-כל-טיק/ingest — pull --rebase
-    // מסרב-לרוץ-על-עץ-מלוכלך-והכשל-היה-שקט (רק-push-fail-נרשם) → כל-סוופ-החמיץ-את-הריבוז.
-    // גל-83 · refspec-מפורש: pull-בלי-branch נכשל ("did not specify a branch") כשאין
-    // upstream-tracking — נמדד-בסוופ-11:59. cloud main מפורש מבטיח-ריבוז-אמיתי.
-    const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote, "main"]);
-    if (!pull.ok && !pull.out.includes("Already up to date") && !pull.out.includes("up to date")) {
-      sealLog({ repo: name, action: "pull-fail", out: pull.out.slice(0, 220) });
+    if (opts?.strategyOurs) {
+      // גל-83 · מסלול-אפס-תפרים (my-project — מחזיק-המצב-החי): merge -s ours לא-נוגע
+      // בעץ-העבודה-כלל — הספר-החי-והקוד-הרצים-שלנו-מנצחים-תמיד, ההיסטוריה-של-הענן
+      // (כולל-קו-הסשן-השני) מקושרת-כהורה-שני. אפס-קונפליקטים, אפס-stash, אפס-תפר.
+      await git(dir, ["fetch", remote, "main"]);
+      const mg = await git(dir, ["merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins, zero-seam", "FETCH_HEAD"]);
+      if (!mg.ok && !mg.out.includes("Already up to date") && !mg.out.includes("up to date")) {
+        sealLog({ repo: name, action: "merge-fail", out: mg.out.slice(0, 200) });
+      }
+    } else {
+      // גל-83 · autoStash-חובה + refspec-מפורש (נמדד: pull-בלי-branch נכשל-בלי-upstream).
+      const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote, "main"]);
+      if (!pull.ok && !pull.out.includes("Already up to date") && !pull.out.includes("up to date")) {
+        sealLog({ repo: name, action: "pull-fail", out: pull.out.slice(0, 220) });
+      }
     }
     if (afterPull) { try { await afterPull(); } catch (e) { sealLog({ repo: name, action: "after-pull-fail", error: String(e) }); } }
     const push = await git(dir, ["push", remote, "HEAD"]);
@@ -613,7 +624,7 @@ async function sealMyProject(): Promise<void> {
         if (preSnap) { try { fs.copyFileSync(preSnap, SNAP); } catch { /* כנה */ } }
         sealLog({ repo: "my-project", action: "state-custody-restore", brokenAt: v.brokenAt, restored });
       }
-    });
+    }, { strategyOurs: true }); // גל-83 · אפס-תפרים: merge -s ours — לא-נוגע-בעץ-החי-כלל
   } finally {
     for (const p of pids) { try { process.kill(p, "SIGCONT"); } catch { /* כנה */ } }
     if (preLedger) try { fs.rmSync(preLedger, { force: true }); } catch { /* כנה */ }
