@@ -1,4 +1,4 @@
-/* estate-sync v2 — שומר-העוגנים-המרפא-את-עצמו (גל-16 · "הזרימה-המרפאת-את-עצמה")
+/* estate-sync v4 — שומר-העוגנים-המרפא-את-עצמו (גל-16 · "הזרימה-המרפאת-את-עצמה")
  * ═══════════════════════════════════════════════════════════════════════════════
  * לקח-הגלים: סנדבוקסים נמחקים — הגיט הוא שכבת-הקיום. v1 ידע-רק ff-pull בספרייה
  * קיימת; אחרי-מחיקת-סנדבוקס השומר-עצמו נשאר-חסר-אונים. v2 מרפא: אם-עוגן-חסר —
@@ -20,7 +20,15 @@
  * במשך-80-דקות-ובפנים אפס-טיקים (ה-`void tick()`-היה-חבור-ב-callback-של-listen,
  * ו-hot-reload/קריסה-השאירו-פורט-פתוח-בלי-עבודה). החיווט-החדש: הטיק-רץ-מיד-
  * ברמת-המודול — לא-תלוי-ב-listen; מגן-globalThis מונע-ריבוי-מאזינים-ב-hot-reload;
- * כשל-listen = יומן-כנה-ולא-מוות-שקט — העבודה-ממשיכה-גם-בלי-HTTP. */
+ * כשל-listen = יומן-כנה-ולא-מוות-שקט — העבודה-ממשיכה-גם-בלי-HTTP.
+ *
+ * גל-t77 · התיקון-השורשי-של-חור-הדיסק: נמדד-חי — pull-נכשל-אחד (מנעול/רשת/חלון-עצירה)
+ * גרם-להסגר-של-ריפו-שלם (FleetHQ.stale = 2.6G!) ולשיבוט-חסר-node_modules. v4 = סולם-מדורג:
+ *  1) pull-נכשל → ניסיון-חוזר-אחרי-3ש׳ (שגיאה-רגעית)
+ *  2) עדיין-נכשל → fetch+rebase --autostash — שומר-קומיטים-מקומיים (אפס-אובדן)
+ *  3) rebase-נכשל → rebase --abort + דיווח-כן "diverged" — הספרייה-נשארת-שלמה, אין-הסגר
+ *  4) הסגר-רק-על-ריפו-מת-מבנית (git status-נכשל) · אחרי-שיבוט-מוצלח — ניקוי-אוטומטי-של-ההסגר
+ *  5) quarantine-שנכשל-ב-rename לא מוחק-את-המקור — דיווח-כן-והמתנה-לטיק-הבא */
 import { createServer } from "node:http";
 import { existsSync, mkdirSync, rmSync, renameSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -131,11 +139,11 @@ async function headAge(dir: string): Promise<number | null> {
   return Math.max(0, Math.round((Date.now() - t) / 60_000));
 }
 
-/* ריפוי-עצמי: הסגר-של-ספרייה-פגומה ואז-שיבוט-טרי */
+/* ריפוי-עצמי: הסגר-של-ספרייה-מתה-מבנית בלבד · אין-מחיקת-מקור-בכשל-rename (אפס-אובדן) */
 function quarantine(dir: string): string {
   const qu = `${dir}.stale-${Date.now()}`;
   try { renameSync(dir, qu); log("quarantined:", dir, "→", qu); return qu; }
-  catch { try { rmSync(dir, { recursive: true, force: true }); } catch { /* כבר-אין */ } return ""; }
+  catch { log("quarantine-rename-failed (no destructive fallback — honest):", dir); return ""; }
 }
 
 async function syncAnchor(a: Anchor, st: AnchorState, pat: string | null): Promise<void> {
@@ -150,21 +158,55 @@ async function syncAnchor(a: Anchor, st: AnchorState, pat: string | null): Promi
   }
   const url = `https://github.com/${ORG}/${a.repo}.git`;
 
-  /* קיים-כריפו? → ff-pull */
+  /* קיים-כריפו? → בדיקה-מבנית ואז סולם-החלמה-מדורג (v4) */
   if (existsSync(path.join(a.dir, ".git"))) {
-    const r = await runGit(["pull", "--ff-only", "--quiet"], { cwd: a.dir, token, timeoutMs: 90_000 });
-    if (r.code === 0) {
+    const health = await runGit(["status", "--porcelain"], { cwd: a.dir, token, timeoutMs: 30_000 });
+    if (health.code !== 0) {
+      log("repo-structurally-dead → quarantine path:", a.name);
+    } else {
+      let r = await runGit(["pull", "--ff-only", "--quiet"], { cwd: a.dir, token, timeoutMs: 90_000 });
+      if (r.code !== 0) {
+        /* מדורג-1: ניסיון-חוזר — שגיאה-רגעית (מנעול/רשת/חלון-עצירה של סנדבוקס) */
+        log("pull-failed → retry-after-3s:", a.name, r.out.trim().slice(0, 100));
+        await new Promise((res) => setTimeout(res, 3_000));
+        r = await runGit(["pull", "--ff-only", "--quiet"], { cwd: a.dir, token, timeoutMs: 90_000 });
+      }
+      if (r.code !== 0) {
+        /* מדורג-2: fetch+rebase --autostash — משמר-קומיטים-מקומיים (אפס-אובדן) */
+        await runGit(["fetch", "--quiet", "origin"], { cwd: a.dir, token, timeoutMs: 90_000 });
+        const rb = await runGit(["rebase", "--autostash", "--quiet", "FETCH_HEAD"], { cwd: a.dir, token, timeoutMs: 90_000 });
+        if (rb.code === 0) {
+          st.ok = true; st.state = "healed"; heals++;
+          st.headAgeMin = await headAge(a.dir);
+          st.detail = `rebase-autostash ok${st.headAgeMin !== null ? ` · head ${st.headAgeMin} דק` : ""}`;
+          log("HEALED", a.name, st.detail);
+          return;
+        }
+        /* מדורג-3: התנגדות-אמיתית → abort + דיווח-כן · הספרייה-נשארת-שלמה, אין-הסגר */
+        await runGit(["rebase", "--abort"], { cwd: a.dir, token, timeoutMs: 30_000 });
+        st.ok = false; st.state = "failed"; fails++;
+        st.detail = `diverged-honest (repo intact, no quarantine): ${rb.out.trim().slice(0, 90)}`;
+        log("DIVERGED", a.name, st.detail);
+        return;
+      }
       st.ok = true; st.state = st.state === "healed" ? "healed" : "fresh";
       st.headAgeMin = await headAge(a.dir);
       st.detail = `ff-pull ok${st.headAgeMin !== null ? ` · head ${st.headAgeMin} דק` : ""}`;
       log("OK", a.name, st.detail);
       return;
     }
-    log("pull-failed → self-heal re-clone:", a.name, r.out.trim().slice(0, 120));
   }
 
-  /* חסר/פגום → הסגר-ושיבוט-טרי */
-  if (existsSync(a.dir)) quarantine(a.dir);
+  /* מת-מבנית/חסר → הסגר-ושיבוט-טרי */
+  let qu = "";
+  if (existsSync(a.dir)) qu = quarantine(a.dir);
+  if (existsSync(a.dir) && !qu) {
+    /* לא-הצלחנו-להזיז-את-המקור — לא מוחקים (אפס-אובדן) · דיווח-כן והמתנה לטיק הבא */
+    st.ok = false; st.state = "failed"; fails++;
+    st.detail = "quarantine-blocked (rename failed, dir intact) — honest";
+    log("FAIL", a.name, st.detail);
+    return;
+  }
   mkdirSync(path.dirname(a.dir), { recursive: true });
   const c = await runGit(["clone", "--quiet", url, a.dir], { token, timeoutMs: 180_000 });
   if (c.code === 0) {
@@ -172,6 +214,11 @@ async function syncAnchor(a: Anchor, st: AnchorState, pat: string | null): Promi
     st.headAgeMin = await headAge(a.dir);
     st.detail = `cloned-from-canon${st.headAgeMin !== null ? ` · head ${st.headAgeMin} דק` : ""}`;
     log("HEALED", a.name, st.detail);
+    /* ניקוי-אוטומטי-של-ההסגר — סותם-את-חור-הדיסק-שנמדד (FleetHQ.stale=2.6G) */
+    if (qu) {
+      try { rmSync(qu, { recursive: true, force: true }); log("stale-cleaned:", qu); }
+      catch { log("stale-clean-deferred (honest):", qu); }
+    }
     return;
   }
   st.ok = false; st.state = "failed"; fails++;
@@ -201,7 +248,7 @@ const health = createServer((req, res) => {
   res.end(JSON.stringify({
     ok: allOk,
     service: "estate-sync",
-    version: 3,
+    version: 4,
     selfHealing: true,
     tickDecoupledFromListen: true,
     pid: process.pid,
@@ -228,7 +275,7 @@ function boot() {
 
   /* העבודה-קודמת-לבריאות: הטיק-רץ-מיד — לא-חבור-ב-callback-של-listen
    * (השורש-של-הזומבי-שנמדד: שרת-200 · אפס-טיקים · 80-דקות). */
-  log(`booting v3 · self-healing · ${ANCHORS.length} anchors · every ${Math.round(INTERVAL_MS / 1000)}s · health :${PORT} · pid ${process.pid}`);
+  log(`booting v4 · self-healing · ${ANCHORS.length} anchors · every ${Math.round(INTERVAL_MS / 1000)}s · health :${PORT} · pid ${process.pid}`);
   void tick();
   setInterval(() => void tick(), INTERVAL_MS);
 
