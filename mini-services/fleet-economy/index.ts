@@ -632,7 +632,8 @@ function git(dir: string, args: string[]): Promise<{ ok: boolean; out: string }>
     });
   });
 }
-async function sealRepo(dir: string, afterPull?: () => void | Promise<void>): Promise<boolean> {
+type SealOpts = { noPull?: boolean; pushRef?: string };
+async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opts: SealOpts = {}): Promise<boolean> {
   const name = dir.split("/").filter(Boolean).pop()!;
   for (let attempt = 0; attempt < 2; attempt++) {
     const st = await git(dir, ["status", "--porcelain", "--branch"]);
@@ -645,13 +646,15 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>): Pr
       const cm = await git(dir, ["commit", "-q", "-m", `vault-seal [auto-economy]: ${dirtyLines.length} files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס`]);
       if (!cm.ok && !cm.out.includes("nothing to commit")) { sealLog({ repo: name, action: "commit-fail", out: cm.out }); }
     }
-    await git(dir, ["pull", "--rebase", "-X", "ours", "origin"]);
-    // ות-ריפוי 2026-10-16: afterPull היה-מרומז-ולא-מוגדר → ReferenceError-מת-את-כל-סבב-האטימה
+    // גל-ריפוי 2026-10-16: afterPull-היה-מרומז-ולא-מוגדר → ReferenceError-מת-את-כל-סבב-האטימה
     // כל-10-דקות (שורש-מיילי-הכשל). עכשיו: פרמטר-אופציונלי אמיתי.
+    // ול-my-project: noPull — ה-session-השני-של-z.ai (צ'אט-זמני) אוטם-ל-main-שרשרת-משלו;
+    // pull-משם-הוא-מחולל-התפרים. האמת: הדיסק-המקומי · היעד: sovereign/main-בלבד.
+    if (!opts.noPull) await git(dir, ["pull", "--rebase", "-X", "ours", "origin"]);
     if (afterPull) { try { await afterPull(); } catch (e) { sealLog({ repo: name, action: "after-pull-fail", error: String(e) }); } }
-    const push = await git(dir, ["push", "origin", "HEAD"]);
+    const push = await git(dir, opts.pushRef ? ["push", "origin", `HEAD:${opts.pushRef}`] : ["push", "origin", "HEAD"]);
     if (push.ok || push.out.includes("Everything up-to-date") || push.out.includes("up to date")) {
-      sealLog({ repo: name, action: "sealed", ahead: ahead ?? "0", detail: push.out.slice(0, 120) });
+      sealLog({ repo: name, action: "sealed", ahead: ahead ?? "0", ref: opts.pushRef ?? "HEAD", detail: push.out.slice(0, 120) });
       // אירוע-אמת → עסקת-תשתית: אגרת-אטימה על מאגר שנאטם בפועל (קומיט+דחיפה קרו)
       try {
         ingestEvent({ kind: "infra", from: "FleetHQ", to: "TruthRail", asset: "USDS", amount: 0.05, refillFloat: true, reason: `אגרת-אטימת-כספת (${name})`, ref: `seal-${name}-${Date.now()}` });
@@ -706,7 +709,7 @@ async function sealMyProject(): Promise<boolean> {
         if (preSnap) { try { fs.copyFileSync(preSnap, SNAP); } catch { /* כנה */ } }
         sealLog({ repo: "my-project", action: "state-custody-restore", brokenAt: v.brokenAt, restored });
       }
-    }).then((r) => { ok = r; });
+    }, { noPull: true, pushRef: "refs/heads/sovereign/main" }).then((r) => { ok = r; });
   } finally {
     for (const p of pids) { try { process.kill(p, "SIGCONT"); } catch { /* כנה */ } }
     if (preLedger) try { fs.rmSync(preLedger, { force: true }); } catch { /* כנה */ }
