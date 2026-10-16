@@ -96,7 +96,7 @@ MINIS=(
   "mini-services/estate-sync|3021"
   "mini-services/sovereign-gateway|3011"
   "mini-services/boot-verifier|3042"
-  "mini-services/fleet-economy|3016"
+  "/home/z/estate/fleet-economy|3016"
   "mini-services/forge|"
   "mini-services/office-live|"
 )
@@ -116,9 +116,9 @@ for entry in "${MINIS[@]}"; do
 done
 
 # מפקח-החייאה-של-הכלכלה-הפנימית (תורת fix-not-close): אם-נפל — מוקם-תוך-שניות
-if [ -f "$ROOT/mini-services/fleet-economy/supervise-economy.sh" ] && ! pgrep -f 'supervise-economy' >/dev/null 2>&1; then
+if [ -f "/home/z/estate/fleet-economy/supervise-economy.sh" ] && ! pgrep -f 'supervise-economy' >/dev/null 2>&1; then
   if [ "$DRY" != "--dry-run" ]; then
-    (cd "$ROOT/mini-services/fleet-economy" && (setsid nohup bash supervise-economy.sh > /dev/null 2>&1 < /dev/null &) )
+    (cd "/home/z/estate/fleet-economy" && (setsid nohup bash supervise-economy.sh > /dev/null 2>&1 < /dev/null &) )
     say "▶ מפקח-כלכלה הופעל (supervise-economy)"
   else
     say "○ (dry) מפקח-כלכלה יופעל"
