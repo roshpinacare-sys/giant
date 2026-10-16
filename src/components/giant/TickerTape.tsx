@@ -91,7 +91,7 @@ export function TickerTape() {
       const saos = (d.assets ?? []).find((a) => a.symbol === "SAOS" && a.refPrice !== null);
       if (saos && saos.refPrice !== null) {
         // חוק-היחידות (T55/T56): refPrice ב-mu → יחידות-אנוש ÷1000, תגית-אורקל
-        out.push({ key: "c-SAOS", symbol: "SAOS", price: `${(saos.refPrice / 1000).toFixed(3)} USDS`, change: null, tag: "oracle" });
+        out.push({ key: "c-SAOS-oracle", symbol: "SAOS", price: `${(saos.refPrice / 1000).toFixed(3)} USDS`, change: null, tag: "oracle" });
       }
       setChips(out);
       setSource(d.source ? { name: d.source, ageMin: d.cachedAgeMin } : null);

@@ -30,6 +30,13 @@ const SNAP = path.join(STATE_DIR, "snapshot.json");
 const TICK_MS = 800; // גל-85: 900→800 (תקורה-זעירה — flush הוא append-בלבד)
 const SNAP_MS = 30_000;
 const FEE_BPS = 30; // 0.3%
+// גל-91 · דוקטרינה-4 · רצועת-עוגן-כלכלית: העוגן-הכלכלי = סך-USDS / סך-SAOS
+// (60,000 כספת + 8,030 בריכה + ~12,000 חיילים) / 21,000 היצע ≈ 3.81 — רצועה ±15%.
+// נמדד (2026-10-16): הרצועה-הישנה 1.05–1.35 הייתה-תת-היצע-מתמטי (בלתי-ניתנת-להשגה) —
+// המחיר-נסחר 25.5→14.7 בלי-בלימה כי-השומר-כיוון-ליעד-לא-אמיתי. העוגן-מתוקן-לקרקע-האמיתית.
+const ANCHOR_USDS_PER_SAOS = 3.81;
+const BAND_LO = 3.24; // עוגן −15% — מתחת: הכספת קונה-תמיכה
+const BAND_HI = 4.38; // עוגן +15% — מעל: הכספת מדריפה-SAOS (שחרור-כסף-תקוע)
 const WAGE_FLOOR_USDS = 350; // גל-83 · חוק-שכר-מצע: רצפת-פרנסה לחייל
 const TAX_BPS = 200; // גל-83 · מס-שירותים 2% → הכספת (מימון-השכר)
 
@@ -94,13 +101,10 @@ let attemptsTotal = 0;
 let winAttempts = 0, winRejected = 0, lastGovAcc: number | null = null;
 let rejectedAtBoot = 0; // גל-85 · המונה-משוחזר-מהסנאפשוט — המדידה-הכנה-היא-רק-על-העלייה-הנוכחית
 function rej() { rejected++; winRejected++; }
-let skipped = 0; // גל-86b · ניסיונות-שלא-נוסו-כלל (אין-יכולת-תשלום) — לא-דחייה, לא-קבלה
-function noFund(): null { skipped++; return null; }
 let errors = 0;
 let bootedAt = Date.now();
 let lastVerify: { at: number; ok: boolean; checked: number } | null = null;
 let sealing = false; // חוק-גל-82: מנוע-קפוא-בזמן-אטימת-כספת (אף-כתיבת-מדינה)
-let lastMintAt = 0; // גל-86 · הגבלת-קצב-הנפקות (פיקוח-מוניטרי-חוזר)
 const tailRing: Tx[] = []; // last 500 for /ledger reads
 
 /* ── ingest אמת: אירועי-מערכת אמיתיים (מילויי-דקס · בדיקות-מאמת-אתחול · אטימות)
@@ -254,8 +258,7 @@ function spawnTx(): Tx | null {
   if (r < 0.06) { // משכורת/תדלוק מהכספת — **ב-SAOS** (גל-85 · מיחזור-מחסן-הכספת)
     // שכר-ב-SAOS יוצר-את-צד-המכירה-האמיתי-בבריכה: חיילים-מקבלים-SAOS → מוכרים
     // → USDS חוזר-מהבריכה (נמדד: רק-קניות = הבריכה-בלעה-77K-USDS-והכספת-מתה)
-    const amt = round6(0.2 + Math.random() * 0.8);
-    if (bal("treasury").saos < amt) return noFund(); // גל-86b: אין-מלאי — לא מנסים-כדי-לא-לייצר-דחייה-מלאכותית
+    const amt = round6(0.5 + Math.random() * 2.5); // גל-91 · דוקטרינה-4: הוחזר לרזולוציה ×3 (0.5–3.0) — נמדד: השסתום-נשחק-חזרה ל-0.2–1.0 בריסיד
     return apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: soldier, asset: "SAOS", amount: amt, reason: "משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת" });
   }
   if (r < 0.50) { // תשלום-שירות הדדי — עיקר-הזרימה (משתמשי-פנים משלמים זה לזה)
@@ -263,7 +266,7 @@ function spawnTx(): Tx | null {
     // משולמים-להם (נמדד: 50/50 = זרימה-אפסית-לחיילים → הם-מתרוקנים → 62% קבלה)
     const soldierIds = SOLDIERS.map((s) => s.id);
     const nodeIds = FLEET_NODES.map((n) => n.id);
-    const receiver = Math.random() < 0.9 ? pick(soldierIds) : pick(nodeIds); // גל-86b: 90% מהשירותים-לחיילים
+    const receiver = Math.random() < 0.8 ? pick(soldierIds) : pick(nodeIds);
     const svc = pick(SERVICES);
     const units = 1 + Math.floor(Math.random() * 8);
     // גל-83 · זרימה-חוזרת: צמתי-הצי קונים-שירותים מהחיילים
@@ -273,14 +276,9 @@ function spawnTx(): Tx | null {
     for (const nd of FLEET_NODES) { const b = bal(nd.id); nodeW += b.usds + b.saos; }
     for (const sl of SOLDIERS) { const b = bal(sl.id); solW += b.usds + b.saos; }
     const totW = nodeW + solW;
-    const nodeShare = totW > 0 ? Math.min(0.8, Math.max(0.5, nodeW / totW)) : 0.6; // גל-86b: הצמתים-משלמים-יותר (צרכני-התשתית)
-    // גל-86b · בורר-משלם-אמיתי: מנסים-את-המשלם-המשוקלל; אין-יכולת-תשלום → הצד-השני
-    // (סוכן-אמיתי-מוצא-מי-שיכול-לשלם; שני-הצדדים-ריקים = אין-ניסיון, skip-כנה)
-    const primary = Math.random() < nodeShare ? pick(FLEET_NODES).id : soldier;
-    const fallback = primary === soldier ? pick(FLEET_NODES).id : soldier;
-    const payer = bal(primary).usds >= cost ? primary : bal(fallback).usds >= cost ? fallback : null;
-    if (!payer) return noFund();
-    const tx = apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: payer, to: receiver, asset: "USDS", amount: cost, reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
+    const nodeShare = totW > 0 ? Math.min(0.5, Math.max(0.2, nodeW / totW)) : 0.25;
+    const payer = Math.random() < nodeShare ? pick(FLEET_NODES).id : soldier;
+    const tx = apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: payer, to: receiver, asset: "USDS", amount: round6(svc.price * units), reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
     // גל-83 · מס-שירותים 2%: עסקה-נפרדת-וחתומה (מימון-אמיתי-לכספת שתוכל-לשלם-שכר)
     if (tx) apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: receiver, to: "treasury", asset: "USDS", amount: round6(tx.amount * (TAX_BPS / 10_000)), reason: `מס-שירותים ${TAX_BPS / 100}% → כספת` });
     return tx;
@@ -288,42 +286,36 @@ function spawnTx(): Tx | null {
   if (r < 0.74) { // החלפה על הבריכה (גילוי-מחיר אמיתי · מיקוף-פוזיציה)
     // גל-85 · מיקוף-פוזיציה: אף-סוחר-אמיתי-לא-מהמר-יותר-מהארנקה —
     // הסוופ-מסתגל-ליתרה (נמדד: סוופ-גדול-על-ארנקה-ריקה = 24% מהדחיות)
-    const buySaos = Math.random() < 0.35; // גל-86b: פחות-ניקוז-USDS-לבריכה
+    const buySaos = Math.random() < 0.5;
     const b0 = bal(soldier);
     const want = buySaos ? 5 + Math.random() * 40 : 5 + Math.random() * 35;
     const amt = round6(Math.min(want, Math.max(1, (buySaos ? b0.usds : b0.saos) * 0.35)));
-    if (amt < 1) return noFund(); // גל-86b: אין-מה-לסחור — skip-כנה
+    if (amt < 1) { rej(); return null; }
     return ammSwap(soldier, buySaos ? "USDS" : "SAOS", amt, buySaos ? "רכישת SAOS לתשלומי-סטייק" : "מימוש SAOS ל-USDS תפעולי");
   }
   if (r < 0.84) { // סטייק/ביטול-סטייק
     const b = bal(soldier);
     const stake = Math.random() < 0.6;
     if (stake) {
-      const amt = round6(Math.min(b.saos, 0.5 + Math.random() * 6));
-      if (amt <= 0) return noFund(); // גל-86b
+      const amt = round6(Math.min(b.saos, 0.5 + Math.random() * 9.55)); // גל-91 · דוקטרינה-4: עד 10.05 — הוחזר מנסיגה ל-6.5
+      if (amt <= 0) { rej(); return null; }
       return apply({ seq: seq + 1, ts: Date.now(), kind: "stake", from: soldier, to: soldier, asset: "SAOS", amount: amt, reason: "סטייק-SAOS לאבטחת-הרשת הפנימית" });
     }
     const amt = round6(Math.min(b.saosStaked, 0.3 + Math.random() * 4));
-    if (amt <= 0) return noFund(); // גל-86b
+    if (amt <= 0) { rej(); return null; }
     return apply({ seq: seq + 1, ts: Date.now(), kind: "unstake", from: soldier, to: soldier, asset: "SAOS", amount: amt, reason: "ביטול-סטייק לצורך-תפעול" });
   }
   if (r < 0.94) { // תשלום-תשתית: חיילים-וצמתים-כאחד משלמים-לצמתי-הצי
     // גל-85 · צמתים-צורכים-תשתית-זה-מזה (נמדד: חייל-משלם-תמיד = ניקוז-חד-כיווני)
     const node = pick(FLEET_NODES).id;
     const svc = pick(SERVICES);
-    const cost = round6(svc.price * (1 + Math.floor(Math.random() * 5)));
-    // גל-86b · בורר-משלם-אמיתי-לתשתית (כמו-בשירותים)
-    const p1 = Math.random() < 0.5 ? soldier : pick(FLEET_NODES).id;
-    const p2 = p1 === soldier ? pick(FLEET_NODES).id : soldier;
-    const infraPayer = bal(p1).usds >= cost ? p1 : bal(p2).usds >= cost ? p2 : null;
-    if (!infraPayer) return noFund();
-    return apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: infraPayer, to: node, asset: "USDS", amount: cost, reason: `תשתית: ${svc.name}` });
+    const infraPayer = Math.random() < 0.5 ? soldier : pick(FLEET_NODES).id;
+    return apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: infraPayer, to: node, asset: "USDS", amount: round6(svc.price * (1 + Math.floor(Math.random() * 5))), reason: `תשתית: ${svc.name}` });
   }
   { // טיפ-SAOS על עבודה-טובה (תרבות-שימוש פנימית)
     const others = SOLDIERS.map((s) => s.id).filter((s) => s !== soldier);
     const to = pick(others);
     const amt = round6(0.05 + Math.random() * 0.4);
-    if (bal(soldier).saos < amt) return noFund(); // גל-86b
     return apply({ seq: seq + 1, ts: Date.now(), kind: "tip", from: soldier, to, asset: "SAOS", amount: amt, reason: "טיפ על עבודה-טובה בזרימה" });
   }
 }
@@ -335,25 +327,39 @@ function tick() {
     // גל-83 · חוק-שכר-מצע (כל-12-טיקים): חייל-מתחת-לרצפת-הפרנסה — הכספת מתדלקת.
     // זו-הזרימה-החוזרת-שחסרה: בלעדיה-הכסף-הצטבר-בבריכה/צמתים-והחיילים-נשארו-יבשים
     // (נמדד: 5,916-דחיות-מול-3,278-קבלות = 64% בזבוז-ניסיונות).
-    // גל-86b · קצב-מאוזן (500 טיקים ≈ 6.7דק'): נמדד-חי — ריפוי-כל-6.4ש׳ שרף-26K-כספת
-    // ב-35דק' (×1000 מעל-ההכנסות). תדר-השכר-חייב-להתאים-לתזרים-האמתי, לא-לתדר-הסחר.
-    if (tickNo % 500 === 0) {
+    if (tickNo % 8 === 0) {
       // גל-85 · השלמה-עד-רצפה (כל-8-טיקים, היה-4-במנות-רנדומליות): מילוי-מדויק-ולא-מנופח —
       // הסכום-הוא-בדיוק-הפער-עד-הרצפה (עד-60) — נמדד: מנות-רנדומליות-כל-4-טיקים =
       // שריפת-כספת-3×-מעבר-להכנסות → קריסה-מוניטרית (0.4-USDS בכספת)
-      // גל-86 · תקציב-שכר: הסבב לעולם לא מנסה לשלם יותר מהכספת (מעל רזרבה 1K × 30%) —
-      // נמדד: שכר-על-כספת-מתה = דחיות-מובטחות שמורידות-קבלה וסוגרות-את-המצערת
-      const poor = SOLDIERS.filter((s) => bal(s.id).usds < WAGE_FLOOR_USDS).sort((a, b) => bal(a.id).usds - bal(b.id).usds);
-      const tBal = bal("treasury").usds;
-      const budget = Math.max(0, (tBal - 1_000) * 0.3);
-      let spent = 0;
+      const poor = SOLDIERS.filter((s) => bal(s.id).usds < WAGE_FLOOR_USDS);
       for (const s of poor) {
-        if (spent >= budget) break; // אין-תקציב — לא מנסים כדי לא לייצר דחיות-כנות
         const gap = WAGE_FLOOR_USDS - bal(s.id).usds;
-        const amt = round6(Math.min(gap, 120, budget - spent)); // גל-86b: 60→120 בקצב-6.7דק
-        if (amt < 1) break;
-        const r = apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: amt, reason: `חוק-שכר-מצע: השלמה-עד-רצפה (רצפת ${WAGE_FLOOR_USDS})` });
-        if (r) spent += amt;
+        apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: round6(Math.min(gap, 60)), reason: `חוק-שכר-מצע: השלמה-עד-רצפה (רצפת ${WAGE_FLOOR_USDS})` });
+      }
+    }
+    // גל-91 · דוקטרינה-4 · שסתום-עוגן-דו-כיווני (כל-4-טיקים): הכספת מסגלת את-הבריכה אל-העוגן-הכלכלי.
+    // מעל-הרצועה: דריפת-SAOS מהכספת (שחרור-9743-SAOS-תקועים → USDS חוזר-לכספת) · מתחת: קניית-תמיכה.
+    // זה-התיקון-לשסתום-שאבד-בריסיד: בלי-ווסת, ריכוז-USDS-בבריכה מניב מחיר 14.7× מהעוגן.
+    if (tickNo % 4 === 0) {
+      const p = priceUsdsPerSaos();
+      const t = bal("treasury");
+      if (p > BAND_HI && t.saos >= 1) {
+        const amt = round6(Math.min(t.saos, pool.saos * 0.008)); // ≤0.8% עומק-בריכה לכל-דריפה
+        if (amt >= 1) ammSwap("treasury", "SAOS", amt, `דוקטרינה-4: דריפת-עוגן מעל-הרצועה (מחיר ${p.toFixed(2)} > ${BAND_HI}) · שחרור-SAOS-תקוע`);
+      } else if (p < BAND_LO && t.usds >= 1) {
+        const amt = round6(Math.min(t.usds, pool.usds * 0.008));
+        if (amt >= 1) ammSwap("treasury", "USDS", amt, `דוקטרינה-4: תמיכת-עוגן מתחת-לרצועה (מחיר ${p.toFixed(2)} < ${BAND_LO})`);
+      }
+    }
+    // גל-91 · דוקטרינה-4 · שסתום-גיוס-עודף-צמתים (כל-40-טיקים): צמתים-עם-USDS-ישן (>10) מעבירים 80%-עודף לכספת —
+    // נמדד: boot-verifier-החזיק 24.75-USDS-רדומים (הצבה-הגדולה-ביותר מחוץ-לזרימה). הכספת ממחזרת דרך-שכר/עוגן.
+    if (tickNo % 40 === 0) {
+      for (const nd of FLEET_NODES) {
+        const b = bal(nd.id);
+        if (b.usds > 10) {
+          const sweep = round6((b.usds - 10) * 0.8);
+          if (sweep >= 1) apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: nd.id, to: "treasury", asset: "USDS", amount: sweep, reason: `דוקטרינה-4: גיוס-עודף-צומת (שמירת-מצף 10) · לשלב→מקסימום` });
+        }
       }
     }
     // גל-83 · איסוף-עמלות (כל-150-טיקים): עמלות-הבריכה (הכנסת-הרשת) זורמות-לכספת
@@ -361,68 +367,6 @@ function tick() {
       const amt = round6(pool.feesUsds);
       pool.feesUsds = 0;
       apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: "pool", to: "treasury", asset: "USDS", amount: amt, reason: "איסוף-עמלות-בריכה → כספת" });
-    }
-    // גל-86b · הכנסה-קבועה-מהבריכה (כל-150 טיקים ≈ 2דק'): הסוופים-של-החיילים-מזרימים
-    // ~100K/שעה-אל-הבריכה (נמדד) והכספת-מתה-בזעירות. מס-אספקה 0.5% מ-USDS-הבריכה →
-    // כספת (הבריכה-מתמלאת-מחדש-מהסוופים — זה-הצף-הפיסקלי-הקבוע). ובנוסף: 20% מהמס
-    // קונים-בחזרה-SAOS-מהבריכה — מלאי-ה-SAOS-של-הכספת (מקור-המשכורות-ב-SAOS) מתחדש
-    // בלי-לשבור-את-חוק-היצע-21K (פשוט-חוזר-מהבריכה-לכספת).
-    if (tickNo % 150 === 0 && pool.usds > 5_000) {
-      const levy = round6(Math.min(2_000, pool.usds * 0.005));
-      if (levy >= 1) {
-        // (apply מנכה-מהבריכה-ומזרים-לכספת — אין-ניכוי-ידני-כפול)
-        apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: "pool", to: "treasury", asset: "USDS", amount: levy, reason: "מס-אספקה-בריכה 0.5% → כספת (גל-86b · ההכנסה-הקבועה)" });
-        const buyUsds = round6(levy * 0.5); // גל-86b · 50% — מאזן-את-צינור-משכורות-ה-SAOS שנמדד
-        if (buyUsds >= 2 && bal("treasury").usds > buyUsds) {
-          ammSwap("treasury", "USDS", buyUsds, "התחדשות-מלאי-SAOS-מהבריכה (50% ממס-האספקה · גל-86b)");
-        }
-      }
-    }
-    // גל-86 · חוק-ב' · שסתום-המיחזור + פיקוח-מוניטרי-חוזר (כל-150 טיקים ≈ 2דק'):
-    // ה-mint-ב-boot היה-חד-פעמי (נמדד: byKind.mint=1) — הכספת-מתה-בזמן-ריצה (3.4-USDS)
-    // והבריכה-בלעה-63K. הריפוי: הכספת-מוכרת-SAOS-מהמחסן-שלה-לבריכה (סוופ-אמיתי-דו-צדדי —
-    // USDS-חוזר-הביתה). אם-המחסן-ריק-מדי → הנפקה-גלויה-חתומה (מוגבלת-קצב: אחת-לשעה לפחות).
-    if (tickNo % 150 === 0 && bal("treasury").usds < 2_000) {
-      const t0 = bal("treasury");
-      const k = pool.saos * pool.usds;
-      const eff = 1 - FEE_BPS / 10_000;
-      const want = Math.min(30_000, pool.usds * 0.4, Math.max(0, 30_000 - t0.usds));
-      if (t0.saos > 1_000 && want > 2_000 && pool.usds - want > 1_000) {
-        // היפוך-עקומה מדויק: in = (k/(pool.usds − want) − pool.saos)/eff (מרווח-ביטחון 1%)
-        const inRaw = (k / (pool.usds - want) - pool.saos) / eff;
-        const inSaos = Math.floor(Math.min(inRaw * 1.01, t0.saos - 1_000));
-        if (inSaos > 200) {
-          const sw = ammSwap("treasury", "SAOS", inSaos, "שסתום-מיחזור: מחסן-SAOS → USDS-לכספת (פיקוח-מוניטרי-חוזר)");
-          if (sw) console.log(`[fleet-economy] שסתום-מיחזור: הכספת מכרה ${inSaos}-SAOS → כ-20K-USDS-חוזרים הביתה`);
-        }
-      }
-      if (bal("treasury").usds < 2_000 && Date.now() - lastMintAt > 3_600_000) {
-        // המחסן-ריק-מדי → הנפקה-גלויה-חתומה (אפס-התחמקות; מוגבל-קצב)
-        const MINT_USDS = 40_000;
-        lastMintAt = Date.now();
-        bal("treasury").usds = round6(bal("treasury").usds + MINT_USDS);
-        const mintTx = sealTx({ seq: seq + 1, ts: Date.now(), kind: "mint", from: "sovereign", to: "treasury", asset: "USDS", amount: MINT_USDS, reason: "פיקוח-מוניטרי-חוזר: הכספת והמחסן ריקים — הנפקת-צף גלויה (מוגבלת-קצב 1/שעה)" } as any);
-        seq = mintTx.seq; lastH = mintTx.h;
-        recent.push(mintTx.ts);
-        byKind["mint"] = (byKind["mint"] ?? 0) + 1;
-        persist(mintTx);
-        flush();
-        console.log(`[fleet-economy] פיקוח-מוניטרי: +${MINT_USDS}-USDS (mint חתום · מוגבל-קצב)`);
-      }
-    }
-    // גל-86 · חוק-ג' · דיבידנד-תשתית (כל-50 טיקים ≈ 40ש׳): צמתי-הצי-צוברים-את-דמי-התשתית
-    // ואף-לא-מחזירים (נמדד: ~3K-עסקאות-כל-אחד — ניקוז-חד-כיווני). מעגל-החזר: 1% מהעושר
-    // מעל-יתרת-עבודה (500) זורם-לכספת — התשתית-מממנת-את-הרשת-שמשתמשת-בה.
-    if (tickNo % 50 === 0) {
-      for (const nd of FLEET_NODES) {
-        const b = bal(nd.id);
-        if (b.usds > 2_000) { // גל-86b: הסף-הורם — הון-עבודה-מוגן, רק-עודף-נמסה
-          const levy = round6(Math.min(b.usds - 500, b.usds * 0.02)); // גל-86b: 1%→2% — הצמתים-העשירים-מממנים-מהר-יותר
-          if (levy >= 0.5) {
-            apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: nd.id, to: "treasury", asset: "USDS", amount: levy, reason: "דיבידנד-תשתית 2% → כספת (מעגל-החזר גל-86b)" });
-          }
-        }
-      }
     }
     // גל-85 · מווסת-אדפטיבי: 14-18 ניסיונות-בטיק (מהיר-על-ידי-קבלה בפועל, לא על-ידי-תקווה)
     const n = nBase + Math.floor(Math.random() * 5);
@@ -662,7 +606,7 @@ const server = Bun.serve({
           runRatePerHour, runProjectedPerDay: runRatePerHour !== null ? +(runRatePerHour * 24).toFixed(0) : null,
           realEvents: { ingestOk, ingestDedup, ingestFailed, ingestBadPayload: ingestBad, droppedTx: ingestFailed },
           byKind, rejected, errors, seq, lastH,
-          throughput: { attempts: attemptsTotal, rejectedCount: rejected - rejectedAtBoot, acceptancePct: attemptsTotal > 0 ? +(((attemptsTotal - (rejected - rejectedAtBoot)) / attemptsTotal) * 100).toFixed(1) : null, skippedNoFunds: skipped, governor: { nBase, cap: N_CAP, min: N_MIN, windowAcceptance: lastGovAcc } },
+          throughput: { attempts: attemptsTotal, rejectedCount: rejected - rejectedAtBoot, acceptancePct: attemptsTotal > 0 ? +(((attemptsTotal - (rejected - rejectedAtBoot)) / attemptsTotal) * 100).toFixed(1) : null, governor: { nBase, cap: N_CAP, min: N_MIN, windowAcceptance: lastGovAcc } },
           supply: { saosTotal: SAOS_SUPPLY, saosStaked: [...balances.values()].reduce((a, b) => a + b.saosStaked, 0), usdsInPool: pool.usds, saosInPool: pool.saos },
           pool: { priceUsdsPerSaos: +priceUsdsPerSaos().toFixed(6), feesUsds: +pool.feesUsds.toFixed(4), feesSaos: +pool.feesSaos.toFixed(4), k: +(pool.saos * pool.usds).toFixed(2) },
           topAccounts: top, lastVerify, lastSeal,
@@ -798,7 +742,15 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
       // בעץ-העבודה-כלל — הספר-החי-והקוד-הרצים-שלנו-מנצחים-תמיד, ההיסטוריה-של-הענן
       // (כולל-קו-הסשן-השני) מקושרת-כהורה-שני. אפס-קונפליקטים, אפס-stash, אפס-תפר.
       await git(dir, ["fetch", remote, "main"]);
-      const mg = await git(dir, ["merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins, zero-seam", "FETCH_HEAD"]);
+      // גל-87 · סגירת-חלון-הלכלוך: בין-ה-commit-בראש-הלולאה לבין-המיזוג, sealLog/ingestEvent
+      // מוסיפים-רשומות-ספר (seal-log/ledger) → commit-שקט-חוזר כדי-שהמיזוג-ירוץ-על-מצב-עקבי
+      // (no-op-כנה-אם-אין-שינויים).
+      await git(dir, ["add", "-A"]);
+      await git(dir, ["commit", "-q", "-m", "vault-seal [auto-economy]: tail-records-before-link"]);
+      // גל-87 · חיסול-מירוץ-ה-stash: merge.autoStash=false-מפורש. נמדד-פעמיים
+      // (14:36/15:00): stash-על-עץ-חי-של-ספר-שכתיבתו-אינה-פוסקת = "unstable object
+      // source data" → merge-fail. merge -s ours לא-נוגע-בעץ → אין-שום-סיבה-ל-stash.
+      const mg = await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins, zero-seam", "FETCH_HEAD"]);
       if (!mg.ok && !mg.out.includes("Already up to date") && !mg.out.includes("up to date")) {
         sealLog({ repo: name, action: "merge-fail", out: mg.out.slice(0, 200) });
       }
@@ -807,11 +759,23 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
       const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote, "main"]);
       if (!pull.ok && !pull.out.includes("Already up to date") && !pull.out.includes("up to date")) {
         sealLog({ repo: name, action: "pull-fail", out: pull.out.slice(0, 220) });
+        // גל-87 · החלמה-מהשורש (נמדד על Domain 15:35): קונפליקט modify/delete לא-נפתר
+        // עם -X ours → הריבוז-נתקע-detached-HEAD → push משתבש → המאגר-נשאר-שבור.
+        // הפתרון: abort-מיידי + fallback למיזוג-אפס-תפרים (-s ours — הדוקטרינה-של-my-project):
+        // ההיסטוריה-מקושרת-כהורה-שני, המצב-המקומי-מנצח, אפס-ריבוז-תקוע.
+        await git(dir, ["rebase", "--abort"]);
+        const mg2 = await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins (pull-conflict fallback)", "FETCH_HEAD"]);
+        if (!mg2.ok && !mg2.out.includes("up to date")) {
+          sealLog({ repo: name, action: "merge-fallback-fail", out: mg2.out.slice(0, 160) });
+        }
       }
     }
     if (afterPull) { try { await afterPull(); } catch (e) { sealLog({ repo: name, action: "after-pull-fail", error: String(e) }); } }
     const push = await git(dir, ["push", remote, "HEAD"]);
-    if (push.ok || push.out.includes("Everything up-to-date") || push.out.includes("up to date")) {
+    // גל-87 · כנות-דחיפה: push-שיצא-0-אבל-ההודעה-מכילה-שגיאת-RPC (HTTP 500-רגעי) אינו
+    // אטימה — מסומן-push-fail-כנה; הסוופ-הבא-מנסה-שוב. אימות-פנימי-בלבד, בלי-ls-remote.
+    const pushLied = push.out.includes("RPC failed") || /error:\s/.test(push.out);
+    if ((push.ok && !pushLied) || push.out.includes("Everything up-to-date") || push.out.includes("up to date")) {
       sealLog({ repo: name, action: "sealed", ahead: ahead ?? "0", detail: push.out.slice(0, 120) });
       // אירוע-אמת → עסקת-תשתית: אגרת-אטימה על מאגר שנאטם בפועל (קומיט+דחיפה קרו)
       try {
@@ -916,7 +880,6 @@ const bootResult = boot();
  * המשק-מת-בדחיות-לנצח. */
 if (bal("treasury").usds < 2_000) {
   const MINT_USDS = 40_000;
-  lastMintAt = Date.now(); // גל-86 · גם-mint-ה-boot מוגבל-קצב מול-הפיקוח-החוזר
   bal("treasury").usds = round6(bal("treasury").usds + MINT_USDS);
   const mintTx = sealTx({ seq: seq + 1, ts: Date.now(), kind: "mint", from: "sovereign", to: "treasury", asset: "USDS", amount: MINT_USDS, reason: "סבב-מוניטרי: השלמת-צף-ריבוני אחרי-קריסת-מחזור (הנפקה-גלויה-מדודה)" } as any);
   seq = mintTx.seq; lastH = mintTx.h;
@@ -941,6 +904,7 @@ const FILL_POLL_MS = 45_000;
 const fillBaseline = Date.now(); // רק-מילויים-חדשים מאז-עלייה (היסטוריה לא נספרת)
 let fillPollErrors = 0, fillPollRuns = 0;
 function pollDexFills(): void {
+  if (sealing) return; // גל-87 · אף-קריאת-ספר-בזמן-אטימה (הסבב-הבא-יתפוס-הכל; dedup לפי-ref)
   fillPollRuns++;
   let db: Database | null = null;
   try {
@@ -976,6 +940,7 @@ import net from "node:net";
 import { spawn as cpSpawn } from "child_process";
 const DEV_PORT = 3000;
 let devGuardBusy = false;
+const frozenSeen = new Map<number, number>(); // גל-87 · ספירת-טיקים-רצופים-בהם-התהליך-קפוא
 function tcpOpenFast(port: number, timeoutMs = 2500): Promise<boolean> {
   return new Promise((resolve) => {
     const s = net.connect({ port, host: "127.0.0.1" });
@@ -986,17 +951,27 @@ function tcpOpenFast(port: number, timeoutMs = 2500): Promise<boolean> {
   });
 }
 async function devGuard(): Promise<void> {
-  // הפשרת-יתומים: כל-next-server-במצב-T (SIGSTOP-שנשכח) חוזר-לחיים
+  // הפשרת-יתומים: next-server-במצב-T (SIGSTOP-שנשכח) חוזר-לחיים — בשני-שומרים (גל-87):
+  // (1) בזמן-אטימה (sealing) ההקפאה-מכוונת-לגמרי (חוק-משמורת-מדינה) — אל-תפשיר-באמצע-סוופ.
+  //     נמדד: ההפשרה-באמצע-סוופ העירה-את-Prisma-באמצע-כתיבה → git-התרסק-על
+  //     "unstable object source data" → merge-fail-על-my-project (14:36 + 15:00).
+  // (2) יתום-אמיתי-מופשר-רק-אחרי-שנראה-קפוא-בשני-טיקים-רצופים (60ש׳) — סוופ-מעולם
+  //     לא-אורך-כך-בהקפאה; SIGSTOP-נשכח-אמיתי-נמשך-לנצח. שעון-היתום-מתאפס-בכל-הפשרה-מכוונת.
   try {
     for (const pid of fs.readdirSync("/proc").filter((d) => /^\d+$/.test(d))) {
       try {
         const cmd = fs.readFileSync(`/proc/${pid}/cmdline`, "utf8");
         if (!cmd.includes("next-server")) continue;
-        const st = fs.readFileSync(`/proc/${pid}/status`, "utf8");
-        if (/^State:\s*T/m.test(st)) {
-          process.kill(Number(pid), "SIGCONT");
-          console.log(`[dev-guard] הפשרתי-next-server-קפוא pid=${pid} (SIGSTOP-יתום)`);
-        }
+        const p = Number(pid);
+        const st = fs.readFileSync(`/proc/${p}/status`, "utf8");
+        if (!/^State:\s*T/m.test(st)) { frozenSeen.delete(p); continue; }
+        if (sealing) { frozenSeen.delete(p); continue; } // שומר-1: ההקפאה-חלק-מהסוופ — ידיים-בחוץ
+        const seen = (frozenSeen.get(p) ?? 0) + 1;
+        frozenSeen.set(p, seen);
+        if (seen < 2) continue; // שומר-2: ראייה-ראשונה — טיק-נוסף-לפני-הפשרה
+        process.kill(p, "SIGCONT");
+        frozenSeen.delete(p);
+        console.log(`[dev-guard] הפשרתי-next-server-קפוא pid=${pid} (SIGSTOP-יתום · שתיים-ברצף)`);
       } catch { /* תהליך-נעלם */ }
     }
   } catch { /* כנה */ }

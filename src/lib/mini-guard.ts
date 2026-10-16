@@ -23,15 +23,24 @@ export const MINI_SERVICES: MiniServiceDef[] = [
   { name: "office-live", dir: "mini-services/office-live", port: 3036, he: "משדר-העולם-התלת-ממדי" },
   { name: "sovereign-gateway", dir: "mini-services/sovereign-gateway", port: 3011, he: "שער-ה-LLM-הריבוני (כל-סוכן-משוחזר)", probe: "gateway" },
   { name: "boot-verifier", dir: "mini-services/boot-verifier", port: 3042, he: "מאמת-התחייה — קבלת-בריאות-כל-15דק", probe: "boot-verifier" },
+  /* גל-87 · נמדד: כל-צוות-FleetHQ-היה-אנשי-מת-מהלכים (קורפסים-מ-FleetHQ.stale-שנמחק) —
+   * הממונה-האמיתי-עתה-בן-עץ-ה-Next (שושלת-השרדות); הוא-בעצמו-מחיה-פורנן/gateway/beats-כל-5ש׳.
+   * single-flight-מובנה (pid-file+pidAlive) מונע-כפילות-אם-המשגיחה-משגיחה-על-המשגיח. */
+  { name: "fleet-supervisor", dir: "/home/z/estate/FleetHQ/mini-services/agent-hq", port: 3010, he: "ממונה-הצי (FleetHQ: פורנן 3010 + גייטוויי + beats)", cmd: "[ -d node_modules ] || bun install --silent; exec bun tools/runtime-supervisor.ts", env: { AGENT_HQ_DATA_DIR: "/home/z/my-project/Domain" } },
 ];
 
 export interface MiniServiceDef {
   name: string;
+  /** יחסי-ל-my-project או מוחלט (מחוץ-לעץ — למשל FleetHQ) */
   dir: string;
   port: number;
   he: string;
   /** סוג-הבדיקה-הפונקציונלית: "estate-sync" = מדידת-טיקים-מהבריאות-החיה. "gateway"/"boot-verifier" = בריאות-HTTP. חסר = פורט-בלבד (socket.io). */
   probe?: "estate-sync" | "gateway" | "boot-verifier";
+  /** פקודת-השקה-מותאמת (default: התקנה-אם-חסר + bun run dev) */
+  cmd?: string;
+  /** השמה-סביבתית-מכריעה (מנצחת-את-הורשת-השרת — גל-87: AGENT_HQ_DATA_DIR ירש-נתיב-עוגן-קריאה) */
+  env?: Record<string, string>;
 }
 
 const MIN_SPAWN_INTERVAL_MS = 90_000;
@@ -132,17 +141,17 @@ export interface MiniServiceHealth {
  * ההשקה-הישירה-של-bun-run-dev קרסה-על-חבילה-חסרה (Cannot find package 'socket.io')
  * והמשגיחה-שגרה-עותק-גוסס-כל-90ש׳. התיקון: ההשקה-מתקינה-תחילה-אם-חסר (מדוד-חי-שוב-אחרי-מחיקה-אמת). */
 function spawnService(svc: MiniServiceDef): string {
-  const cwd = path.join(process.cwd(), svc.dir);
+  const cwd = svc.dir.startsWith("/") ? svc.dir : path.join(process.cwd(), svc.dir);
   const logPath = path.join(process.cwd(), ".zscripts", `mini-service-${svc.name}.log`);
   let fd: number | null = null;
   try {
     fd = openSync(logPath, "a");
     const stamp = new Date().toISOString();
-    const child = spawn("bash", ["-c", `[ -d node_modules ] || bun install --silent; exec bun run dev`], {
+    const child = spawn("bash", ["-c", svc.cmd ?? `[ -d node_modules ] || bun install --silent; exec bun run dev`], {
       cwd,
       /* בן-של-שרת-Next (עץ-הפלטפורמה) — בלי-setsid; ההשגחה-החוזרת-מכסה-אם-נעקר */
       stdio: ["ignore", fd, fd],
-      env: { ...process.env, MINI_GUARD: "1", REVIVED_AT: stamp },
+      env: { ...process.env, MINI_GUARD: "1", REVIVED_AT: stamp, ...(svc.env ?? {}) },
     });
     child.on("error", (e) => { lastNote[svc.name] = `spawn-error: ${e.message}`; });
     child.unref();

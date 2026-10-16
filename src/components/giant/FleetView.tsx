@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Bot, Boxes, RefreshCw, Ship } from "lucide-react";
+import { Bot, RefreshCw, Ship } from "lucide-react";
 import { InternalEconomy } from "@/components/giant/InternalEconomy";
 
 /* ═══ הצי — לקוחות-האמת-הראשונים של-הריבונות ═══════════════════════════════
@@ -320,107 +320,6 @@ export function FleetView() {
           </ul>
         </section>
       )}
-
-      {/* ─── מלאי-היכולות-החי (גל-86 · חיווט-הכל-לכלים) ─── */}
-      <CapabilitiesPanel />
     </div>
-  );
-}
-
-interface CapRow {
-  name: string;
-  group: string;
-  state: "OK" | "BLOCKED" | "FAIL" | "DOWN" | "STARTABLE" | "UNKNOWN";
-  detail: string;
-  runnable: boolean;
-  measuredAt: string;
-}
-
-const CAP_STATE_HE: Record<CapRow["state"], { label: string; cls: string }> = {
-  OK: { label: "חי", cls: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300" },
-  BLOCKED: { label: "חסום-שער", cls: "border-amber-500/30 bg-amber-500/10 text-amber-300" },
-  STARTABLE: { label: "מוכן-להקמה", cls: "border-sky-500/30 bg-sky-500/10 text-sky-300" },
-  DOWN: { label: "למטה", cls: "border-orange-500/30 bg-orange-500/10 text-orange-300" },
-  FAIL: { label: "כשל-כנה", cls: "border-red-500/30 bg-red-500/10 text-red-300" },
-  UNKNOWN: { label: "לא-הוכח", cls: "border-zinc-600 bg-zinc-800 text-zinc-400" },
-};
-
-function CapabilitiesPanel() {
-  const [caps, setCaps] = useState<CapRow[] | null>(null);
-  const [measuredAt, setMeasuredAt] = useState<string | null>(null);
-  const [err, setErr] = useState<string | null>(null);
-
-  const load = useCallback(async () => {
-    try {
-      const res = await fetch("/api/giant/capabilities", { cache: "no-store" });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const j = (await res.json()) as { capabilities?: CapRow[]; measuredAt?: string };
-      setCaps(j.capabilities ?? []);
-      setMeasuredAt(j.measuredAt ?? null);
-      setErr(null);
-    } catch (e) {
-      setErr(e instanceof Error ? e.message : "כשל-רשת");
-    }
-  }, []);
-
-  useEffect(() => {
-    const t0 = window.setTimeout(() => void load(), 0);
-    const iv = setInterval(() => void load(), 120_000);
-    return () => {
-      window.clearTimeout(t0);
-      clearInterval(iv);
-    };
-  }, [load]);
-
-  const groups = Array.from(new Set((caps ?? []).map((c) => c.group)));
-  const okCount = (caps ?? []).filter((c) => c.state === "OK").length;
-
-  return (
-    <section className="rounded-xl border border-zinc-700 bg-zinc-900/60 p-4" aria-label="מלאי-יכולות-הריבונות">
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <Boxes className="size-4 text-zinc-400" aria-hidden />
-          <h3 className="text-sm font-medium text-zinc-200">מלאי-היכולות-החי — כל-רכוש-הגיט מחובר-לכלים (גל-86)</h3>
-        </div>
-        <div className="flex items-center gap-3">
-          {caps && (
-            <span className="text-[11px] text-zinc-500">
-              {okCount}/{caps.length} חיים{measuredAt ? ` · מדוד ${agoHe(measuredAt)}` : ""}
-            </span>
-          )}
-          <button
-            onClick={() => void load()}
-            className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-1.5 text-[11px] text-zinc-300 transition hover:border-amber-500/40 hover:text-amber-300"
-            aria-label="מדידה-חוזרת-של-המלאי"
-          >
-            <RefreshCw className="size-3" aria-hidden />
-            מדידה
-          </button>
-        </div>
-      </div>
-      {err && <p className="text-xs text-red-300">כשל-מדידה: {err}</p>}
-      {!caps && !err && <p className="text-xs text-zinc-500">מודד את המלאי-החי (הרצת-כלים אמיתית — עד-דקה)…</p>}
-      {caps && (
-        <div className="space-y-3">
-          {groups.map((g) => (
-            <div key={g}>
-              <p className="mb-1.5 text-[10px] font-medium uppercase tracking-wide text-zinc-500">{g}</p>
-              <ul className="space-y-1.5">
-                {caps.filter((c) => c.group === g).map((c) => {
-                  const st = CAP_STATE_HE[c.state] ?? CAP_STATE_HE.UNKNOWN;
-                  return (
-                    <li key={`${c.group}-${c.name}`} className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-zinc-800 bg-zinc-950/50 px-3 py-2 text-xs">
-                      <span className={`rounded-md border px-2 py-0.5 text-[10px] font-medium ${st.cls}`}>{st.label}</span>
-                      <span className="font-mono text-zinc-200">{c.name}</span>
-                      <span className="min-w-0 flex-1 text-zinc-500" style={{ overflowWrap: "anywhere" }}>{c.detail}</span>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-        </div>
-      )}
-    </section>
   );
 }
