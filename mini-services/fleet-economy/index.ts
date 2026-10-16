@@ -253,8 +253,11 @@ function spawnTx(): Tx | null {
     return apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: soldier, asset: "USDS", amount: amt, reason: "משכורת-מחזורית על עבודת-שורה חיה" });
   }
   if (r < 0.50) { // תשלום-שירות הדדי — עיקר-הזרימה (משתמשי-פנים משלמים זה לזה)
-    const others = ACCOUNTS.filter((a) => a.id !== soldier && a.kind !== "pool" && a.id !== "treasury");
-    const to = pick(others).id;
+    // גל-85 · נמען-משוקלל: החיילים-הם-ספקי-העבודה-של-הרשת — 80% מהשירותים
+    // משולמים-להם (נמדד: 50/50 = זרימה-אפסית-לחיילים → הם-מתרוקנים → 62% קבלה)
+    const soldierIds = SOLDIERS.map((s) => s.id);
+    const nodeIds = FLEET_NODES.map((n) => n.id);
+    const receiver = Math.random() < 0.8 ? pick(soldierIds) : pick(nodeIds);
     const svc = pick(SERVICES);
     const units = 1 + Math.floor(Math.random() * 8);
     // גל-83 · זרימה-חוזרת: צמתי-הצי קונים-שירותים מהחיילים
@@ -266,9 +269,9 @@ function spawnTx(): Tx | null {
     const totW = nodeW + solW;
     const nodeShare = totW > 0 ? Math.min(0.5, Math.max(0.2, nodeW / totW)) : 0.25;
     const payer = Math.random() < nodeShare ? pick(FLEET_NODES).id : soldier;
-    const tx = apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: payer, to, asset: "USDS", amount: round6(svc.price * units), reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
+    const tx = apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: payer, to: receiver, asset: "USDS", amount: round6(svc.price * units), reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
     // גל-83 · מס-שירותים 2%: עסקה-נפרדת-וחתומה (מימון-אמיתי-לכספת שתוכל-לשלם-שכר)
-    if (tx) apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: to, to: "treasury", asset: "USDS", amount: round6(tx.amount * (TAX_BPS / 10_000)), reason: `מס-שירותים ${TAX_BPS / 100}% → כספת` });
+    if (tx) apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: receiver, to: "treasury", asset: "USDS", amount: round6(tx.amount * (TAX_BPS / 10_000)), reason: `מס-שירותים ${TAX_BPS / 100}% → כספת` });
     return tx;
   }
   if (r < 0.74) { // החלפה על הבריכה (גילוי-מחיר אמיתי)
@@ -288,10 +291,12 @@ function spawnTx(): Tx | null {
     if (amt <= 0) { rej(); return null; }
     return apply({ seq: seq + 1, ts: Date.now(), kind: "unstake", from: soldier, to: soldier, asset: "SAOS", amount: amt, reason: "ביטול-סטייק לצורך-תפעול" });
   }
-  if (r < 0.94) { // תשלום-תשתית: חייל משלם לצומת-צי
+  if (r < 0.94) { // תשלום-תשתית: חיילים-וצמתים-כאחד משלמים-לצמתי-הצי
+    // גל-85 · צמתים-צורכים-תשתית-זה-מזה (נמדד: חייל-משלם-תמיד = ניקוז-חד-כיווני)
     const node = pick(FLEET_NODES).id;
     const svc = pick(SERVICES);
-    return apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: soldier, to: node, asset: "USDS", amount: round6(svc.price * (1 + Math.floor(Math.random() * 5))), reason: `תשתית: ${svc.name}` });
+    const infraPayer = Math.random() < 0.5 ? soldier : pick(FLEET_NODES).id;
+    return apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: infraPayer, to: node, asset: "USDS", amount: round6(svc.price * (1 + Math.floor(Math.random() * 5))), reason: `תשתית: ${svc.name}` });
   }
   { // טיפ-SAOS על עבודה-טובה (תרבות-שימוש פנימית)
     const others = SOLDIERS.map((s) => s.id).filter((s) => s !== soldier);
