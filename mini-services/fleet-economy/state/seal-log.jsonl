@@ -545,3 +545,5 @@
 {"ts":"2026-10-16T17:28:38.542Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T17:28:38.542Z","action":"sweep-done"}
 {"ts":"2026-10-16T17:39:15.303Z","action":"sweep-skipped-lock-held","ageMs":180007.31762695312}
+{"ts":"2026-10-16T17:51:50.318Z","action":"stale-lock-broken","ageMs":935022.3176269531}
+{"ts":"2026-10-16T17:51:50.408Z","repo":"my-project","action":"commit-fail","out":"fatal: Unable to create '/home/z/my-project/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue."}
