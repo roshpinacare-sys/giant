@@ -372,6 +372,7 @@ function boot() {
         pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
         seq = 0; lastH = "GENESIS"; ledgerBuf = []; ledgerLines = 0; recent = [];
         byKind = {}; byAccount = {}; rejected = 0; ledgerFileNo = 0;
+        rejectedAtBoot = 0; // גל-85 · בסיס-המדידה-מתאפס-גם-בזריעה (נמדד: מדידה-שלילית-שקרית)
         seed();
         return { restored: false, seq: 0, quarantined: true };
       }
@@ -398,7 +399,12 @@ function quarantineState(reason: string) {
 /* אימות-שרשרת מלאה (לתביעה מול-אמת): קורא את הספר כולה ומאמת sha256 */
 function verifyChain(): { ok: boolean; checked: number; brokenAt?: number } {
   let prev = "GENESIS"; let checked = 0;
-  const files = fs.readdirSync(STATE_DIR).filter((f) => f === "ledger.jsonl" || f.startsWith("ledger-")).sort();
+  const files = fs.readdirSync(STATE_DIR).filter((f) => f === "ledger.jsonl" || f.startsWith("ledger-")).sort((a, b) => {
+    // גל-85 · מיון-מספרי (היה-לקסיקוגרפי: ledger-10 לפני ledger-2 → שרשרת-תפורה-כשיש-רוטציה)
+    const na = Number(/-(\d+)\.jsonl$/.exec(a)?.[1] ?? 0);
+    const nb = Number(/-(\d+)\.jsonl$/.exec(b)?.[1] ?? 0);
+    return na - nb || a.localeCompare(b);
+  });
   for (const f of files) {
     const lines = fs.readFileSync(path.join(STATE_DIR, f), "utf8").split("\n").filter(Boolean);
     for (const line of lines) {
@@ -426,6 +432,50 @@ function snapshotSave() {
   fs.writeFileSync(tmp, JSON.stringify(obj));
   fs.renameSync(tmp, SNAP);
 }
+
+/* ── גל-85 · מנעול-כותב-יחיד (single-writer invariant) ─────────────────────
+ * נמדד-פורנזית: ספר-חי-נקרע-פעמיים (הסגרים 12:02/12:08 + תפר 13:27) על-ידי
+ * מנוע-שני-שקם-מ-api/economy-spawn או-החייאה-כפולה — שני-מנועים-על-אותו-ספר
+ * = שרשרת-משולבת = זריעה-מחדש-בעלייה-הבאה. מעכשיו: מי-שלא-מחזיק-במנעול
+ * לא-נוגע-בספר — יוצא-בכנות-מיד. */
+const ENGINE_LOCK = path.join(STATE_DIR, "engine.lock");
+let ownsBook = false;
+function pidAlive(pid: number): boolean {
+  try { process.kill(pid, 0); return true; } catch { return false; }
+}
+function acquireEngineLock(): void {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const fd = fs.openSync(ENGINE_LOCK, "wx");
+      fs.writeFileSync(fd, String(process.pid));
+      fs.closeSync(fd);
+      ownsBook = true;
+      return;
+    } catch {
+      // המנעול-תפוס — מי-מחזיק?
+      let holder = 0;
+      try { holder = Number(fs.readFileSync(ENGINE_LOCK, "utf8").trim()); } catch { /* מנעול-ריק-שבור */ }
+      if (holder && holder !== process.pid && pidAlive(holder)) {
+        console.log(`[fleet-economy] יוצא-בכנות: מנוע-חי-${holder} מחזיק-בספר (כותב-יחיד) — אף-כתיבה-ממני`);
+        process.exit(0);
+      }
+      // מחזיק-מת — שבירת-מנעול-נטוש-וניסיון-חוזר
+      try { fs.rmSync(ENGINE_LOCK, { force: true }); } catch { /* כנה */ }
+    }
+  }
+  console.log("[fleet-economy] יוצא-בכנות: לא-הושג-מנעול-הספר-אחרי-2-ניסיונות");
+  process.exit(0);
+}
+acquireEngineLock();
+// גל-85 · סדר-המוות-הנכון: flush → snapshot → רק-אז-שחרור-המנעול
+// (שחרור-לפני-flush = רייס-מול-מנוע-חדש-שנכנס-בין-לבין)
+process.on("exit", () => {
+  if (!ownsBook) return;
+  try { flush(); snapshotSave(); } catch { /* כנה */ }
+  try { fs.rmSync(ENGINE_LOCK, { force: true }); } catch { /* כנה */ }
+});
+process.on("SIGTERM", () => process.exit(0));
+process.on("SIGINT", () => process.exit(0));
 
 const server = Bun.serve({
   port: PORT,
@@ -697,7 +747,7 @@ setTimeout(sealAll, 45_000); // אטימה ראשונה דקה-אחרי-עליי
 const bootResult = boot();
 setInterval(tick, TICK_MS);
 setInterval(snapshotSave, SNAP_MS);
-process.on("exit", () => { try { flush(); snapshotSave(); } catch {} });
+// (גל-85 · מטפל-exit-מאוחד-למעלה: flush→snapshot→שחרור-מנעול, פעם-אחת)
 
 /* ── רשת-ביטחון למילויי-דקס (poller): כל-עסקה שנרשמה בפועל במנוע-הדקס (DexTrade —
  *   כולל-מילויי-מנוע-התדירות-של-הצי) נרשמת כדמי-שירות בספר — בלי-תלות במפיק-HTTP
