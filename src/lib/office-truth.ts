@@ -17,13 +17,23 @@ export const FEEDS: { key: string; he: string; url: string; capMin: number }[] =
 ];
 
 export async function readPat(): Promise<string | null> {
-  try {
-    const raw = await readFile(path.join(process.cwd(), "upload", "pat.env"), "utf8");
-    const m = raw.match(/(?:github_pat_[A-Za-z0-9_]+|ghp_[A-Za-z0-9]+)/);
-    return m ? m[0] : null;
-  } catch {
-    return null;
+  // T-76 · עמידות-סנדבוקס: הסנדבוקס מנקה את upload/ (נמדד: 2026-10-16 — הסנדבוקס
+  // מחק את pat.env באמצע-הפעלה וכל-הדלתות-נמדדות-מהגיט נפלו לכשל-כנה). ה-פאט של
+  // הבעלים מועתק גם ל-.secrets/pat (מאוּטר-גיט) — הקריאה מנסה את שני המקומות.
+  const candidates: string[][] = [
+    ["upload", "pat.env"],
+    [".secrets", "pat"],
+  ];
+  for (const parts of candidates) {
+    try {
+      const raw = await readFile(path.join(process.cwd(), ...parts), "utf8");
+      const m = raw.match(/(?:github_pat_[A-Za-z0-9_]+|ghp_[A-Za-z0-9]+)/);
+      if (m) return m[0];
+    } catch {
+      /* המקום-הבא-בתור — כנות: אין-פאט = אפס-מדידה */
+    }
   }
+  return null;
 }
 
 export async function getJson<T = unknown>(url: string, token: string | null): Promise<T | null> {
