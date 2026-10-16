@@ -1039,3 +1039,5 @@
 {"ts":"2026-10-16T20:01:59.036Z","repo":"autonomy-fix","action":"pull-fail","out":"error: unable to create temporary file: No space left on device\nfatal: failed to write object\nfatal: unpack-objects failed"}
 {"ts":"2026-10-16T20:01:59.854Z","repo":"autonomy-fix","action":"push-fail","out":"some refs to 'https://github.com/roshpinacare-sys/Autonomy.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
 {"ts":"2026-10-16T20:01:59.854Z","action":"sweep-done"}
+{"ts":"2026-10-16T20:11:05.397Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for bea999e48b87c86b97be9f57f1d5ca8266b3d4da\nCannot save the current worktree state\nfatal: stash failed"}
+{"ts":"2026-10-16T20:11:05.900Z","repo":"my-project","action":"state-custody-restore","brokenAt":42777,"restored":true}
