@@ -504,7 +504,10 @@ const SEAL_REPOS = [
   "/home/z/estate/Sandbox",
   "/home/z/estate/roshpina",
   "/home/z/estate/saos-dex",
-  "/home/z/channels/giant",
+  // גל-83 · הוצא-מהסוופ: /home/z/channels/giant הוא-צ'קאאוט-שני-של-אותו-ריפו-בגיטהאב
+  // (roshpinacare-sys/giant) — אטימת-שני-צ'קאאוטים-במקביל-עם-קבצי-מצב-חיים-מול-ישנים
+  // היא-מכונת-התפרים (נמדד: 37-קומיטים-של-מצב-ישן-דחפו-מהעותק-השני-וקרעו-את-הספר).
+  // my-project הוא-הבעלים-הקנוני-של-המצב-החי; העותק-ב-estate נשאר-לקריאה-בלבד.
   "/home/z/autonomy-fix",
 ];
 const SEAL_LOG = path.join(STATE_DIR, "seal-log.jsonl");
@@ -539,9 +542,15 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>): Pr
       const cm = await git(dir, ["commit", "-q", "-m", `vault-seal [auto-economy]: ${dirtyLines.length} files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס`]);
       if (!cm.ok && !cm.out.includes("nothing to commit")) { sealLog({ repo: name, action: "commit-fail", out: cm.out }); }
     }
-    await git(dir, ["pull", "--rebase", "-X", "ours", "origin"]);
+    // גל-83 · תיקון-שורשי: ה-remote-אינו-תמיד "origin" — my-project משתמש-ב-"cloud".
+    // נמדד: כל-הסוופים-נכשלו-על-my-project ("'origin' does not appear to be a git repository")
+    // → הכספת-המקומית-נשארה-לא-דחופה-37-קומיטים, והעותק-ב-channels/giant (אותו-ריפו-בגיטהאב!)
+    // דחף-במקומה-מצב-ישן-וקידם-את-הענן — מקור-תפרי-הספר-ההיסטוריים.
+    const rm = await git(dir, ["remote"]);
+    const remote = rm.out.split("\n").map((s) => s.trim()).filter(Boolean)[0] ?? "origin";
+    await git(dir, ["pull", "--rebase", "-X", "ours", remote]);
     if (afterPull) { try { await afterPull(); } catch (e) { sealLog({ repo: name, action: "after-pull-fail", error: String(e) }); } }
-    const push = await git(dir, ["push", "origin", "HEAD"]);
+    const push = await git(dir, ["push", remote, "HEAD"]);
     if (push.ok || push.out.includes("Everything up-to-date") || push.out.includes("up to date")) {
       sealLog({ repo: name, action: "sealed", ahead: ahead ?? "0", detail: push.out.slice(0, 120) });
       // אירוע-אמת → עסקת-תשתית: אגרת-אטימה על מאגר שנאטם בפועל (קומיט+דחיפה קרו)
