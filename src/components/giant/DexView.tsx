@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CandleChart } from "./CandleChart";
 import { TradeDesk } from "./TradeDesk";
-import { Activity, Coins, Flame, Gauge, TrendingUp, Trophy, Layers, Scale, Rocket, CandlestickChart } from "lucide-react";
+import { Activity, Coins, Flame, Gauge, TrendingUp, Trophy, Layers, Scale, Rocket, CandlestickChart, ShieldCheck } from "lucide-react";
 
 /* ═══ הדקס — מרכז-הכובד של הריבונות (GIANT · R360 · V3 מיזוג-צי) ══════════
  * מיזוג-הליינים (T55): שטח-המסחר-עם-נרות-אמת (התאומים, api/giant/dex) +
@@ -682,6 +682,41 @@ export function DexView() {
           סדר-הפתיחה נאטם-בחוק: הוכחת-ווליום על-הדקס (עכשיו) → נגזרות → הלוואות → מינוף. כל-שלב נפתח רק אחרי-הוכחה מדידה של-שלב-לפניו.
         </p>
       </section>
+
+      {/* גל-91 · נזילות-אמת: האוצר על-השרשרת (mainnet, קריאה-חיה-ללא-מפתחות) */}
+      {data?.chainTreasury && (
+        <section className="rounded-2xl border border-emerald-600/25 bg-emerald-500/[0.03] p-5" aria-label="on-chain treasury">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-100">
+              <ShieldCheck className="h-4 w-4 text-emerald-500" aria-hidden /> נזילות-אמת · האוצר על-השרשרת (mainnet)
+            </h3>
+            <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-400">
+              {data.chainTreasury.accounts} חשבונות · {data.chainTreasury.source}
+            </span>
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <div className="rounded-xl border border-white/5 bg-zinc-950/60 px-3 py-2">
+              <p className="text-[10px] text-zinc-500">STEEM נזיל</p>
+              <p className="font-mono text-sm font-bold text-zinc-100">{data.chainTreasury.liquidSteem.toFixed(3)}</p>
+            </div>
+            <div className="rounded-xl border border-white/5 bg-zinc-950/60 px-3 py-2">
+              <p className="text-[10px] text-zinc-500">SBD נזיל</p>
+              <p className="font-mono text-sm font-bold text-zinc-100">{data.chainTreasury.liquidSbd.toFixed(3)}</p>
+            </div>
+            <div className="rounded-xl border border-white/5 bg-zinc-950/60 px-3 py-2">
+              <p className="text-[10px] text-zinc-500">SP (מנופח-נטו)</p>
+              <p className="font-mono text-sm font-bold text-zinc-100">{data.chainTreasury.spTotal.toFixed(2)}</p>
+            </div>
+            <div className="rounded-xl border border-white/5 bg-zinc-950/60 px-3 py-2">
+              <p className="text-[10px] text-zinc-500">פקודות-פתוחות בשוק</p>
+              <p className="font-mono text-sm font-bold text-amber-400">{data.chainTreasury.openOrders}</p>
+            </div>
+          </div>
+          <p className="mt-2 text-[10px] leading-relaxed text-zinc-500">
+            נמדד-חי מהשרשרת (condenser_api) · זה הגיבוי-הממשי מאחורי-הספר-הפנימי · הזרימה: תגמולים-ושוק-הפנימי של Steem → מנוע-הגריד → עומק-הדקס
+          </p>
+        </section>
+      )}
 
       {/* סל-הנכסים */}
       {data && data.assets.length > 0 && (

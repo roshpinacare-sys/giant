@@ -68,6 +68,17 @@ export interface DexPayload {
   } | null;
   truth: TruthPayload | null;
   truthMeta: { saosLive: FileMeta; honestEcon: FileMeta; money: FileMeta } | null;
+  /* גל-91 · נזילות-אמת: האוצר האמיתי על-השרשרת (mainnet · קריאה-ללא-מפתחות).
+   * הצהרת-אמת: הדקס-הפנימי (SAOS/USDS) הוא-הספר; זה הגיבוי-הממשי מאחוריו. */
+  chainTreasury: {
+    measuredAt: string;
+    accounts: number;
+    liquidSteem: number;
+    liquidSbd: number;
+    spTotal: number;
+    openOrders: number;
+    source: "steem-mainnet";
+  } | null;
   fetchedAt: string;
 }
 
@@ -117,6 +128,55 @@ interface GridPublic {
   hive?: { ok?: boolean; publishedAt?: string };
 }
 
+/* גל-91 · קריאת-אוצר-אמת מ-Steem-מייננט (אפס-מפתחות · השמות-פומביים-על-השרשרת).
+ * שמות-הצי = רוסטר-ה-custody הפומבי (14) — זהו-מידע-על-השרשרת-עצמה, לא-סוד.
+ * כשל = null כנה; לעולם-לא-המצאה. */
+const CHAIN_ROSTER = [
+  "headcorner", "cashmachine", "haran", "israelnews", "lsa", "macrame", "siq",
+  "tov", "wic", "wog", "woq", "hcsoldier4", "hcsoldier5", "hcsoldier6",
+];
+async function readChainTreasury(): Promise<DexPayload["chainTreasury"]> {
+  try {
+    const rpc = async (method: string, params: unknown[]): Promise<{ result?: unknown }> => {
+      const res = await fetch("https://api.steemit.com", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ jsonrpc: "2.0", method, params, id: 1 }),
+        cache: "no-store",
+        signal: AbortSignal.timeout(8_000),
+      });
+      if (!res.ok) throw new Error(`rpc ${res.status}`);
+      return (await res.json()) as { result?: unknown };
+    };
+    const [accRes, gpoRes] = await Promise.all([
+      rpc("condenser_api.get_accounts", [CHAIN_ROSTER]),
+      rpc("condenser_api.get_dynamic_global_properties", []),
+    ]);
+    const accounts = (accRes.result ?? []) as Array<Record<string, string>>;
+    const gpo = (gpoRes.result ?? {}) as Record<string, string>;
+    const tv = parseFloat(String(gpo.total_vesting_shares ?? "0"));
+    const tf = parseFloat(String(gpo.total_vesting_fund_steem ?? "0"));
+    const vestsPerSp = tf > 0 ? tv / tf : 0;
+    let liquidSteem = 0;
+    let liquidSbd = 0;
+    let spTotal = 0;
+    let openOrders = 0;
+    for (const a of accounts) {
+      liquidSteem += parseFloat(String(a.balance ?? "0")) || 0;
+      liquidSbd += parseFloat(String(a.sbd_balance ?? "0")) || 0;
+      const vests = parseFloat(String(a.vesting_shares ?? "0")) || 0;
+      const delegated = parseFloat(String(a.delegated_vesting_shares ?? "0")) || 0;
+      const received = parseFloat(String(a.received_vesting_shares ?? "0")) || 0;
+      spTotal += vestsPerSp > 0 ? (vests - delegated + received) / vestsPerSp : 0;
+      openOrders += Number(a.open_orders ?? 0) || 0;
+    }
+    if (!accounts.length) return null;
+    return { measuredAt: new Date().toISOString(), accounts: accounts.length, liquidSteem, liquidSbd, spTotal, openOrders, source: "steem-mainnet" };
+  } catch {
+    return null;
+  }
+}
+
 export async function loadDex(force = false): Promise<DexPayload> {
   if (!force && cache && Date.now() - cache.at < CACHE_MS) return cache.data;
   const pat = await readPat();
@@ -126,16 +186,17 @@ export async function loadDex(force = false): Promise<DexPayload> {
     ok: false, note: "מצב-המנוע לא נמדד כרגע — נסה שוב", savedAt: null, height: null,
     pairs: [], accounts: [], assets: [], poolPairs: [], treasuryProfit: null,
     treasuryProfitEver: null, feeMeter: null, ordersOpen: null, metrics: [], grid: null,
-    supply: null, truth, truthMeta,
+    supply: null, truth, truthMeta, chainTreasury: null,
     fetchedAt: new Date().toISOString(),
   };
   if (!pat) return empty;
 
-  const [snap, klines, metrics, grid] = await Promise.all([
+  const [snap, klines, metrics, grid, chainTreasury] = await Promise.all([
     ghRaw<Snap>("saos-dex", "db/state-snapshot.json", pat),
     ghRaw<KlineFile>("saos-dex", "db/klines.json", pat),
     ghRaw<MetricsFile>("saos-dex", "db/dex-metrics.json", pat),
     ghRaw<GridPublic>("saos-dex", "db/grid-public.json", pat),
+    readChainTreasury(),
   ]);
   if (!snap?.state) return empty;
 
@@ -218,6 +279,7 @@ export async function loadDex(force = false): Promise<DexPayload> {
     supply,
     truth,
     truthMeta,
+    chainTreasury,
     fetchedAt: new Date().toISOString(),
   };
   cache = { at: Date.now(), data: payload };
