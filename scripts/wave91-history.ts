@@ -44,13 +44,14 @@ async function pull(account: string) {
 
   // collect seen indices to dedupe overlaps
   const seen = new Set<number>();
+  let lowest = Infinity;
   if (existsSync(outFile)) {
     const lines = require("fs").readFileSync(outFile, "utf8").split("\n").filter(Boolean);
-    for (const l of lines) { try { seen.add(JSON.parse(l)[0]); } catch {} }
+    for (const l of lines) { try { const i = JSON.parse(l)[0]; seen.add(i); if (i < lowest) lowest = i; } catch {} }
   }
 
   // atomic-ish cursor across workers
-  let cursor = lastIdx;
+  let cursor = Number.isFinite(lowest) ? lowest - 1 : lastIdx;
   let errors = 0;
   const WORKERS = 6;
 
