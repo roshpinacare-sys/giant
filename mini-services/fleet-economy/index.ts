@@ -727,11 +727,23 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
       const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote, "main"]);
       if (!pull.ok && !pull.out.includes("Already up to date") && !pull.out.includes("up to date")) {
         sealLog({ repo: name, action: "pull-fail", out: pull.out.slice(0, 220) });
+        // גל-87 · החלמה-מהשורש (נמדד על Domain 15:35): קונפליקט modify/delete לא-נפתר
+        // עם -X ours → הריבוז-נתקע-detached-HEAD → push משתבש → המאגר-נשאר-שבור.
+        // הפתרון: abort-מיידי + fallback למיזוג-אפס-תפרים (-s ours — הדוקטרינה-של-my-project):
+        // ההיסטוריה-מקושרת-כהורה-שני, המצב-המקומי-מנצח, אפס-ריבוז-תקוע.
+        await git(dir, ["rebase", "--abort"]);
+        const mg2 = await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins (pull-conflict fallback)", "FETCH_HEAD"]);
+        if (!mg2.ok && !mg2.out.includes("up to date")) {
+          sealLog({ repo: name, action: "merge-fallback-fail", out: mg2.out.slice(0, 160) });
+        }
       }
     }
     if (afterPull) { try { await afterPull(); } catch (e) { sealLog({ repo: name, action: "after-pull-fail", error: String(e) }); } }
     const push = await git(dir, ["push", remote, "HEAD"]);
-    if (push.ok || push.out.includes("Everything up-to-date") || push.out.includes("up to date")) {
+    // גל-87 · כנות-דחיפה: push-שיצא-0-אבל-ההודעה-מכילה-שגיאת-RPC (HTTP 500-רגעי) אינו
+    // אטימה — מסומן-push-fail-כנה; הסוופ-הבא-מנסה-שוב. אימות-פנימי-בלבד, בלי-ls-remote.
+    const pushLied = push.out.includes("RPC failed") || /error:\s/.test(push.out);
+    if ((push.ok && !pushLied) || push.out.includes("Everything up-to-date") || push.out.includes("up to date")) {
       sealLog({ repo: name, action: "sealed", ahead: ahead ?? "0", detail: push.out.slice(0, 120) });
       // אירוע-אמת → עסקת-תשתית: אגרת-אטימה על מאגר שנאטם בפועל (קומיט+דחיפה קרו)
       try {
