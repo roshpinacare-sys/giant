@@ -1105,3 +1105,18 @@
 {"ts":"2026-10-16T20:41:35.699Z","action":"sweep-done"}
 {"ts":"2026-10-16T20:51:07.135Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 4a4cb9f774da338b0bb2895b33afcd1a59815cc8\nCannot save the current worktree state\nfatal: stash failed"}
 {"ts":"2026-10-16T20:51:07.588Z","repo":"my-project","action":"state-custody-restore","brokenAt":42777,"restored":true}
+{"ts":"2026-10-16T20:51:12.929Z","repo":"my-project","action":"state-custody-restore","brokenAt":42777,"restored":true}
+{"ts":"2026-10-16T20:51:26.450Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   648c06b..59f8215  HEAD -> main"}
+{"ts":"2026-10-16T20:51:27.068Z","repo":"FleetHQ","action":"commit-fail","out":"src/lib/hq/contract.ts\nU\tsrc/lib/hq/store.ts\nU\tsrc/lib/hq/textures.ts\nU\tsrc/lib/hq/world.ts\nU\tstate/silence-watchdog/state.json\nU\tt19b/Domain\nU\tworklog.md\nerror: Committing is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict."}
+{"ts":"2026-10-16T20:51:27.333Z","repo":"FleetHQ","action":"pull-fail","out":"error: Pulling is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an"}
+{"ts":"2026-10-16T20:51:31.864Z","repo":"FleetHQ","action":"commit-fail","out":"src/lib/hq/contract.ts\nU\tsrc/lib/hq/store.ts\nU\tsrc/lib/hq/textures.ts\nU\tsrc/lib/hq/world.ts\nU\tstate/silence-watchdog/state.json\nU\tt19b/Domain\nU\tworklog.md\nerror: Committing is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict."}
+{"ts":"2026-10-16T20:51:31.913Z","repo":"FleetHQ","action":"pull-fail","out":"error: Pulling is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an"}
+{"ts":"2026-10-16T20:51:32.663Z","repo":"FleetHQ","action":"push-fail","out":"a ref in \"refs/{heads,tags}/\". If so we add a corresponding\n  refs/{heads,tags}/ prefix on the remote side.\n\nNeither worked, so we gave up. You must fully qualify the ref.\nhint: The <src> part of the refspec is a commit object.\nhint: Did you mean to create a new branch by pushing to\nhint: 'HEAD:refs/heads/HEAD'?\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/FleetHQ.git'"}
+{"ts":"2026-10-16T20:51:34.395Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:51:35.804Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:51:37.280Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:51:39.047Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:51:40.837Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:51:42.223Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:51:43.976Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:51:43.976Z","action":"sweep-done"}
