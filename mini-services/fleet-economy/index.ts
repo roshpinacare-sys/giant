@@ -30,6 +30,13 @@ const SNAP = path.join(STATE_DIR, "snapshot.json");
 const TICK_MS = 800; // גל-85: 900→800 (תקורה-זעירה — flush הוא append-בלבד)
 const SNAP_MS = 30_000;
 const FEE_BPS = 30; // 0.3%
+// גל-91 · דוקטרינה-4 · רצועת-עוגן-כלכלית: העוגן-הכלכלי = סך-USDS / סך-SAOS
+// (60,000 כספת + 8,030 בריכה + ~12,000 חיילים) / 21,000 היצע ≈ 3.81 — רצועה ±15%.
+// נמדד (2026-10-16): הרצועה-הישנה 1.05–1.35 הייתה-תת-היצע-מתמטי (בלתי-ניתנת-להשגה) —
+// המחיר-נסחר 25.5→14.7 בלי-בלימה כי-השומר-כיוון-ליעד-לא-אמיתי. העוגן-מתוקן-לקרקע-האמיתית.
+const ANCHOR_USDS_PER_SAOS = 3.81;
+const BAND_LO = 3.24; // עוגן −15% — מתחת: הכספת קונה-תמיכה
+const BAND_HI = 4.38; // עוגן +15% — מעל: הכספת מדריפה-SAOS (שחרור-כסף-תקוע)
 const WAGE_FLOOR_USDS = 350; // גל-83 · חוק-שכר-מצע: רצפת-פרנסה לחייל
 const TAX_BPS = 200; // גל-83 · מס-שירותים 2% → הכספת (מימון-השכר)
 
@@ -251,7 +258,7 @@ function spawnTx(): Tx | null {
   if (r < 0.06) { // משכורת/תדלוק מהכספת — **ב-SAOS** (גל-85 · מיחזור-מחסן-הכספת)
     // שכר-ב-SAOS יוצר-את-צד-המכירה-האמיתי-בבריכה: חיילים-מקבלים-SAOS → מוכרים
     // → USDS חוזר-מהבריכה (נמדד: רק-קניות = הבריכה-בלעה-77K-USDS-והכספת-מתה)
-    const amt = round6(0.2 + Math.random() * 0.8);
+    const amt = round6(0.5 + Math.random() * 2.5); // גל-91 · דוקטרינה-4: הוחזר לרזולוציה ×3 (0.5–3.0) — נמדד: השסתום-נשחק-חזרה ל-0.2–1.0 בריסיד
     return apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: soldier, asset: "SAOS", amount: amt, reason: "משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת" });
   }
   if (r < 0.50) { // תשלום-שירות הדדי — עיקר-הזרימה (משתמשי-פנים משלמים זה לזה)
@@ -290,7 +297,7 @@ function spawnTx(): Tx | null {
     const b = bal(soldier);
     const stake = Math.random() < 0.6;
     if (stake) {
-      const amt = round6(Math.min(b.saos, 0.5 + Math.random() * 6));
+      const amt = round6(Math.min(b.saos, 0.5 + Math.random() * 9.55)); // גל-91 · דוקטרינה-4: עד 10.05 — הוחזר מנסיגה ל-6.5
       if (amt <= 0) { rej(); return null; }
       return apply({ seq: seq + 1, ts: Date.now(), kind: "stake", from: soldier, to: soldier, asset: "SAOS", amount: amt, reason: "סטייק-SAOS לאבטחת-הרשת הפנימית" });
     }
@@ -328,6 +335,31 @@ function tick() {
       for (const s of poor) {
         const gap = WAGE_FLOOR_USDS - bal(s.id).usds;
         apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: round6(Math.min(gap, 60)), reason: `חוק-שכר-מצע: השלמה-עד-רצפה (רצפת ${WAGE_FLOOR_USDS})` });
+      }
+    }
+    // גל-91 · דוקטרינה-4 · שסתום-עוגן-דו-כיווני (כל-4-טיקים): הכספת מסגלת את-הבריכה אל-העוגן-הכלכלי.
+    // מעל-הרצועה: דריפת-SAOS מהכספת (שחרור-9743-SAOS-תקועים → USDS חוזר-לכספת) · מתחת: קניית-תמיכה.
+    // זה-התיקון-לשסתום-שאבד-בריסיד: בלי-ווסת, ריכוז-USDS-בבריכה מניב מחיר 14.7× מהעוגן.
+    if (tickNo % 4 === 0) {
+      const p = priceUsdsPerSaos();
+      const t = bal("treasury");
+      if (p > BAND_HI && t.saos >= 1) {
+        const amt = round6(Math.min(t.saos, pool.saos * 0.008)); // ≤0.8% עומק-בריכה לכל-דריפה
+        if (amt >= 1) ammSwap("treasury", "SAOS", amt, `דוקטרינה-4: דריפת-עוגן מעל-הרצועה (מחיר ${p.toFixed(2)} > ${BAND_HI}) · שחרור-SAOS-תקוע`);
+      } else if (p < BAND_LO && t.usds >= 1) {
+        const amt = round6(Math.min(t.usds, pool.usds * 0.008));
+        if (amt >= 1) ammSwap("treasury", "USDS", amt, `דוקטרינה-4: תמיכת-עוגן מתחת-לרצועה (מחיר ${p.toFixed(2)} < ${BAND_LO})`);
+      }
+    }
+    // גל-91 · דוקטרינה-4 · שסתום-גיוס-עודף-צמתים (כל-40-טיקים): צמתים-עם-USDS-ישן (>10) מעבירים 80%-עודף לכספת —
+    // נמדד: boot-verifier-החזיק 24.75-USDS-רדומים (הצבה-הגדולה-ביותר מחוץ-לזרימה). הכספת ממחזרת דרך-שכר/עוגן.
+    if (tickNo % 40 === 0) {
+      for (const nd of FLEET_NODES) {
+        const b = bal(nd.id);
+        if (b.usds > 10) {
+          const sweep = round6((b.usds - 10) * 0.8);
+          if (sweep >= 1) apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: nd.id, to: "treasury", asset: "USDS", amount: sweep, reason: `דוקטרינה-4: גיוס-עודף-צומת (שמירת-מצף 10) · לשלב→מקסימום` });
+        }
       }
     }
     // גל-83 · איסוף-עמלות (כל-150-טיקים): עמלות-הבריכה (הכנסת-הרשת) זורמות-לכספת
