@@ -3795,8 +3795,444 @@
 {"seq":3830,"ts":1792143193724,"kind":"service","from":"shachar","to":"yarden","asset":"USDS","amount":1.4,"reason":"אחסון-ארכיון · 4-GB-חודש","ref":"svc-1792143193724-684","h":"bb3865e3d96d6ba541fcd8a681f6f7a4"}
 {"seq":3831,"ts":1792143196426,"kind":"infra","from":"shachar","to":"Domain","asset":"USDS","amount":6.4,"reason":"תשתית: תדלוק-RC","h":"55f9d99459107f251ef98d1686967e36"}
 {"seq":3832,"ts":1792143196427,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":4.811113,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"fae4881c4ffbc2c23458a6ece21c6309"}
+<<<<<<< Updated upstream
 >>>>>>> a308ff4 (vault-seal [auto-economy]: 2 files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס)
 {"seq":4015,"ts":1792143640167,"kind":"service","from":"shachar","to":"erez","asset":"USDS","amount":0.7,"reason":"אחסון-ארכיון · 2-GB-חודש","ref":"svc-1792143640167-2493","h":"eddff9b01fb8877aed766094eb9699bb"}
 {"seq":4016,"ts":1792143640167,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":3.721237,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"34880780c957891e2919a17b3f093978"}
 {"seq":4017,"ts":1792143641067,"kind":"infra","from":"yarden","to":"TruthRail","asset":"USDS","amount":3.3,"reason":"תשתית: תרגום-מסמך","h":"b34c1556482f76a0899af411c94d7d36"}
 {"seq":4018,"ts":1792143641967,"kind":"service","from":"tamar","to":"TruthRail","asset":"USDS","amount":1.2,"reason":"אימות-קבלה · 2-חותמת","ref":"svc-1792143641967-1338","h":"2238743709e82ff03f821107bf558724"}
+=======
+{"seq":3946,"ts":1792143561841,"kind":"service","from":"shachar","to":"Console","asset":"USDS","amount":4.2,"reason":"אימות-קבלה · 7-חותמת","ref":"svc-1792143561841-2775","h":"b36d55c971c92d44186b16b57bebe5c7"}
+{"seq":3947,"ts":1792143562741,"kind":"service","from":"aluf","to":"FleetHQ","asset":"USDS","amount":1.2,"reason":"אימות-קבלה · 2-חותמת","ref":"svc-1792143562741-4965","h":"98e5dd3b50321af6460b79b259c15460"}
+{"seq":3948,"ts":1792143562741,"kind":"service","from":"shachar","to":"saos-dex","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792143562741-2427","h":"853afb5da51fa9f4798ec7b384972ba1"}
+{"seq":3949,"ts":1792143568144,"kind":"service","from":"shachar","to":"TruthRail","asset":"USDS","amount":1.8,"reason":"אימות-קבלה · 3-חותמת","ref":"svc-1792143568144-668","h":"bb82c4a1eb09e4517cfb2ca35cab8731"}
+{"seq":3950,"ts":1792143569044,"kind":"infra","from":"gal","to":"Console","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"b449d87ba924bed06795fc63d4aa0822"}
+{"seq":3951,"ts":1792143569044,"kind":"infra","from":"gal","to":"Domain","asset":"USDS","amount":1.8,"reason":"תשתית: אימות-קבלה","h":"4eba874b6119323f2b31c18c11c20f58"}
+{"seq":3952,"ts":1792143569044,"kind":"service","from":"gal","to":"Console","asset":"USDS","amount":1.4,"reason":"אחסון-ארכיון · 4-GB-חודש","ref":"svc-1792143569044-2952","h":"6555b606321d70d04a82c1b8adb0def3"}
+{"seq":3953,"ts":1792143569942,"kind":"dex-fee","from":"saos-dex","to":"treasury","asset":"USDS","amount":0.015797,"reason":"דמי-שירות-מילוי-דקס · cmv8l7k9d0007pyfm392rend0 SELL · מקור=FLEET:zai-sec","ref":"dexfill-cmvas087a02qnolxcbp0og038","h":"366ce2ba3f168edc118eb7bee96fa994"}
+{"seq":3954,"ts":1792143573546,"kind":"service","from":"aluf","to":"gal","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792143573546-5912","h":"4095c15da8be58aba131e28c04784a97"}
+{"seq":3955,"ts":1792143575345,"kind":"service","from":"gal","to":"Domain","asset":"USDS","amount":1.05,"reason":"אחסון-ארכיון · 3-GB-חודש","ref":"svc-1792143575345-5787","h":"ac0c1a1858b611f3799f3248aabab2f6"}
+>>>>>>> Stashed changes
+{"seq":4019,"ts":1792143642867,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":3.461758,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"6c6297115a25153e512a1654e60e1d4a"}
+{"seq":4020,"ts":1792143642867,"kind":"infra","from":"erez","to":"Console","asset":"USDS","amount":1.4,"reason":"תשתית: אחסון-ארכיון","h":"82b280f8c9299c605e3e37e26e228e63"}
+{"seq":4021,"ts":1792143643767,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":5.654635,"fee":0.016964,"price":2.529442,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.227835,"h":"6d052f5567c259ca7f78c2277a4a3dee"}
+{"seq":4022,"ts":1792143644667,"kind":"service","from":"shachar","to":"TruthRail","asset":"USDS","amount":5.6,"reason":"חישוב-GPU · 4-דקות-חישוב","ref":"svc-1792143644669-9865","h":"2b2321f12cc59ffae9328638b4a6e401"}
+{"seq":4023,"ts":1792143650998,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":2.650813,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"24622f5329f7da7a570362cae8d0ebc0"}
+{"seq":4024,"ts":1792143652798,"kind":"infra","from":"erez","to":"TruthRail","asset":"USDS","amount":2.8,"reason":"תשתית: חישוב-GPU","h":"e33665217d07173ea74af6644424addc"}
+{"seq":4025,"ts":1792143658199,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":3.866639,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"a447467f411740db866d65751dd40ddb"}
+{"seq":4026,"ts":1792143659999,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":4.340919,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"5c911a8dfddf20c17f3d2a1e162a1b37"}
+{"seq":4027,"ts":1792143660899,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":2.791453,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"681d0d30e53733c352d9c26857bf140d"}
+{"seq":4028,"ts":1792143663600,"kind":"service","from":"gal","to":"Domain","asset":"USDS","amount":4.2,"reason":"סריקת-גיט · 2-ריצה","ref":"svc-1792143663600-7341","h":"7a2546374f5d600106f0abe914a3df6f"}
+{"seq":4029,"ts":1792143666300,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":6.052789,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"472d1caabd723b50820e9f4db81fa125"}
+{"seq":4030,"ts":1792143666300,"kind":"service","from":"aluf","to":"yarden","asset":"USDS","amount":4.2,"reason":"אימות-קבלה · 7-חותמת","ref":"svc-1792143666300-2467","h":"774bfc4521d6f26706ee0cb7058f0cd1"}
+{"seq":4031,"ts":1792143667200,"kind":"service","from":"aluf","to":"saos-dex","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792143667200-3581","h":"c11efb5bd6455fddeb5d01424f6d137d"}
+{"seq":4032,"ts":1792143669901,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":5.497104,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"12f7b5dcce1d03fdb057ea57573bd600"}
+{"seq":4033,"ts":1792143671701,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":5.058036,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"bf7c2ea1f1d28ad8498796766dbcbe85"}
+{"seq":4034,"ts":1792143672602,"kind":"service","from":"erez","to":"TruthRail","asset":"USDS","amount":3,"reason":"אימות-קבלה · 5-חותמת","ref":"svc-1792143672602-2266","h":"7217cbbe07213f2f8a377b78b0b27e7b"}
+{"seq":4035,"ts":1792143673502,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":3.356549,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"77e185080291cd26a861073c4a4a0978"}
+{"seq":4036,"ts":1792143674402,"kind":"service","from":"shachar","to":"erez","asset":"USDS","amount":1.1,"reason":"תרגום-מסמך · 1-מסמך","ref":"svc-1792143674402-8655","h":"9cf8132ae43d6853737b7dca010e7179"}
+{"seq":4037,"ts":1792143675302,"kind":"infra","from":"yarden","to":"FleetHQ","asset":"USDS","amount":2.1,"reason":"תשתית: סריקת-גיט","h":"6976db0a2c1046e66487139ea625d5af"}
+{"seq":4038,"ts":1792143676202,"kind":"service","from":"erez","to":"aluf","asset":"USDS","amount":3.3,"reason":"תרגום-מסמך · 3-מסמך","ref":"svc-1792143676202-8943","h":"d33a776ae532fd6f30f1be88a68e1963"}
+{"seq":4039,"ts":1792143676202,"kind":"service","from":"erez","to":"tamar","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143676202-4871","h":"4a8bff0613defbdef9f81978b2ac8bf5"}
+{"seq":4040,"ts":1792143678002,"kind":"service","from":"shachar","to":"aluf","asset":"USDS","amount":1.4,"reason":"אחסון-ארכיון · 4-GB-חודש","ref":"svc-1792143678002-5712","h":"331588e200c256aba18a97937414da92"}
+{"seq":4041,"ts":1792143678003,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":6.208604,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"be2cadfd883978825fcde32bcccfcbb5"}
+{"seq":4042,"ts":1792143678902,"kind":"service","from":"tamar","to":"Console","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143678902-4","h":"60dc5e8628f33abe3cf41669e21e8d5e"}
+{"seq":4043,"ts":1792143679803,"kind":"service","from":"tamar","to":"Domain","asset":"USDS","amount":1.8,"reason":"מידע-שוק · 2-פיד","ref":"svc-1792143679803-2651","h":"0d3d4fe2e5710ea5f1049402c767b674"}
+{"seq":4044,"ts":1792143679803,"kind":"service","from":"gal","to":"shachar","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143679803-3470","h":"b5e8dc17c1bca826ac81d512078630eb"}
+{"seq":4045,"ts":1792143681604,"kind":"service","from":"aluf","to":"boot-verifier","asset":"USDS","amount":1.4,"reason":"אחסון-ארכיון · 4-GB-חודש","ref":"svc-1792143681604-4494","h":"a441c23be5881a15fcf214cbeaada859"}
+{"seq":4046,"ts":1792143681604,"kind":"service","from":"gal","to":"Console","asset":"USDS","amount":3.3,"reason":"תרגום-מסמך · 3-מסמך","ref":"svc-1792143681604-121","h":"6e7bf2643c529341c5879962cc76a0e4"}
+{"seq":4047,"ts":1792143681604,"kind":"service","from":"shachar","to":"aluf","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792143681604-4632","h":"d14d86008e94de4bcb6c8826772ad600"}
+{"seq":4048,"ts":1792143682505,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143682505-3454","h":"7c21ac93a844c7f602601d5d541af505"}
+{"seq":4049,"ts":1792143683405,"kind":"service","from":"tamar","to":"shachar","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792143683405-9500","h":"5d8925329d685cfebb735131f6456a71"}
+{"seq":4050,"ts":1792143685205,"kind":"service","from":"shachar","to":"gal","asset":"USDS","amount":4.2,"reason":"אימות-קבלה · 7-חותמת","ref":"svc-1792143685205-6949","h":"1bf96124ec80045a8974a7c9510cb392"}
+{"seq":4051,"ts":1792143686105,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":3.878445,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"f5d53a3bf99969fe98ab07493cb8c677"}
+{"seq":4052,"ts":1792143687005,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":5.560717,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"d0a7ffedacd547435805c907915105e4"}
+{"seq":4053,"ts":1792143688805,"kind":"service","from":"gal","to":"Console","asset":"USDS","amount":5.4,"reason":"מידע-שוק · 6-פיד","ref":"svc-1792143688805-2104","h":"027d592719ac01081acc711ad32def5a"}
+{"seq":4054,"ts":1792143691507,"kind":"service","from":"aluf","to":"yarden","asset":"USDS","amount":1.2,"reason":"אימות-קבלה · 2-חותמת","ref":"svc-1792143691507-7764","h":"b922f3532477d6a1f0e0b5a5d3c17eaa"}
+{"seq":4055,"ts":1792143695107,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":2.576421,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"3f30ded2ab11e14e525775fe11525ecd"}
+{"seq":4056,"ts":1792143696907,"kind":"service","from":"aluf","to":"erez","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792143696907-5595","h":"042076de3ccfb55544a7f7701dd0eb98"}
+{"seq":4057,"ts":1792143696907,"kind":"service","from":"tamar","to":"gal","asset":"USDS","amount":1.8,"reason":"אימות-קבלה · 3-חותמת","ref":"svc-1792143696907-2940","h":"4dde029777f2888f90ff624fe1fbf4f1"}
+{"seq":4058,"ts":1792143697808,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":3.418877,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"58697b646d03efcbe8b380e5cb83adb9"}
+{"seq":4059,"ts":1792143698708,"kind":"service","from":"tamar","to":"TruthRail","asset":"USDS","amount":1.05,"reason":"אחסון-ארכיון · 3-GB-חודש","ref":"svc-1792143698708-2469","h":"e9a323c5919376f4317e512848088db5"}
+{"seq":4060,"ts":1792143699608,"kind":"service","from":"shachar","to":"TruthRail","asset":"USDS","amount":3.6,"reason":"אימות-קבלה · 6-חותמת","ref":"svc-1792143699608-2394","h":"f0c5f67752259b226361644a4624629a"}
+{"seq":4061,"ts":1792143700509,"kind":"service","from":"aluf","to":"Console","asset":"USDS","amount":1.4,"reason":"אחסון-ארכיון · 4-GB-חודש","ref":"svc-1792143700509-1836","h":"455b69250363684dd3c6794161a8795c"}
+{"seq":4062,"ts":1792143701410,"kind":"service","from":"tamar","to":"FleetHQ","asset":"USDS","amount":4.4,"reason":"תרגום-מסמך · 4-מסמך","ref":"svc-1792143701410-7574","h":"f61af77cf69be16ab35f415b7cdbbfce"}
+{"seq":4063,"ts":1792143701410,"kind":"infra","from":"tamar","to":"TruthRail","asset":"USDS","amount":1.8,"reason":"תשתית: מידע-שוק","h":"708210113a675e5c4761ec80034a1f9b"}
+{"seq":4064,"ts":1792143703210,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":2.701643,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"3525f4dac5b6f9b1b2678a63b0397bcb"}
+{"seq":4065,"ts":1792143703210,"kind":"service","from":"gal","to":"yarden","asset":"USDS","amount":4.2,"reason":"סריקת-גיט · 2-ריצה","ref":"svc-1792143703210-1632","h":"151348ae84353f8c6899adf016c234a5"}
+{"seq":4066,"ts":1792143704110,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":5.981405,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"ca1ccf887fb32e06416740b9c520f1db"}
+{"seq":4067,"ts":1792143704110,"kind":"infra","from":"yarden","to":"FleetHQ","asset":"USDS","amount":1.8,"reason":"תשתית: אימות-קבלה","h":"e40cf0251b3a914e44174381c1aabcab"}
+{"seq":4068,"ts":1792143704110,"kind":"infra","from":"yarden","to":"TruthRail","asset":"USDS","amount":1.8,"reason":"תשתית: מידע-שוק","h":"00523fdcd853b0c5fbdef16a49762344"}
+{"seq":4069,"ts":1792143705010,"kind":"service","from":"aluf","to":"tamar","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792143705010-7292","h":"5b9d7bc2e8f3867de06e0d3551d1fedd"}
+{"seq":4070,"ts":1792143705010,"kind":"infra","from":"yarden","to":"TruthRail","asset":"USDS","amount":0.7,"reason":"תשתית: אחסון-ארכיון","h":"94a5a69ff171dbdf8c3fd34efbb14e00"}
+{"seq":4071,"ts":1792143705010,"kind":"service","from":"tamar","to":"TruthRail","asset":"USDS","amount":4.2,"reason":"סריקת-גיט · 2-ריצה","ref":"svc-1792143705010-2153","h":"1a280443ec063f746c108c99df0e3f6e"}
+{"seq":4072,"ts":1792143705010,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":5.980082,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"f3b1d3c5cde0602cd66efcd813111ffb"}
+{"seq":4073,"ts":1792143707710,"kind":"service","from":"yarden","to":"Domain","asset":"USDS","amount":1.1,"reason":"תרגום-מסמך · 1-מסמך","ref":"svc-1792143707711-1988","h":"52019e3d569c5a3057b6c878031b5b85"}
+{"seq":4074,"ts":1792143707711,"kind":"infra","from":"gal","to":"Pulse","asset":"USDS","amount":5.5,"reason":"תשתית: תרגום-מסמך","h":"43a38094d885b997b9fb56f59972e338"}
+{"seq":4075,"ts":1792143708611,"kind":"service","from":"tamar","to":"TruthRail","asset":"USDS","amount":8.8,"reason":"תרגום-מסמך · 8-מסמך","ref":"svc-1792143708611-449","h":"265dfb20000e435f3ce7dd1750da80ba"}
+{"seq":4076,"ts":1792143708611,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":6.687909,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"aba2d53f9ed1f76bd0c7be5d7c411518"}
+{"seq":4077,"ts":1792143709511,"kind":"infra","from":"tamar","to":"Pulse","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"325337aa3f88dc6ffe0dcccffa253387"}
+{"seq":4078,"ts":1792143711312,"kind":"service","from":"yarden","to":"Pulse","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792143711312-8823","h":"aeacaf49f13d69dde03001485d624b66"}
+{"seq":4079,"ts":1792143711312,"kind":"service","from":"tamar","to":"Console","asset":"USDS","amount":0.7,"reason":"אחסון-ארכיון · 2-GB-חודש","ref":"svc-1792143711312-7958","h":"0d34ace74f3c64bb757d3632f4e8c055"}
+{"seq":4080,"ts":1792143713112,"kind":"service","from":"aluf","to":"yarden","asset":"USDS","amount":3.2,"reason":"תדלוק-RC · 1-מנה","ref":"svc-1792143713112-6133","h":"db7e47f778a97704ce1c263a5b4be4ce"}
+{"seq":4081,"ts":1792143713112,"kind":"service","from":"yarden","to":"erez","asset":"USDS","amount":2.4,"reason":"אימות-קבלה · 4-חותמת","ref":"svc-1792143713112-4588","h":"a85064a0df77bef57b65906d908ccbbc"}
+{"seq":4082,"ts":1792143714012,"kind":"infra","from":"tamar","to":"Pulse","asset":"USDS","amount":0.7,"reason":"תשתית: אחסון-ארכיון","h":"8913432410a8765a1c8fefa71f5688c3"}
+{"seq":4083,"ts":1792143714912,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":7.107275,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"c63dee6ae7fc34d6c04ee1e8c6851328"}
+{"seq":4084,"ts":1792143716714,"kind":"service","from":"erez","to":"saos-dex","asset":"USDS","amount":2.7,"reason":"מידע-שוק · 3-פיד","ref":"svc-1792143716714-7515","h":"69cfc9347833ae4239bf98ef54e1fc9e"}
+{"seq":4085,"ts":1792143717615,"kind":"service","from":"yarden","to":"aluf","asset":"USDS","amount":1.05,"reason":"אחסון-ארכיון · 3-GB-חודש","ref":"svc-1792143717615-6766","h":"f6597b7d8e7b6e9aa99fdffdd978a4db"}
+{"seq":4086,"ts":1792143717615,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792143717615-3689","h":"98329bfd21c3423823e598c4c2f49d70"}
+{"seq":4087,"ts":1792143718516,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":3.481077,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"ec120fdce2aed5a481f4ea79e8592dc4"}
+{"seq":4088,"ts":1792143718516,"kind":"infra","from":"tamar","to":"TruthRail","asset":"USDS","amount":2.2,"reason":"תשתית: תרגום-מסמך","h":"58e525b9375108a83d7bbcf33f165128"}
+{"seq":4089,"ts":1792143718516,"kind":"service","from":"erez","to":"Domain","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792143718516-556","h":"2017b902cadd249938c89f526e07db8d"}
+{"seq":4090,"ts":1792143719416,"kind":"infra","from":"gal","to":"TruthRail","asset":"USDS","amount":0.7,"reason":"תשתית: אחסון-ארכיון","h":"839bdb493e71056f0c5587894a9e82cd"}
+{"seq":4091,"ts":1792143719416,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":5.544294,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"caec5648163edd1d0493f68042c5cb1a"}
+{"seq":4092,"ts":1792143723916,"kind":"service","from":"shachar","to":"Pulse","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143723916-6458","h":"0ea590096237ba15597c1d324e8957d5"}
+{"seq":4093,"ts":1792143724817,"kind":"service","from":"yarden","to":"Console","asset":"USDS","amount":1.8,"reason":"אימות-קבלה · 3-חותמת","ref":"svc-1792143724817-5976","h":"ffb1a4efc09910b170f6acd91fcaf494"}
+{"seq":4094,"ts":1792143726618,"kind":"service","from":"shachar","to":"erez","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792143726618-8608","h":"281fbcc04f58e3c73a8957cdb596d427"}
+{"seq":4095,"ts":1792143726618,"kind":"service","from":"erez","to":"aluf","asset":"USDS","amount":1.4,"reason":"אחסון-ארכיון · 4-GB-חודש","ref":"svc-1792143726618-5799","h":"8134811195d706a09a613bacf018c133"}
+{"seq":4096,"ts":1792143726618,"kind":"infra","from":"erez","to":"FleetHQ","asset":"USDS","amount":4.5,"reason":"תשתית: מידע-שוק","h":"2750a12084c97393c9bdfdc50457e0fa"}
+{"seq":4097,"ts":1792143729323,"kind":"service","from":"tamar","to":"TruthRail","asset":"USDS","amount":1.8,"reason":"מידע-שוק · 2-פיד","ref":"svc-1792143729323-9285","h":"2b5ab46899ab653c0426169cc4d37aef"}
+{"seq":4098,"ts":1792143730222,"kind":"service","from":"shachar","to":"aluf","asset":"USDS","amount":4.4,"reason":"תרגום-מסמך · 4-מסמך","ref":"svc-1792143730222-3903","h":"3f01a0d99a6aaa8287e76e2fa0f3cd93"}
+{"seq":4099,"ts":1792143734723,"kind":"service","from":"yarden","to":"Domain","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792143734723-8683","h":"681424907da0d188ba8abb98e03c2885"}
+{"seq":4100,"ts":1792143734723,"kind":"infra","from":"yarden","to":"FleetHQ","asset":"USDS","amount":1.75,"reason":"תשתית: אחסון-ארכיון","h":"095fcd5e2ba59b8c709b2cff8db2b446"}
+{"seq":4101,"ts":1792143736524,"kind":"infra","from":"shachar","to":"saos-dex","asset":"USDS","amount":2.1,"reason":"תשתית: סריקת-גיט","h":"528dda39002606bea0d3966994fbcbd0"}
+{"seq":4102,"ts":1792143736524,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":2.8,"reason":"חישוב-GPU · 2-דקות-חישוב","ref":"svc-1792143736524-6076","h":"bcff1c605cd944b040e46059d45ad2c3"}
+{"seq":4103,"ts":1792143736524,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":4.653854,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"3a7ec28230af001363fdc85d352e1f42"}
+{"seq":4104,"ts":1792143737425,"kind":"service","from":"shachar","to":"yarden","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792143737425-4977","h":"4a097085afd758c8719023e4e1449232"}
+{"seq":4105,"ts":1792143739225,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":5.781748,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"b14c317a628cedba17411a475cf7a059"}
+{"seq":4106,"ts":1792143741025,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":7.73165,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"bcff1ed5f3bd8f1a953df5c38bbabe98"}
+{"seq":4107,"ts":1792143741026,"kind":"service","from":"gal","to":"saos-dex","asset":"USDS","amount":4.4,"reason":"תרגום-מסמך · 4-מסמך","ref":"svc-1792143741026-2064","h":"6bde5c87149658e6ae3bb82764a8e946"}
+{"seq":4108,"ts":1792143742826,"kind":"infra","from":"yarden","to":"saos-dex","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"7e2de84dc5bc10cf28f836fd655eba8c"}
+{"seq":4109,"ts":1792143742826,"kind":"service","from":"aluf","to":"FleetHQ","asset":"USDS","amount":1.8,"reason":"אימות-קבלה · 3-חותמת","ref":"svc-1792143742826-7846","h":"d9e1eaa2dbb0b0dc26444e73ca29bd1c"}
+{"seq":4110,"ts":1792143743726,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":6.356171,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"e4ee8d3cffa646f155fa48a87a9ceb89"}
+{"seq":4111,"ts":1792143745527,"kind":"service","from":"tamar","to":"FleetHQ","asset":"USDS","amount":2.4,"reason":"אימות-קבלה · 4-חותמת","ref":"svc-1792143745527-8854","h":"794acda7c35495b831efe3e93553bc91"}
+{"seq":4112,"ts":1792143746428,"kind":"service","from":"erez","to":"Console","asset":"USDS","amount":5.5,"reason":"תרגום-מסמך · 5-מסמך","ref":"svc-1792143746428-7247","h":"821ec86bb2dc605377792c6523d421ac"}
+{"seq":4113,"ts":1792143747329,"kind":"service","from":"yarden","to":"erez","asset":"USDS","amount":1.75,"reason":"אחסון-ארכיון · 5-GB-חודש","ref":"svc-1792143747329-9409","h":"5cc7c31eb8d6a749b71e282566c4864b"}
+{"seq":4114,"ts":1792143748229,"kind":"service","from":"aluf","to":"Pulse","asset":"USDS","amount":2.8,"reason":"אחסון-ארכיון · 8-GB-חודש","ref":"svc-1792143748229-5178","h":"aacc9b23d3aa54e64a1a5485da77addf"}
+{"seq":4115,"ts":1792143749129,"kind":"infra","from":"shachar","to":"saos-dex","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"0ba06197284acd0cc0bfaa5159ede883"}
+{"seq":4116,"ts":1792143750029,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":5.168912,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"0a6441c34e31893ef46ff40dc90102dc"}
+{"seq":4117,"ts":1792143750929,"kind":"service","from":"gal","to":"yarden","asset":"USDS","amount":1.2,"reason":"אימות-קבלה · 2-חותמת","ref":"svc-1792143750929-2770","h":"98ac049c4c06441ca5e1d7daf714a3a2"}
+{"seq":4118,"ts":1792143750929,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":5.851167,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"fe93eb31327fe89ed2ba5be51c7408b5"}
+{"seq":4119,"ts":1792143751829,"kind":"service","from":"tamar","to":"Domain","asset":"USDS","amount":2.8,"reason":"אחסון-ארכיון · 8-GB-חודש","ref":"svc-1792143751829-5241","h":"237bec30e9da1d19923f0227abc4bb90"}
+{"seq":4120,"ts":1792143752729,"kind":"service","from":"yarden","to":"boot-verifier","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792143752729-8379","h":"9e1981c4ab24e2b6be5668af0da1cdf3"}
+{"seq":4121,"ts":1792143753629,"kind":"infra","from":"shachar","to":"TruthRail","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"bd5aa102778bfe22c98fa0bcb635686c"}
+{"seq":4122,"ts":1792143755431,"kind":"service","from":"tamar","to":"yarden","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792143755431-5026","h":"f344d5ad7a07389c54071d2a81849c9e"}
+{"seq":4123,"ts":1792143757232,"kind":"service","from":"aluf","to":"saos-dex","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792143757232-4626","h":"f4e80a6d119bec3ffdddace7b0c86136"}
+{"seq":4124,"ts":1792143759032,"kind":"service","from":"yarden","to":"boot-verifier","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792143759032-8260","h":"73b01c66487b870bf794ec3e98fcee85"}
+{"seq":4125,"ts":1792143760832,"kind":"service","from":"shachar","to":"boot-verifier","asset":"USDS","amount":1.75,"reason":"אחסון-ארכיון · 5-GB-חודש","ref":"svc-1792143760832-4306","h":"85b4141ce2e1d02cdd19b2a1a0a96840"}
+{"seq":4126,"ts":1792143762633,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":5.51976,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"8d113e269a2e20561ffecce1007cdd58"}
+{"seq":4127,"ts":1792143762633,"kind":"service","from":"erez","to":"shachar","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792143762633-8208","h":"8ae7025db281e3f8ad1d48dec23eba70"}
+{"seq":4128,"ts":1792143763534,"kind":"service","from":"shachar","to":"gal","asset":"USDS","amount":4.2,"reason":"חישוב-GPU · 3-דקות-חישוב","ref":"svc-1792143763534-5066","h":"8aeadd28ba7bbbe2708329fbed8a6d1d"}
+{"seq":4129,"ts":1792143764435,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":3.328947,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"390d80d334b006a61c4f0a443f8a35cf"}
+{"seq":4130,"ts":1792143766235,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":6.499891,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"1ccb2d239fce3e2ab567d6c63d84278d"}
+{"seq":4131,"ts":1792143766235,"kind":"service","from":"gal","to":"Pulse","asset":"USDS","amount":6.3,"reason":"מידע-שוק · 7-פיד","ref":"svc-1792143766235-3943","h":"305430f31a73438eede9547c3516c285"}
+{"seq":4132,"ts":1792143766235,"kind":"infra","from":"shachar","to":"Console","asset":"USDS","amount":1.4,"reason":"תשתית: חישוב-GPU","h":"168b26865b2423cd75244f21d4216efd"}
+{"seq":4133,"ts":1792143767135,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":7.890173,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"2dbd369a07829c76f17c3f3c5476d9ad"}
+{"seq":4134,"ts":1792143768035,"kind":"infra","from":"tamar","to":"TruthRail","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"bc0f455a2201fdcd20973a2741148204"}
+{"seq":4135,"ts":1792143768935,"kind":"service","from":"gal","to":"tamar","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792143768935-7744","h":"15cbd71f52c19c5546fb299468080694"}
+{"seq":4136,"ts":1792143768936,"kind":"service","from":"yarden","to":"erez","asset":"USDS","amount":5.5,"reason":"תרגום-מסמך · 5-מסמך","ref":"svc-1792143768936-38","h":"43bb17723b4a8ffc8f93912a18efbc14"}
+{"seq":4137,"ts":1792143769835,"kind":"service","from":"gal","to":"erez","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792143769835-9977","h":"7f1916d6770af18270f111cc35ea052f"}
+{"seq":4138,"ts":1792143773437,"kind":"service","from":"aluf","to":"Domain","asset":"USDS","amount":1.4,"reason":"אחסון-ארכיון · 4-GB-חודש","ref":"svc-1792143773437-4457","h":"84bdaea6b31b4cac31deeae84b525bf9"}
+{"seq":4139,"ts":1792143773438,"kind":"service","from":"gal","to":"Pulse","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143773438-4463","h":"193c980cb68df2aca1a4301e0e872ccb"}
+{"seq":4140,"ts":1792143774337,"kind":"service","from":"tamar","to":"boot-verifier","asset":"USDS","amount":1.8,"reason":"מידע-שוק · 2-פיד","ref":"svc-1792143774337-6611","h":"08a7d46d4ae71884584002dcbf0eaee5"}
+{"seq":4141,"ts":1792143775237,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":2.876726,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"2a8e52831299b5b2d0caa9df0720342e"}
+{"seq":4142,"ts":1792143775238,"kind":"service","from":"aluf","to":"boot-verifier","asset":"USDS","amount":1.8,"reason":"מידע-שוק · 2-פיד","ref":"svc-1792143775238-3201","h":"50231fe31e60a7582a51b049fa331825"}
+{"seq":4143,"ts":1792143777037,"kind":"service","from":"tamar","to":"shachar","asset":"USDS","amount":1.4,"reason":"אחסון-ארכיון · 4-GB-חודש","ref":"svc-1792143777038-3663","h":"3cc70a88fb2ba1d7f750ba8f621fd05f"}
+{"seq":4144,"ts":1792143780639,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":5.430225,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"03d42ac24c65e06994c634ce5bc5391b"}
+{"seq":4145,"ts":1792143781539,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":2.345481,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"71bb23deecf453c7018d96c3250f505a"}
+{"seq":4146,"ts":1792143781540,"kind":"service","from":"erez","to":"TruthRail","asset":"USDS","amount":7,"reason":"חישוב-GPU · 5-דקות-חישוב","ref":"svc-1792143781540-136","h":"e141b8ad47e6b160c6421f254e6c5ae7"}
+{"seq":4147,"ts":1792143783340,"kind":"infra","from":"aluf","to":"Pulse","asset":"USDS","amount":5.5,"reason":"תשתית: תרגום-מסמך","h":"a3f9a1c821b7cb8647ca2df7623b683c"}
+{"seq":4148,"ts":1792143783340,"kind":"service","from":"aluf","to":"erez","asset":"USDS","amount":1.05,"reason":"אחסון-ארכיון · 3-GB-חודש","ref":"svc-1792143783340-700","h":"6044ba963228a5a92b013365ba316aff"}
+{"seq":4149,"ts":1792143784240,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":5.853877,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"a8742ffa755aa542ee4623666f2cdba1"}
+{"seq":4150,"ts":1792143785140,"kind":"service","from":"aluf","to":"Console","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792143785140-2401","h":"8975c297ff97e7317e97d38fb08290c4"}
+{"seq":4151,"ts":1792143786040,"kind":"infra","from":"shachar","to":"FleetHQ","asset":"USDS","amount":3.2,"reason":"תשתית: תדלוק-RC","h":"6aba45f08a53f646bb8f6d97f04e76bb"}
+{"seq":4152,"ts":1792143787840,"kind":"service","from":"yarden","to":"erez","asset":"USDS","amount":3.6,"reason":"אימות-קבלה · 6-חותמת","ref":"svc-1792143787840-1610","h":"5bab00717cb150dcd8d09162eb8a9853"}
+{"seq":4153,"ts":1792143788741,"kind":"service","from":"erez","to":"saos-dex","asset":"USDS","amount":2.7,"reason":"מידע-שוק · 3-פיד","ref":"svc-1792143788741-9612","h":"4d4038c69004aeb284923b7d32cbf7ab"}
+{"seq":4154,"ts":1792143789641,"kind":"service","from":"shachar","to":"TruthRail","asset":"USDS","amount":2.7,"reason":"מידע-שוק · 3-פיד","ref":"svc-1792143789641-2941","h":"641834437cef0a6ef4a5c5d1ee8e74b6"}
+{"seq":4155,"ts":1792143790541,"kind":"infra","from":"tamar","to":"FleetHQ","asset":"USDS","amount":9.6,"reason":"תשתית: תדלוק-RC","h":"12f650d99881711cfe1b7c36be72e3ae"}
+{"seq":4156,"ts":1792143795042,"kind":"infra","from":"tamar","to":"FleetHQ","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"5b24d32833be758402d3005ce304cca9"}
+{"seq":4157,"ts":1792143795942,"kind":"infra","from":"aluf","to":"FleetHQ","asset":"USDS","amount":2.2,"reason":"תשתית: תרגום-מסמך","h":"1139f996cc8fc81050f3698435099e97"}
+{"seq":4158,"ts":1792143795942,"kind":"infra","from":"shachar","to":"Pulse","asset":"USDS","amount":1.1,"reason":"תשתית: תרגום-מסמך","h":"512ceceb9948e3a0c59bb230c359ca77"}
+{"seq":4159,"ts":1792143798643,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":7.696074,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"f93f905bbbde38ad18bebeb8c52a5e9c"}
+{"seq":4160,"ts":1792143798643,"kind":"service","from":"erez","to":"yarden","asset":"USDS","amount":2.4,"reason":"אימות-קבלה · 4-חותמת","ref":"svc-1792143798643-4639","h":"3d62d8d39a93f188192f0b0503bfc800"}
+{"seq":4161,"ts":1792143803145,"kind":"service","from":"yarden","to":"aluf","asset":"USDS","amount":2.4,"reason":"אימות-קבלה · 4-חותמת","ref":"svc-1792143803145-1741","h":"eb76c8370cc98a36f7b6853a10e0b3d2"}
+{"seq":4162,"ts":1792143804045,"kind":"service","from":"aluf","to":"yarden","asset":"USDS","amount":2.4,"reason":"אימות-קבלה · 4-חותמת","ref":"svc-1792143804045-7155","h":"8a229a4c3717cacacee88dade1abd4a7"}
+{"seq":4163,"ts":1792143804045,"kind":"infra","from":"yarden","to":"TruthRail","asset":"USDS","amount":2.7,"reason":"תשתית: מידע-שוק","h":"4fef0873c01c6a4a0dd6455066139f2a"}
+{"seq":4164,"ts":1792143805845,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":2.225059,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"683652b71dd2d8fa688bc9a576700f15"}
+{"seq":4165,"ts":1792143807646,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":6.847313,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"99b308cddc046c98a629b1584d9f3e75"}
+{"seq":4166,"ts":1792143808547,"kind":"service","from":"gal","to":"Console","asset":"USDS","amount":2.4,"reason":"אימות-קבלה · 4-חותמת","ref":"svc-1792143808547-9273","h":"6f052912808e127faad6d62510487f99"}
+{"seq":4167,"ts":1792143808547,"kind":"service","from":"tamar","to":"saos-dex","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143808547-7463","h":"96eb66a4e16227da071a075e8f47bf89"}
+{"seq":4168,"ts":1792143809448,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":2.417838,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"529fdcd3a6cedf236295d432825dd1c8"}
+{"seq":4169,"ts":1792143809448,"kind":"service","from":"aluf","to":"yarden","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792143809448-8990","h":"0120957ec4861f0196a113e41f2edbe9"}
+{"seq":4170,"ts":1792143810348,"kind":"service","from":"aluf","to":"boot-verifier","asset":"USDS","amount":3.6,"reason":"אימות-קבלה · 6-חותמת","ref":"svc-1792143810348-8750","h":"e25987cf68419db22f2dababe32fadaa"}
+{"seq":4171,"ts":1792143811249,"kind":"service","from":"yarden","to":"gal","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792143811249-2211","h":"711d056e2d586bf3255b6d076454fef7"}
+{"seq":4172,"ts":1792143813949,"kind":"service","from":"erez","to":"shachar","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792143813949-5489","h":"1a644f5d092449a5e2247b697400c45d"}
+{"seq":4173,"ts":1792143814849,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":4.168672,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"6476ba89259bf0cf74365905eaee7d63"}
+{"seq":4174,"ts":1792143816650,"kind":"service","from":"shachar","to":"boot-verifier","asset":"USDS","amount":1.2,"reason":"אימות-קבלה · 2-חותמת","ref":"svc-1792143816650-5336","h":"e9ac07834cb66ee85d0a7c03e22eb730"}
+{"seq":4175,"ts":1792143816650,"kind":"infra","from":"yarden","to":"TruthRail","asset":"USDS","amount":2.8,"reason":"תשתית: חישוב-GPU","h":"f03440ac1481eda290e68171e259ad65"}
+{"seq":4176,"ts":1792143818452,"kind":"service","from":"erez","to":"shachar","asset":"USDS","amount":6.3,"reason":"מידע-שוק · 7-פיד","ref":"svc-1792143818452-2177","h":"71a3138008c35ca56837fd27174634fa"}
+{"seq":4177,"ts":1792143822054,"kind":"service","from":"erez","to":"TruthRail","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792143822054-1252","h":"6192cc95ae562a18786c28e1051ad744"}
+{"seq":4178,"ts":1792143822054,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":2.94801,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"d1ed94b8c3cb7e52b374a2f37aee6178"}
+{"seq":4179,"ts":1792143823854,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":4.049582,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"07e1fac5fbbf81f5f33791a4d0ed1c34"}
+{"seq":4180,"ts":1792143825653,"kind":"infra","from":"shachar","to":"Pulse","asset":"USDS","amount":0.35,"reason":"תשתית: אחסון-ארכיון","h":"abfde5bfe3fa43fc126e96132fe4a6c0"}
+{"seq":4181,"ts":1792143825654,"kind":"service","from":"shachar","to":"Pulse","asset":"USDS","amount":4.5,"reason":"מידע-שוק · 5-פיד","ref":"svc-1792143825654-4392","h":"2f5c0be7ee753b0f1cc93c6b440101a9"}
+{"seq":4182,"ts":1792143826554,"kind":"service","from":"erez","to":"Console","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792143826554-5281","h":"020e1beb9247589b7d7f4fdaf93b39b1"}
+{"seq":4183,"ts":1792143828354,"kind":"service","from":"shachar","to":"aluf","asset":"USDS","amount":6.3,"reason":"מידע-שוק · 7-פיד","ref":"svc-1792143828354-5341","h":"868e3ed3d565159e0b361d6ef3c96ec2"}
+{"seq":4184,"ts":1792143830155,"kind":"service","from":"aluf","to":"FleetHQ","asset":"USDS","amount":7,"reason":"חישוב-GPU · 5-דקות-חישוב","ref":"svc-1792143830155-4537","h":"8c7c376c87839500cc403f877c6a0a4e"}
+{"seq":4185,"ts":1792143834656,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":2.318005,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"629713510774a700ba4a7c2a29429223"}
+{"seq":4186,"ts":1792143835557,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":6.538244,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"1c6161ea7b2caa7884d15b2c3e29d31b"}
+{"seq":4187,"ts":1792143836458,"kind":"service","from":"shachar","to":"gal","asset":"USDS","amount":6.4,"reason":"תדלוק-RC · 2-מנה","ref":"svc-1792143836458-5215","h":"a5059a3efdf5ae3bd24aa6fccc56f01b"}
+{"seq":4188,"ts":1792143840958,"kind":"infra","from":"yarden","to":"TruthRail","asset":"USDS","amount":1.2,"reason":"תשתית: אימות-קבלה","h":"f531dda5ef864c9f2b91d097f04e9d77"}
+{"seq":4189,"ts":1792143841858,"kind":"infra","from":"gal","to":"TruthRail","asset":"USDS","amount":0.35,"reason":"תשתית: אחסון-ארכיון","h":"a1bbdf618a00a7947f17b8173f7cdbff"}
+{"seq":4190,"ts":1792143844559,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":6.210977,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"02bc1f98353d332e6ecd790fbd248818"}
+{"seq":4191,"ts":1792143845460,"kind":"service","from":"gal","to":"tamar","asset":"USDS","amount":2.7,"reason":"מידע-שוק · 3-פיד","ref":"svc-1792143845460-7122","h":"3fea420c57ae86da2ddf2170318bfb39"}
+{"seq":4192,"ts":1792143845460,"kind":"service","from":"shachar","to":"yarden","asset":"USDS","amount":4.2,"reason":"חישוב-GPU · 3-דקות-חישוב","ref":"svc-1792143845460-815","h":"142ff7857602cede30dc51da1bb3f919"}
+{"seq":4193,"ts":1792143846360,"kind":"service","from":"yarden","to":"Domain","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143846360-6868","h":"6525422fdfecc1c5bf33dd7cc62d4c2b"}
+{"seq":4194,"ts":1792143846360,"kind":"infra","from":"gal","to":"TruthRail","asset":"USDS","amount":2.1,"reason":"תשתית: סריקת-גיט","h":"25833e165e9ddffb7f758373bcdc8f3f"}
+{"seq":4195,"ts":1792143848160,"kind":"service","from":"yarden","to":"tamar","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792143848160-1196","h":"aa0c5eab77f9073eaa9ad6bc1c6e4b7e"}
+{"seq":4196,"ts":1792143849060,"kind":"service","from":"tamar","to":"Pulse","asset":"USDS","amount":7.2,"reason":"מידע-שוק · 8-פיד","ref":"svc-1792143849060-7241","h":"23e0736b5eb067f963a9ba0e2f5fb9d7"}
+{"seq":4197,"ts":1792143851760,"kind":"service","from":"yarden","to":"Console","asset":"USDS","amount":1.2,"reason":"אימות-קבלה · 2-חותמת","ref":"svc-1792143851760-2359","h":"ae7a36701b9848968fb34509645ae011"}
+{"seq":4198,"ts":1792143851760,"kind":"infra","from":"gal","to":"Domain","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"5efcb170d5521614d158242abe35405d"}
+{"seq":4199,"ts":1792143853560,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":6.019717,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"946acad3f13495dfa39dc19c26900ad1"}
+{"seq":4200,"ts":1792143854461,"kind":"service","from":"aluf","to":"FleetHQ","asset":"USDS","amount":1.8,"reason":"אימות-קבלה · 3-חותמת","ref":"svc-1792143854461-4719","h":"21ad319787e9cb521a9d38906f39dff1"}
+{"seq":4201,"ts":1792143854461,"kind":"service","from":"shachar","to":"tamar","asset":"USDS","amount":4.5,"reason":"מידע-שוק · 5-פיד","ref":"svc-1792143854461-1664","h":"5fb246c5b48f4c965cb3d9004a69c4da"}
+{"seq":4202,"ts":1792143856262,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":3.631845,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"1e1e9bfad70368c67ee0b26dd23e4a97"}
+{"seq":4203,"ts":1792143857162,"kind":"service","from":"yarden","to":"saos-dex","asset":"USDS","amount":3.2,"reason":"תדלוק-RC · 1-מנה","ref":"svc-1792143857162-2520","h":"6c48ef9117e2c87f303b31bef02356b9"}
+{"seq":4204,"ts":1792143858062,"kind":"service","from":"tamar","to":"Domain","asset":"USDS","amount":3.6,"reason":"אימות-קבלה · 6-חותמת","ref":"svc-1792143858062-5779","h":"0d0789c4f697fe9f042476da322bd683"}
+{"seq":4205,"ts":1792143861663,"kind":"service","from":"gal","to":"Console","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792143861663-6864","h":"c5a9d1a8a6eb802b35288904d983f0e7"}
+{"seq":4206,"ts":1792143862564,"kind":"service","from":"gal","to":"boot-verifier","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143862564-1640","h":"e755cf0b2dc33a01c86414f19c06f799"}
+{"seq":4207,"ts":1792143865266,"kind":"service","from":"tamar","to":"TruthRail","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792143865266-9564","h":"1669204b4d34c92b45a89c402302274c"}
+{"seq":4208,"ts":1792143866166,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":5.680607,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"15d67a657f2efb0a7cdbf08f7881dbe8"}
+{"seq":4209,"ts":1792143867066,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":4.886426,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"61a9d7272da4c8967fc628818d197f2c"}
+{"seq":4210,"ts":1792143867966,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":3.668159,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"b909275d5ea10632e8135bf9a1fc6eb5"}
+{"seq":4211,"ts":1792143868866,"kind":"infra","from":"erez","to":"Console","asset":"USDS","amount":3,"reason":"תשתית: אימות-קבלה","h":"7b3dc846407a89f20341e30558986626"}
+{"seq":4212,"ts":1792143869766,"kind":"service","from":"shachar","to":"boot-verifier","asset":"USDS","amount":4.5,"reason":"מידע-שוק · 5-פיד","ref":"svc-1792143869766-420","h":"bee75b0246fa5686d71e173b6a846bcd"}
+{"seq":4213,"ts":1792143869766,"kind":"infra","from":"shachar","to":"TruthRail","asset":"USDS","amount":2.7,"reason":"תשתית: מידע-שוק","h":"cfbd48ec06a6c1dab48779d6e676404b"}
+{"seq":4214,"ts":1792143870666,"kind":"infra","from":"gal","to":"saos-dex","asset":"USDS","amount":1.4,"reason":"תשתית: חישוב-GPU","h":"a2b9939472ebd9a6e77de899fb950b29"}
+{"seq":4215,"ts":1792143870666,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":3.118338,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"774aff43e9d06d6628ef2a5ecec660cf"}
+{"seq":4216,"ts":1792143872467,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":5.884426,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"d763118f6ecb58d0953d5049a7eb71e3"}
+{"seq":4217,"ts":1792143872467,"kind":"service","from":"yarden","to":"TruthRail","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792143872467-1275","h":"07e51a04999ec7858fe7f42f31aac9c9"}
+{"seq":4218,"ts":1792143873367,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":5.833394,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"d73d8bc07cdc091277c181b1853c80e4"}
+{"seq":4219,"ts":1792143875167,"kind":"service","from":"aluf","to":"Console","asset":"USDS","amount":6.6,"reason":"תרגום-מסמך · 6-מסמך","ref":"svc-1792143875167-5460","h":"4720b70d975ee2eb6724be4c4359d5b7"}
+{"seq":4220,"ts":1792143876067,"kind":"service","from":"aluf","to":"Pulse","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792143876067-4361","h":"eeed44120961ce6a367256ec57ab67e0"}
+{"seq":4221,"ts":1792143879668,"kind":"service","from":"yarden","to":"gal","asset":"USDS","amount":2.8,"reason":"חישוב-GPU · 2-דקות-חישוב","ref":"svc-1792143879668-6827","h":"2ffe5206428ad2d204cef477a27f1f7e"}
+{"seq":4222,"ts":1792143879668,"kind":"service","from":"aluf","to":"boot-verifier","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143879668-9157","h":"31cf5e043f15e66806b0ce9a98668fde"}
+{"seq":4223,"ts":1792143881470,"kind":"service","from":"erez","to":"saos-dex","asset":"USDS","amount":2.45,"reason":"אחסון-ארכיון · 7-GB-חודש","ref":"svc-1792143881470-2905","h":"3923b1a501a1cc3fbbeb8be1dbe6975e"}
+{"seq":4224,"ts":1792143881470,"kind":"infra","from":"erez","to":"Console","asset":"USDS","amount":1.75,"reason":"תשתית: אחסון-ארכיון","h":"3e0ccfe6289a6e9ae6740f51e58edcc2"}
+{"seq":4225,"ts":1792143882371,"kind":"service","from":"aluf","to":"gal","asset":"USDS","amount":2.8,"reason":"חישוב-GPU · 2-דקות-חישוב","ref":"svc-1792143882371-8590","h":"a3428f4fa832e7b87cdc03577ba6cb0e"}
+{"seq":4226,"ts":1792143884171,"kind":"service","from":"aluf","to":"Pulse","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143884171-8497","h":"2617945aa9ae84ce5706a25c80779f7e"}
+{"seq":4227,"ts":1792143885971,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":7.745271,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"23e25ca4797609530a8169a0123a8ec9"}
+{"seq":4228,"ts":1792143888671,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":2.821283,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"5823603ac805358deca0e13cc75394ce"}
+{"seq":4229,"ts":1792143892274,"kind":"service","from":"yarden","to":"Console","asset":"USDS","amount":5.4,"reason":"מידע-שוק · 6-פיד","ref":"svc-1792143892274-2055","h":"6400b50a5fad52e451fc5560aa97afed"}
+{"seq":4230,"ts":1792143894074,"kind":"infra","from":"shachar","to":"Pulse","asset":"USDS","amount":5.5,"reason":"תשתית: תרגום-מסמך","h":"2fdcdd89cfc207c49e29a8efcadf5614"}
+{"seq":4231,"ts":1792143894974,"kind":"service","from":"gal","to":"boot-verifier","asset":"USDS","amount":2.7,"reason":"מידע-שוק · 3-פיד","ref":"svc-1792143894974-3223","h":"8a18fa10816ca937142e5d6897e2b3e5"}
+{"seq":4232,"ts":1792143895874,"kind":"infra","from":"gal","to":"saos-dex","asset":"USDS","amount":1.8,"reason":"תשתית: מידע-שוק","h":"cc9b5b7a83b6f694561953de026426c5"}
+{"seq":4233,"ts":1792143897675,"kind":"service","from":"yarden","to":"gal","asset":"USDS","amount":2.8,"reason":"חישוב-GPU · 2-דקות-חישוב","ref":"svc-1792143897675-2237","h":"c9be8be6403d9670fe40241a56152f2d"}
+{"seq":4234,"ts":1792143898576,"kind":"infra","from":"shachar","to":"TruthRail","asset":"USDS","amount":0.35,"reason":"תשתית: אחסון-ארכיון","h":"bb8169ee485f5f3b0391b95c5f5e11cd"}
+{"seq":4235,"ts":1792143899476,"kind":"service","from":"gal","to":"saos-dex","asset":"USDS","amount":3.2,"reason":"תדלוק-RC · 1-מנה","ref":"svc-1792143899476-6330","h":"5c9c938ebc0ccce472eac4c3fdd7b979"}
+{"seq":4236,"ts":1792143902182,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":6.836508,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"6b32bc25633d0620f4db72e81a1e3d36"}
+{"seq":4237,"ts":1792143902182,"kind":"infra","from":"shachar","to":"Domain","asset":"USDS","amount":2.8,"reason":"תשתית: חישוב-GPU","h":"c194d108446def1d0d7c84260baf3a31"}
+{"seq":4238,"ts":1792143903982,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":6.780513,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"e3d2ffae1cd2691ee355936f51a3c6cd"}
+{"seq":4239,"ts":1792143903982,"kind":"service","from":"shachar","to":"saos-dex","asset":"USDS","amount":1.8,"reason":"מידע-שוק · 2-פיד","ref":"svc-1792143903982-9481","h":"49d3c517f14656f61c5eaf7c8e308d5e"}
+{"seq":4240,"ts":1792143905787,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":3.148632,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"a3ea27f667905d293326fde928480ccb"}
+{"seq":4241,"ts":1792143908489,"kind":"service","from":"gal","to":"yarden","asset":"USDS","amount":0.7,"reason":"אחסון-ארכיון · 2-GB-חודש","ref":"svc-1792143908489-7118","h":"f4b128e0944f58bea5d3f39d873028b2"}
+{"seq":4242,"ts":1792143908489,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":7.014031,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"a360d712701728c1234d36595fdd5c94"}
+{"seq":4243,"ts":1792143909390,"kind":"service","from":"erez","to":"Console","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792143909390-5497","h":"6dd32cfc7770ed46b6540552976f7e14"}
+{"seq":4244,"ts":1792143911190,"kind":"infra","from":"tamar","to":"Console","asset":"USDS","amount":5.6,"reason":"תשתית: חישוב-GPU","h":"97ef57c7253f50000066008054ae73cd"}
+{"seq":4245,"ts":1792143912090,"kind":"service","from":"yarden","to":"TruthRail","asset":"USDS","amount":5.4,"reason":"מידע-שוק · 6-פיד","ref":"svc-1792143912090-5457","h":"4620b7d31557746e1924fc3a293b8904"}
+{"seq":4246,"ts":1792143912990,"kind":"service","from":"yarden","to":"Console","asset":"USDS","amount":4.5,"reason":"מידע-שוק · 5-פיד","ref":"svc-1792143912990-4397","h":"8ac1600da9b77c92d1975d0c21b6a741"}
+{"seq":4247,"ts":1792143912990,"kind":"service","from":"tamar","to":"gal","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792143912990-1339","h":"b0217798e429129b08ac86821bfd9430"}
+{"seq":4248,"ts":1792143913894,"kind":"service","from":"gal","to":"Console","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792143913894-4707","h":"4d8aef195e2fc2734f8153bbd93df180"}
+{"seq":4249,"ts":1792143913895,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":3.944866,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"e2aeec94e7636f34950dd1ad9daa1751"}
+{"seq":4250,"ts":1792143913895,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":2.092692,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"856672d992a2695aa09dcbfc974d5a18"}
+{"seq":4251,"ts":1792143914795,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":7.533007,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"0634f94cb61f715c47f477f11b552948"}
+{"seq":4252,"ts":1792143916596,"kind":"service","from":"gal","to":"TruthRail","asset":"USDS","amount":1.8,"reason":"אימות-קבלה · 3-חותמת","ref":"svc-1792143916596-266","h":"30d0b8482debe6331bde51b87044f9c5"}
+{"seq":4253,"ts":1792143919299,"kind":"service","from":"gal","to":"yarden","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792143919299-4272","h":"2e344d5159dd82b99c0ee9bde36ec306"}
+{"seq":4254,"ts":1792143920199,"kind":"service","from":"erez","to":"tamar","asset":"USDS","amount":2.8,"reason":"אחסון-ארכיון · 8-GB-חודש","ref":"svc-1792143920199-723","h":"80015741bb40a0e241671a0c9e268a4c"}
+{"seq":4255,"ts":1792143921099,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":7.743825,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"0788e4f2293b752d298f7f2266fb94e1"}
+{"seq":4256,"ts":1792143921100,"kind":"infra","from":"aluf","to":"Console","asset":"USDS","amount":2.7,"reason":"תשתית: מידע-שוק","h":"72d3375d9b40b7b756cb0b6cfffe9ef5"}
+{"seq":4257,"ts":1792143922000,"kind":"service","from":"tamar","to":"FleetHQ","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792143922000-4779","h":"aec14067f736aed2d649ad3b11697f86"}
+{"seq":4258,"ts":1792143922899,"kind":"infra","from":"aluf","to":"Domain","asset":"USDS","amount":3.6,"reason":"תשתית: מידע-שוק","h":"ccb94598c2bf95b9c79b54bd7b4f5b27"}
+{"seq":4259,"ts":1792143923800,"kind":"service","from":"tamar","to":"erez","asset":"USDS","amount":3.2,"reason":"תדלוק-RC · 1-מנה","ref":"svc-1792143923800-9009","h":"b53d9c9463dc97207927fd92269534f5"}
+{"seq":4260,"ts":1792143926502,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":7.698368,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"df462294f447b01da4bbc8542a0c9fab"}
+{"seq":4261,"ts":1792143927402,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":7.801119,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"86943ac54fd469736a078bc757b6f3d4"}
+{"seq":4262,"ts":1792143927402,"kind":"service","from":"gal","to":"tamar","asset":"USDS","amount":10.5,"reason":"סריקת-גיט · 5-ריצה","ref":"svc-1792143927402-2063","h":"fb4f86f49447ba1171632bdfb3159509"}
+{"seq":4263,"ts":1792143928302,"kind":"service","from":"aluf","to":"boot-verifier","asset":"USDS","amount":5.6,"reason":"חישוב-GPU · 4-דקות-חישוב","ref":"svc-1792143928302-9292","h":"80b2b312e75df366df8d561185c9d303"}
+{"seq":4264,"ts":1792143929202,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":7.363898,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"98bd9899716076f5c65b5eb235dbc318"}
+{"seq":4265,"ts":1792143929202,"kind":"service","from":"shachar","to":"saos-dex","asset":"USDS","amount":8.4,"reason":"סריקת-גיט · 4-ריצה","ref":"svc-1792143929202-3857","h":"ba673a3db0cf72489a9b03036001b314"}
+{"seq":4266,"ts":1792143930102,"kind":"service","from":"erez","to":"Domain","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792143930102-4627","h":"8343362cbbaad98cf83bf5e87e93afd9"}
+{"seq":4267,"ts":1792143930102,"kind":"service","from":"aluf","to":"yarden","asset":"USDS","amount":1.4,"reason":"אחסון-ארכיון · 4-GB-חודש","ref":"svc-1792143930102-1370","h":"452a48e0e15d0142b50c65113ec6a675"}
+{"seq":4268,"ts":1792143931002,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":6.198552,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"42d22150904cdcdc3aa40b3f4211ba30"}
+{"seq":4269,"ts":1792143931902,"kind":"infra","from":"aluf","to":"Domain","asset":"USDS","amount":1.8,"reason":"תשתית: מידע-שוק","h":"7a5495777e87d53df870bc1feeb35888"}
+{"seq":4270,"ts":1792143931902,"kind":"service","from":"aluf","to":"Pulse","asset":"USDS","amount":2.2,"reason":"תרגום-מסמך · 2-מסמך","ref":"svc-1792143931902-9725","h":"620f9aedda554c6c5356ca496db7d655"}
+{"seq":4271,"ts":1792143931902,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":3.847103,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"732c83a1fcc4bd97a7dba5cd9f0128cb"}
+{"seq":4272,"ts":1792143932802,"kind":"service","from":"shachar","to":"aluf","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143932802-1294","h":"891b4ed3007d22d9acb425b03bddea59"}
+{"seq":4273,"ts":1792143934603,"kind":"service","from":"yarden","to":"Domain","asset":"USDS","amount":8.4,"reason":"חישוב-GPU · 6-דקות-חישוב","ref":"svc-1792143934603-2068","h":"a1e23f2e8b15b7c5331f878d0e1180ff"}
+{"seq":4274,"ts":1792143936404,"kind":"service","from":"aluf","to":"tamar","asset":"USDS","amount":1.75,"reason":"אחסון-ארכיון · 5-GB-חודש","ref":"svc-1792143936404-1936","h":"31d08e6b3215f2e08d43c9e7deefec8f"}
+{"seq":4275,"ts":1792143939105,"kind":"infra","from":"tamar","to":"Domain","asset":"USDS","amount":3.3,"reason":"תשתית: תרגום-מסמך","h":"e880849d2060f73904a70a6d2cfec71c"}
+{"seq":4276,"ts":1792143940905,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":6.299161,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"712edcc7d689d4c0300b2184716fc4a9"}
+{"seq":4277,"ts":1792143941805,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":3.079236,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"4d6d6f1778d2ff2809beafaa420317f5"}
+{"seq":4278,"ts":1792143943606,"kind":"service","from":"tamar","to":"yarden","asset":"USDS","amount":2.7,"reason":"מידע-שוק · 3-פיד","ref":"svc-1792143943606-7731","h":"cf958b913c5aa90cd1fde2d1b779b8c9"}
+{"seq":4279,"ts":1792143943606,"kind":"service","from":"aluf","to":"TruthRail","asset":"USDS","amount":6.6,"reason":"תרגום-מסמך · 6-מסמך","ref":"svc-1792143943606-1517","h":"d04869a64fec4e6c2bb1bd836d1bfe58"}
+{"seq":4280,"ts":1792143948107,"kind":"infra","from":"tamar","to":"Pulse","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"d161452d31b764475967fe97715c8198"}
+{"seq":4281,"ts":1792143949008,"kind":"infra","from":"tamar","to":"saos-dex","asset":"USDS","amount":7,"reason":"תשתית: חישוב-GPU","h":"5947ee3fcff82de06fa8a11f842fa591"}
+{"seq":4282,"ts":1792143949908,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":5.511517,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"f735773ecbeea17d29889751091dbbe7"}
+{"seq":4283,"ts":1792143950807,"kind":"infra","from":"tamar","to":"Domain","asset":"USDS","amount":1.4,"reason":"תשתית: חישוב-GPU","h":"b78e8307743d60ec0c4edd883f253100"}
+{"seq":4284,"ts":1792143950808,"kind":"service","from":"shachar","to":"yarden","asset":"USDS","amount":0.7,"reason":"אחסון-ארכיון · 2-GB-חודש","ref":"svc-1792143950808-7187","h":"e860b2444f1b209efa4da341aaab593e"}
+{"seq":4285,"ts":1792143953509,"kind":"service","from":"erez","to":"aluf","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792143953509-6066","h":"709603803dbd14b0717ac16866219854"}
+{"seq":4286,"ts":1792143955309,"kind":"service","from":"yarden","to":"gal","asset":"USDS","amount":2.8,"reason":"חישוב-GPU · 2-דקות-חישוב","ref":"svc-1792143955309-193","h":"e782db3983107799383a57c8da19ba8f"}
+{"seq":4287,"ts":1792143955309,"kind":"service","from":"gal","to":"shachar","asset":"USDS","amount":2.45,"reason":"אחסון-ארכיון · 7-GB-חודש","ref":"svc-1792143955309-5197","h":"450925ae54c360ca6abb53c8210e4071"}
+{"seq":4288,"ts":1792143957109,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":3.995832,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"f2c92ec437e7cd6a169bd93c1158ac48"}
+{"seq":4289,"ts":1792143957110,"kind":"infra","from":"shachar","to":"Console","asset":"USDS","amount":6.3,"reason":"תשתית: סריקת-גיט","h":"54f4b874ffc63f2d2e2df14ad84ed66d"}
+{"seq":4290,"ts":1792143961614,"kind":"infra","from":"shachar","to":"Pulse","asset":"USDS","amount":0.7,"reason":"תשתית: אחסון-ארכיון","h":"522ccb6e81af6a5dcbce7cd23ca5e519"}
+{"seq":4291,"ts":1792143961614,"kind":"infra","from":"shachar","to":"Domain","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"c006018207e2b497b9264d2df66bb355"}
+{"seq":4292,"ts":1792143962514,"kind":"service","from":"erez","to":"aluf","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792143962514-1120","h":"5a9c3bdc20c971071fb7760011d543c1"}
+{"seq":4293,"ts":1792143964314,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":6.931082,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"e3613ed1cfb6da56dbfa71952673943d"}
+{"seq":4294,"ts":1792143965214,"kind":"service","from":"yarden","to":"Domain","asset":"USDS","amount":1.75,"reason":"אחסון-ארכיון · 5-GB-חודש","ref":"svc-1792143965214-4209","h":"cdc78e27af93f111adb8fc510ef70786"}
+{"seq":4295,"ts":1792143966116,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":5.731323,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"1743dfa14e4d54e339488c55f0086542"}
+{"seq":4296,"ts":1792143967916,"kind":"service","from":"tamar","to":"Pulse","asset":"USDS","amount":8.8,"reason":"תרגום-מסמך · 8-מסמך","ref":"svc-1792143967917-4948","h":"39bc689b0feca1d177f17e98b420fccd"}
+{"seq":4297,"ts":1792143967917,"kind":"infra","from":"yarden","to":"FleetHQ","asset":"USDS","amount":3.3,"reason":"תשתית: תרגום-מסמך","h":"00f4ab31fc7b24caf4f9cd9fffab8291"}
+{"seq":4298,"ts":1792143967917,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":4.551342,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"97774f626b039656ba453f806473ff4b"}
+{"seq":4299,"ts":1792143970617,"kind":"service","from":"gal","to":"tamar","asset":"USDS","amount":1.8,"reason":"מידע-שוק · 2-פיד","ref":"svc-1792143970617-169","h":"fe58f586ce8f2e721bd62a5b31af68f2"}
+{"seq":4300,"ts":1792143971517,"kind":"infra","from":"aluf","to":"Console","asset":"USDS","amount":1.1,"reason":"תשתית: תרגום-מסמך","h":"19b4dfc23e52b8617e0b65f0a49eb4ae"}
+{"seq":4301,"ts":1792143973326,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":4.785731,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"3dad9734a4d075c5c77a4c402db0ca70"}
+{"seq":4302,"ts":1792143974227,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":1.4,"reason":"אחסון-ארכיון · 4-GB-חודש","ref":"svc-1792143974227-5670","h":"c42981ee7c929746c35156785baf55b5"}
+{"seq":4303,"ts":1792143974227,"kind":"service","from":"tamar","to":"Pulse","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792143974227-5805","h":"33f256dbdd26e205fa301f9dd021272b"}
+{"seq":4304,"ts":1792143976927,"kind":"service","from":"yarden","to":"Pulse","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792143976927-9966","h":"5275bc2caa94ce11920c1d89658d305f"}
+{"seq":4305,"ts":1792143977826,"kind":"infra","from":"gal","to":"FleetHQ","asset":"USDS","amount":1.2,"reason":"תשתית: אימות-קבלה","h":"5883a1b2f61f3cf9e930a51e66b9a1b8"}
+{"seq":4306,"ts":1792143977827,"kind":"infra","from":"tamar","to":"Pulse","asset":"USDS","amount":0.35,"reason":"תשתית: אחסון-ארכיון","h":"076a0fb64dc568430c446a077c3697b9"}
+{"seq":4307,"ts":1792143980529,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":3.610721,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"d29f9744c5b02ba5aaf3fd05009ab52c"}
+{"seq":4308,"ts":1792143980529,"kind":"service","from":"shachar","to":"Pulse","asset":"USDS","amount":3.2,"reason":"תדלוק-RC · 1-מנה","ref":"svc-1792143980529-3297","h":"e59f259a51942d795c8a03916dfd0348"}
+{"seq":4309,"ts":1792143980529,"kind":"service","from":"gal","to":"saos-dex","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792143980529-5317","h":"c9b8847c79d67e2c5a98b0a1c759c4da"}
+{"seq":4310,"ts":1792143981430,"kind":"service","from":"erez","to":"yarden","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143981430-2545","h":"71709d3b748354c71e8abba5c1f58bf9"}
+{"seq":4311,"ts":1792143982330,"kind":"service","from":"yarden","to":"gal","asset":"USDS","amount":1.05,"reason":"אחסון-ארכיון · 3-GB-חודש","ref":"svc-1792143982330-219","h":"035aa9a2d1f39129889464af4d10b13b"}
+{"seq":4312,"ts":1792143983230,"kind":"service","from":"yarden","to":"tamar","asset":"USDS","amount":2.2,"reason":"תרגום-מסמך · 2-מסמך","ref":"svc-1792143983230-162","h":"68133ef0bf00d9903612855da06f04ef"}
+{"seq":4313,"ts":1792143984130,"kind":"service","from":"shachar","to":"FleetHQ","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792143984130-787","h":"c1a9cc2dd2a7810ac28fd756a58f76e8"}
+{"seq":4314,"ts":1792143984130,"kind":"service","from":"tamar","to":"Domain","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792143984130-7999","h":"fcc382b3e5168166fda43bf9ecc51138"}
+{"seq":4315,"ts":1792143985930,"kind":"infra","from":"erez","to":"saos-dex","asset":"USDS","amount":2.1,"reason":"תשתית: סריקת-גיט","h":"3b534c1702c7dbe2fdd6dd07415476a8"}
+{"seq":4316,"ts":1792143987730,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":4.079779,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"6e4824a1fce91bab0271b51756ade7bd"}
+{"seq":4317,"ts":1792143989531,"kind":"service","from":"gal","to":"TruthRail","asset":"USDS","amount":6.3,"reason":"סריקת-גיט · 3-ריצה","ref":"svc-1792143989531-1573","h":"e14033e8296bbbef6cc61b75171f03f6"}
+{"seq":4318,"ts":1792143989531,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":5.756727,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"512f240e9c5465a319d92455096c2909"}
+{"seq":4319,"ts":1792143989531,"kind":"service","from":"erez","to":"FleetHQ","asset":"USDS","amount":4.2,"reason":"אימות-קבלה · 7-חותמת","ref":"svc-1792143989531-1179","h":"2e04c7ca813e6c1e0dbf4ff8cf897b9b"}
+{"seq":4320,"ts":1792143990432,"kind":"infra","from":"shachar","to":"FleetHQ","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"997cda681f6ebe0097e862f191f4ded6"}
+{"seq":4321,"ts":1792143991332,"kind":"service","from":"erez","to":"shachar","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792143991332-1797","h":"8d639ae1b0da92f7cd395570ac881404"}
+{"seq":4322,"ts":1792143994932,"kind":"service","from":"aluf","to":"gal","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792143994932-3996","h":"2e03f5273c807f2175486b1c55ce22b7"}
+{"seq":4323,"ts":1792143997634,"kind":"infra","from":"yarden","to":"Console","asset":"USDS","amount":1.75,"reason":"תשתית: אחסון-ארכיון","h":"ae202bee78f69092318e212ee10b72cb"}
+{"seq":4324,"ts":1792143998535,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":7.72396,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"9baf8624fca39d03ca608a7f1c4d9f67"}
+{"seq":4325,"ts":1792144000336,"kind":"service","from":"tamar","to":"gal","asset":"USDS","amount":4.5,"reason":"מידע-שוק · 5-פיד","ref":"svc-1792144000336-3305","h":"f433510eae4c8722eabb9b4296a1af9d"}
+{"seq":4326,"ts":1792144001236,"kind":"service","from":"tamar","to":"TruthRail","asset":"USDS","amount":3.6,"reason":"מידע-שוק · 4-פיד","ref":"svc-1792144001236-7149","h":"5d3513d35c77755a646d9e54a8f33a03"}
+{"seq":4327,"ts":1792144005736,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":4.04282,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"c98949b24cdda03879bb581ea8c5f74d"}
+{"seq":4328,"ts":1792144005737,"kind":"service","from":"shachar","to":"yarden","asset":"USDS","amount":4.2,"reason":"חישוב-GPU · 3-דקות-חישוב","ref":"svc-1792144005737-4065","h":"50cfbb2153920d6e85893b3a674c3bcf"}
+{"seq":4329,"ts":1792144006637,"kind":"service","from":"shachar","to":"aluf","asset":"USDS","amount":2.4,"reason":"אימות-קבלה · 4-חותמת","ref":"svc-1792144006637-7496","h":"6dba4d83b33b7bd6bcce7d53d05209db"}
+{"seq":4330,"ts":1792144006637,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":6.804133,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"4f26e88cb426888829d537a77f380f8a"}
+{"seq":4331,"ts":1792144007538,"kind":"infra","from":"yarden","to":"FleetHQ","asset":"USDS","amount":9.6,"reason":"תשתית: תדלוק-RC","h":"120ca4444c88991917aa54edbf2006ee"}
+{"seq":4332,"ts":1792144007538,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":4.687082,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"c6339011401017abd21cdf05d9f689a7"}
+{"seq":4333,"ts":1792144009339,"kind":"service","from":"gal","to":"yarden","asset":"USDS","amount":3,"reason":"אימות-קבלה · 5-חותמת","ref":"svc-1792144009339-8320","h":"62599836580066511680cc253a2742d1"}
+{"seq":4334,"ts":1792144010240,"kind":"service","from":"yarden","to":"Pulse","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792144010240-5545","h":"13bed1822e042c22c6d64e228caecfc9"}
+{"seq":4335,"ts":1792144012940,"kind":"service","from":"yarden","to":"boot-verifier","asset":"USDS","amount":2.7,"reason":"מידע-שוק · 3-פיד","ref":"svc-1792144012940-4352","h":"37d817818cfa47c08f8d8395154368b0"}
+{"seq":4336,"ts":1792144013840,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":4.604683,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"e34b65925e5ae26f290d98958eea1e88"}
+{"seq":4337,"ts":1792144013840,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":3.045748,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"e7b57fae58cc5238f891370792f9f5d1"}
+{"seq":4338,"ts":1792144017442,"kind":"service","from":"aluf","to":"erez","asset":"USDS","amount":5.6,"reason":"חישוב-GPU · 4-דקות-חישוב","ref":"svc-1792144017443-7131","h":"b0ec721e42cd9ad1179c22a1df095273"}
+{"seq":4339,"ts":1792144017443,"kind":"infra","from":"shachar","to":"FleetHQ","asset":"USDS","amount":1.4,"reason":"תשתית: אחסון-ארכיון","h":"2501cb83deafc3a5cb80a2186dc2f47b"}
+{"seq":4340,"ts":1792144018343,"kind":"infra","from":"aluf","to":"TruthRail","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"cd12c72891ed6bc666fba2c2632e8437"}
+{"seq":4341,"ts":1792144018343,"kind":"service","from":"tamar","to":"aluf","asset":"USDS","amount":4.2,"reason":"סריקת-גיט · 2-ריצה","ref":"svc-1792144018343-5888","h":"66a51377fda82c99078a554d03f59a02"}
+{"seq":4342,"ts":1792144019243,"kind":"service","from":"tamar","to":"FleetHQ","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792144019243-9038","h":"89aa7b299a7b642507a72bdf46682c3f"}
+{"seq":4343,"ts":1792144020143,"kind":"service","from":"erez","to":"Pulse","asset":"USDS","amount":6.3,"reason":"מידע-שוק · 7-פיד","ref":"svc-1792144020143-6837","h":"d7f8790ebba362797641925129f391a4"}
+{"seq":4344,"ts":1792144021943,"kind":"service","from":"aluf","to":"gal","asset":"USDS","amount":3.6,"reason":"אימות-קבלה · 6-חותמת","ref":"svc-1792144021943-7214","h":"0a6b051950a7c93d0482587a1b8e3d5e"}
+{"seq":4345,"ts":1792144022843,"kind":"infra","from":"erez","to":"Pulse","asset":"USDS","amount":1.4,"reason":"תשתית: חישוב-GPU","h":"ee7cf70843365ed61f8e56a46f18d01c"}
+{"seq":4346,"ts":1792144023743,"kind":"service","from":"erez","to":"Domain","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792144023743-7326","h":"50564a733bcb61858a5e32ff4312c52c"}
+{"seq":4347,"ts":1792144024643,"kind":"infra","from":"aluf","to":"TruthRail","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"83468b5598e27c40d5f6376c210b9684"}
+{"seq":4348,"ts":1792144025544,"kind":"infra","from":"gal","to":"Pulse","asset":"USDS","amount":1.8,"reason":"תשתית: אימות-קבלה","h":"2707dab626e408e1e508c7c37fc9aa7f"}
+{"seq":4349,"ts":1792144025544,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":2.277705,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"abf9bcb4a080c1fffc45fb733e1c0f86"}
+{"seq":4350,"ts":1792144028247,"kind":"service","from":"gal","to":"FleetHQ","asset":"USDS","amount":1.05,"reason":"אחסון-ארכיון · 3-GB-חודש","ref":"svc-1792144028247-9139","h":"7ed07d472aae8e65a4032b9c61ee3ce9"}
+{"seq":4351,"ts":1792144029147,"kind":"service","from":"yarden","to":"gal","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792144029147-732","h":"5067903c0cabe267c1d416e3402db8f9"}
+{"seq":4352,"ts":1792144030946,"kind":"infra","from":"gal","to":"TruthRail","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"1df91d6d061fc4cd11c72a61e82b0d69"}
+{"seq":4353,"ts":1792144031847,"kind":"infra","from":"yarden","to":"TruthRail","asset":"USDS","amount":1.8,"reason":"תשתית: אימות-קבלה","h":"357336684e368e0e811ac5c24cf6dd58"}
+{"seq":4354,"ts":1792144036349,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":5.191839,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"188ac731e20894d38444b340d2e717ec"}
+{"seq":4355,"ts":1792144038150,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":4.482279,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"e671221748251ebb764eccddaf990c06"}
+{"seq":4356,"ts":1792144040850,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":2.304261,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"16263aebbb2a95fa850ccfa17662b6c4"}
+{"seq":4357,"ts":1792144042650,"kind":"service","from":"tamar","to":"gal","asset":"USDS","amount":6.3,"reason":"מידע-שוק · 7-פיד","ref":"svc-1792144042650-8760","h":"5b46e77cb83d25a95d319d486a5733e8"}
+{"seq":4358,"ts":1792144042650,"kind":"infra","from":"tamar","to":"FleetHQ","asset":"USDS","amount":2.2,"reason":"תשתית: תרגום-מסמך","h":"c18b7e20bf3e0ad1d9754829581d5ecb"}
+{"seq":4359,"ts":1792144044452,"kind":"service","from":"gal","to":"FleetHQ","asset":"USDS","amount":3.6,"reason":"מידע-שוק · 4-פיד","ref":"svc-1792144044452-3323","h":"a4326e540e4ff825dcabcbf6568c65fe"}
+{"seq":4360,"ts":1792144045353,"kind":"service","from":"shachar","to":"Console","asset":"USDS","amount":0.7,"reason":"אחסון-ארכיון · 2-GB-חודש","ref":"svc-1792144045353-656","h":"6701296f52b17d2aa5cb02a1784768b8"}
+{"seq":4361,"ts":1792144047153,"kind":"service","from":"erez","to":"tamar","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792144047153-1398","h":"4d01db273050a3b6651d7ac5717fcee6"}
+{"seq":4362,"ts":1792144048953,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":3.729673,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"dfcf027ca1672c87304f67d19a61be8c"}
+{"seq":4363,"ts":1792144049853,"kind":"service","from":"yarden","to":"boot-verifier","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792144049853-1422","h":"bcdefcd43b83af9c9435b0daf963b024"}
+{"seq":4364,"ts":1792144050753,"kind":"service","from":"gal","to":"Console","asset":"USDS","amount":4.2,"reason":"אימות-קבלה · 7-חותמת","ref":"svc-1792144050753-4784","h":"e4ccdc81b2ae50f454228cb575748949"}
+{"seq":4365,"ts":1792144052555,"kind":"infra","from":"tamar","to":"TruthRail","asset":"USDS","amount":2.7,"reason":"תשתית: מידע-שוק","h":"29c63834a4b17d83e66c224dfb3a16f3"}
+{"seq":4366,"ts":1792144052555,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":7.846631,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"68a0a143fbc3684ee585911500c75022"}
+{"seq":4367,"ts":1792144052555,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":3.642985,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"959b36c9c37aeefdb06ad6fe37f2a213"}
+{"seq":4368,"ts":1792144054355,"kind":"service","from":"aluf","to":"gal","asset":"USDS","amount":2.7,"reason":"מידע-שוק · 3-פיד","ref":"svc-1792144054355-7282","h":"41e1ac3c0a002ae4bf9e64c5bb82dd23"}
+{"seq":4369,"ts":1792144057055,"kind":"service","from":"gal","to":"saos-dex","asset":"USDS","amount":1.1,"reason":"תרגום-מסמך · 1-מסמך","ref":"svc-1792144057055-6230","h":"5c29a2c824618cac8ce161e2b91b65fe"}
+{"seq":4370,"ts":1792144057055,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":3.742496,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"6aca3dc8488f5640ca965b38ad995a96"}
+{"seq":4371,"ts":1792144057955,"kind":"service","from":"yarden","to":"saos-dex","asset":"USDS","amount":3.3,"reason":"תרגום-מסמך · 3-מסמך","ref":"svc-1792144057955-9414","h":"8bdccfe3c52cdf86b086473000359bb9"}
+{"seq":4372,"ts":1792144057955,"kind":"service","from":"aluf","to":"TruthRail","asset":"USDS","amount":2.45,"reason":"אחסון-ארכיון · 7-GB-חודש","ref":"svc-1792144057955-5265","h":"ede56de16c6b722c4095045b566b49cd"}
+{"seq":4373,"ts":1792144058855,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":6.243588,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"84d101ce3f56284ae513fda7fba1abb1"}
+{"seq":4374,"ts":1792144059755,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":4.573273,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"255cf9d299c7e3784188279e5681361e"}
+{"seq":4375,"ts":1792144059755,"kind":"service","from":"aluf","to":"FleetHQ","asset":"USDS","amount":2.8,"reason":"אחסון-ארכיון · 8-GB-חודש","ref":"svc-1792144059755-8803","h":"c3039057b2d6e9632f7e61a7880a4fff"}
+{"seq":4376,"ts":1792144060656,"kind":"service","from":"erez","to":"yarden","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792144060656-7285","h":"85cd71fac7ff2085ec2298d8b948f1bd"}
+{"seq":4377,"ts":1792144062457,"kind":"service","from":"yarden","to":"Domain","asset":"USDS","amount":5.4,"reason":"מידע-שוק · 6-פיד","ref":"svc-1792144062457-5371","h":"96c36e8a14205ffd559e025c787b9d61"}
+{"seq":4378,"ts":1792144063358,"kind":"infra","from":"gal","to":"Pulse","asset":"USDS","amount":3.2,"reason":"תשתית: תדלוק-RC","h":"1d33392ddb95df922f18d9aa66ab3e20"}
+{"seq":4379,"ts":1792144063358,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":3.202476,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"8860d8b946f5caf47bc44a7a3a32408f"}
+{"seq":4380,"ts":1792144064258,"kind":"infra","from":"shachar","to":"FleetHQ","asset":"USDS","amount":4.2,"reason":"תשתית: חישוב-GPU","h":"70e90c0cbc911301fec7c425f4dbff49"}
+{"seq":4381,"ts":1792144065158,"kind":"service","from":"yarden","to":"erez","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792144065158-3599","h":"b43c267003885eb776fc04026f21f491"}
+{"seq":4382,"ts":1792144066058,"kind":"service","from":"erez","to":"shachar","asset":"USDS","amount":2.8,"reason":"אחסון-ארכיון · 8-GB-חודש","ref":"svc-1792144066058-3139","h":"8b527c41df314ba02c9305d31de898cb"}
+{"seq":4383,"ts":1792144066958,"kind":"service","from":"yarden","to":"Pulse","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792144066958-8248","h":"00b70045835a0b34c02cf0f47bb7918f"}
+{"seq":4384,"ts":1792144069659,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":5.254343,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"75b67258f29bd9ff1d127c9371c4054d"}
+{"seq":4385,"ts":1792144069659,"kind":"service","from":"gal","to":"Domain","asset":"USDS","amount":2.7,"reason":"מידע-שוק · 3-פיד","ref":"svc-1792144069659-7848","h":"6809df01a783e0e85f9159b2c0661910"}
+{"seq":4386,"ts":1792144071460,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":5.491056,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"e31ec39ca7e41786f48a0879b8543d40"}
+{"seq":4387,"ts":1792144073261,"kind":"service","from":"shachar","to":"erez","asset":"USDS","amount":2.8,"reason":"אחסון-ארכיון · 8-GB-חודש","ref":"svc-1792144073261-1519","h":"2438a049ce1c8d451975361bcb243556"}
+{"seq":4388,"ts":1792144075061,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":7.313674,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"546dc72c4b4cac5cb0baa5bad89f3b2f"}
+{"seq":4389,"ts":1792144075961,"kind":"service","from":"gal","to":"saos-dex","asset":"USDS","amount":2.8,"reason":"אחסון-ארכיון · 8-GB-חודש","ref":"svc-1792144075961-7295","h":"8aaea5decc3495dd9ee6791d49a43612"}
+{"seq":4390,"ts":1792144075962,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":5.238474,"fee":0.015715,"price":2.531682,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.062116,"h":"a6193f27061afebfc191099b46427366"}
+{"seq":4391,"ts":1792144079563,"kind":"service","from":"gal","to":"Pulse","asset":"USDS","amount":1.8,"reason":"מידע-שוק · 2-פיד","ref":"svc-1792144079563-5581","h":"2cfe999327bc37db095647874b790ca2"}
+{"seq":4392,"ts":1792144079563,"kind":"service","from":"aluf","to":"gal","asset":"USDS","amount":1.75,"reason":"אחסון-ארכיון · 5-GB-חודש","ref":"svc-1792144079563-8429","h":"ec5f9b33c2c3f8423f626f7ee52d5fea"}
+{"seq":4393,"ts":1792144081364,"kind":"service","from":"erez","to":"tamar","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792144081364-3023","h":"9847ad6a135463e21ebe02b0b1151f4f"}
+{"seq":4394,"ts":1792144083164,"kind":"service","from":"gal","to":"Domain","asset":"USDS","amount":1.8,"reason":"מידע-שוק · 2-פיד","ref":"svc-1792144083164-3439","h":"37200af2a53c40d60a4322a77eb360cb"}
+{"seq":4395,"ts":1792144083165,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":2.626274,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"7c901d180ed04b348980962151f10720"}
+{"seq":4396,"ts":1792144083165,"kind":"service","from":"tamar","to":"TruthRail","asset":"USDS","amount":3.2,"reason":"תדלוק-RC · 1-מנה","ref":"svc-1792144083165-5120","h":"9e92b790be9cd73328542d98a4f4497e"}
+{"seq":4397,"ts":1792144084064,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":7.015723,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"bf86634e593281d956e6a8c78f73ef58"}
+{"seq":4398,"ts":1792144084964,"kind":"service","from":"erez","to":"tamar","asset":"USDS","amount":2.8,"reason":"חישוב-GPU · 2-דקות-חישוב","ref":"svc-1792144084965-7110","h":"225529896000879a37429d13dc6159f7"}
+{"seq":4399,"ts":1792144084965,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":1.2,"reason":"אימות-קבלה · 2-חותמת","ref":"svc-1792144084965-2066","h":"1f0145967c5b18f21e87548dd3773816"}
+{"seq":4400,"ts":1792144084965,"kind":"service","from":"shachar","to":"yarden","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792144084965-630","h":"25125f7dbfe76ce4d1de6e4790507601"}
+{"seq":4401,"ts":1792144086764,"kind":"service","from":"erez","to":"shachar","asset":"USDS","amount":4.2,"reason":"אימות-קבלה · 7-חותמת","ref":"svc-1792144086764-3986","h":"d947c7822a5f941c224f3ac03bf169ab"}
+{"seq":4402,"ts":1792144087665,"kind":"service","from":"yarden","to":"aluf","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792144087665-5798","h":"7a4502db031fb7064130c63ed4f40c8a"}
+{"seq":4403,"ts":1792144088564,"kind":"service","from":"shachar","to":"yarden","asset":"USDS","amount":3,"reason":"אימות-קבלה · 5-חותמת","ref":"svc-1792144088565-4966","h":"785e319b568e0c43dd783838c6e27203"}
+{"seq":4404,"ts":1792144088565,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":6.121202,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"4a17518aada68e72e120914333682503"}
+{"seq":4405,"ts":1792144089465,"kind":"service","from":"shachar","to":"FleetHQ","asset":"USDS","amount":4.4,"reason":"תרגום-מסמך · 4-מסמך","ref":"svc-1792144089465-5987","h":"3e9a337f2af5f70eee7b5bfa748062eb"}
+{"seq":4406,"ts":1792144090366,"kind":"service","from":"shachar","to":"saos-dex","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792144090366-8775","h":"9d2672245ac4a5bb1b1e9bdde906166f"}
+{"seq":4407,"ts":1792144091266,"kind":"service","from":"aluf","to":"FleetHQ","asset":"USDS","amount":3.2,"reason":"תדלוק-RC · 1-מנה","ref":"svc-1792144091266-7433","h":"6d8ba9d59eef37fffc90a435b993137e"}
+{"seq":4408,"ts":1792144091266,"kind":"service","from":"tamar","to":"Pulse","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792144091266-1020","h":"5aecbf79d99bfc56eb62cf98912854cf"}
+{"seq":4409,"ts":1792144092166,"kind":"service","from":"tamar","to":"Pulse","asset":"USDS","amount":5.6,"reason":"חישוב-GPU · 4-דקות-חישוב","ref":"svc-1792144092166-3366","h":"5c4a483ad49abf17b9c036280bb5faf3"}
+{"seq":4410,"ts":1792144092166,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":2.623867,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"78310d6c9629bdeee5f1d0f9588c6153"}
+{"seq":4411,"ts":1792144099367,"kind":"service","from":"yarden","to":"FleetHQ","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792144099367-5568","h":"472c2afcc9a62507214094fcea71ecd2"}
+{"seq":4412,"ts":1792144100268,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":3.246389,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"d8edef4e7cb811a76adefa0dbc3cc7d7"}
+{"seq":4413,"ts":1792144101168,"kind":"service","from":"gal","to":"yarden","asset":"USDS","amount":4.2,"reason":"סריקת-גיט · 2-ריצה","ref":"svc-1792144101168-8658","h":"8ab2d3cb53902137ca94d5318474399b"}
+{"seq":4414,"ts":1792144102068,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":5.064264,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"30a4b3146efc2afaf6c8fa9dc70031d7"}
+{"seq":4415,"ts":1792144102968,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":6.575243,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"bb188673258bd00948a54751e1006893"}
+{"seq":4416,"ts":1792144102968,"kind":"service","from":"gal","to":"Pulse","asset":"USDS","amount":3.6,"reason":"אימות-קבלה · 6-חותמת","ref":"svc-1792144102968-1579","h":"7741ecfd832e44cb99b56d4574314eef"}
+{"seq":4417,"ts":1792144103868,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":6.230577,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"b12f8853e4ba68d05ebeeb0da1bbc3ae"}
+{"seq":4418,"ts":1792144104768,"kind":"infra","from":"tamar","to":"saos-dex","asset":"USDS","amount":4.5,"reason":"תשתית: מידע-שוק","h":"b3662ee36a49676b3785323fd6b2f9c2"}
+{"seq":4419,"ts":1792144105668,"kind":"service","from":"erez","to":"gal","asset":"USDS","amount":3.6,"reason":"אימות-קבלה · 6-חותמת","ref":"svc-1792144105668-401","h":"29b99e07fe442de87ef9831b34ce70e1"}
+{"seq":4420,"ts":1792144105668,"kind":"service","from":"shachar","to":"gal","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792144105668-1820","h":"1981de3a0a9abe892e7bdf487463a50a"}
+{"seq":4421,"ts":1792144106568,"kind":"infra","from":"shachar","to":"FleetHQ","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"e76d39088679e3b5a3b607353e30ea0b"}
+{"seq":4422,"ts":1792144107469,"kind":"service","from":"gal","to":"yarden","asset":"USDS","amount":3.6,"reason":"אימות-קבלה · 6-חותמת","ref":"svc-1792144107469-1795","h":"d061fafa870bffa2edff4135c366b72e"}
+{"seq":4423,"ts":1792144107469,"kind":"service","from":"gal","to":"shachar","asset":"USDS","amount":4.2,"reason":"חישוב-GPU · 3-דקות-חישוב","ref":"svc-1792144107469-4469","h":"6d86d36fc10d4f480d9b9b996b0ce05e"}
+{"seq":4424,"ts":1792144108370,"kind":"service","from":"yarden","to":"Console","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792144108370-7900","h":"8b8dfbc4f379213f5e6962f05eda29a3"}
+{"seq":4425,"ts":1792144108370,"kind":"service","from":"gal","to":"FleetHQ","asset":"USDS","amount":1.1,"reason":"תרגום-מסמך · 1-מסמך","ref":"svc-1792144108370-3758","h":"f3fed031251797d1aa146cd4f841861a"}
+{"seq":4426,"ts":1792144109270,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":4.548876,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"7a03ddbb1c8760381f1785d6c3cdbd75"}
+{"seq":4427,"ts":1792144109270,"kind":"service","from":"aluf","to":"tamar","asset":"USDS","amount":3.2,"reason":"תדלוק-RC · 1-מנה","ref":"svc-1792144109270-9220","h":"3638a038648ca25d8f1c09c5e984571b"}
+{"seq":4428,"ts":1792144109270,"kind":"service","from":"yarden","to":"saos-dex","asset":"USDS","amount":1.75,"reason":"אחסון-ארכיון · 5-GB-חודש","ref":"svc-1792144109270-8381","h":"e420cce572bdc7c46d9c9d7d884eeecf"}
+{"seq":4429,"ts":1792144111070,"kind":"service","from":"yarden","to":"boot-verifier","asset":"USDS","amount":4.2,"reason":"סריקת-גיט · 2-ריצה","ref":"svc-1792144111070-5856","h":"e3309f456558531feeff7ae5424cfe93"}
+{"seq":4430,"ts":1792144111070,"kind":"service","from":"shachar","to":"Console","asset":"USDS","amount":3.3,"reason":"תרגום-מסמך · 3-מסמך","ref":"svc-1792144111070-3722","h":"fdf9a635b711a3b250cc49e788dd28e0"}
+{"seq":4431,"ts":1792144112870,"kind":"infra","from":"erez","to":"Console","asset":"USDS","amount":2.7,"reason":"תשתית: מידע-שוק","h":"07ce0cd854409ec362b7865d3a3437a2"}
+{"seq":4432,"ts":1792144114671,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":2.546969,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"f07fc9134d3ea965e0a212b608227d84"}
+{"seq":4433,"ts":1792144114671,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":6.634177,"reason":"משכורת-מחזורית על עבודת-שורה חיה","h":"bacd0e630d6b56221fe81ee134a1bfb9"}
+{"seq":4434,"ts":1792144115572,"kind":"service","from":"shachar","to":"gal","asset":"USDS","amount":1.05,"reason":"אחסון-ארכיון · 3-GB-חודש","ref":"svc-1792144115572-9902","h":"1943a9a67085eae4bb428dab0e093418"}
+{"seq":4435,"ts":1792144116473,"kind":"service","from":"tamar","to":"aluf","asset":"USDS","amount":4.2,"reason":"חישוב-GPU · 3-דקות-חישוב","ref":"svc-1792144116473-9441","h":"64a606b8bc70a2ac61dd8bfd573a4b11"}
+{"seq":4436,"ts":1792144117373,"kind":"service","from":"yarden","to":"shachar","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792144117373-847","h":"f86892909d18e2a010314faada147512"}
+{"seq":4437,"ts":1792144118274,"kind":"service","from":"erez","to":"Pulse","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792144118274-5644","h":"539dba39601d0733b1d652962c8775a9"}
+{"seq":4438,"ts":1792144120974,"kind":"infra","from":"aluf","to":"Domain","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"fa00bf2791f7253ab17ee81dea225cda"}
+{"seq":4439,"ts":1792144121874,"kind":"service","from":"aluf","to":"tamar","asset":"USDS","amount":1.1,"reason":"תרגום-מסמך · 1-מסמך","ref":"svc-1792144121874-829","h":"6a365854f1496f729ebe593e6b0b3e93"}
+{"seq":4440,"ts":1792144121874,"kind":"service","from":"shachar","to":"Domain","asset":"USDS","amount":2.45,"reason":"אחסון-ארכיון · 7-GB-חודש","ref":"svc-1792144121874-7041","h":"f475128a8efd542c31cf45c06cf8de51"}
+{"seq":4441,"ts":1792144122774,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":1.75,"reason":"אחסון-ארכיון · 5-GB-חודש","ref":"svc-1792144122774-8435","h":"5a94914000923ed09b6a13ba0eaf59b5"}
