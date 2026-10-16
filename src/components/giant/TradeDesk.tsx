@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ownerFetch } from "@/lib/owner-client";
 import { ArrowDownUp, Ban, CircleCheck, Clock, Lock, TicketCheck } from "lucide-react";
 
@@ -72,6 +72,9 @@ export function TradeDesk() {
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [pairId, setPairId] = useState<string | null>(null); // בורר-השוק (אפס = ברירת-המחדל SAOS)
+  // רפרנס-יציב לבורר-השוק (בלי-הדלקת-אפקט-בכל-רינדור)
+  const currentPair = useRef<string | null>(null);
+  currentPair.current = pairId;
 
   // טפסים
   const [side, setSide] = useState<Side>("BUY");
@@ -208,9 +211,6 @@ export function TradeDesk() {
   const tokenIn = side === "BUY" ? "USDS" : baseToken;
   const tokenOut = side === "BUY" ? baseToken : "USDS";
 
-  // רפרנס-יציב לבורר-השוק (בלי-הדלקת-אפקט-בכל-רינדור)
-  const currentPair = useRef<string | null>(null);
-  currentPair.current = pairId;
   function switchPair(next: string) {
     setPairId(next);
     setQuote(null);
