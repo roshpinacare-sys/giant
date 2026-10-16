@@ -2433,3 +2433,24 @@ Stage Summary:
 - Zero testnet anywhere in runtime; all rails mainnet, measured.
 - Multi-writer resilience now built INTO the economy: writers never lose events, treasury self-heals, reasons are measured.
 - 6/6 services alive; disk 75%; wave-90 pushed e005b033.
+
+---
+Task ID: 91
+Agent: Z.ai Code (wave-91 · trace 1a1464cbd355e6f1)
+Task: "תמשיך" — פתיחת חקירת הכסף של הבעלים (מגל-90): ~1100 STEEM התקבלו, ~800 "נעלמו" — לבדוק מה קורה באמת ולוודא שעכשיו מרוויחים ולא מפסידים.
+
+Work Log:
+- פורנזיה על-שרשרת מלאה (mainnet בלבד): 182,137 ops נשלפו מ-condenser_api.get_account_history עבור headcorner (106,153 ops, 2018-03→2026-10-16) ו-cornerstone (75,984 ops, 2016-08→2023-03, רדום). סקריפטים: scripts/wave91-{balance,history,analyze,recent,agg,pnl}.ts + מטמון-ראיות scripts/wave91-cache/ (61MB).
+- מאזן-חי (20:03Z): צי נזיל Σ=67.4 STEEM + 83.0 SBD; headcorner נעול בהזמנות-פתוחות 20.7 STEEM + 62.3 SBD; headcorner HP = 3,502 STEEM-שווה; האצלות-SP פעילות 603.7 STEEM-שווה ל-14 חשבונות-צי.
+- פענוח התלונה (התאמה מדויקת): 2026-10-06 המרת SBD→STEEM (116.6 SBD) החזירה +1,120.3 STEEM = ה"קיבלתי ~1100". 2026-10-07 הבוט מכר 963.1 STEEM @ 0.10012 = ה"~800 שנעלמו" — הכסף הפך-צורה STEEM→SBD, לא נעלם.
+- חשבונות מלאים (חלון 2026-08-01→10-16, headcorner): מכירות 3,638.7 STEEM→366.9 SBD; קניות-חזרה 1,484.9 STEEM (153.0 SBD); המרות 147.6 SBD→1,417.5 STEEM; powerup 88.1; מימון-חיילים 140.6 (hcsoldier1-3 = 18.7 כ"א, hcs1-3 = 33.9/13.9/13.9); רעש-ערוץ-הודעות ≈0. אין העברה לא-מזוהה, אין גניבה.
+- P&L נמדד (USD): מכירות ל-btsx/BlockTrades בפאריטי-ביננס (0.100) = הוגן; הפסד-אמת במסילת-ההמרה (feed 0.1041 מול ביננס 0.0998 ≈ -6.1$) + קניות (-4.8$); קורציון +3.2$ (31.6 STEEM-שווה VESTS). נטו ≈ -8$ על 77 יום — איזון-עד-שלילי-קל. המערכת לא מפסידה משמעותית ולא מרוויחה.
+- הדליפה האמיתית שנמצאה ותוקנה: 2026-10-14T03:58 המחזור מכר 297.1 STEEM לתיק-קנייה שלו-עצמו (current_orderid 948945592 → open_orderid 2026101404) — ספרד לאף-אחד. תיקון: WAVE-91 SELF-CROSS GUARD ב-daily.mjs (saos-engine) — ask חדש מעל כל bid עצמי, bid חדש מתחת לכל ask עצמי (±10bps); המחיר מותאם, אף-ביטול-שכבה-עמיתה (T-19); גם ops בתוך-הבאצ'; יומן self-cross-guard ב-events.jsonl. dexflow (ווליום-עצמי מתוכנן, הוראת-בעלים 2026-10-13) נשאר — אפס-עמלה, מסומן כנכון.
+- תשתית: דיסק חזר ל-100% (ENOSPC — rot2 REFUSED, המנוע מת). שורש: חבילות-git לא-מאוחות (FleetHQ ≈1.2GB מהיום) + .venv 4.4GB לא-בשימוש + bundles כפולים. טופל: מחיקת .venv (JS-stack בלבד; הפייתון החי = /app/.venv נפרד) + puppeteer-cache + bundle-ישן + git gc (FleetHQ 1.2GB→230MB). דיסק 100%→76% (1.9GB פנוי).
+- saos-engine הופעל מחדש נקי (אינסטנס-יחיד, :3040 ok); מירוץ-כפילות-אינסטנס זוהה ונפתר (השומר הכפיל בטרם אכיפת-פורט).
+
+Stage Summary:
+- תשובה לבעלים: אף שקל לא נעלם ולא נגנב — ה-1100 = מילוי-המרה 10-06; ה-800 = מכירות אמיתיות שהפכו ל-SBD/מוחזרו. כל זרימה ממופה ומאומתת מול השרשרת.
+- רווחיות נמדדת ≈ איזון (-8$/77י); מקור-ההפסד-היחיד = המרות בפער-feed-מול-ביננס; הדליפה-המבנית (self-cross) תוקנה בקוד החי.
+- הכסף האמיתי ב-HP: 3,502 STEEM-שווה + 604 STEEM-שווה SP מואצל לצי (מניב-קורציון קטן).
+- פתוחים: לאמת יומן self-cross-guard במחזור-חי; gate-המרות נמדד (feed במקום סטטי); העלאת-קומיטים.
