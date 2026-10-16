@@ -316,6 +316,20 @@ function boot() {
       const v = verifyChain();
       if (!v.ok) {
         quarantineState(`boot-heal-brokenAt-${v.brokenAt}`);
+        // תיקון-שורש (גל-79 · נמדד: תפר-git-בספר-חי אסר-בעבר זריעה-מחדש ששרפה-את-היתרות):
+        // אם-הסנאפשוט-שוחזר-בהצלחה (קופה-קיימת) — היתרות-הן-האמת-המחושבת:
+        // ספר-חדש-חתום-מהמצב-החי (recovery-genesis) · אפס-שריפת-הון. ההיסטוריה-התפורה-בהסגר-לביקורת.
+        if (balances.has("treasury")) {
+          seq = 0; lastH = "GENESIS"; ledgerBuf = []; ledgerLines = 0; recent = []; ledgerFileNo = 0;
+          apply({
+            seq: 1, ts: Date.now(), kind: "recovery", from: "treasury", to: "treasury",
+            asset: "USDS", amount: 0,
+            reason: `ריפוי-ספר-בעלייה · הסגר-brokenAt=${v.brokenAt} · יתרות-הכספת-נשמרו · אפס-שריפה`,
+          });
+          flush();
+          snapshotSave();
+          return { restored: true, seq: 1, quarantined: true, balancesPreserved: true };
+        }
         balances = new Map();
         pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
         seq = 0; lastH = "GENESIS"; ledgerBuf = []; ledgerLines = 0; recent = [];
