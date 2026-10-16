@@ -281,3 +281,5 @@
 {"ts":"2026-10-16T13:28:44.669Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T13:28:46.358Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T13:28:46.358Z","action":"sweep-done"}
+{"ts":"2026-10-16T13:36:31.603Z","repo":"my-project","action":"commit-fail","out":"On branch main\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   db/custom.db\n\tmodified:   mini-services/fleet-economy/state/ledger.jsonl\n\tmodified:   mini-services/fleet-economy/state/snapshot.json\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
+{"ts":"2026-10-16T13:36:31.613Z","action":"sweep-error","error":"ReferenceError: afterPull is not defined"}
