@@ -1943,7 +1943,6 @@ Stage Summary:
 - **lint-אפס-אמיתי-פעם-ראשונה** · **הטוקן-שלנו-רץ-ונסחר-במדידה-חיה** · המנדט-מתקדם-בשערים-הירוקים — fix-not-close-בכל-השכבות.
 
 ---
-<<<<<<< HEAD
 Task ID: 61
 Agent: zai-main (trace 1a143737646dadf5)
 Task: הוראת-הבעלים "תמשיך כן ודחוף" — החייאת-המכונה-אחרי-הקריסה · מיזוג-ענן-T75 · ביקורת-אדום-עצמית-ראשונה · תיקון-שורש-מקור-האימיילים-הנותר
@@ -1963,7 +1962,7 @@ Stage Summary:
 - המכונה-חיה-ומאוחדת-עם-הענן · הצי-סוחר-אפס-שגיאות · הביקורת-האדומה-הראשונה-רצה-בתחום-סגור-והכשלים-מתוקנים-או-מתועדים-בכנות · מקור-האימיילים-האחרון-צומצם-מהשורש-לא-רק-בסימפטום
 - פתוח-מדוד: (1) Administration-write-לפאט-יאפשר-מחיקת-5-רשומות-זומבי-ענן · (2) forge-bench-eval→node:vm · (3) פתיחת-חומת-הבילינג-תחזיר-canary-לירוק-מלא
 - אפס-בילינג · אפס-סודות-בפלט · הכל-מדיד
-=======
+---
 Task ID: 63
 Agent: zai-main (trace 1a14397b4083c731)
 Task: הוראת-הבעלים (גל-77): "משתמשים זה משתמשי פנים לא חוץ — אנחנו המשתמשים בריבונות. החיילים הצי הסוכנים הם המשתמשים ברשת כהוכחה ומטרה. לא לחפש לקוחות חוץ — לפתח יכולות כלפי פנים"
@@ -1980,4 +1979,22 @@ Stage Summary:
 - **הדוקטרינה מיושרת-בקנון**: המשתמשים=פנים (חיילים·צי·סוכנים) — הוכחה-חיה-בלדג'ר, לא-סיפור. אפס-רדיפה-אחרי-לקוחות-חוץ; המסילות-הקיימות-משרתות-פנים-ראשון.
 - **הציון-הכן-עלה 46.74%→55.43%** — כי-המטרה-עצמה-הוגדרה-מחדש-בשקיפות-מלאה (weightsNote-מתעד).
 - **היכולות-כלפי-פנים-הבאות (להכרעה)**: הרחבת-תקציב-הצי (750→2000-תקרה) · מסילת-מפתחות-עצמאית-לכל-חייל · SP-DELEGATE-שורה-מהמטריצה · תיקון-FLEET/SBD-INTEREST-בלולאת-התיקון.
->>>>>>> fca3e24 (wave-77: internal-first doctrine per owner — users=internal (soldiers·fleet·agents are THE users, proof+goal) · gap matrix external-users→internal-users re-framed with measured proof (5 live agents · 22-24 fills/24h · FLEET wallets) · score honestly recomputed 46.74%→55.43% by route from file (weightsNote documents doctrine change) · FleetView=network-users view with live internal-users band · nav+API re-framed inward-first · HOLD repair witnessed (−26.69 root=locked inventory, real inventory 56.79$) · fleet advanced live during work (145.5→153.83 USDS) — trace 1a14397b4083c731)
+
+---
+Task ID: T75-c
+Agent: zai-main (trace 1a1438791f288609)
+Task: הבעלים: "תמשיך כן ודחוף" — משתמשי-פנים הם הריבונות · בחינת הריפו הפרטיים (לא-פחות-חשובים) · מודעות-כשלים-והתראות
+
+Work Log:
+- **דחיפה-ראשונה**: 3535077 (קבלת-boot-verify) → ענן main מאומת ls-remote.
+- **מפת-הריפו הפרטיים (API, 25/39)**: saos-dex · Sandbox · steem · Project-files · saos-desk · roshpina · Zip · Defi · vault-home · saos-markets · saos-owner-channel · sanbox · SovereignConsole · saos-sovereign-platform/foundry · Saosmartwallet · saos-agents · sandbox-private · saos-control-center · Adsmarket · anchor-baseline · saos-jummper · Sdk · TruthRail · negen. הצי דוחף-חי (saos-dex 07:07 · Sandbox 07:05 · steem 06:58).
+- **מקור-מיילי-הכשל נתפס**: 24ש׳ → 3-כשלים בלבד, כולם Sandbox/compute-canary (05:59). היומן שלנו (Autonomy/compute-journal.jsonl ציבורי) מוכיח: טקס-מדוד כל-6ש׳ sentinel→canary→still-walled→חניה-מחדש 204×18. ה-BlobNotFound ביומן = אין-יומן-ריצה כלל = חסימת-0-step — **החומה-עדיין-סגורה** וכל-בדיקה = מייל-אחד-צפוי. **הצי-הקביל-תיקן-שורש בגל-61**: קצב 6ש׳→24ש׳ (Autonomy 927716d · Sandbox 2493fb8) — נרשם-כאן-בכנות-כהשלמה.
+- **זומבים**: 8-ריצות-queued (saos-dex/steem×3/Defi/saos-agents/Adsmarket/Sandbox×2) — ביטול=403 (לטוקן-המקומי אין actions:write; רק SBX_FLEET_PAT בענן). שקטים-בתור — לא-מייצרים-מיילים.
+- **חור-ריפוי-עצמי אמת נתגלה-ונאטם מהשורש (T75-d)**: dev.log חשף **1396 טיקי-דקס-כושלים** "attempt to write a readonly database" — השרת עלה 06:27 בתוך-חלון-המחיקה ומאגר-החיבורים שלו הוקפא-על-קובץ-ישן. מדידה: חיבור-חדש WRITE_OK_NEW_CONN → התיקון ב-dex-engine: זיהוי readonly/locked → $disconnect → הטיק-הבא (8ש׳) מתחבר-מחדש. הריפוי-בפועל: הפעלה-מחדש-קנונית (setsid כמו sovereign-boot.sh) → **lastTickAt מתקדם · ticks=3 · אפס-כשלים**.
+- **לקח-ריבוז נוסף**: rebase על גל-61 החזיר-db-מהעץ-מעל-קובץ-חי (stash-pop-עימות) → שרת-כתב-ל-inode-רפאים → טופל-באותו-טקס: עצירה→checkout→הפעלה→מדידה. אובדן-אמת: ~4-דק' מוני-טיק (נרשם-כנה).
+- **משטח-מודעות-חדש (T75-c)**: src/lib/compute-wall.ts (קריאת-לדגר+יומן-ציבוריים-בלי-טוקן · fail-honest nulls) → /api/giant/liveness + /api/giant/gap → **כרטיס-חומת-המחשוב במפת-הפער**: "סגורה — הרשת-חונה-את-עצמה · בדיקה-אחרונה לפני X דק' · מייל-canary = בדיקה-מתוזמנת, לא-תקלה".
+- **לולאת-המוצר-הפנימית (הצי-כמשתמשים) נמדדה-חיה**: 11-פקודות — FLEET=6 · USER=4 · API=1 · **6-OPEN-עומדות** · 3-FILLED · 2-CANCELLED. שירותים: 3011/3036/3042 חיים · boot-verify all_ok=true · 390px אפס-גלישה · tsc-src=0.
+- **קומיט b861358 נדחף-ואומת ls-remote** (אחרי-ריבוז-על גל-61: ffef72d).
+
+Stage Summary:
+- **הריבונות מודעת-להתראות-שלה-ומטפלת**: מיילי-ה-git מזוהים-למקור (canary-מתוזמן על-חומה-סגורה), הקצב כבר-הורד ל-24ש׳ ע"י-הצי, והמערכת מציגה-זאת-לבעלים-בממשק-במקום-להשאיר-תעלומה. חור-ריפוי-עצמי שלישי-מסוג-מסד-נתונים נאטם מהשורש (disconnect-on-readonly). 25-ריפו-פרטיים ממופים-ונבדקו; המצב-כנה: חומה-סגורה, הרשת-חונה-את-עצמה-ועובדת-פנימה — מחשוב-מקומי + דקות-ציבוריות + הצי-סוחר-במוצר-שלו.
