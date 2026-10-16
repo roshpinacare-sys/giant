@@ -895,3 +895,19 @@
 {"ts":"2026-10-16T18:31:33.825Z","action":"sweep-done"}
 {"ts":"2026-10-16T18:41:03.077Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 9a90864d7ce7d85664a886a81ebab595c5919c39\nCannot save the current worktree state\nfatal: stash failed"}
 {"ts":"2026-10-16T18:41:03.534Z","repo":"my-project","action":"state-custody-restore","brokenAt":42777,"restored":true}
+{"ts":"2026-10-16T18:41:08.806Z","repo":"my-project","action":"state-custody-restore","brokenAt":42777,"restored":true}
+{"ts":"2026-10-16T18:41:22.996Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   b4c67d0..6d7e576  HEAD -> main"}
+{"ts":"2026-10-16T18:41:23.325Z","repo":"FleetHQ","action":"commit-fail","out":"action.cpython-313.pyc\nU\tsovereign-stack/health/compaction-policy.json\nU\tsovereign-stack/health/mem.json\nU\tstate/silence-watchdog/state.json\nU\tt19b/Domain\nerror: Committing is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict."}
+{"ts":"2026-10-16T18:41:26.496Z","repo":"FleetHQ","action":"pull-fail","out":"int: \"git add/rm <conflicted_files>\", then run \"git rebase --continue\".\nhint: You can instead skip this commit: run \"git rebase --skip\".\nhint: To abort and get back to the state before \"git rebase\", run \"git rebase --abo"}
+{"ts":"2026-10-16T18:41:30.478Z","repo":"FleetHQ","action":"commit-fail","out":"k/health/compaction-policy.json\nU\tsovereign-stack/health/mem.json\nU\tsovereign/stack/policy/verdicts.json\nU\tstate/silence-watchdog/state.json\nU\tt19b/Domain\nerror: Committing is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict."}
+{"ts":"2026-10-16T18:41:33.194Z","repo":"FleetHQ","action":"pull-fail","out":"int: \"git add/rm <conflicted_files>\", then run \"git rebase --continue\".\nhint: You can instead skip this commit: run \"git rebase --skip\".\nhint: To abort and get back to the state before \"git rebase\", run \"git rebase --abo"}
+{"ts":"2026-10-16T18:41:34.202Z","repo":"FleetHQ","action":"push-fail","out":"a ref in \"refs/{heads,tags}/\". If so we add a corresponding\n  refs/{heads,tags}/ prefix on the remote side.\n\nNeither worked, so we gave up. You must fully qualify the ref.\nhint: The <src> part of the refspec is a commit object.\nhint: Did you mean to create a new branch by pushing to\nhint: 'HEAD:refs/heads/HEAD'?\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/FleetHQ.git'"}
+{"ts":"2026-10-16T18:41:35.028Z","repo":"Domain","action":"pull-fail","out":"From https://github.com/roshpinacare-sys/Domain\n * branch              main       -> FETCH_HEAD\nfatal: Cannot rebase onto multiple branches."}
+{"ts":"2026-10-16T18:41:35.975Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:41:37.584Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:41:39.223Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:41:41.090Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:41:43.020Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:41:44.753Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:41:46.201Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:41:46.202Z","action":"sweep-done"}
