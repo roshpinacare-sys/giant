@@ -1,8 +1,8 @@
 {
-  "at": "2026-10-16T08:27:40.315Z",
+  "at": "2026-10-16T08:35:04.883Z",
   "producer": "boot-verifier:3042",
   "all_ok": true,
-  "elapsed_s": 1,
+  "elapsed_s": 1.5,
   "checks": {
     "office": {
       "reception_3000": "up",
@@ -18,9 +18,9 @@
       "note": "runtime-supervisor state read; foreman childPid=none"
     },
     "receipts": {
-      "boot-verify_self_age_s": 455,
-      "gateway-telemetry-latest_age_s": 163,
-      "boot-watcher-state_age_s": 10879
+      "boot-verify_self_age_s": 443,
+      "gateway-telemetry-latest_age_s": 99,
+      "boot-watcher-state_age_s": 11323
     },
     "private_vault": {
       "repo": "roshpinacare-sys/fleet-vault",
@@ -28,5 +28,5 @@
       "method": "git-ls-remote"
     }
   },
-  "sha256": "bca360deae755dd3bc14d05a3c80875023ac5be7b01278d97e20b2f9800309cb"
+  "sha256": "ea92e8dfc40b24478a18f1670b14ae26870fc1fd10b5906352161ed6a22ab0b1"
 }
