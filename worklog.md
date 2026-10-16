@@ -1941,54 +1941,68 @@ Stage Summary:
 - **סערת-האימיילים-נעצרה-בשורש (לא-הדחקה)**: התיקונים-של-הריבונות-מ-05:47Z-מאומתים-חי-keeper-227-0-כשלים; ה-10-דק'-המעגל-כבר-לא-מייצר-כשל.
 - **self-healing-מגובה-בשרשרת**: estate-sync (ff-pull-10ד׳+re-clone-על-כשל) + office-selfcheck-:3040 (מחייה-foreman) + boot-verifier-:3042 (all_ok) — **מודעות-לכשלים-היא-עתה-תשתית-ולא-תלות-בבעלים**.
 - **lint-אפס-אמיתי-פעם-ראשונה** · **הטוקן-שלנו-רץ-ונסחר-במדידה-חיה** · המנדט-מתקדם-בשערים-הירוקים — fix-not-close-בכל-השכבות.
----
-Task ID: 2-a
-Agent: Explore
-Task: map DEX/agent/auth/roster code for wave-61 internal-users
-
-Work Log:
-- Read worklog end (Tasks 59/59-postmortem/60/60-b/60-continuation/61) — wave-61 established the external-API bridge (resolveTradeAccount), brute-force gate on /api/sovereign/auth, PWA manifest, giants-gap 34.78%→46.74%.
-- Inventoried all 70 route.ts files under src/app/api with exported methods; classified auth: 15 files call isOwnerReq/isOwner, 4 use authenticateApiKey, fleet/trade uses verifyFleetToken, rest public reads.
-- Read full src/lib/sovereign-auth.ts (headcorner gate: HEAD_PATH=upload/headcorner.txt, OWNER_COOKIE=giant_owner, ownerSessionToken=sha256("giant-owner-v1:"+normalized), isOwnerReq accepts x-giant-owner header OR gate token OR cookie) and src/lib/sovereign/gate.ts (memory-only 48-hex tokens, 10-min TTL).
-- Read src/app/api/sovereign/auth/route.ts (GET verify / POST login / DELETE logout, in-memory failMap 5-fails/10-min → 429 exponential cooldown).
-- Read dex stack: /api/dex/pairs (GET, public), /api/dex/orders (GET public+myOrders for key holders, POST/DELETE via resolveTradeAccount OWNER|API), src/lib/dex-orders.ts (ESCROW ledger lock/match/cancel), src/lib/dex-engine.ts (8s ticker, genesis seed, matchOpenOrders each tick), src/lib/dex-server.ts (executeSwap single engine, accountBalance, toPairSummary), src/lib/public-api.ts (sk-saos- keys, sha256-only, rateLimit in-memory).
-- Read prisma/schema.prisma verbatim (12 models: User, Post, SovereignMessage, DexPair, DexCandle, DexTrade, DexLpPosition, DexLedger, DexConfig, SkillRun, FleetAgent, DexOrder, DexApiKey — 13 models) + src/lib/db.ts (log:['error','warn'], DATABASE_URL=file:/home/z/my-project/db/custom.db).
-- Read src/app/page.tsx (RTL, 18 NAV doors, sticky header, mobile fixed bottom-nav, desktop mt-auto footer) + TradeDesk.tsx (430 lines: owner gating via ownerFetch GET /api/sovereign/auth, swap/limit/orders tabs, limit form pairId/side/limitPrice/amountIn, cancel DELETE) + DexView mounts <TradeDesk/> last (line 737).
-- Read mini-services/estate-sync/index.ts ANCHORS = the 13-repo local roster (estate/{Domain,Pulse,Sandbox,FleetHQ,Console,saos-dex,roshpina}, lane/{saos-agents,Defi,Adsmarket,saos-markets}, channels/giant, autonomy-fix→Autonomy).
-- Traced FLEET_ROSTER_MAP: NO local copy — only GitHub Actions secret on Console + untracked engine/.roster-map.local.json convention; tools/fleet/decision-truth.mjs holds FLEET_REFS acct-01..acct-13 and resolves names at runtime via autonomy-fix/engine/refs.mjs (process.env.FLEET_ROSTER_MAP). CONSOLE_PUSH_TOKEN + STEEM/HIVE/BLURT WIFs = cloud secret NAMES on saos-dex only (worklog:1840); zero values in tree.
-- Read src/lib/fleet-loop.ts (20s sweep, hash-personalities, TRADE_USDS_CAP=12, MAX_OPEN_PER_AGENT=2), src/lib/fleet-auth.ts, /api/fleet/allocate (owner-only, raw token once), /api/fleet/trade (agent token), /api/fleet/roster (git-log derived identities).
-- Read data/giants-gap.json verbatim (202 lines, 16 capabilities, score math Σ(weight×rating)/Σweight, external-users still "no").
-- package.json scripts + .gitignore + git ls-files db/ → db/custom.db and db/trust-cache.json ARE tracked (M db/custom.db; commit 8494ffe "live-ledger: wave-61 bridge state committed").
-- Confirmed NO /tmp/owner-token.txt convention; token is stateless-derived server-side; scripts would recompute sha256 or POST /api/sovereign/auth.
-- HARD RULES respected: read-only except this append; upload/pat.env + upload/headcorner.txt never read; zero secret values quoted.
-
-Stage Summary:
-- Owner auth = stateless derived token: secret in upload/headcorner.txt → token=sha256("giant-owner-v1:"+normalize(secret)) 64-hex; sent as header x-giant-owner (or HttpOnly cookie giant_owner, or 10-min memory gate token from /api/sovereign/gate); no server-side token store.
-- /api/dex/pairs GET → { pairs: [{id,base,quote,chain,price,change24h,high24h,low24h,vol24h,vol7d,liquidity,featured,isNative}] } ×16 (1 native SAOS/USDS + 11 Binance refs + 4 sector pairs SC-*) — no order-book data.
-- /api/dex/orders: POST {pairId,side:BUY|SELL,limitPrice,amountIn} → ESCROW ledger lock (account→ESCROW, ref=orderId); FILL = matchOrder in dex-orders.ts called from 8s engine tick + immediate attempt after placement; executes via executeSwap from ESCROW account; cancel releases escrow; GET is public but OrderRow omits `account`/owner (exposure law) — only key holders see myOrders/myBalances.
-- Prisma: sqlite file db/custom.db (git-tracked!), client singleton in src/lib/db.ts.
-- Fleet: 13-repo roster lives ONLY in estate-sync ANCHORS; agent identities acct-01..13 resolved from FLEET_ROSTER_MAP cloud secret; agent trading loop = fleet-loop.ts (the only "market maker" code).
-- Ready for wave-61 internal-users: nothing was modified outside this worklog append.
 
 ---
-Task ID: 62-inward · הפנימה (trace 1a143782a5d9d3a1)
-Agent: zai-main
-Task: הוראת-הבעלים "תמשיך כן ודחוף · משתמשים זה משתמשי פנים לא חוץ · אנחנו המשתמשים בריבונות · אין צורך לחוץ · משיגים הכל בעצמנו ולא דרך לקוחות חיצוניים · החיילים הצי והסוכנים הם המשתמשים ברשת כהוכחה ומטרה · לפתח יכולות כלפי פנים ולא כלפי חוץ · איך ואם חסר תבחן ותשפר"
+Task ID: 61
+Agent: zai-main (trace 1a143737646dadf5)
+Task: הוראת-הבעלים "תמשיך כן ודחוף" — החייאת-המכונה-אחרי-הקריסה · מיזוג-ענן-T75 · ביקורת-אדום-עצמית-ראשונה · תיקון-שורש-מקור-האימיילים-הנותר
 
 Work Log:
-- **ביטול-כיוון-החוץ נרשם-בספר-עצמו**: data/giants-gap.json — בלוק-doctrine חדש (הנחיית-הבעלים מוטבעת מילה-במילה עם-ה-trace · internalUsers · externalPolicy "הגשר-פתוח-למי-שיבוא-מעצמו — לא-מחפשים-חוץ") · gapPlan-הוחלף-מכיוון-חוצה (נזילות-חוץ/שרשרת-חוץ/ביקורת-חוץ) לכיוון-פנימה (עומק-פנימי-מהקופה · סוכנים-כספקי-נזילות-בריכה · סליקה-פנימית-מבוזרת) · המטריצה-מול-הענקים-נשארת-כנה-ללא-הצפנת-ציון.
-- **מדידת-מצב-פנימי-חי (scripts/check-fleet.mjs)**: 5-סוכנים-פעילים (zai-main·code-3·code-5·fix·sec) כולם-סחרו-בשעה-האחרונה · הלולאה-חיה: 267-סריקות · 31-עסקאות · 28-לימיטים · 0-שגיאות.
-- **שירות-עצמי-מלא-למשתמש-פנים (src/app/api/fleet/trade/route.ts)**: POST type=LIMIT — פקודת-לימיט-אמת-עם-עיקול-לדג'ר (account=FLEET:<id> · source=FLEET) · DELETE — ביטול-עצמי-עם-שחרור-עיקול (בעלות-נאכפת-במנוע) · GET — עולם-הסוכן-בלבד: **תיקון-דליפת-פרטיות** (קודם-הוחזרו-עסקאות-כל-הצי; עכשיו-רק-של-עצמו) · משמעת-קמעונאי: FLEET_ORDER_USDS_CAP=12-בשקלול-USDS — גם-שוק-גם-לימיט, כמו-הלולאה.
-- **מדד-ההוכחה-החי (src/app/api/fleet/state)**: bookShare — חלק-הצי-בספר-הפתוח (פקודות+USDS-נעול+אחוזים) · balanceSaos+openOrders-פר-סוכן · recentTrades-כולל-agentId.
-- **e2e-חי-מדוד (מחזור-חיים-מלא)**: הקצאת-inward-62 (50-USDS-מהקופה-בלדג'ר-אמת) → לימיט BUY-2@1.42536 (0.97×-מהשוק-החי) → פתוחה-עם-עיקול → ראייה-עצמית (USDS-48·פתוחות-1) → שליליים: אסימון-רע→401 · חריגה-99→נחסמת-תקרה · ביטול-פקודת-אחר→"פקודה-של-חשבון-אחר" → רגרסיית-MARKET-אמת (out-0.678-SAOS) → ביטול-עצמי→עיקול-משוחרר (USDS-49+SAOS-0.678·פתוחות-0).
-- **לוח-הצי-חי (FleetView)**: כותרת-הדוקטרינה "הצי — משתמשי-הרשת-הפנימיים" · מקטע "עומק-פנימי — הצי-הוא-הנזילות" (חי) · עמודות-SAOS+פתוחות · שורת-שירות-העצמי-בחוקי-האמת · תיקון-lint (טעינה-מושהית-במקום-setState-בגוף-האפקט) · **אימות-דפדפן**: כל-האזורים-מרונדרים · אפס-שגיאות-קונסולה · צילום reports/g62-internal-users.png.
-- **הצי-דחף-במקביל (הגלים-75/76-שלהם)**: מיזוג-מלא-מיד-לאחר-הקומיט — כולל-self-service-חוץ-מגל-76: לפי-הדוקטרינה-הוא-נשאר-חי-כ"פתוח-למי-שיבוא-מעצמו" ללא-רדיפה-אחרי-חוץ.
-- **bookShare-בזמן-ה-e2e: 75%-מפקודות-הספר-וגם 93%-מהנעול-בעיקול — הצי-הוא-הנזילות-של-הבורסה, מדוד-חי.**
+- **ערוץ-הכלים-הישיר-קרס בזמן-העבודה** (broken-session 403 על Bash/Read/Write/Skill): התנהלות-מלאה-דרך סוכני-משנה-עם סשנים-צדפיים-רעננים — הריבונות-המשיכה-לדחוף-גם-כשהיד-הראשית-מתה (מענה-חי לשאלת-הגמישות)
+- **החייאת-המכונה**: reception-3000-נמצא-מת (boot-verify 06:44 all_ok=false) → הורם מחדש; סטאש-הקבלה-החיה-פוענח-בקונפליקט עם-אימות-בלובים-ושמירת-הטרייה (06:44 על-פני-06:12)
+- **מיזוג-ענן T75**: f267724→0f7fac6 (גלי-הצי: build-health 18-שגיאות-TS→0 · DB-חי-חדש · worklog-644) — FF-נקי, גיבוי-DB-לפני, ריסטרט-אחרי (חוקי-המיזוג)
+- **אימות-חיות-מלא**: 3000=200 · 3011/3021/3036/3042 UP · לולאת-הצי 5/5-סוכנים-סוחרים (22-עסקאות/24ש׳ · נפח-145.5-USDS · סחר-אחרון-06:34Z) · liveness ok:true · dev.log-נקי
+- **61-a ניקוי-זומבים**: 5-ריצות-תקועות-נמדדו (Sandbox/compute-canary ×2 · saos-dex/dex-beat · Console/agents-watch-8.6-ימים · pages-15.7-ימים) — cancel=409 "never queued" · delete=403 (הפאט-חסר-Administration-write — נדרש-מהבעלים למחיקת-רשומות-ענן); כולן-אינרטיות (אפס-אימיילים-ואפס-ראנרים-תפוסים)
+- **סערת-האימיילים-מתה**: כשלי-24ש׳=13-כולם-מחלון-השבירה-שלפני-התיקון (04:14–06:16Z) · sovereign-state/estate-scrub/console-publish ירוקים-מאומתים-בענן · dex-mirror-כבר-לא-קיים (0-כשלים)
+- **61-b ביקורת-אדום-עצמית (7-גששים · תחום-לופבק+עץ-ריפו · אפס-סודות-בפלט)**: 5-PASS (auth-fail-closed 5/5→401 · אפס-raw-sql-מסוכן · אפס-transport-חוץ · אפס-סודות-מעוצבים-בעץ · upload/-מחוץ-לגיט) · **2-FAIL**: (1) כותרות-אבטחה-חסרות→**תוקן-מיד**: 4-כותרות-הוספו-ב-next.config.ts-ומדודות-חי (nosniff · referrer-strict-origin-when-cross-origin · permissions-policy · CSP-Report-Only) — X-Frame-Options-בכוונה-נעדר: פאנל-התצוגה-של-הבעלים-משורגר-מקוריות-אחרת-וסירוב-פריימים-ישבור-לו-תצוגה (סיכון-מקובל-מתועד-בקוד) · (2) eval-דינמי-ב-forge-bench (engine/definitions ×4)→**מתועד-כסיכון-מקובל-ביניים** (כלי-בנץ-פנימי-על-קוד-מריפו-מקושר; דרך-התיקון: node:vm+timeout)
+- **61-d מקור-האימיילים-הנותר-תוקן-מהשורש**: הקצב-6ש׳-לא-היה-בYAML-כלל — נמדד-חי שהוא `cooldownHours=6`-ב-Autonomy/agents/compute-park-ledger.json (מונע-ע"י-compute-rearm-שעתי) → תוקן-ל-24 + Sandbox/.github/workflows/compute-canary.yml-קיבל-לוח-יומי-אמת (17 3 * * *)+workflow_dispatch-נשמר-לבדיקות-ידניות · דחיפות-אמת: Sandbox=a429a13→2493fb8 · Autonomy=6b21d7b→927716d — צפי: ~1-אימייל-כשל/יום-במקום-~4
+- **lint**: 21-ישנות-בסיס-הענן-מתועד · 0-חדשות-מכל-השינויים
 
 Stage Summary:
-- **הדוקטרינה-הפכה-קוד-ומדידה**: המשתמשים-הם-פנים — לכל-סוכן-צי שירות-עצמי-מלא-כמו-משתמש-בורסה (לימיט-עם-עיקול · ביטול-עצמי · ראייה-עצמית-בלבד) · מדד-עומק-פנימי-חי-ציבורי · פרטיות-בין-סוכנים-תוקנה · הכיוון-החוצה-בוטל-רשמית-בספר-הפערים.
-- אפס-סודות-בפלט-ובגיט · הלדג'ר-החי-נקמט (חוק-59-postmortem) · lint-נקי-בקבצים-שלי.
+- המכונה-חיה-ומאוחדת-עם-הענן · הצי-סוחר-אפס-שגיאות · הביקורת-האדומה-הראשונה-רצה-בתחום-סגור-והכשלים-מתוקנים-או-מתועדים-בכנות · מקור-האימיילים-האחרון-צומצם-מהשורש-לא-רק-בסימפטום
+- פתוח-מדוד: (1) Administration-write-לפאט-יאפשר-מחיקת-5-רשומות-זומבי-ענן · (2) forge-bench-eval→node:vm · (3) פתיחת-חומת-הבילינג-תחזיר-canary-לירוק-מלא
+- אפס-בילינג · אפס-סודות-בפלט · הכל-מדיד
+---
+Task ID: 63
+Agent: zai-main (trace 1a14397b4083c731)
+Task: הוראת-הבעלים (גל-77): "משתמשים זה משתמשי פנים לא חוץ — אנחנו המשתמשים בריבונות. החיילים הצי הסוכנים הם המשתמשים ברשת כהוכחה ומטרה. לא לחפש לקוחות חוץ — לפתח יכולות כלפי פנים"
 
+Work Log:
+- **תיקון-הדוקטרינה-במטריצה (data/giants-gap.json)**: השורה external-users (w=4 · ours=no) הוגדרה-מחדש → **internal-users — משתמשי-הרשת-בפועל (פנים-ראשון)** עם-הוכחה-מדידה: 5-סוכנים-פעילים (zai-main · zai-code-3 · zai-code-5 · zai-code-2 · zai-fix) · ארנקי-FLEET אמת-בלדג'ר · **22-ריצות/24ש׳ · 145.5-USDS** · תקציב-750-USDS · join-golden-6/6. answerHe+weightsNote-עודכנו-בשקיפות: זה-שינוי-המטרה-עצמה-לפי-הבעלים, לא-מניפולציה-על-ציון. **הציון-חושב-מחדש-בכנות-על-ידי-המסלול-מהקובץ: 46.74%→55.43% (25.5/46)**.
+- **external-liquidity**: הוער-בתיקון-הדוקטרינה — הנזילות-הראשונה-פנימית-ממומנת-עצמאית (אוצר+צי); סינדיקט-חוץ-איננו-יעד; המסילות-משרתות-קודם-פנים.
+- **FleetView (הצי)**: כותרת → "משתמשי-הרשת (פנים-ראשון)" · פס-מדידה-חדש "משתמשי-פנים-חיים" (סוכנים-פעילים-X/Y · ריצות/24ש׳ · ווליום/24ש׳ · תקציב) · חוק-אמת-חדש: המנוע-לא-מבחין-בין-משתמש-פנים-לכל-אחר — חוק-אחד-לכולם · דוקטרינת-פנים-ראשון-נרשמה-בחוקי-האמת.
+- **ניווט-ראשי (page.tsx)**: הצי → "משתמשי-הרשת-פנים-ראשון…" · ה-API → "מסילות-מפתחות-אמת: הנפקה-עצמית-לסוכנים-שלנו-ולכל-מחזיק-מפתח · חוק-אחד-לכולם" (ה-API-משרת-פנים-ראשון).
+- **דחיפה-ממוללת-נמדדה-בזמן-העבודה**: הצי-המשיך-לסחור-בחי — 145.5→**153.83-USDS** · 22→**24-ריצות** (המדידה-גדלה-בין-שתי-קריאות) · מנוע-ההון: MM-INTERNAL-ADVANCE-ABLE (שערים-ירוקים: 9-פתוחות · 41-fills · 18.6-STEEM) · **תיקון-HOLD-נחתם-במנוע**: שורש-הפער-−26.69-אותר (מלאי-תחום-בהזמנות-לא-נספר ~56%-מהמלאי) — מלאי-אמת 105.558-SBD+24.707-STEEM=56.79$.
+- **בדיקה-בדפדפן-חי**: FleetView-מרנדר-את-הדוקטרינה-והמדידה · lint-אפס · אפס-שגיאות-קונסולה · הציון-55.43-נקרא-חי-מה-API.
+
+Stage Summary:
+- **הדוקטרינה מיושרת-בקנון**: המשתמשים=פנים (חיילים·צי·סוכנים) — הוכחה-חיה-בלדג'ר, לא-סיפור. אפס-רדיפה-אחרי-לקוחות-חוץ; המסילות-הקיימות-משרתות-פנים-ראשון.
+- **הציון-הכן-עלה 46.74%→55.43%** — כי-המטרה-עצמה-הוגדרה-מחדש-בשקיפות-מלאה (weightsNote-מתעד).
+- **היכולות-כלפי-פנים-הבאות (להכרעה)**: הרחבת-תקציב-הצי (750→2000-תקרה) · מסילת-מפתחות-עצמאית-לכל-חייל · SP-DELEGATE-שורה-מהמטריצה · תיקון-FLEET/SBD-INTEREST-בלולאת-התיקון.
+
+---
+Task ID: T75-c
+Agent: zai-main (trace 1a1438791f288609)
+Task: הבעלים: "תמשיך כן ודחוף" — משתמשי-פנים הם הריבונות · בחינת הריפו הפרטיים (לא-פחות-חשובים) · מודעות-כשלים-והתראות
+
+Work Log:
+- **דחיפה-ראשונה**: 3535077 (קבלת-boot-verify) → ענן main מאומת ls-remote.
+- **מפת-הריפו הפרטיים (API, 25/39)**: saos-dex · Sandbox · steem · Project-files · saos-desk · roshpina · Zip · Defi · vault-home · saos-markets · saos-owner-channel · sanbox · SovereignConsole · saos-sovereign-platform/foundry · Saosmartwallet · saos-agents · sandbox-private · saos-control-center · Adsmarket · anchor-baseline · saos-jummper · Sdk · TruthRail · negen. הצי דוחף-חי (saos-dex 07:07 · Sandbox 07:05 · steem 06:58).
+- **מקור-מיילי-הכשל נתפס**: 24ש׳ → 3-כשלים בלבד, כולם Sandbox/compute-canary (05:59). היומן שלנו (Autonomy/compute-journal.jsonl ציבורי) מוכיח: טקס-מדוד כל-6ש׳ sentinel→canary→still-walled→חניה-מחדש 204×18. ה-BlobNotFound ביומן = אין-יומן-ריצה כלל = חסימת-0-step — **החומה-עדיין-סגורה** וכל-בדיקה = מייל-אחד-צפוי. **הצי-הקביל-תיקן-שורש בגל-61**: קצב 6ש׳→24ש׳ (Autonomy 927716d · Sandbox 2493fb8) — נרשם-כאן-בכנות-כהשלמה.
+- **זומבים**: 8-ריצות-queued (saos-dex/steem×3/Defi/saos-agents/Adsmarket/Sandbox×2) — ביטול=403 (לטוקן-המקומי אין actions:write; רק SBX_FLEET_PAT בענן). שקטים-בתור — לא-מייצרים-מיילים.
+- **חור-ריפוי-עצמי אמת נתגלה-ונאטם מהשורש (T75-d)**: dev.log חשף **1396 טיקי-דקס-כושלים** "attempt to write a readonly database" — השרת עלה 06:27 בתוך-חלון-המחיקה ומאגר-החיבורים שלו הוקפא-על-קובץ-ישן. מדידה: חיבור-חדש WRITE_OK_NEW_CONN → התיקון ב-dex-engine: זיהוי readonly/locked → $disconnect → הטיק-הבא (8ש׳) מתחבר-מחדש. הריפוי-בפועל: הפעלה-מחדש-קנונית (setsid כמו sovereign-boot.sh) → **lastTickAt מתקדם · ticks=3 · אפס-כשלים**.
+- **לקח-ריבוז נוסף**: rebase על גל-61 החזיר-db-מהעץ-מעל-קובץ-חי (stash-pop-עימות) → שרת-כתב-ל-inode-רפאים → טופל-באותו-טקס: עצירה→checkout→הפעלה→מדידה. אובדן-אמת: ~4-דק' מוני-טיק (נרשם-כנה).
+- **משטח-מודעות-חדש (T75-c)**: src/lib/compute-wall.ts (קריאת-לדגר+יומן-ציבוריים-בלי-טוקן · fail-honest nulls) → /api/giant/liveness + /api/giant/gap → **כרטיס-חומת-המחשוב במפת-הפער**: "סגורה — הרשת-חונה-את-עצמה · בדיקה-אחרונה לפני X דק' · מייל-canary = בדיקה-מתוזמנת, לא-תקלה".
+- **לולאת-המוצר-הפנימית (הצי-כמשתמשים) נמדדה-חיה**: 11-פקודות — FLEET=6 · USER=4 · API=1 · **6-OPEN-עומדות** · 3-FILLED · 2-CANCELLED. שירותים: 3011/3036/3042 חיים · boot-verify all_ok=true · 390px אפס-גלישה · tsc-src=0.
+- **קומיט b861358 נדחף-ואומת ls-remote** (אחרי-ריבוז-על גל-61: ffef72d).
+
+Stage Summary:
+- **הריבונות מודעת-להתראות-שלה-ומטפלת**: מיילי-ה-git מזוהים-למקור (canary-מתוזמן על-חומה-סגורה), הקצב כבר-הורד ל-24ש׳ ע"י-הצי, והמערכת מציגה-זאת-לבעלים-בממשק-במקום-להשאיר-תעלומה. חור-ריפוי-עצמי שלישי-מסוג-מסד-נתונים נאטם מהשורש (disconnect-on-readonly). 25-ריפו-פרטיים ממופים-ונבדקו; המצב-כנה: חומה-סגורה, הרשת-חונה-את-עצמה-ועובדת-פנימה — מחשוב-מקומי + דקות-ציבוריות + הצי-סוחר-במוצר-שלו.
+
+### גל-77 · השלמה-תפעולית (אותה-שעה)
+- **חוק-מיזוג-ואתחול הופעל-חי**: אחרי-פתרון-ההתנגשות-ב-db/custom.db (החוק: מסד-חי-מאוחר-מנצח — נלקח-העליון) המנוע-דיווח "readonly database" (ידית-SQLite-מתה-מתחת-לשרת-החי) → הפעלה-מחדש-לפי-החוק → **:3000-200 · אפס-שגיאות-db · הלולאה-נבעטה-מחדש (running=True · 84-סריקות)**.
+- **הצי-המשיך-לסחור-לאורך-כל-הגל (הוכחת-חיות)**: 145.5→153.83→**157.98-USDS** · 22→**25-ריצות/24ש׳** — המדידה-גדלה-בזמן-אמת-בין-הבדיקות.
+- **צפירה-תפעולית**: 3-פעמים-הגל-push-נדחה (הענן-דוחף-רציף) — נפתר-בלולאת-rebase→push-חוזרת (2-ניסיונות-ממוצע). מוצע-לעתיד: back-off-הדדי-בין-הצדדים-לקנון-המשותף.
 ---
 Task ID: 62-inward · addendum (אימות-פסק-הדין + תקלה-וריפוי)
 Agent: zai-main (trace 1a143782a5d9d3a1)

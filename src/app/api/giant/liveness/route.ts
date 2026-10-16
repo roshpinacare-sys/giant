@@ -7,6 +7,7 @@
  */
 import { NextResponse } from "next/server";
 import { ensureMiniServices, portAlive, MINI_SERVICES } from "@/lib/mini-guard";
+import { measureComputeWall } from "@/lib/compute-wall";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -31,8 +32,17 @@ export async function GET(req: Request) {
     );
   }
   const allAlive = servicesAfter.every((s) => s.alive);
+  /* T75-c: מודעות-חומת-המחשוב — מצב-כנה מהיומן-הציבורי, בלי-לעכב את-הבקרת-החיים */
+  const computeWall = await measureComputeWall(6000).catch(() => null);
   return NextResponse.json(
-    { ok: allAlive, guardian: "next-server", force, services: servicesAfter, at: new Date().toISOString() },
+    {
+      ok: allAlive,
+      guardian: "next-server",
+      force,
+      services: servicesAfter,
+      computeWall,
+      at: new Date().toISOString(),
+    },
     { headers: { "cache-control": "no-store" } },
   );
 }

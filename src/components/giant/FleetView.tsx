@@ -111,8 +111,8 @@ export function FleetView() {
             <Ship className="size-5 text-amber-400" aria-hidden />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-amber-100">הצי — משתמשי-הרשת-הפנימיים</h2>
-            <p className="text-xs text-zinc-400">החיילים-והסוכנים-הם-המשתמשים-כהוכחה-ומטרה · ארנק-אמת · לדג'ר-אמת · אפס-תלות-חוץ</p>
+            <h2 className="text-lg font-semibold text-amber-100">הצי — משתמשי-הרשת (פנים-ראשון)</h2>
+            <p className="text-xs text-zinc-400">הוראת-הבעלים (גל-77): החיילים-הצי-והסוכנים הם-המשתמשים-ברשת — הוכחה-ומטרה · אין-חיפוש-לקוחות-חוץ · הפיתוח-כלפי-פנים</p>
           </div>
         </div>
         <button
@@ -124,6 +124,17 @@ export function FleetView() {
           רענון
         </button>
       </header>
+
+      {/* ─── משתמשי-הפנים-חיים — המדידה-הרשמית ─── */}
+      <section aria-label="משתמשי-הפנים-חיים" className="rounded-xl border border-amber-500/25 bg-amber-500/5 p-4">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs">
+          <span className="font-medium text-amber-200">משתמשי-פנים-חיים:</span>
+          <span>סוכנים-פעילים: <b className="text-emerald-300">{state ? state.agents.filter((a) => a.active).length : "—"}/{state?.agents.length ?? "—"}</b></span>
+          <span>ריצות/24ש׳: <b className="text-amber-300">{f2(state?.fleetTrades24h, 0)}</b></span>
+          <span>ווליום/24ש׳: <b className="text-amber-300">{f2(state?.fleetVol24h)} USDS</b></span>
+          <span>תקציב-מוקצה: <b className="text-zinc-200">{f2(state?.totalAllocated)} USDS</b></span>
+        </div>
+      </section>
 
       {/* ─── בריאות-הלולאה — מדידה-כנה ─── */}
       <section
@@ -172,10 +183,11 @@ export function FleetView() {
         <ul className="space-y-1.5 text-xs leading-relaxed text-zinc-400">
           <li>· כל-סוכן-מחזיק-ארנק-אמת (FLEET:&lt;agentId&gt;) — מהקופה, עם-רשומת-מקור-בלדג'ר. אין-הדפסה-סמויה.</li>
           <li>· הסוכנים-מחליטים-בעצמם: התאמת-מלאי-סביב-מחיר-הבריכה · לימיט-ליד-המחיר · ביטול-זקנים — בלי-יד-אנושית.</li>
-          <li>· כל-פעולה-עוברת-את-אותו-מנוע-אמת (עמלות · נעילות · מילויים · השפעת-מחיר) — משתמש-אמת בדיוק.</li>
+          <li>· כל-פעולה-עוברת-את-אותו-מנוע-אמת (עמלות · נעילות · מילויים · השפעת-מחיר) — המנוע-לא-מבחין-בין-משתמש-פנים-לכל-אחר: חוק-אחד-לכולם.</li>
           <li>· שירות-עצמי-מלא (גל-62): כל-סוכן-מציב-לימיט-עם-עיקול, מבטל-את-שלו, ורואה-רק-את-שלו — באסימון-הסוכן-שלו.</li>
           <li>· מינון-כנה: פקודה-עד-12 USDS · עד-2 לימיטים-פתוחים-לסוכן · מרווח-בין-פעולות-2–5 דק — לקוח-קמעונאי, לא-לוויתן.</li>
           <li>· הלולאה-איננה-תלויה-בשום-שירות-חוץ — גם-בלי-Binance הצי-ממשיך-לעבוד.</li>
+          <li>· דוקטרינת-פנים-ראשון: היכולות-מפותחות-כלפי-פנים — המסילות-משרתות-קודם-את-האוצר-והצבא; מסילות-ה-API-פתוחות-אך-אינן-היעד.</li>
         </ul>
       </section>
 

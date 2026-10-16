@@ -17,6 +17,7 @@ import {
   AGENT_CLAIMS, GAP_DIMENSIONS, GAP_VERDICT, GIANT_PRODUCTS,
   GIANTS_SEARCHED_AT, ROADMAP,
 } from "@/lib/giant/gap-data";
+import { measureComputeWall, type ComputeWallState } from "@/lib/compute-wall";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -49,6 +50,7 @@ export interface GapPayload {
     externalBidExists: boolean | null;
     internalPriceUsdsMu: number | null;
     code: CodeMeasurement | null;
+    computeWall: ComputeWallState | null;
   };
 }
 
@@ -117,6 +119,12 @@ export async function GET() {
     if (typeof a.verdict === "string") truthVerdict = a.verdict;
   } catch { /* כנה — נשאר הערך-הגס */ }
 
+  /* T75-c: מודעות-חומת-המחשוב — ההסבר-הכנה למיילי-canary (בדיקה-מתוזמנת, לא-תקלה) */
+  const computeWall = await measureComputeWall(6000).catch((e) => {
+    errors.push(`computeWall: ${e instanceof Error ? e.message : "שגיאה"}`);
+    return null;
+  });
+
   const payload: GapPayload = {
     ok: errors.length === 0,
     errors,
@@ -144,6 +152,7 @@ export async function GET() {
       externalBidExists,
       internalPriceUsdsMu,
       code,
+      computeWall,
     },
   };
 
