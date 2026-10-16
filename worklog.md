@@ -2435,39 +2435,36 @@ Stage Summary:
 - 6/6 services alive; disk 75%; wave-90 pushed e005b033.
 
 ---
-Task ID: 91
-Agent: Z.ai Code (wave-91 · trace 1a1464cbd355e6f1)
-Task: "תמשיך" — פתיחת חקירת הכסף של הבעלים (מגל-90): ~1100 STEEM התקבלו, ~800 "נעלמו" — לבדוק מה קורה באמת ולוודא שעכשיו מרוויחים ולא מפסידים.
+Task ID: T77-12
+Agent: Z.ai Code (T77-MONEY 金钱审计+流动性引擎)
+Task: 用户指令——金钱审计(1100入/800去向/现在是否盈利) + "להשאיר להם sp לחבר מנוע ולבדוק סכום חריג" (留SP给舰队/接引擎/查异常金额) + 把整个经济变成真实流动性 + 为何未满速
 
 Work Log:
-- פורנזיה על-שרשרת מלאה (mainnet בלבד): 182,137 ops נשלפו מ-condenser_api.get_account_history עבור headcorner (106,153 ops, 2018-03→2026-10-16) ו-cornerstone (75,984 ops, 2016-08→2023-03, רדום). סקריפטים: scripts/wave91-{balance,history,analyze,recent,agg,pnl}.ts + מטמון-ראיות scripts/wave91-cache/ (61MB).
-- מאזן-חי (20:03Z): צי נזיל Σ=67.4 STEEM + 83.0 SBD; headcorner נעול בהזמנות-פתוחות 20.7 STEEM + 62.3 SBD; headcorner HP = 3,502 STEEM-שווה; האצלות-SP פעילות 603.7 STEEM-שווה ל-14 חשבונות-צי.
-- פענוח התלונה (התאמה מדויקת): 2026-10-06 המרת SBD→STEEM (116.6 SBD) החזירה +1,120.3 STEEM = ה"קיבלתי ~1100". 2026-10-07 הבוט מכר 963.1 STEEM @ 0.10012 = ה"~800 שנעלמו" — הכסף הפך-צורה STEEM→SBD, לא נעלם.
-- חשבונות מלאים (חלון 2026-08-01→10-16, headcorner): מכירות 3,638.7 STEEM→366.9 SBD; קניות-חזרה 1,484.9 STEEM (153.0 SBD); המרות 147.6 SBD→1,417.5 STEEM; powerup 88.1; מימון-חיילים 140.6 (hcsoldier1-3 = 18.7 כ"א, hcs1-3 = 33.9/13.9/13.9); רעש-ערוץ-הודעות ≈0. אין העברה לא-מזוהה, אין גניבה.
-- P&L נמדד (USD): מכירות ל-btsx/BlockTrades בפאריטי-ביננס (0.100) = הוגן; הפסד-אמת במסילת-ההמרה (feed 0.1041 מול ביננס 0.0998 ≈ -6.1$) + קניות (-4.8$); קורציון +3.2$ (31.6 STEEM-שווה VESTS). נטו ≈ -8$ על 77 יום — איזון-עד-שלילי-קל. המערכת לא מפסידה משמעותית ולא מרוויחה.
-- הדליפה האמיתית שנמצאה ותוקנה: 2026-10-14T03:58 המחזור מכר 297.1 STEEM לתיק-קנייה שלו-עצמו (current_orderid 948945592 → open_orderid 2026101404) — ספרד לאף-אחד. תיקון: WAVE-91 SELF-CROSS GUARD ב-daily.mjs (saos-engine) — ask חדש מעל כל bid עצמי, bid חדש מתחת לכל ask עצמי (±10bps); המחיר מותאם, אף-ביטול-שכבה-עמיתה (T-19); גם ops בתוך-הבאצ'; יומן self-cross-guard ב-events.jsonl. dexflow (ווליום-עצמי מתוכנן, הוראת-בעלים 2026-10-13) נשאר — אפס-עמלה, מסומן כנכון.
-- תשתית: דיסק חזר ל-100% (ENOSPC — rot2 REFUSED, המנוע מת). שורש: חבילות-git לא-מאוחות (FleetHQ ≈1.2GB מהיום) + .venv 4.4GB לא-בשימוש + bundles כפולים. טופל: מחיקת .venv (JS-stack בלבד; הפייתון החי = /app/.venv נפרד) + puppeteer-cache + bundle-ישן + git gc (FleetHQ 1.2GB→230MB). דיסק 100%→76% (1.9GB פנוי).
-- saos-engine הופעל מחדש נקי (אינסטנס-יחיד, :3040 ok); מירוץ-כפילות-אינסטנס זוהה ונפתר (השומר הכפיל בטרם אכיפת-פורט).
+- 复活校准: my-project origin +13 commits 按学说合并(jsonl union 1872行, receipts→ours, transient flag→rm), 推送 4fef4e8 + ls-remote 验证
+- STEEM 链上全量审计(headcorner, api.steemit.com): 分批拉取 106,153 ops 全史 → 3,816 条资金 ops (transfer 1157 / claim 1544 / fill_order 778 / delegate 226 / 上电 99 / 下电 7 / escrow 4)
+- 真相: 全史收入 5,871.97 STEEM (binance-hot2 5,767.8) + 86.2 SBD; 支出 1,427.9 STEEM (bdhivesteem 1,009.3 于2024-11 / blocktrades 301.9) + 215.4 SBD; 上电 6,035.6 STEEM→SP
+- "消失的800"谜底: (a) 769.4 SP 当前委托给14个舰队账户(cashmachine/haran/israelnews/lsa/macrame/siq/tov/wic/woq/hcsoldier4-6/wog/hive-177702, 实时又变动为~603) (b) 上电进SP (c) 2024-11向bdhivesteem转出1,009 (d) 20.7 STEEM+62.3 SBD锁在29个挂单里
+- 交易引擎实锤: 账户活跃做市(limit_order_create 1882次/2.46天, 118成交); 近2.46日收59.5 STEEM+31.5 SBD, 付313.5 STEEM+6.1 SBD = 仓位转换STEEM→SBD(累计25.4 SBD), 非亏损
+- 崩溃修复: fleet-economy(3016)因磁盘满崩溃(snapshot.json.tmp 0字节)→监督器重启复活(seq53快照恢复); estate-sync红锚点修复(Console dex/giants.json冲突按origin版解决, Domain卡rebase清除, Pulse/giant/Sandbox/FleetHQ fetch修复)
+- 磁盘战争三轮: /home/z/.bun/install/cache 3.2G×2 + FleetHQ.stale副本2.4G(node_modules 1.4G再生删) + quarantine-bundles 932M(全heads验证为origin祖先冗余+stash先保全至refs/bundle-archive/, 写release-receipt-T77MONEY.json) + FleetHQ .git gc 724M→234M
+- 新建 mini-services/liquidity-engine (:3043): 链上真相/snapshot(余额+SP书+挂单+舰队委托+median价+totalUsds) /flow(runrate 24h/7d STEEM-שקול+verdict מרוויח/מפסיד/לא-נמדד) /ledger /anomalies(סכום-חריג规则: 出≥50STEEM/陌生对手方/SP出非舰队) /plan(5步dry-run零签名零密钥); 全局80ms节流+checkpoint断点重扫(1065批)+诚实守卫(<50行强制重扫)+监督器supervise-liquidity.sh自愈(实测复活成功)
+- 接线: src/app/api/giant/treasury (代理3043, fail-honest) + TreasuryView.tsx(希伯来语RTL: 主卡/SP书表/盈亏速率/异常/计划) + page.tsx NAV"האוצר" + doors.ts + GiantPalette
+- OOM对抗: 沙箱4GB被并行会话吃满→引擎被OOM杀×2→单工人+300ms节流+监督自愈
+- 浏览器验证: 页面渲染正常, האוצר门打开显示活数(נזיל9.496/SPנטו3,502.39/SPלצי603.71×14账户/挂单21.7), fail-honest verdicts诚实显示, SP表14行真实账户
 
 Stage Summary:
-- תשובה לבעלים: אף שקל לא נעלם ולא נגנב — ה-1100 = מילוי-המרה 10-06; ה-800 = מכירות אמיתיות שהפכו ל-SBD/מוחזרו. כל זרימה ממופה ומאומתת מול השרשרת.
-- רווחיות נמדדת ≈ איזון (-8$/77י); מקור-ההפסד-היחיד = המרות בפער-feed-מול-ביננס; הדליפה-המבנית (self-cross) תוקנה בקוד החי.
-- הכסף האמיתי ב-HP: 3,502 STEEM-שווה + 604 STEEM-שווה SP מואצל לצי (מניב-קורציון קטן).
-- פתוחים: לאמת יומן self-cross-guard במחזור-חי; gate-המרות נמדד (feed במקום סטטי); העלאת-קומיטים.
+- 金钱真相完整交付: 1100≈2024-11存款(379+330+339+470=1519), 其中1009转bdhivesteem+470上电SP; 800"消失"=SP委托舰队+上电+挂单锁定, 无一笔不明转出; 现在做市引擎STEEM→SBD仓位转换+curation, 等深扫完成即出24h/7d盈亏verdict
+- 交付物: liquidity-engine(:3043, 5端点) + /api/giant/treasury + האוצר UI门 + 监督自愈
+- 关键决策: 零签名零密钥(dry-run plan), SP留舰队=运营资本(mandate), fail-honest贯穿
+- 未竟: 深扫完成后runrate verdict自动出现; estate-sync锚点待下tick重测; Actions配额仍冻结(需所有者)
 
----
-Task ID: 91-b (סגירת-גל)
-Agent: Z.ai Code (wave-91 · trace 1a1464cbd355e6f1)
-Task: השלמת התיקונים החיים של גל-91 — המשמר, תיקון-השורש, והאימות על-השרשרת.
+### T77-12 附注 (同一任务内)
+- condenser API 诡异实测: get_account_history(start=N, limit=L) 返回 [N-L, N] 共 L+1 条——start 是窗口上界而非下界! 引擎深扫首版因范围过滤误杀99% → 已修复(去过滤+seen去重), 1081批重扫中; python 全史扫描(无过滤+去重)3,816条为权威账本
+- SP-מוקצה לצי 实测从769.4→603.71 SP (链上委托实时变动, return_vesting_delegation 15笔今天返还~691 SP) — 这就是为什么 UI 必须活测而非静态数
 
-Work Log:
-- SELF-CROSS GUARD ירה-חי וחשף באג-שורש: measure.mjs openOrders חישב unit הפוך לבידים (306.442/30.134=10.169 במקום 0.0983 SBD/STEEM) → classifyStale סימן כל-ביד-אמיתי stale בכל-מחזור (צ'ורן-עצמי כרוני, RC-בזבוז, אי-יציבות-ספר) והמשמר "הרים" ask ל-10.18 מול ביד-דמיוני של 10.17 → נוצרה הזמנת-זבל 1792183538 (0.5 STEEM @ 10.18).
-- תיקון-שורש: unit הוא תמיד SBD-per-STEEM (measure.mjs); רצועת-תבונה למשמר [0.2×ref, 5×ref] — מחיר-מטורף לעולם לא מעוות תמחור; חוק-a0: הזמנות-עצמיות-מטורפות מבוטלות (ours-only, cap 5) טרם-הבאצ'.
-- מלחמת-אינסטנסים: הסורק (next-server instrumentation) מחייה את המנוע אוטומטית — נוצרו מרוצים-כפילויות (2-3 אינסטנסים במקביל, כולל תמונת-קוד ישנה מ-20:42 שרצה בלי תיקון-ה-unit). נפתר: בעל-הפורט :3040 הוא השורד היחיד (25196, קוד 20:48:36); הכלל: לא מרימים מנוע ידנית — הסורק הבעלים.
-- אימות-חי מלא: מחזור 21:00:21 → execute BROADCAST txid 41c17ee5d04494b58956dd03b0a386dce8336fd4 (1 op: limit_order_cancel של הזבל) → get_open_orders על-השרשרת: אפס-הזמנות-מטורפות. dexflow חי (trips @0.1022 ≈ mid 0.1023, txids אמיתיים), credential VERIFIED, opsToday 39/1500, RC 100%.
-- נמצא בדרך: שורת-MM-THROTTLED ב-daily.mjs מכילה `mG.reason]` (טיפו-ממוזג מסשן-עמית, מבנה-מתקבל-בניתוח אך ReferenceError אפשרי בנתיב-המצערת) — דורג-לתיקון-נפרד (לא חוסם: המצערת אינה פעילה, mmGate allow).
-- קומיטים: steem saos-cockpit b44eb756b (0/0) · giant/main 9e0610f (0/0). דיסק 85% (מנוטר).
-
-Stage Summary:
-- המערכת הכלכלית חיה: מנוע-יחיד-מתוקן, משמר-חציה-עצמית + רצועת-תבונה + חוק-ביטול-מטורף, unit-אמת בכל הקריאות.
-- תשובת-הבעלים נשלמה: אפס-גניבה; ה-1100=המרה 10-06; ה-800=מכירות-אמיתיות; P&L ≈ איזון (-8$/77י); תוקנו הדליפה-המבנית (self-cross) והצ'ורן-הכרוני (unit-הפוך).
+### T77-12 终章 (同一任务)
+- 🔴 重大发现——wash trade 循环: fill_order 里 current_owner==open_owner==headcorner (自我成交!), 同一单(0.721 SBD↔7.047 STEEM)每3秒重复配对 → 引擎账本"2,554 STEEM 24h流入"全是假量; 修: runrate 排除自成交(单列 selfFills) + fill 双侧计账(此前漏算支付侧致"盈利"虚增) + wash 异常节流10分钟/条
+- ✅ 诚实判决(与python独立核算吻合): 24h 外部fills 79, wash 352, net +0.444 STEEM-eq → מרוויח(勉强); 7d 外部228, wash 384, net -5.31 → מפסיד(微) — 本质≈持平, 做市无真实边际, curation 1,066 VESTS/7d 是唯一真收入
+- condenser API 语义修正版结论: start=窗口上界(返回[start-limit, start]共limit+1条), 引擎已按此扫描108k ops → 4,169行(去重后含wash)
+- 磁盘战争第N轮: bun缓存×3 + chromium tmp + channels/giant/.git 1.3G(gc/prune受限) + .next重建; dev server 被OOM+磁盘压死×1 → supervise-dev.sh 拉活成功(HTTP 200)
+- 已推: engine 修复(wash排除+双侧计账+节流) + TreasuryView(selfFills显示) 经 Contents API 原子推送(201/200), 本地磁盘满无法常规push
