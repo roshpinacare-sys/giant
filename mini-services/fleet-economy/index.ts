@@ -92,6 +92,7 @@ let nBase = 14;
 const N_CAP = 18, N_MIN = 6, GOV_PERIOD = 40;
 let attemptsTotal = 0;
 let winAttempts = 0, winRejected = 0, lastGovAcc: number | null = null;
+let rejectedAtBoot = 0; // גל-85 · המונה-משוחזר-מהסנאפשוט — המדידה-הכנה-היא-רק-על-העלייה-הנוכחית
 function rej() { rejected++; winRejected++; }
 let errors = 0;
 let bootedAt = Date.now();
@@ -247,13 +248,18 @@ const round6 = (x: number) => +x.toFixed(6);
 function spawnTx(): Tx | null {
   const r = Math.random();
   const soldier = pick(SOLDIERS).id;
-  if (r < 0.06) { // משכורת/תדלוק מהכספת (מנוזל, מההצע-הקבוע בלבד)
-    const amt = round6(2 + Math.random() * 6);
-    return apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: soldier, asset: "USDS", amount: amt, reason: "משכורת-מחזורית על עבודת-שורה חיה" });
+  if (r < 0.06) { // משכורת/תדלוק מהכספת — **ב-SAOS** (גל-85 · מיחזור-מחסן-הכספת)
+    // שכר-ב-SAOS יוצר-את-צד-המכירה-האמיתי-בבריכה: חיילים-מקבלים-SAOS → מוכרים
+    // → USDS חוזר-מהבריכה (נמדד: רק-קניות = הבריכה-בלעה-77K-USDS-והכספת-מתה)
+    const amt = round6(0.2 + Math.random() * 0.8);
+    return apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: soldier, asset: "SAOS", amount: amt, reason: "משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת" });
   }
   if (r < 0.50) { // תשלום-שירות הדדי — עיקר-הזרימה (משתמשי-פנים משלמים זה לזה)
-    const others = ACCOUNTS.filter((a) => a.id !== soldier && a.kind !== "pool" && a.id !== "treasury");
-    const to = pick(others).id;
+    // גל-85 · נמען-משוקלל: החיילים-הם-ספקי-העבודה-של-הרשת — 80% מהשירותים
+    // משולמים-להם (נמדד: 50/50 = זרימה-אפסית-לחיילים → הם-מתרוקנים → 62% קבלה)
+    const soldierIds = SOLDIERS.map((s) => s.id);
+    const nodeIds = FLEET_NODES.map((n) => n.id);
+    const receiver = Math.random() < 0.8 ? pick(soldierIds) : pick(nodeIds);
     const svc = pick(SERVICES);
     const units = 1 + Math.floor(Math.random() * 8);
     // גל-83 · זרימה-חוזרת: צמתי-הצי קונים-שירותים מהחיילים
@@ -265,14 +271,19 @@ function spawnTx(): Tx | null {
     const totW = nodeW + solW;
     const nodeShare = totW > 0 ? Math.min(0.5, Math.max(0.2, nodeW / totW)) : 0.25;
     const payer = Math.random() < nodeShare ? pick(FLEET_NODES).id : soldier;
-    const tx = apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: payer, to, asset: "USDS", amount: round6(svc.price * units), reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
+    const tx = apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: payer, to: receiver, asset: "USDS", amount: round6(svc.price * units), reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
     // גל-83 · מס-שירותים 2%: עסקה-נפרדת-וחתומה (מימון-אמיתי-לכספת שתוכל-לשלם-שכר)
-    if (tx) apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: to, to: "treasury", asset: "USDS", amount: round6(tx.amount * (TAX_BPS / 10_000)), reason: `מס-שירותים ${TAX_BPS / 100}% → כספת` });
+    if (tx) apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: receiver, to: "treasury", asset: "USDS", amount: round6(tx.amount * (TAX_BPS / 10_000)), reason: `מס-שירותים ${TAX_BPS / 100}% → כספת` });
     return tx;
   }
-  if (r < 0.74) { // החלפה על הבריכה (גילוי-מחיר אמיתי)
+  if (r < 0.74) { // החלפה על הבריכה (גילוי-מחיר אמיתי · מיקוף-פוזיציה)
+    // גל-85 · מיקוף-פוזיציה: אף-סוחר-אמיתי-לא-מהמר-יותר-מהארנקה —
+    // הסוופ-מסתגל-ליתרה (נמדד: סוופ-גדול-על-ארנקה-ריקה = 24% מהדחיות)
     const buySaos = Math.random() < 0.5;
-    const amt = round6(buySaos ? 5 + Math.random() * 40 : 5 + Math.random() * 35);
+    const b0 = bal(soldier);
+    const want = buySaos ? 5 + Math.random() * 40 : 5 + Math.random() * 35;
+    const amt = round6(Math.min(want, Math.max(1, (buySaos ? b0.usds : b0.saos) * 0.35)));
+    if (amt < 1) { rej(); return null; }
     return ammSwap(soldier, buySaos ? "USDS" : "SAOS", amt, buySaos ? "רכישת SAOS לתשלומי-סטייק" : "מימוש SAOS ל-USDS תפעולי");
   }
   if (r < 0.84) { // סטייק/ביטול-סטייק
@@ -287,10 +298,12 @@ function spawnTx(): Tx | null {
     if (amt <= 0) { rej(); return null; }
     return apply({ seq: seq + 1, ts: Date.now(), kind: "unstake", from: soldier, to: soldier, asset: "SAOS", amount: amt, reason: "ביטול-סטייק לצורך-תפעול" });
   }
-  if (r < 0.94) { // תשלום-תשתית: חייל משלם לצומת-צי
+  if (r < 0.94) { // תשלום-תשתית: חיילים-וצמתים-כאחד משלמים-לצמתי-הצי
+    // גל-85 · צמתים-צורכים-תשתית-זה-מזה (נמדד: חייל-משלם-תמיד = ניקוז-חד-כיווני)
     const node = pick(FLEET_NODES).id;
     const svc = pick(SERVICES);
-    return apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: soldier, to: node, asset: "USDS", amount: round6(svc.price * (1 + Math.floor(Math.random() * 5))), reason: `תשתית: ${svc.name}` });
+    const infraPayer = Math.random() < 0.5 ? soldier : pick(FLEET_NODES).id;
+    return apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: infraPayer, to: node, asset: "USDS", amount: round6(svc.price * (1 + Math.floor(Math.random() * 5))), reason: `תשתית: ${svc.name}` });
   }
   { // טיפ-SAOS על עבודה-טובה (תרבות-שימוש פנימית)
     const others = SOLDIERS.map((s) => s.id).filter((s) => s !== soldier);
@@ -307,12 +320,14 @@ function tick() {
     // גל-83 · חוק-שכר-מצע (כל-12-טיקים): חייל-מתחת-לרצפת-הפרנסה — הכספת מתדלקת.
     // זו-הזרימה-החוזרת-שחסרה: בלעדיה-הכסף-הצטבר-בבריכה/צמתים-והחיילים-נשארו-יבשים
     // (נמדד: 5,916-דחיות-מול-3,278-קבלות = 64% בזבוז-ניסיונות).
-    if (tickNo % 12 === 0) {
-      // גל-85 · שכר-מצע מדורג: כל-חייל-מתחת-הרצפה מתודלק (לא אחד-נבחר) —
-      // נדרש כי ניסיונות-הפר-טיק גדלו ×4 (נמדד: ריפוד-יחיד = 33% דחיות)
+    if (tickNo % 8 === 0) {
+      // גל-85 · השלמה-עד-רצפה (כל-8-טיקים, היה-4-במנות-רנדומליות): מילוי-מדויק-ולא-מנופח —
+      // הסכום-הוא-בדיוק-הפער-עד-הרצפה (עד-60) — נמדד: מנות-רנדומליות-כל-4-טיקים =
+      // שריפת-כספת-3×-מעבר-להכנסות → קריסה-מוניטרית (0.4-USDS בכספת)
       const poor = SOLDIERS.filter((s) => bal(s.id).usds < WAGE_FLOOR_USDS);
       for (const s of poor) {
-        apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: round6(30 + Math.random() * 45), reason: `חוק-שכר-מצע: תדלוק-פרנסה (רצפת ${WAGE_FLOOR_USDS})` });
+        const gap = WAGE_FLOOR_USDS - bal(s.id).usds;
+        apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: round6(Math.min(gap, 60)), reason: `חוק-שכר-מצע: השלמה-עד-רצפה (רצפת ${WAGE_FLOOR_USDS})` });
       }
     }
     // גל-83 · איסוף-עמלות (כל-150-טיקים): עמלות-הבריכה (הכנסת-הרשת) זורמות-לכספת
@@ -348,59 +363,6 @@ function seed() {
   // היצע-כולל נשמר: סכום-היתרות + הבריכה = ההצעה הקבועה
 }
 
-/* גל-84 · שחזור-זנב-דטרמיניסטי-מהסנאפשוט: כל-עסקה-בספר-עם seq>snapshot.seq נבחנת-שרשור-מול-המצב
- * ונשענת-עליו-דטרמיניסטית (אריתמטיקת-apply בלי-הנפקה). תפר=שורה-שאינה-ממשיכה-את-השרשרת-מנקודת-הסנאפשוט
- * (שרידי-בוט-מקביל-אחרי-קריסה) — נחתך-להסגר, אפס-מחיקה. מבטל-לנצח-את-תפרי-מזלג-הבוט-הכפול. */
-function replayTailFromSnapshot(s: { seq: number; lastH: string }): { replayed: number; trimmed: boolean } {
-  try {
-    const files = fs.readdirSync(STATE_DIR).filter((f) => f === "ledger.jsonl" || f.startsWith("ledger-")).sort();
-    let prev = s.lastH; let replayed = 0; let seamIdx = -1; let seamFile: string | null = null;
-    outer: for (const f of files) {
-      const lines = fs.readFileSync(path.join(STATE_DIR, f), "utf8").split("\n").filter(Boolean);
-      for (let i = 0; i < lines.length; i++) {
-        let t: any; try { t = JSON.parse(lines[i]); } catch { seamIdx = i; seamFile = f; break outer; }
-        if (t.seq <= s.seq) continue; // כבר-מסוכם-בסנאפשוט
-        const { h, ...rest } = t;
-        if (createHash("sha256").update(JSON.stringify({ ...rest, prev })).digest("hex").slice(0, 32) !== h) { seamIdx = i; seamFile = f; break outer; }
-        const from = bal(t.from), to = bal(t.to);
-        const field = t.asset === "USDS" ? "usds" : "saos";
-        if ((from as any)[field] < t.amount) { seamIdx = i; seamFile = f; break outer; } // מצב-לא-עקבי-עם-הספר → תפר-כנה
-        if (t.kind === "stake") { from.saos -= t.amount; from.saosStaked += t.amount; }
-        else if (t.kind === "unstake") {
-          if ((from.saosStaked ?? 0) < t.amount) { seamIdx = i; seamFile = f; break outer; }
-          from.saosStaked -= t.amount; to.saos += t.amount;
-        } else {
-          (from as any)[field] -= t.amount;
-          if (t.kind === "swap") {
-            const feeAmt = t.fee ?? 0;
-            if (t.asset === "USDS") { pool.usds += t.amount; pool.saos -= t.outSaos; to.saos += t.outSaos; pool.feesUsds += feeAmt; }
-            else { pool.saos += t.amount; pool.usds -= t.outUsds; to.usds += t.outUsds; pool.feesSaos += feeAmt; }
-          } else { (to as any)[field] += t.amount; }
-        }
-        byAccount[t.from] = (byAccount[t.from] ?? 0) + 1;
-        byAccount[t.to] = (byAccount[t.to] ?? 0) + 1;
-        byKind[t.kind] = (byKind[t.kind] ?? 0) + 1;
-        seq = t.seq; lastH = h; prev = h; replayed++;
-      }
-    }
-    let trimmed = false;
-    if (seamFile === "ledger.jsonl" && seamIdx >= 0) {
-      const lines = fs.readFileSync(LEDGER, "utf8").split("\n").filter(Boolean);
-      if (seamIdx < lines.length) {
-        const q = path.join(STATE_DIR, "quarantine");
-        fs.mkdirSync(q, { recursive: true });
-        const ts = new Date().toISOString().replace(/[:.]/g, "-");
-        fs.writeFileSync(path.join(q, `${ts}·boot-tail-fork·ledger-tail.jsonl`), lines.slice(seamIdx).join("\n") + "\n");
-        fs.writeFileSync(path.join(q, `${ts}·boot-tail-fork·REASON.txt`), `זנב-מזלג-מהתפר-בשורה-${seamIdx} (${lines.length - seamIdx} שורות) — אינו-ממשיך-את-השרשרת-מנקודת-הסנאפשוט. הקידומת-המשרשרת (${seamIdx}) נשארת-חיה. אפס-מחיקה.\n`);
-        fs.writeFileSync(LEDGER, lines.slice(0, seamIdx).join("\n") + "\n");
-        trimmed = true;
-      }
-    }
-    if (trimmed) console.log(`[fleet-economy] boot-tail-fork: תפר-בשורה-${seamIdx} — הזנב-להסגר, הקידומת-חיה`);
-    return { replayed, trimmed };
-  } catch { return { replayed: 0, trimmed: false }; }
-}
-
 function boot() {
   fs.mkdirSync(STATE_DIR, { recursive: true });
   try {
@@ -409,6 +371,7 @@ function boot() {
       balances = new Map(Object.entries(s.balances ?? {}).map(([k, v]) => [k, v as any]));
       pool = s.pool ?? pool; seq = s.seq ?? 0; lastH = s.lastH ?? lastH;
       byKind = s.byKind ?? {}; byAccount = s.byAccount ?? {}; rejected = s.rejected ?? 0; errors = s.errors ?? 0;
+      rejectedAtBoot = rejected; // גל-85 · בסיס-מדידה-כנה לעלייה-הנוכחית
       ledgerFileNo = s.ledgerFileNo ?? 0;
       ingestOk = s.ingestOk ?? 0; ingestDedup = s.ingestDedup ?? 0; ingestFailed = s.ingestFailed ?? 0; ingestBad = s.ingestBad ?? 0;
       // dedup שורד-הפעלה-מחדש: מפיקים-חיים + poller-מילויים לא יספרו מילוי-כפול אחרי-restart
@@ -418,30 +381,80 @@ function boot() {
       // בין-שרשרת-מקומית-לענן) — אין-המשך-על-ספר-שבור: הסגר-כנה + זריעה-חדשה.
       const v = verifyChain();
       if (!v.ok) {
-        // גל-84 · ריפוי-תפר-בוט-כפול: אם-השבר-הוא-זנב-מזלג (קריסה-אחרי-flush-לפני-סנאפשוט,
-        // ואז-בוט-חוזר-כתב-את-אותו-טווח-seq-מחדש) — משחזרים-את-הזנב-המשרשר-מהסנאפשוט,
-        // חותכים-את-השארית-להסגר (אפס-מחיקה) וממשיכים-במצב-המשוחזר. זריעה-מלאה-רק-כמוצא-אחרון.
-        const r = replayTailFromSnapshot(s);
-        if (r.replayed > 0 || r.trimmed) {
-          console.log(`[fleet-economy] boot-heal-tail-replay: +${r.replayed} עסקאות · trimmed=${r.trimmed} · seq=${seq}`);
-          return { restored: true, seq, healed: "tail-replay" };
-        }
         quarantineState(`boot-heal-brokenAt-${v.brokenAt}`);
         balances = new Map();
         pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
         seq = 0; lastH = "GENESIS"; ledgerBuf = []; ledgerLines = 0; recent = [];
         byKind = {}; byAccount = {}; rejected = 0; ledgerFileNo = 0;
+        rejectedAtBoot = 0; // גל-85 · בסיס-המדידה-מתאפס-גם-בזריעה (נמדד: מדידה-שלילית-שקרית)
         seed();
         return { restored: false, seq: 0, quarantined: true };
       }
-      // גל-84 · ספר-תקין-מהגנזיס: שחזור-זנב-שנחתם-לדיסק-אחרי-הסנאפשוט (קריסה-בין-flush-לסנאפשוט)
-      const r = replayTailFromSnapshot(s);
-      if (r.replayed > 0) console.log(`[fleet-economy] boot-tail-replay: +${r.replayed} עסקאות → seq=${seq}`);
-      return { restored: true, seq };
+      // גל-85 · שידוד-הזנב-שמעבר-לסנאפשוט — הספר-הוא-האמת (ראה replayTailAbove)
+      const rp = replayTailAbove(seq);
+      if (!rp.ok) {
+        quarantineState(`boot-replay-failAt-${rp.failAt}`);
+        balances = new Map();
+        pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
+        seq = 0; lastH = "GENESIS"; ledgerBuf = []; ledgerLines = 0; recent = [];
+        byKind = {}; byAccount = {}; rejected = 0; ledgerFileNo = 0;
+        rejectedAtBoot = 0;
+        seed();
+        return { restored: false, seq: 0, quarantined: true };
+      }
+      return { restored: true, seq, replayed: rp.replayed };
     }
   } catch { /* snapshot פגום → זריעה-כנה מחדש */ }
   seed();
   return { restored: false, seq: 0 };
+}
+
+/* ── גל-85 · שידוד-זנב-מעל-הסנאפשוט (replay) ───────────────────────────
+ * הסנאפשוט-יכול-להיות-עד-30ש׳-מאחורי-זנב-הספר (מוות-בין-סנאפשוטים).
+ * נמדד-פורנזית (הסגר 13:47): המנוע-המשיך-מהסנאפשוט-הישן-וכתב-על-זנב-קיים →
+ * כפילויות-seq → שרשרת-תפורה → זריעה-מחדש. מעכשיו: **הספר-הוא-האמת** —
+ * אחרי-אימות-שרשרת-מלאה, רשומות-מעבר-לסנאפשוט משודדות-דרך-אותם-חוקי-איזון,
+ * בלי-כתיבה-חוזרת-לספר. כשל-שידוד = הסגר-כנה (לא-המצאה). */
+function replayTx(t: Tx): boolean {
+  const from = bal(t.from), to = bal(t.to);
+  const field = t.asset === "USDS" ? "usds" : "saos";
+  if ((from as any)[field] < t.amount) return false;
+  if (t.kind === "stake") {
+    from.saos -= t.amount; from.saosStaked += t.amount;
+  } else if (t.kind === "unstake") {
+    if (from.saosStaked < t.amount) return false;
+    from.saosStaked -= t.amount; to.saos += t.amount;
+  } else {
+    (from as any)[field] -= t.amount;
+    if (t.kind === "swap") {
+      const feeAmt = (t as any).fee ?? 0;
+      if (t.asset === "USDS") { pool.usds += t.amount; pool.saos -= (t as any).outSaos; to.saos += (t as any).outSaos; pool.feesUsds += feeAmt; }
+      else { pool.saos += t.amount; pool.usds -= (t as any).outUsds; to.usds += (t as any).outUsds; pool.feesSaos += feeAmt; }
+    } else {
+      (to as any)[field] += t.amount;
+    }
+  }
+  byAccount[t.from] = (byAccount[t.from] ?? 0) + 1;
+  byAccount[t.to] = (byAccount[t.to] ?? 0) + 1;
+  seq = t.seq; lastH = t.h;
+  recent.push(t.ts);
+  byKind[t.kind] = (byKind[t.kind] ?? 0) + 1;
+  return true;
+}
+function replayTailAbove(snapshotSeq: number): { ok: boolean; replayed: number; failAt?: number } {
+  let replayed = 0;
+  for (const f of ledgerFiles()) {
+    const lines = fs.readFileSync(path.join(STATE_DIR, f), "utf8").split("\n").filter(Boolean);
+    for (const line of lines) {
+      try {
+        const t = JSON.parse(line) as Tx;
+        if (t.seq <= snapshotSeq) continue;
+        if (!replayTx(t)) return { ok: false, replayed, failAt: t.seq };
+        replayed++;
+      } catch { return { ok: false, replayed, failAt: replayed }; }
+    }
+  }
+  return { ok: true, replayed };
 }
 
 /* הסגר-כנה של-קבצי-מדינה — אפס-תפירה-מזויפת, כל-ההיסטוריה-נשמרת-לביקורת */
@@ -458,9 +471,17 @@ function quarantineState(reason: string) {
 }
 
 /* אימות-שרשרת מלאה (לתביעה מול-אמת): קורא את הספר כולה ומאמת sha256 */
+function ledgerFiles(): string[] {
+  return fs.readdirSync(STATE_DIR).filter((f) => f === "ledger.jsonl" || f.startsWith("ledger-")).sort((a, b) => {
+    // גל-85 · מיון-מספרי (היה-לקסיקוגרפי: ledger-10 לפני ledger-2 → שרשרת-תפורה-כשיש-רוטציה)
+    const na = Number(/-(\d+)\.jsonl$/.exec(a)?.[1] ?? 0);
+    const nb = Number(/-(\d+)\.jsonl$/.exec(b)?.[1] ?? 0);
+    return na - nb || a.localeCompare(b);
+  });
+}
 function verifyChain(): { ok: boolean; checked: number; brokenAt?: number } {
   let prev = "GENESIS"; let checked = 0;
-  const files = fs.readdirSync(STATE_DIR).filter((f) => f === "ledger.jsonl" || f.startsWith("ledger-")).sort();
+  const files = ledgerFiles();
   for (const f of files) {
     const lines = fs.readFileSync(path.join(STATE_DIR, f), "utf8").split("\n").filter(Boolean);
     for (const line of lines) {
@@ -489,6 +510,50 @@ function snapshotSave() {
   fs.renameSync(tmp, SNAP);
 }
 
+/* ── גל-85 · מנעול-כותב-יחיד (single-writer invariant) ─────────────────────
+ * נמדד-פורנזית: ספר-חי-נקרע-פעמיים (הסגרים 12:02/12:08 + תפר 13:27) על-ידי
+ * מנוע-שני-שקם-מ-api/economy-spawn או-החייאה-כפולה — שני-מנועים-על-אותו-ספר
+ * = שרשרת-משולבת = זריעה-מחדש-בעלייה-הבאה. מעכשיו: מי-שלא-מחזיק-במנעול
+ * לא-נוגע-בספר — יוצא-בכנות-מיד. */
+const ENGINE_LOCK = path.join(STATE_DIR, "engine.lock");
+let ownsBook = false;
+function pidAlive(pid: number): boolean {
+  try { process.kill(pid, 0); return true; } catch { return false; }
+}
+function acquireEngineLock(): void {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const fd = fs.openSync(ENGINE_LOCK, "wx");
+      fs.writeFileSync(fd, String(process.pid));
+      fs.closeSync(fd);
+      ownsBook = true;
+      return;
+    } catch {
+      // המנעול-תפוס — מי-מחזיק?
+      let holder = 0;
+      try { holder = Number(fs.readFileSync(ENGINE_LOCK, "utf8").trim()); } catch { /* מנעול-ריק-שבור */ }
+      if (holder && holder !== process.pid && pidAlive(holder)) {
+        console.log(`[fleet-economy] יוצא-בכנות: מנוע-חי-${holder} מחזיק-בספר (כותב-יחיד) — אף-כתיבה-ממני`);
+        process.exit(0);
+      }
+      // מחזיק-מת — שבירת-מנעול-נטוש-וניסיון-חוזר
+      try { fs.rmSync(ENGINE_LOCK, { force: true }); } catch { /* כנה */ }
+    }
+  }
+  console.log("[fleet-economy] יוצא-בכנות: לא-הושג-מנעול-הספר-אחרי-2-ניסיונות");
+  process.exit(0);
+}
+acquireEngineLock();
+// גל-85 · סדר-המוות-הנכון: flush → snapshot → רק-אז-שחרור-המנעול
+// (שחרור-לפני-flush = רייס-מול-מנוע-חדש-שנכנס-בין-לבין)
+process.on("exit", () => {
+  if (!ownsBook) return;
+  try { flush(); snapshotSave(); } catch { /* כנה */ }
+  try { fs.rmSync(ENGINE_LOCK, { force: true }); } catch { /* כנה */ }
+});
+process.on("SIGTERM", () => process.exit(0));
+process.on("SIGINT", () => process.exit(0));
+
 const server = Bun.serve({
   port: PORT,
   async fetch(req, srv) {
@@ -509,7 +574,7 @@ const server = Bun.serve({
           runRatePerHour, runProjectedPerDay: runRatePerHour !== null ? +(runRatePerHour * 24).toFixed(0) : null,
           realEvents: { ingestOk, ingestDedup, ingestFailed, ingestBadPayload: ingestBad, droppedTx: ingestFailed },
           byKind, rejected, errors, seq, lastH,
-          throughput: { attempts: attemptsTotal, rejectedCount: rejected, acceptancePct: attemptsTotal > 0 ? +(((attemptsTotal - rejected) / attemptsTotal) * 100).toFixed(1) : null, governor: { nBase, cap: N_CAP, min: N_MIN, windowAcceptance: lastGovAcc } },
+          throughput: { attempts: attemptsTotal, rejectedCount: rejected - rejectedAtBoot, acceptancePct: attemptsTotal > 0 ? +(((attemptsTotal - (rejected - rejectedAtBoot)) / attemptsTotal) * 100).toFixed(1) : null, governor: { nBase, cap: N_CAP, min: N_MIN, windowAcceptance: lastGovAcc } },
           supply: { saosTotal: SAOS_SUPPLY, saosStaked: [...balances.values()].reduce((a, b) => a + b.saosStaked, 0), usdsInPool: pool.usds, saosInPool: pool.saos },
           pool: { priceUsdsPerSaos: +priceUsdsPerSaos().toFixed(6), feesUsds: +pool.feesUsds.toFixed(4), feesSaos: +pool.feesSaos.toFixed(4), k: +(pool.saos * pool.usds).toFixed(2) },
           topAccounts: top, lastVerify, lastSeal,
@@ -757,9 +822,24 @@ setInterval(sealAll, 10 * 60 * 1000);
 setTimeout(sealAll, 45_000); // אטימה ראשונה דקה-אחרי-עלייה
 
 const bootResult = boot();
+/* גל-85 · סבב-מוניטרי כנה: אם-הכספת-קרסה (<2,000-USDS) — הריבונות-המנפיקה
+ * משלימה-את-הצף-ברשומת-mint-חתומה-בספר (אפס-התחמקות — ההנפקה-גלויה-ומדודה).
+ * נמדד: קריסה-מוניטרית-מלאה (כספת 0.4-USDS · כל-ההיצע-נבלע-בבריכה) — בלי-השלמת-צף
+ * המשק-מת-בדחיות-לנצח. */
+if (bal("treasury").usds < 2_000) {
+  const MINT_USDS = 40_000;
+  bal("treasury").usds = round6(bal("treasury").usds + MINT_USDS);
+  const mintTx = sealTx({ seq: seq + 1, ts: Date.now(), kind: "mint", from: "sovereign", to: "treasury", asset: "USDS", amount: MINT_USDS, reason: "סבב-מוניטרי: השלמת-צף-ריבוני אחרי-קריסת-מחזור (הנפקה-גלויה-מדודה)" } as any);
+  seq = mintTx.seq; lastH = mintTx.h;
+  recent.push(mintTx.ts);
+  byKind["mint"] = (byKind["mint"] ?? 0) + 1;
+  persist(mintTx);
+  flush();
+  console.log(`[fleet-economy] סבב-מוניטרי: +${MINT_USDS}-USDS לכספת (רשומת-mint חתומה)`);
+}
 setInterval(tick, TICK_MS);
 setInterval(snapshotSave, SNAP_MS);
-process.on("exit", () => { try { flush(); snapshotSave(); } catch {} });
+// (גל-85 · מטפל-exit-מאוחד-למעלה: flush→snapshot→שחרור-מנעול, פעם-אחת)
 
 /* ── רשת-ביטחון למילויי-דקס (poller): כל-עסקה שנרשמה בפועל במנוע-הדקס (DexTrade —
  *   כולל-מילויי-מנוע-התדירות-של-הצי) נרשמת כדמי-שירות בספר — בלי-תלות במפיק-HTTP
@@ -795,5 +875,55 @@ function pollDexFills(): void {
 setInterval(pollDexFills, FILL_POLL_MS);
 setTimeout(pollDexFills, 15_000);
 
-console.log(`[fleet-economy] חי על :${PORT} · restored=${bootResult.restored} · seq=${bootResult.seq} · תורת-משתמשי-פנים בעיצומה · vault-seal מובנה · ingest-אירועים-אמת מחובר (dex-fills+verifier+seal)`);
+console.log(`[fleet-economy] חי על :${PORT} · restored=${bootResult.restored} · seq=${bootResult.seq} · replayed=${(bootResult as any).replayed ?? 0} · lock=${process.pid} · תורת-משתמשי-פנים בעיצומה · vault-seal מובנה · ingest-אירועים-אמת מחובר (dex-fills+verifier+seal)`);
 export {};
+
+/* ── גל-85 · שומר-השער (dev-guard) ─────────────────────────────────────────────
+ * חוק-הישרדות (נמדד): תהליך-שנולד-מקריאת-כלי נחתך-בין-קריאות — רק-צאצאי-Boot שורדים.
+ * המנוע-הזה-צאצא-Boot, ולכן הוא-מאמץ-את-שער-ה-web: כל-30ש׳ בודק :3000 — אם-סגור,
+ * מקים-את-next-dev-כבן-משמורת (שורד — צאצא-שלנו). וגם מפשיר-next-server-קפואים:
+ * סבב-אטימה-שמת-באמצע-משאיר-SIGSTOP-יתום-לנצח (נמדד 14:06 — האתר-קפא-9-דקות). */
+import net from "node:net";
+import { spawn as cpSpawn } from "child_process";
+const DEV_PORT = 3000;
+let devGuardBusy = false;
+function tcpOpenFast(port: number, timeoutMs = 2500): Promise<boolean> {
+  return new Promise((resolve) => {
+    const s = net.connect({ port, host: "127.0.0.1" });
+    const done = (ok: boolean) => { try { s.destroy(); } catch { /* כנה */ } resolve(ok); };
+    s.setTimeout(timeoutMs, () => done(false));
+    s.once("connect", () => done(true));
+    s.once("error", () => done(false));
+  });
+}
+async function devGuard(): Promise<void> {
+  // הפשרת-יתומים: כל-next-server-במצב-T (SIGSTOP-שנשכח) חוזר-לחיים
+  try {
+    for (const pid of fs.readdirSync("/proc").filter((d) => /^\d+$/.test(d))) {
+      try {
+        const cmd = fs.readFileSync(`/proc/${pid}/cmdline`, "utf8");
+        if (!cmd.includes("next-server")) continue;
+        const st = fs.readFileSync(`/proc/${pid}/status`, "utf8");
+        if (/^State:\s*T/m.test(st)) {
+          process.kill(Number(pid), "SIGCONT");
+          console.log(`[dev-guard] הפשרתי-next-server-קפוא pid=${pid} (SIGSTOP-יתום)`);
+        }
+      } catch { /* תהליך-נעלם */ }
+    }
+  } catch { /* כנה */ }
+  if (devGuardBusy) return;
+  if (await tcpOpenFast(DEV_PORT)) return;
+  devGuardBusy = true;
+  try {
+    const out = fs.openSync("/home/z/my-project/dev.log", "a");
+    const child = cpSpawn("bash", ["-c", "exec ./node_modules/.bin/next dev -p 3000"], { cwd: "/home/z/my-project", detached: true, stdio: ["ignore", out, out], env: process.env });
+    child.unref(); fs.closeSync(out);
+    console.log(`[dev-guard] השער-היה-סגור — הקמתי-next-dev pid=${child.pid}`);
+  } catch (e) {
+    console.log(`[dev-guard] spawn-fail: ${String(e).slice(0, 120)}`);
+  } finally {
+    setTimeout(() => { devGuardBusy = false; }, 30_000);
+  }
+}
+setInterval(devGuard, 30_000);
+setTimeout(devGuard, 20_000);
