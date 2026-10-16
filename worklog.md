@@ -2223,3 +2223,25 @@ Stage Summary:
 - לקח-שורש: כל-git-על-מאגר-חי = ניתוח-ת-מדינה; המנגנונים-החדשים (hooks+anchor+replay+heal) הופכים-את-התפר-מקרע-חוזר-לנקודת-ריפוי-אוטומטית.
 - פתוח: producerDropped http-404 (235-אירועים) — מפיק-האירועים-האמתיים-פונה-לנתיב-מת; לרפאות-בגל-הבא.
 - **עכשיו-חוזרים-לשליחות-הבעלים**: אודיט-הלימיטים-של-הצי (הוכחת-STALE-CURE-10:49 · DEAD-DELEGATION-14:32 · יתרות-תחומות).
+---
+Task ID: 80
+Agent: zai-main (trace 1a14477290f781e1 · "תמשיך" + הוראת-בעלים על טוקני-הסוכנים)
+Task: "בתיקיה של steem בסודות שלה בagents יש טוקנים עם הרשאת ניהול — וודא שהם גם יהיו בכספת אטומית לשימוש הריבונות אבל בצורה מפוקחת"
+
+Work Log:
+- **מציאת-התיקיה**: repo `roshpinacare-sys/steem` (פרטי · לא-היה-checkout מקומי → clone ל-estate) · הסודות שבו (Actions): GH_PAT · MAIN_KEY · ROT2_FLEET_KEYS · ROT_ROSTER · STEEM_VAULT_PASSES · ZIP_PAT · הכספת-האטומית = `vault-home` (התגלה-ונקלט: wraps-registry · keys.env-25-סלוטים · intake).
+- **שרשרת-פתיחה מדודה (אפס-סודות-בפלט)**: vault-home נפתח דרך רישום-ה-wraps (P-מאסטר · T-47-export-trap נתפס-שוב) → נמצא שהסוד ROT2_FLEET_KEYS = כשרות-הצי (16-חשבונות) — החומר נשלף **מהיסטוריית-git של steem** (`bc2200b27 agent/vault/KEYS-ROT2-2026-10-13.zip.enc` + meta-v4) → נפתח (aes-256-cbc pbkdf2-**300000** — הנוסחה-הביתית; 200000-נכשל-כנה) → **inner-sha תואם meta-v4 ✓**.
+- **שיפוט-שרשרת חי (השרשרת-השופט-היחיד)**: ROT2 **41/41 LIVE** — 12-steem (9-quads ×active/memo/posting + 3-hcsoldier ×active/posting) + 4-hive (×2) · גזירת-pubkeys מה-WIFs תואמת-רשום 41/41 · vault-slots: STEEM_*_A כולם LIVE · **STEEM_*_B כולם STALE (מדווח-כנה, לא-נמחק)** · HEAD_CORNER_MASTER LIVE:owner (4-סדרי-גזירה × 4-תפקידים).
+- **הכשרות-ניהול בכספת האטומית**: `fleet-rot2.keys.enc` אטום (house-formula · roundtrip-MATCH) + `vault-chain/rot2-meta.json` + **`supervise/`** — שער-הפיקוח:
+  * **שער-שלושה-סיכות fail-closed**: zip-sha + material-json-sha + roster-semantic — **נתפס-עובד-באמת**: שתי-פתיחות-נדחו (SHA-PIN-DRIFT — zip אינו-דטרמיניסטי/מטמיע-mtime) → repin משולש עם קשירה-למדידת-הפתיחה (json-sha 7ac4f7fa…=נמדד-בפתיחה-הראשונה) → אומת.
+  * **ספר-פיקוח append-only**: `vault-chain/CUSTODY-LEDGER.jsonl` — כל-open/verify/deploy/refusal רשום (טביעות-אצבע-בלבד).
+  * **שיפוט-חי לפני-כל-שימוש**: `verify` → **ALL-LIVE 41/41** + קבלה-חתומת-זמן ב-`vault-chain/receipts/`.
+  * `deploy` → material 0600 ל-`--out`-בלבד, מעולם-לא-stdout.
+- **גילוי-מדוד שמפריך-טענת-worklog**: **GITHUB_PAT-שבכספת בעל admin-write מלא** (secrets-list 200 על steem/saos-runtime/Domain · PUT-secret 201 + DELETE 204 על vault-home בפרוב-חפ-ומחיקה) — פריט-פתוח "Administration-write-חסר-לפאט" **נסגר-ככוזב**.
+- **אינטגרציית-הקנון תחת-כותב-חי**: rebase-על-origin (ענן-התקדם: איחוי-שלוחות + worklog-T77) → 4-קונפליקטים-בקבצי-מדינה → **חוק-הכותב-החי** (הפעם-הוחל-נכון): ledger-מקומי-חי ניצן (928→1381-שורות · seq-עולה-חי · אפס-סימני-קונפליקט) · שרשרת-ה-3370-של-הענן נשמרת-בהיסטוריה (a17f03a) · boot-verify-הטרי-מהענן ניצן · stash-מיושן-נזרק-כנה.
+- **תשתית-חיה**: reception:3000 נפל במהלך-ה-rebase → הוחייה (200 + /api/organism 200) → **כל-ה-10-פורטים חיים** (3000/3002/3010/3011/3016/3021/3036/3040/3041/3042).
+- **היגיינה**: כל-חומר-העבודה-הזמני (/tmp/vw — material · keys.env · meta-v4 · קבצים-פתוחים) **נוגז-ונמחק** · סריקת-גלים-על-העץ-החתום של vault-home: **8-קבצי-custody נקיים מחומר-מפתח** · vault-home push **15f5bd6 remote==local (מאומת ls-remote)**.
+
+Stage Summary:
+- **טוקני-הסוכנים עם הרשאת-הניהול (ROT2 · 16-חשבונות · 41-סלוטים · 41/41-LIVE-מדוד) — בכספת האטומית, בפיקוח**: שורדים-כל-מחיקת-sandbox (ciphertext-בgit-פרטי + wraps) · נפתחים-רק-דרך-שער-משולש-סיכות-fail-closed · כל-מגע-רשום-בספר · השרשרת-נשפטת-לפני-כל-שימוש · אפס-חומר-גלוי-מעולם.
+- פתוחים: STEEM_*_B-סטיים (ממתין-הכרעת-בעלים: סיבוב-B-או-מחיקת-סלוטים) · GEN-3 (HEADCORNER-GEN3.enc) אטום-בסנדבוקס-זה (טבעת-shard ריקה; GEN3_SHARD_B64-בכספת-לא-פתר-אותו — כנה) · סנכרון-מנועים: צריכת-`deploy-fleet-env.sh` בתוך-לולאת-המסחר של-הצי (החיבור-הבא-הטבעי).
