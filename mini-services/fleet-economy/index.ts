@@ -260,7 +260,7 @@ function spawnTx(): Tx | null {
     // משולמים-להם (נמדד: 50/50 = זרימה-אפסית-לחיילים → הם-מתרוקנים → 62% קבלה)
     const soldierIds = SOLDIERS.map((s) => s.id);
     const nodeIds = FLEET_NODES.map((n) => n.id);
-    const receiver = Math.random() < 0.8 ? pick(soldierIds) : pick(nodeIds);
+    const receiver = Math.random() < 0.9 ? pick(soldierIds) : pick(nodeIds); // גל-86b: 90% מהשירותים-לחיילים
     const svc = pick(SERVICES);
     const units = 1 + Math.floor(Math.random() * 8);
     // גל-83 · זרימה-חוזרת: צמתי-הצי קונים-שירותים מהחיילים
@@ -270,7 +270,7 @@ function spawnTx(): Tx | null {
     for (const nd of FLEET_NODES) { const b = bal(nd.id); nodeW += b.usds + b.saos; }
     for (const sl of SOLDIERS) { const b = bal(sl.id); solW += b.usds + b.saos; }
     const totW = nodeW + solW;
-    const nodeShare = totW > 0 ? Math.min(0.5, Math.max(0.2, nodeW / totW)) : 0.25;
+    const nodeShare = totW > 0 ? Math.min(0.8, Math.max(0.5, nodeW / totW)) : 0.6; // גל-86b: הצמתים-משלמים-יותר (צרכני-התשתית)
     const payer = Math.random() < nodeShare ? pick(FLEET_NODES).id : soldier;
     const tx = apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: payer, to: receiver, asset: "USDS", amount: round6(svc.price * units), reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
     // גל-83 · מס-שירותים 2%: עסקה-נפרדת-וחתומה (מימון-אמיתי-לכספת שתוכל-לשלם-שכר)
@@ -280,7 +280,7 @@ function spawnTx(): Tx | null {
   if (r < 0.74) { // החלפה על הבריכה (גילוי-מחיר אמיתי · מיקוף-פוזיציה)
     // גל-85 · מיקוף-פוזיציה: אף-סוחר-אמיתי-לא-מהמר-יותר-מהארנקה —
     // הסוופ-מסתגל-ליתרה (נמדד: סוופ-גדול-על-ארנקה-ריקה = 24% מהדחיות)
-    const buySaos = Math.random() < 0.5;
+    const buySaos = Math.random() < 0.35; // גל-86b: פחות-ניקוז-USDS-לבריכה
     const b0 = bal(soldier);
     const want = buySaos ? 5 + Math.random() * 40 : 5 + Math.random() * 35;
     const amt = round6(Math.min(want, Math.max(1, (buySaos ? b0.usds : b0.saos) * 0.35)));
@@ -336,7 +336,7 @@ function tick() {
       for (const s of poor) {
         if (spent >= budget) break; // אין-תקציב — לא מנסים כדי לא לייצר דחיות-כנות
         const gap = WAGE_FLOOR_USDS - bal(s.id).usds;
-        const amt = round6(Math.min(gap, 60, budget - spent));
+        const amt = round6(Math.min(gap, 120, budget - spent)); // גל-86b: 60→120 בקצב-6.7דק
         if (amt < 1) break;
         const r = apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: amt, reason: `חוק-שכר-מצע: השלמה-עד-רצפה (רצפת ${WAGE_FLOOR_USDS})` });
         if (r) spent += amt;
@@ -403,9 +403,9 @@ function tick() {
       for (const nd of FLEET_NODES) {
         const b = bal(nd.id);
         if (b.usds > 500) {
-          const levy = round6(Math.min(b.usds - 500, b.usds * 0.01));
+          const levy = round6(Math.min(b.usds - 500, b.usds * 0.02)); // גל-86b: 1%→2% — הצמתים-העשירים-מממנים-מהר-יותר
           if (levy >= 0.5) {
-            apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: nd.id, to: "treasury", asset: "USDS", amount: levy, reason: "דיבידנד-תשתית 1% → כספת (מעגל-החזר גל-86)" });
+            apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: nd.id, to: "treasury", asset: "USDS", amount: levy, reason: "דיבידנד-תשתית 2% → כספת (מעגל-החזר גל-86b)" });
           }
         }
       }
