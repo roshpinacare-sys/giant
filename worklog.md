@@ -2457,3 +2457,18 @@ Stage Summary:
 - שוק-סטימיט-הפנימי = זירת-הביצוע: המנוע-בונה-הצעות · CI-משדר (exec-cycle) · doctrine-caps-מגנים · txids-מתועדים
 - הידיים-הקבועות-חיות ב-CI; היד-המקומית מחכה-ל-10-שניות-של-המפעיל (adopt-credential) — אפס-מפתחות-במכונה, כחוק
 - הכל-בגיט: my-project 93eae21 · steem 37147ad · Domain 44052446
+
+---
+Task ID: 91-b (browser verification + port-law root-fix)
+Agent: Z.ai Code (wave-91 continuation)
+
+Work Log:
+- Browser E2E: DEX view rendered (candles + trade desk live) · USDS/WSTEEM pair-switch golden path OK · treasury strip verified on-screen: STEEM 17.144 · SBD 43.497 · SP 4134.25 · openOrders 0 · badge "steem-mainnet · 14 חשבונות" · zero console errors
+- Root-cause caught live: main-app dev server OOM-killed (dmesg: 1.5GB RSS) → FleetHQ's dev script (explicit `next dev -p 3000`) squatted the holy :3000 → main API served HTML-404 to the page. Fixed by port-law: killed the squatter by pid, restarted the main app, **root-fixed FleetHQ package.json to -p 3002** (FleetHQ 06a09f15 pushed)
+- Clobber war round-2: parallel T94 session pushed 21601c3 — restored my mini-guard sentinel to the cloud (cooperation); my chainTreasury route+strip got flattened by a -s-ours vault-sync mid-window → RE-ASSERTED from surviving commit e383ffe (sentinel protocol), then measured the strip's true gap: it keyed on `data` (market payload) instead of `eng` (dex payload) → fixed, committed, pushed (692e8d1 → cloud via 0e0d5ce)
+- Writer-churn mitigation: db/custom.db skip-worktree (runtime cache, stops the add-commit war), fleet-economy briefly stopped → revived by mini-guard (survival lineage verified)
+
+Stage Summary:
+- The owner SEES real liquidity on the DEX page now: on-chain treasury, live, keyless, honest
+- Port-law restored: my-project owns :3000, FleetHQ bound to :3002 by design
+- All work in git: my-project (chain 0e0d5ce+), steem 37147ad, Domain 44052446, FleetHQ 06a09f15
