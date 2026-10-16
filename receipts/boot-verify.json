@@ -1,12 +1,12 @@
 {
-  "at": "2026-10-16T18:22:13.374Z",
+  "at": "2026-10-16T18:30:13.345Z",
   "producer": "boot-verifier:3042",
   "all_ok": false,
-  "elapsed_s": 1.1,
+  "elapsed_s": 1.4,
   "checks": {
     "office": {
-      "reception_3000": "down",
-      "fleethq_3002": "up",
+      "reception_3000": "up",
+      "fleethq_3002": "down",
       "foreman_3010": "up",
       "estate_sync_3021": "up",
       "sovereign_gateway_3011": "up",
@@ -14,7 +14,7 @@
       "recruit_3041": "up"
     },
     "fleet_extra": {
-      "economy_3016": "down",
+      "economy_3016": "up",
       "office_live_3036": "up",
       "verifier_3042_self": "up"
     },
@@ -24,9 +24,9 @@
       "note": "runtime-supervisor state read; foreman childPid=none"
     },
     "receipts": {
-      "boot-verify_self_age_s": 213,
-      "gateway-telemetry-latest_age_s": 554,
-      "boot-watcher-state_age_s": 4503
+      "boot-verify_self_age_s": 479,
+      "gateway-telemetry-latest_age_s": 158,
+      "boot-watcher-state_age_s": 4983
     },
     "private_vault": {
       "repo": "roshpinacare-sys/fleet-vault",
@@ -34,5 +34,5 @@
       "method": "git-ls-remote"
     }
   },
-  "sha256": "bdb8f0091ff6a7c4bca231439df5f9af7717f07995a5acdb714efd1c72a596c3"
+  "sha256": "e2634dbb7019ae52e61ee7ef428d9a8fd6e7bb34eb8880b5857824ef59e57878"
 }
