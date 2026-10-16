@@ -5,6 +5,28 @@ const nextConfig: NextConfig = {
   /* HMR-חי: ללא-זה Next-16 חוסם-את-שקע-ה-HMR (Blocked cross-origin /_next/hmr)
    * → ההידרציה-ממתינה-לנצח והממשק-כולו-מת בלי-שגיאה (נמדד: renderers=0 · אפס-פיבר). */
   allowedDevOrigins: ["127.0.0.1", "localhost"],
+  /* גל-86 · תיקון-שורשי לרענון-עצמי-ממושך של-העמוד (נמדד: window.__probe נעלם תוך-12ש׳ ·
+   * 361-ריבילדים ב-dev.log · db/custom.db נכתב-בכל-שנייה): Turbopack צפה-בקבצי-מדינה-חיים
+   * (מסד-הדקס · ספר-הכלכלה · קבלות · לוגים) — כל-כתיבה-הציתה-Fast-Refresh-וכיוון-שמנועי-
+   * הריצה-אינם-מתחלפים-חם — רענון-עמוד-מלא. זה-שבר-את-המשרד-החי-וכל-UI-ממושב.
+   * התיקון: מסלולי-מדינה-מחוץ-לצפייה — הקוד-ממשיך-להיערך-חם כרגיל. */
+  turbopack: {
+    watch: {
+      ignored: [
+        "**/db/**",
+        "**/state/**",
+        "**/receipts/**",
+        "**/logs/**",
+        "**/mini-services/**/state/**",
+        "**/reports/**",
+        "**/*.db",
+        "**/*.db-journal",
+        "**/*.db-wal",
+        "**/*.db-shm",
+        "**/*.jsonl",
+      ],
+    },
+  },
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
