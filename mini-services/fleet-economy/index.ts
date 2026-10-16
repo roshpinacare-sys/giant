@@ -652,8 +652,8 @@ const server = Bun.serve({
         const clen = +(req.headers.get("content-length") ?? 0);
         if (clen > 8_192) return Response.json({ ok: false, error: "payload-too-large" }, { status: 413 });
         let body: any = null;
-        try { body = await req.json(); } catch { ingestBad++; return Response.json({ ok: false, error: "bad-json" }, { status: 400 }); }
-        if (!body || typeof body !== "object") { ingestBad++; return Response.json({ ok: false, error: "bad-payload" }, { status: 400 }); }
+        try { body = await req.json(); } catch { ingestBad++; noteWhy("bad-json"); return Response.json({ ok: false, error: "bad-json" }, { status: 400 }); }
+        if (!body || typeof body !== "object") { ingestBad++; noteWhy("bad-payload"); return Response.json({ ok: false, error: "bad-payload" }, { status: 400 }); }
         const r = ingestEvent({
           kind: String(body.kind ?? ""), from: String(body.from ?? ""), to: String(body.to ?? ""),
           asset: body.asset === "SAOS" ? "SAOS" : "USDS", amount: Number(body.amount),
