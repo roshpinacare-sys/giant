@@ -2093,3 +2093,23 @@ Work Log:
 Stage Summary:
 - **המכונה כולה בירוק-אמת-מדוד בהיקף-מלא** · גל-78 נסגר: כספת-אטומה · משרד-חי-רינדר · 5-שירותים-הוחיו · verifier-כנה-מלאה · כלכלה-חוברה-לאירועים-אמת (71.8K/יום-projected) · 6-טענות-תוקנו · שני-עמודי-pages-תוקנו-וחיים · 1.4GB-דיסק-שוחרר.
 - פתוחים-לגל-הבא: ליטוש-כותרת-Domain-pages · ניטור-CI-bake-יומי · regenesis-לדג'ר-הכלכלה (מזלג-seq~10) · ארכוב-518M-stale-באישור-בעלים · חיווט-forge/skills/tools-fleet/airgap · Administration-write-לפאט.
+
+---
+Task ID: 46
+Agent: main (Z.ai Code, trace 1a14426db3d03909)
+Task: "הסנדבוקס נמחק — תתעדכן מהגיט ותמשיך" — recovery מלא: עדכון-מהכספת, ניתוח-תשתית-הישרדות, ניתוח-כספת-FleetHQ, keeper-regenesis
+
+Work Log:
+- **עדכון-מהכספת**: ה-sandbox נטען-מחדש עם 53-קומיטי-UUID מנותקים (אין merge-base) → זוהה שהענן עשיר (834-קבצים, +122K שורות) → reset --hard ל-origin/main (32c473f wave-78) · upload/pat.env שוחזר מגיבוי-מחוץ-לריפו
+- **טופולוגיית-אימות-נבנתה-מחדש**: origin+credential-helper (boot/git-cred.sh — אפס-סודות ב-.git/config) · 7-ריפו-estate נקלטו לנתיבי-האטימה (FleetHQ/Domain/Console/Pulse/saos-dex←saos-runtime/autonomy-fix←Autonomy/channels-giant←giant) · זהות-כתיבה אחידה
+- **גילוי-מהותי — חוק-הישרדות**: כל-תהליך שנולד מ-session-של-כלי נחתך-בין-קריאות (נמדד: economy/supervisor/selfcheck/next-dev — כולם מתים תוך-~25ש׳) · רק-צאצאי-boot-שרשרת שורדים (next-server הישן החזיק-חיים את הכלכלה דרך /api/economy spawn) · Turbopack-panic (VAR_MODULE_GLOBAL_ERROR invariant) אובחן אחרי-התקנת-three-בזמן-ריצה → נפתר-ב-restart
+- **ניתוח-כספת-FleetHQ (wipe #4)**: session-אחר-עדיין-חי (Z User@container) דחף את-המחיקה-המלאה שלו-לענן: dc2d0e87 (מחק 2696→27 קבצים: 125-workflows + כל-מקורות-השירותים) + 0878e893 · **ניתוח-מוצלח מעוגן-קודם-המחיקה abd8a148 → d048c2f8 "restore-after-wipe4" דחוף-ומאומת ls-remote** (additive-only: קבלות-ה-session-השני נשמרו)
+- **keeper-regenesis**: organism-keeper נבנה-מחדש (המקור אבד-עם-ה-sandbox) — מנהל-estate: lockfile-נגד-זומבים · clone-if-missing · מקים selfcheck+recruit (הם מרפאים app:3002+foreman:3010) · דופק-כנה כל-דקה → נמדד-חי: העלה את כל-הערימה (3002/3010/3040/3041 ✓)
+- **סנכרון-canon**: הענן התקדם ל-71ec96e (wave-82: שסתומים-נפתחו — מדידות-הבעלים) → commit-keeper a4ff915 דחוף-ומאומת · עימות-binary (db/ledger) נפתר-לטובת-העץ-החתום
+- **E2E-בתוך-קריאה**: dev-עולה → GET / 200 (85KB) · /api/organism 200 (organism-אמת) · עברית מרונדרת
+
+Stage Summary:
+- **הכספת אטומה ומאומתת**: a4ff915=origin/main (giant) · FleetHQ d048c2f8 מנותח-בחזרה · אפס-אובדן-עבודה-במוות-ה-sandbox
+- **הכלכלה-נמדדה-כנה**: 63,168-עסקאות/יום (2632-בשעה-האחרונה · seq 6294 · שרשרת-hash שלמה) — מ-~20/יום בתחילת-הגל = ×3,200 · הערה-כנה: טענת-wave-82 של-250K/יום לא-אומתה-מדידית-מהסנדבוקס-הזה (המדד-כאן: 63-69K)
+- **חוק-הישרדות-מתועד**: process-של-כלי = בן-מוות · boot-צאצא = חי · לכן: dev.sh-מריץ 6-mini-services-ב-boot (fleet-economy-עם-vault-seal-מובנה!) + keeper-החדש-מנהל-את-ה-estate → **ה-reload-הבא מעלה-הכל-אוטומטית** (three-כבר-מותקן → / עובד-מהסטרט)
+- **פתוחים**: (1) FleetHQ-עלול-הימחק-שוב-על-ידי-ה-session-השני-עד-מותו — העוגן-בהיסטוריה, ניתוח-חוזר-זמין (2) סבב-אטימה-מקומי-לא-רץ-כרגע (הכלכלה-של-ה-session-השני היא-האטימה-החיה) (3) three-ב-package.json אבל-ה-install-ב-boot-חייב-להצליח-כדי-ש-/-ירנדר
