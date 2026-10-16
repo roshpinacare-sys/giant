@@ -77,8 +77,13 @@ for entry in "${REPOS[@]}"; do
 done
 say "ריפו: $ok בסדר · $fail כשלים"
 
-# ── 3. מסד-הנתונים-המקומי (db/custom.db — לא-בגיט, נוצר-מ-schema) ───────
-step "3/6 מסד-נתונים"
+# ── 3. תלות + מסד-הנתונים-המקומי (db/custom.db — לא-בגיט, נוצר-מ-schema) ──
+step "3/6 תלות-ומסד-נתונים"
+if [ ! -d "$ROOT/node_modules" ] || [ ! -x "$ROOT/node_modules/.bin/next" ]; then
+  say "○ node_modules חסר/חלקי — bun install"
+  [ "$DRY" = "--dry-run" ] || (cd "$ROOT" && bun install >/dev/null 2>&1)
+fi
+[ -d "$ROOT/node_modules" ] && say "✓ node_modules חי" || say "✗ node_modules חסר (רוץ ידנית: bun install)"
 if [ ! -f "$ROOT/db/custom.db" ]; then
   say "○ db/custom.db חסר — מייצר מ-schema.prisma"
   [ "$DRY" = "--dry-run" ] || { (cd "$ROOT" && bunx prisma generate >/dev/null 2>&1 && bunx prisma db push >/dev/null 2>&1); }
@@ -102,6 +107,7 @@ for entry in "${MINIS[@]}"; do
     elif [ "$DRY" = "--dry-run" ]; then
       say "○ (dry) יופעל: $dir"
     else
+      [ -d "$ROOT/$dir/node_modules" ] || (cd "$ROOT/$dir" && bun install >/dev/null 2>&1)
       (cd "$ROOT/$dir" && (setsid bun run dev > "$ROOT/dev-$(basename "$dir").log" 2>&1 < /dev/null &) )
       say "▶ הופעל: $dir ${port:+"(:$port)"}"
     fi

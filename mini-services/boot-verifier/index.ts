@@ -154,7 +154,9 @@ async function measure(): Promise<BootVerify> {
       {
         stdout: "pipe",
         stderr: "pipe",
-        env: { ...process.env, GIT_ASKPASS: "/home/z/.gitcred/askpass.sh", GIT_TERMINAL_PROMPT: "0" },
+        /* גל-60: החיווט-לעזר-האימות-החי-שלנו (boot/git-cred.sh קורא-פאט-בזמן-ריצה).
+         * כשהפאט-חסר — ls-remote נכשל → state=unknown (כנה). כשהוא-חוזר — מתרפא-אוטומטית. */
+        env: { ...process.env, GIT_TERMINAL_PROMPT: "0" },
       },
     );
     const stdout = await new Response(p.stdout).text();
