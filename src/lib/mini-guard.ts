@@ -27,6 +27,9 @@ export const MINI_SERVICES: MiniServiceDef[] = [
    * הממונה-האמיתי-עתה-בן-עץ-ה-Next (שושלת-השרדות); הוא-בעצמו-מחיה-פורנן/gateway/beats-כל-5ש׳.
    * single-flight-מובנה (pid-file+pidAlive) מונע-כפילות-אם-המשגיחה-משגיחה-על-המשגיח. */
   { name: "fleet-supervisor", dir: "/home/z/estate/FleetHQ/mini-services/agent-hq", port: 3010, he: "ממונה-הצי (FleetHQ: פורנן 3010 + גייטוויי + beats)", cmd: "[ -d node_modules ] || bun install --silent; exec bun tools/runtime-supervisor.ts", env: { AGENT_HQ_DATA_DIR: "/home/z/my-project/Domain" } },
+  /* גל-90 · הכלכלה-הפנימית תחת-המשגיחה: נמדד שמשגיח-ה-shell שלה (supervise-economy.sh)
+   * מת-עם-קציר-הסנדבוקס — מעכשיו גם-הוא בן-עץ-ה-Next (שושלת-השרדות) עם בריאות-HTTP כנה (/health). */
+  { name: "fleet-economy", dir: "mini-services/fleet-economy", port: 3016, he: "הכלכלה-הפנימית (ספר-hash-chain · AMM · תורת-כותבים-רבים)", probe: "gateway" },
 ];
 
 export interface MiniServiceDef {
