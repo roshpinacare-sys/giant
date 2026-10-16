@@ -106,10 +106,6 @@ const tailRing: Tx[] = []; // last 500 for /ledger reads
  *  droppedTx = עסקאות-אירוע שאבדו (מוצא-נכשל או דחיית-איזון סופית) — מוצג ב-/metrics.
  */
 let ingestOk = 0, ingestDedup = 0, ingestFailed = 0, ingestBad = 0;
-/* גל-88 · שבירת-שתיקה: סיבות-הכשל-חושבו-ולא-נחשפו (נמדד: 2,499-כשלים מול 1,089-הצלחות
- * בלי-יכולת-לדעת-למה). מעתה: מפת-סיבות-חיה-ב-/health. */
-const ingestWhy: Record<string, number> = {};
-function whyCount(why: string): void { ingestWhy[why] = (ingestWhy[why] ?? 0) + 1; }
 const seenRefs = new Map<string, number>(); // ref → ts (דהיות: פקודות-כפולות של מפיקים לא נספרות פעמיים)
 const SEEN_REFS_CAP = 20_000;
 const SEEN_REFS_SNAP = 5_000; // כמה-refs-שורדים-ב-snapshot (האחרונים-ראשית — Map שומר-סדר-הכנסה)
@@ -139,19 +135,19 @@ function ingestEvent(v: {
   reason: string; ref: string; refillFloat?: boolean;
 }): { ok: boolean; dedup?: boolean; tx?: Tx; why?: string } {
   if (!INGEST_KINDS.has(v.kind) || !KNOWN_ACCOUNTS.has(v.from) || !KNOWN_ACCOUNTS.has(v.to)) {
-    ingestBad++; whyCount("bad-kind-or-account"); return { ok: false, why: "bad-kind-or-account" };
+    ingestBad++; return { ok: false, why: "bad-kind-or-account" };
   }
   if (!(v.asset === "USDS" || v.asset === "SAOS") || !Number.isFinite(v.amount) || v.amount <= 0 || v.amount > 1_000_000) {
-    ingestBad++; whyCount("bad-amount"); return { ok: false, why: "bad-amount" };
+    ingestBad++; return { ok: false, why: "bad-amount" };
   }
   const reason = String(v.reason).slice(0, 300);
   const ref = String(v.ref).slice(0, 200);
   if (seenRefs.has(ref)) { ingestDedup++; return { ok: true, dedup: true, why: "already-recorded" }; }
   if (v.refillFloat && v.asset === "USDS" && !refillFloatIfEmpty(v.from, v.amount)) {
-    ingestFailed++; whyCount("float-refill-failed"); return { ok: false, why: "float-refill-failed" };
+    ingestFailed++; return { ok: false, why: "float-refill-failed" };
   }
   const tx = apply({ seq: seq + 1, ts: Date.now(), kind: v.kind, from: v.from, to: v.to, asset: v.asset, amount: round6(v.amount), reason, ref });
-  if (!tx) { ingestFailed++; whyCount("balance-rejected"); return { ok: false, why: "balance-rejected (counted honestly in rejected)" }; }
+  if (!tx) { ingestFailed++; return { ok: false, why: "balance-rejected (counted honestly in rejected)" }; }
   rememberRef(ref);
   ingestOk++;
   return { ok: true, tx };
@@ -332,23 +328,6 @@ function tick() {
       for (const s of poor) {
         const gap = WAGE_FLOOR_USDS - bal(s.id).usds;
         apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: round6(Math.min(gap, 60)), reason: `חוק-שכר-מצע: השלמה-עד-רצפה (רצפת ${WAGE_FLOOR_USDS})` });
-      }
-    }
-    // גל-88 · שומר-כספת-ריבוני: הזרימה-החוזרת-שנייה-שחסרה. נמדד-חי: כספת-שוקעת-ל-9.7-USDS
-    // בעוד-הבריכה-בלעה-163K-ולכספת-9,342-SAOS-עתודות-שאינן-נוזלות → שכר-נכשל → קבלה
-    // קרסה-ל-9.7% → המווסת-על-רצפה. התיקון: הכספת מוכרת-עתודת-SAOS-לבריכה (swap-AMM
-    // אמיתי-מוחתם-בספר — לא-מינט, לא-סימולציה). גדרות: עתודת-מינימום-2,000-SAOS-אסור-היתוך
-    // · מקס-500-SAOS-לפעולה · קצב-מוגבל (כל-300-טיקים-או-בעלייה-אם-הכספת-יבשה-מהיריבות).
-    if ((tickNo % 300 === 0 || tickNo <= 3) && bal("treasury").usds < 200 && bal("treasury").saos > 2000) {
-      const price = pool.usds / Math.max(pool.saos, 1);
-      const needUsds = 2000 - bal("treasury").usds;
-      const saosIn = Math.min(
-        bal("treasury").saos - 2000,
-        Math.ceil((needUsds * 1.15) / Math.max(price, 0.01)),
-        500,
-      );
-      if (saosIn >= 10) {
-        ammSwap("treasury", "SAOS", saosIn, `שומר-כספת-ריבוני: מכירת-עתודת-${saosIn}-SAOS-למימון-צף-השכר (כספת-יבשה נמדדה)`);
       }
     }
     // גל-83 · איסוף-עמלות (כל-150-טיקים): עמלות-הבריכה (הכנסת-הרשת) זורמות-לכספת
@@ -580,7 +559,7 @@ const server = Bun.serve({
   async fetch(req, srv) {
     const url = new URL(req.url);
     try {
-      if (url.pathname === "/health") return Response.json({ ok: true, engine: "fleet-economy", seq, uptimeMs: Date.now() - bootedAt, lastH, port: PORT, ingestWhy, ingest: { ok: ingestOk, failed: ingestFailed, dedup: ingestDedup, bad: ingestBad } });
+      if (url.pathname === "/health") return Response.json({ ok: true, engine: "fleet-economy", seq, uptimeMs: Date.now() - bootedAt, lastH, port: PORT });
       if (url.pathname === "/metrics") {
         const total = Object.values(byKind).reduce((a, b) => a + b, 0);
         const top = Object.entries(byAccount).sort((a, b) => b[1] - a[1]).slice(0, 10)

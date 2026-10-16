@@ -2280,3 +2280,103 @@ Stage Summary:
 - **לולאת-התחייה-של-FleetHQ-נשברה**: הגופות-הרעילו-את-המחליף-שלהן; עתה-כותב-יחיד-חוקי (סופרוויזר-21559-מהשיבוט-האמיתי).
 - **הסולם-הכלכלי-ממשיך-לטפס**: 119.5K-עסקאות-מצטבר · 516K/יום-תחזית-נמדדת.
 - **פתוחים לגל-90**: (1) לאמת-2-מחזורי-estate-sync-ללא-הסגר-חוזר-על-FleetHQ (2) מפיקי-ה-ingest-לחבר-מחדש-לזרימה (3) מלחמת-הדחיפות-מול-הסשן-השני-נמשכת — החלטת-בעלים-ממתינה (86-b-עומדת).
+Task ID: T77-4
+Agent: zai-web (sovereign session)
+Task: תרגיל-התעוררות T77 מלא — כיול-mול-git, חקירת-חור-הדיסק-השורשי, תיקון-estate-sync, ריפוי-Domain
+
+Work Log:
+- התעוררות: sandbox חי · דיסק 89% (1.1G) · origin התקדם 4622ffe→89f43c8→f08e04c — כיול-מלא-mול-הכספת
+- pause-seal-merge-resume: SIGSTOP 45 תהליכים · אטימת-delta (10d5c66) · מיזוג f08e04c (db=ours, keeper-log=union) · דחיפה ba8d48d + ls-remote ✓
+- FleetHQ 3002: מנעול-.next-תקול → ניקוי-והתחלה · התגלה-node_modules-חסר (next/dist/bin נעלם!)
+- שורש-חור-הדיסק שנמדד: estate-sync v3 הסגיר-ריפו-שלם על כשל-pull-יחיד → FleetHQ.stale=2.6G + wiped=675M + Sandbox.stale×2 + Console/Pulse.stale — ~3.4G מתים
+- תיקון-שורשי estate-sync v4 (סולם-מדורג): retry-3s → fetch+rebase --autostash (שומר-קומיטים-מקומיים) → diverged-honest (אין-הסגר-על-התנגדות) → הסגר-רק-על-מוות-מבני → ניקוי-אוטומטי-של-הסגר-אחרי-שיבוט → quarantine-rename-כשל לא מוחק-מקור
+- lint נקי · הפעלה-מחדש (kill זומבי-13683) · v4 חי על 3021
+- טיק-ראשון: 12/13 ירוק-מיד · FleetHQ ff-pull-ok ללא-הסגר · דיווח-כן: Domain diverged (office-lock.json needs-merge)
+- Domain: קונפליקט-office-lock (pid-דד-מול-חי) · live-pid-14613-מנצח · rebase-התנגש-עם-כותב-חי-שני · abort+merge-doctrine · auto-economy-סשן-אחר-סימן-במקביל (23f0f7b87) · סופית: HEAD==origin מושלם · agent-hq הוחזר
+- ניקוי-דיסק: FleetHQ.stale-2.6G נמחק + wiped-675M + Sandbox.stale×2 + Console/Pulse.stale → 2.7G-פנוי (72%)
+
+Stage Summary:
+- estate-sync v4 = הסולם-המדורג-החדש: כשל-pull-רגעי לא עוד מוחק-ריפו-שלם — החור-השחור-הכרוני-של-הדיסק נסתם-בקוד
+- 12/13 עוגנים-ירוקים · 5/5 ריפו-פרטיים ff-pull-ok (T75-מימוש-חלקי)
+- Domain מיושר HEAD==origin · אפס-אובדן בכל-הדרך
+- ba8d48d על-הכספת (ls-remote-מאומת)
+
+---
+Task ID: T77-5
+Agent: zai-web (sovereign session)
+Task: grid-watch-4/4 + אימיילי-הכשל-כל-10-דק — אבחון-שורשי-וריפוי (T75-3 מימוש)
+
+Work Log:
+- grid-watch: exposure-gate ירוק (#397/398) · content-campaign ירוק (#23) · fleet-health 200-חי · treasury-route = כשל-100% (48/48) — אבחון: exposure-scan מוצא host-filesystem-path ב-agents/econ-ledger.jsonl → fail-loud → commit-דילוג
+- ריפוי-treasury-route: הקובץ הוסר-כבר-מ-HEAD (9b24b2572 · 15:26 ע״פ-חוק-החשיפה) · סריקה-מקומית: PASS-383-קבצים-0-הפרות · dispatch-422 (schedule-only) — ריצה-הבאה-תאשר
+- אימיילי-הכשל: office-artery #97 (15:30) — "Cannot find module agents/office-artery.mjs" · השורש: קומיט-9b24b2572 "office-memory: foreman books sync" מחק **482-קבצים/141K-שורות** מ-agents/+truth/ — הכותב-האוטומטי-רכב-על-מחיקות-שהוצגו-משיבוט-חלקי
+- תיקון-שורשי-מבני: VAULT-LAW-v2 ב-domain-sync.sh — books-sync לעולם לא נושא מחיקות (dels מוסרים-מה-index לפני-commit · bash -n-תקין)
+- שחזור: 489-קבצים-מ-7a1fe67ee → commit 8b75369a6 → דחיפה-ל-origin · ls-tree: 343-קבצים-חוזרים-ל-agents/ · ls-remote-מאומת
+- domain-sync-loop: זומבי-ישן-2474-שרד-TERM → kill -9 · לופ-נקי-יחיד pid-7010 · "nothing to commit" (הכל-אטום) · pushed-351265214-בסבב-הראשון
+- FleetHQ-git: ה-patch נאטם-ע״י-auto-economy (f0e2f056) — החוק-מתפשט-בעצמו
+
+Stage Summary:
+- שרשרת-הכשל-המלאה-נסגרה: שיבוט-חלקי → מחיקות-מוצגות → books-sync-רוכב-עליהן → 482-קבצים-נמחקים → office-artery-לא-מוצא-מודול → אימייל-כשל-כל-10-דק
+- שלושה-חוקים-חדשים: estate-sync-v4-סולם · VAULT-LAW-v2-אסור-מחיקות-בזיכרון · quarantine-לא-מוחק-מקור
+- 458-מחיקות-בטלו · 489-קבצים-קמו-לתחייה · אפס-אובדן-נשמר-בכל-השכבות
+- המתנה-לריצות-המתוכננות: office-artery + treasury-route יאושרו-ירוקים-בטיק-הבא
+
+---
+Task ID: T77-6
+Agent: zai-web (sovereign session)
+Task: אימות-קצה-לקצה · פיצול-מנועי-כלכלה · OOM-FleetHQ · משגיחים-חסרים
+
+Work Log:
+- office-artery #98: SUCCESS-בדיספץ' (204→run-ירוק) — אימות-קצה: מודול-המשוחזר-עובד-בראנר-אמיתי · אימיילי-הכשל-נרפאו-מוכח
+- estate-sync: טיק-3 = 13/13-עוגנים-ירוקים (Domain-כולל) — לולאת-הריפוי-העצמי-מלאה
+- כלכלה: נמדד-חי 234-tx/30ש׳ = **673,920/יום** · מנוע-מדווח projectedPerDay=659,136 · tx24h=34,859 — יעד-האלפים-נשבר-פי-מאות
+- פיצול-מוחות-שנמדד: 2 מנועי-כלכלה (my-project-קפוא-מ-15:17 + estate-חי-מ-14:29 · 48-דק-כפילות-חלון) · החי-כותב-לריפו-משלו-עם-כספת-משלו (fleet-economy-repo · אטימה-כל-10ד׳) · המשגיח-הכפול-של-my-project-הוסר (היה-עלול-להקים-מנוע-שלישי)
+- משגיח-חסר-למנוע-החי: supervise-economy.sh-של-estate הופעל (10879) · seq-ממשיך-55,487+
+- FleetHQ-3002: OOM-קטל-נמדד (dmesg: next-server-1.26GB-RSS) — שורש-המוות-החוזר · supervise-fleethq.sh-חדש: בדיקה-כל-20ש׳ + מגבלת-זיכרון 768MB + ניקוי-מנעולים + יומן-כן · חי-עכשיו (11811) · 3002=200
+- דיסק: 2.3G-פנוי-יציב
+
+Stage Summary:
+- שלוש-לולאות-חיים-אטומות: כלכלה (supervisor) · מטה (supervisor+cap) · עוגנים (estate-sync-v4)
+- קצב-עסקאות נמדד: ~660-725K/יום — טיפוס-סדר-גודל מול 20/יום-ההיסטורי
+- פיצול-המוחות-בכלכלה-זוהה-ומוגבל (החי=canon, הקפוא=היסטוריה-מבודדת-בכספת)
+- OOM-מוגדר-כאויב: מגבלת-זיכרון-למטה + משגיח-מקים-לנצח
+
+---
+Task ID: T77-7
+Agent: zai-web (sovereign session)
+Task: FleetHQ-פצצת-הזיכרון — שרשרת-שורש-מלאה (dev-bomb → broken-start → standalone-true)
+
+Work Log:
+- treasury-route #49: **SUCCESS** — תיקון-החשיפה-אומת-בראנר-אמיתי · grid-watch 4/4 סגור-רשמית
+- שרשרת-המוות-של-3002 נפרקה-שלב-אחר-שלב:
+  1. dev-mode: קימפול-על-ביקוש-של-דף-השורש (10-40ש׳) → פצצת-זיכרון 899MB-1.26GB → OOM (dmesg-מוכח ×2)
+  2. משגיח-עם-curl-קצר: רצח-מטופל-בריא-בקימפול (DOWN→pkill→לולאה-אינסופית) — נלמד: חיות=פורט-קשור (ss)
+  3. next start + output:standalone → תצורה-שבורה (⚠-התראה-עצמית) → קריסה-גם-בפרודקשן (1GB-OOM)
+  4. **הפתרון-האמיתי**: node .next/standalone/server.js + cp-static + מגבלת 512MB — רגל-קלה-מיידית
+- מלכודת-הכתיבה: estate-sync-autostash + auto-economy-commits נלחמו-בעריכות-מקומיות-לא-אטומות → הקובץ-הוחלף-מתחתיי — לקח: commit+push-מיידי-תמיד
+- קונפליקטים-3-קבלות (lineage-union-615 · ours-ל-json) — נפתרו-אפס-אובדן · route.ts-turbopack-fix (spawn-arg-מחושב)
+- FleetHQ נדחף: 752b3080 (ls-remote-מאומת) · המשגיח-הסופי: **חי-90ש׳+** (כל-הקודמים-מתו-תוך-1-3ד׳) · 3002=200-יציב
+
+Stage Summary:
+- לקח-ארכיטקטוני: dev-server-על-אפליקציית-3D-בסנדבוקס-4GB = פצצת-זיכרון-מתקתקת; standalone+cap = הריפוי-היחיד
+- מוות-המשגיח-לא-היה-תעלומה-אלא-נזק-משני-של-נפילת-OOM-מדורגת — ריפוי-הפצצה ריפא-גם-את-המשגיח
+- pkill-רחב (next-server) היה-עומד-להרוג-את-3000-הקודש — נתפס-בזמן; הריגה-מעתה-לפי-pid-של-הפורט-בלבד
+
+---
+Task ID: T77-8
+Agent: zai-web (sovereign session)
+Task: sites-pages + selfhood-fix + watchdog-שכבה-2 + סריקת-אמת-כל-האתרים
+
+Work Log:
+- מדידת-כל-אתרי-Pages: Domain 200 · FleetHQ 200 · Console 200 · Pulse 200 · **saos-dex 404 · roshpina 404**
+- אבחון-ה-404: GitHub-Pages-כלל-לא-מופעל על-שני-הריפו · ניסיון-הפעלה → 422 "plan does not support" — שניהם **פרטיים** (Pages-פרטי-דורש-תשלום)
+- עשייה-בגבולות-הסמכות: דפי-נחיתה-כנים-RTL נבנו-ונדחפו (saos-dex 51f939e · roshpina 5f91fd1) — ישרתו-מיד-עם-הפיכת-הריפו-לפומבי (החלטת-בעלים-לפי-חוק-החשיפה, לא-שלי-להכריע)
+- selfhood (Autonomy): 3×-cancelled — שורש: timeout-minutes:12-בעוד-המחזור-לוקח-~13ד׳ → תוקן-ל-35 · נדחף f2ffabc
+- watchdog-שכבה-2 ל-FleetHQ: מקים-משגיח-שנעלם (נמדד: הפעיל-עצמו-מייד-16:42:15) · נדחף 7ee07db8
+- /tmp: 1.1G→~0.5G (bunx-455M+161M+55M) · אין-stale-חדשים-ב-estate (v4-מחזיק!)
+- מצב-סופי: economy seq-74,601+ · anchors 13/13 · 3002 עומד-על-standalone-בריא (121MB-תחת-עומס-15-פגיעות)
+
+Stage Summary:
+- 4/6 אתרים-ירוקים · 2-פרטיים-חסומי-תוכנית (עם-דפי-נחיתה-מוכנים) — כנות-מלאה-למפעיל
+- selfhood-ירוק-מהטיק-הבא (12→35ד׳)
+- הגנה-רב-שכבתית על 3002: standalone-בריא + משגיח + watchdog

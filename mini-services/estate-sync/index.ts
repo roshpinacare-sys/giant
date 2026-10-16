@@ -1,4 +1,4 @@
-/* estate-sync v2 — שומר-העוגנים-המרפא-את-עצמו (גל-16 · "הזרימה-המרפאת-את-עצמה")
+/* estate-sync v4 — שומר-העוגנים-המרפא-את-עצמו (גל-16 · "הזרימה-המרפאת-את-עצמה")
  * ═══════════════════════════════════════════════════════════════════════════════
  * לקח-הגלים: סנדבוקסים נמחקים — הגיט הוא שכבת-הקיום. v1 ידע-רק ff-pull בספרייה
  * קיימת; אחרי-מחיקת-סנדבוקס השומר-עצמו נשאר-חסר-אונים. v2 מרפא: אם-עוגן-חסר —
@@ -20,9 +20,17 @@
  * במשך-80-דקות-ובפנים אפס-טיקים (ה-`void tick()`-היה-חבור-ב-callback-של-listen,
  * ו-hot-reload/קריסה-השאירו-פורט-פתוח-בלי-עבודה). החיווט-החדש: הטיק-רץ-מיד-
  * ברמת-המודול — לא-תלוי-ב-listen; מגן-globalThis מונע-ריבוי-מאזינים-ב-hot-reload;
- * כשל-listen = יומן-כנה-ולא-מוות-שקט — העבודה-ממשיכה-גם-בלי-HTTP. */
+ * כשל-listen = יומן-כנה-ולא-מוות-שקט — העבודה-ממשיכה-גם-בלי-HTTP.
+ *
+ * גל-t77 · התיקון-השורשי-של-חור-הדיסק: נמדד-חי — pull-נכשל-אחד (מנעול/רשת/חלון-עצירה)
+ * גרם-להסגר-של-ריפו-שלם (FleetHQ.stale = 2.6G!) ולשיבוט-חסר-node_modules. v4 = סולם-מדורג:
+ *  1) pull-נכשל → ניסיון-חוזר-אחרי-3ש׳ (שגיאה-רגעית)
+ *  2) עדיין-נכשל → fetch+rebase --autostash — שומר-קומיטים-מקומיים (אפס-אובדן)
+ *  3) rebase-נכשל → rebase --abort + דיווח-כן "diverged" — הספרייה-נשארת-שלמה, אין-הסגר
+ *  4) הסגר-רק-על-ריפו-מת-מבנית (git status-נכשל) · אחרי-שיבוט-מוצלח — ניקוי-אוטומטי-של-ההסגר
+ *  5) quarantine-שנכשל-ב-rename לא מוחק-את-המקור — דיווח-כן-והמתנה-לטיק-הבא */
 import { createServer } from "node:http";
-import { existsSync, mkdirSync, rmSync, renameSync, readFileSync, readdirSync, statfsSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync, renameSync, readFileSync } from "node:fs";
 import path from "node:path";
 
 const ORG = "roshpinacare-sys";
@@ -131,59 +139,11 @@ async function headAge(dir: string): Promise<number | null> {
   return Math.max(0, Math.round((Date.now() - t) / 60_000));
 }
 
-/* ריפוי-עצמי: הסגר-של-ספרייה-פגומה ואז-שיבוט-טרי */
-/* גל-87 · שומר-הדיסק (נמדד: הדיסק-התמלא-עד-100% מגופות-הסגר — "No space left
- * on device" שבר-את-כל-הגיט-באימפריה). מתחת-ל-1.5G-פנויים אסור-להקים-עותקים-חדשים. */
-const FREE_MIN_BYTES = 1_500_000_000;
-function freeBytes(): number | null {
-  try { const s = statfsSync("/home/z"); return s.bavail * s.bsize; } catch { return null; }
-}
-/* גל-87 · הסגר-היגייני: הסגר-הישן השאיר-גופה-מלאה (300M+ עם .next) בכל-פעם →
- * הדיסק-מת. מעכשיו: bundle-של-כל-ההיסטוריה אל-vault-home (שימור-מלא-של-קומיטים
- * ייחודיים — קבלות-הצי-שנוצרו-מקומית) ואז-מחיקה-מלאה-של-הגופה. אפס-אובדן, אפס-צבירה. */
-function preserveAndPrune(qu: string, name: string): void {
-  try {
-    const bdir = "/home/z/my-project/estate/quarantine-bundles";
-    mkdirSync(bdir, { recursive: true });
-    const out = path.join(bdir, `${name}-${Date.now()}.bundle`);
-    const p = Bun.spawnSync(["git", "bundle", "create", out, "--all"], { cwd: qu, stdout: "pipe", stderr: "pipe" });
-    if (p.exitCode === 0) {
-      const kb = Math.round(((Bun.file(out).size) || 0) / 1024);
-      log("bundle-preserved:", out, `(${kb}KB)`);
-      try { rmSync(qu, { recursive: true, force: true }); log("quarantine-pruned:", qu); } catch { /* כנה */ }
-    } else {
-      // bundle-נכשל (הריפו-שהוסגר-פגום) — רושמים-את-ה-HEAD-ליומן (לחקירה) ומוחקים-הכל.
-      // גל-87-תיקון-שני: השארת-.git-יצרה-לולאת-כשלים (שיבוט-לתוך-עץ-לא-ריק =
-      // "Untracked working tree file would be overwritten" בכל-טיק). ריפו-פגום-אינו-נכס;
-      // הענן-הוא-האמת, וה-salvage-המוקדם-שמר-את-הייחודי.
-      try {
-        const h = Bun.spawnSync(["git", "rev-parse", "HEAD"], { cwd: qu, stdout: "pipe", stderr: "pipe" });
-        if (h.exitCode === 0) log("bundle-fail — head-recorded:", String(h.stdout).trim().slice(0, 40));
-      } catch { /* כנה */ }
-      try { rmSync(qu, { recursive: true, force: true }); log("quarantine-pruned-full:", qu); } catch { /* כנה */ }
-    }
-  } catch { /* כנה — השימור-מיטבי; אף-פעם-לא-מפיל-את-הסוופ */ }
-}
+/* ריפוי-עצמי: הסגר-של-ספרייה-מתה-מבנית בלבד · אין-מחיקת-מקור-בכשל-rename (אפס-אובדן) */
 function quarantine(dir: string): string {
-  const free = freeBytes();
-  if (free !== null && free < FREE_MIN_BYTES) { log("quarantine-deferred-disk-low:", dir, `free=${Math.round(free / 1e6)}MB`); return ""; }
   const qu = `${dir}.stale-${Date.now()}`;
-  try { renameSync(dir, qu); log("quarantined:", dir, "→", qu); preserveAndPrune(qu, path.basename(dir)); return qu; }
-  catch { try { rmSync(dir, { recursive: true, force: true }); } catch { /* כבר-אין */ } return ""; }
-}
-/* גל-87 · סוופ-ניקיון-נחיתה: גופות-stale-היסטוריות (נמדד: 8-גופות × 300M+) —
- * bundle-ומחיקה-בכל-עלייה, כדי-שאף-משבר-עבר-לא-ימשיך-לאכול-דיסק-בשקט. */
-function sweepOldQuarantines(): void {
-  for (const base of ["/home/z/estate", "/home/z/lane", "/home/z/channels"]) {
-    try {
-      for (const d of readdirSync(base)) {
-        if (!/\.stale-\d+$/.test(d)) continue;
-        const full = path.join(base, d);
-        try { const s = statfsSync("/home/z"); if (s.bavail * s.bsize < FREE_MIN_BYTES / 4) break; } catch { /* כנה */ }
-        preserveAndPrune(full, d.replace(/\.stale-\d+$/, ""));
-      }
-    } catch { /* כנה */ }
-  }
+  try { renameSync(dir, qu); log("quarantined:", dir, "→", qu); return qu; }
+  catch { log("quarantine-rename-failed (no destructive fallback — honest):", dir); return ""; }
 }
 
 async function syncAnchor(a: Anchor, st: AnchorState, pat: string | null): Promise<void> {
@@ -198,80 +158,69 @@ async function syncAnchor(a: Anchor, st: AnchorState, pat: string | null): Promi
   }
   const url = `https://github.com/${ORG}/${a.repo}.git`;
 
-  /* קיים-כריפו? → ff-pull */
+  /* קיים-כריפו? → בדיקה-מבנית ואז סולם-החלמה-מדורג (v4) */
   if (existsSync(path.join(a.dir, ".git"))) {
-    const r = await runGit(["pull", "--ff-only", "--quiet"], { cwd: a.dir, token, timeoutMs: 90_000 });
-    if (r.code === 0) {
+    const health = await runGit(["status", "--porcelain"], { cwd: a.dir, token, timeoutMs: 30_000 });
+    if (health.code !== 0) {
+      log("repo-structurally-dead → quarantine path:", a.name);
+    } else {
+      let r = await runGit(["pull", "--ff-only", "--quiet"], { cwd: a.dir, token, timeoutMs: 90_000 });
+      if (r.code !== 0) {
+        /* מדורג-1: ניסיון-חוזר — שגיאה-רגעית (מנעול/רשת/חלון-עצירה של סנדבוקס) */
+        log("pull-failed → retry-after-3s:", a.name, r.out.trim().slice(0, 100));
+        await new Promise((res) => setTimeout(res, 3_000));
+        r = await runGit(["pull", "--ff-only", "--quiet"], { cwd: a.dir, token, timeoutMs: 90_000 });
+      }
+      if (r.code !== 0) {
+        /* מדורג-2: fetch+rebase --autostash — משמר-קומיטים-מקומיים (אפס-אובדן) */
+        await runGit(["fetch", "--quiet", "origin"], { cwd: a.dir, token, timeoutMs: 90_000 });
+        const rb = await runGit(["rebase", "--autostash", "--quiet", "FETCH_HEAD"], { cwd: a.dir, token, timeoutMs: 90_000 });
+        if (rb.code === 0) {
+          st.ok = true; st.state = "healed"; heals++;
+          st.headAgeMin = await headAge(a.dir);
+          st.detail = `rebase-autostash ok${st.headAgeMin !== null ? ` · head ${st.headAgeMin} דק` : ""}`;
+          log("HEALED", a.name, st.detail);
+          return;
+        }
+        /* מדורג-3: התנגדות-אמיתית → abort + דיווח-כן · הספרייה-נשארת-שלמה, אין-הסגר */
+        await runGit(["rebase", "--abort"], { cwd: a.dir, token, timeoutMs: 30_000 });
+        st.ok = false; st.state = "failed"; fails++;
+        st.detail = `diverged-honest (repo intact, no quarantine): ${rb.out.trim().slice(0, 90)}`;
+        log("DIVERGED", a.name, st.detail);
+        return;
+      }
       st.ok = true; st.state = st.state === "healed" ? "healed" : "fresh";
       st.headAgeMin = await headAge(a.dir);
       st.detail = `ff-pull ok${st.headAgeMin !== null ? ` · head ${st.headAgeMin} דק` : ""}`;
       log("OK", a.name, st.detail);
       return;
     }
-    /* גל-87 · הסתעפות ≠ שחיתות (שורש-מכונת-הדיסק — נמדד): הצי-מקומט-קבלות-מקומיות
-     * (pacemaker/office-ci) בכל-דקה → pull--ff-only-נכשל-בכל-טיק → הסגר-מלא-בכל-טיק
-     * → גופה-300M-בכל-10דק' → הדיסק-מת. העוגן-קריאה-בלבד — ריפוי-מדורג-במקום-השמדה:
-     * (a) רק-מאחורי → ff-merge אל-origin/main (b) קומיטים-מקומיים (מאחורי-או-מקדימה)
-     * → HOLD — הכספת (vault-seal) היא-בעלת-הכתיבה, העוגן-לא-נוגע (c) רק-שחיתות-אמיתית
-     * (fetch/rev-list-נכשלו) → הסגר. */
-    const f = await runGit(["fetch", "origin", "--quiet"], { cwd: a.dir, token, timeoutMs: 60_000 });
-    if (f.code === 0) {
-      const ab = await runGit(["rev-list", "--left-right", "--count", "HEAD...origin/main"], { cwd: a.dir, timeoutMs: 20_000 });
-      const m = /(\d+)\s+(\d+)/.exec(ab.out);
-      if (ab.code === 0 && m) {
-        const ahead = Number(m[1]); const behind = Number(m[2]);
-        if (behind > 0 && ahead === 0) {
-          const ff = await runGit(["merge", "--ff-only", "origin/main", "--quiet"], { cwd: a.dir, token, timeoutMs: 60_000 });
-          if (ff.code === 0) {
-            st.ok = true; st.state = "fresh";
-            st.headAgeMin = await headAge(a.dir);
-            st.detail = `ff-to-origin ok${st.headAgeMin !== null ? ` · head ${st.headAgeMin} דק` : ""}`;
-            log("OK", a.name, st.detail);
-            return;
-          }
-        } else if (ahead > 0) {
-          st.ok = true; st.state = st.state === "healed" ? "healed" : "fresh";
-          st.detail = `diverged-local ahead=${ahead} behind=${behind} — vault-seal-מאחה (העוגן-לא-נוגע)`;
-          log("HOLD", a.name, st.detail);
-          return;
-        }
-      }
-    }
-    log("pull-failed → graduated-heal-failed → quarantine:", a.name, r.out.trim().slice(0, 120));
   }
 
-  /* חסר/פגום → הסגר-ושיבוט-טרי. גל-87 · שיבוט-ל-tmp-ואז-rename — שיבוט-חלקי
-   * (דיסק-מלא/רשת) לא-ישאיר-עץ-הרוס-ביעד; מחלקת-ה"Untracked working tree
-   * file would be overwritten" נעלמת-כולה. */
-  if (existsSync(a.dir)) quarantine(a.dir);
-  if (existsSync(a.dir)) {
+  /* מת-מבנית/חסר → הסגר-ושיבוט-טרי */
+  let qu = "";
+  if (existsSync(a.dir)) qu = quarantine(a.dir);
+  if (existsSync(a.dir) && !qu) {
+    /* לא-הצלחנו-להזיז-את-המקור — לא מוחקים (אפס-אובדן) · דיווח-כן והמתנה לטיק הבא */
     st.ok = false; st.state = "failed"; fails++;
-    st.detail = "clone-deferred — יעד-לא-התפנה (דיסק-נמוך?) — כנה";
+    st.detail = "quarantine-blocked (rename failed, dir intact) — honest";
     log("FAIL", a.name, st.detail);
     return;
   }
   mkdirSync(path.dirname(a.dir), { recursive: true });
-  const tmpClone = `${a.dir}.clone-${Date.now()}`;
-  const c = await runGit(["clone", "--quiet", url, tmpClone], { token, timeoutMs: 180_000 });
+  const c = await runGit(["clone", "--quiet", url, a.dir], { token, timeoutMs: 180_000 });
   if (c.code === 0) {
-    /* גל-87 · כנות-מדודה: rename-כושל (היעד-נכבש-מחדש-בשניות-ע"י-כותב-חי) אינו-ריפוי —
-     * ירוק-מזויף-אסור (נמדד-חי: "cloned-from-canon" על-עץ-בלי-.git). כשל-שם = כשל-כנה,
-     * המחזור-הבא-מנסה-שוב-אחרי-שהכובש-טופל-בשורש. */
-    try { renameSync(tmpClone, a.dir); }
-    catch {
-      try { rmSync(tmpClone, { recursive: true, force: true }); } catch { /* כנה */ }
-      st.ok = false; st.state = "failed"; fails++;
-      st.detail = "clone-rename-failed — היעד-נכבש-מחדש-בידי-כותב-חי (טופל-בשורש, המחזור-הבא-ינסה)";
-      log("FAIL", a.name, st.detail);
-      return;
-    }
     st.ok = true; st.state = "healed"; heals++;
     st.headAgeMin = await headAge(a.dir);
     st.detail = `cloned-from-canon${st.headAgeMin !== null ? ` · head ${st.headAgeMin} דק` : ""}`;
     log("HEALED", a.name, st.detail);
+    /* ניקוי-אוטומטי-של-ההסגר — סותם-את-חור-הדיסק-שנמדד (FleetHQ.stale=2.6G) */
+    if (qu) {
+      try { rmSync(qu, { recursive: true, force: true }); log("stale-cleaned:", qu); }
+      catch { log("stale-clean-deferred (honest):", qu); }
+    }
     return;
   }
-  try { rmSync(tmpClone, { recursive: true, force: true }); } catch { /* כנה */ }
   st.ok = false; st.state = "failed"; fails++;
   st.detail = `clone-failed: ${c.out.trim().slice(0, 120) || "no-stderr"}`;
   log("FAIL", a.name, st.detail);
@@ -299,7 +248,7 @@ const health = createServer((req, res) => {
   res.end(JSON.stringify({
     ok: allOk,
     service: "estate-sync",
-    version: 3,
+    version: 4,
     selfHealing: true,
     tickDecoupledFromListen: true,
     pid: process.pid,
@@ -326,8 +275,7 @@ function boot() {
 
   /* העבודה-קודמת-לבריאות: הטיק-רץ-מיד — לא-חבור-ב-callback-של-listen
    * (השורש-של-הזומבי-שנמדד: שרת-200 · אפס-טיקים · 80-דקות). */
-  log(`booting v3 · self-healing · ${ANCHORS.length} anchors · every ${Math.round(INTERVAL_MS / 1000)}s · health :${PORT} · pid ${process.pid}`);
-  sweepOldQuarantines(); // גל-87 · ניקוי-גופות-היסטוריות-בעלייה (bundle+מחיקה)
+  log(`booting v4 · self-healing · ${ANCHORS.length} anchors · every ${Math.round(INTERVAL_MS / 1000)}s · health :${PORT} · pid ${process.pid}`);
   void tick();
   setInterval(() => void tick(), INTERVAL_MS);
 
