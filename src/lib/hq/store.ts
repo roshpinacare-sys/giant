@@ -101,8 +101,6 @@ interface HqBridgeState {
   // ---- הזרמת מציאות (AgentHQ קורא אליהן מתוך מטפלי הסוקט שלו) ----
   syncSnapshot(snap: Snapshot): void;
   syncAgent(a: AgentView): void;
-  /** אצווה-לפריים (גל-81): פריים-4Hz אחד = עדכון-store אחד — לא 6 עדכונים נפרדים לסוכן שמקפיצים רינדור-עץ 24 פעמים בשנייה */
-  syncAgents(list: AgentView[]): void;
   syncLog(agentId: string, entry: LogEntry): void;
   syncTask(t: Task): void;
   syncDecision(d: Decision): void;
@@ -213,14 +211,6 @@ export const useHq = create<HqBridgeState>((set, get) => ({
     const agents = upsert(st.snap.agents, a);
     set({ snap: { ...st.snap, agents }, lastSignalAt: Date.now() });
     syncBrains(st.brains, [a]);
-  },
-  syncAgents(list) {
-    if (!list.length) return;
-    const st = get();
-    let agents = st.snap.agents;
-    for (const a of list) agents = upsert(agents, a);
-    set({ snap: { ...st.snap, agents }, lastSignalAt: Date.now() });
-    syncBrains(st.brains, list);
   },
   syncLog(agentId, entry) {
     const st = get();
