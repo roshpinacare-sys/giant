@@ -8,7 +8,7 @@
 //     אין-עליהם-מסחר, אין-נפח-מדומה, אין-עומק מדומה.
 //  5. נפח-SAOS = עסקאות-אמת בלבד (בעלים + הצי דרך ה-API). הארנה נמדדת, לא-מבוימת.
 
-import { db } from "@/lib/db";
+import { db, healDb } from "@/lib/db";
 import type { Timeframe } from "@/lib/dex-types";
 import { TF_SECONDS } from "@/lib/dex-types";
 import { binanceTickers24h } from "@/lib/market-feed";
@@ -354,10 +354,12 @@ async function tick(): Promise<void> {
      * הישן-תקוע (נמדד 2026-10-16: 1396 טיקים-כושלים · חיבור-חדש WRITE_OK). disconnect
      * כופר-מנוע-חדש — הטיק-הבא (8ש׳) מתחבר-מחדש-ומרפא. לעולם-לא-ירוק-מזויף: הכישלון-נרשם. */
     const msg = err instanceof Error ? `${err.message} ${String((err as { code?: string }).code ?? "")}` : String(err);
-    if (/readonly|read-only|locked|SQLITE_BUSY|SQLITE_READONLY/i.test(msg)) {
+    // גל-82: "Engine is not yet connected" — בריכת-Prisma-קפואה-אחרי-SIGSTOP-של-אטימת-כספת
+    // (חוק-משמורת-מדינה) — נוסף-לחוק-הריפוי: ניתוק-כופה → הטיק-הבא-מתחבר-מחדש.
+    if (/readonly|read-only|locked|SQLITE_BUSY|SQLITE_READONLY|not yet connected|Engine is not yet/i.test(msg)) {
       try {
-        await db.$disconnect();
-        console.error("[dex-engine] self-heal: stale pool dropped — next tick reconnects");
+        await healDb("dex-engine tick");
+        console.error("[dex-engine] self-heal: stale pool replaced — next tick reconnects");
       } catch { /* כנה — ננסה-שוב-בטיק-הבא */ }
     }
   } finally {
@@ -417,10 +419,10 @@ async function matchTick(): Promise<void> {
     st.lastError = err instanceof Error ? err.message : String(err);
     console.error("[dex-engine] matcher failed:", err);
     const msg = `${err instanceof Error ? err.message : String(err)} ${String((err as { code?: string }).code ?? "")}`;
-    if (/readonly|read-only|locked|SQLITE_BUSY|SQLITE_READONLY/i.test(msg)) {
+    if (/readonly|read-only|locked|SQLITE_BUSY|SQLITE_READONLY|not yet connected|Engine is not yet/i.test(msg)) {
       try {
-        await db.$disconnect();
-        console.error("[dex-engine] matcher self-heal: stale pool dropped — next run reconnects");
+        await healDb("dex matcher");
+        console.error("[dex-engine] matcher self-heal: stale pool replaced — next run reconnects");
       } catch { /* כנה — ננסה-שוב */ }
     }
   } finally {

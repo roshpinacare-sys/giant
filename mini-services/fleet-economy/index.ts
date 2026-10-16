@@ -85,6 +85,7 @@ let rejected = 0;
 let errors = 0;
 let bootedAt = Date.now();
 let lastVerify: { at: number; ok: boolean; checked: number } | null = null;
+let sealing = false; // חוק-גל-82: מנוע-קפוא-בזמן-אטימת-כספת (אף-כתיבת-מדינה)
 const tailRing: Tx[] = []; // last 500 for /ledger reads
 
 /* ── ingest אמת: אירועי-מערכת אמיתיים (מילויי-דקס · בדיקות-מאמת-אתחול · אטימות)
@@ -277,6 +278,7 @@ function spawnTx(): Tx | null {
 }
 
 function tick() {
+  if (sealing) return; // חוק-גל-82: בזמן-אטימת-כספת המנוע-קפוא — אף-כתיבה-לא-מתרחשת
   try {
     const n = 2 + Math.floor(Math.random() * 3); // 2-4 עסקאות בטיק ≈ 192K-384K/יום
     for (let i = 0; i < n; i++) spawnTx();
@@ -309,11 +311,36 @@ function boot() {
       // dedup שורד-הפעלה-מחדש: מפיקים-חיים + poller-מילויים לא יספרו מילוי-כפול אחרי-restart
       if (Array.isArray(s.seenRefs)) for (const [k, v] of s.seenRefs as [string, number][]) seenRefs.set(k, v);
       if (!balances.has("treasury")) throw new Error("snapshot corrupt");
+      // ריפוי-עצמי בעלייה (גל-82 · שורש-התפר): אם-הספר-על-הדיסק-תפור (תפר-מיזוג-גיט
+      // בין-שרשרת-מקומית-לענן) — אין-המשך-על-ספר-שבור: הסגר-כנה + זריעה-חדשה.
+      const v = verifyChain();
+      if (!v.ok) {
+        quarantineState(`boot-heal-brokenAt-${v.brokenAt}`);
+        balances = new Map();
+        pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
+        seq = 0; lastH = "GENESIS"; ledgerBuf = []; ledgerLines = 0; recent = [];
+        byKind = {}; byAccount = {}; rejected = 0; ledgerFileNo = 0;
+        seed();
+        return { restored: false, seq: 0, quarantined: true };
+      }
       return { restored: true, seq };
     }
   } catch { /* snapshot פגום → זריעה-כנה מחדש */ }
   seed();
   return { restored: false, seq: 0 };
+}
+
+/* הסגר-כנה של-קבצי-מדינה — אפס-תפירה-מזויפת, כל-ההיסטוריה-נשמרת-לביקורת */
+function quarantineState(reason: string) {
+  const q = path.join(STATE_DIR, "quarantine");
+  fs.mkdirSync(q, { recursive: true });
+  const ts = new Date().toISOString().replace(/[:.]/g, "-");
+  for (const f of fs.readdirSync(STATE_DIR)) {
+    const isState = f === "ledger.jsonl" || f === "snapshot.json" || f.startsWith("ledger-") || f.startsWith("tmp-prepull");
+    if (!isState) continue;
+    try { fs.renameSync(path.join(STATE_DIR, f), path.join(q, `${ts}·${reason}·${f}`)); } catch { /* כנה */ }
+  }
+  try { fs.writeFileSync(path.join(STATE_DIR, "quarantine", `${ts}·${reason}·REASON.txt`), `${reason}\n`); } catch { /* כנה */ }
 }
 
 /* אימות-שרשרת מלאה (לתביעה מול-אמת): קורא את הספר כולה ומאמת sha256 */
@@ -340,6 +367,7 @@ function priceUsdsPerSaos() { return pool.saos > 0 ? pool.usds / pool.saos : 0; 
 function countsWindow(ms: number) { const cutoff = Date.now() - ms; let c = 0; for (let i = recent.length - 1; i >= 0; i--) { if (recent[i] >= cutoff) c++; else break; } return c; }
 
 function snapshotSave() {
+  if (sealing) return; // חוק-גל-82: אף-כתיבת-מדינה-בזמן-אטימה
   flush();
   const obj = { v: 3, savedAt: Date.now(), seq, lastH, balances: Object.fromEntries(balances), pool, byKind, byAccount, rejected, errors, ledgerFileNo, ingestOk, ingestDedup, ingestFailed, ingestBad, seenRefs: Array.from(seenRefs.entries()).slice(-SEEN_REFS_SNAP) };
   const tmp = SNAP + ".tmp";
@@ -463,6 +491,7 @@ async function sealRepo(dir: string): Promise<boolean> {
       if (!cm.ok && !cm.out.includes("nothing to commit")) { sealLog({ repo: name, action: "commit-fail", out: cm.out }); }
     }
     await git(dir, ["pull", "--rebase", "-X", "ours", "origin"]);
+    if (afterPull) { try { await afterPull(); } catch (e) { sealLog({ repo: name, action: "after-pull-fail", error: String(e) }); } }
     const push = await git(dir, ["push", "origin", "HEAD"]);
     if (push.ok || push.out.includes("Everything up-to-date") || push.out.includes("up to date")) {
       sealLog({ repo: name, action: "sealed", ahead: ahead ?? "0", detail: push.out.slice(0, 120) });
@@ -477,6 +506,57 @@ async function sealRepo(dir: string): Promise<boolean> {
   }
   return false;
 }
+
+/* ── חוק-משמורת-מדינה (גל-82 · שורש-התפר-החוזר) ─────────────────────────────
+ * ריבוז-גיט ממזג-שתי-הוספות-קנה-על-ספר-חי-לשרשרת-תפורה (נמדד-פעמיים: גל-80-וגל-82).
+ * התיקון-מהשורש, לפי-חוק-גל-80-שנרשם-ולא-מומש:
+ *  1. המנוע-שלנו-קפוא-בזמן-אטימה (sealing — טיק-וסנאפשוט-מדלגים)
+ *  2. next-server-קפוא (SIGSTOP — הוא-כותב-את-db/custom.db-דרך-מנוע-הדקס)
+ *  3. אחרי-הריבוז: נאמת-את-השרשרת; תפר → מחזירים-את-העותק-המקומי-התקין
+ *     (הענן-לא-מפסיד — התפר-שלו-נשאר-בהיסטוריית-הגיט; הספר-החי-שלנו-הוא-האמת)
+ *  4. רק-אז-דוחפים. */
+function nextServerPids(): number[] {
+  const out: number[] = [];
+  try {
+    for (const pid of fs.readdirSync("/proc").filter((d) => /^\d+$/.test(d))) {
+      try {
+        const cmd = fs.readFileSync(`/proc/${pid}/cmdline`, "utf8");
+        if (cmd.includes("next-server")) out.push(Number(pid));
+      } catch { /* תהליך-נעלם */ }
+    }
+  } catch { /* כנה */ }
+  return out;
+}
+
+async function sealMyProject(): Promise<void> {
+  sealing = true; // הקפאה-עצמית: אף-tick/snapshotSave-לא-רץ
+  const pids = nextServerPids();
+  for (const p of pids) { try { process.kill(p, "SIGSTOP"); } catch { /* כנה */ } }
+  let preLedger = ""; let preSnap = "";
+  try {
+    try { flush(); snapshotSave(); } catch { /* נקודת-עקביות-כנה */ }
+    const ts = Date.now();
+    preLedger = path.join(STATE_DIR, `tmp-prepull-ledger-${ts}.jsonl`);
+    preSnap = path.join(STATE_DIR, `tmp-prepull-snap-${ts}.json`);
+    try { fs.copyFileSync(LEDGER, preLedger); fs.copyFileSync(SNAP, preSnap); } catch { preLedger = ""; preSnap = ""; }
+    await sealRepo("/home/z/my-project", () => {
+      const v = verifyChain();
+      if (!v.ok) {
+        // תפר-מיזוג-מהענן → משמורת-מדינה: השרשרת-החיה-המקומית-מנצחת
+        let restored = false;
+        if (preLedger) { try { fs.copyFileSync(preLedger, LEDGER); restored = true; } catch { /* כנה */ } }
+        if (preSnap) { try { fs.copyFileSync(preSnap, SNAP); } catch { /* כנה */ } }
+        sealLog({ repo: "my-project", action: "state-custody-restore", brokenAt: v.brokenAt, restored });
+      }
+    });
+  } finally {
+    for (const p of pids) { try { process.kill(p, "SIGCONT"); } catch { /* כנה */ } }
+    if (preLedger) try { fs.rmSync(preLedger, { force: true }); } catch { /* כנה */ }
+    if (preSnap) try { fs.rmSync(preSnap, { force: true }); } catch { /* כנה */ }
+    sealing = false; // הפשרה — הכלכלה-חוזרת-לנשום
+  }
+}
+
 async function sealAll(): Promise<void> {
   try {
     let sealed = 0;

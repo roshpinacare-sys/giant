@@ -49,8 +49,8 @@ function personalityFor(agentId: string): AgentPersonality {
     return ((h >>> 0) % 1000) / 1000 * n;
   };
   return {
-    targetBasePct: 0.35 + r(0.3), // 35%-65% מלאי-SAOS-ביעד
-    tradeUsds: 4 + r(TRADE_USDS_CAP - 4), // 4..12 USDS
+    targetBasePct: 0.35 + r(0.3), // 35%-65% מלאי-בסיס-ביעד
+    tradeUsds: 4 + r(TRADE_USDS_CAP - 4), // 4..24 USDS (גל-82)
     // 0.04%-0.12% מהמחיר — פעמיים-עד-ארבע-פעמים-השפעת-המיד-של-פקודה-משלנו:
     // סוכנים-אחרים-שמבצעים-עסקאות-שוק-חוצים-אותן-ברציפות (נמדד: פקודת-12-USDS
     // מזיזה-את-בריכת-58.9k/86.6k-ב-~0.028%).
@@ -101,6 +101,7 @@ async function publishHealth(): Promise<void> {
     orders: st.orders,
     cancels: st.cancels,
     errors: st.errors,
+    pools: st.pools,
     lastError: st.lastError,
     lastSweepAt: st.lastSweepAt,
     lastActionAt: st.lastActionAt,
@@ -113,56 +114,64 @@ async function publishHealth(): Promise<void> {
   });
 }
 
-async function agentBalances(account: string): Promise<{ usds: number; saos: number }> {
-  const rows = await db.dexLedger.groupBy({
-    by: ["token"],
-    _sum: { amount: true },
-    where: { account, token: { in: ["USDS", "SAOS"] } },
-  });
-  const map = new Map(rows.map((r) => [r.token, r._sum.amount ?? 0]));
-  return { usds: map.get("USDS") ?? 0, saos: map.get("SAOS") ?? 0 };
-}
-
 async function sweepOnce(): Promise<void> {
   const st = loopState();
   if (st.busy) return;
   st.busy = true;
   st.lastSweepAt = new Date().toISOString();
   try {
-    const pair = await db.dexPair.findFirst({ where: { isNative: true, base: "SAOS" } });
-    if (!pair) return; // אין-שוק — אין-לקוחות; לא-ממציאים
+    // גל-82 · ריבוי-בריכות: כל-הזוגות-הילידים-עם-רזרבות-אמת — לא-רק-SAOS/USDS.
+    // בריכה-בלי-רזרבות = לא-שוק; לא-ממציאים-זרימה-עליה.
+    const pairs = await db.dexPair.findMany({
+      where: { isNative: true, reserveBase: { gt: 0 }, reserveQuote: { gt: 0 } },
+      orderBy: { sort: "asc" },
+    });
+    if (!pairs.length) return; // אין-שוק — אין-לקוחות; לא-ממציאים
+    st.pools = pairs.length;
 
     const agents = await db.fleetAgent.findMany({ where: { active: true } });
     if (!agents.length) return;
 
     const now = Date.now();
+    let actions = 0;
+
     for (const agent of agents) {
+      if (actions >= MAX_ACTIONS_PER_SWEEP) break;
       try {
-        // מי-בזמן-שלו: מרווח-אישי-8..45 שניות מה-אישיות-היציבה
+        // מי-בזמן-שלו: מרווח-אישי-5..20 שניות מה-אישיות-היציבה
         const pers = personalityFor(agent.agentId);
         const gapSec = MIN_GAP_SEC + Math.floor((pers.targetBasePct * 100) % (MAX_GAP_SEC - MIN_GAP_SEC));
         const last = agent.lastTradeAt ? new Date(agent.lastTradeAt).getTime() : 0;
         if (now - last < gapSec * 1000) continue;
 
         const account = `FLEET:${agent.agentId}`;
-        const bal = await agentBalances(account);
-        const price = pair.price;
-        const baseValue = bal.saos * price;
-        const total = baseValue + bal.usds;
-        if (total < 1) continue; // אין-הון-אמיתי — לא-מדמים-לקוח
+        // יתרות-החשבון-פעם-אחת (כל-האסימונים-הילידים) — ממנה-נגזר-המלאי-בכל-בריכה
+        const tokens = [...new Set([...pairs.map((p) => p.base), "USDS"])];
+        const rows = await db.dexLedger.groupBy({
+          by: ["token"],
+          _sum: { amount: true },
+          where: { account, token: { in: tokens } },
+        });
+        const balMap = new Map(rows.map((r) => [r.token, r._sum.amount ?? 0]));
+        const usds = balMap.get("USDS") ?? 0;
+        // שווי-כולל-בכל-הבריכות — יעד-המלאי-לכל-בריכה = שווי-מחולק-שווה (MM-רב-שוק)
+        let totalValue = usds;
+        const baseValue = new Map<string, number>();
+        for (const pair of pairs) {
+          const bv = (balMap.get(pair.base) ?? 0) * pair.price;
+          baseValue.set(pair.id, bv);
+          totalValue += bv;
+        }
+        if (totalValue < 1) continue; // אין-הון-אמיתי — לא-מדמים-לקוח
+        const targetPerPool = totalValue / pairs.length;
 
-        const targetBase = total * pers.targetBasePct;
-        const deviation = baseValue - targetBase; // >0 = מכור-SAOS-עודף · <0 = קנה
-
-        // פקודות-פתוחות-של-הסוכן
+        // פקודות-פתוחות-של-הסוכן (על-כל-הבריכות)
         const open = await db.dexOrder.findMany({
           where: { account, status: "OPEN" },
           orderBy: { createdAt: "asc" },
         });
 
-        let acted = false;
-
-        // 1) מחזור-חיים: פקודות-זקנות-מ-4 ד׳ → ביטול-והחזרת-נזילות-לעבודה (עד-3-לסריקה)
+        // 1) מחזור-חיים: פקודות-זקנות-מ-2.5 ד׳ → ביטול-והחזרת-נזילות-לעבודה (עד-3-לסריקה)
         let cancels = 0;
         for (const staleOrder of open) {
           if (cancels >= MAX_CANCELS_PER_SWEEP) break;
@@ -171,47 +180,37 @@ async function sweepOnce(): Promise<void> {
           if ("ok" in res) {
             st.cancels += 1;
             cancels += 1;
-            acted = true;
+            actions += 1;
           } else {
             st.errors += 1;
             st.lastError = `${agent.agentId} cancel: ${res.error}`;
           }
         }
 
-        // 2) איזון-מלאי-דטרמיניסטי — סטייה->3% → עסקת-שוק-אמת (בלי-קוביות)
-        const devTrigger = Math.max(total * DEVIATION_TRIGGER, MIN_NOTIONAL);
-        if (Math.abs(deviation) > devTrigger) {
-          const usds = Math.min(Math.abs(deviation), pers.tradeUsds, bal.usds);
-          if (deviation < 0 && usds >= MIN_NOTIONAL) {
-            // קניית-SAOS-להשלמת-מלאי
-            const res = await executeSwap({
-              pairId: pair.id,
-              side: "BUY",
-              amountIn: usds,
-              slippagePct: 1.5,
-              source: "FLEET",
-              account,
-              agentId: agent.agentId,
-            });
-            if ("error" in res) {
-              st.errors += 1;
-              st.lastError = `${agent.agentId} BUY: ${res.error}`;
-            } else {
-              st.trades += 1;
-              acted = true;
-            }
-          } else if (deviation > 0) {
-            // מכירת-SAOS-עודף
-            const saosToSell = Math.min(
-              deviation / price,
-              pers.tradeUsds / price,
-              bal.saos,
-            );
-            if (saosToSell * price >= MIN_NOTIONAL) {
+        // 2+3) על-כל-בריכה-חיה: איזון-מלאי + מעשה-שוק-דו-צדדי
+        let openCount = open.length - cancels;
+        for (const pair of pairs) {
+          if (actions >= MAX_ACTIONS_PER_SWEEP) break;
+          if (openCount >= MAX_OPEN_PER_AGENT) break;
+          const price = pair.price;
+          if (!Number.isFinite(price) || price <= 0) continue;
+
+          // גודל-פקודה-מכובד-לבריכה: מינימום-בין-האישיות-לבין-0.6%-מהרזרבה (קמעונאי-אמת)
+          const poolCap = pair.reserveQuote * MAX_POOL_ORDER_USDS;
+          const tradeUsds = Math.min(pers.tradeUsds, poolCap);
+          if (tradeUsds < MIN_NOTIONAL) continue;
+
+          const deviation = (baseValue.get(pair.id) ?? 0) - targetPerPool; // >0 = מכור-עודף · <0 = קנה
+          const devTrigger = Math.max(targetPerPool * DEVIATION_TRIGGER, MIN_NOTIONAL);
+
+          if (deviation < -devTrigger && usds >= MIN_NOTIONAL) {
+            // קניית-בסיס-להשלמת-מלאי-הבריכה
+            const amountIn = Math.min(-deviation, tradeUsds, usds);
+            if (amountIn >= MIN_NOTIONAL) {
               const res = await executeSwap({
                 pairId: pair.id,
-                side: "SELL",
-                amountIn: saosToSell,
+                side: "BUY",
+                amountIn,
                 slippagePct: 1.5,
                 source: "FLEET",
                 account,
@@ -219,63 +218,87 @@ async function sweepOnce(): Promise<void> {
               });
               if ("error" in res) {
                 st.errors += 1;
-                st.lastError = `${agent.agentId} SELL: ${res.error}`;
+                st.lastError = `${agent.agentId} ${pair.base} BUY: ${res.error}`;
               } else {
                 st.trades += 1;
-                acted = true;
+                actions += 1;
+              }
+            }
+          } else if (deviation > devTrigger) {
+            // מכירת-בסיס-עודף
+            const held = balMap.get(pair.base) ?? 0;
+            const baseToSell = Math.min(deviation / price, tradeUsds / price, held);
+            if (baseToSell * price >= MIN_NOTIONAL) {
+              const res = await executeSwap({
+                pairId: pair.id,
+                side: "SELL",
+                amountIn: baseToSell,
+                slippagePct: 1.5,
+                source: "FLEET",
+                account,
+                agentId: agent.agentId,
+              });
+              if ("error" in res) {
+                st.errors += 1;
+                st.lastError = `${agent.agentId} ${pair.base} SELL: ${res.error}`;
+              } else {
+                st.trades += 1;
+                actions += 1;
+              }
+            }
+          }
+
+          // מעשה-שוק-דו-צדדי — קנייה-מתחת-המיד + מכירה-מעליו (עומק-אמת-שחוצה-ברציפות)
+          if (openCount < MAX_OPEN_PER_AGENT && usds >= MIN_NOTIONAL) {
+            const limitPrice = price * (1 - pers.limitOffsetPct);
+            const amountIn = Math.min(tradeUsds, usds);
+            if (amountIn >= MIN_NOTIONAL) {
+              const res = await placeLimitOrder({
+                pairId: pair.id,
+                side: "BUY",
+                limitPrice,
+                amountIn,
+                account,
+                source: "FLEET",
+                agentId: agent.agentId,
+              });
+              if ("error" in res) {
+                st.errors += 1;
+                st.lastError = `${agent.agentId} ${pair.base} limit-BUY: ${res.error}`;
+              } else {
+                st.orders += 1;
+                openCount += 1;
+                actions += 1;
+              }
+            }
+          }
+          const heldBase = balMap.get(pair.base) ?? 0;
+          if (openCount < MAX_OPEN_PER_AGENT && heldBase * price >= MIN_NOTIONAL) {
+            const limitPrice = price * (1 + pers.limitOffsetPct);
+            const amountIn = Math.min(tradeUsds / price, heldBase);
+            if (amountIn * price >= MIN_NOTIONAL) {
+              const res = await placeLimitOrder({
+                pairId: pair.id,
+                side: "SELL",
+                limitPrice,
+                amountIn,
+                account,
+                source: "FLEET",
+                agentId: agent.agentId,
+              });
+              if ("error" in res) {
+                st.errors += 1;
+                st.lastError = `${agent.agentId} ${pair.base} limit-SELL: ${res.error}`;
+              } else {
+                st.orders += 1;
+                openCount += 1;
+                actions += 1;
               }
             }
           }
         }
 
-        // 3) מעשה-שוק-דו-צדדי — קנייה-מתחת-למחיר + מכירה-מעל-המחיר (עומק-אמת-שחוצה-ברציפות)
-        const slots = MAX_OPEN_PER_AGENT - (open.length - cancels);
-        if (slots > 0 && bal.usds >= MIN_NOTIONAL) {
-          const limitPrice = price * (1 - pers.limitOffsetPct);
-          const amountIn = Math.min(pers.tradeUsds, bal.usds);
-          if (amountIn >= MIN_NOTIONAL) {
-            const res = await placeLimitOrder({
-              pairId: pair.id,
-              side: "BUY",
-              limitPrice,
-              amountIn,
-              account,
-              source: "FLEET",
-              agentId: agent.agentId,
-            });
-            if ("error" in res) {
-              st.errors += 1;
-              st.lastError = `${agent.agentId} limit-BUY: ${res.error}`;
-            } else {
-              st.orders += 1;
-              acted = true;
-            }
-          }
-        }
-        if (slots > 1 && bal.saos * price >= MIN_NOTIONAL) {
-          const limitPrice = price * (1 + pers.limitOffsetPct);
-          const amountIn = Math.min(pers.tradeUsds / price, bal.saos);
-          if (amountIn * price >= MIN_NOTIONAL) {
-            const res = await placeLimitOrder({
-              pairId: pair.id,
-              side: "SELL",
-              limitPrice,
-              amountIn,
-              account,
-              source: "FLEET",
-              agentId: agent.agentId,
-            });
-            if ("error" in res) {
-              st.errors += 1;
-              st.lastError = `${agent.agentId} limit-SELL: ${res.error}`;
-            } else {
-              st.orders += 1;
-              acted = true;
-            }
-          }
-        }
-
-        if (acted) {
+        if (actions > 0) {
           await db.fleetAgent.update({
             where: { agentId: agent.agentId },
             data: { lastTradeAt: new Date() },
@@ -313,6 +336,7 @@ async function seedFromPublishedHealth(): Promise<void> {
     st.orders = Math.max(st.orders, Number(prev.orders ?? 0));
     st.cancels = Math.max(st.cancels, Number(prev.cancels ?? 0));
     st.errors = Math.max(st.errors, Number(prev.errors ?? 0));
+    st.pools = Math.max(st.pools, Number(prev.pools ?? 0));
   } catch {
     // אין-עדות-קודמת — מתחילים-מאפס-כנה
   }
@@ -340,6 +364,7 @@ export function fleetLoopStatus(): LoopHealth {
     orders: st.orders,
     cancels: st.cancels,
     errors: st.errors,
+    pools: st.pools,
     lastError: st.lastError,
     lastSweepAt: st.lastSweepAt,
     lastActionAt: st.lastActionAt,
