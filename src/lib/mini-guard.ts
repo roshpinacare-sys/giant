@@ -26,7 +26,7 @@ export const MINI_SERVICES: MiniServiceDef[] = [
   /* גל-87 · נמדד: כל-צוות-FleetHQ-היה-אנשי-מת-מהלכים (קורפסים-מ-FleetHQ.stale-שנמחק) —
    * הממונה-האמיתי-עתה-בן-עץ-ה-Next (שושלת-השרדות); הוא-בעצמו-מחיה-פורנן/gateway/beats-כל-5ש׳.
    * single-flight-מובנה (pid-file+pidAlive) מונע-כפילות-אם-המשגיחה-משגיחה-על-המשגיח. */
-  { name: "fleet-supervisor", dir: "/home/z/estate/FleetHQ/mini-services/agent-hq", port: 3010, he: "ממונה-הצי (FleetHQ: פורנן 3010 + גייטוויי + beats)", cmd: "[ -d node_modules ] || bun install --silent; exec bun tools/runtime-supervisor.ts" },
+  { name: "fleet-supervisor", dir: "/home/z/estate/FleetHQ/mini-services/agent-hq", port: 3010, he: "ממונה-הצי (FleetHQ: פורנן 3010 + גייטוויי + beats)", cmd: "[ -d node_modules ] || bun install --silent; exec bun tools/runtime-supervisor.ts", env: { AGENT_HQ_DATA_DIR: "/home/z/my-project/Domain" } },
 ];
 
 export interface MiniServiceDef {
@@ -39,6 +39,8 @@ export interface MiniServiceDef {
   probe?: "estate-sync" | "gateway" | "boot-verifier";
   /** פקודת-השקה-מותאמת (default: התקנה-אם-חסר + bun run dev) */
   cmd?: string;
+  /** השמה-סביבתית-מכריעה (מנצחת-את-הורשת-השרת — גל-87: AGENT_HQ_DATA_DIR ירש-נתיב-עוגן-קריאה) */
+  env?: Record<string, string>;
 }
 
 const MIN_SPAWN_INTERVAL_MS = 90_000;
@@ -149,7 +151,7 @@ function spawnService(svc: MiniServiceDef): string {
       cwd,
       /* בן-של-שרת-Next (עץ-הפלטפורמה) — בלי-setsid; ההשגחה-החוזרת-מכסה-אם-נעקר */
       stdio: ["ignore", fd, fd],
-      env: { ...process.env, MINI_GUARD: "1", REVIVED_AT: stamp },
+      env: { ...process.env, MINI_GUARD: "1", REVIVED_AT: stamp, ...(svc.env ?? {}) },
     });
     child.on("error", (e) => { lastNote[svc.name] = `spawn-error: ${e.message}`; });
     child.unref();

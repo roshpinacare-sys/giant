@@ -254,7 +254,17 @@ async function syncAnchor(a: Anchor, st: AnchorState, pat: string | null): Promi
   const tmpClone = `${a.dir}.clone-${Date.now()}`;
   const c = await runGit(["clone", "--quiet", url, tmpClone], { token, timeoutMs: 180_000 });
   if (c.code === 0) {
-    try { renameSync(tmpClone, a.dir); } catch { try { rmSync(tmpClone, { recursive: true, force: true }); } catch { /* כנה */ } }
+    /* גל-87 · כנות-מדודה: rename-כושל (היעד-נכבש-מחדש-בשניות-ע"י-כותב-חי) אינו-ריפוי —
+     * ירוק-מזויף-אסור (נמדד-חי: "cloned-from-canon" על-עץ-בלי-.git). כשל-שם = כשל-כנה,
+     * המחזור-הבא-מנסה-שוב-אחרי-שהכובש-טופל-בשורש. */
+    try { renameSync(tmpClone, a.dir); }
+    catch {
+      try { rmSync(tmpClone, { recursive: true, force: true }); } catch { /* כנה */ }
+      st.ok = false; st.state = "failed"; fails++;
+      st.detail = "clone-rename-failed — היעד-נכבש-מחדש-בידי-כותב-חי (טופל-בשורש, המחזור-הבא-ינסה)";
+      log("FAIL", a.name, st.detail);
+      return;
+    }
     st.ok = true; st.state = "healed"; heals++;
     st.headAgeMin = await headAge(a.dir);
     st.detail = `cloned-from-canon${st.headAgeMin !== null ? ` · head ${st.headAgeMin} דק` : ""}`;
