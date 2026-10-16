@@ -274,9 +274,14 @@ function spawnTx(): Tx | null {
     if (tx) apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: receiver, to: "treasury", asset: "USDS", amount: round6(tx.amount * (TAX_BPS / 10_000)), reason: `מס-שירותים ${TAX_BPS / 100}% → כספת` });
     return tx;
   }
-  if (r < 0.74) { // החלפה על הבריכה (גילוי-מחיר אמיתי)
+  if (r < 0.74) { // החלפה על הבריכה (גילוי-מחיר אמיתי · מיקוף-פוזיציה)
+    // גל-85 · מיקוף-פוזיציה: אף-סוחר-אמיתי-לא-מהמר-יותר-מהארנקה —
+    // הסוופ-מסתגל-ליתרה (נמדד: סוופ-גדול-על-ארנקה-ריקה = 24% מהדחיות)
     const buySaos = Math.random() < 0.5;
-    const amt = round6(buySaos ? 5 + Math.random() * 40 : 5 + Math.random() * 35);
+    const b0 = bal(soldier);
+    const want = buySaos ? 5 + Math.random() * 40 : 5 + Math.random() * 35;
+    const amt = round6(Math.min(want, Math.max(1, (buySaos ? b0.usds : b0.saos) * 0.35)));
+    if (amt < 1) { rej(); return null; }
     return ammSwap(soldier, buySaos ? "USDS" : "SAOS", amt, buySaos ? "רכישת SAOS לתשלומי-סטייק" : "מימוש SAOS ל-USDS תפעולי");
   }
   if (r < 0.84) { // סטייק/ביטול-סטייק
@@ -313,12 +318,12 @@ function tick() {
     // גל-83 · חוק-שכר-מצע (כל-12-טיקים): חייל-מתחת-לרצפת-הפרנסה — הכספת מתדלקת.
     // זו-הזרימה-החוזרת-שחסרה: בלעדיה-הכסף-הצטבר-בבריכה/צמתים-והחיילים-נשארו-יבשים
     // (נמדד: 5,916-דחיות-מול-3,278-קבלות = 64% בזבוז-ניסיונות).
-    if (tickNo % 12 === 0) {
-      // גל-85 · שכר-מצע מדורג: כל-חייל-מתחת-הרצפה מתודלק (לא אחד-נבחר) —
-      // נדרש כי ניסיונות-הפר-טיק גדלו ×4 (נמדד: ריפוד-יחיד = 33% דחיות)
+    if (tickNo % 4 === 0) {
+      // גל-85 · שכר-מצע-חלק (כל-4-טיקים, היה-12): מילוי-רציף-של-כל-העניים —
+      // ריפוד-דחוס-מונע-התרסקות-לאפס-בין-מילויים (נמדד: ריפוד-דליל = קבלה-מתנדנדת)
       const poor = SOLDIERS.filter((s) => bal(s.id).usds < WAGE_FLOOR_USDS);
       for (const s of poor) {
-        apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: round6(30 + Math.random() * 45), reason: `חוק-שכר-מצע: תדלוק-פרנסה (רצפת ${WAGE_FLOOR_USDS})` });
+        apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: round6(40 + Math.random() * 40), reason: `חוק-שכר-מצע: תדלוק-פרנסה (רצפת ${WAGE_FLOOR_USDS})` });
       }
     }
     // גל-83 · איסוף-עמלות (כל-150-טיקים): עמלות-הבריכה (הכנסת-הרשת) זורמות-לכספת
