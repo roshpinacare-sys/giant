@@ -645,3 +645,18 @@
 {"ts":"2026-10-16T18:01:29.025Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T18:01:30.807Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T18:01:30.808Z","action":"sweep-done"}
+{"ts":"2026-10-16T18:11:02.101Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for dd58057909ad89ffddbccf822754671f96736f02\nCannot save the current worktree state\nfatal: stash failed"}
+{"ts":"2026-10-16T18:11:07.314Z","repo":"my-project","action":"commit-fail","out":"On branch main\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   db/custom.db\n\tmodified:   mini-services/fleet-economy/state/seal-log.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
+{"ts":"2026-10-16T18:11:08.866Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for e3eb822605fbdf58d3a722b55c46f3629824a88e\nCannot save the current worktree state\nfatal: stash failed"}
+{"ts":"2026-10-16T18:11:10.311Z","repo":"my-project","action":"push-fail","out":"jected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T18:11:12.211Z","repo":"FleetHQ","action":"pull-fail","out":"tash them before you merge.\nAborting\nhint: Could not execute the todo command\nhint:\nhint:     pick b3fe1f3a07e040d6384c8ddcb675551069179c6c vault-seal [auto-economy]: 18 files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס\nhint:\n"}
+{"ts":"2026-10-16T18:11:20.316Z","repo":"FleetHQ","action":"pull-fail","out":"tash them before you merge.\nAborting\nhint: Could not execute the todo command\nhint:\nhint:     pick b3fe1f3a07e040d6384c8ddcb675551069179c6c vault-seal [auto-economy]: 18 files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס\nhint:\n"}
+{"ts":"2026-10-16T18:11:21.229Z","repo":"FleetHQ","action":"push-fail","out":"a ref in \"refs/{heads,tags}/\". If so we add a corresponding\n  refs/{heads,tags}/ prefix on the remote side.\n\nNeither worked, so we gave up. You must fully qualify the ref.\nhint: The <src> part of the refspec is a commit object.\nhint: Did you mean to create a new branch by pushing to\nhint: 'HEAD:refs/heads/HEAD'?\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/FleetHQ.git'"}
+{"ts":"2026-10-16T18:11:23.160Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:11:24.768Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:11:26.502Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:11:28.771Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:11:31.017Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:11:32.692Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:11:34.505Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T18:11:34.506Z","action":"sweep-done"}
