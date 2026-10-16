@@ -197,7 +197,7 @@ export function classifyAgent(name: string): AgentFamily {
 
 export const FAMILY_LABEL: Record<AgentFamily, string> = {
   owner: "הבעלים",
-  zai: "סוכני-Z.ai",
+  zai: "סוכני-פיתוח-חוזים (היסטורי)",
   organ: "איברי-הריבונות",
   automation: "אוטומציה-ובוטים",
 };
