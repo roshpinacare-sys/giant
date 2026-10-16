@@ -2397,3 +2397,20 @@ Work Log:
 Stage Summary:
 - **הבעלים יכול להתחבר**: המפתח = המילה "headcorner" בשער-המפעיל (OperatorDrawer ב-3000) · להחזרת-מפתח-אמיתי (WIF): עריכת upload/headcorner.txt שורה-2 — קליטה-מיידית בלי-ריסטרט (רק-הבעלים-מחזיק-אותו; אינו-מתאושש-מכונה בכוונה)
 - כספת: HEAD==origin==e48fdea · grid-watch ירוק-בייצור · FleetHQ בבנייה
+
+---
+Task ID: T77-8
+Agent: Z.ai Code (orchestrator)
+Task: החייאת-FleetHQ :3002 — שרשרת-מוות-מרובה-שורשים (node_modules-נמחו → Turbopack-OOM → עץ-מנותח-בשידור-חי-ע"י-סשן-מקביל → אינדקס-שבור)
+
+Work Log:
+- סוויפ: 3002=000 · המפקח מת · node_modules=0-חבילות → bun-install (933-חבילות, 7.5ש׳) · next-bin שוחזר
+- בנייה-1: Turbopack-Module-not-found על spawn('tools/git-cage.mjs') → תיקון-נתיב-ריצה-מוחלט (התכנסות-עצמאית: 1c5a8286-הסשן-המקביל תיקן-את-אותו-דבר)
+- בנייה-2: exit-137 OOM-מערכת (next-server-3000 אוחז 1.2GB, available-1.5GB — לא-מספיק לטורבופק)
+- במקביל: הסשן-המקביל ניתח-את-FleetHQ-ונטש-באמצע → עץ-מרוסק (אין-.git, receipts+sovereign-stack-בלבד) → הצלה-שמורה-בצד (mv, אפס-מחיקה) → שיבוט-מהכספת (e1e13a44, CI-ענן-ירוק "build pass") → **אינדקס-שבור-0-קבצים-נעוקים** (דפוס-9b24b2572!) → git reset --hard HEAD → 2888-קבצים ✓
+- supervisor-v2 (נמדד-חי): נסיגת-בנייה 10ד׳ · dev-fallback מוגבל-700MB (שירות-עכשיו, standalone-מאוחר) · self-heal-node_modules · ניקוי-מנעול · subshell-cd (v1: cd-בלולאה=exit-קטלני)
+- הרכב-v2-בזיכרון-החיה-את-3002-מיד (200-אומת) · ה-v2-בדיסק-אבד-ב-rebase-autostash → נכתב-מחדש → נאטם: **LOCAL==ORIGIN==e7710222**
+- בניית-standalone נדחית-לנסיגה-הבאה (זיכרון-יתפנה) — המפקח יבנה-אוטומטית
+
+Stage Summary:
+- 3002-חי-ו-200 (dev-מוגבל-700MB, מפקח-v2-שומר) · שרשרת-ההצלה: אפס-אובדן (עץ-גרוסה-נשמר-ב-FleetHQ.gutted-*) · דפוס-אינדקס-שבור-בשיבוט-מתועד-בפעם-השנייה (VAULT-LAW-v2-חוזר-על-עצמו-בהקשר-שיבוט)
