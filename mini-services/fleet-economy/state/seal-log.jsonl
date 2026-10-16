@@ -78,6 +78,7 @@
 {"ts":"2026-10-16T09:49:03.031Z","repo":"giant","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T09:49:04.677Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T09:49:04.677Z","action":"sweep-done"}
+<<<<<<< Updated upstream
 {"ts":"2026-10-16T10:03:44.712Z","repo":"my-project","action":"state-custody-restore","brokenAt":1,"restored":true}
 {"ts":"2026-10-16T10:03:47.792Z","repo":"my-project","action":"state-custody-restore","brokenAt":1,"restored":true}
 {"ts":"2026-10-16T10:03:47.796Z","repo":"my-project","action":"push-fail","out":"fatal: 'origin' does not appear to be a git repository\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists."}
@@ -91,3 +92,28 @@
 {"ts":"2026-10-16T10:04:05.815Z","repo":"giant","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T10:04:07.825Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T10:04:07.825Z","action":"sweep-done"}
+=======
+{"ts":"2026-10-16T09:58:49.052Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant\n   4ab3ee5..5244de4  HEAD -> main"}
+{"ts":"2026-10-16T09:58:52.414Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   8646c618..40441f7d  HEAD -> main"}
+{"ts":"2026-10-16T09:58:55.658Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   87d16aeb..1938a299  HEAD -> main"}
+{"ts":"2026-10-16T09:58:57.486Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T09:58:59.247Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T09:59:01.220Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T09:59:03.758Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T09:59:05.921Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T09:59:08.176Z","repo":"giant","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T09:59:09.997Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T09:59:09.997Z","action":"sweep-done"}
+{"ts":"2026-10-16T10:08:50.598Z","repo":"my-project","action":"commit-fail","out":"On branch main\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   db/custom.db\n\tmodified:   mini-services/fleet-economy/state/ledger.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
+{"ts":"2026-10-16T10:08:51.472Z","repo":"my-project","action":"push-fail","out":"[rejected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T10:08:53.912Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   cef4b4c0..63b92d9c  HEAD -> main"}
+{"ts":"2026-10-16T10:08:56.989Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   7a4261de..4b0e341b  HEAD -> main"}
+{"ts":"2026-10-16T10:08:58.793Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:09:00.211Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:09:02.273Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:09:04.058Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:09:06.187Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:09:08.430Z","repo":"giant","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:09:10.278Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T10:09:10.278Z","action":"sweep-done"}
+>>>>>>> Stashed changes
