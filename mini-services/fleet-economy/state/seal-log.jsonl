@@ -584,3 +584,15 @@
 {"ts":"2026-10-16T17:11:19.593Z","repo":"saos-dex","action":"status-fail","out":""}
 {"ts":"2026-10-16T17:11:19.593Z","repo":"autonomy-fix","action":"status-fail","out":""}
 {"ts":"2026-10-16T17:11:19.593Z","action":"sweep-done"}
+{"ts":"2026-10-16T17:21:02.979Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 7b57edc25c501d561ccb783c96783c0a1ef27fd4\nCannot save the current worktree state\nfatal: stash failed"}
+{"ts":"2026-10-16T17:21:07.428Z","repo":"my-project","action":"commit-fail","out":"On branch main\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   db/custom.db\n\tmodified:   mini-services/fleet-economy/state/seal-log.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
+{"ts":"2026-10-16T17:21:16.121Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   28245d6..de738e9  HEAD -> main"}
+{"ts":"2026-10-16T17:21:16.125Z","repo":"FleetHQ","action":"status-fail","out":""}
+{"ts":"2026-10-16T17:21:16.125Z","repo":"Domain","action":"status-fail","out":""}
+{"ts":"2026-10-16T17:21:16.125Z","repo":"Console","action":"status-fail","out":""}
+{"ts":"2026-10-16T17:21:16.125Z","repo":"Pulse","action":"status-fail","out":""}
+{"ts":"2026-10-16T17:21:16.126Z","repo":"Sandbox","action":"status-fail","out":""}
+{"ts":"2026-10-16T17:21:16.126Z","repo":"roshpina","action":"status-fail","out":""}
+{"ts":"2026-10-16T17:21:16.126Z","repo":"saos-dex","action":"status-fail","out":""}
+{"ts":"2026-10-16T17:21:16.126Z","repo":"autonomy-fix","action":"status-fail","out":""}
+{"ts":"2026-10-16T17:21:16.126Z","action":"sweep-done"}

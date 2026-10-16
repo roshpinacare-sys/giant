@@ -69,11 +69,21 @@ function tcpOpen(port: number, host = "127.0.0.1"): Promise<boolean> {
   });
 }
 
+/* חוק-PATH-המובטח (נמדד 85-c: יתומי-דור-ישן נולדו-בלי-/home/z/.bun/bin → posix_spawn 'bun' ENOENT):
+ *   כל-צאצא-שלנו מקבל PATH עם bun + נתיבים-קנוניים, ללא-תלות בסביבת-ההורה. */
+const GUARANTEED_PATH = ["/home/z/.bun/bin", "/usr/local/bin", "/usr/local/sbin", "/usr/bin", "/usr/sbin", "/bin", "/sbin", process.env.PATH ?? ""].join(":");
+const GUARANTEED_ENV: NodeJS.ProcessEnv = { ...process.env, PATH: GUARANTEED_PATH };
+function resolveBun(): string {
+  for (const cand of ["/home/z/.bun/bin/bun", "/usr/local/bin/bun"]) if (fs.existsSync(cand)) return cand;
+  return "bun"; // נפילה-כנה
+}
+const BUN = resolveBun();
+
 function spawnDetached(cmd: string, args: string[], cwd: string, logFile: string): number | null {
   try {
     fs.mkdirSync(path.dirname(logFile), { recursive: true });
     const out = fs.openSync(logFile, "a");
-    const child = spawn(cmd, args, { cwd, detached: true, stdio: ["ignore", out, out], env: { ...process.env } });
+    const child = spawn(cmd, args, { cwd, detached: true, stdio: ["ignore", out, out], env: GUARANTEED_ENV });
     child.unref();
     return child.pid ?? null;
   } catch (e) {
@@ -129,12 +139,12 @@ async function ensureEstateServices(): Promise<void> {
     }
     if (await tcpOpen(s.port)) continue; // פורט-חי — אין-כפילות (חוק-נגד-זומבים)
     if (!fs.existsSync(path.join(s.dir, "node_modules"))) {
-      const inst = await sh("bun", ["install"], s.dir, 180_000);
-      log({ action: "deps-install", name: s.name, code: inst.code });
+      const inst = await sh(BUN, ["install"], s.dir, 180_000);
+      log({ action: "deps-install", name: s.name, code: inst.code, via: BUN });
       if (inst.code !== 0) continue;
     }
-    const pid = spawnDetached("bun", [s.entry], s.dir, s.log);
-    log({ action: "estate-service-spawned", name: s.name, pid });
+    const pid = spawnDetached(BUN, [s.entry], s.dir, s.log);
+    log({ action: "estate-service-spawned", name: s.name, pid, via: BUN });
   }
 }
 
