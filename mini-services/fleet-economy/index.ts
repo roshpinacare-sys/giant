@@ -98,6 +98,7 @@ let errors = 0;
 let bootedAt = Date.now();
 let lastVerify: { at: number; ok: boolean; checked: number } | null = null;
 let sealing = false; // חוק-גל-82: מנוע-קפוא-בזמן-אטימת-כספת (אף-כתיבת-מדינה)
+let lastMintAt = 0; // גל-86 · הגבלת-קצב-הנפקות (פיקוח-מוניטרי-חוזר)
 const tailRing: Tx[] = []; // last 500 for /ledger reads
 
 /* ── ingest אמת: אירועי-מערכת אמיתיים (מילויי-דקס · בדיקות-מאמת-אתחול · אטימות)
@@ -324,10 +325,19 @@ function tick() {
       // גל-85 · השלמה-עד-רצפה (כל-8-טיקים, היה-4-במנות-רנדומליות): מילוי-מדויק-ולא-מנופח —
       // הסכום-הוא-בדיוק-הפער-עד-הרצפה (עד-60) — נמדד: מנות-רנדומליות-כל-4-טיקים =
       // שריפת-כספת-3×-מעבר-להכנסות → קריסה-מוניטרית (0.4-USDS בכספת)
-      const poor = SOLDIERS.filter((s) => bal(s.id).usds < WAGE_FLOOR_USDS);
+      // גל-86 · תקציב-שכר: הסבב לעולם לא מנסה לשלם יותר מהכספת (מעל רזרבה 1K × 30%) —
+      // נמדד: שכר-על-כספת-מתה = דחיות-מובטחות שמורידות-קבלה וסוגרות-את-המצערת
+      const poor = SOLDIERS.filter((s) => bal(s.id).usds < WAGE_FLOOR_USDS).sort((a, b) => bal(a.id).usds - bal(b.id).usds);
+      const tBal = bal("treasury").usds;
+      const budget = Math.max(0, (tBal - 1_000) * 0.3);
+      let spent = 0;
       for (const s of poor) {
+        if (spent >= budget) break; // אין-תקציב — לא מנסים כדי לא לייצר דחיות-כנות
         const gap = WAGE_FLOOR_USDS - bal(s.id).usds;
-        apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: round6(Math.min(gap, 60)), reason: `חוק-שכר-מצע: השלמה-עד-רצפה (רצפת ${WAGE_FLOOR_USDS})` });
+        const amt = round6(Math.min(gap, 60, budget - spent));
+        if (amt < 1) break;
+        const r = apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: amt, reason: `חוק-שכר-מצע: השלמה-עד-רצפה (רצפת ${WAGE_FLOOR_USDS})` });
+        if (r) spent += amt;
       }
     }
     // גל-83 · איסוף-עמלות (כל-150-טיקים): עמלות-הבריכה (הכנסת-הרשת) זורמות-לכספת
@@ -335,6 +345,52 @@ function tick() {
       const amt = round6(pool.feesUsds);
       pool.feesUsds = 0;
       apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: "pool", to: "treasury", asset: "USDS", amount: amt, reason: "איסוף-עמלות-בריכה → כספת" });
+    }
+    // גל-86 · חוק-ב' · שסתום-המיחזור + פיקוח-מוניטרי-חוזר (כל-150 טיקים ≈ 2דק'):
+    // ה-mint-ב-boot היה-חד-פעמי (נמדד: byKind.mint=1) — הכספת-מתה-בזמן-ריצה (3.4-USDS)
+    // והבריכה-בלעה-63K. הריפוי: הכספת-מוכרת-SAOS-מהמחסן-שלה-לבריכה (סוופ-אמיתי-דו-צדדי —
+    // USDS-חוזר-הביתה). אם-המחסן-ריק-מדי → הנפקה-גלויה-חתומה (מוגבלת-קצב: אחת-לשעה לפחות).
+    if (tickNo % 150 === 0 && bal("treasury").usds < 2_000) {
+      const t0 = bal("treasury");
+      const k = pool.saos * pool.usds;
+      const eff = 1 - FEE_BPS / 10_000;
+      const want = Math.min(30_000, pool.usds * 0.4, Math.max(0, 30_000 - t0.usds));
+      if (t0.saos > 1_000 && want > 2_000 && pool.usds - want > 1_000) {
+        // היפוך-עקומה מדויק: in = (k/(pool.usds − want) − pool.saos)/eff (מרווח-ביטחון 1%)
+        const inRaw = (k / (pool.usds - want) - pool.saos) / eff;
+        const inSaos = Math.floor(Math.min(inRaw * 1.01, t0.saos - 1_000));
+        if (inSaos > 200) {
+          const sw = ammSwap("treasury", "SAOS", inSaos, "שסתום-מיחזור: מחסן-SAOS → USDS-לכספת (פיקוח-מוניטרי-חוזר)");
+          if (sw) console.log(`[fleet-economy] שסתום-מיחזור: הכספת מכרה ${inSaos}-SAOS → כ-20K-USDS-חוזרים הביתה`);
+        }
+      }
+      if (bal("treasury").usds < 2_000 && Date.now() - lastMintAt > 3_600_000) {
+        // המחסן-ריק-מדי → הנפקה-גלויה-חתומה (אפס-התחמקות; מוגבל-קצב)
+        const MINT_USDS = 40_000;
+        lastMintAt = Date.now();
+        bal("treasury").usds = round6(bal("treasury").usds + MINT_USDS);
+        const mintTx = sealTx({ seq: seq + 1, ts: Date.now(), kind: "mint", from: "sovereign", to: "treasury", asset: "USDS", amount: MINT_USDS, reason: "פיקוח-מוניטרי-חוזר: הכספת והמחסן ריקים — הנפקת-צף גלויה (מוגבלת-קצב 1/שעה)" } as any);
+        seq = mintTx.seq; lastH = mintTx.h;
+        recent.push(mintTx.ts);
+        byKind["mint"] = (byKind["mint"] ?? 0) + 1;
+        persist(mintTx);
+        flush();
+        console.log(`[fleet-economy] פיקוח-מוניטרי: +${MINT_USDS}-USDS (mint חתום · מוגבל-קצב)`);
+      }
+    }
+    // גל-86 · חוק-ג' · דיבידנד-תשתית (כל-50 טיקים ≈ 40ש׳): צמתי-הצי-צוברים-את-דמי-התשתית
+    // ואף-לא-מחזירים (נמדד: ~3K-עסקאות-כל-אחד — ניקוז-חד-כיווני). מעגל-החזר: 1% מהעושר
+    // מעל-יתרת-עבודה (500) זורם-לכספת — התשתית-מממנת-את-הרשת-שמשתמשת-בה.
+    if (tickNo % 50 === 0) {
+      for (const nd of FLEET_NODES) {
+        const b = bal(nd.id);
+        if (b.usds > 500) {
+          const levy = round6(Math.min(b.usds - 500, b.usds * 0.01));
+          if (levy >= 0.5) {
+            apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: nd.id, to: "treasury", asset: "USDS", amount: levy, reason: "דיבידנד-תשתית 1% → כספת (מעגל-החזר גל-86)" });
+          }
+        }
+      }
     }
     // גל-85 · מווסת-אדפטיבי: 14-18 ניסיונות-בטיק (מהיר-על-ידי-קבלה בפועל, לא על-ידי-תקווה)
     const n = nBase + Math.floor(Math.random() * 5);
@@ -828,6 +884,7 @@ const bootResult = boot();
  * המשק-מת-בדחיות-לנצח. */
 if (bal("treasury").usds < 2_000) {
   const MINT_USDS = 40_000;
+  lastMintAt = Date.now(); // גל-86 · גם-mint-ה-boot מוגבל-קצב מול-הפיקוח-החוזר
   bal("treasury").usds = round6(bal("treasury").usds + MINT_USDS);
   const mintTx = sealTx({ seq: seq + 1, ts: Date.now(), kind: "mint", from: "sovereign", to: "treasury", asset: "USDS", amount: MINT_USDS, reason: "סבב-מוניטרי: השלמת-צף-ריבוני אחרי-קריסת-מחזור (הנפקה-גלויה-מדודה)" } as any);
   seq = mintTx.seq; lastH = mintTx.h;
