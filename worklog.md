@@ -2205,3 +2205,23 @@ Stage Summary:
 - הכספת מאוחדת ואטומה — אפס אובדן משתי השלוחות
 - המנוע הכלכלי חי ומייצר ~872 tx/שעה ≈ 21k/יום (מדידה-כנה)
 - סיכון שזוהה: עותק FleetHQ.stale-1792147002230 עדיין מריץ שירותים (agent-hq/office-selfcheck/office-recruit) — דרוש re-home של התהליכים
+
+---
+Task ID: T77-2
+Agent: Z.ai Code (zai-web session)
+Task: T76-5 — תיקון "המשרד-החי" (תצוגה תקולה) + תשתית-המפקדה
+
+Work Log:
+- גילוי: FleetHQ (פורט 3002) היה DOWN — זה השאיר את המשרד משותק; office-live (3036) עצמו חי
+- גילוי-קריטי: דיסק 100% מלא (0 בייטים!) — איום-מוות על כל-השירותים; שוחררו 2.1G על-ידי מחיקת 5 עותקי-stale מתים (FleetHQ.stale ×4, Domain.stale, Console.stale ×2) + /tmp ישן
+- המעבר-משושלת: node_modules הותקן ב-FleetHQ הקנוני (933 חבילות, 9 שנ׳); כל-השירותים הועברו מהעותק-הפעיל-על-stale (FleetHQ.stale-1792147002230, נמחק אחר-כך) לקנון: foreman 3010, selfcheck 3040, recruit 3041, sovereign-gateway 3011, local-beats, post-batcher, lineage-guard, shift-history, runtime-supervisor
+- אימות boot-verifier /scan: all_ok=true — כל-הפורטים למעלה (3000·3002·3010·3011·3021·3040·3041·3036·3016)
+- שורש-תקלת-התצוגה: live-feed.ts הזרים פריים-4Hz כ-6 עדכוני-store נפרדים (24 setState/שנייה, כל-אחד יוצר אובייקט-snap חדש) → רינדור-עץ מתמיד → קיפאון-thread → קנבס-שחור ודף-תלוש
+- התיקון: store.syncAgents(list) — אצווה-לפריים אחת (4 עדכונים/שנייה במקום 24); tsc=0 · lint=0
+- E2E דפדפן: החדר-התלת-מימדי רינדר מלא — סוכנים חיים, בועות-שיחה (הפורמן מכניס-אותך), אירועי-גריד אמיתיים (aging 2810.8 SP), truth-gate ALL-GREEN, אפס שגיאות-קונסולה, הדף מגיב מיד
+
+Stage Summary:
+- המשרד-החי עובד מקצה-לקצה: סצנה תלת-מימדית + סוכנים + תיבת-מפעיל + הצעות
+- התשתית כולה עברה ל-FleetHQ הקנוני — אפס תלות בעותקי-stale
+- דיסק: 2.1G פנויים (79%) — מנוטר; להיזהר מנפיחות-stale עתידית
+- נותר: כשלי grid-watch אמיתיים ב-Domain (treasury-route · exposure-gate · campaign · fleet-health.json) — דורש טיפול נפרד
