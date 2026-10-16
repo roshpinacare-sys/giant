@@ -1,8 +1,8 @@
 {
-  "at": "2026-10-16T16:37:13.410Z",
+  "at": "2026-10-16T16:48:39.093Z",
   "producer": "boot-verifier:3042",
   "all_ok": false,
-  "elapsed_s": 1.1,
+  "elapsed_s": 1,
   "checks": {
     "office": {
       "reception_3000": "up",
@@ -20,11 +20,11 @@
     },
     "sentinels": {
       "watchdog": false,
-      "snapshot": false,
-      "note": "runtime-supervisor state unreadable — sentinel booleans false by honesty, not by guess"
+      "snapshot": true,
+      "note": "runtime-supervisor state read; foreman childPid=none"
     },
     "receipts": {
-      "boot-verify_self_age_s": 213,
+      "boot-verify_self_age_s": 685,
       "gateway-telemetry-latest_age_s": -1,
       "boot-watcher-state_age_s": -1
     },
@@ -34,5 +34,5 @@
       "method": "git-ls-remote"
     }
   },
-  "sha256": "876cf3ba603c4c454bfddbc4dac4cd82de861530ae90c056ab05eb10ffd3f35f"
+  "sha256": "d26258bb8f7f8e19d3893b1863ceecf954279e6537ab3d9e6c1c44cf1b186884"
 }

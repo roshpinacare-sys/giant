@@ -191,8 +191,11 @@ function rotate() {
 function apply(t: Omit<Tx, "h">, refH?: string): Tx | null {
   const from = bal(t.from), to = bal(t.to);
   const field = t.asset === "USDS" ? "usds" : "saos";
-  if ((from as any)[field] < t.amount) { rej(); return null; }
-  if (t.kind === "stake") {
+  // גל-86 · הנפקה-ריבונית (mint): אין-מאזן-מקור (from=sovereign) — זיכוי-יעד-בלבד, בלי-בדיקת-איזון
+  if (t.kind !== "mint" && (from as any)[field] < t.amount) { rej(); return null; }
+  if (t.kind === "mint") {
+    (to as any)[field] += t.amount;
+  } else if (t.kind === "stake") {
     from.saos -= t.amount; from.saosStaked += t.amount;
   } else if (t.kind === "unstake") {
     if (from.saosStaked < t.amount) { rej(); return null; }
@@ -440,8 +443,12 @@ function boot() {
 function replayTx(t: Tx): boolean {
   const from = bal(t.from), to = bal(t.to);
   const field = t.asset === "USDS" ? "usds" : "saos";
-  if ((from as any)[field] < t.amount) return false;
-  if (t.kind === "stake") {
+  // גל-86 · מראה-מדויק-של-apply(): mint אינו-עובר-בדיקת-איזון (נמדד: פצצת-replay-failAt —
+  // מטבע-שנכתב-ישירות-הפיל-כל-אתחול-עם-תמונה-ישנה → הסגר-ומחיקה)
+  if (t.kind !== "mint" && (from as any)[field] < t.amount) return false;
+  if (t.kind === "mint") {
+    (to as any)[field] += t.amount;
+  } else if (t.kind === "stake") {
     from.saos -= t.amount; from.saosStaked += t.amount;
   } else if (t.kind === "unstake") {
     if (from.saosStaked < t.amount) return false;
@@ -939,17 +946,14 @@ recoverCapital(); // גל-86 · שחרור-הון-תקוע (דוקטרינה #4)
  * המשק-מת-בדחיות-לנצח. */
 if (bal("treasury").usds < 2_000) {
   const MINT_USDS = 40_000;
-  bal("treasury").usds = round6(bal("treasury").usds + MINT_USDS);
-  const mintTx = sealTx({ seq: seq + 1, ts: Date.now(), kind: "mint", from: "sovereign", to: "treasury", asset: "USDS", amount: MINT_USDS, reason: "סבב-מוניטרי: השלמת-צף-ריבוני אחרי-קריסת-מחזור (הנפקה-גלויה-מדודה)" } as any);
-  seq = mintTx.seq; lastH = mintTx.h;
-  recent.push(mintTx.ts);
-  byKind["mint"] = (byKind["mint"] ?? 0) + 1;
-  persist(mintTx);
-  flush();
-  console.log(`[fleet-economy] סבב-מוניטרי: +${MINT_USDS}-USDS לכספת (רשומת-mint חתומה)`);
+  const mintTx = apply({ seq: seq + 1, ts: Date.now(), kind: "mint", from: "sovereign", to: "treasury", asset: "USDS", amount: MINT_USDS, reason: "סבב-מוניטרי: השלמת-צף-ריבוני אחרי-קריסת-מחזור (הנפקה-גלויה-מדודה)" });
+  if (mintTx) {
+    flush();
+    console.log(`[fleet-economy] סבב-מוניטרי: +${MINT_USDS}-USDS לכספת (רשומת-mint חתומה)`);
+  }
 }
 setInterval(tick, TICK_MS);
-setInterval(snapshotSave, SNAP_MS);
+setInterval(() => { try { snapshotSave(); } catch { /* גל-86 · כשל-דיסק (ENOSPC) כנה — המנוע-לא-מת-על-סנאפשוט (נמדד: קריסת-ENOSPC) */ } }, SNAP_MS);
 // (גל-85 · מטפל-exit-מאוחד-למעלה: flush→snapshot→שחרור-מנעול, פעם-אחת)
 
 /* ── רשת-ביטחון למילויי-דקס (poller): כל-עסקה שנרשמה בפועל במנוע-הדקס (DexTrade —
