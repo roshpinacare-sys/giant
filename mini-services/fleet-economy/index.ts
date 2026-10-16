@@ -27,7 +27,7 @@ const PORT = 3016;
 const STATE_DIR = path.join(import.meta.dir, "state");
 const LEDGER = path.join(STATE_DIR, "ledger.jsonl");
 const SNAP = path.join(STATE_DIR, "snapshot.json");
-const TICK_MS = 900;
+const TICK_MS = 800; // גל-85: 900→800 (תקורה-זעירה — flush הוא append-בלבד)
 const SNAP_MS = 30_000;
 const FEE_BPS = 30; // 0.3%
 const WAGE_FLOOR_USDS = 350; // גל-83 · חוק-שכר-מצע: רצפת-פרנסה לחייל
@@ -85,6 +85,14 @@ let recent: number[] = []; // timestamps (24h window)
 let byKind: Record<string, number> = {};
 let byAccount: Record<string, number> = {};
 let rejected = 0;
+/* גל-85 · מווסת-קצב אדפטיבי: ניסיונות-פר-טיק נשלטים-על-ידי-אחוז-הקבלה בפועל.
+ * קבלה גבוהה (>92%) → המצערת נפתחת · קבלה נמוכה (<70%) → נסגרת.
+ * כנות-מלאה: attemptsTotal ואחוז-הקבלה מוצגים ב-/metrics. */
+let nBase = 14;
+const N_CAP = 18, N_MIN = 6, GOV_PERIOD = 40;
+let attemptsTotal = 0;
+let winAttempts = 0, winRejected = 0, lastGovAcc: number | null = null;
+function rej() { rejected++; winRejected++; }
 let errors = 0;
 let bootedAt = Date.now();
 let lastVerify: { at: number; ok: boolean; checked: number } | null = null;
@@ -182,11 +190,11 @@ function rotate() {
 function apply(t: Omit<Tx, "h">, refH?: string): Tx | null {
   const from = bal(t.from), to = bal(t.to);
   const field = t.asset === "USDS" ? "usds" : "saos";
-  if ((from as any)[field] < t.amount) { rejected++; return null; }
+  if ((from as any)[field] < t.amount) { rej(); return null; }
   if (t.kind === "stake") {
     from.saos -= t.amount; from.saosStaked += t.amount;
   } else if (t.kind === "unstake") {
-    if (from.saosStaked < t.amount) { rejected++; return null; }
+    if (from.saosStaked < t.amount) { rej(); return null; }
     from.saosStaked -= t.amount; to.saos += t.amount;
   } else {
     (from as any)[field] -= t.amount;
@@ -215,11 +223,11 @@ function ammSwap(user: string, asset: "USDS" | "SAOS", amountIn: number, reason:
   const k = pool.saos * pool.usds;
   if (asset === "USDS") {
     const out = pool.saos - k / (pool.usds + amountIn * (1 - FEE_BPS / 10_000));
-    if (out <= 0 || out > pool.saos * 0.5) { rejected++; return null; }
+    if (out <= 0 || out > pool.saos * 0.5) { rej(); return null; }
     return apply({ seq: seq + 1, ts: Date.now(), kind: "swap", from: user, to: "pool", asset, amount: amountIn, fee: +(amountIn * FEE_BPS / 10_000).toFixed(6), price: +(pool.usds / pool.saos).toFixed(6), reason, outSaos: +out.toFixed(6) } as any);
   }
   const out = pool.usds - k / (pool.saos + amountIn * (1 - FEE_BPS / 10_000));
-  if (out <= 0 || out > pool.usds * 0.5) { rejected++; return null; }
+  if (out <= 0 || out > pool.usds * 0.5) { rej(); return null; }
   return apply({ seq: seq + 1, ts: Date.now(), kind: "swap", from: user, to: "pool", asset, amount: amountIn, fee: +(amountIn * FEE_BPS / 10_000).toFixed(6), price: +(pool.usds / pool.saos).toFixed(6), reason, outUsds: +out.toFixed(6) } as any);
 }
 
@@ -248,9 +256,15 @@ function spawnTx(): Tx | null {
     const to = pick(others).id;
     const svc = pick(SERVICES);
     const units = 1 + Math.floor(Math.random() * 8);
-    // גל-83 · זרימה-חוזרת: 25% מהרכישות — צמתי-הצי קונים-שירותים מהחיילים
-    // (הצמתים צוברים-תשתית-ולא-הוציאו-מעולם — הכסף-היה-נתקע-אצלם)
-    const payer = Math.random() < 0.25 ? pick(FLEET_NODES).id : soldier;
+    // גל-83 · זרימה-חוזרת: צמתי-הצי קונים-שירותים מהחיילים
+    // גל-85 · משלם-משוקלל-עושר: חלק-הצמתים-בתשלום נגזר-מחלקתם-בהון-המחזורי בפועל
+    // (מי-שצבר-תשתית משלם-יותר — הכסף-לא-נתקע-אצל-אף-אחד; חלון-מוגן 20%-50%)
+    let nodeW = 0, solW = 0;
+    for (const nd of FLEET_NODES) { const b = bal(nd.id); nodeW += b.usds + b.saos; }
+    for (const sl of SOLDIERS) { const b = bal(sl.id); solW += b.usds + b.saos; }
+    const totW = nodeW + solW;
+    const nodeShare = totW > 0 ? Math.min(0.5, Math.max(0.2, nodeW / totW)) : 0.25;
+    const payer = Math.random() < nodeShare ? pick(FLEET_NODES).id : soldier;
     const tx = apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: payer, to, asset: "USDS", amount: round6(svc.price * units), reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
     // גל-83 · מס-שירותים 2%: עסקה-נפרדת-וחתומה (מימון-אמיתי-לכספת שתוכל-לשלם-שכר)
     if (tx) apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: to, to: "treasury", asset: "USDS", amount: round6(tx.amount * (TAX_BPS / 10_000)), reason: `מס-שירותים ${TAX_BPS / 100}% → כספת` });
@@ -266,11 +280,11 @@ function spawnTx(): Tx | null {
     const stake = Math.random() < 0.6;
     if (stake) {
       const amt = round6(Math.min(b.saos, 0.5 + Math.random() * 6));
-      if (amt <= 0) { rejected++; return null; }
+      if (amt <= 0) { rej(); return null; }
       return apply({ seq: seq + 1, ts: Date.now(), kind: "stake", from: soldier, to: soldier, asset: "SAOS", amount: amt, reason: "סטייק-SAOS לאבטחת-הרשת הפנימית" });
     }
     const amt = round6(Math.min(b.saosStaked, 0.3 + Math.random() * 4));
-    if (amt <= 0) { rejected++; return null; }
+    if (amt <= 0) { rej(); return null; }
     return apply({ seq: seq + 1, ts: Date.now(), kind: "unstake", from: soldier, to: soldier, asset: "SAOS", amount: amt, reason: "ביטול-סטייק לצורך-תפעול" });
   }
   if (r < 0.94) { // תשלום-תשתית: חייל משלם לצומת-צי
@@ -294,9 +308,10 @@ function tick() {
     // זו-הזרימה-החוזרת-שחסרה: בלעדיה-הכסף-הצטבר-בבריכה/צמתים-והחיילים-נשארו-יבשים
     // (נמדד: 5,916-דחיות-מול-3,278-קבלות = 64% בזבוז-ניסיונות).
     if (tickNo % 12 === 0) {
+      // גל-85 · שכר-מצע מדורג: כל-חייל-מתחת-הרצפה מתודלק (לא אחד-נבחר) —
+      // נדרש כי ניסיונות-הפר-טיק גדלו ×4 (נמדד: ריפוד-יחיד = 33% דחיות)
       const poor = SOLDIERS.filter((s) => bal(s.id).usds < WAGE_FLOOR_USDS);
-      if (poor.length) {
-        const s = pick(poor);
+      for (const s of poor) {
         apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: round6(30 + Math.random() * 45), reason: `חוק-שכר-מצע: תדלוק-פרנסה (רצפת ${WAGE_FLOOR_USDS})` });
       }
     }
@@ -306,8 +321,17 @@ function tick() {
       pool.feesUsds = 0;
       apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: "pool", to: "treasury", asset: "USDS", amount: amt, reason: "איסוף-עמלות-בריכה → כספת" });
     }
-    const n = 3 + Math.floor(Math.random() * 3); // גל-83: 3-5 עסקאות בטיק ≈ 288K-480K/יום (עם-קבלה-גבוהה)
+    // גל-85 · מווסת-אדפטיבי: 14-18 ניסיונות-בטיק (מהיר-על-ידי-קבלה בפועל, לא על-ידי-תקווה)
+    const n = nBase + Math.floor(Math.random() * 5);
+    attemptsTotal += n; winAttempts += n;
     for (let i = 0; i < n; i++) spawnTx();
+    if (tickNo % GOV_PERIOD === 0 && winAttempts > 0) {
+      const acc = 1 - winRejected / winAttempts;
+      lastGovAcc = +acc.toFixed(3);
+      if (acc > 0.92) nBase = Math.min(nBase + 1, N_CAP);
+      else if (acc < 0.70) nBase = Math.max(nBase - 2, N_MIN);
+      winAttempts = 0; winRejected = 0;
+    }
     flush(); // אטימה-לדיסק בכל-טיק: מוות-פתאום מאבד לכל-היותר טיק אחד
     const cutoff = Date.now() - 86_400_000;
     while (recent.length && recent[0] < cutoff) recent.shift();
@@ -421,6 +445,7 @@ const server = Bun.serve({
           runRatePerHour, runProjectedPerDay: runRatePerHour !== null ? +(runRatePerHour * 24).toFixed(0) : null,
           realEvents: { ingestOk, ingestDedup, ingestFailed, ingestBadPayload: ingestBad, droppedTx: ingestFailed },
           byKind, rejected, errors, seq, lastH,
+          throughput: { attempts: attemptsTotal, rejectedCount: rejected, acceptancePct: attemptsTotal > 0 ? +(((attemptsTotal - rejected) / attemptsTotal) * 100).toFixed(1) : null, governor: { nBase, cap: N_CAP, min: N_MIN, windowAcceptance: lastGovAcc } },
           supply: { saosTotal: SAOS_SUPPLY, saosStaked: [...balances.values()].reduce((a, b) => a + b.saosStaked, 0), usdsInPool: pool.usds, saosInPool: pool.saos },
           pool: { priceUsdsPerSaos: +priceUsdsPerSaos().toFixed(6), feesUsds: +pool.feesUsds.toFixed(4), feesSaos: +pool.feesSaos.toFixed(4), k: +(pool.saos * pool.usds).toFixed(2) },
           topAccounts: top, lastVerify, lastSeal,

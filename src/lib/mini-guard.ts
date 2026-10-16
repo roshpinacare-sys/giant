@@ -23,13 +23,6 @@ export const MINI_SERVICES: MiniServiceDef[] = [
   { name: "office-live", dir: "mini-services/office-live", port: 3036, he: "משדר-העולם-התלת-ממדי" },
   { name: "sovereign-gateway", dir: "mini-services/sovereign-gateway", port: 3011, he: "שער-ה-LLM-הריבוני (כל-סוכן-משוחזר)", probe: "gateway" },
   { name: "boot-verifier", dir: "mini-services/boot-verifier", port: 3042, he: "מאמת-התחייה — קבלת-בריאות-כל-15דק", probe: "boot-verifier" },
-  /* T-80 (2026-10-16 · owner law: tokens in the atomic vault FOR THE
-   * SOVEREIGNTY'S USE, supervised): the sovereign trading engine joins the
-   * guardian's roster. office-selfcheck lawfully owns :3040 → the engine
-   * binds :3043 via SAOS_ENGINE_PORT. dir is ABSOLUTE (estate tree) —
-   * path.resolve below honors it. Born a child of the Next-server tree
-   * (the platform-kept-alive lineage), re-revived by this very guard. */
-  { name: "saos-engine", dir: "/home/z/estate/steem/mini-services/saos-engine", port: 3043, he: "מנוע-הריבונות — לולאת-המסחר של הצי (T-80: צריכה-מפוקחת של ROT2 מהכספת-האטומית)", env: { SAOS_ENGINE_PORT: "3043" } },
 ];
 
 export interface MiniServiceDef {
@@ -39,8 +32,6 @@ export interface MiniServiceDef {
   he: string;
   /** סוג-הבדיקה-הפונקציונלית: "estate-sync" = מדידת-טיקים-מהבריאות-החיה. "gateway"/"boot-verifier" = בריאות-HTTP. חסר = פורט-בלבד (socket.io). */
   probe?: "estate-sync" | "gateway" | "boot-verifier";
-  /** T-80: per-service env additions (SAOS_ENGINE_PORT for the estate engine). */
-  env?: Record<string, string>;
 }
 
 const MIN_SPAWN_INTERVAL_MS = 90_000;
@@ -141,8 +132,7 @@ export interface MiniServiceHealth {
  * ההשקה-הישירה-של-bun-run-dev קרסה-על-חבילה-חסרה (Cannot find package 'socket.io')
  * והמשגיחה-שגרה-עותק-גוסס-כל-90ש׳. התיקון: ההשקה-מתקינה-תחילה-אם-חסר (מדוד-חי-שוב-אחרי-מחיקה-אמת). */
 function spawnService(svc: MiniServiceDef): string {
-  /* T-80: path.resolve (לא join) — dir מוחלט (עץ-ה-estate) נשאר כמות-שהוא; יחסי נפתר מהשורש */
-  const cwd = path.resolve(process.cwd(), svc.dir);
+  const cwd = path.join(process.cwd(), svc.dir);
   const logPath = path.join(process.cwd(), ".zscripts", `mini-service-${svc.name}.log`);
   let fd: number | null = null;
   try {
@@ -152,7 +142,7 @@ function spawnService(svc: MiniServiceDef): string {
       cwd,
       /* בן-של-שרת-Next (עץ-הפלטפורמה) — בלי-setsid; ההשגחה-החוזרת-מכסה-אם-נעקר */
       stdio: ["ignore", fd, fd],
-      env: { ...process.env, MINI_GUARD: "1", REVIVED_AT: stamp, ...(svc.env ?? {}) },
+      env: { ...process.env, MINI_GUARD: "1", REVIVED_AT: stamp },
     });
     child.on("error", (e) => { lastNote[svc.name] = `spawn-error: ${e.message}`; });
     child.unref();
