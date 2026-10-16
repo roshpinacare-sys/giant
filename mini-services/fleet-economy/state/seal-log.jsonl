@@ -1076,3 +1076,17 @@
 {"ts":"2026-10-16T20:21:52.614Z","action":"sweep-done"}
 {"ts":"2026-10-16T20:31:10.688Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for aa70f7b8f40fda82959b280a17cc46d42f0d7c37\nCannot save the current worktree state\nfatal: stash failed"}
 {"ts":"2026-10-16T20:31:11.584Z","repo":"my-project","action":"state-custody-restore","brokenAt":42777,"restored":true}
+{"ts":"2026-10-16T20:31:18.383Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 9b794173f725000a74f14fd056036d721b59d771\nCannot save the current worktree state\nfatal: stash failed"}
+{"ts":"2026-10-16T20:31:19.230Z","repo":"my-project","action":"state-custody-restore","brokenAt":42777,"restored":true}
+{"ts":"2026-10-16T20:31:20.392Z","repo":"my-project","action":"push-fail","out":"jected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T20:31:32.905Z","repo":"FleetHQ","action":"pull-fail","out":"main       -> FETCH_HEAD\nerror: Your local changes to the following files would be overwritten by checkout:\n\treceipts/runtime-supervisor-state.json\nPlease commit your changes or stash them before you switch branches.\nAbo"}
+{"ts":"2026-10-16T20:31:39.726Z","repo":"FleetHQ","action":"pull-fail","out":"int: \"git add/rm <conflicted_files>\", then run \"git rebase --continue\".\nhint: You can instead skip this commit: run \"git rebase --skip\".\nhint: To abort and get back to the state before \"git rebase\", run \"git rebase --abo"}
+{"ts":"2026-10-16T20:31:40.552Z","repo":"FleetHQ","action":"push-fail","out":"a ref in \"refs/{heads,tags}/\". If so we add a corresponding\n  refs/{heads,tags}/ prefix on the remote side.\n\nNeither worked, so we gave up. You must fully qualify the ref.\nhint: The <src> part of the refspec is a commit object.\nhint: Did you mean to create a new branch by pushing to\nhint: 'HEAD:refs/heads/HEAD'?\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/FleetHQ.git'"}
+{"ts":"2026-10-16T20:31:44.017Z","repo":"Domain","action":"sealed","ahead":"1","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   c895c188..67dfc725  HEAD -> main"}
+{"ts":"2026-10-16T20:31:46.036Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:31:48.044Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:31:51.083Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Sandbox.git\n   24c6437e..8f18f365  HEAD -> main"}
+{"ts":"2026-10-16T20:31:53.055Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:31:54.799Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:31:56.369Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:31:56.369Z","action":"sweep-done"}
