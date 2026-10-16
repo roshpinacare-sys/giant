@@ -169,7 +169,7 @@ export function TreasuryView() {
                 <div className="mt-3 space-y-1.5 font-mono text-[11px] text-zinc-300">
                   <p>נכנס: <span className="text-emerald-300">{n3(r.transfersIn.steem)} STEEM + {n3(r.transfersIn.sbd)} SBD</span></p>
                   <p>יוצא: <span className="text-red-300">{n3(r.transfersOut.steem)} STEEM + {n3(r.transfersOut.sbd)} SBD</span></p>
-                  <p>עסקאות-מנוע: <span className="text-amber-300">{r.tradingFills}</span> מילויים · קוראטור: <span className="text-amber-300">{n3(r.curation?.vests)} VESTS</span></p>
+                  <p>עסקאות-מנוע: <span className="text-amber-300">{r.tradingFills}</span> חוץ · <span className="text-zinc-500">{(r as any).selfFills ?? 0} עצמיות(wash — לא-בחשבון)</span> · קוראטור: <span className="text-amber-300">{n3(r.curation?.vests)} VESTS</span></p>
                   <p className="border-t border-white/5 pt-1.5">שקול-נטו: <b className={r.netSteemEq >= 0 ? "text-emerald-300" : "text-red-300"}>{n3(r.netSteemEq)} STEEM</b></p>
                 </div>
               ) : (

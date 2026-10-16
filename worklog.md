@@ -2461,3 +2461,10 @@ Stage Summary:
 ### T77-12 附注 (同一任务内)
 - condenser API 诡异实测: get_account_history(start=N, limit=L) 返回 [N-L, N] 共 L+1 条——start 是窗口上界而非下界! 引擎深扫首版因范围过滤误杀99% → 已修复(去过滤+seen去重), 1081批重扫中; python 全史扫描(无过滤+去重)3,816条为权威账本
 - SP-מוקצה לצי 实测从769.4→603.71 SP (链上委托实时变动, return_vesting_delegation 15笔今天返还~691 SP) — 这就是为什么 UI 必须活测而非静态数
+
+### T77-12 终章 (同一任务)
+- 🔴 重大发现——wash trade 循环: fill_order 里 current_owner==open_owner==headcorner (自我成交!), 同一单(0.721 SBD↔7.047 STEEM)每3秒重复配对 → 引擎账本"2,554 STEEM 24h流入"全是假量; 修: runrate 排除自成交(单列 selfFills) + fill 双侧计账(此前漏算支付侧致"盈利"虚增) + wash 异常节流10分钟/条
+- ✅ 诚实判决(与python独立核算吻合): 24h 外部fills 79, wash 352, net +0.444 STEEM-eq → מרוויח(勉强); 7d 外部228, wash 384, net -5.31 → מפסיד(微) — 本质≈持平, 做市无真实边际, curation 1,066 VESTS/7d 是唯一真收入
+- condenser API 语义修正版结论: start=窗口上界(返回[start-limit, start]共limit+1条), 引擎已按此扫描108k ops → 4,169行(去重后含wash)
+- 磁盘战争第N轮: bun缓存×3 + chromium tmp + channels/giant/.git 1.3G(gc/prune受限) + .next重建; dev server 被OOM+磁盘压死×1 → supervise-dev.sh 拉活成功(HTTP 200)
+- 已推: engine 修复(wash排除+双侧计账+节流) + TreasuryView(selfFills显示) 经 Contents API 原子推送(201/200), 本地磁盘满无法常规push

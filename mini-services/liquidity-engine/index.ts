@@ -46,6 +46,18 @@ let scanState = { done: 0, deepScanDone: false };
 let anomalies: any[] = [];
 let boot = { at: new Date().toISOString() };
 
+function dedupeLedger() {
+  const seen = new Set<number>();
+  const out: Row[] = [];
+  for (const r of ledger) {
+    if (seen.has(r.i)) continue;
+    seen.add(r.i);
+    out.push(r);
+  }
+  out.sort((a, b) => a.i - b.i);
+  ledger = out;
+}
+
 function loadState() {
   try {
     if (fs.existsSync(LEDGER_PATH)) {
@@ -61,6 +73,7 @@ function loadState() {
   } catch (e) {
     console.log("[state] load fail-honest:", e);
   }
+  dedupeLedger(); // 重启期并发扫描可能产生重复行——装毕即去重（诚实账本）
 }
 function saveLedger() {
   fs.writeFileSync(LEDGER_PATH, JSON.stringify(ledger));
@@ -146,6 +159,7 @@ async function deepScan() {
       }
     }));
     ledger.sort((a, b) => a.i - b.i);
+    dedupeLedger();
     scanState.done = maxIdx + 1;
     scanState.deepScanDone = true;
     saveScan(); saveLedger();
@@ -173,7 +187,7 @@ async function incremental() {
       if (KEEP.has(t)) { ledger.push({ i: idx, ts: v.timestamp, t, o: v.op[1] }); added++; }
     }
     if (added) {
-      ledger.sort((a, b) => a.i - b.i);
+      dedupeLedger();
       saveLedger();
       console.log(`[incr] +${added} rows=${ledger.length}`);
       recheckAnomalies();
@@ -185,6 +199,7 @@ async function incremental() {
 
 /* ─── חוקי-חריגות (סכום-חריג) — רץ על ספר-התנועות ─── */
 let lastAnomalyScanIdx = -1;
+let lastWashLoggedAt = 0;
 function recheckAnomalies() {
   const from = lastAnomalyScanIdx < 0 ? Math.max(0, ledger.length - 200) : ledger.findIndex((r) => r.i > lastAnomalyScanIdx);
   if (from < 0) return;
@@ -200,6 +215,14 @@ function recheckAnomalies() {
     }
     if (r.t === "delegate_vesting_shares" && !FLEET.has(r.o.delegatee)) {
       pushAnomaly({ kind: "SP-יוצא-לא-מוכר", shares: r.o.vesting_shares, party: r.o.delegatee, idx: r.i, ts: r.ts });
+    }
+    if (r.t === "fill_order" && r.o.current_owner === ACCOUNT && r.o.open_owner === ACCOUNT) {
+      // 节流：同类 wash 每10分钟记一次（否则每3秒一单会刷屏）
+      const tMs = Date.parse(r.ts);
+      if (!lastWashLoggedAt || tMs - lastWashLoggedAt >= 600_000) {
+        lastWashLoggedAt = tMs;
+        pushAnomaly({ kind: "סחר-עצמי(wash)", got: r.o.open_pays, paid: r.o.current_pays, idx: r.i, ts: r.ts });
+      }
     }
   }
   lastAnomalyScanIdx = ledger.length ? ledger[ledger.length - 1].i : -1;
@@ -292,7 +315,7 @@ function runrate() {
   const steemPriceSbd = snap?.price?.steemInSbd ?? null;
   for (const [k, span] of Object.entries(spans)) {
     const since = new Date(now - span).toISOString();
-    let inSteem = 0, inSbd = 0, outSteem = 0, outSbd = 0, curIn = 0, curVests = 0, fills = 0;
+    let inSteem = 0, inSbd = 0, outSteem = 0, outSbd = 0, curIn = 0, curVests = 0, fills = 0, selfFills = 0;
     for (const r of ledger) {
       if (r.ts < since) continue;
       if (r.t === "transfer") {
@@ -300,11 +323,16 @@ function runrate() {
         if (r.o.to === ACCOUNT) { if (cur === "STEEM") inSteem += amt; else inSbd += amt; }
         else { if (cur === "STEEM") outSteem += amt; else outSbd += amt; }
       } else if (r.t === "fill_order") {
+        // 自我成交（两侧都是自己）= wash volume——不进盈亏，如实单列
+        if (r.o.current_owner === ACCOUNT && r.o.open_owner === ACCOUNT) { selfFills++; continue; }
         fills++;
-        // מה-שקיבלנו בעסקה
+        // מה-שקיבלנו בעסקה + מה-ששילמנו (שני-הצדדים — בלי-זה הרווח מנופח!)
         const got = r.o.current_owner === ACCOUNT ? r.o.open_pays : r.o.current_pays;
+        const gave = r.o.current_owner === ACCOUNT ? r.o.current_pays : r.o.open_pays;
         const g = f(got), gc = got.split(" ")[1];
         if (gc === "STEEM") inSteem += g; else inSbd += g;
+        const p = f(gave), pc = gave.split(" ")[1];
+        if (pc === "STEEM") outSteem += p; else outSbd += p;
       } else if (r.t === "claim_reward_balance") {
         curVests += f(r.o.reward_vests); curIn += f(r.o.reward_steem);
       } else if (r.t === "transfer_to_vesting") {
@@ -318,6 +346,7 @@ function runrate() {
       transfersIn: { steem: r3(inSteem), sbd: r3(inSbd) },
       transfersOut: { steem: r3(outSteem), sbd: r3(outSbd) },
       tradingFills: fills,
+      selfFills, // 自我成交（wash）——不计盈亏，如实分开
       curation: { vests: r3(curVests), steemRewards: r3(curIn) },
       poweredUp: r3(0),
       netSteemEq: r3(inEq - outEq),
