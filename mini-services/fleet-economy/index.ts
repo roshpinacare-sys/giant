@@ -92,6 +92,7 @@ let nBase = 14;
 const N_CAP = 18, N_MIN = 6, GOV_PERIOD = 40;
 let attemptsTotal = 0;
 let winAttempts = 0, winRejected = 0, lastGovAcc: number | null = null;
+let rejectedAtBoot = 0; // גל-85 · המונה-משוחזר-מהסנאפשוט — המדידה-הכנה-היא-רק-על-העלייה-הנוכחית
 function rej() { rejected++; winRejected++; }
 let errors = 0;
 let bootedAt = Date.now();
@@ -356,6 +357,7 @@ function boot() {
       balances = new Map(Object.entries(s.balances ?? {}).map(([k, v]) => [k, v as any]));
       pool = s.pool ?? pool; seq = s.seq ?? 0; lastH = s.lastH ?? lastH;
       byKind = s.byKind ?? {}; byAccount = s.byAccount ?? {}; rejected = s.rejected ?? 0; errors = s.errors ?? 0;
+      rejectedAtBoot = rejected; // גל-85 · בסיס-מדידה-כנה לעלייה-הנוכחית
       ledgerFileNo = s.ledgerFileNo ?? 0;
       ingestOk = s.ingestOk ?? 0; ingestDedup = s.ingestDedup ?? 0; ingestFailed = s.ingestFailed ?? 0; ingestBad = s.ingestBad ?? 0;
       // dedup שורד-הפעלה-מחדש: מפיקים-חיים + poller-מילויים לא יספרו מילוי-כפול אחרי-restart
@@ -445,7 +447,7 @@ const server = Bun.serve({
           runRatePerHour, runProjectedPerDay: runRatePerHour !== null ? +(runRatePerHour * 24).toFixed(0) : null,
           realEvents: { ingestOk, ingestDedup, ingestFailed, ingestBadPayload: ingestBad, droppedTx: ingestFailed },
           byKind, rejected, errors, seq, lastH,
-          throughput: { attempts: attemptsTotal, rejectedCount: rejected, acceptancePct: attemptsTotal > 0 ? +(((attemptsTotal - rejected) / attemptsTotal) * 100).toFixed(1) : null, governor: { nBase, cap: N_CAP, min: N_MIN, windowAcceptance: lastGovAcc } },
+          throughput: { attempts: attemptsTotal, rejectedCount: rejected - rejectedAtBoot, acceptancePct: attemptsTotal > 0 ? +(((attemptsTotal - (rejected - rejectedAtBoot)) / attemptsTotal) * 100).toFixed(1) : null, governor: { nBase, cap: N_CAP, min: N_MIN, windowAcceptance: lastGovAcc } },
           supply: { saosTotal: SAOS_SUPPLY, saosStaked: [...balances.values()].reduce((a, b) => a + b.saosStaked, 0), usdsInPool: pool.usds, saosInPool: pool.saos },
           pool: { priceUsdsPerSaos: +priceUsdsPerSaos().toFixed(6), feesUsds: +pool.feesUsds.toFixed(4), feesSaos: +pool.feesSaos.toFixed(4), k: +(pool.saos * pool.usds).toFixed(2) },
           topAccounts: top, lastVerify, lastSeal,
