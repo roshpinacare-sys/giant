@@ -578,21 +578,17 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
     // דחף-במקומה-מצב-ישן-וקידם-את-הענן — מקור-תפרי-הספר-ההיסטוריים.
     const rm = await git(dir, ["remote"]);
     const remote = rm.out.split("\n").map((s) => s.trim()).filter(Boolean)[0] ?? "origin";
-    if (opts?.strategyOurs) {
-      // גל-83 · מסלול-אפס-תפרים (my-project — מחזיק-המצב-החי): merge -s ours לא-נוגע
-      // בעץ-העבודה-כלל — הספר-החי-והקוד-הרצים-שלנו-מנצחים-תמיד, ההיסטוריה-של-הענן
-      // (כולל-קו-הסשן-השני) מקושרת-כהורה-שני. אפס-קונפליקטים, אפס-stash, אפס-תפר.
-      await git(dir, ["fetch", remote, "main"]);
-      const mg = await git(dir, ["merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins, zero-seam", "FETCH_HEAD"]);
-      if (!mg.ok && !mg.out.includes("Already up to date") && !mg.out.includes("up to date")) {
-        sealLog({ repo: name, action: "merge-fail", out: mg.out.slice(0, 200) });
-      }
-    } else {
-      // גל-83 · autoStash-חובה + refspec-מפורש (נמדד: pull-בלי-branch נכשל-בלי-upstream).
-      const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote, "main"]);
-      if (!pull.ok && !pull.out.includes("Already up to date") && !pull.out.includes("up to date")) {
-        sealLog({ repo: name, action: "pull-fail", out: pull.out.slice(0, 220) });
-      }
+    /* T-82 ROOT FIX (measured live 2026-10-16, three times): the strategyOurs
+     * "merge -s ours" path NEVER updates the working tree — every seal then
+     * re-committed this sandbox's BOOT-TIME tree over the branch tip, silently
+     * reverting session code (mini-guard roster, organism-keeper) and DELETING
+     * worklog lines from the record. The "zero-seam" was actually a
+     * record-falsification loop. The rebase path (-X ours: live state wins
+     * conflicts, cloud code flows in, autoStash guards races) is the same
+     * proven law every other repo already runs. History stays honest. */
+    const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote, "main"]);
+    if (!pull.ok && !pull.out.includes("Already up to date") && !pull.out.includes("up to date")) {
+      sealLog({ repo: name, action: "pull-fail", out: pull.out.slice(0, 220) });
     }
     if (afterPull) { try { await afterPull(); } catch (e) { sealLog({ repo: name, action: "after-pull-fail", error: String(e) }); } }
     const push = await git(dir, ["push", remote, "HEAD"]);
