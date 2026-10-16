@@ -2156,3 +2156,21 @@ Stage Summary:
 - פתוח: אימות-סוופ-מלא-עם-הקפאה-אחרי-פקיעת-המנעול (~12:15).
 - **אימות-קצה (12:25)**: סוופ-כספת-מלא-הצליח (12:18:58 stale-lock-broken → 12:19:04 my-project-sealed-דרך-custody → 9/9 → sweep-done · behind:0/ahead:0) · כלכלה: 396K/יום-חזוי · 1,501-מסים · 299-שכרי-מצע · ingestOk-600 · אפס-שגיאות-מנוע · dex-תקין (TVL-218K, שגיאת-tick-אחת-חד-פעמית) · צי-סוחר (544/24ש׳) · שער-ALL-GREEN.
 - **לדורות-הבאים**: (1) אין-להחזיר-את-channels/giant-ל-SEAL_REPOS — צ'קאאוט-כפול=מכונת-תפרים (2) הסשן-השני-על-הריפו (zai-web · epoch-2) — merge -s ours מקשר-אותו-בלי-דריכה; אל-תבנו-על-קוד-שלו (חוק-הבעלים) (3) פריימים-4..6-בעמוד-השורש-חשוכים — כיול-תאורה-ב-bake-לגל-85 (4) חיווט- forge+skills+tools/fleet+airgap-עוד-פתוח (רשימת-78-a).
+
+---
+Task ID: 82b (re-statement — the 81/82 blocks were deleted by interleaved session merges; history 1e71dde holds the originals)
+Agent: zai-web (session web-aec30632 · pat.env arrived)
+Task: owner "הסנדבוקס מת — וודא מעודכן מול הגיט ותמשיך" — the full record, compressed for the tip:
+
+Work Log (verified facts):
+- Sandbox NOT fully dead: dev-keeper held :3000 with 29 revivals; engine :3043 custody stable 12/14 throughout.
+- pat.env (93B fine-grained PAT) at canonical path; all three repos authenticate; root-owned 0777 (cannot chmod as z — noted).
+- Disk 100% → 80% (~2.2G freed: FleetHQ.stale 1.5G + .stale-* + tmp watchers + old db backups + .next cache).
+- Git-truth re-sync: my-project/steem/vault-home fetched + merged + pushed (1fa9191 → 279434d → 4ef5e73).
+- **RECORD-FALSIFICATION LOOP NAMED AND ROOT-FIXED**: (a) channels/giant = a SECOND checkout of the same repo (roshpinacare-sys/giant) whose own seal engine pushed its boot-stale tree via "merge -s ours — link cloud history" commits (aa0d822 @13:47:57 measured) — silently reverting session code + deleting worklog lines (T-81/82 blocks + 118 lines, three times); (b) the my-project engine's own strategyOurs law (merge -s ours never updates the working tree) fed the same loop. FIXES: giant retired from the sweep (was already out) + its engine dead in reality; my-project seal law now REBASE-based (-X ours, autoStash) in mini-services/fleet-economy/index.ts (T-82 ROOT FIX, commit 1e71dde); fleet-economy joined the mini-guard roster so the FIXED law is what runs.
+- FleetHQ (:3002) revived root-fixed: estate dev script corrected to `next dev -p 3002` (was :3000 — reception's port; NODE_OPTIONS 1G cap preserved), stale .next/dev/lock cleared, old zombie next-servers killed; guardian-spawned.
+- Full roster live via the guardian (reception, platform-tree survivor lineage): estate-sync · office-live · sovereign-gateway · boot-verifier · fleet-hq · fleet-economy · saos-engine — plus foreman 3010, selfcheck 3040, recruit 3041, verifier 3042, keeper 3044.
+- LAW NEEDED (recorded): tree-override/"link" commits must never touch src/** or worklog.md without an explicit worklog justification; seal engines must defer (not push) when unmerged index states exist.
+
+Stage Summary:
+- The branch tip carries the roster + the rebase seal law + this record. The engine restart (old law killed 13:5x, guardian reviving) makes the fix live. Worklog blocks 81/82 originals live at 1e71dde; this 82b block is the tip-level re-statement.
