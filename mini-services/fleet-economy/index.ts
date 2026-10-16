@@ -202,8 +202,28 @@ function apply(t: Omit<Tx, "h">, refH?: string): Tx | null {
     if (t.kind === "swap") {
       // מטבע-נכנס יושב בבריכה, עמלה נשארת בה
       const feeAmt = t.fee ?? 0;
-      if (t.asset === "USDS") { pool.usds += t.amount; pool.saos -= (t as any).outSaos; to.saos += (t as any).outSaos; pool.feesUsds += feeAmt; }
-      else { pool.saos += t.amount; pool.usds -= (t as any).outUsds; to.usds += (t as any).outUsds; pool.feesSaos += feeAmt; }
+      if ((t as any).v === 2) {
+        // גל-86 · תיקון-אספקה (דוקטרינה #4): התמורה-למשתמש-ששילם — לא-לחשבון-הבריכה.
+        // חשבון-הבריכה-מראה-את-יתרות-השמורות (נכנס += יוצא -=) — איסוף-עמלות-הוגן.
+        if (t.asset === "USDS") {
+          pool.usds += t.amount; pool.saos -= (t as any).outSaos; pool.feesUsds += feeAmt;
+          to.usds += t.amount; to.saos -= (t as any).outSaos;
+          from.saos += (t as any).outSaos;
+        } else {
+          pool.saos += t.amount; pool.usds -= (t as any).outUsds; pool.feesSaos += feeAmt;
+          to.saos += t.amount; to.usds -= (t as any).outUsds;
+          from.usds += (t as any).outUsds;
+        }
+      } else {
+        // v1 (היסטוריה-חתומה): התמורה-נרשמה-לחשבון-הבריכה — התוקן-ב-settlement-v1
+        if (t.asset === "USDS") { pool.usds += t.amount; pool.saos -= (t as any).outSaos; to.saos += (t as any).outSaos; pool.feesUsds += feeAmt; }
+        else { pool.saos += t.amount; pool.usds -= (t as any).outUsds; to.usds += (t as any).outUsds; pool.feesSaos += feeAmt; }
+      }
+    } else if (t.kind === "pool-align") {
+      // גל-86 · איזון-חשבונאי-חד-פעמי: חשבון-הבריכה := יתרות-השמורות (אחרי-הסדרת-החוב).
+      // מבטל-ספירה-כפולה (חור-התפוקות-שלא-נמסרו); הסה"כ-האמיתי = יתרות-משתמשים + שמורות.
+      const pb = bal("pool");
+      pb.usds = round6(pool.usds); pb.saos = round6(pool.saos); pb.saosStaked = 0;
     } else {
       (to as any)[field] += t.amount;
     }
@@ -225,11 +245,11 @@ function ammSwap(user: string, asset: "USDS" | "SAOS", amountIn: number, reason:
   if (asset === "USDS") {
     const out = pool.saos - k / (pool.usds + amountIn * (1 - FEE_BPS / 10_000));
     if (out <= 0 || out > pool.saos * 0.5) { rej(); return null; }
-    return apply({ seq: seq + 1, ts: Date.now(), kind: "swap", from: user, to: "pool", asset, amount: amountIn, fee: +(amountIn * FEE_BPS / 10_000).toFixed(6), price: +(pool.usds / pool.saos).toFixed(6), reason, outSaos: +out.toFixed(6) } as any);
+    return apply({ seq: seq + 1, ts: Date.now(), kind: "swap", from: user, to: "pool", asset, amount: amountIn, fee: +(amountIn * FEE_BPS / 10_000).toFixed(6), price: +(pool.usds / pool.saos).toFixed(6), reason, outSaos: +out.toFixed(6), v: 2 } as any);
   }
   const out = pool.usds - k / (pool.saos + amountIn * (1 - FEE_BPS / 10_000));
   if (out <= 0 || out > pool.usds * 0.5) { rej(); return null; }
-  return apply({ seq: seq + 1, ts: Date.now(), kind: "swap", from: user, to: "pool", asset, amount: amountIn, fee: +(amountIn * FEE_BPS / 10_000).toFixed(6), price: +(pool.usds / pool.saos).toFixed(6), reason, outUsds: +out.toFixed(6) } as any);
+  return apply({ seq: seq + 1, ts: Date.now(), kind: "swap", from: user, to: "pool", asset, amount: amountIn, fee: +(amountIn * FEE_BPS / 10_000).toFixed(6), price: +(pool.usds / pool.saos).toFixed(6), reason, outUsds: +out.toFixed(6), v: 2 } as any);
 }
 
 /* ── מחולל-העסקאות: המשתמשים-הפנימיים משתמשים בכלים בזרימה חכמה ────────────── */
@@ -365,6 +385,8 @@ function seed() {
 
 function boot() {
   fs.mkdirSync(STATE_DIR, { recursive: true });
+  const seam = defuseSeam();
+  if (seam.defused) console.log(`[fleet-economy] defuse-seam: קטעתי-${seam.dropped}-שורות-מקומיות-מעל-תפר-ב-seq-${seam.at} (הקאנון-מנצח · דוקטרינה #5)`);
   try {
     if (fs.existsSync(SNAP)) {
       const s = JSON.parse(fs.readFileSync(SNAP, "utf8"));
@@ -428,8 +450,24 @@ function replayTx(t: Tx): boolean {
     (from as any)[field] -= t.amount;
     if (t.kind === "swap") {
       const feeAmt = (t as any).fee ?? 0;
-      if (t.asset === "USDS") { pool.usds += t.amount; pool.saos -= (t as any).outSaos; to.saos += (t as any).outSaos; pool.feesUsds += feeAmt; }
-      else { pool.saos += t.amount; pool.usds -= (t as any).outUsds; to.usds += (t as any).outUsds; pool.feesSaos += feeAmt; }
+      if ((t as any).v === 2) {
+        // גל-86 · מראה-מדויק-של-apply() — אספקה-למשתמש + חשבון-בריכה-מראה-שמורות
+        if (t.asset === "USDS") {
+          pool.usds += t.amount; pool.saos -= (t as any).outSaos; pool.feesUsds += feeAmt;
+          to.usds += t.amount; to.saos -= (t as any).outSaos;
+          from.saos += (t as any).outSaos;
+        } else {
+          pool.saos += t.amount; pool.usds -= (t as any).outUsds; pool.feesSaos += feeAmt;
+          to.saos += t.amount; to.usds -= (t as any).outUsds;
+          from.usds += (t as any).outUsds;
+        }
+      } else {
+        if (t.asset === "USDS") { pool.usds += t.amount; pool.saos -= (t as any).outSaos; to.saos += (t as any).outSaos; pool.feesUsds += feeAmt; }
+        else { pool.saos += t.amount; pool.usds -= (t as any).outUsds; to.usds += (t as any).outUsds; pool.feesSaos += feeAmt; }
+      }
+    } else if (t.kind === "pool-align") {
+      const pb = bal("pool");
+      pb.usds = round6(pool.usds); pb.saos = round6(pool.saos); pb.saosStaked = 0;
     } else {
       (to as any)[field] += t.amount;
     }
@@ -455,6 +493,78 @@ function replayTailAbove(snapshotSeq: number): { ok: boolean; replayed: number; 
     }
   }
   return { ok: true, replayed };
+}
+
+/* ── גל-86 · פירוק-תפר-מיזוג-בעלייה (דוקטרינה #5: הקאנון-הגיט-מנצח-על-שאריות-סנדבוקס) ──
+ * נמדד: מיזוג-ענן-הכניס-זנב-מתקדם-לספר-והמנוע-המקומי-המשיך-לכתוב-מעליו → ירידת-seq
+ * → verifyChain-נכשל-באתחול-הבא → הסגר-וזריעה = מחיקת-הכלכלה. מעכשיו: אם-יש-ירידת-seq,
+ * הזנב-המקומי-שאחרי-התפר-הוא-שארית-סנדבוקס — קוטעים-בתפר, השרשרת-שנשארת-מאומתת-וממשיכה. */
+function defuseSeam(): { defused: boolean; dropped: number; at?: number } {
+  try {
+    const lines = fs.readFileSync(LEDGER, "utf8").split("\n").filter(Boolean);
+    const seqs = lines.map((l) => { try { return (JSON.parse(l) as { seq: number }).seq; } catch { return -1; } });
+    let seamIdx = -1;
+    for (let i = 1; i < seqs.length; i++) { if (seqs[i] !== -1 && seqs[i] < seqs[i - 1]) { seamIdx = i; break; } }
+    if (seamIdx === -1) return { defused: false, dropped: 0 };
+    const dropped = lines.length - seamIdx;
+    fs.writeFileSync(LEDGER, lines.slice(0, seamIdx).join("\n") + "\n");
+    return { defused: true, dropped, at: seqs[seamIdx] };
+  } catch { return { defused: false, dropped: 0 }; }
+}
+
+/* ── גל-86 · שחרור-הון-תקוע (דוקטרינה #4: "יש כסף תקוע בלימיטים — לבדוק הכל,
+ * להשתמש טוב יותר דרך המערכת לשלב כדי להגיע למקסימום") ────────────────────
+ * נמדד-פורנזית על-הספר-כולו (@52,671): כל-סוופ-v1 שילם-נכנס-והתמורה-נרשמה
+ * לחשבון-הבריכה-במקום-למשלם — ~71K-USDS + ~15.7K-SAOS תקועים. הריפוי:
+ *  1. settlement-v1 — החזר-חתום-של-כל-תמורה-שלא-נמסרה (נגזר-מהספר, פר-משתמש, תקרה-יתרת-בריכה)
+ *  2. pool-align — חשבון-הבריכה := שמורות (ביטול-ספירה-כפולה)
+ *  3. float-trim — מגן-עתידי: צף-מאמת-האתחול מעל-1,000 חוזר-לכספת
+ * פעם-אחת-בלבד (מנעול-מרקר); כל-עסקה-חתומה-בשרשרת-דרך-apply(). קריסה-באמצע =
+ * ריצה-חוזרת-מחשבת-רק-את-היתרה (עסקאות-הסדר אינן-kind:"swap" — לא-נספרות-פעמיים). */
+function recoverCapital(): void {
+  if (sealing) return;
+  const marker = path.join(STATE_DIR, "settlement-v1.done");
+  if (!fs.existsSync(marker)) {
+    const owed = new Map<string, { usds: number; saos: number }>();
+    for (const f of ledgerFiles()) {
+      const lines = fs.readFileSync(path.join(STATE_DIR, f), "utf8").split("\n").filter(Boolean);
+      for (const line of lines) {
+        try {
+          const t = JSON.parse(line) as any;
+          if (t.kind !== "swap" || t.from === "pool" || t.to !== "pool") continue;
+          const o = owed.get(t.from) ?? { usds: 0, saos: 0 };
+          if (t.asset === "USDS") o.saos += t.outSaos ?? 0; else o.usds += t.outUsds ?? 0;
+          owed.set(t.from, o);
+        } catch { /* כנה */ }
+      }
+    }
+    const pb = bal("pool");
+    let settledUsds = 0, settledSaos = 0, capped = 0;
+    for (const [user, o] of owed) {
+      const usds = round6(Math.min(o.usds, Math.max(0, pb.usds - settledUsds)));
+      const saos = round6(Math.min(o.saos, Math.max(0, pb.saos - settledSaos)));
+      if (usds < round6(o.usds) || saos < round6(o.saos)) capped++;
+      if (usds > 0) { apply({ seq: seq + 1, ts: Date.now(), kind: "swap-settle", from: "pool", to: user, asset: "USDS", amount: usds, reason: "settlement-v1: החזר-תמורות-סוופ-שלא-נמסרו (נגזר-מהספר · דוקטרינה #4)", ref: `settle-v1-${user}-${Date.now()}` }); settledUsds += usds; }
+      if (saos > 0) { apply({ seq: seq + 1, ts: Date.now(), kind: "swap-settle", from: "pool", to: user, asset: "SAOS", amount: saos, reason: "settlement-v1: החזר-SAOS-שנקנה-ולא-נמסר (נגזר-מהספר · דוקטרינה #4)", ref: `settle-v1-${user}-${Date.now()}` }); settledSaos += saos; }
+    }
+    apply({ seq: seq + 1, ts: Date.now(), kind: "pool-align", from: "pool", to: "pool", asset: "USDS", amount: 0, reason: "pool-align: חשבון-הבריכה := שמורות — ביטול-ספירה-כפולה אחרי-settlement-v1" });
+    flush(); snapshotSave();
+    try { fs.writeFileSync(marker, JSON.stringify({ at: new Date().toISOString(), users: owed.size, settledUsds: round6(settledUsds), settledSaos: round6(settledSaos), capped })); } catch { /* כנה */ }
+    sealLog({ action: "settlement-v1", users: owed.size, settledUsds: round6(settledUsds), settledSaos: round6(settledSaos), capped });
+    console.log(`[fleet-economy] settlement-v1: ${owed.size}-משתמשים · ${round6(settledUsds)}-USDS + ${round6(settledSaos)}-SAOS שוחררו-מהבריכה (capped=${capped})`);
+  }
+  const ftMarker = path.join(STATE_DIR, "float-trim-v1.done");
+  if (!fs.existsSync(ftMarker)) {
+    const bv = bal("boot-verifier");
+    if (bv.usds > 1_000) {
+      const trim = round6(bv.usds - 250);
+      apply({ seq: seq + 1, ts: Date.now(), kind: "float-trim", from: "boot-verifier", to: "treasury", asset: "USDS", amount: trim, reason: "גיזום-צף-עודף: מאמת-האתחול מחזיק צף-שנים — העודף חוזר לכספת (דוקטרינה #4)" });
+      sealLog({ action: "float-trim-v1", trimmed: trim });
+      console.log(`[fleet-economy] float-trim-v1: ${trim}-USDS חזרו-מצף-מאמת-האתחול-לכספת`);
+    }
+    flush();
+    try { fs.writeFileSync(ftMarker, JSON.stringify({ at: new Date().toISOString() })); } catch { /* כנה */ }
+  }
 }
 
 /* הסגר-כנה של-קבצי-מדינה — אפס-תפירה-מזויפת, כל-ההיסטוריה-נשמרת-לביקורת */
@@ -822,6 +932,7 @@ setInterval(sealAll, 10 * 60 * 1000);
 setTimeout(sealAll, 45_000); // אטימה ראשונה דקה-אחרי-עלייה
 
 const bootResult = boot();
+recoverCapital(); // גל-86 · שחרור-הון-תקוע (דוקטרינה #4) — פעם-אחת, חתום-בשרשרת
 /* גל-85 · סבב-מוניטרי כנה: אם-הכספת-קרסה (<2,000-USDS) — הריבונות-המנפיקה
  * משלימה-את-הצף-ברשומת-mint-חתומה-בספר (אפס-התחמקות — ההנפקה-גלויה-ומדודה).
  * נמדד: קריסה-מוניטרית-מלאה (כספת 0.4-USDS · כל-ההיצע-נבלע-בבריכה) — בלי-השלמת-צף
