@@ -85,6 +85,61 @@ async function ghRaw<T>(repo: string, path: string, pat: string): Promise<T | nu
   }
 }
 
+/* ═══ R365-money-truth: מדידת-כסף-אמת-חיה-מהשרשרת ═══
+ * הבעלים: "איפה הכסף? זה לא מוצג" — נמדד: הכרטיס הציג רק STEEM/SBD נזיל ($23)
+ * והנכס-האמיתי-הגדול (SP · נעול-וסטינג) לא הוצג כלל. מדידה-חיה get_accounts +
+ * get_dynamic_global_properties; מטמון 10 דק'; כשל = השורות-הישנות נשארות (fail-honest). */
+interface SteemTruth {
+  at: number;
+  liquid: number | null;
+  sbd: number | null;
+  ownSp: number | null;
+  delegatedOutSp: number | null;
+}
+let steemTruthCache: SteemTruth | null = null;
+const STEEM_TRUTH_MS = 10 * 60_000;
+
+function rpcNum(v: unknown): number {
+  const n = typeof v === "string" ? parseFloat(v) : typeof v === "number" ? v : NaN;
+  return Number.isFinite(n) ? n : NaN;
+}
+
+async function steemTruth(): Promise<SteemTruth | null> {
+  if (steemTruthCache && Date.now() - steemTruthCache.at < STEEM_TRUTH_MS) return steemTruthCache;
+  try {
+    const rpc = (method: string, params: unknown[]) =>
+      fetch("https://api.steemit.com", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ jsonrpc: "2.0", method, params, id: 1 }),
+        cache: "no-store",
+        signal: AbortSignal.timeout(8_000),
+      }).then((r) => (r.ok ? (r.json() as Promise<{ result?: unknown }>) : null));
+    const [accRes, dgpRes] = await Promise.all([
+      rpc("condenser_api.get_accounts", [["headcorner"]]),
+      rpc("condenser_api.get_dynamic_global_properties", []),
+    ]);
+    const acc = (accRes?.result as Array<Record<string, string>> | undefined)?.[0];
+    const dgp = dgpRes?.result as Record<string, string> | undefined;
+    if (!acc) return steemTruthCache;
+    const totalVests = rpcNum(dgp?.total_vesting_shares);
+    const totalFund = rpcNum(dgp?.total_vesting_fund_steem);
+    const spPerVest = Number.isFinite(totalVests) && Number.isFinite(totalFund) && totalVests > 0 ? totalFund / totalVests : NaN;
+    const ownVests = rpcNum(acc.vesting_shares) - rpcNum(acc.delegated_vesting_shares) + rpcNum(acc.received_vesting_shares);
+    const t: SteemTruth = {
+      at: Date.now(),
+      liquid: Number.isFinite(rpcNum(acc.balance)) ? rpcNum(acc.balance) : null,
+      sbd: Number.isFinite(rpcNum(acc.sbd_balance)) ? rpcNum(acc.sbd_balance) : null,
+      ownSp: Number.isFinite(spPerVest) && Number.isFinite(ownVests) ? ownVests * spPerVest : null,
+      delegatedOutSp: Number.isFinite(spPerVest) && Number.isFinite(rpcNum(acc.delegated_vesting_shares)) ? rpcNum(acc.delegated_vesting_shares) * spPerVest : null,
+    };
+    steemTruthCache = t;
+    return t;
+  } catch {
+    return steemTruthCache;
+  }
+}
+
 interface SnapState {
   height?: number;
   balances?: Record<string, Record<string, number>>;
@@ -120,8 +175,23 @@ interface GridPublic {
 export async function loadDex(force = false): Promise<DexPayload> {
   if (!force && cache && Date.now() - cache.at < CACHE_MS) return cache.data;
   const pat = await readPat();
-  const truth = loadTruth();
+  let truth = loadTruth();
   const truthMeta = { saosLive: truth.meta.saosLive, honestEcon: truth.meta.honestEcon, money: truth.meta.money };
+
+  /* R365-money-truth: שורות-כסף-אמת-חיות-מהשרשרת — נזיל-טרי + ה-SP (הנכס-הגדול) שלא-הוצג כלל.
+   * סימוני-USD נלקחים-מהשורות-הקיימות (מטמון-המוניטור); כשל-RPC = השורות-הקיימות נשארות (fail-honest). */
+  const chainMoney = await steemTruth();
+  if (chainMoney && (chainMoney.liquid !== null || chainMoney.sbd !== null || chainMoney.ownSp !== null)) {
+    const steemMark = truth.realMoney.lines.find((l) => l.asset.startsWith("STEEM"))?.markUsd ?? null;
+    const sbdMark = truth.realMoney.lines.find((l) => l.asset.startsWith("SBD"))?.markUsd ?? null;
+    const fresh: typeof truth.realMoney.lines = [];
+    if (chainMoney.liquid !== null) fresh.push({ asset: "STEEM · headcorner-נזיל", amount: chainMoney.liquid, markUsd: steemMark, usd: steemMark !== null ? chainMoney.liquid * steemMark : null, source: "chain-live · get_accounts" });
+    if (chainMoney.sbd !== null) fresh.push({ asset: "SBD · headcorner-נזיל", amount: chainMoney.sbd, markUsd: sbdMark, usd: sbdMark !== null ? chainMoney.sbd * sbdMark : null, source: "chain-live · get_accounts" });
+    if (chainMoney.ownSp !== null) fresh.push({ asset: "SP · headcorner (נעול-וסטינג)", amount: chainMoney.ownSp, markUsd: steemMark, usd: steemMark !== null ? chainMoney.ownSp * steemMark : null, source: chainMoney.delegatedOutSp !== null ? `chain-live · מופקד-החוצה ${chainMoney.delegatedOutSp.toFixed(0)} SP` : "chain-live · get_accounts" });
+    if (fresh.length > 0) {
+      truth = { ...truth, realMoney: { lines: fresh, totalUsd: fresh.reduce((s, l) => s + (l.usd ?? 0), 0), marksAt: truth.realMoney.marksAt } };
+    }
+  }
   const empty: DexPayload = {
     ok: false, note: "מצב-המנוע לא נמדד כרגע — נסה שוב", savedAt: null, height: null,
     pairs: [], accounts: [], assets: [], poolPairs: [], treasuryProfit: null,

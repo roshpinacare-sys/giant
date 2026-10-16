@@ -372,7 +372,7 @@ export function DexView() {
               {eng.truth.realMoney.lines.length > 0 && (
                 <div className="space-y-1.5">
                   {eng.truth.realMoney.lines.map((l, i) => (
-                    <div key={`${l.asset}-${i}`} className="flex items-center justify-between rounded-xl border border-white/5 bg-zinc-950/60 px-3 py-2 text-xs">
+                    <div key={`${l.asset}-${i}`} title={l.source} className="flex items-center justify-between rounded-xl border border-white/5 bg-zinc-950/60 px-3 py-2 text-xs">
                       <span className="font-bold text-zinc-300">{l.asset}</span>
                       <span className="font-mono text-zinc-200">
                         {l.amount !== null ? l.amount.toLocaleString("en-US", { maximumFractionDigits: 3 }) : "—"}
@@ -380,6 +380,11 @@ export function DexView() {
                       </span>
                     </div>
                   ))}
+                  {eng.truth.realMoney.lines.some((l) => l.asset.startsWith("SP")) && (
+                    <p className="rounded-xl border border-amber-600/25 bg-amber-500/[0.05] px-3 py-2 text-[10px] leading-4 text-zinc-500">
+                      SP נעול בוסטינג — זה כוח-הצבעה/עגינה, לא נזיל · נזיל רק דרך פאוור-דאון (13 שבועות) · הפאוור-דאון האחרון בוטל (שיעור 0) ב-5.10 · רחף-מעל שורה למקור-המדידה
+                    </p>
+                  )}
                   <div className="flex items-center justify-between rounded-xl border border-emerald-600/30 bg-emerald-500/[0.06] px-3 py-2 text-xs">
                     <span className="font-black text-emerald-400">סה״כ הכסף-האמיתי-מאחורי-המערכת</span>
                     <span className="font-mono font-black text-emerald-400">{eng.truth.realMoney.totalUsd !== null ? `$${eng.truth.realMoney.totalUsd.toFixed(2)}` : "—"}</span>
