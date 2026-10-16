@@ -858,3 +858,53 @@ setTimeout(pollDexFills, 15_000);
 
 console.log(`[fleet-economy] חי על :${PORT} · restored=${bootResult.restored} · seq=${bootResult.seq} · replayed=${(bootResult as any).replayed ?? 0} · lock=${process.pid} · תורת-משתמשי-פנים בעיצומה · vault-seal מובנה · ingest-אירועים-אמת מחובר (dex-fills+verifier+seal)`);
 export {};
+
+/* ── גל-85 · שומר-השער (dev-guard) ─────────────────────────────────────────────
+ * חוק-הישרדות (נמדד): תהליך-שנולד-מקריאת-כלי נחתך-בין-קריאות — רק-צאצאי-Boot שורדים.
+ * המנוע-הזה-צאצא-Boot, ולכן הוא-מאמץ-את-שער-ה-web: כל-30ש׳ בודק :3000 — אם-סגור,
+ * מקים-את-next-dev-כבן-משמורת (שורד — צאצא-שלנו). וגם מפשיר-next-server-קפואים:
+ * סבב-אטימה-שמת-באמצע-משאיר-SIGSTOP-יתום-לנצח (נמדד 14:06 — האתר-קפא-9-דקות). */
+import net from "node:net";
+import { spawn as cpSpawn } from "child_process";
+const DEV_PORT = 3000;
+let devGuardBusy = false;
+function tcpOpenFast(port: number, timeoutMs = 2500): Promise<boolean> {
+  return new Promise((resolve) => {
+    const s = net.connect({ port, host: "127.0.0.1" });
+    const done = (ok: boolean) => { try { s.destroy(); } catch { /* כנה */ } resolve(ok); };
+    s.setTimeout(timeoutMs, () => done(false));
+    s.once("connect", () => done(true));
+    s.once("error", () => done(false));
+  });
+}
+async function devGuard(): Promise<void> {
+  // הפשרת-יתומים: כל-next-server-במצב-T (SIGSTOP-שנשכח) חוזר-לחיים
+  try {
+    for (const pid of fs.readdirSync("/proc").filter((d) => /^\d+$/.test(d))) {
+      try {
+        const cmd = fs.readFileSync(`/proc/${pid}/cmdline`, "utf8");
+        if (!cmd.includes("next-server")) continue;
+        const st = fs.readFileSync(`/proc/${pid}/status`, "utf8");
+        if (/^State:\s*T/m.test(st)) {
+          process.kill(Number(pid), "SIGCONT");
+          console.log(`[dev-guard] הפשרתי-next-server-קפוא pid=${pid} (SIGSTOP-יתום)`);
+        }
+      } catch { /* תהליך-נעלם */ }
+    }
+  } catch { /* כנה */ }
+  if (devGuardBusy) return;
+  if (await tcpOpenFast(DEV_PORT)) return;
+  devGuardBusy = true;
+  try {
+    const out = fs.openSync("/home/z/my-project/dev.log", "a");
+    const child = cpSpawn("bash", ["-c", "exec ./node_modules/.bin/next dev -p 3000"], { cwd: "/home/z/my-project", detached: true, stdio: ["ignore", out, out], env: process.env });
+    child.unref(); fs.closeSync(out);
+    console.log(`[dev-guard] השער-היה-סגור — הקמתי-next-dev pid=${child.pid}`);
+  } catch (e) {
+    console.log(`[dev-guard] spawn-fail: ${String(e).slice(0, 120)}`);
+  } finally {
+    setTimeout(() => { devGuardBusy = false; }, 30_000);
+  }
+}
+setInterval(devGuard, 30_000);
+setTimeout(devGuard, 20_000);
