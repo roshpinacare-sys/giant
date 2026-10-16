@@ -48,16 +48,18 @@ function mapStation(a: WorldFrame['ag'][number]): Station {
 function ingestFrame(f: WorldFrame, full: boolean): void {
   const store = useHq.getState();
   if (!f || !Array.isArray(f.ag)) return;
+  // גל-81: אצווה-לפריים — פריים אחד = עדכון-store אחד (לא 6 עדכונים לסוכן ב-4Hz = 24 רינדורים/שנייה ששחקו את ה-thread עד קיפאון)
+  const views: AgentView[] = [];
   for (const a of f.ag) {
-    const view: AgentView = {
+    views.push({
       id: a.id,
       state: mapState(a),
       activity: a.activity || a.label || '',
       station: mapStation(a),
       since: f.t,
-    };
-    store.syncAgent(view);
+    });
   }
+  store.syncAgents(views);
   for (const e of f.ev ?? []) {
     const key = `${e.ts}|${e.who}|${e.text}`;
     if (seenEvents.has(key)) continue;
