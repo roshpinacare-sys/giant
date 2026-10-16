@@ -643,6 +643,20 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
     if (dirtyLines.length > 0) {
       const add = await git(dir, ["add", "-A"]);
       if (!add.ok) { sealLog({ repo: name, action: "add-fail", out: add.out }); return false; }
+      // ── חוק-כספת (2026-10-16 · נמדד ב-Domain a8840581): חותמת-אוטומט לא רוכבת על מחיקות.
+      // וייפ-ישן שהשאיר מחיקות פארקות בעץ נחתם לכספת ע"י add -A (הקטלוג + ~125 workflows
+      // נמחקו-בפועל). מחיקות לא נאטמות — נשארות פארקות בעץ לבעלים-האמיתי שלהן. רק קבצי-
+      // ה-tmp של המנוע עצמו (state/tmp-*) מותרים-להיחתם-כמחיקה. ──
+      const stagedDel = await git(dir, ["diff", "--cached", "--name-only", "--diff-filter=D"]);
+      if (stagedDel.ok && stagedDel.out.trim()) {
+        const delPaths = stagedDel.out.trim().split("\n").filter((p) => !p.startsWith("mini-services/fleet-economy/state/tmp-"));
+        if (delPaths.length > 0) {
+          for (let i = 0; i < delPaths.length; i += 50) {
+            await git(dir, ["reset", "-q", "HEAD", "--", ...delPaths.slice(i, i + 50)]);
+          }
+          sealLog({ repo: name, action: "deletions-blocked", count: delPaths.length, sample: delPaths.slice(0, 3) });
+        }
+      }
       const cm = await git(dir, ["commit", "-q", "-m", `vault-seal [auto-economy]: ${dirtyLines.length} files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס`]);
       if (!cm.ok && !cm.out.includes("nothing to commit")) { sealLog({ repo: name, action: "commit-fail", out: cm.out }); }
     }
