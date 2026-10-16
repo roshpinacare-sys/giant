@@ -2465,3 +2465,27 @@ Stage Summary:
 - The "loss" was display blindness: SP (the biggest real asset) never rendered; now fixed chain-live
 - Earning now: real-side spread capture on fills (measured buy-back > sell) + tiny curation drips; SIM book profit 885 USDS (internal-only, honestly labeled)
 - Key fact: honest-econ/money.json lines are stale-cache; chain-live measurement in dex route now supersedes for display
+
+---
+Task ID: T94-steem-liquidity
+Agent: Z.ai Code (main orchestrator)
+Task: "הכל בדקס יהיה נזיל — נשתמש בשוק של סטימיט ועוד כדי לייצר את הזרימה הדרושה ביעילות ומהירות" (trace 1a146513162051a5)
+
+Work Log:
+- DISK CRISIS FIRST: Turbopack panics "No space left on device" (os error 28) — freed 1.4G bun cache + 1.3G forge/node_modules duplicate + 49M old quarantine + killed 2 stale-tree zombies and deleted /home/z/estate/FleetHQ.stale-1792174187919 (1.8G!) → disk 82% (1.8G free), dev server revived via supervisor
+- MEASURED the Steem market live (no assumptions): api.steemit.com condenser works (get_ticker STEEM/SBD 0.102, get_order_book REAL depth 14 bids/20 asks, get_current_median_history_price witness feed), CoinGecko steem.usd=0.053567 ≈ HTX steemusdt=0.0535 (cross-validated) → oracle = median/HTX/chain-cross, fail-honest nulls
+- NEW src/lib/steem-feed.ts: Steem internal market + CoinGecko + HTX feeds, 20s snapshot cache, real chain orderbook levels (price/steem/sbd/cumulative)
+- NEW src/lib/steem-bridge.ts: versioned genesis (steem-bridge-v1) — STEEM/USDS pool (30,000 tokens @ oracle 0.0535, TVL ~3,210 USDS) + SBD/USDS pool (4,000 @ 0.5245, TVL ~4,196) funded from TREASURY with documented ledger issuance; BRIDGE valve inventory (5,000 USDS + 8,000 STEEM + 800 SBD, documented)
+- PEG VALVE (10s tick): when pool deviates >0.75% from live oracle → real corrective swap via executeSwap (source "BRIDGE", bounded 0.6% pool/tick, ≤400 USDS, slippage 1.5%); health published to DexConfig steemBridgeHealth; LIVE VERIFIED: valve executed real SELL corrections on both pools, deviation converged (SBD 0.048% pegged, STEEM chasing 2.2%→converging)
+- NEW src/lib/dex-server.ts router: buildRouteQuote + executeRouteSwap — every token↔every token via USDS hub (1-2 real legs); quote/swap routes accept {from,to} router mode; partial-failure honesty (leg-1 executed → reported explicitly)
+- Multi-pool fairness fix fleet-loop.ts: sweep pool rotation (sweeps % pools) + cap 24→32 — STEEM/SBD pools (sort-last) were starved of MM flow under the action cap
+- TradeDesk: live market selector (all 7 native pools incl. STEEM/SBD), dynamic BUY/SELL labels + wallet chips; SteemBridgePanel (new): real chain orderbook, oracle badges, peg deviation bars, valve activity — mounted in DexView
+- VERIFIED end-to-end: /api/dex/steem/market 200 (oracle fresh, pools pegged); router quote STEEM→USDS→SAOS real legs; fleet loop pools=7, agents opened positions on new pools (zai-main/zai-sec BUYs); browser: 0 console errors, selector switch works, mobile fits, screenshots archived (tool-results/steem-bridge-*.png, gitignored)
+- vol24h measured: STEEM pool 753→950 USDS, SBD pool 111→159 USDS within minutes of genesis; pairsCount 16→18, TVL 225K→232K
+
+Stage Summary:
+- DEX liquidity doctrine shifted: prices now anchored to REAL Steem market via live oracle valve (STEEM=$0.0535 cross-validated CoinGecko+HTX; SBD=$0.5245 chain-derived)
+- Everything tradable: 7 native pools + router (any token pair via USDS hub) + UI market selector
+- Flow engine: fleet agents (8) trade all 7 pools with fair rotation; peg valve generates real corrective flow every 10s when deviating
+- Key fact: merge -s ours CLOBBERED sibling work before (wave-91 RE-ASSERT after 7ab6bbf) — use normal merge + resolve, ours only for state files
+- Key fact: auto-economy sealer commits shared-worktree files automatically; my T94 src files landed via edd9145/a2cb4d5 vault-seal commits
