@@ -181,6 +181,22 @@ const round6 = (x: number) => +x.toFixed(6);
 function spawnTx(): Tx | null {
   const r = Math.random();
   const soldier = pick(SOLDIERS).id;
+  // ── MM-פנימי (גל-81 · מדידה-חיה: בלי-נגד-מכיר הבריכה-סוטה 1.00→2.5 ונדחות-מצטברות):
+  // הכספת סוחרת-מול-הסטייה בתוך-רצועה — מוכרת-SAOS-מהרזרבה כשהמחיר-חם, קונה כשקר.
+  // זו תורת-MM-INTERNAL בפועל: נזילות-פנימית-נשמרת, אפס-תלות-חוץ.
+  const price = priceUsdsPerSaos();
+  const drift = price / 1.0038; // אנקור = מחיר-הפתיחה המדוד
+  if (r < 0.10 && (drift > 1.2 || drift < 0.83)) {
+    if (drift > 1.2) {
+      const tb = bal("treasury");
+      const amt = round6(Math.min(tb.saos, 60 + Math.random() * 240));
+      if (amt > 0) return ammSwap("treasury", "SAOS", amt, `MM-פנימי: מכירת-SAOS-מהרזרבה (מחיר ${price.toFixed(3)} > רצועה)`);
+    } else {
+      const tb = bal("treasury");
+      const amt = round6(Math.min(tb.usds, 60 + Math.random() * 240));
+      if (amt > 0) return ammSwap("treasury", "USDS", amt, `MM-פנימי: קניית-SAOS-לרזרבה (מחיר ${price.toFixed(3)} < רצועה)`);
+    }
+  }
   if (r < 0.06) { // משכורת/תדלוק מהכספת (מנוזל, מההצע-הקבוע בלבד)
     const amt = round6(2 + Math.random() * 6);
     return apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: soldier, asset: "USDS", amount: amt, reason: "משכורת-מחזורית על עבודת-שורה חיה" });
