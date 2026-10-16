@@ -381,11 +381,71 @@ function boot() {
         seed();
         return { restored: false, seq: 0, quarantined: true };
       }
-      return { restored: true, seq };
+      // גל-85 · שידוד-הזנב-שמעבר-לסנאפשוט — הספר-הוא-האמת (ראה replayTailAbove)
+      const rp = replayTailAbove(seq);
+      if (!rp.ok) {
+        quarantineState(`boot-replay-failAt-${rp.failAt}`);
+        balances = new Map();
+        pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
+        seq = 0; lastH = "GENESIS"; ledgerBuf = []; ledgerLines = 0; recent = [];
+        byKind = {}; byAccount = {}; rejected = 0; ledgerFileNo = 0;
+        rejectedAtBoot = 0;
+        seed();
+        return { restored: false, seq: 0, quarantined: true };
+      }
+      return { restored: true, seq, replayed: rp.replayed };
     }
   } catch { /* snapshot פגום → זריעה-כנה מחדש */ }
   seed();
   return { restored: false, seq: 0 };
+}
+
+/* ── גל-85 · שידוד-זנב-מעל-הסנאפשוט (replay) ───────────────────────────
+ * הסנאפשוט-יכול-להיות-עד-30ש׳-מאחורי-זנב-הספר (מוות-בין-סנאפשוטים).
+ * נמדד-פורנזית (הסגר 13:47): המנוע-המשיך-מהסנאפשוט-הישן-וכתב-על-זנב-קיים →
+ * כפילויות-seq → שרשרת-תפורה → זריעה-מחדש. מעכשיו: **הספר-הוא-האמת** —
+ * אחרי-אימות-שרשרת-מלאה, רשומות-מעבר-לסנאפשוט משודדות-דרך-אותם-חוקי-איזון,
+ * בלי-כתיבה-חוזרת-לספר. כשל-שידוד = הסגר-כנה (לא-המצאה). */
+function replayTx(t: Tx): boolean {
+  const from = bal(t.from), to = bal(t.to);
+  const field = t.asset === "USDS" ? "usds" : "saos";
+  if ((from as any)[field] < t.amount) return false;
+  if (t.kind === "stake") {
+    from.saos -= t.amount; from.saosStaked += t.amount;
+  } else if (t.kind === "unstake") {
+    if (from.saosStaked < t.amount) return false;
+    from.saosStaked -= t.amount; to.saos += t.amount;
+  } else {
+    (from as any)[field] -= t.amount;
+    if (t.kind === "swap") {
+      const feeAmt = (t as any).fee ?? 0;
+      if (t.asset === "USDS") { pool.usds += t.amount; pool.saos -= (t as any).outSaos; to.saos += (t as any).outSaos; pool.feesUsds += feeAmt; }
+      else { pool.saos += t.amount; pool.usds -= (t as any).outUsds; to.usds += (t as any).outUsds; pool.feesSaos += feeAmt; }
+    } else {
+      (to as any)[field] += t.amount;
+    }
+  }
+  byAccount[t.from] = (byAccount[t.from] ?? 0) + 1;
+  byAccount[t.to] = (byAccount[t.to] ?? 0) + 1;
+  seq = t.seq; lastH = t.h;
+  recent.push(t.ts);
+  byKind[t.kind] = (byKind[t.kind] ?? 0) + 1;
+  return true;
+}
+function replayTailAbove(snapshotSeq: number): { ok: boolean; replayed: number; failAt?: number } {
+  let replayed = 0;
+  for (const f of ledgerFiles()) {
+    const lines = fs.readFileSync(path.join(STATE_DIR, f), "utf8").split("\n").filter(Boolean);
+    for (const line of lines) {
+      try {
+        const t = JSON.parse(line) as Tx;
+        if (t.seq <= snapshotSeq) continue;
+        if (!replayTx(t)) return { ok: false, replayed, failAt: t.seq };
+        replayed++;
+      } catch { return { ok: false, replayed, failAt: replayed }; }
+    }
+  }
+  return { ok: true, replayed };
 }
 
 /* הסגר-כנה של-קבצי-מדינה — אפס-תפירה-מזויפת, כל-ההיסטוריה-נשמרת-לביקורת */
@@ -402,14 +462,17 @@ function quarantineState(reason: string) {
 }
 
 /* אימות-שרשרת מלאה (לתביעה מול-אמת): קורא את הספר כולה ומאמת sha256 */
-function verifyChain(): { ok: boolean; checked: number; brokenAt?: number } {
-  let prev = "GENESIS"; let checked = 0;
-  const files = fs.readdirSync(STATE_DIR).filter((f) => f === "ledger.jsonl" || f.startsWith("ledger-")).sort((a, b) => {
+function ledgerFiles(): string[] {
+  return fs.readdirSync(STATE_DIR).filter((f) => f === "ledger.jsonl" || f.startsWith("ledger-")).sort((a, b) => {
     // גל-85 · מיון-מספרי (היה-לקסיקוגרפי: ledger-10 לפני ledger-2 → שרשרת-תפורה-כשיש-רוטציה)
     const na = Number(/-(\d+)\.jsonl$/.exec(a)?.[1] ?? 0);
     const nb = Number(/-(\d+)\.jsonl$/.exec(b)?.[1] ?? 0);
     return na - nb || a.localeCompare(b);
   });
+}
+function verifyChain(): { ok: boolean; checked: number; brokenAt?: number } {
+  let prev = "GENESIS"; let checked = 0;
+  const files = ledgerFiles();
   for (const f of files) {
     const lines = fs.readFileSync(path.join(STATE_DIR, f), "utf8").split("\n").filter(Boolean);
     for (const line of lines) {
@@ -788,5 +851,5 @@ function pollDexFills(): void {
 setInterval(pollDexFills, FILL_POLL_MS);
 setTimeout(pollDexFills, 15_000);
 
-console.log(`[fleet-economy] חי על :${PORT} · restored=${bootResult.restored} · seq=${bootResult.seq} · תורת-משתמשי-פנים בעיצומה · vault-seal מובנה · ingest-אירועים-אמת מחובר (dex-fills+verifier+seal)`);
+console.log(`[fleet-economy] חי על :${PORT} · restored=${bootResult.restored} · seq=${bootResult.seq} · replayed=${(bootResult as any).replayed ?? 0} · lock=${process.pid} · תורת-משתמשי-פנים בעיצומה · vault-seal מובנה · ingest-אירועים-אמת מחובר (dex-fills+verifier+seal)`);
 export {};
