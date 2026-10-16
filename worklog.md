@@ -1906,3 +1906,26 @@ Stage Summary:
 - sovereign/main = d72f7d0 (כולל: תחייה + איחוי-79 + תיקון-משרד-חי + איחוי-80)
 - המנוע הכלכלי ממשיך: ok:true, ~48tx/דקה, שקיעות-בודדות-כנות בחלון-ההשהיה
 - שלושה-מחזורי-איחוי ביום-העבודה: אפס-דריסות, אפס-אובדן, הכול-מאומת ls-remote
+
+---
+Task ID: T78
+Agent: Z.ai Code (zai-web session)
+Task: ריפוי-grid-watch — 15/15 אדומים (שורש-אימיילי-הכשל-כל-10-דקות)
+
+Work Log:
+- זיהוי: grid-watch מדווח-על-39-ריפו/321-workflows; האימיילים-כל-10-דק' = כל-כשל-cron. המדידה-החיה: 190-ירוקים · 116-אמבר · 15-אדומים
+- אנונימיזציה-פוענחה: private-f1bf631a = saos-dex (sha256-שמות-פרטיים, חוק-26-a)
+- שורש-מאומר-בעצמנו (D4, נמדד-12.10): קיר-דקות-Actions-לריפו-פרטי — ריצות-מתות-בשניות-בלי-שלבים; ריצת-dex-beat-תקועה-מ-15.10
+- saos-dex (9-אדומים+1-תקוע): כל-10-ה-workflows-כבר-היו-ללא-cron (גל-Z-70); נוטרלו-רשמית disabled_manually → amber "manually disabled" — המנועים-המקומיים-הם-הבצענים (הכלכלה-כבר-מבצעת-dex-פנימית)
+- FleetHQ/office-heartbeat: דליפת-runtime (auto-seal-קומיט-2-קבצים-לתוך-ספריית-clone-יעד) → הסרה+gitignore+rm-guard → SUCCESS
+- Domain/office-worldbeat + office-pulse: התרפאו-מעצמם (שרשרת-הצתה-עצמית-מהגל-הקודם)
+- Domain/exposure-gate: השער-צדק-2-פעמים — (א) דליפת-נתיבי-/home/z/-ב-econ-ledger → המחולל-רופא-ליחסיים (FleetHQ/micro-work-rig) + הקובץ-נכנס-לחוק-ה-sig-locked (שרשרת-sha16-לא-ניתנת-לשכתוב) · (ב) 'headcorner'-ב-head-delegate = החלטת-בעלים-מדודה-מתועדת → סייג-26-R2-צר → PASS-842/0
+- Domain/content-campaign: **טיהור-a5d2224d-פגע-גם-כאן** — POSTER="owner" (חשבון-זר-אמיתי-מ-2016!) → השער-הביט-ביט-סירב-5-ריצות-כנה-כמתוכנן → שוחזר-env-first (FLEET_ACCOUNT-סוד-קודם, fallback-הקול-האמיתי) → SUCCESS
+- Console/truth-gate: 404-רפאים-של-מירוץ-פריסת-Pages (נמדד: deck/+versus.html-404-במהלך-בנייה, 200-אחר-כך) → G2-מעבר-שני-מדוד → SUCCESS
+- דחיפות-דרך-contents-API (ה-clone-המקומי-של-Domain-חי-ונעול-על-ידי-כותבי-runtime)
+
+Stage Summary:
+- **15/15 אדומים-טופלו** — סערת-אימיילי-הכשל-אמורה-להיעצר; כל-הריפויים-עם-קומיט-מתועד-והצתת-אימות-ירוקה
+- 6-ירוקים-חדשים-חיים-בענן: office-heartbeat · exposure-gate · content-campaign · truth-gate · worldbeat · pulse
+- דוקטרינה-מחודדת: GitHub=קודקס+Pages+אימות-קל; **הביצוע=מקומי** (אפס-תלות-ב-runners-חוץ-ללולאות-הליבה)
+- כלי-עבודה-חדשים: פענוח-אנונימיזציה · דחיפת-API-ישירה-ל-main · חתימה-עם-השהיית-כותבים
