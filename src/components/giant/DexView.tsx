@@ -46,6 +46,16 @@ interface DexEnginePayload {
   feeMeter: number | null;
   ordersOpen: number | null;
   metrics: { day: string; beats: number; ticks: number; fills: number; swaps: number; height: number; vol24QuoteMu: number; trades24: number }[];
+  /* גל-91 · נזילות-אמת: האוצר על-השרשרת (mainnet · קריאה-חיה ללא-מפתחות) */
+  chainTreasury: {
+    measuredAt: string;
+    accounts: number;
+    liquidSteem: number;
+    liquidSbd: number;
+    spTotal: number;
+    openOrders: number;
+    source: string;
+  } | null;
   /* היצע-אמת (R74 · דרישת-הבעלים "אני רוצה להבין מה קורה אצלנו באמת") */
   supply: {
     accountsSaosMu: number;
@@ -684,32 +694,32 @@ export function DexView() {
       </section>
 
       {/* גל-91 · נזילות-אמת: האוצר על-השרשרת (mainnet, קריאה-חיה-ללא-מפתחות) */}
-      {data?.chainTreasury && (
+      {eng?.chainTreasury && (
         <section className="rounded-2xl border border-emerald-600/25 bg-emerald-500/[0.03] p-5" aria-label="on-chain treasury">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-100">
               <ShieldCheck className="h-4 w-4 text-emerald-500" aria-hidden /> נזילות-אמת · האוצר על-השרשרת (mainnet)
             </h3>
             <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-400">
-              {data.chainTreasury.accounts} חשבונות · {data.chainTreasury.source}
+              {eng.chainTreasury.accounts} חשבונות · {eng.chainTreasury.source}
             </span>
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
             <div className="rounded-xl border border-white/5 bg-zinc-950/60 px-3 py-2">
               <p className="text-[10px] text-zinc-500">STEEM נזיל</p>
-              <p className="font-mono text-sm font-bold text-zinc-100">{data.chainTreasury.liquidSteem.toFixed(3)}</p>
+              <p className="font-mono text-sm font-bold text-zinc-100">{eng.chainTreasury.liquidSteem.toFixed(3)}</p>
             </div>
             <div className="rounded-xl border border-white/5 bg-zinc-950/60 px-3 py-2">
               <p className="text-[10px] text-zinc-500">SBD נזיל</p>
-              <p className="font-mono text-sm font-bold text-zinc-100">{data.chainTreasury.liquidSbd.toFixed(3)}</p>
+              <p className="font-mono text-sm font-bold text-zinc-100">{eng.chainTreasury.liquidSbd.toFixed(3)}</p>
             </div>
             <div className="rounded-xl border border-white/5 bg-zinc-950/60 px-3 py-2">
               <p className="text-[10px] text-zinc-500">SP (מנופח-נטו)</p>
-              <p className="font-mono text-sm font-bold text-zinc-100">{data.chainTreasury.spTotal.toFixed(2)}</p>
+              <p className="font-mono text-sm font-bold text-zinc-100">{eng.chainTreasury.spTotal.toFixed(2)}</p>
             </div>
             <div className="rounded-xl border border-white/5 bg-zinc-950/60 px-3 py-2">
               <p className="text-[10px] text-zinc-500">פקודות-פתוחות בשוק</p>
-              <p className="font-mono text-sm font-bold text-amber-400">{data.chainTreasury.openOrders}</p>
+              <p className="font-mono text-sm font-bold text-amber-400">{eng.chainTreasury.openOrders}</p>
             </div>
           </div>
           <p className="mt-2 text-[10px] leading-relaxed text-zinc-500">
