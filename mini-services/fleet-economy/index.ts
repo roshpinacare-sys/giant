@@ -686,16 +686,33 @@ function nextServerPids(): number[] {
     for (const pid of fs.readdirSync("/proc").filter((d) => /^\d+$/.test(d))) {
       try {
         const cmd = fs.readFileSync(`/proc/${pid}/cmdline`, "utf8");
-        if (cmd.includes("next-server")) out.push(Number(pid));
+        if (!cmd.includes("next-server")) continue;
+        // גל-84 · היקף-מדויק: רק-next-server-של-my-project — לא-של-FleetHQ/אחרים
+        try {
+          const cwd = fs.readlinkSync(`/proc/${pid}/cwd`);
+          if (!cwd.startsWith("/home/z/my-project")) continue;
+        } catch { /* ללא-cwd → לא-שלנו */ continue; }
+        out.push(Number(pid));
       } catch { /* תהליך-נעלם */ }
     }
   } catch { /* כנה */ }
   return out;
 }
 
+/* גל-84 · מרקר-הקפאה-מתוכננת: המפקח-על-3000 קורא-אותו-ונמנע-מהצתת-הצתות-החייאה
+ * (EADDRINUSE-סערה) בזמן-שהשרת-מושהה-כחלק-מאטימה-עקבית. נמחק-ב-finally תמיד. */
+const WEB_FREEZE_FLAG = "/home/z/my-project/state/web-freeze.flag";
+function webFreezeSet() {
+  try { fs.mkdirSync(path.dirname(WEB_FREEZE_FLAG), { recursive: true }); fs.writeFileSync(WEB_FREEZE_FLAG, String(Date.now())); } catch { /* כנה */ }
+}
+function webFreezeClear() {
+  try { fs.rmSync(WEB_FREEZE_FLAG, { force: true }); } catch { /* כנה */ }
+}
+
 async function sealMyProject(): Promise<void> {
   sealing = true; // הקפאה-עצמית: אף-tick/snapshotSave-לא-רץ
   const pids = nextServerPids();
+  webFreezeSet();
   for (const p of pids) { try { process.kill(p, "SIGSTOP"); } catch { /* כנה */ } }
   let preLedger = ""; let preSnap = "";
   try {
@@ -716,6 +733,7 @@ async function sealMyProject(): Promise<void> {
     }, { strategyOurs: true }); // גל-83 · אפס-תפרים: merge -s ours — לא-נוגע-בעץ-החי-כלל
   } finally {
     for (const p of pids) { try { process.kill(p, "SIGCONT"); } catch { /* כנה */ } }
+    webFreezeClear();
     if (preLedger) try { fs.rmSync(preLedger, { force: true }); } catch { /* כנה */ }
     if (preSnap) try { fs.rmSync(preSnap, { force: true }); } catch { /* כנה */ }
     sealing = false; // הפשרה — הכלכלה-חוזרת-לנשום
