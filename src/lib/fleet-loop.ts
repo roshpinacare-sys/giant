@@ -27,7 +27,9 @@ const DEVIATION_TRIGGER = 0.03; // סטייה-של-3% ממלאי-היעד = עס
 const STALE_ORDER_MS = 2.5 * 60_000; // פקודה-שלא-מולאה-תוך-2.5 ד׳ → ביטול-והחזרת-נזילות (גל-82: 4→2.5)
 const MIN_NOTIONAL = 1; // אף-פקודה-מתחת-ל-1-USDS-שווה — אין-אבק
 const MAX_CANCELS_PER_SWEEP = 3; // תקרת-ביטולים-לסוכן-בסריקה (חסינות-עומס)
-const MAX_ACTIONS_PER_SWEEP = 24; // חסינות-עומס-כוללת-לסריקה (SQLite-כותב-יחיד)
+const MAX_ACTIONS_PER_SWEEP = 32; // חסינות-עומס-כוללת-לסריקה (SQLite-כותב-יחיד · גל-94: 7-בריכות)
+// גל-94 · הוגנות-סבב: כל-סריקה מתחילה-מבריכה-אחרת (sweeps % pools) — אף-בריכה-לא-נרעבת
+// כשהתקרה-נגמרת-לפני-סוף-הרשימה; STEEM/SBD (sort-גבוה) זוכים-בקדימות-כל-סבב.
 const MAX_POOL_ORDER_USDS = 0.006; // פקודה-לא-תעלה-על-0.6%-מרזרבת-הבריכה (קמעונאי-אמת-בכל-בריכה)
 const LEDGER_BALANCES_KEY = "fleetLoopVersion";
 
@@ -122,11 +124,14 @@ async function sweepOnce(): Promise<void> {
   try {
     // גל-82 · ריבוי-בריכות: כל-הזוגות-הילידים-עם-רזרבות-אמת — לא-רק-SAOS/USDS.
     // בריכה-בלי-רזרבות = לא-שוק; לא-ממציאים-זרימה-עליה.
-    const pairs = await db.dexPair.findMany({
+    const pairs0 = await db.dexPair.findMany({
       where: { isNative: true, reserveBase: { gt: 0 }, reserveQuote: { gt: 0 } },
       orderBy: { sort: "asc" },
     });
-    if (!pairs.length) return; // אין-שוק — אין-לקוחות; לא-ממציאים
+    if (!pairs0.length) return; // אין-שוק — אין-לקוחות; לא-ממציאים
+    // הוגנות-סבב (גל-94): רוטציה-אמיתית של-נקודת-ההתחלה — הסריקה-הבאה פותחת-מהבריכה-הבאה
+    const off = st.sweeps % pairs0.length;
+    const pairs = [...pairs0.slice(off), ...pairs0.slice(0, off)];
     st.pools = pairs.length;
 
     const agents = await db.fleetAgent.findMany({ where: { active: true } });

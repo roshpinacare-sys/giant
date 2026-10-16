@@ -72,9 +72,11 @@ export function TradeDesk() {
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [pairId, setPairId] = useState<string | null>(null); // בורר-השוק (אפס = ברירת-המחדל SAOS)
-  // רפרנס-יציב לבורר-השוק (בלי-הדלקת-אפקט-בכל-רינדור)
+  // רפרנס-יציב לבורר-השוק (מסונכרן-באפקט — בלי-כתיבת-רפרנס-ברינדור)
   const currentPair = useRef<string | null>(null);
-  currentPair.current = pairId;
+  useEffect(() => {
+    currentPair.current = pairId;
+  }, [pairId]);
 
   // טפסים
   const [side, setSide] = useState<Side>("BUY");
