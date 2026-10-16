@@ -2212,3 +2212,23 @@ Stage Summary:
 - 12/13 עוגנים-ירוקים · 5/5 ריפו-פרטיים ff-pull-ok (T75-מימוש-חלקי)
 - Domain מיושר HEAD==origin · אפס-אובדן בכל-הדרך
 - ba8d48d על-הכספת (ls-remote-מאומת)
+
+---
+Task ID: T77-5
+Agent: zai-web (sovereign session)
+Task: grid-watch-4/4 + אימיילי-הכשל-כל-10-דק — אבחון-שורשי-וריפוי (T75-3 מימוש)
+
+Work Log:
+- grid-watch: exposure-gate ירוק (#397/398) · content-campaign ירוק (#23) · fleet-health 200-חי · treasury-route = כשל-100% (48/48) — אבחון: exposure-scan מוצא host-filesystem-path ב-agents/econ-ledger.jsonl → fail-loud → commit-דילוג
+- ריפוי-treasury-route: הקובץ הוסר-כבר-מ-HEAD (9b24b2572 · 15:26 ע״פ-חוק-החשיפה) · סריקה-מקומית: PASS-383-קבצים-0-הפרות · dispatch-422 (schedule-only) — ריצה-הבאה-תאשר
+- אימיילי-הכשל: office-artery #97 (15:30) — "Cannot find module agents/office-artery.mjs" · השורש: קומיט-9b24b2572 "office-memory: foreman books sync" מחק **482-קבצים/141K-שורות** מ-agents/+truth/ — הכותב-האוטומטי-רכב-על-מחיקות-שהוצגו-משיבוט-חלקי
+- תיקון-שורשי-מבני: VAULT-LAW-v2 ב-domain-sync.sh — books-sync לעולם לא נושא מחיקות (dels מוסרים-מה-index לפני-commit · bash -n-תקין)
+- שחזור: 489-קבצים-מ-7a1fe67ee → commit 8b75369a6 → דחיפה-ל-origin · ls-tree: 343-קבצים-חוזרים-ל-agents/ · ls-remote-מאומת
+- domain-sync-loop: זומבי-ישן-2474-שרד-TERM → kill -9 · לופ-נקי-יחיד pid-7010 · "nothing to commit" (הכל-אטום) · pushed-351265214-בסבב-הראשון
+- FleetHQ-git: ה-patch נאטם-ע״י-auto-economy (f0e2f056) — החוק-מתפשט-בעצמו
+
+Stage Summary:
+- שרשרת-הכשל-המלאה-נסגרה: שיבוט-חלקי → מחיקות-מוצגות → books-sync-רוכב-עליהן → 482-קבצים-נמחקים → office-artery-לא-מוצא-מודול → אימייל-כשל-כל-10-דק
+- שלושה-חוקים-חדשים: estate-sync-v4-סולם · VAULT-LAW-v2-אסור-מחיקות-בזיכרון · quarantine-לא-מוחק-מקור
+- 458-מחיקות-בטלו · 489-קבצים-קמו-לתחייה · אפס-אובדן-נשמר-בכל-השכבות
+- המתנה-לריצות-המתוכננות: office-artery + treasury-route יאושרו-ירוקים-בטיק-הבא
