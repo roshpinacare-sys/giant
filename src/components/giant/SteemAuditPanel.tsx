@@ -114,7 +114,7 @@ export function SteemAuditPanel() {
             אמת-הכסף · headcorner — התשובה-המדודה ל&quot;איפה הכסף?&quot;
           </h3>
           <p className="mt-0.5 text-[10px] text-zinc-500">
-            יתרות-מהשרשרת · פיצול עסקאות-עצמי (ווש) מזרימה-אמת · חלון {flow ? `${flow.fromTs} .. ${flow.toTs.slice(0, 10)}` : "—"}
+            יתרות-מהשרשרת · פיצול עסקאות-עצמי (ווש) מזרימה-אמת · חלון {flow ? `${flow.fromTs.slice(0, 10)} .. ${flow.toTs.slice(0, 10)}` : "—"}
           </p>
         </div>
         <div className="flex items-center gap-2">
