@@ -78,7 +78,6 @@
 {"ts":"2026-10-16T09:49:03.031Z","repo":"giant","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T09:49:04.677Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T09:49:04.677Z","action":"sweep-done"}
-<<<<<<< Updated upstream
 {"ts":"2026-10-16T10:03:44.712Z","repo":"my-project","action":"state-custody-restore","brokenAt":1,"restored":true}
 {"ts":"2026-10-16T10:03:47.792Z","repo":"my-project","action":"state-custody-restore","brokenAt":1,"restored":true}
 {"ts":"2026-10-16T10:03:47.796Z","repo":"my-project","action":"push-fail","out":"fatal: 'origin' does not appear to be a git repository\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists."}
@@ -92,7 +91,6 @@
 {"ts":"2026-10-16T10:04:05.815Z","repo":"giant","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T10:04:07.825Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T10:04:07.825Z","action":"sweep-done"}
-=======
 {"ts":"2026-10-16T09:58:49.052Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant\n   4ab3ee5..5244de4  HEAD -> main"}
 {"ts":"2026-10-16T09:58:52.414Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   8646c618..40441f7d  HEAD -> main"}
 {"ts":"2026-10-16T09:58:55.658Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   87d16aeb..1938a299  HEAD -> main"}
@@ -116,7 +114,6 @@
 {"ts":"2026-10-16T10:09:08.430Z","repo":"giant","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T10:09:10.278Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T10:09:10.278Z","action":"sweep-done"}
->>>>>>> Stashed changes
 {"ts":"2026-10-16T10:18:58.819Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant\n   5f4ef59..28b51bb  HEAD -> main"}
 {"ts":"2026-10-16T10:19:07.714Z","repo":"FleetHQ","action":"sealed","ahead":"1","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   f732a780..5211cbc2  HEAD -> main"}
 {"ts":"2026-10-16T10:19:10.805Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   15c1f34c..f4b88f15  HEAD -> main"}
@@ -749,3 +746,43 @@
 {"ts":"2026-10-16T20:13:00.268Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T20:13:02.711Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T20:13:02.711Z","action":"sweep-done"}
+{"ts":"2026-10-16T20:01:21.790Z","repo":"my-project","action":"state-custody-restore","brokenAt":1,"restored":true}
+{"ts":"2026-10-16T20:01:38.008Z","repo":"my-project","action":"code-lane-diff","files":["src/app/api/giant/dex/route.ts","src/components/giant/DexView.tsx","src/lib/mini-guard.ts"],"count":3}
+{"ts":"2026-10-16T20:01:38.450Z","repo":"my-project","action":"state-custody-restore","brokenAt":1,"restored":true}
+{"ts":"2026-10-16T20:01:47.686Z","repo":"my-project","action":"sealed","ahead":"1","detail":"To https://github.com/roshpinacare-sys/giant.git\n   2314247..93be9c1  HEAD -> main"}
+{"ts":"2026-10-16T20:01:51.865Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   02511731f..222398e71  HEAD -> main"}
+{"ts":"2026-10-16T20:01:54.071Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:01:55.659Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:01:57.577Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:01:59.404Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:02:01.178Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:02:02.976Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:02:05.322Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:02:05.322Z","action":"sweep-done"}
+{"ts":"2026-10-16T20:11:24.041Z","repo":"my-project","action":"state-custody-restore","brokenAt":1,"restored":true}
+{"ts":"2026-10-16T20:11:30.714Z","repo":"my-project","action":"code-lane-diff","files":["src/app/api/giant/dex/route.ts","src/components/giant/DexView.tsx","src/lib/mini-guard.ts"],"count":3}
+{"ts":"2026-10-16T20:11:30.920Z","repo":"my-project","action":"state-custody-restore","brokenAt":1,"restored":true}
+{"ts":"2026-10-16T20:11:42.384Z","repo":"my-project","action":"sealed","ahead":"2","detail":"To https://github.com/roshpinacare-sys/giant.git\n   7a34b0f..f5cf263  HEAD -> main"}
+{"ts":"2026-10-16T20:11:44.301Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:11:46.510Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:11:48.025Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:11:49.371Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:11:51.788Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:11:53.498Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:11:54.980Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:11:56.819Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:11:56.819Z","action":"sweep-done"}
+{"ts":"2026-10-16T20:21:27.179Z","repo":"my-project","action":"code-lane-diff","files":["scripts/wave91-balance.ts","scripts/wave91-cache/cornerstone.done","scripts/wave91-cache/cornerstone.jsonl","scripts/wave91-cache/headcorner.jsonl","scripts/wave91-history.ts","src/app/api/giant/dex/route.ts","src/components/giant/DexView.tsx","src/lib/mini-guard.ts"],"count":8}
+{"ts":"2026-10-16T20:21:27.485Z","repo":"my-project","action":"state-custody-restore","brokenAt":1,"restored":true}
+{"ts":"2026-10-16T20:21:35.740Z","repo":"my-project","action":"code-lane-diff","files":["on","src/app/api/dex/orders/route.ts","src/app/api/dex/quote/route.ts","src/app/api/dex/steem/market/route.ts","src/app/api/dex/swap/route.ts","src/app/api/giant/dex/route.ts","src/components/giant/DexView.tsx","src/components/giant/TradeDesk.tsx","src/lib/dex-engine.ts","src/lib/dex-orders.ts","src/lib/dex-server.ts","src/lib/mini-guard.ts"],"count":14}
+{"ts":"2026-10-16T20:21:36.073Z","repo":"my-project","action":"state-custody-restore","brokenAt":1,"restored":true}
+{"ts":"2026-10-16T20:21:52.604Z","repo":"my-project","action":"sealed","ahead":"2","detail":"To https://github.com/roshpinacare-sys/giant.git\n   9f65e55..e383ffe  HEAD -> main"}
+{"ts":"2026-10-16T20:21:55.694Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   a91744a0..3f11f626  HEAD -> main"}
+{"ts":"2026-10-16T20:21:59.390Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   eeb40e59..38434bdb  HEAD -> main"}
+{"ts":"2026-10-16T20:22:01.134Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:22:02.926Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:22:04.760Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:22:06.635Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:22:08.133Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:22:10.050Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:22:10.050Z","action":"sweep-done"}
