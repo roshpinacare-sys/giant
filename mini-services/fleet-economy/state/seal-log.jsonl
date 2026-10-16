@@ -622,3 +622,16 @@
 {"ts":"2026-10-16T17:41:28.627Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T17:41:30.629Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-16T17:41:30.633Z","action":"sweep-done"}
+{"ts":"2026-10-16T17:51:07.823Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for af9ff5130dd934177c57dd41fa288dfd744afdef\nCannot save the current worktree state\nfatal: stash failed"}
+{"ts":"2026-10-16T17:51:15.113Z","repo":"my-project","action":"commit-fail","out":"On branch main\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   db/custom.db\n\tmodified:   mini-services/fleet-economy/state/seal-log.jsonl\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")"}
+{"ts":"2026-10-16T17:51:17.502Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 311b1d155e6eb017b82811c86811f7a65701f908\nCannot save the current worktree state\nfatal: stash failed"}
+{"ts":"2026-10-16T17:51:20.119Z","repo":"my-project","action":"push-fail","out":"jected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T17:51:23.586Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   f080c9f6..bc2eb87e  HEAD -> main"}
+{"ts":"2026-10-16T17:51:25.883Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:51:28.469Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:51:30.889Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:51:33.431Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:51:36.520Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:51:38.722Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:51:41.199Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:51:41.199Z","action":"sweep-done"}
