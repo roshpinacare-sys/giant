@@ -30,6 +30,8 @@ const SNAP = path.join(STATE_DIR, "snapshot.json");
 const TICK_MS = 900;
 const SNAP_MS = 30_000;
 const FEE_BPS = 30; // 0.3%
+const WAGE_FLOOR_USDS = 350; // גל-83 · חוק-שכר-מצע: רצפת-פרנסה לחייל
+const TAX_BPS = 200; // גל-83 · מס-שירותים 2% → הכספת (מימון-השכר)
 
 /* ── משתמשי-הפנים ─────────────────────────────────────────────────────────── */
 type Account = { id: string; kind: "treasury" | "soldier" | "fleet" | "pool"; role: string };
@@ -75,6 +77,7 @@ let balances: Balances = new Map();
 let pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
 let seq = 0;
 let lastH = "GENESIS";
+let tickNo = 0; // גל-83 · מונה-טיקים לחוקים-הפיסקליים (שכר-מצע/איסוף-עמלות)
 let ledgerBuf: string[] = [];
 let ledgerLines = 0;
 let ledgerFileNo = 0;
@@ -245,7 +248,13 @@ function spawnTx(): Tx | null {
     const to = pick(others).id;
     const svc = pick(SERVICES);
     const units = 1 + Math.floor(Math.random() * 8);
-    return apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: soldier, to, asset: "USDS", amount: round6(svc.price * units), reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
+    // גל-83 · זרימה-חוזרת: 25% מהרכישות — צמתי-הצי קונים-שירותים מהחיילים
+    // (הצמתים צוברים-תשתית-ולא-הוציאו-מעולם — הכסף-היה-נתקע-אצלם)
+    const payer = Math.random() < 0.25 ? pick(FLEET_NODES).id : soldier;
+    const tx = apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: payer, to, asset: "USDS", amount: round6(svc.price * units), reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
+    // גל-83 · מס-שירותים 2%: עסקה-נפרדת-וחתומה (מימון-אמיתי-לכספת שתוכל-לשלם-שכר)
+    if (tx) apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: to, to: "treasury", asset: "USDS", amount: round6(tx.amount * (TAX_BPS / 10_000)), reason: `מס-שירותים ${TAX_BPS / 100}% → כספת` });
+    return tx;
   }
   if (r < 0.74) { // החלפה על הבריכה (גילוי-מחיר אמיתי)
     const buySaos = Math.random() < 0.5;
@@ -280,7 +289,24 @@ function spawnTx(): Tx | null {
 function tick() {
   if (sealing) return; // חוק-גל-82: בזמן-אטימת-כספת המנוע-קפוא — אף-כתיבה-לא-מתרחשת
   try {
-    const n = 2 + Math.floor(Math.random() * 3); // 2-4 עסקאות בטיק ≈ 192K-384K/יום
+    tickNo++;
+    // גל-83 · חוק-שכר-מצע (כל-12-טיקים): חייל-מתחת-לרצפת-הפרנסה — הכספת מתדלקת.
+    // זו-הזרימה-החוזרת-שחסרה: בלעדיה-הכסף-הצטבר-בבריכה/צמתים-והחיילים-נשארו-יבשים
+    // (נמדד: 5,916-דחיות-מול-3,278-קבלות = 64% בזבוז-ניסיונות).
+    if (tickNo % 12 === 0) {
+      const poor = SOLDIERS.filter((s) => bal(s.id).usds < WAGE_FLOOR_USDS);
+      if (poor.length) {
+        const s = pick(poor);
+        apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: round6(30 + Math.random() * 45), reason: `חוק-שכר-מצע: תדלוק-פרנסה (רצפת ${WAGE_FLOOR_USDS})` });
+      }
+    }
+    // גל-83 · איסוף-עמלות (כל-150-טיקים): עמלות-הבריכה (הכנסת-הרשת) זורמות-לכספת
+    if (tickNo % 150 === 0 && pool.feesUsds >= 1) {
+      const amt = round6(pool.feesUsds);
+      pool.feesUsds = 0;
+      apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: "pool", to: "treasury", asset: "USDS", amount: amt, reason: "איסוף-עמלות-בריכה → כספת" });
+    }
+    const n = 3 + Math.floor(Math.random() * 3); // גל-83: 3-5 עסקאות בטיק ≈ 288K-480K/יום (עם-קבלה-גבוהה)
     for (let i = 0; i < n; i++) spawnTx();
     flush(); // אטימה-לדיסק בכל-טיק: מוות-פתאום מאבד לכל-היותר טיק אחד
     const cutoff = Date.now() - 86_400_000;
