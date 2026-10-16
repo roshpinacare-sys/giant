@@ -329,12 +329,7 @@ export async function fetchSovereignAccount(
     evidenceHe:
       `נמדד-חי: ${steemFree.toFixed(3)}+${steemLocked.toFixed(3)} STEEM · ${sbdFree.toFixed(3)}+${sbdLocked.toFixed(3)} SBD · ` +
       `SP ${sp.ownSp.toFixed(1)}-עצמי / ${sp.delegatedOutSp.toFixed(1)}-מועבר-החוצה / ${sp.netWorkingSp.toFixed(1)}-נטו · ` +
-      `${ops.fills}-fills · ${ops.orderCreates}-הזמנות-חדשות בחלון-100-האופ-האחרון · ` +
-      `תרופת-התקיעות (פקודת-הבעלים 2026-10-16 "כסף-תקוע-בלימיטים"): ` +
-      `law-12-STALE-CURE מבטל-פקודות-עצמניות-מבוגרות-מ-20-שעות-שסטו-מעל-2%-מה-mid (הסולם-התקוע-מ-10-14: ~60.3-SBD+10.8-STEEM), ` +
-      `DEAD-DELEGATION-CURE מחזיר-SP-מהאצלות-שקטות-מעל-72-שעות-מחוץ-לרוסטר-החי (נמדד: 4-מתות=61-SP), ` +
-      `ופער-ה-932-SP (state-החשבון-אומר-מועבר-1460.7-אך-אינדקס-ההאצלות-מציג-528.6) רשום-כנה-כפער-לא-משוחזר — ` +
-      `המנה-העולה (voting_manabar) מאשרת-שההון-העובד-האמיתי = ${sp.netWorkingSp.toFixed(1)}-SP`,
+      `${ops.fills}-fills · ${ops.orderCreates}-הזמנות-חדשות בחלון-100-האופ-האחרון`,
   };
 }
 
@@ -460,10 +455,8 @@ export function buildRepairs(input: {
   chain: Awaited<ReturnType<typeof fetchGlobalProps>>;
   feedSbdPerSteem: number | null;
   poolAprPct: number | null;
-  marksUsd: { steemUsd: number | null; sbdUsd: number | null } | null;
 }): RepairRow[] {
-  const { sovereign, chain, feedSbdPerSteem, poolAprPct, marksUsd } = input;
-  const marks = { steemUsd: marksUsd?.steemUsd ?? null, sbdUsd: marksUsd?.sbdUsd ?? null };
+  const { sovereign, chain, feedSbdPerSteem, poolAprPct } = input;
   const rows: RepairRow[] = [];
 
   /* תיקון-1: המלאי — הספר-הישן ספר-רק-חופשי */
@@ -511,32 +504,6 @@ export function buildRepairs(input: {
     repairState: "MEASURED-ROUTED",
     repairStateHe: "מתורגל-למסלול-עובד — ה-SBD-מרוויח-בספר-המיקור-עד-שהריבית-תחזור",
   });
-
-  /* תיקון-2.5: GRID — תרופת-הכסף-התקוע (פקודת-הבעלים 2026-10-16) */
-  if (sovereign) {
-    const lockedUsd =
-      sovereign.holdings.sbdLocked * (marks.sbdUsd ?? 0) + sovereign.holdings.steemLocked * (marks.steemUsd ?? 0);
-    rows.push({
-      strategyId: "GRID",
-      nameHe: "כסף-תקוע-בלימיטים — תרופת-הזקנה-וההאצלות-המתות (חוק-12)",
-      diagnosisHe:
-        "פקודת-הבעלים \"יש-גם-כסף-תקוע-בלימיטים-של-הצי, צריך-לבדוק-הכל-ולהשתמש-טוב-יותר-במערכת\" נמדדה-כנה: " +
-        `3-מקורות-תקיעה-נתגלו — (1) פקודות-לימיט-זקנות: הסולם-מ-10-14-ישן-על-הספר-יומיים-רחוק-מה-mid-החי (${sovereign.holdings.sbdLocked.toFixed(1)}-SBD+${sovereign.holdings.steemLocked.toFixed(1)}-STEEM-תחומים ≈ ${lockedUsd.toFixed(2)}$); ` +
-        "(2) האצלות-מתות: 3-חיילי-hc-שקטים-83-שעות+hive-177702-מעולם-לא — 61-SP-צועדים-במקום; " +
-        "(3) באג-TDZ-במנוע: מסלול-GOVERNOR-HOLD-קרס-בכל-ריצה (runs 143-145) — ה-executor-המקומי-היה-שבור",
-      measuredEvidence:
-        `נמדד-חי-מול-השרשרת: 7-פקודות-פתוחות (2-מ-10-14) · אינדקס-ההאצלות (3-ארג-הנכון — ה-4-ארג-החזיר-שקרית-ריק-והסתיר-את-הצי) = 13-שורות-528.6-SP-מול-state-החשבון-1460.7 — ` +
-        `פער-932-SP-רשום-כנה · המנה-העולה מאשרת-הון-עובד-אמיתי ${sovereign.sp.netWorkingSp.toFixed(1)}-SP`,
-      repairsHe: [
-        "law-12-STALE-CURE ב-market-exec (73ebff5): פקודה-עצמנית-מבוגרת-מ-20-שעות-שסטתה-מעל-2%-מה-mid → ביטול-מכני-מקבלת-קבלה (cap-8/ריצה) — הסולם-מרוכז-מחדש-באותה-ריצה",
-        "DEAD-DELEGATION-CURE ב-head-delegate (b403973): סריקה-חיה-של-כל-ההאצלות, מי-שלא-הצביע-72-שעות-ומחוץ-לרוסטר → החזר-61-SP-לכוח-הציד-של-הראש (קדנס-14:32-UTC-יומי)",
-        "באג-ה-TDZ-תוקן-והוכח-חי: הריצה-שקרסה-פעמיים-משלימה-נקייה (planned=0 skipped=6 errors=0)",
-        "שער-ה-RC-וה-STASIS-ושער-הרוסטר נשארים-חמושים-על-כל-חתימה — התרופות-עוברות-באותו-verify-then-sign",
-      ],
-      repairState: "FIXED-LIVE",
-      repairStateHe: "תוקן-וחי — התיקונים-בענן-והקדנס-קוטף-אותם-היום (tick-10:49 · self-audience-14:32)",
-    });
-  }
 
   /* תיקון-3: SP-DELEGATE — פער-הלכידה */
   if (sovereign) {
@@ -921,7 +888,7 @@ export async function measureCapital(): Promise<CapitalPayload> {
       : null;
   const spMatrix = buildSpMatrix(spApr, marksFilled, realizedCurationAprPct);
   const readiness = buildReadiness({ sovereign, feedSbdPerSteem: feed?.sbdPerSteem ?? null, poolAprPct: spApr });
-  const repairs = buildRepairs({ sovereign, chain, feedSbdPerSteem: feed?.sbdPerSteem ?? null, poolAprPct: spApr, marksUsd: marks ? { steemUsd: marks.steemUsd, sbdUsd: marks.sbdUsd } : null });
+  const repairs = buildRepairs({ sovereign, chain, feedSbdPerSteem: feed?.sbdPerSteem ?? null, poolAprPct: spApr });
 
   const ok = Boolean(marks && book && chain && reward && sovereign);
   return {

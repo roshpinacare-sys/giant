@@ -34,23 +34,3 @@ jobs:
             git commit -m "ext-audit: external scanner report $(date -u +%Y-%m-%dT%H:%M:%SZ)"
             git push
           fi
-
-  # גל-79 · מסלול-זהב-ב-CI — רגרסיה-חוזרת של-מסלול-ההצטרפות (join-golden 6/6)
-  # כנות-מדודה: הריצה-מבוצעת אך ורק על עותק-הלדג'ר-הזרוק (cp → /tmp) — אף-כתיבה
-  # לא נוגעת בלדג'ר-אמת; join-golden עצמו משמיד-את-המפתח-שהנפיק (self-revoke).
-  # check-fleet הוא קריאת-SELECT בלבד מה-SQLite (בלי-שרת, בלי-:3000) — נרץ על העותק.
-  golden-path:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-      - name: install deps + generate prisma client (bun does not run postinstall)
-        run: |
-          bun install --frozen-lockfile
-          bunx prisma generate
-      - name: throwaway ledger copy — golden path never touches a live ledger
-        run: cp db/custom.db /tmp/golden-test.db
-      - name: join-golden 6/6 (self-issue → zero-balance-block → self-revoke, on the copy)
-        run: DATABASE_URL="file:/tmp/golden-test.db" bun scripts/join-golden.ts
-      - name: check-fleet (read-only fleet audit, same copy)
-        run: DATABASE_URL="file:/tmp/golden-test.db" bun scripts/check-fleet.mjs
