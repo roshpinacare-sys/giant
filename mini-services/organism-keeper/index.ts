@@ -69,11 +69,11 @@ function tcpOpen(port: number, host = "127.0.0.1"): Promise<boolean> {
   });
 }
 
-function spawnDetached(cmd: string, args: string[], cwd: string, logFile: string): number | null {
+function spawnDetached(cmd: string, args: string[], cwd: string, logFile: string, extraEnv?: Record<string, string>): number | null {
   try {
     fs.mkdirSync(path.dirname(logFile), { recursive: true });
     const out = fs.openSync(logFile, "a");
-    const child = spawn(cmd, args, { cwd, detached: true, stdio: ["ignore", out, out], env: { ...process.env } });
+    const child = spawn(cmd, args, { cwd, detached: true, stdio: ["ignore", out, out], env: { ...process.env, ...(extraEnv ?? {}) } });
     child.unref();
     return child.pid ?? null;
   } catch (e) {
@@ -116,9 +116,14 @@ async function ensureEstate(): Promise<void> {
 
 /* ── 3 · שירותי-ה-estate (selfcheck → app:3002+foreman:3010 · recruit:3041) ── */
 const FH = path.join(ESTATE, "FleetHQ", "mini-services");
-const ESTATE_SERVICES: Array<{ name: string; port: number; dir: string; entry: string; log: string }> = [
+const ESTATE_SERVICES: Array<{ name: string; port: number; dir: string; entry: string; log: string; env?: Record<string, string>; cmd?: string }> = [
   { name: "office-selfcheck", port: 3040, dir: path.join(FH, "office-selfcheck"), entry: "index.ts", log: "/tmp/office-selfcheck.log" },
   { name: "office-recruit", port: 3041, dir: path.join(FH, "office-recruit"), entry: "recruit.ts", log: "/tmp/office-recruit.log" },
+  /* T-80 · supervised ROT2 consumption: the sovereign trading engine joins
+   * the keeper roster — office-selfcheck lawfully owns :3040, the engine
+   * binds :3043 via SAOS_ENGINE_PORT. Spawned by THIS RESIDENT keeper so it
+   * survives tool-call boundaries; --smol keeps the GC lean on the 4GB box. */
+  { name: "saos-engine", port: 3043, dir: path.join(ESTATE, "steem", "mini-services", "saos-engine"), entry: "index.ts", log: "/tmp/saos-engine.log", env: { SAOS_ENGINE_PORT: "3043" }, cmd: "bun --smol" },
 ];
 
 async function ensureEstateServices(): Promise<void> {
@@ -133,7 +138,8 @@ async function ensureEstateServices(): Promise<void> {
       log({ action: "deps-install", name: s.name, code: inst.code });
       if (inst.code !== 0) continue;
     }
-    const pid = spawnDetached("bun", [s.entry], s.dir, s.log);
+    const [cmdBin, ...cmdRest] = (s.cmd ?? "bun").split(" ");
+    const pid = spawnDetached(cmdBin, [...cmdRest, s.entry], s.dir, s.log, s.env);
     log({ action: "estate-service-spawned", name: s.name, pid });
   }
 }
