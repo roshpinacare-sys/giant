@@ -4,6 +4,8 @@ import { PrismaClient } from '@prisma/client'
  * שורש-הכשל-הנמדד: אטימת-כספת מקפיאה next-server (SIGSTOP · חוק-משמורת-מדינה) — ובריכת-החיבורים
  * של-Prisma מתה-בין-ההקפאות; ה-client-השבור-נשמר-ב-globalThis-ואף-צרכן-לא-מתאושש.
  * התיקון: proxy-שמנתב-ללקוח-החי-הנוכחי + מרפא-ומנסה-פעם-אחת-שוב על-שגיאות-חיבור-קטלניות.
+ * גל-82-b: ה-proxy-הראשון-עטף-רק-פונקציות-עליונות — delegates-של-מודלים (db.x.findMany)
+ * עקפו-אותו-לגמרי (נמדד: /api/fleet/state-500-למרות-הריפוי). מעכשיו-גם-מתודות-המודל-עטופות.
  * כנות: כל-ריפוי-נרשם — לא-נחבא. */
 
 const globalForPrisma = globalThis as unknown as {
@@ -32,30 +34,55 @@ export async function healDb(reason: string): Promise<void> {
   console.error(`[db] self-heal: stale pool replaced (${reason.slice(0, 120)})`)
 }
 
+function healAndRetry(path: string, args: unknown[], err: unknown): Promise<unknown> {
+  const msg = err instanceof Error ? err.message : String(err)
+  if (!FATAL_DB.test(msg)) throw err
+  return healDb(msg).then(() => {
+    const c2 = current as unknown as Record<string, unknown>
+    // הליכה-עד-ההורה (ה-delegate) ואז-קריאה-למתודה-עליו — שמירה-על-this-נכון
+    const segs = path.split('.')
+    let parent: unknown = c2
+    for (let i = 0; i < segs.length - 1; i++) {
+      parent = (parent as Record<string, unknown>)[segs[i]]
+    }
+    const method = (parent as Record<string, unknown>)?.[segs[segs.length - 1]]
+    if (typeof method !== 'function') throw err
+    return (method as (...a: unknown[]) => unknown).apply(parent, args)
+  })
+}
+
+/** עטיפת-מתודה: retry-once-כנה על-שגיאות-חיבור-קטלניות (path = "fleetAgent.findMany" וכד') */
+function wrapMethod(path: string, fn: (...a: unknown[]) => unknown, args: unknown[]): unknown {
+  const res = fn(...args)
+  if (
+    res &&
+    typeof (res as Promise<unknown>).then === 'function' &&
+    typeof (res as Promise<unknown>).catch === 'function'
+  ) {
+    return (res as Promise<unknown>).catch((err: unknown) => healAndRetry(path, args, err))
+  }
+  return res
+}
+
 export const db = new Proxy({} as PrismaClient, {
   get(_t, prop) {
     const client = current as unknown as Record<string | symbol, unknown>
     const v = client[prop]
-    if (typeof v !== 'function') return v
-    return (...args: unknown[]) => {
-      const res = (v as (...a: unknown[]) => unknown).apply(client, args)
-      // retry-once-כנה: רק-על-שגיאות-חיבור-קטלניות — שאר-השגיאות-נשרקות-כמו-שהן
-      if (
-        res &&
-        typeof (res as Promise<unknown>).then === 'function' &&
-        typeof (res as Promise<unknown>).catch === 'function'
-      ) {
-        return (res as Promise<unknown>).catch(async (err: unknown) => {
-          const msg = err instanceof Error ? err.message : String(err)
-          if (FATAL_DB.test(msg)) {
-            await healDb(msg)
-            const c2 = current as unknown as Record<string | symbol, unknown>
-            return (c2[prop] as (...a: unknown[]) => unknown).apply(c2, args)
-          }
-          throw err
-        })
-      }
-      return res
+    if (typeof v === 'function') {
+      return (...args: unknown[]) => wrapMethod(String(prop), v as (...a: unknown[]) => unknown, args)
     }
+    if (v && typeof v === 'object') {
+      // model delegate (fleetAgent · dexTrade · $transaction וכד') — עוטפים-גם-את-מתודותיו
+      return new Proxy(v, {
+        get(_t2, method) {
+          const mv = (v as Record<string | symbol, unknown>)[method]
+          if (typeof mv !== 'function') return mv
+          const path = `${String(prop)}.${String(method)}`
+          const bound = (mv as (...a: unknown[]) => unknown).bind(v)
+          return (...args: unknown[]) => wrapMethod(path, bound, args)
+        },
+      })
+    }
+    return v
   },
 })
