@@ -23,23 +23,6 @@ export const MINI_SERVICES: MiniServiceDef[] = [
   { name: "office-live", dir: "mini-services/office-live", port: 3036, he: "משדר-העולם-התלת-ממדי" },
   { name: "sovereign-gateway", dir: "mini-services/sovereign-gateway", port: 3011, he: "שער-ה-LLM-הריבוני (כל-סוכן-משוחזר)", probe: "gateway" },
   { name: "boot-verifier", dir: "mini-services/boot-verifier", port: 3042, he: "מאמת-התחייה — קבלת-בריאות-כל-15דק", probe: "boot-verifier" },
-  /* T-82 (owner: "sandbox died — sync against git"): FleetHQ revival, root-fixed.
-   * Its dev script said :3000 (reception's port) — the estate script now binds
-   * the house-law port 3002 with the NODE_OPTIONS cap preserved. The guardian
-   * spawns it as a platform-tree child — the survivor lineage. */
-  { name: "fleet-hq", dir: "/home/z/estate/FleetHQ", port: 3002, he: "מפקדת-הצי — veritas + שער-המפעיל (חוק-פורט: 3002)" },
-  /* T-82 · the auto-economy seal engine joins the survivor lineage. Its
-   * merge-s-ours "zero-seam" law was the measured record-falsification loop
-   * (reverted session code + worklog from the tip 3×); the seal law is now
-   * rebase-based — the guardian owns its revival so the FIXED law runs. */
-  { name: "fleet-economy", dir: "mini-services/fleet-economy", port: 3016, he: "מנוע-הכלכלה — אוטמ-את-הכספת (חוק-ריבז: rebase+X-ours)" },
-  /* T-80 (2026-10-16 · owner law: tokens in the atomic vault FOR THE
-   * SOVEREIGNTY'S USE, supervised): the sovereign trading engine joins the
-   * guardian's roster. office-selfcheck lawfully owns :3040 → the engine
-   * binds :3043 via SAOS_ENGINE_PORT. dir is ABSOLUTE (estate tree) —
-   * path.resolve below honors it. Born a child of the Next-server tree
-   * (the platform-kept-alive lineage), re-revived by this very guard. */
-  { name: "saos-engine", dir: "/home/z/estate/steem/mini-services/saos-engine", port: 3043, he: "מנוע-הריבונות — לולאת-המסחר של הצי (T-80: צריכה-מפוקחת של ROT2 מהכספת-האטומית)", env: { SAOS_ENGINE_PORT: "3043" } },
 ];
 
 export interface MiniServiceDef {
@@ -49,8 +32,6 @@ export interface MiniServiceDef {
   he: string;
   /** סוג-הבדיקה-הפונקציונלית: "estate-sync" = מדידת-טיקים-מהבריאות-החיה. "gateway"/"boot-verifier" = בריאות-HTTP. חסר = פורט-בלבד (socket.io). */
   probe?: "estate-sync" | "gateway" | "boot-verifier";
-  /** T-80: per-service env additions (SAOS_ENGINE_PORT for the estate engine). */
-  env?: Record<string, string>;
 }
 
 const MIN_SPAWN_INTERVAL_MS = 90_000;
@@ -151,8 +132,7 @@ export interface MiniServiceHealth {
  * ההשקה-הישירה-של-bun-run-dev קרסה-על-חבילה-חסרה (Cannot find package 'socket.io')
  * והמשגיחה-שגרה-עותק-גוסס-כל-90ש׳. התיקון: ההשקה-מתקינה-תחילה-אם-חסר (מדוד-חי-שוב-אחרי-מחיקה-אמת). */
 function spawnService(svc: MiniServiceDef): string {
-  /* T-80: path.resolve (לא join) — dir מוחלט (עץ-ה-estate) נשאר כמות-שהוא; יחסי נפתר מהשורש */
-  const cwd = path.resolve(process.cwd(), svc.dir);
+  const cwd = path.join(process.cwd(), svc.dir);
   const logPath = path.join(process.cwd(), ".zscripts", `mini-service-${svc.name}.log`);
   let fd: number | null = null;
   try {
@@ -162,7 +142,7 @@ function spawnService(svc: MiniServiceDef): string {
       cwd,
       /* בן-של-שרת-Next (עץ-הפלטפורמה) — בלי-setsid; ההשגחה-החוזרת-מכסה-אם-נעקר */
       stdio: ["ignore", fd, fd],
-      env: { ...process.env, MINI_GUARD: "1", REVIVED_AT: stamp, ...(svc.env ?? {}) },
+      env: { ...process.env, MINI_GUARD: "1", REVIVED_AT: stamp },
     });
     child.on("error", (e) => { lastNote[svc.name] = `spawn-error: ${e.message}`; });
     child.unref();
