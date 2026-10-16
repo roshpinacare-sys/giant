@@ -5,6 +5,15 @@ const nextConfig: NextConfig = {
   /* HMR-חי: ללא-זה Next-16 חוסם-את-שקע-ה-HMR (Blocked cross-origin /_next/hmr)
    * → ההידרציה-ממתינה-לנצח והממשק-כולו-מת בלי-שגיאה (נמדד: renderers=0 · אפס-פיבר). */
   allowedDevOrigins: ["127.0.0.1", "localhost"],
+  /* גל-84 · סערת-Fast-Refresh-נשורשה: מנוע-הכלכלה-המוגבר (מאות-אלפי-עסקאות/יום לפי-מנדט)
+   * כותב-ל-ledger/state כל-~3-שניות → Turbopack-היה-מקמפל-מחדש-את-כל-האפליקציה-בכל-כתיבה
+   * → המשרד-החי-התאפס-בלי-הפסקה (התצוגה-"תקולה"). התיקון: הצפייה-מוציאה-תיקיות-מדינה-חיות
+   * (אין-להן-שום-קשר-לקוד-ה-UI) — ההידור-חוזר-חוזר-להיות-רק-על-שינויי-קוד אמיתיים. */
+  turbopack: {
+    watch: {
+      ignored: ["**/mini-services/**/state/**", "**/db/**", "**/.task-*/**", "**/state-supervisor-web.log"],
+    },
+  },
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
