@@ -597,3 +597,17 @@
 {"ts":"2026-10-16T17:21:16.126Z","repo":"autonomy-fix","action":"status-fail","out":""}
 {"ts":"2026-10-16T17:21:16.126Z","action":"sweep-done"}
 {"ts":"2026-10-16T17:31:04.485Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for e1eb2caab0d6c3e6ed4f378d7620632d21c02857\nCannot save the current worktree state\nfatal: stash failed"}
+{"ts":"2026-10-16T17:31:10.732Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for 2a064bf3e67242cfb37ef06f3e2d64e38d366b5e\nCannot save the current worktree state\nfatal: stash failed"}
+{"ts":"2026-10-16T17:31:12.010Z","repo":"my-project","action":"push-fail","out":"jected]        HEAD -> main (non-fast-forward)\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/giant.git'\nhint: Updates were rejected because the tip of your current branch is behind\nhint: its remote counterpart. If you want to integrate the remote changes,\nhint: use 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details."}
+{"ts":"2026-10-16T17:31:12.091Z","repo":"FleetHQ","action":"commit-fail","out":"erdicts.json\nU\tsovereign/stack/runtime/RUNSCORES.md\nU\tsovereign/stack/runtime/scores.json\nU\tsovereign/stack/runtime/skills.json\nU\tt19b/Domain\nU\tworklog.md\nerror: Committing is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict."}
+{"ts":"2026-10-16T17:31:12.928Z","repo":"FleetHQ","action":"pull-fail","out":"-history.jsonl\n\treceipts/books-lineage.json\n\treceipts/gateway-telemetry-latest.json\n\treceipts/host-mem.jsonl\n\treceipts/lineage-guard.json\n\treceipts/lineage-guard.jsonl\n\treceipts/recruitment/live.json\n\treceipts/shift-hist"}
+{"ts":"2026-10-16T17:31:19.564Z","repo":"FleetHQ","action":"pull-fail","out":"as resolved with\nhint: \"git add/rm <conflicted_files>\", then run \"git rebase --continue\".\nhint: You can instead skip this commit: run \"git rebase --skip\".\nhint: To abort and get back to the state before \"git rebase\", run"}
+{"ts":"2026-10-16T17:31:20.538Z","repo":"FleetHQ","action":"push-fail","out":"a ref in \"refs/{heads,tags}/\". If so we add a corresponding\n  refs/{heads,tags}/ prefix on the remote side.\n\nNeither worked, so we gave up. You must fully qualify the ref.\nhint: The <src> part of the refspec is a commit object.\nhint: Did you mean to create a new branch by pushing to\nhint: 'HEAD:refs/heads/HEAD'?\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/FleetHQ.git'"}
+{"ts":"2026-10-16T17:31:22.629Z","repo":"Domain","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:31:24.784Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:31:26.696Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:31:26.697Z","repo":"Sandbox","action":"status-fail","out":""}
+{"ts":"2026-10-16T17:31:26.698Z","repo":"roshpina","action":"status-fail","out":""}
+{"ts":"2026-10-16T17:31:28.777Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:31:30.989Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T17:31:30.989Z","action":"sweep-done"}

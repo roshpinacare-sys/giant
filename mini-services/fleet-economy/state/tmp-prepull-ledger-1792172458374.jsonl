@@ -80181,3 +80181,305 @@
 {"seq":80181,"ts":1792171852308,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":15.827345,"fee":0.047482,"price":2.71156,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":5.812605,"h":"feffad184c21e68d518a79652d195020"}
 {"seq":80182,"ts":1792171853109,"kind":"infra","from":"saos-dex","to":"Pulse","asset":"USDS","amount":4.5,"reason":"תשתית: מידע-שוק","h":"6965df421e35cec19cffe939c895917a"}
 {"seq":80183,"ts":1792171857109,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":15.701811,"fee":0.047105,"price":2.717985,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":5.752933,"h":"3f77af162e1972c89840e60aef91584d"}
+{"seq":80184,"ts":1792171878731,"kind":"infra","from":"shachar","to":"saos-dex","asset":"USDS","amount":3.3,"reason":"תשתית: תרגום-מסמך","h":"88eebd0adad3f6726a354c3efac09cb0"}
+{"seq":80185,"ts":1792171881132,"kind":"infra","from":"TruthRail","to":"Console","asset":"USDS","amount":12.8,"reason":"תשתית: תדלוק-RC","h":"40cdf7718d05dbe44e029f5165061aaa"}
+{"seq":80186,"ts":1792171881132,"kind":"infra","from":"saos-dex","to":"Pulse","asset":"USDS","amount":10.5,"reason":"תשתית: סריקת-גיט","h":"ad9c139cdbf80499f1a34550d459cace"}
+{"seq":80187,"ts":1792171881932,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":26.489032,"fee":0.079467,"price":2.724367,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":9.674739,"h":"2b52f8ba17f088a60a53869f7d35aa29"}
+{"seq":80188,"ts":1792171882629,"kind":"infra","from":"FleetHQ","to":"TruthRail","asset":"USDS","amount":0.05,"reason":"אגרת-אטימת-כספת (Domain)","ref":"seal-Domain-1792171882629","h":"ff52c6ba4be69bcd1a35e911bc831bce"}
+{"seq":80189,"ts":1792171883532,"kind":"infra","from":"pool","to":"treasury","asset":"USDS","amount":1.79081,"reason":"איסוף-עמלות-בריכה → כספת","h":"b542b9ff73f0d3458c094f4e543a6120"}
+{"seq":80190,"ts":1792171883532,"kind":"infra","from":"pool","to":"treasury","asset":"USDS","amount":67.026617,"reason":"מס-אספקה-בריכה 0.5% → כספת (גל-86b · ההכנסה-הקבועה)","h":"493de8b372b8cacb669de37a83d5d0ae"}
+{"seq":80191,"ts":1792171883532,"kind":"swap","from":"treasury","to":"pool","asset":"USDS","amount":33.513309,"fee":0.10054,"price":2.735149,"reason":"התחדשות-מלאי-SAOS-מהבריכה (50% ממס-האספקה · גל-86b)","outSaos":12.185696,"h":"616085ec8f34650ee4f3d6c1d56e9e9d"}
+{"seq":80192,"ts":1792171884784,"kind":"infra","from":"FleetHQ","to":"TruthRail","asset":"USDS","amount":0.05,"reason":"אגרת-אטימת-כספת (Console)","ref":"seal-Console-1792171884784","h":"143493dab0cd835aa204b968662f4321"}
+{"seq":80193,"ts":1792171885932,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":9.449282,"fee":0.028348,"price":2.748821,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":3.424862,"h":"826bc9f0f0d2bc323f7cf7a15ed76739"}
+{"seq":80194,"ts":1792171886696,"kind":"infra","from":"FleetHQ","to":"TruthRail","asset":"USDS","amount":0.05,"reason":"אגרת-אטימת-כספת (Pulse)","ref":"seal-Pulse-1792171886696","h":"3f12ed8e1cdd303376cd799de58bac06"}
+{"seq":80195,"ts":1792171887533,"kind":"infra","from":"saos-dex","to":"TruthRail","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"a61a85c703b8265faccd5d7d5e563ce1"}
+{"seq":80196,"ts":1792171887533,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":29.172236,"fee":0.087517,"price":2.752683,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":10.543153,"h":"a84ff12f68efda353b6028e2d1fc4626"}
+{"seq":80197,"ts":1792171888371,"kind":"infra","from":"yarden","to":"TruthRail","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"0bfb683225cca15c4b718ce7444a42c2"}
+{"seq":80198,"ts":1792171888777,"kind":"infra","from":"FleetHQ","to":"TruthRail","asset":"USDS","amount":0.05,"reason":"אגרת-אטימת-כספת (saos-dex)","ref":"seal-saos-dex-1792171888777","h":"b59d038541509e0dcdd847dd5a446ce8"}
+{"seq":80199,"ts":1792171889933,"kind":"infra","from":"Domain","to":"saos-dex","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"2d3c25c509d06d8d75a83da2f2f1b311"}
+{"seq":80200,"ts":1792171890989,"kind":"infra","from":"FleetHQ","to":"TruthRail","asset":"USDS","amount":0.05,"reason":"אגרת-אטימת-כספת (autonomy-fix)","ref":"seal-autonomy-fix-1792171890989","h":"a9512fab7de221f687a3529a514e8d73"}
+{"seq":80201,"ts":1792171890989,"kind":"infra","from":"FleetHQ","to":"treasury","asset":"USDS","amount":0.2,"reason":"סבב-אטימת-כספת הושלם · 6/9-מאגרים","ref":"sealsweep-1792171890989","h":"b73630a3c6d54c35f7b127192a13205e"}
+{"seq":80202,"ts":1792171892360,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":19.228442,"fee":0.057685,"price":2.76462,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":6.92447,"h":"11cc96b1f4dc64f6d379aba3972506c7"}
+{"seq":80203,"ts":1792171902765,"kind":"infra","from":"aluf","to":"Console","asset":"USDS","amount":0.7,"reason":"תשתית: אחסון-ארכיון","h":"1fd6e00c6464b9353d729ff4d6a18965"}
+{"seq":80204,"ts":1792171909977,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":12.498487,"fee":0.037495,"price":2.772502,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":4.490347,"h":"b9eee1703c5cc0b2a8a02544e4e864e9"}
+{"seq":80205,"ts":1792171909977,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":4.810947,"fee":0.014433,"price":2.777632,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":1.726223,"h":"61538bf42e11c78fa86e9fa09701849c"}
+{"seq":80206,"ts":1792171910777,"kind":"infra","from":"yarden","to":"TruthRail","asset":"USDS","amount":6.4,"reason":"תשתית: תדלוק-RC","h":"ae65148f4fc3a594f28f65900ff00f80"}
+{"seq":80207,"ts":1792171914777,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":8.124017,"fee":0.024372,"price":2.779608,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.912207,"h":"285a53b1477d876d884eff2a8bebfa60"}
+{"seq":80208,"ts":1792171917178,"kind":"infra","from":"Domain","to":"FleetHQ","asset":"USDS","amount":1.75,"reason":"תשתית: אחסון-ארכיון","h":"71c6a0bf176c79a61cb714b10692e04a"}
+{"seq":80209,"ts":1792171917178,"kind":"infra","from":"Console","to":"Domain","asset":"USDS","amount":5.5,"reason":"תשתית: תרגום-מסמך","h":"30f701cd9932b6c75ef818e50f450fab"}
+{"seq":80210,"ts":1792171918778,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":19.947825,"fee":0.059843,"price":2.782946,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":7.135883,"h":"a3cadfc6614fc490c9af128bf82920d4"}
+{"seq":80211,"ts":1792171918778,"kind":"infra","from":"saos-dex","to":"Domain","asset":"USDS","amount":5.6,"reason":"תשתית: חישוב-GPU","h":"46012fa07d8dd459067c178d73008fe8"}
+{"seq":80212,"ts":1792171923579,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":3.127116,"fee":0.009381,"price":2.79115,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":1.11675,"h":"f2a007cfe0e9db275a217c1e59e00db5"}
+{"seq":80213,"ts":1792171925179,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":5.338014,"fee":0.016014,"price":2.792437,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":1.905113,"h":"6ed1c0371bd4feedcbfe48d78efb428c"}
+{"seq":80214,"ts":1792171925179,"kind":"infra","from":"Pulse","to":"saos-dex","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"4153727fd59bf98e272f8f8796b699b4"}
+{"seq":80215,"ts":1792171925979,"kind":"infra","from":"erez","to":"Pulse","asset":"USDS","amount":1.2,"reason":"תשתית: אימות-קבלה","h":"e07faed5faba8bed93754b77d6cc0a76"}
+{"seq":80216,"ts":1792171926779,"kind":"infra","from":"saos-dex","to":"saos-dex","asset":"USDS","amount":2.2,"reason":"תשתית: תרגום-מסמך","h":"00bbd4ec144257673dc3c2e8b9997a02"}
+{"seq":80217,"ts":1792171929179,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":18.961953,"fee":0.056886,"price":2.794635,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":6.755346,"h":"654b2690b973a16f7dce3289fd1cfd77"}
+{"seq":80218,"ts":1792171930779,"kind":"infra","from":"aluf","to":"Pulse","asset":"USDS","amount":2.7,"reason":"תשתית: מידע-שוק","h":"143d6ec51e37d1695c576981aa129cc3"}
+{"seq":80219,"ts":1792171931580,"kind":"infra","from":"Domain","to":"saos-dex","asset":"USDS","amount":4.4,"reason":"תשתית: תרגום-מסמך","h":"1d2d50664900e9bf9800a3a8a774a9c9"}
+{"seq":80220,"ts":1792171933180,"kind":"infra","from":"FleetHQ","to":"Console","asset":"USDS","amount":16,"reason":"תשתית: תדלוק-RC","h":"f4ea0e8d11b076a3d1f6cd7095c5a9cd"}
+{"seq":80221,"ts":1792171934780,"kind":"infra","from":"yarden","to":"Pulse","asset":"USDS","amount":2.2,"reason":"תשתית: תרגום-מסמך","h":"5ea543d05ddf8db6998f4f962506bfe9"}
+{"seq":80222,"ts":1792171934780,"kind":"infra","from":"Domain","to":"Console","asset":"USDS","amount":4.2,"reason":"תשתית: סריקת-גיט","h":"df016489b01b0be025cefb76d1fe92a7"}
+{"seq":80223,"ts":1792171934780,"kind":"infra","from":"Console","to":"TruthRail","asset":"USDS","amount":9.6,"reason":"תשתית: תדלוק-RC","h":"a6548b7d050098a15b6899bca2d1f58f"}
+{"seq":80224,"ts":1792171941183,"kind":"infra","from":"Console","to":"TruthRail","asset":"USDS","amount":2.4,"reason":"תשתית: אימות-קבלה","h":"1db0bcb950e8fc75a42408c0e9966303"}
+{"seq":80225,"ts":1792171942783,"kind":"infra","from":"Pulse","to":"Console","asset":"USDS","amount":3.6,"reason":"תשתית: מידע-שוק","h":"aaf39a803520d9823b9bcd183270b69e"}
+{"seq":80226,"ts":1792171942783,"kind":"infra","from":"FleetHQ","to":"Domain","asset":"USDS","amount":2.7,"reason":"תשתית: מידע-שוק","h":"ad6f4af948d5a8911e271a36d2897e38"}
+{"seq":80227,"ts":1792171942783,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":12.966086,"fee":0.038898,"price":2.80245,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":4.608425,"h":"ad2eeafc43de431df2264a585911d321"}
+{"seq":80228,"ts":1792171943583,"kind":"infra","from":"Console","to":"Console","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"d173bd4242df5216e40249e76c88ae1f"}
+{"seq":80229,"ts":1792171943583,"kind":"infra","from":"saos-dex","to":"saos-dex","asset":"USDS","amount":16,"reason":"תשתית: תדלוק-RC","h":"a8765e83bcd70912b17a2fb52b756335"}
+{"seq":80230,"ts":1792171943583,"kind":"infra","from":"saos-dex","to":"FleetHQ","asset":"USDS","amount":16,"reason":"תשתית: תדלוק-RC","h":"d60a53f28d9e31e14a095ad55d149640"}
+{"seq":80231,"ts":1792171945183,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":8.427956,"fee":0.025284,"price":2.807801,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.990767,"h":"f7eb207691ddf0e20a219de54ef90596"}
+{"seq":80232,"ts":1792171945983,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":23.319375,"fee":0.069958,"price":2.811281,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":8.255921,"h":"38877a9e0aa57901b81325b59a07f791"}
+{"seq":80233,"ts":1792171948383,"kind":"infra","from":"yarden","to":"Domain","asset":"USDS","amount":1.2,"reason":"תשתית: אימות-קבלה","h":"6b4cab10ae32a37051cfceb356edbdd7"}
+{"seq":80234,"ts":1792171948383,"kind":"infra","from":"erez","to":"FleetHQ","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"fa2986dc4af5363cf5cfd66a93372827"}
+{"seq":80235,"ts":1792171949183,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":14.737594,"fee":0.044213,"price":2.820922,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":5.2031,"h":"b9a0873f1bbbbfc56b1a29c618413b05"}
+{"seq":80236,"ts":1792171949183,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":1.087625,"fee":0.003263,"price":2.827024,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.38354,"h":"8661affa72eaf04e5b557af1dd42a333"}
+{"seq":80237,"ts":1792171952383,"kind":"infra","from":"tamar","to":"TruthRail","asset":"USDS","amount":5.5,"reason":"תשתית: תרגום-מסמך","h":"fe28fd894cf1e3e76f2d74e516f0a030"}
+{"seq":80238,"ts":1792171955584,"kind":"infra","from":"Pulse","to":"TruthRail","asset":"USDS","amount":4.5,"reason":"תשתית: מידע-שוק","h":"0d9345d160deb0fd9f95199b2a9742d3"}
+{"seq":80239,"ts":1792171956384,"kind":"infra","from":"yarden","to":"saos-dex","asset":"USDS","amount":5.5,"reason":"תשתית: תרגום-מסמך","h":"eaca340129531935fbf64c8ebd1cfdcc"}
+{"seq":80240,"ts":1792171962785,"kind":"infra","from":"erez","to":"saos-dex","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"09cdf00ede72964056853b2cbca28fd4"}
+{"seq":80241,"ts":1792171965985,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":5.280611,"fee":0.015842,"price":2.827474,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":1.861285,"h":"e3d323db9e0269244383f7a336124100"}
+{"seq":80242,"ts":1792171965985,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":3.432397,"fee":0.010297,"price":2.829662,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":1.209063,"h":"2f65b6d42baef20e899be784bc6df45a"}
+{"seq":80243,"ts":1792171965985,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":13.070622,"fee":0.039212,"price":2.831085,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":4.59858,"h":"9f15b5aaf379d6b324ac9af90f3216fe"}
+{"seq":80244,"ts":1792171968386,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":10.40027,"fee":0.031201,"price":2.836506,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":3.652804,"h":"461da47344a78881345ce53e6fe55b32"}
+{"seq":80245,"ts":1792171970786,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":8.495904,"fee":0.025488,"price":2.840823,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.97983,"h":"9a857a7e73b949103d3776595a24abd5"}
+{"seq":80246,"ts":1792171973186,"kind":"infra","from":"shachar","to":"saos-dex","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"4d8d64aa7dae088c9ab25f91fbe13116"}
+{"seq":80247,"ts":1792171976386,"kind":"infra","from":"erez","to":"saos-dex","asset":"USDS","amount":9.6,"reason":"תשתית: תדלוק-RC","h":"2272f79d3ab51ead0ceb08288a808c3f"}
+{"seq":80248,"ts":1792171981187,"kind":"infra","from":"tamar","to":"Domain","asset":"USDS","amount":2.7,"reason":"תשתית: מידע-שוק","h":"bac7ceae5d216eedd99f0a8ecf631564"}
+{"seq":80249,"ts":1792171985987,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":7.654436,"fee":0.022963,"price":2.844351,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.68153,"h":"0cd212cbb945f5dff7fa7c26b79bf2d9"}
+{"seq":80250,"ts":1792171987587,"kind":"infra","from":"FleetHQ","to":"Domain","asset":"USDS","amount":2.1,"reason":"תשתית: סריקת-גיט","h":"747b53a274839ee279bd3a8d126cdb3c"}
+{"seq":80251,"ts":1792171994788,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":5.815175,"fee":0.017446,"price":2.847533,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.035191,"h":"d98f164d4022381e5d636a28bd002a51"}
+{"seq":80252,"ts":1792171995588,"kind":"infra","from":"erez","to":"saos-dex","asset":"USDS","amount":4.4,"reason":"תשתית: תרגום-מסמך","h":"09567e61cf762cf45fbbffcf755a6243"}
+{"seq":80253,"ts":1792171996388,"kind":"infra","from":"TruthRail","to":"Domain","asset":"USDS","amount":2.4,"reason":"תשתית: אימות-קבלה","h":"e60c31f25a01a61c97f6a7e6478feaf6"}
+{"seq":80254,"ts":1792171997989,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":1,"fee":0.003,"price":2.849951,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.349805,"h":"289fecc9b9599409bde22e4d6dfa0295"}
+{"seq":80255,"ts":1792171997990,"kind":"infra","from":"Pulse","to":"FleetHQ","asset":"USDS","amount":3.3,"reason":"תשתית: תרגום-מסמך","h":"1d1bce5103a54b59aa8bd124732a6a97"}
+{"seq":80256,"ts":1792171997990,"kind":"infra","from":"yarden","to":"TruthRail","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"3dcdc352087617f6fb4ce52646cce8ae"}
+{"seq":80257,"ts":1792171999590,"kind":"infra","from":"FleetHQ","to":"TruthRail","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"84a5a092f582777673689daa64b445ad"}
+{"seq":80258,"ts":1792171999590,"kind":"infra","from":"saos-dex","to":"Pulse","asset":"USDS","amount":3.2,"reason":"תשתית: תדלוק-RC","h":"05ebd7360c717cb202a4668787640413"}
+{"seq":80259,"ts":1792172002791,"kind":"infra","from":"yarden","to":"Pulse","asset":"USDS","amount":5.5,"reason":"תשתית: תרגום-מסמך","h":"8044346dabad2728ea0e7db9bd08037a"}
+{"seq":80260,"ts":1792172003591,"kind":"infra","from":"pool","to":"treasury","asset":"USDS","amount":68.425916,"reason":"מס-אספקה-בריכה 0.5% → כספת (גל-86b · ההכנסה-הקבועה)","h":"8c3fdda9376ab0c714113f5d8ef72cb7"}
+{"seq":80261,"ts":1792172003591,"kind":"swap","from":"treasury","to":"pool","asset":"USDS","amount":34.212958,"fee":0.102639,"price":2.850367,"reason":"התחדשות-מלאי-SAOS-מהבריכה (50% ממס-האספקה · גל-86b)","outSaos":11.937239,"h":"0be15bd137c5d6228e8ddecb9908ed2a"}
+{"seq":80262,"ts":1792172003591,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":2.021058,"fee":0.006063,"price":2.864615,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.703305,"h":"e9ebd259d61f469d1dae55fee2cbce3f"}
+{"seq":80263,"ts":1792172003591,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":1.313688,"fee":0.003941,"price":2.865458,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.457038,"h":"ce9f09e7e0562e099d4d9637a8a7d1fb"}
+{"seq":80264,"ts":1792172003591,"kind":"infra","from":"erez","to":"Console","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"709601925bd56d9efad38cea056fe8fc"}
+{"seq":80265,"ts":1792172003591,"kind":"infra","from":"FleetHQ","to":"TruthRail","asset":"USDS","amount":1.75,"reason":"תשתית: אחסון-ארכיון","h":"7e573a6bb9f96d982dbd13f43cac5367"}
+{"seq":80266,"ts":1792172004396,"kind":"infra","from":"TruthRail","to":"TruthRail","asset":"USDS","amount":1.4,"reason":"תשתית: אחסון-ארכיון","h":"f48cd973f5a5905469f27be02acdbe2a"}
+{"seq":80267,"ts":1792172006798,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":2.682883,"fee":0.008049,"price":2.866006,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.933115,"h":"b43c3a1a754816457fb22f3d941fecae"}
+{"seq":80268,"ts":1792172009998,"kind":"infra","from":"yarden","to":"Console","asset":"USDS","amount":4.2,"reason":"תשתית: סריקת-גיט","h":"18c4a66c3bdabdc4d2ca83fefda225f0"}
+{"seq":80269,"ts":1792172014799,"kind":"infra","from":"Pulse","to":"TruthRail","asset":"USDS","amount":1.1,"reason":"תשתית: תרגום-מסמך","h":"37bcff6b26804d3739e1d81b1f717670"}
+{"seq":80270,"ts":1792172014799,"kind":"infra","from":"saos-dex","to":"Domain","asset":"USDS","amount":1.8,"reason":"תשתית: אימות-קבלה","h":"8eba7eaa9154e30ce1e347b15d93917e"}
+{"seq":80271,"ts":1792172015599,"kind":"infra","from":"aluf","to":"saos-dex","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"6a91fbcb0d72deb25f5d6819a0380471"}
+{"seq":80272,"ts":1792172015599,"kind":"infra","from":"saos-dex","to":"FleetHQ","asset":"USDS","amount":4.5,"reason":"תשתית: מידע-שוק","h":"2aa3b5dde57a436dfec13d192de372cc"}
+{"seq":80273,"ts":1792172015599,"kind":"infra","from":"yarden","to":"FleetHQ","asset":"USDS","amount":0.35,"reason":"תשתית: אחסון-ארכיון","h":"5ab6949a4ea70ac38509ac9f9cbd8467"}
+{"seq":80274,"ts":1792172016399,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":3.779864,"fee":0.01134,"price":2.867125,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":1.314031,"h":"71145aa48b66171387b6f82550ceb07f"}
+{"seq":80275,"ts":1792172021200,"kind":"infra","from":"gal","to":"Domain","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"6e993951e0e5334e6a121497b0723a9a"}
+{"seq":80276,"ts":1792172021200,"kind":"infra","from":"tamar","to":"Console","asset":"USDS","amount":0.35,"reason":"תשתית: אחסון-ארכיון","h":"2fb0008563256bdaa65ccb902370b249"}
+{"seq":80277,"ts":1792172024401,"kind":"infra","from":"Domain","to":"Console","asset":"USDS","amount":4.4,"reason":"תשתית: תרגום-מסמך","h":"02f00b377045543c8d45b5817eaee88f"}
+{"seq":80278,"ts":1792172037205,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":1,"fee":0.003,"price":2.868702,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.347519,"h":"e2b3678f0371d74338fe1beab9f25191"}
+{"seq":80279,"ts":1792172039605,"kind":"infra","from":"gal","to":"saos-dex","asset":"USDS","amount":1.4,"reason":"תשתית: חישוב-GPU","h":"7ea64ea788849f2b99a02c65a96443ce"}
+{"seq":80280,"ts":1792172041205,"kind":"infra","from":"Domain","to":"saos-dex","asset":"USDS","amount":5.5,"reason":"תשתית: תרגום-מסמך","h":"912dbbc7ca3917af40c2e1a5becb6f02"}
+{"seq":80281,"ts":1792172041205,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":2.334412,"fee":0.007003,"price":2.869119,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.811055,"h":"c9bde9ec08a4f8e6c044a069a556101f"}
+{"seq":80282,"ts":1792172046807,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":1,"fee":0.003,"price":2.870093,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.34735,"h":"ba30cd73461a3e500078158efb3ad31a"}
+{"seq":80283,"ts":1792172046807,"kind":"infra","from":"FleetHQ","to":"FleetHQ","asset":"USDS","amount":3.6,"reason":"תשתית: מידע-שוק","h":"fcdaf22277764d08f14574fc2ef952cd"}
+{"seq":80284,"ts":1792172050007,"kind":"infra","from":"FleetHQ","to":"Domain","asset":"USDS","amount":2.1,"reason":"תשתית: סריקת-גיט","h":"91e56abf569ea9a4fa1583543616260c"}
+{"seq":80285,"ts":1792172056410,"kind":"infra","from":"saos-dex","to":"Domain","asset":"USDS","amount":3.3,"reason":"תשתית: תרגום-מסמך","h":"c75be9819b8e9014eef0a86249262672"}
+{"seq":80286,"ts":1792172066813,"kind":"infra","from":"Domain","to":"FleetHQ","asset":"USDS","amount":4.2,"reason":"תשתית: סריקת-גיט","h":"a0eda913e9749284842daffec695e4de"}
+{"seq":80287,"ts":1792172066813,"kind":"infra","from":"FleetHQ","to":"FleetHQ","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"01aace9e81cf4c0b1121c21c7c5077cc"}
+{"seq":80288,"ts":1792172069214,"kind":"infra","from":"Domain","to":"Domain","asset":"USDS","amount":4.4,"reason":"תשתית: תרגום-מסמך","h":"4a59ce8a32ad69c38f2c38f8a575c793"}
+{"seq":80289,"ts":1792172069214,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":1.517367,"fee":0.004552,"price":2.870511,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.526961,"h":"15c3c3fd1712694823180968c6fb61b3"}
+{"seq":80290,"ts":1792172071615,"kind":"infra","from":"tamar","to":"TruthRail","asset":"USDS","amount":2.4,"reason":"תשתית: אימות-קבלה","h":"1589149ce437a069f25279a8e8ed55f4"}
+{"seq":80291,"ts":1792172074816,"kind":"infra","from":"TruthRail","to":"Console","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"d8928991be75a4e04dc486956b40eae6"}
+{"seq":80292,"ts":1792172082818,"kind":"infra","from":"Pulse","to":"saos-dex","asset":"USDS","amount":2.8,"reason":"תשתית: חישוב-GPU","h":"cb6c117ab2108d07f261857f04eca397"}
+{"seq":80293,"ts":1792172084418,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":4.673171,"fee":0.01402,"price":2.871144,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":1.622201,"h":"d6fd02e66b8f04a6fc5e288d5dbcb291"}
+{"seq":80294,"ts":1792172086019,"kind":"infra","from":"FleetHQ","to":"FleetHQ","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"4040a8363680e3055eebff31eb6f30a4"}
+{"seq":80295,"ts":1792172086820,"kind":"infra","from":"FleetHQ","to":"TruthRail","asset":"USDS","amount":5.6,"reason":"תשתית: חישוב-GPU","h":"c49632d24c9311c3024789e4c2272450"}
+{"seq":80296,"ts":1792172087620,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":3.037561,"fee":0.009113,"price":2.873095,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":1.053839,"h":"f2612157174a79fedac712229dafa2f9"}
+{"seq":80297,"ts":1792172090821,"kind":"infra","from":"Domain","to":"FleetHQ","asset":"USDS","amount":4.2,"reason":"תשתית: סריקת-גיט","h":"c57cad87b4e4c51e1b818c93dd5875b8"}
+{"seq":80298,"ts":1792172090821,"kind":"infra","from":"Pulse","to":"FleetHQ","asset":"USDS","amount":4.2,"reason":"תשתית: חישוב-GPU","h":"27f1adb009cdac6a0234eecf395bad32"}
+{"seq":80299,"ts":1792172097225,"kind":"infra","from":"TruthRail","to":"FleetHQ","asset":"USDS","amount":3.6,"reason":"תשתית: מידע-שוק","h":"dc71a51627f37725803827dcec0a14be"}
+{"seq":80300,"ts":1792172102026,"kind":"infra","from":"TruthRail","to":"Pulse","asset":"USDS","amount":3.2,"reason":"תשתית: תדלוק-RC","h":"a7bdd78d7e43ce8269c24e2025faeb14"}
+{"seq":80301,"ts":1792172102827,"kind":"infra","from":"gal","to":"FleetHQ","asset":"USDS","amount":2.4,"reason":"תשתית: אימות-קבלה","h":"bcc18d2db7e322a9a99e247e0ae568df"}
+{"seq":80302,"ts":1792172104427,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":1.134415,"fee":0.003403,"price":2.874364,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.39345,"h":"1b473f37de1c729ba0e36815660d5e89"}
+{"seq":80303,"ts":1792172106028,"kind":"infra","from":"TruthRail","to":"Pulse","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"3b717de322cb800ba169c7edff3e20fa"}
+{"seq":80304,"ts":1792172114029,"kind":"infra","from":"Console","to":"saos-dex","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"d5e63375eb348665e348d0faa20ae5dd"}
+{"seq":80305,"ts":1792172114029,"kind":"infra","from":"Pulse","to":"TruthRail","asset":"USDS","amount":10.5,"reason":"תשתית: סריקת-גיט","h":"3b178a3d8ce431e59e009a6f59e6dec9"}
+{"seq":80306,"ts":1792172114029,"kind":"infra","from":"TruthRail","to":"Domain","asset":"USDS","amount":4.2,"reason":"תשתית: חישוב-GPU","h":"b0e354253e9042cb18331c5e12dbfc37"}
+{"seq":80307,"ts":1792172118032,"kind":"infra","from":"Domain","to":"Domain","asset":"USDS","amount":7,"reason":"תשתית: חישוב-GPU","h":"d35a8ffbaab1acad491261315abae7f9"}
+{"seq":80308,"ts":1792172120433,"kind":"infra","from":"Domain","to":"FleetHQ","asset":"USDS","amount":2.1,"reason":"תשתית: סריקת-גיט","h":"7cdf86687e386616ded8c37a9c6c2071"}
+{"seq":80309,"ts":1792172123634,"kind":"infra","from":"pool","to":"treasury","asset":"USDS","amount":1.015702,"reason":"איסוף-עמלות-בריכה → כספת","h":"abe74a2a823043e31a94631f047e05f1"}
+{"seq":80310,"ts":1792172123634,"kind":"infra","from":"pool","to":"treasury","asset":"USDS","amount":68.719453,"reason":"מס-אספקה-בריכה 0.5% → כספת (גל-86b · ההכנסה-הקבועה)","h":"9a00c20f7a986544a848f311d395411f"}
+{"seq":80311,"ts":1792172123634,"kind":"swap","from":"treasury","to":"pool","asset":"USDS","amount":34.359727,"fee":0.103079,"price":2.874838,"reason":"התחדשות-מלאי-SAOS-מהבריכה (50% ממס-האספקה · גל-86b)","outSaos":11.886402,"h":"03250001c3170012ee761df082fb1acc"}
+{"seq":80312,"ts":1792172127635,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":1,"fee":0.003,"price":2.889208,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.345052,"h":"15536ee03fab6b74ad7846569a9dac77"}
+{"seq":80313,"ts":1792172130835,"kind":"infra","from":"Pulse","to":"saos-dex","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"3adb2cb273d834f86f3c45fae749093c"}
+{"seq":80314,"ts":1792172134836,"kind":"infra","from":"Pulse","to":"Domain","asset":"USDS","amount":3.2,"reason":"תשתית: תדלוק-RC","h":"4360713ee82f62e757a5b081b6e71f20"}
+{"seq":80315,"ts":1792172146039,"kind":"infra","from":"Console","to":"Console","asset":"USDS","amount":9.6,"reason":"תשתית: תדלוק-RC","h":"4d1b06713d7ca6b085d8dd08aa86ec2e"}
+{"seq":80316,"ts":1792172146039,"kind":"infra","from":"Domain","to":"TruthRail","asset":"USDS","amount":16,"reason":"תשתית: תדלוק-RC","h":"a55c9b2da23b7693723115beb137dbca"}
+{"seq":80317,"ts":1792172146840,"kind":"infra","from":"Pulse","to":"Pulse","asset":"USDS","amount":6.3,"reason":"תשתית: סריקת-גיט","h":"fb4baeb5b2b55f685018dd526183d2ed"}
+{"seq":80318,"ts":1792172148441,"kind":"infra","from":"Pulse","to":"saos-dex","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"12c85d697f761abb6dce805bf29c93a5"}
+{"seq":80319,"ts":1792172153242,"kind":"infra","from":"saos-dex","to":"FleetHQ","asset":"USDS","amount":4.2,"reason":"תשתית: חישוב-GPU","h":"a5918e18e53bf80da4bee2090bcf3f27"}
+{"seq":80320,"ts":1792172157243,"kind":"infra","from":"Domain","to":"FleetHQ","asset":"USDS","amount":1.8,"reason":"תשתית: אימות-קבלה","h":"3347630a0cf43032053f7f236bf34276"}
+{"seq":80321,"ts":1792172162044,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":1,"fee":0.003,"price":2.889627,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.345002,"h":"17fe7da462e4af4943c97f628af87651"}
+{"seq":80322,"ts":1792172162845,"kind":"infra","from":"FleetHQ","to":"FleetHQ","asset":"USDS","amount":7,"reason":"תשתית: חישוב-GPU","h":"b58c09a5ba5ed1a8ea7f8043f47fe6b7"}
+{"seq":80323,"ts":1792172162845,"kind":"infra","from":"TruthRail","to":"FleetHQ","asset":"USDS","amount":12.8,"reason":"תשתית: תדלוק-RC","h":"9981874b1227acefeabd45236c5b29b1"}
+{"seq":80324,"ts":1792172163645,"kind":"infra","from":"TruthRail","to":"Domain","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"ba6c1b99abd1d005dfcacb5d37d59d8c"}
+{"seq":80325,"ts":1792172164445,"kind":"infra","from":"FleetHQ","to":"TruthRail","asset":"USDS","amount":2.2,"reason":"תשתית: תרגום-מסמך","h":"55be408bc0ef9f0db77eaa6dbd3d96bb"}
+{"seq":80326,"ts":1792172170847,"kind":"infra","from":"FleetHQ","to":"Console","asset":"USDS","amount":6.4,"reason":"תשתית: תדלוק-RC","h":"afced42fdee009e89206bf770fbeb05d"}
+{"seq":80327,"ts":1792172178048,"kind":"infra","from":"FleetHQ","to":"Pulse","asset":"USDS","amount":1.75,"reason":"תשתית: אחסון-ארכיון","h":"69d2f1016f9f2af5727a9b18486b0f3e"}
+{"seq":80328,"ts":1792172178048,"kind":"infra","from":"Console","to":"FleetHQ","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"65d535bb10dc07d2a2703198d01fdd57"}
+{"seq":80329,"ts":1792172180450,"kind":"infra","from":"TruthRail","to":"FleetHQ","asset":"USDS","amount":1.75,"reason":"תשתית: אחסון-ארכיון","h":"099e0d7b60a97cc7d2e9e34582769d26"}
+{"seq":80330,"ts":1792172186852,"kind":"infra","from":"TruthRail","to":"Console","asset":"USDS","amount":9.6,"reason":"תשתית: תדלוק-RC","h":"d82b3db88504f4dd81b39ba821800e5b"}
+{"seq":80331,"ts":1792172189252,"kind":"infra","from":"FleetHQ","to":"FleetHQ","asset":"USDS","amount":4.5,"reason":"תשתית: מידע-שוק","h":"be2cba02dec930b9b5703cb0336f2769"}
+{"seq":80332,"ts":1792172190052,"kind":"infra","from":"saos-dex","to":"TruthRail","asset":"USDS","amount":10.5,"reason":"תשתית: סריקת-גיט","h":"4b3202c1e7bb5699f9a24b5d8a3844fa"}
+{"seq":80333,"ts":1792172194054,"kind":"infra","from":"saos-dex","to":"TruthRail","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"2286c8916f9510226dc2dfa7944b2d5e"}
+{"seq":80334,"ts":1792172194054,"kind":"infra","from":"saos-dex","to":"Pulse","asset":"USDS","amount":2.4,"reason":"תשתית: אימות-קבלה","h":"81131bd3667fe58aefdf04c3f5433fc4"}
+{"seq":80335,"ts":1792172196455,"kind":"infra","from":"TruthRail","to":"TruthRail","asset":"USDS","amount":10.5,"reason":"תשתית: סריקת-גיט","h":"d2f6d26e440e3ee2b6479fc63440bcc8"}
+{"seq":80336,"ts":1792172198856,"kind":"infra","from":"TruthRail","to":"saos-dex","asset":"USDS","amount":9.6,"reason":"תשתית: תדלוק-RC","h":"02eace87e67cea3ebeb14abfa70b5ce4"}
+{"seq":80337,"ts":1792172198856,"kind":"infra","from":"Domain","to":"FleetHQ","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"2f0f4975a355ef0472d5d454f39edd0e"}
+{"seq":80338,"ts":1792172198856,"kind":"infra","from":"FleetHQ","to":"Domain","asset":"USDS","amount":4.2,"reason":"תשתית: סריקת-גיט","h":"928a82acf956aafc338b252f51dbfe4b"}
+{"seq":80339,"ts":1792172198856,"kind":"infra","from":"Console","to":"Console","asset":"USDS","amount":2.1,"reason":"תשתית: סריקת-גיט","h":"b16447516b38a528244c55469713abfb"}
+{"seq":80340,"ts":1792172198856,"kind":"infra","from":"saos-dex","to":"saos-dex","asset":"USDS","amount":1.4,"reason":"תשתית: חישוב-GPU","h":"38e60b765093981e6ebdb135f5f05b78"}
+{"seq":80341,"ts":1792172203658,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":120,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"7d2420a08c7896004fd19921cfe38308"}
+{"seq":80342,"ts":1792172203658,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":120,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"6aa87a420056abbd9e593be833914c7c"}
+{"seq":80343,"ts":1792172203658,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":120,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"1056e20857183ec16ddd2d4477ce1f47"}
+{"seq":80344,"ts":1792172203658,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":120,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"4b2f24d9bce583e8f2fd7f67d8a716de"}
+{"seq":80345,"ts":1792172203658,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":120,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"5f03abdf9a932427f4b570c631d7c426"}
+{"seq":80346,"ts":1792172203658,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":120,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"fb06be3cb2dd18966fd05b6defb4331b"}
+{"seq":80347,"ts":1792172206861,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":33.28129,"fee":0.099844,"price":2.890046,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":11.453708,"h":"fc87c0dff261f926e69cf641dabe4a6d"}
+{"seq":80348,"ts":1792172206861,"kind":"infra","from":"gal","to":"Domain","asset":"USDS","amount":1.75,"reason":"תשתית: אחסון-ארכיון","h":"2a89c50d859ec4b9b7e58d3bbd50c8f9"}
+{"seq":80349,"ts":1792172214062,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":31.946686,"fee":0.09584,"price":2.904001,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":10.942686,"h":"7864ca9e8e6a5739b57ef252ae1d1ed3"}
+{"seq":80350,"ts":1792172216463,"kind":"infra","from":"Domain","to":"Console","asset":"USDS","amount":5.5,"reason":"תשתית: תרגום-מסמך","h":"1cb0459f63ea0c8356bca182066339f6"}
+{"seq":80351,"ts":1792172216463,"kind":"infra","from":"saos-dex","to":"Console","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"b16dcc91466bf655e6924ea5535bf345"}
+{"seq":80352,"ts":1792172219665,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":31.884754,"fee":0.095654,"price":2.917429,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":10.871312,"h":"bb2a67fa8a07e6d1439d7e9c02d67186"}
+{"seq":80353,"ts":1792172219665,"kind":"infra","from":"saos-dex","to":"Console","asset":"USDS","amount":8.4,"reason":"תשתית: סריקת-גיט","h":"23318191714fd4baba3a3c55f9e4b99a"}
+{"seq":80354,"ts":1792172221265,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":25.692581,"fee":0.077078,"price":2.930861,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":8.723821,"h":"dfc415e4a32f656313493a125648f9d6"}
+{"seq":80355,"ts":1792172231672,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":23.08746,"fee":0.069262,"price":2.941707,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":7.811841,"h":"e003cdbe589e496e977d09d6d462ea3b"}
+{"seq":80356,"ts":1792172231672,"kind":"infra","from":"yarden","to":"Console","asset":"USDS","amount":2.1,"reason":"תשתית: סריקת-גיט","h":"06d27ae3cf4938e16a2be9d6dc422fd4"}
+{"seq":80357,"ts":1792172231672,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":22.000831,"fee":0.066002,"price":2.951471,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":7.420142,"h":"67fd152421a6598ae7850178ffacec22"}
+{"seq":80358,"ts":1792172231672,"kind":"infra","from":"tamar","to":"FleetHQ","asset":"USDS","amount":4.2,"reason":"תשתית: סריקת-גיט","h":"dab80a124129cd861873a53d4b07b254"}
+{"seq":80359,"ts":1792172231672,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":19.371253,"fee":0.058114,"price":2.96079,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":6.513949,"h":"5e8c5ad00b0f1da6bb017d7c6f312780"}
+{"seq":80360,"ts":1792172232473,"kind":"infra","from":"Console","to":"FleetHQ","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"3ed88093fd0063c5c8a37112eba4e11e"}
+{"seq":80361,"ts":1792172233273,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":39.444389,"fee":0.118333,"price":2.969007,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":13.208336,"h":"06abd3134956e8bba967a1ac2655aae9"}
+{"seq":80362,"ts":1792172237274,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":23.045386,"fee":0.069136,"price":2.985775,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":7.682637,"h":"0e9068a968f690cb8f5de4dbbf359c36"}
+{"seq":80363,"ts":1792172237274,"kind":"infra","from":"Console","to":"Domain","asset":"USDS","amount":1.2,"reason":"תשתית: אימות-קבלה","h":"4d0f8861872e7d05d40acfb4c77d6ad5"}
+{"seq":80364,"ts":1792172239675,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":6.478438,"fee":0.019435,"price":2.995593,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.155176,"h":"b356c816df901c00c6a631466cbd1c4b"}
+{"seq":80365,"ts":1792172239675,"kind":"infra","from":"Domain","to":"Pulse","asset":"USDS","amount":5.5,"reason":"תשתית: תרגום-מסמך","h":"50045c4db7815cbba3afb5dae8ff0269"}
+{"seq":80366,"ts":1792172242076,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":6.035788,"fee":0.018107,"price":2.998356,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.006134,"h":"d720c3f57aea022a238b839d773f4fa9"}
+{"seq":80367,"ts":1792172242077,"kind":"infra","from":"shachar","to":"Console","asset":"USDS","amount":6.4,"reason":"תשתית: תדלוק-RC","h":"f6754632d3f7ee7a2974615b3bb0176d"}
+{"seq":80368,"ts":1792172243676,"kind":"infra","from":"pool","to":"treasury","asset":"USDS","amount":70.212595,"reason":"מס-אספקה-בריכה 0.5% → כספת (גל-86b · ההכנסה-הקבועה)","h":"b91c4b5e8672fd6f62ed5d15a59c2f73"}
+{"seq":80369,"ts":1792172243677,"kind":"swap","from":"treasury","to":"pool","asset":"USDS","amount":35.106297,"fee":0.105319,"price":3.000931,"reason":"התחדשות-מלאי-SAOS-מהבריכה (50% ממס-האספקה · גל-86b)","outSaos":11.634374,"h":"5d9ed5641f7a106554da752bbe8d254e"}
+{"seq":80370,"ts":1792172243677,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":5.085851,"fee":0.015258,"price":3.015932,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":1.680664,"h":"f40bc641745707cc2be931ae31931132"}
+{"seq":80371,"ts":1792172243677,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":5.485632,"fee":0.016457,"price":3.018108,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":1.811417,"h":"16321e0174926ae9668e63a246b7e7de"}
+{"seq":80372,"ts":1792172244477,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":15.672962,"fee":0.047019,"price":3.020456,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":5.16764,"h":"036a11b82125cefe47b55bac1795ae98"}
+{"seq":80373,"ts":1792172246077,"kind":"infra","from":"FleetHQ","to":"Pulse","asset":"USDS","amount":2.1,"reason":"תשתית: סריקת-גיט","h":"23d3c783cb253106ce7205788f52971e"}
+{"seq":80374,"ts":1792172249279,"kind":"infra","from":"erez","to":"saos-dex","asset":"USDS","amount":4.5,"reason":"תשתית: מידע-שוק","h":"7348a64ea020d9df84a075e1fd8bc1ce"}
+{"seq":80375,"ts":1792172249279,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":18.042791,"fee":0.054128,"price":3.02717,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":5.934832,"h":"2f2f157a211dc28b1c041b65f717fd70"}
+{"seq":80376,"ts":1792172249279,"kind":"infra","from":"yarden","to":"Domain","asset":"USDS","amount":6.4,"reason":"תשתית: תדלוק-RC","h":"0315a0fdef66114e27b0aa3abc621535"}
+{"seq":80377,"ts":1792172257281,"kind":"infra","from":"yarden","to":"TruthRail","asset":"USDS","amount":2.2,"reason":"תשתית: תרגום-מסמך","h":"f82d9f29cc2a81d331b66252af81613a"}
+{"seq":80378,"ts":1792172258081,"kind":"infra","from":"gal","to":"FleetHQ","asset":"USDS","amount":3,"reason":"תשתית: אימות-קבלה","h":"0450c67476ea51302de0d7583aae60da"}
+{"seq":80379,"ts":1792172258081,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":29.711004,"fee":0.089133,"price":3.034909,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":9.739952,"h":"92d5f919a4597423f8cd80c16691bd4e"}
+{"seq":80380,"ts":1792172258081,"kind":"infra","from":"gal","to":"Pulse","asset":"USDS","amount":3,"reason":"תשתית: אימות-קבלה","h":"8cfa46407c654ea094d148ec7d3f68a4"}
+{"seq":80381,"ts":1792172263684,"kind":"infra","from":"shachar","to":"Domain","asset":"USDS","amount":1.4,"reason":"תשתית: חישוב-GPU","h":"797f4fc99d6b44ed87af7c93be696a1d"}
+{"seq":80382,"ts":1792172264485,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":23.962461,"fee":0.071887,"price":3.047673,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":7.825743,"h":"1c89fe2496e2a16454fb8934f3d8a5e3"}
+{"seq":80383,"ts":1792172264485,"kind":"infra","from":"tamar","to":"FleetHQ","asset":"USDS","amount":3.2,"reason":"תשתית: תדלוק-RC","h":"8eeb6988961e190115b1663b598f684d"}
+{"seq":80384,"ts":1792172266886,"kind":"infra","from":"tamar","to":"Pulse","asset":"USDS","amount":12.8,"reason":"תשתית: תדלוק-RC","h":"9dc629b3835ab1db558d29788d9f5bd4"}
+{"seq":80385,"ts":1792172269287,"kind":"infra","from":"shachar","to":"TruthRail","asset":"USDS","amount":1.4,"reason":"תשתית: חישוב-GPU","h":"628285c6c7209d2c9a5897729073d26e"}
+{"seq":80386,"ts":1792172274090,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":13.404501,"fee":0.040214,"price":3.057988,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":4.366172,"h":"649ef552e43aef6729b4c7bf2a698eb6"}
+{"seq":80387,"ts":1792172277292,"kind":"infra","from":"shachar","to":"Domain","asset":"USDS","amount":7,"reason":"תשתית: חישוב-GPU","h":"c539426a28c931202d5dfcdd774f81d8"}
+{"seq":80388,"ts":1792172277292,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":23.287002,"fee":0.069861,"price":3.063765,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":7.565597,"h":"f3642d1e7e3c298a0c43030bb8f60620"}
+{"seq":80389,"ts":1792172279693,"kind":"infra","from":"erez","to":"TruthRail","asset":"USDS","amount":4.2,"reason":"תשתית: חישוב-GPU","h":"4ac2641aa3c002f408ca13accdafaac6"}
+{"seq":80390,"ts":1792172282895,"kind":"infra","from":"shachar","to":"TruthRail","asset":"USDS","amount":0.35,"reason":"תשתית: אחסון-ארכיון","h":"ba8d0bab33a75314a2f72031eebcf177"}
+{"seq":80391,"ts":1792172282895,"kind":"infra","from":"TruthRail","to":"Console","asset":"USDS","amount":1.8,"reason":"תשתית: אימות-קבלה","h":"e91bec2e1c4fff870b40bf8be32b7d6b"}
+{"seq":80392,"ts":1792172283695,"kind":"infra","from":"Pulse","to":"Pulse","asset":"USDS","amount":1.4,"reason":"תשתית: חישוב-GPU","h":"4c7afc804dd09c9934738bc1de4fc16a"}
+{"seq":80393,"ts":1792172283695,"kind":"infra","from":"shachar","to":"TruthRail","asset":"USDS","amount":0.35,"reason":"תשתית: אחסון-ארכיון","h":"588328f8116f232a8c3600b807cb7afe"}
+{"seq":80394,"ts":1792172283695,"kind":"infra","from":"gal","to":"Domain","asset":"USDS","amount":4.5,"reason":"תשתית: מידע-שוק","h":"881180467d968465d7474b45b33418c1"}
+{"seq":80395,"ts":1792172283695,"kind":"infra","from":"shachar","to":"Pulse","asset":"USDS","amount":12.8,"reason":"תשתית: תדלוק-RC","h":"0eabfa7a4bf83cffc416574341391d3a"}
+{"seq":80396,"ts":1792172287695,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":2.032425,"fee":0.006097,"price":3.073815,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.659128,"h":"733881cba52ba7dbb2ffd6248b36a73a"}
+{"seq":80397,"ts":1792172294099,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":9.975599,"fee":0.029927,"price":3.074693,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":3.232427,"h":"41bd847cb87d070c57f12487abaa554e"}
+{"seq":80398,"ts":1792172297301,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":6.48414,"fee":0.019452,"price":3.079003,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.09865,"h":"9b43e82e74117a3a86364f6c3695886b"}
+{"seq":80399,"ts":1792172297301,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":13.318361,"fee":0.039955,"price":3.081807,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":4.304627,"h":"22ca1287d030ca109b0cac8b27d4d87a"}
+{"seq":80400,"ts":1792172298101,"kind":"infra","from":"aluf","to":"TruthRail","asset":"USDS","amount":1.1,"reason":"תשתית: תרגום-מסמך","h":"14dba412f290351f7dac9b655b433b4a"}
+{"seq":80401,"ts":1792172298901,"kind":"infra","from":"TruthRail","to":"Domain","asset":"USDS","amount":4.2,"reason":"תשתית: חישוב-GPU","h":"78f9ab3d39fb146ccf119ebcfaac5851"}
+{"seq":80402,"ts":1792172299702,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":4.214691,"fee":0.012644,"price":3.087569,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":1.360555,"h":"1d0cf23f30b10057104aceb83dc16f51"}
+{"seq":80403,"ts":1792172302102,"kind":"infra","from":"aluf","to":"Console","asset":"USDS","amount":3.6,"reason":"תשתית: מידע-שוק","h":"023af892ece45043bcbe5ee8fb97ee5d"}
+{"seq":80404,"ts":1792172304503,"kind":"infra","from":"FleetHQ","to":"FleetHQ","asset":"USDS","amount":2.1,"reason":"תשתית: סריקת-גיט","h":"53ce7d36a22380adbf888c020a41d3e7"}
+{"seq":80405,"ts":1792172305303,"kind":"infra","from":"yarden","to":"Console","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"98e471dd8f85ab403ed3b3bda5ac6b43"}
+{"seq":80406,"ts":1792172306903,"kind":"infra","from":"aluf","to":"Domain","asset":"USDS","amount":3.6,"reason":"תשתית: מידע-שוק","h":"524fecbf19b36a1effaa78a92e79b435"}
+{"seq":80407,"ts":1792172310104,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":19.729412,"fee":0.059188,"price":3.089394,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":6.358239,"h":"69fa0b25103ce3266a2907d31e20acd6"}
+{"seq":80408,"ts":1792172310104,"kind":"infra","from":"saos-dex","to":"TruthRail","asset":"USDS","amount":4.4,"reason":"תשתית: תרגום-מסמך","h":"8d5fff0a777d3943c3764798c83cdc9e"}
+{"seq":80409,"ts":1792172310904,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":7.242926,"fee":0.021729,"price":3.097943,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.329786,"h":"170d81562dd3287f58f2357fa3a9dcd6"}
+{"seq":80410,"ts":1792172317308,"kind":"infra","from":"Pulse","to":"TruthRail","asset":"USDS","amount":1.8,"reason":"תשתית: מידע-שוק","h":"091480d933f94d17c6972240ba9bb508"}
+{"seq":80411,"ts":1792172319709,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":26.490013,"fee":0.07947,"price":3.101084,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":8.500824,"h":"995d0775fbdeacda073d487a663b01a4"}
+{"seq":80412,"ts":1792172319709,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":12.231551,"fee":0.036695,"price":3.112587,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":3.914579,"h":"36eee49536968c0c91903266fe6bf47b"}
+{"seq":80413,"ts":1792172321309,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":7.950508,"fee":0.023852,"price":3.117905,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.540895,"h":"b627df25a333edc6af3b2693f0d1227f"}
+{"seq":80414,"ts":1792172324511,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":4.707902,"fee":0.014124,"price":3.121364,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":1.503266,"h":"a39ff7a50d26b5d497e193be030f4acc"}
+{"seq":80415,"ts":1792172324511,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":3.060136,"fee":0.00918,"price":3.123414,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.976594,"h":"17cdaed51693e82dafdb08385139ad05"}
+{"seq":80416,"ts":1792172326912,"kind":"infra","from":"saos-dex","to":"TruthRail","asset":"USDS","amount":1.1,"reason":"תשתית: תרגום-מסמך","h":"41c3e79ee11c134bc3b23b7e4b161dba"}
+{"seq":80417,"ts":1792172326912,"kind":"infra","from":"FleetHQ","to":"Domain","asset":"USDS","amount":1.1,"reason":"תשתית: תרגום-מסמך","h":"d05f254614d870e377747a24286e75a6"}
+{"seq":80418,"ts":1792172328513,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":17.218509,"fee":0.051656,"price":3.124746,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":5.487266,"h":"303cc78386f2d0b8242edc4c509e91ed"}
+{"seq":80419,"ts":1792172331715,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":5.16783,"fee":0.015503,"price":3.132249,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":1.644338,"h":"e5abf6eb7bb74b384615f3791bea15ae"}
+{"seq":80420,"ts":1792172332515,"kind":"infra","from":"yarden","to":"Console","asset":"USDS","amount":1.4,"reason":"תשתית: חישוב-GPU","h":"7091cf43a979ac480a29c89ccdd1b711"}
+{"seq":80421,"ts":1792172332515,"kind":"infra","from":"yarden","to":"FleetHQ","asset":"USDS","amount":7,"reason":"תשתית: חישוב-GPU","h":"15530253132641299da106696def3ce5"}
+{"seq":80422,"ts":1792172332515,"kind":"infra","from":"FleetHQ","to":"Domain","asset":"USDS","amount":6.3,"reason":"תשתית: סריקת-גיט","h":"b0a87a28d5b1e21a2504f2544f28543d"}
+{"seq":80423,"ts":1792172333315,"kind":"infra","from":"shachar","to":"Console","asset":"USDS","amount":1.2,"reason":"תשתית: אימות-קבלה","h":"1b34674bc1b79e6aa067adca9e89453e"}
+{"seq":80424,"ts":1792172335717,"kind":"infra","from":"Console","to":"Pulse","asset":"USDS","amount":2.8,"reason":"תשתית: חישוב-GPU","h":"d3f25126e0c2e8ebfef3b8b883f19e38"}
+{"seq":80425,"ts":1792172338917,"kind":"infra","from":"Domain","to":"saos-dex","asset":"USDS","amount":2.4,"reason":"תשתית: אימות-קבלה","h":"818dc438cd44a60ce8925a279a32cb46"}
+{"seq":80426,"ts":1792172339717,"kind":"infra","from":"TruthRail","to":"Pulse","asset":"USDS","amount":10.5,"reason":"תשתית: סריקת-גיט","h":"2848e5ca558d8d1ef5ab65f6a5fda0c9"}
+{"seq":80427,"ts":1792172341317,"kind":"infra","from":"aluf","to":"TruthRail","asset":"USDS","amount":1.4,"reason":"תשתית: אחסון-ארכיון","h":"ce4ecd4af7f68b70dfc0c7797e7b42bf"}
+{"seq":80428,"ts":1792172346119,"kind":"infra","from":"erez","to":"Pulse","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"5227c2bde61da1060b0fa571eef9f3d1"}
+{"seq":80429,"ts":1792172346119,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":11.192031,"fee":0.033576,"price":3.134502,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":3.557115,"h":"8397e2c1c5d06e2a4d43a08adf776db8"}
+{"seq":80430,"ts":1792172347719,"kind":"infra","from":"Pulse","to":"saos-dex","asset":"USDS","amount":10.5,"reason":"תשתית: סריקת-גיט","h":"7e55d35d27e8a5d869621d423fcc8022"}
+{"seq":80431,"ts":1792172347719,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":1.621589,"fee":0.004865,"price":3.139385,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.514923,"h":"783b32692637e34041073de91137b2cd"}
+{"seq":80432,"ts":1792172350120,"kind":"infra","from":"Pulse","to":"FleetHQ","asset":"USDS","amount":0.35,"reason":"תשתית: אחסון-ארכיון","h":"c03df0b58d9e58473e72c9445a19012a"}
+{"seq":80433,"ts":1792172350120,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":2.86909,"fee":0.008607,"price":3.140093,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.910773,"h":"4081cd85d8ae5e884c60c242d31fad35"}
+{"seq":80434,"ts":1792172350120,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":9.884118,"fee":0.029652,"price":3.141346,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":3.13487,"h":"b4eb38dce926148fe7195513800e6d62"}
+{"seq":80435,"ts":1792172351722,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":7.27482,"fee":0.021824,"price":3.145663,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.30455,"h":"81c44c97cb56b7118d08680edf5da9f7"}
+{"seq":80436,"ts":1792172353323,"kind":"infra","from":"FleetHQ","to":"Console","asset":"USDS","amount":4.5,"reason":"תשתית: מידע-שוק","h":"db08d54e6128cfcaf69ad4d254669fdd"}
+{"seq":80437,"ts":1792172353323,"kind":"infra","from":"Pulse","to":"Console","asset":"USDS","amount":1.2,"reason":"תשתית: אימות-קבלה","h":"e1e18fac354b5ffc7328aa49025b6152"}
+{"seq":80438,"ts":1792172353323,"kind":"infra","from":"saos-dex","to":"TruthRail","asset":"USDS","amount":1.2,"reason":"תשתית: אימות-קבלה","h":"1110063bfb6729df590908b7f0e61167"}
+{"seq":80439,"ts":1792172355724,"kind":"infra","from":"saos-dex","to":"Console","asset":"USDS","amount":2.8,"reason":"תשתית: חישוב-GPU","h":"d27d8160c2af0790caaf3c76f8dfedbf"}
+{"seq":80440,"ts":1792172357325,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":1.864908,"fee":0.005595,"price":3.148842,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.590399,"h":"92fc0bdbb252dee9fb7908fe4f1710af"}
+{"seq":80441,"ts":1792172357325,"kind":"infra","from":"tamar","to":"Console","asset":"USDS","amount":4.2,"reason":"תשתית: סריקת-גיט","h":"fb271249c3982720dd5345ffcbfebb58"}
+{"seq":80442,"ts":1792172359727,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":1.054032,"fee":0.003162,"price":3.149658,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.333621,"h":"2d639fe751e19f22945e0749a0f2f761"}
+{"seq":80443,"ts":1792172362929,"kind":"infra","from":"TruthRail","to":"Pulse","asset":"USDS","amount":2.7,"reason":"תשתית: מידע-שוק","h":"b569d0e61a707b26981cc125e68f4e9c"}
+{"seq":80444,"ts":1792172362929,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":1.212191,"fee":0.003637,"price":3.150118,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.383621,"h":"530bbee958b2ab3f92f08efa32f05efe"}
+{"seq":80445,"ts":1792172362929,"kind":"infra","from":"Console","to":"Pulse","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"d68b3a317245d56033368814c49b61dc"}
+{"seq":80446,"ts":1792172362929,"kind":"infra","from":"FleetHQ","to":"FleetHQ","asset":"USDS","amount":4.4,"reason":"תשתית: תרגום-מסמך","h":"2c934eb38e340a95d72cacb1e2f7def5"}
+{"seq":80447,"ts":1792172363729,"kind":"infra","from":"pool","to":"treasury","asset":"USDS","amount":1.93555,"reason":"איסוף-עמלות-בריכה → כספת","h":"6b1f36509fe38e87980a304ba0dc42bc"}
+{"seq":80448,"ts":1792172363729,"kind":"infra","from":"pool","to":"treasury","asset":"USDS","amount":71.945372,"reason":"מס-אספקה-בריכה 0.5% → כספת (גל-86b · ההכנסה-הקבועה)","h":"68ac36cc4e7fc8465d2e22a5ac06e599"}
+{"seq":80449,"ts":1792172363729,"kind":"swap","from":"treasury","to":"pool","asset":"USDS","amount":35.972686,"fee":0.107918,"price":3.150648,"reason":"התחדשות-מלאי-SAOS-מהבריכה (50% ממס-האספקה · גל-86b)","outSaos":11.354995,"h":"76712cb0951175c1fe59892bf0f69199"}
+{"seq":80450,"ts":1792172363729,"kind":"infra","from":"gal","to":"Console","asset":"USDS","amount":3.6,"reason":"תשתית: מידע-שוק","h":"40c6182f4620f053bc771d0de7349d2c"}
+{"seq":80451,"ts":1792172365329,"kind":"infra","from":"Console","to":"saos-dex","asset":"USDS","amount":1.8,"reason":"תשתית: אימות-קבלה","h":"4d5d82dd9f704abcdd5951daa499e151"}
+{"seq":80452,"ts":1792172366129,"kind":"infra","from":"saos-dex","to":"Domain","asset":"USDS","amount":10.5,"reason":"תשתית: סריקת-גיט","h":"91856fce547c630ef0e07eeaf85d273d"}
+{"seq":80453,"ts":1792172368530,"kind":"infra","from":"erez","to":"Pulse","asset":"USDS","amount":1.2,"reason":"תשתית: אימות-קבלה","h":"f29f962bba3460c11a3dcd578e4d5879"}
+{"seq":80454,"ts":1792172368530,"kind":"infra","from":"FleetHQ","to":"FleetHQ","asset":"USDS","amount":3.2,"reason":"תשתית: תדלוק-RC","h":"e46eb31fc8e89a1d9826f92083e1fbe2"}
+{"seq":80455,"ts":1792172369330,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":1,"fee":0.003,"price":3.166398,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.314847,"h":"d764132147ab74b36d4c792e408541a9"}
+{"seq":80456,"ts":1792172373332,"kind":"infra","from":"saos-dex","to":"Pulse","asset":"USDS","amount":3.3,"reason":"תשתית: תרגום-מסמך","h":"8d1f8ebb6b30a290c5748f8ded396919"}
+{"seq":80457,"ts":1792172373332,"kind":"infra","from":"gal","to":"Domain","asset":"USDS","amount":4.5,"reason":"תשתית: מידע-שוק","h":"16a6e4802e871b68982d1f76bbc9c0e2"}
+{"seq":80458,"ts":1792172374132,"kind":"infra","from":"Console","to":"Console","asset":"USDS","amount":1.4,"reason":"תשתית: אחסון-ארכיון","h":"7e8b63866818ed8e91132eb437015afb"}
+{"seq":80459,"ts":1792172377334,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":6.424676,"fee":0.019274,"price":3.166836,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":2.021753,"h":"0368c1cdd93822e7cb28f54eaf1b76cd"}
+{"seq":80460,"ts":1792172379735,"kind":"infra","from":"Domain","to":"FleetHQ","asset":"USDS","amount":4.2,"reason":"תשתית: חישוב-GPU","h":"e7f7b5be45c9628958222c40e1043d6a"}
+{"seq":80461,"ts":1792172388542,"kind":"infra","from":"shachar","to":"Domain","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"217c508afc618b4de27aa78c21ddec5f"}
+{"seq":80462,"ts":1792172388542,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":1,"fee":0.003,"price":3.169653,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.314524,"h":"3fb232a5308c907a6fafe4242906cdbe"}
+{"seq":80463,"ts":1792172389342,"kind":"infra","from":"gal","to":"Pulse","asset":"USDS","amount":0.7,"reason":"תשתית: אחסון-ארכיון","h":"400b8ba0b57b0974362b59b908b53617"}
+{"seq":80464,"ts":1792172394145,"kind":"infra","from":"TruthRail","to":"saos-dex","asset":"USDS","amount":5.6,"reason":"תשתית: חישוב-GPU","h":"9b27309dce5f3a9477af788a5b704f72"}
+{"seq":80465,"ts":1792172394945,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":1.648633,"fee":0.004946,"price":3.170092,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.518439,"h":"a7277b6447e705475826c888d6f246a2"}
+{"seq":80466,"ts":1792172405349,"kind":"infra","from":"FleetHQ","to":"TruthRail","asset":"USDS","amount":5.5,"reason":"תשתית: תרגום-מסמך","h":"3ec75d21a27089348a4289f04ccf646d"}
+{"seq":80467,"ts":1792172407750,"kind":"infra","from":"yarden","to":"Domain","asset":"USDS","amount":4.2,"reason":"תשתית: חישוב-GPU","h":"3d336d09e70c607eb67f84805d134ca8"}
+{"seq":80468,"ts":1792172408550,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":1.269549,"fee":0.003809,"price":3.170815,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.39915,"h":"233028c88e7e3ae7e08e0f42aebac450"}
+{"seq":80469,"ts":1792172409350,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":1.071611,"fee":0.003215,"price":3.171372,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.336863,"h":"03c3022dd494a6fcad6ac07afd04a543"}
+{"seq":80470,"ts":1792172415756,"kind":"infra","from":"yarden","to":"saos-dex","asset":"USDS","amount":6.3,"reason":"תשתית: סריקת-גיט","h":"d804aad7dfb4b700b29641994bd9e065"}
+{"seq":80471,"ts":1792172415756,"kind":"infra","from":"Pulse","to":"TruthRail","asset":"USDS","amount":4.2,"reason":"תשתית: סריקת-גיט","h":"05531996951bdccd0c1942216b8f0b23"}
+{"seq":80472,"ts":1792172417357,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":1,"fee":0.003,"price":3.171842,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.314307,"h":"58d9115a7b8fd7fcef4223eb8794e79f"}
+{"seq":80473,"ts":1792172419759,"kind":"infra","from":"Console","to":"TruthRail","asset":"USDS","amount":8.4,"reason":"תשתית: סריקת-גיט","h":"1c2b9a27e5256e37d5081031ff943240"}
+{"seq":80474,"ts":1792172422160,"kind":"infra","from":"saos-dex","to":"saos-dex","asset":"USDS","amount":5.6,"reason":"תשתית: חישוב-GPU","h":"041bb0dbf5828a9516517b5c115a82b9"}
+{"seq":80475,"ts":1792172424561,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":1,"fee":0.003,"price":3.172281,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.314263,"h":"540f01cd8f9973f2a462dbd565d1d153"}
+{"seq":80476,"ts":1792172424561,"kind":"infra","from":"Console","to":"FleetHQ","asset":"USDS","amount":12.8,"reason":"תשתית: תדלוק-RC","h":"368511bff93bcb5e47b0b368f90ae595"}
+{"seq":80477,"ts":1792172427763,"kind":"infra","from":"TruthRail","to":"saos-dex","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"5a28889603c901b0dda37d3a8d3e7104"}
+{"seq":80478,"ts":1792172428563,"kind":"tip","from":"aluf","to":"tamar","asset":"SAOS","amount":0.062045,"reason":"טיפ על עבודה-טובה בזרימה","h":"18b1c2742a4d41c6b57921de844d0c7e"}
+{"seq":80479,"ts":1792172431763,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":1,"fee":0.003,"price":3.172719,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.31422,"h":"f23d6da4d98d3ba4b7891d929570b774"}
+{"seq":80480,"ts":1792172434164,"kind":"infra","from":"Domain","to":"saos-dex","asset":"USDS","amount":1.4,"reason":"תשתית: חישוב-GPU","h":"7e87b49f1314a3c912a00e362dc4081b"}
+{"seq":80481,"ts":1792172446170,"kind":"stake","from":"tamar","to":"tamar","asset":"SAOS","amount":0.062045,"reason":"סטייק-SAOS לאבטחת-הרשת הפנימית","h":"94603629eed367092d56d5030449b41e"}
+{"seq":80482,"ts":1792172446170,"kind":"infra","from":"saos-dex","to":"FleetHQ","asset":"USDS","amount":4.2,"reason":"תשתית: סריקת-גיט","h":"e3334d7a59faebacd8de6bbc17c0b909"}
+{"seq":80483,"ts":1792172450973,"kind":"infra","from":"FleetHQ","to":"Console","asset":"USDS","amount":8.4,"reason":"תשתית: סריקת-גיט","h":"29f01c56f6d54930731eae27c90b41a2"}
+{"seq":80484,"ts":1792172451774,"kind":"infra","from":"Console","to":"Domain","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"39208d5ee21c0bb1650dc2db3e2bbf41"}
+{"seq":80485,"ts":1792172455776,"kind":"infra","from":"FleetHQ","to":"Domain","asset":"USDS","amount":2.2,"reason":"תשתית: תרגום-מסמך","h":"9ece971448fbf7a56da180e2c381ff15"}

@@ -150,8 +150,20 @@ async function syncAnchor(a: Anchor, st: AnchorState, pat: string | null): Promi
   }
   const url = `https://github.com/${ORG}/${a.repo}.git`;
 
-  /* קיים-כריפו? → ff-pull */
+  /* קיים-כריפו? → ff-pull (עם-דיפר-מנעול-אטימה: אם-מנוע-הכספת אוטם-כרגע —
+   * מדלגים-טיק-זה בכנות; אפס-מירוץ commit-מול-pull) */
   if (existsSync(path.join(a.dir, ".git"))) {
+    const SEAL_LOCK = "/home/z/my-project/mini-services/fleet-economy/state/seal.lock";
+    try {
+      const lockAge = Date.now() - (await import("node:fs")).statSync(SEAL_LOCK).mtimeMs;
+      if (lockAge < 12 * 60_000) {
+        st.ok = true; st.state = st.state === "healed" ? "healed" : "fresh";
+        st.detail = `seal-in-progress (lock ${Math.round(lockAge / 1000)}ש׳) — דיפר-כנה`;
+        log("DEFER", a.name, st.detail);
+        return;
+      }
+    } catch { /* אין-מנעול — ממשיכים */ }
+
     const r = await runGit(["pull", "--ff-only", "--quiet"], { cwd: a.dir, token, timeoutMs: 90_000 });
     if (r.code === 0) {
       st.ok = true; st.state = st.state === "healed" ? "healed" : "fresh";
@@ -160,10 +172,33 @@ async function syncAnchor(a: Anchor, st: AnchorState, pat: string | null): Promi
       log("OK", a.name, st.detail);
       return;
     }
-    log("pull-failed → self-heal re-clone:", a.name, r.out.trim().slice(0, 120));
+
+    /* גל-85-c · ריפוי-כירורגי לפני-הסגר (נמדד-חי: הסגר-העיוור מחק עץ-משוחזר,
+     * node_modules ומצב-חי בגלל rebase-תקוע/עץ-מלוכלך — טיפול-יתר הרסני.
+     * הסדר: ביטול-פעולות-תקועות → stash (שמירת-מצב-חי) → reset --hard →
+     * pull חוזר → stash-pop. הסגר רק-אם-גם-זה-נכשל.) */
+    log("pull-failed → surgical recovery:", a.name, r.out.trim().slice(0, 120));
+    for (const quit of [["rebase", "--quit"], ["cherry-pick", "--quit"], ["merge", "--quit"]])
+      await runGit(quit, { cwd: a.dir, timeoutMs: 15_000 });
+    const stash = await runGit(["stash", "push", "-m", "estate-sync-auto-recovery", "--quiet"], { cwd: a.dir, timeoutMs: 30_000 });
+    const stashed = stash.code === 0 && !/No local changes/i.test(stash.out);
+    await runGit(["reset", "--hard", "HEAD", "--quiet"], { cwd: a.dir, timeoutMs: 30_000 });
+    const r2 = await runGit(["pull", "--ff-only", "--quiet"], { cwd: a.dir, token, timeoutMs: 90_000 });
+    if (r2.code === 0) {
+      if (stashed) {
+        const pop = await runGit(["stash", "pop"], { cwd: a.dir, timeoutMs: 30_000 });
+        log(pop.code === 0 ? "RECOVERED" : "RECOVERED-with-stash-retained (pop conflict — stash נשמר-בכנות)", a.name);
+      } else log("RECOVERED", a.name, "surgical pull ok");
+      st.ok = true; st.state = "healed"; heals++;
+      st.headAgeMin = await headAge(a.dir);
+      st.detail = `surgical-recovery ok${st.headAgeMin !== null ? ` · head ${st.headAgeMin} דק` : ""}`;
+      return;
+    }
+    if (stashed) await runGit(["stash", "pop"], { cwd: a.dir, timeoutMs: 30_000 }); /* השבת-המצב-לפני-הסגר */
+    log("surgical-recovery-failed → self-heal re-clone (מוצה-רק-עכשיו):", a.name, r2.out.trim().slice(0, 120));
   }
 
-  /* חסר/פגום → הסגר-ושיבוט-טרי */
+  /* חסר/פגום-באמת → הסגר-ושיבוט-טרי */
   if (existsSync(a.dir)) quarantine(a.dir);
   mkdirSync(path.dirname(a.dir), { recursive: true });
   const c = await runGit(["clone", "--quiet", url, a.dir], { token, timeoutMs: 180_000 });
