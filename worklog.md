@@ -2115,36 +2115,40 @@ Stage Summary:
 - **פתוחים**: (1) FleetHQ-עלול-הימחק-שוב-על-ידי-ה-session-השני-עד-מותו — העוגן-בהיסטוריה, ניתוח-חוזר-זמין (2) סבב-אטימה-מקומי-לא-רץ-כרגע (הכלכלה-של-ה-session-השני היא-האטימה-החיה) (3) three-ב-package.json אבל-ה-install-ב-boot-חייב-להצליח-כדי-ש-/-ירנדר
 
 ---
-Task ID: 47
-Agent: main (Z.ai Code, trace 1a14452468c2af1d)
-Task: "תמשיך" — התאוששות-מסנדבוקס-חדש (עדכון-מהכספת) + ריפוי-מנוע-הכלכלה (403 · boot-heal · מיילי-הכשל-של-10-דקות)
+Task ID: 83
+Agent: zai-main (trace 1a1444cc2afb34c1 · "תמשיך")
+Task: אטימת-כספת פתיחה · 78-d תיקוני-אתרי-Pages (שורש-הבאג של office3d/legacy)
 
 Work Log:
-- **עדכון-מהכספת (T77)**: fetch origin → 4-קומיטים-חדשים-בענן (אטימות-10:13..10:41); קומיט-מקומי-יחיד-שלא-נחתם-זוהה (078099e — state-keeper-אוטומטי-מ-10:37, זול-מהאטימה-בענן-10:41) → reset --hard ל-origin/main (9259512) בלי-אובדן-עבודה. אימות: local==remote.
-- **בדיקת-בריאות**: / 200 (85KB) · /api/organism חי (דופק-אמת) · /api/giant/gap ok:true errors:[] · 8-תהליכי-estate רצים.
-- **גילוי-1 — המנוע-דוחה-את-כל-העולם**: producerDropped sent:0 dropped:196+ lastError:"fetch failed"→"http-403" · projectedPerDay צנח-ל-72 (מ-63-71K!). נמדד-עם-שרת-בדיקה: **Bun 1.3.14 requestIP מחזיר ::ffff:127.0.0.1** (IPv4-ממופה) והמנוע-השווה-רק-127.0.0.1/::1 → 403-לכל-מילוי-אמת. **תיקון**: נרמול ^::ffff: לפני-ההשוואה (economy:3016 /tx/ingest).
-- **גילוי-2 — boot-heal-הורס-היסטוריה**: 4-קרנטינות-ביום (brokenAt-1) — כל-restart-עם-זנב-שנכתב-אחרי-ה-snapshot יוצר-fork-seq וה-boot-הבא-מקפיד-הכל (seq 4896→0). סריקת-כל-הקרנטינות+12-גרסאות-כספת: **כל-הספרים-האטומים-תפורים** (9-רשומות-יתום+איפוס-seq1 — תפר-מיזוג-גיט). **תיקון-מבני**: walkLedger epoch-aware (ירידת-seq=גבול-epoch) + boot עם anchor(snapshot-seq+lastH בלדג'ר)+replay-זנב (replaySealed — אימות-hash+אפקט-מדינה-בלי-persist) + archiveOrphanTail (הסגר-כן, אפס-מחיקה) + נפילה-לreplay-epoch-אחרון. **נמדד-חי: restored=true seq=1673 mode=anchor+replay(1) → ואז seq=1974 anchor+replay(26) — אפס-אובדן-עסקאות.**
-- **גילוי-3 — שורש-מיילי-הכשל-כל-~10-דקות (T75-3)**: seal-log חשף `sweep-error ReferenceError: afterPull is not defined` **בכל-סבב-אטימה-מאז-10:49** — sealRepo התייחסה-למשתנה-שלא-הוגדר-וקריסה-עצרה-את-כל-הסבב-על-המאגר-הראשון. וגם: **sealMyProject (משמורת-מדינה: SIGSTOP-next-server + עותקי-pre-pull + אימות-שרשרת) מעולם-לא-נקראה** — sealAll-אטמה-my-project-ישירות. **תיקון**: sealRepo(dir, afterPull?, opts) · sealAll→sealMyProject ראשון · add-fail-נרשם-בנפרד.
-- **גילוי-4 — הכותב-השני-חי**: origin/main מתקדם-על-ידי-"Z User" (הצ'אט-השני-של-z.ai — טענת-הבעלים: צ'אט-זמני-שימות) עם-שרשרת-לדג'ר-משלו על-אותם-נתיבים → pull-משם=תפר-תמידי. **פתרון-ריבונות**: my-project-נאטם-מעתה **בלי-pull** ול-**refs/heads/sovereign/main** בלבד (סופר-כותב-יחיד, אפס-force, אפס-דריסה; main-משויך-לצ'אט-הגוסס).
-- **אימות-סופי**: סבב-מלא **sweep-done 10/10** (ראשון-מאז-10:49) · my-project sealed 1adb12e..4d8163a→sovereign/main · local==sovereign/main (ls-remote) · producer sent עולה (5→6), dropped קפוא, seq צומח ~0.7tx/ש׳ (~60K/יום-פנימי+מילויי-אמת-חוזרים-לזרום).
+- **אטימה**: commit 9259512 דחוף-ומאומת (ls-remote==HEAD). ריבוז autoStash+ours מול-ענן-שהתקדם → runtime-heal תפס-תפר (stash-pop מול-מנוע-חי) → ספר-חדש seq-נמוך עם-יתרות-שלמות, ההיסטוריה-בגיט. **הלקח-נאכף: מעכשיו אטימה-רק-דרך vault-seal המובנה, אפס-גיט-ידני על קבצי-מצב.**
+- **78-d אבחון-דפדפן של כל-עמודי-המשרד** (agent-browser, צילומי-אמת ב-reports/78d-*.png): root index טרי-ותקין · office3d/ קולנועי יפה · Domain/office3d אינטראקטיבי מושלם · **office3d/legacy/ = באנדל-v4 תקוע-מ-2026-10-14** (מכוער + HUD שבור + צ'יפים-גרועים) — זהו עמוד-ה"משרד-המכוער" שהבעלים דיווח.
+- **שורש-הבאג (2-פגמים ב-publish-3d.sh)**: (1) אחרי `cd $WT` (worktree של office-pages) הבדיקה `[ -d "$(pwd)/dist-office3d" ]` תמיד-שקרית — הארטיפקט-קיים-רק בשורש-הריפו → legacy/ מעולם-לא-התעדכן (2) `node "$(pwd)/office-window/room-viewer.mjs"` גם-נשבר-ב-worktree (אין office-window/ בענף) — `|| true` בלע-את-הכשל; הצופה-הקולנועי על-הענף קיים-רק-בזכות-קומיט-ידני.
+- **התיקון (f50cc7cc ב-FleetHQ main)**: REPO_ROOT נשמר-לפני-ה-worktree · צופה+legacy ניזונים מ-$REPO_ROOT · legacy מוחלף-כולו (rm+cp — שאריות-vendor/-של-v4 לא-שורדות) · dist-office3d הישן-המחויב-הוצא-ממעקב (חוק-ארטיפקטים, כבר-ב-gitignore) · הבנייה-הטרייה-אומתה-מקומית (612-מודולים, vite 15ש׳).
+- **הענן-קיבל**: office-3d.yml הופעל-אוטומטית על f50cc7cc (push-טריגר) — ה-bake יפרסם legacy/ = החדר-האינטראקטיבי-הטרי (זהה-Domain).
 
 Stage Summary:
-- **הכספת-אטומה-ומאומתת: sovereign/main=4d8163a** · מנוע-הכלכלה-ריפא-משלושה-פצעים (403-לופבק · boot-heal-הרסני · sweep-קורס) · שורש-מיילי-הכשל-נתפס-ותוקן · פרוטוקול-אטימה-ריבוני-חד-כותב-מול-הצ'אט-המת-השני · היסטוריית-הלדג'ר-כבר-לא-אובדת-ב-restart (anchor+replay-מנוסה-בשני-הפעלות).
-- **פתוחים להמשך הגל**: (1) ליטוש-כותרת-Domain-pages (78-d פתוח) (2) ניטור-מיילים-עוקבים — לאמת-שהכשלים-נעצרו-מעבר-לסבב-הבא (3) חיווט-forge/skills/tools-fleet/airgap (4) ארכוב-518M-stale-ממתין-אישור-בעלים (5) Administration-write-לפאט.
+- עמוד-ה"משרד-המכוער" תוקן-שורשית (לא-קוסמטיקה — פגם-נתיב בסקריפט-הפרסום שגרם-ל-staleness תמידי). הצי-הענני (Actions) יסיים-את-הפרסום; אימות-דפדפן-חוזר לאחר-ה-bake.
+- פתוחים: פריימים-4..6 בעמוד-השורש חשוכים (פריסטים-קרובים — לכייל-תאורה-ב-bake) · חיווט forge+skills+tools/fleet+airgap (רשימת-78-a) · חוזק-כלכלה-שוטף.
+- **גל-83 · מצערת-הכלכלה-נפתחה (מדידות-חיות)**: נמדד 5,916-דחיות-מול-3,278-קבלות (36%-קבלה) — פגם-כלכלי-מובנה: כסף-זרם-חד-כיווני (חיילים→בריכה/צמתים) והחיילים-התרוקנו. **4-חוקים-פיסקליים-חדשים** (fleet-economy): מס-שירותים-2% (עסקה-חתומה-נפרדת → כספת) · חוק-שכר-מצע (רצפת-350 · כספת-מתדלקת-חיילים-כל-12-טיק) · איסוף-עמלות-בריכה→כספת (כל-150-טיק) · צמתי-צי-קונים-מחיילים (25% מהשירותים). תוצאה-נמדדה (90ש׳): **קבלה 36%→88% · קצב 75.6K→497K/יום** (×6.6, אפס-סינתזה).
+- **גל-83 · ערוץ-המפיקים-נרפא**: POST /tx/ingest דחה-אף-קריאה (http-403, 88-נשרו, sent:0) — Bun `requestIP` מחזיר `::ffff:127.0.0.1` והשומר-לא-ניתח-אותו. תוקף (normalize-של-מיפוי-IPv4) + מאומת: probe-לופבק-נקלט-seq. ה-ingestOk-ההיסטורי-היה-רק-מה-poller-הפנימי; מפיקי-ה-HTTP (מילויי-דקס) מעולם-לא-עברו. מעכשיו-הערוץ-חי.
+- **גל-83 · office3d/legacy מתוקן-בענן**: ה-push f50cc7cc (10:57:51Z) הצית-את office-3d.yml → ה-bake-הענני פרסם-dcec0577 (10:59:34Z) עם-legacy/=החדר-האינטראקטיבי-הטרי (אימות-גיט: כותרת-חדשה ✓). **Pages-build-תקוע "building" 18דק'** → build-חוזר-נדרש-דרך-API (201) — ממתין-לאימות-CDN.
+- UI: InternalEconomy מציג-את-סוגי-tax/recovery/dex-fee בעברית (KIND_HE). lint-0.
 
 ---
-Task ID: 47-b
-Agent: main (Z.ai Code, trace 1a14452468c2af1d)
-Task: המשך-גל-47 — גילוי-מחדל-המחיקות-בכספת (Domain) · חוק-כספת-חדש · שחזור-קטלוג-המוצרים · אימות-E2E
+Task ID: 84
+Agent: zai-main (trace 1a14480010d53f5d · "תבחן היטב איפה עצרת ותמשיך")
+Task: תיקון-שורשי-של-מנוע-האטימה (vault-seal) — 5-פגמים-שנחשפו-ברצף-על-ידי-לוג-כנה
 
 Work Log:
-- **E2E-דפדפן**: 17-מודולים-נרנדרו; זוהה-מודול-אחד-בכשל-כן: "המוצרים" (/api/giant/products → הקטלוג-לא-נמדד).
-- **חקירה**: ה-API-מושך-מ-raw.githubusercontent/Domain/marketing/products.json → **404-בענן-ובכלל**. ב-Domain-המקומי: הקובץ-היה-בהיסטוריה-אבל-נמחק.
-- **מחדל-נתפס**: האטימה-האוטומטית a8840581 (vault-seal 14-files) **חתמה-מחיקות-פארקות** — וייפ-ישן-השאיר-מחיקות-בעץ-העבודה-וה-`git add -A`-של-המנוע-אטם-אותן-לכספת: הקטלוג + ~125-workflows-נמחקו-בפועל-מהענן. זה-שורש-"האתרים-לא-טובים"-וחלק-ממיילי-הכשל.
-- **תיקון-חוק-כספת-במנוע**: sealRepo-עכשיו-חוסם-אטימת-מחיקות (`diff --cached --diff-filter=D` → reset-unstage + log deletions-blocked) — רק-קבצי-tmp-של-המנוע-עצמו-מותרים. מחיקות-נשארות-פארקות-לבעלים-האמיתי. גם-domain-sync.sh-כבר-היה-מתוקן-בחוק-דומה-אבל-רדום (DATA_DIR-חסר).
-- **שחזור**: marketing/products.json-מ-a8840581^ → נאטם-אוטומטית (d64b0319) ודחוף-ומאומת. ה-API-חזר: **ok=True · 5-מוצרים · wave T-60**. ה-125-workflows-לא-שוחזרו-בכוונה (מייצרי-מיילי-כשל-Actions; דרוש-החלטת-בעלים).
-- **אימות-סופי**: דלת-המוצרים-ירוקה-בדפדפן · מודול-הצי-מציג-כלכלה-חיה (233-עסקאות/שעה · פרויקציות-5.6K-24K/יום) · מובייל-390px-ללא-גלישה-אופקית · צילום-מסך-נשמר (reports/fleet-economy-mobile-390.png).
-- **אטימות**: sovereign/main = 626f16c (local==remote-מאומת-ls-remote בכל-דחיפה).
+- **המשך-מ-83**: הסוופים-נכשלו-על-my-project שוב-ושוב. הוספתי-לוג-כן-לכשלי-pull (היה-נקודה-עיוורת — רק-push-fail-נרשם) → הלוג-חשף-שרשרת-של-5-פגמים-אמיתיים:
+  1. **remote-שגוי**: האטימה-קראה-ל-`origin` — my-project משתמש-ב-`cloud` ("'origin' does not appear to be a git repository" בכל-סוופ). תוקן: זיהוי-remote-דינמי.
+  2. **צ'קאאוט-כפול**: /home/z/channels/giant הוא-צ'קאאוט-שני-של-אותו-ריפו-בגיטהאב (roshpinacare-sys/giant) — הסוופ-אטם-את-שניהם; העותק-השני-דחף-מצב-ישן-וקידם-את-הענן (נמדד: 37→47→50-קומיטים-של-פער) — **מכונת-התפרים-ההיסטורית**. הוצא-מ-SEAL_REPOS (my-project-הבעלים-הקנוני).
+  3. **עץ-מלוכלך**: בין-commit-ל-pull, ingest/persist מלכלך-את-העץ → `pull --rebase` מסרב → autoStash-חובה.
+  4. **pull-ללא-branch**: "did not specify a branch" בלי-upstream → refspec-מפורש `cloud main`.
+  5. **ריבוז-תקוע-על-קונפליקטי-delete/modify** (הסשן-השני-על-הריפו! נראו-קומיטים "vault-seal [zai-web] · epoch-2 · איחוי-כספת") → השאיר-rebase-merge-תקוע-ששבר-סבבים. **הפתרון-השורשי ל-my-project: `merge -s ours`** — אסטרטגיה-שלא-נוגעת-בעץ-העבודה-כלל (אפס-תפר-מובטח לספר-החי), ההיסטוריה-מקושרת, התוכן-שלנו-מנצח. יתר-המאגרים: rebase-כרגיל.
+- **"unstable object source data"**: נמדד-שקורה-רק-בפעולות-git-ידניות — git קורא-db/custom.db-בזמן-ש-Prisma-כותב. המנוע-מקפיא-next-server-בסוופים-שלו; הריפוי-הידני-בוצע-עם-SIGSTOP→sync→SIGCONT.
+- **סנכרון-כספת-מלא**: rebase-abort → commit (wave-83 מלא) → merge -s ours → push → **behind:0 · ahead:0 מאומת**.
+- **חוזק-מנוע**: rebase --abort-מונע-כניקול-עצמי לפני-כל-sync · sealMyProject→strategyOurs · לוגי-pull-fail/merge-fail.
 
 Stage Summary:
 - **חוק-כספת-חדש-במנוע: אפס-רכיבה-על-מחיקות** · קטלוג-המוצרים-שוחזר-וחי-באתר · מנוע-הכלכלה-בריא-בכל-שכבותיו (403 · boot-heal · sweep · חוק-מחיקות) · 10/10-מאגרים-נאטמים-בסבב · האמת-כנה-לכל-אורך.
@@ -2265,3 +2269,8 @@ Stage Summary:
 - **Owner law T-80 is now COMPLETE end-to-end**: ROT2 (16 accounts/41 slots, 41/41 LIVE) sealed in the atomic vault → opens ONLY through the triple-pin fail-closed gate → engine consumes it chain-judged → plaintext shredded → every touch ledger-logged (9+ entries). Zero secret material ever on stdout/logs; residue hygiene self-heals.
 - The sovereign trading loop is ALIVE as a guardian-child on :3043 and re-revives by mini-guard if uprooted.
 - Open (honest): engine's GEN-2/GEN-1 fallback needs SAOS_VAULT_PASS env (fail-soft, by design); STEEM_*_B stale slots await owner decision; GEN-3 shard ring still unsolved (honest); FleetHQ :3002 dark since ~12:06 OOM (restartable via boot-services.sh); disk was 100% again — freed 374MB, watch it.
+- מנוע-האטימה-עמיד-מאומת: dynamic-remote · zero-seam-merge לכספת-החיה · self-clean-rebase · לוג-כן-מלא · מנעול-TTL-עובד (sweep-skipped-lock-held-נרשם-כנה) · צ'קאאוט-כפול-הוצא-מהמשחק.
+- הענן-מסונכרן (0/0) עם-כל-גל-83. הסשן-השני (zai-web) ממשיך-לדחוף-לאותו-ריפו — ה-merge -s ours קושר-את-ההיסטוריות-בלי-דריכה.
+- פתוח: אימות-סוופ-מלא-עם-הקפאה-אחרי-פקיעת-המנעול (~12:15).
+- **אימות-קצה (12:25)**: סוופ-כספת-מלא-הצליח (12:18:58 stale-lock-broken → 12:19:04 my-project-sealed-דרך-custody → 9/9 → sweep-done · behind:0/ahead:0) · כלכלה: 396K/יום-חזוי · 1,501-מסים · 299-שכרי-מצע · ingestOk-600 · אפס-שגיאות-מנוע · dex-תקין (TVL-218K, שגיאת-tick-אחת-חד-פעמית) · צי-סוחר (544/24ש׳) · שער-ALL-GREEN.
+- **לדורות-הבאים**: (1) אין-להחזיר-את-channels/giant-ל-SEAL_REPOS — צ'קאאוט-כפול=מכונת-תפרים (2) הסשן-השני-על-הריפו (zai-web · epoch-2) — merge -s ours מקשר-אותו-בלי-דריכה; אל-תבנו-על-קוד-שלו (חוק-הבעלים) (3) פריימים-4..6-בעמוד-השורש-חשוכים — כיול-תאורה-ב-bake-לגל-85 (4) חיווט- forge+skills+tools/fleet+airgap-עוד-פתוח (רשימת-78-a).

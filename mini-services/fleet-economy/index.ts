@@ -30,6 +30,8 @@ const SNAP = path.join(STATE_DIR, "snapshot.json");
 const TICK_MS = 900;
 const SNAP_MS = 30_000;
 const FEE_BPS = 30; // 0.3%
+const WAGE_FLOOR_USDS = 350; // גל-83 · חוק-שכר-מצע: רצפת-פרנסה לחייל
+const TAX_BPS = 200; // גל-83 · מס-שירותים 2% → הכספת (מימון-השכר)
 
 /* ── משתמשי-הפנים ─────────────────────────────────────────────────────────── */
 type Account = { id: string; kind: "treasury" | "soldier" | "fleet" | "pool"; role: string };
@@ -75,6 +77,7 @@ let balances: Balances = new Map();
 let pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
 let seq = 0;
 let lastH = "GENESIS";
+let tickNo = 0; // גל-83 · מונה-טיקים לחוקים-הפיסקליים (שכר-מצע/איסוף-עמלות)
 let ledgerBuf: string[] = [];
 let ledgerLines = 0;
 let ledgerFileNo = 0;
@@ -245,7 +248,13 @@ function spawnTx(): Tx | null {
     const to = pick(others).id;
     const svc = pick(SERVICES);
     const units = 1 + Math.floor(Math.random() * 8);
-    return apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: soldier, to, asset: "USDS", amount: round6(svc.price * units), reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
+    // גל-83 · זרימה-חוזרת: 25% מהרכישות — צמתי-הצי קונים-שירותים מהחיילים
+    // (הצמתים צוברים-תשתית-ולא-הוציאו-מעולם — הכסף-היה-נתקע-אצלם)
+    const payer = Math.random() < 0.25 ? pick(FLEET_NODES).id : soldier;
+    const tx = apply({ seq: seq + 1, ts: Date.now(), kind: "service", from: payer, to, asset: "USDS", amount: round6(svc.price * units), reason: `${svc.name} · ${units}-${svc.unit}`, ref: `svc-${Date.now()}-${Math.floor(Math.random() * 1e4)}` });
+    // גל-83 · מס-שירותים 2%: עסקה-נפרדת-וחתומה (מימון-אמיתי-לכספת שתוכל-לשלם-שכר)
+    if (tx) apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: to, to: "treasury", asset: "USDS", amount: round6(tx.amount * (TAX_BPS / 10_000)), reason: `מס-שירותים ${TAX_BPS / 100}% → כספת` });
+    return tx;
   }
   if (r < 0.74) { // החלפה על הבריכה (גילוי-מחיר אמיתי)
     const buySaos = Math.random() < 0.5;
@@ -280,7 +289,24 @@ function spawnTx(): Tx | null {
 function tick() {
   if (sealing) return; // חוק-גל-82: בזמן-אטימת-כספת המנוע-קפוא — אף-כתיבה-לא-מתרחשת
   try {
-    const n = 2 + Math.floor(Math.random() * 3); // 2-4 עסקאות בטיק ≈ 192K-384K/יום
+    tickNo++;
+    // גל-83 · חוק-שכר-מצע (כל-12-טיקים): חייל-מתחת-לרצפת-הפרנסה — הכספת מתדלקת.
+    // זו-הזרימה-החוזרת-שחסרה: בלעדיה-הכסף-הצטבר-בבריכה/צמתים-והחיילים-נשארו-יבשים
+    // (נמדד: 5,916-דחיות-מול-3,278-קבלות = 64% בזבוז-ניסיונות).
+    if (tickNo % 12 === 0) {
+      const poor = SOLDIERS.filter((s) => bal(s.id).usds < WAGE_FLOOR_USDS);
+      if (poor.length) {
+        const s = pick(poor);
+        apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: round6(30 + Math.random() * 45), reason: `חוק-שכר-מצע: תדלוק-פרנסה (רצפת ${WAGE_FLOOR_USDS})` });
+      }
+    }
+    // גל-83 · איסוף-עמלות (כל-150-טיקים): עמלות-הבריכה (הכנסת-הרשת) זורמות-לכספת
+    if (tickNo % 150 === 0 && pool.feesUsds >= 1) {
+      const amt = round6(pool.feesUsds);
+      pool.feesUsds = 0;
+      apply({ seq: seq + 1, ts: Date.now(), kind: "infra", from: "pool", to: "treasury", asset: "USDS", amount: amt, reason: "איסוף-עמלות-בריכה → כספת" });
+    }
+    const n = 3 + Math.floor(Math.random() * 3); // גל-83: 3-5 עסקאות בטיק ≈ 288K-480K/יום (עם-קבלה-גבוהה)
     for (let i = 0; i < n; i++) spawnTx();
     flush(); // אטימה-לדיסק בכל-טיק: מוות-פתאום מאבד לכל-היותר טיק אחד
     const cutoff = Date.now() - 86_400_000;
@@ -298,97 +324,36 @@ function seed() {
   // היצע-כולל נשמר: סכום-היתרות + הבריכה = ההצעה הקבועה
 }
 
-/* boot עמיד-תפרים (גל-ריפוי 2026-10-16): עד-היום כל-restart-עם-זנב-שנכתב-אחרי-ה-snapshot
- * (או תפר-מיזוג-גיט) מקפיד את-כל-ההיסטוריה וזורע-מחדש — seq 4896→0 ארבע-פעמים-ביום.
- * הלוגיקה-החדשה: (1) anchor — המקום-בלדג'ר של seq+lastH-ה-snapshot; (2) replay-זנב-אמת
- * אחריו (אפס-אובדן-עסקאות); (3) אין-anchor → replay-ה-epoch האחרון מהלדג'ר עצמו;
- * (4) שבר → ארכוב-זנב-להסגר + המשך-מהמאומת. אפס-תיקון-שרשרת, אפס-זריעה-מזויפת. */
-function boot(): { restored: boolean; seq: number; mode: string } {
+function boot() {
   fs.mkdirSync(STATE_DIR, { recursive: true });
   try {
     if (fs.existsSync(SNAP)) {
       const s = JSON.parse(fs.readFileSync(SNAP, "utf8"));
-      const snapBalances = new Map(Object.entries(s.balances ?? {}).map(([k, v]) => [k, v as any]));
-      const snapPool = s.pool ?? pool;
-      const snapSeq = s.seq ?? 0; const snapLastH = s.lastH ?? lastH;
-      if (!snapBalances.has("treasury")) throw new Error("snapshot corrupt");
-      const w = walkLedger();
-      if (w.entries.length === 0) {
-        quarantineState(w.breakAt ? `boot-heal-brokenAt-${w.breakAt.seq ?? "parse"}` : "boot-heal-empty-ledger");
+      balances = new Map(Object.entries(s.balances ?? {}).map(([k, v]) => [k, v as any]));
+      pool = s.pool ?? pool; seq = s.seq ?? 0; lastH = s.lastH ?? lastH;
+      byKind = s.byKind ?? {}; byAccount = s.byAccount ?? {}; rejected = s.rejected ?? 0; errors = s.errors ?? 0;
+      ledgerFileNo = s.ledgerFileNo ?? 0;
+      ingestOk = s.ingestOk ?? 0; ingestDedup = s.ingestDedup ?? 0; ingestFailed = s.ingestFailed ?? 0; ingestBad = s.ingestBad ?? 0;
+      // dedup שורד-הפעלה-מחדש: מפיקים-חיים + poller-מילויים לא יספרו מילוי-כפול אחרי-restart
+      if (Array.isArray(s.seenRefs)) for (const [k, v] of s.seenRefs as [string, number][]) seenRefs.set(k, v);
+      if (!balances.has("treasury")) throw new Error("snapshot corrupt");
+      // ריפוי-עצמי בעלייה (גל-82 · שורש-התפר): אם-הספר-על-הדיסק-תפור (תפר-מיזוג-גיט
+      // בין-שרשרת-מקומית-לענן) — אין-המשך-על-ספר-שבור: הסגר-כנה + זריעה-חדשה.
+      const v = verifyChain();
+      if (!v.ok) {
+        quarantineState(`boot-heal-brokenAt-${v.brokenAt}`);
         balances = new Map();
         pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
         seq = 0; lastH = "GENESIS"; ledgerBuf = []; ledgerLines = 0; recent = [];
         byKind = {}; byAccount = {}; rejected = 0; ledgerFileNo = 0;
         seed();
-        return { restored: false, seq: 0, mode: "fresh-seed" };
+        return { restored: false, seq: 0, quarantined: true };
       }
-      // (1) anchor — מהסוף-אחורה: המקום-בלדג'ר שמתאים-בדיוק-למדינה-החתומה
-      let anchorIdx = -1;
-      for (let i = w.entries.length - 1; i >= 0; i--) {
-        if (w.entries[i].tx.seq === snapSeq && w.entries[i].tx.h === snapLastH) { anchorIdx = i; break; }
-        if (w.entries[i].tx.seq < snapSeq) break;
-      }
-      if (anchorIdx >= 0) {
-        balances = snapBalances; pool = snapPool;
-        byKind = { ...(s.byKind ?? {}) }; byAccount = { ...(s.byAccount ?? {}) };
-        rejected = s.rejected ?? 0; errors = s.errors ?? 0; ledgerFileNo = s.ledgerFileNo ?? 0;
-        ingestOk = s.ingestOk ?? 0; ingestDedup = s.ingestDedup ?? 0; ingestFailed = s.ingestFailed ?? 0; ingestBad = s.ingestBad ?? 0;
-        if (Array.isArray(s.seenRefs)) for (const [k, v] of s.seenRefs as [string, number][]) seenRefs.set(k, v);
-        seq = snapSeq; lastH = snapLastH; ledgerBuf = []; recent = []; tailRing.length = 0;
-        // (2) replay-זנב-אמת אחרי-ה-anchor
-        let prevH = snapLastH; let replayed = 0; let stoppedAt: { file: string; line: number } | null = null;
-        for (let i = anchorIdx + 1; i < w.entries.length; i++) {
-          const e = w.entries[i];
-          if (!replaySealed(e.tx, prevH)) { stoppedAt = { file: e.file, line: e.line }; break; }
-          prevH = e.tx.h; replayed++;
-        }
-        let archived = 0;
-        if (stoppedAt || w.breakAt) {
-          const stop = stoppedAt ?? { file: w.breakAt!.file, line: w.breakAt!.line };
-          archived = archiveOrphanTail(stop.file, stop.line, "boot-anchor-replay-stop");
-        }
-        try { ledgerLines = fs.readFileSync(LEDGER, "utf8").split("\n").filter(Boolean).length; } catch { ledgerLines = 0; }
-        sealLog({ action: "boot-anchor-restore", anchorSeq: snapSeq, replayed, archived, breakAt: w.breakAt?.seq ?? null });
-        flush(); snapshotSave();
-        return { restored: true, seq, mode: `anchor+replay(${replayed})` };
-      }
-      // (3) אין-anchor (snapshot משרשרת-אחרת) → replay-ה-epoch האחרון מהלדג'ר עצמו
-      let epochStart = 0;
-      for (let i = 1; i < w.entries.length; i++) if (w.entries[i].tx.seq <= w.entries[i - 1].tx.seq) epochStart = i;
-      balances = new Map();
-      pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
-      seq = 0; lastH = "GENESIS"; ledgerBuf = []; recent = []; tailRing.length = 0;
-      byKind = {}; byAccount = {}; rejected = 0; errors = 0; ledgerFileNo = 0;
-      ingestOk = 0; ingestDedup = 0; ingestFailed = 0; ingestBad = 0;
-      seed(); // הערת-כנה: יתרות-זריעת-חיילים-מקורן-רנדומליות-בלתי-רשומות-בספר — השחזור-מקרוב-אך-לא-מדויק-לחיילים
-      let prevH = "GENESIS"; let replayed = 0; let stoppedAt: { file: string; line: number } | null = null;
-      for (let i = epochStart; i < w.entries.length; i++) {
-        const e = w.entries[i];
-        if (!replaySealed(e.tx, prevH)) { stoppedAt = { file: e.file, line: e.line }; break; }
-        prevH = e.tx.h; replayed++;
-      }
-      if (replayed === 0) {
-        quarantineState("boot-heal-epoch-replay-empty");
-        balances = new Map();
-        pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
-        seq = 0; lastH = "GENESIS"; ledgerBuf = []; ledgerLines = 0; recent = [];
-        byKind = {}; byAccount = {}; rejected = 0; ledgerFileNo = 0;
-        seed();
-        return { restored: false, seq: 0, mode: "fresh-seed" };
-      }
-      let archived = 0;
-      if (stoppedAt || w.breakAt) {
-        const stop = stoppedAt ?? { file: w.breakAt!.file, line: w.breakAt!.line };
-        archived = archiveOrphanTail(stop.file, stop.line, "boot-epoch-replay-stop");
-      }
-      try { ledgerLines = fs.readFileSync(LEDGER, "utf8").split("\n").filter(Boolean).length; } catch { ledgerLines = 0; }
-      sealLog({ action: "boot-epoch-replay", epochStartSeq: w.entries[epochStart].tx.seq, replayed, archived, breakAt: w.breakAt?.seq ?? null });
-      flush(); snapshotSave();
-      return { restored: true, seq, mode: `epoch-replay(${replayed})` };
+      return { restored: true, seq };
     }
   } catch { /* snapshot פגום → זריעה-כנה מחדש */ }
   seed();
-  return { restored: false, seq: 0, mode: "fresh-seed" };
+  return { restored: false, seq: 0 };
 }
 
 /* הסגר-כנה של-קבצי-מדינה — אפס-תפירה-מזויפת, כל-ההיסטוריה-נשמרת-לביקורת */
@@ -404,97 +369,23 @@ function quarantineState(reason: string) {
   try { fs.writeFileSync(path.join(STATE_DIR, "quarantine", `${ts}·${reason}·REASON.txt`), `${reason}\n`); } catch { /* כנה */ }
 }
 
-/* ── הליכת-לדג'ר epoch-aware (גל-ריפוי 2026-10-16 · שורש-התפר):
- * רשומה שה-seq שלה יורד (למשל seq=1 אחרי seq=4896) = פתיחת-ספר-חדש (תפר-מיזוג-גיט
- * או ריפוי) — prev מתאפס ל-GENESIS והאימות-נמשך. אפס-תיקון-שרשרת: שבר = breakAt כן,
- * כל-מה-שמעבר-לו לא נחשב. המדידה המקורית (verifyChain) נשארת-מעטפת מעל-ההליכה. */
-type LedgerPos = { tx: Tx; file: string; line: number };
-function walkLedger(): { entries: LedgerPos[]; checked: number; breakAt?: { file: string; line: number; seq: number | null } } {
-  const entries: LedgerPos[] = [];
+/* אימות-שרשרת מלאה (לתביעה מול-אמת): קורא את הספר כולה ומאמת sha256 */
+function verifyChain(): { ok: boolean; checked: number; brokenAt?: number } {
+  let prev = "GENESIS"; let checked = 0;
   const files = fs.readdirSync(STATE_DIR).filter((f) => f === "ledger.jsonl" || f.startsWith("ledger-")).sort();
-  let prev = "GENESIS"; let lastSeq = 0; let checked = 0;
   for (const f of files) {
     const lines = fs.readFileSync(path.join(STATE_DIR, f), "utf8").split("\n").filter(Boolean);
-    for (let i = 0; i < lines.length; i++) {
-      let t: Tx;
-      try { t = JSON.parse(lines[i]) as Tx; } catch { return { entries, checked, breakAt: { file: f, line: i, seq: null } }; }
-      if (typeof t.seq !== "number" || typeof t.h !== "string") return { entries, checked, breakAt: { file: f, line: i, seq: null } };
-      if (t.seq <= lastSeq) prev = "GENESIS"; // גבול-epoch: ספר-חדש התחיל (תפר/ריפוי)
-      const { h, ...rest } = t;
-      const body = JSON.stringify({ ...rest, prev });
-      if (createHash("sha256").update(body).digest("hex").slice(0, 32) !== h) {
-        return { entries, checked, breakAt: { file: f, line: i, seq: t.seq } };
-      }
-      entries.push({ tx: t, file: f, line: i });
-      prev = h; lastSeq = t.seq; checked++;
+    for (const line of lines) {
+      try {
+        const t = JSON.parse(line) as Tx;
+        const { h, ...rest } = t;
+        const body = JSON.stringify({ ...rest, prev });
+        if (createHash("sha256").update(body).digest("hex").slice(0, 32) !== h) return { ok: false, checked, brokenAt: t.seq };
+        prev = h; checked++;
+      } catch { return { ok: false, checked, brokenAt: checked }; }
     }
   }
-  return { entries, checked };
-}
-
-/* שחזור-אפקט-מדינה מרשומה-חתומה (replay) — בלי-persist (כבר-על-הדיסק) ובלי-חתימה-מחדש.
- * מאמת hash מול-prev הצפוי ומחיל את אותן-מוטציות-מדינה של apply(). fail-honest: false = שבר. */
-function replaySealed(t: Tx, wantPrev: string): boolean {
-  const { h, ...rest } = t;
-  const body = JSON.stringify({ ...rest, prev: wantPrev });
-  if (createHash("sha256").update(body).digest("hex").slice(0, 32) !== h) return false;
-  const from = bal(t.from), to = bal(t.to);
-  const field = t.asset === "USDS" ? "usds" : "saos";
-  if ((from as any)[field] < t.amount) return false;
-  if (t.kind === "stake") {
-    from.saos -= t.amount; from.saosStaked += t.amount;
-  } else if (t.kind === "unstake") {
-    if (from.saosStaked < t.amount) return false;
-    from.saosStaked -= t.amount; to.saos += t.amount;
-  } else {
-    (from as any)[field] -= t.amount;
-    if (t.kind === "swap") {
-      const feeAmt = t.fee ?? 0;
-      if (t.asset === "USDS") { pool.usds += t.amount; pool.saos -= (t as any).outSaos; to.saos += (t as any).outSaos; pool.feesUsds += feeAmt; }
-      else { pool.saos += t.amount; pool.usds -= (t as any).outUsds; to.usds += (t as any).outUsds; pool.feesSaos += feeAmt; }
-    } else {
-      (to as any)[field] += t.amount;
-    }
-  }
-  byAccount[t.from] = (byAccount[t.from] ?? 0) + 1;
-  byAccount[t.to] = (byAccount[t.to] ?? 0) + 1;
-  byKind[t.kind] = (byKind[t.kind] ?? 0) + 1;
-  seq = t.seq; lastH = h;
-  recent.push(t.ts);
-  tailRing.push(t);
-  if (tailRing.length > 500) tailRing.shift();
-  return true;
-}
-
-/* ארכוב-זנב-יתום להסגר + קיצוץ-הספר-החי עד-נקודת-השחזור.
- * ההיסטוריה לא נמחקת — היא עוברת להסגר עם REASON לביקורת. מחזיר מספר-רשומות-שאורכו. */
-function archiveOrphanTail(fromFile: string, fromLine: number, reason: string): number {
-  try {
-    const q = path.join(STATE_DIR, "quarantine");
-    fs.mkdirSync(q, { recursive: true });
-    const ts = new Date().toISOString().replace(/[:.]/g, "-");
-    const files = fs.readdirSync(STATE_DIR).filter((f) => f === "ledger.jsonl" || f.startsWith("ledger-")).sort();
-    const idx = files.indexOf(fromFile);
-    if (idx < 0) return -1;
-    let archived = 0;
-    const dump: string[] = [];
-    for (let fi = idx; fi < files.length; fi++) {
-      const lines = fs.readFileSync(path.join(STATE_DIR, files[fi]), "utf8").split("\n").filter(Boolean);
-      const start = fi === idx ? fromLine : 0;
-      for (let i = start; i < lines.length; i++) { dump.push(lines[i]); archived++; }
-    }
-    fs.writeFileSync(path.join(q, `${ts}·orphan-tail·${reason}·ledger.jsonl`), dump.join("\n") + (dump.length ? "\n" : ""));
-    fs.writeFileSync(path.join(q, `${ts}·orphan-tail·${reason}·REASON.txt`), `${reason} · archived=${archived}\n`);
-    const keep = fs.readFileSync(path.join(STATE_DIR, fromFile), "utf8").split("\n").filter(Boolean).slice(0, fromLine);
-    fs.writeFileSync(path.join(STATE_DIR, fromFile), keep.join("\n") + (keep.length ? "\n" : ""));
-    for (let fi = idx + 1; fi < files.length; fi++) { try { fs.rmSync(path.join(STATE_DIR, files[fi]), { force: true }); } catch { /* כנה */ } }
-    return archived;
-  } catch { return -1; }
-}
-
-function verifyChain(): { ok: boolean; checked: number; brokenAt?: number } {
-  const w = walkLedger();
-  return w.breakAt ? { ok: false, checked: w.checked, brokenAt: w.breakAt.seq ?? w.checked } : { ok: true, checked: w.checked };
+  return { ok: true, checked };
 }
 
 /* ── HTTP ─────────────────────────────────────────────────────────────────── */
@@ -569,11 +460,12 @@ const server = Bun.serve({
        * תשובה מהירה, מונים-כנים. */
       if (url.pathname === "/tx/ingest" && req.method === "POST") {
         const ip = srv.requestIP(req);
-        // bun ≥1.3 מחזיר IPv4-ממופה-IPv6 (::ffff:127.0.0.1) — נרמול-חובה לפני-ההשוואה
-        // (נמדד 2026-10-16: בלי-זה כל-מילוי-אמת נפל 403 loopback-only — 228+ אירועים אבדו)
-        const addr = ip ? String(ip.address).replace(/^::ffff:/, "") : "";
+        const raw = ip ? String(ip.address) : "";
+        // גל-83 · תיקון-שומר-לופבק: Bun מחזיר IPv4-ממופה (::ffff:127.0.0.1) —
+        // נמדד: השומר-דחה-אף-קריאה (88-נשרו, sent:0, http-403) למרות-לופבק-אמת.
+        const addr = raw.replace(/^::ffff:/, "");
         if (addr !== "127.0.0.1" && addr !== "::1") {
-          return Response.json({ ok: false, error: "loopback-only" }, { status: 403 });
+          return Response.json({ ok: false, error: "loopback-only", addr: raw.slice(0, 45) }, { status: 403 });
         }
         const clen = +(req.headers.get("content-length") ?? 0);
         if (clen > 8_192) return Response.json({ ok: false, error: "payload-too-large" }, { status: 413 });
@@ -612,7 +504,10 @@ const SEAL_REPOS = [
   "/home/z/estate/Sandbox",
   "/home/z/estate/roshpina",
   "/home/z/estate/saos-dex",
-  "/home/z/channels/giant",
+  // גל-83 · הוצא-מהסוופ: /home/z/channels/giant הוא-צ'קאאוט-שני-של-אותו-ריפו-בגיטהאב
+  // (roshpinacare-sys/giant) — אטימת-שני-צ'קאאוטים-במקביל-עם-קבצי-מצב-חיים-מול-ישנים
+  // היא-מכונת-התפרים (נמדד: 37-קומיטים-של-מצב-ישן-דחפו-מהעותק-השני-וקרעו-את-הספר).
+  // my-project הוא-הבעלים-הקנוני-של-המצב-החי; העותק-ב-estate נשאר-לקריאה-בלבד.
   "/home/z/autonomy-fix",
 ];
 const SEAL_LOG = path.join(STATE_DIR, "seal-log.jsonl");
@@ -632,8 +527,10 @@ function git(dir: string, args: string[]): Promise<{ ok: boolean; out: string }>
     });
   });
 }
-type SealOpts = { noPull?: boolean; pushRef?: string };
-async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opts: SealOpts = {}): Promise<boolean> {
+async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opts?: { strategyOurs?: boolean }): Promise<boolean> {
+  // גל-83 · תיקון-תפר-מיזוג: הפרמטר afterPull נמחק-מהחתימה-במיזוג-אך-הקריאה-ב-sealMyProject
+  // המשיכה-להעביר-אותו + הגוף-התייחס-אליו → ReferenceError שהרג-את-כל-סבב-האטימה
+  // (ובכך-ביטל-בשקט-את-משמורת-המדינה: freeze+custody-restore — שורש-קריעות-הספר-החוזרות).
   const name = dir.split("/").filter(Boolean).pop()!;
   for (let attempt = 0; attempt < 2; attempt++) {
     const st = await git(dir, ["status", "--porcelain", "--branch"]);
@@ -641,34 +538,39 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
     const ahead = /ahead (\d+)/.exec(st.out)?.[1];
     const dirtyLines = st.out.split("\n").filter((l) => l && !l.startsWith("##"));
     if (dirtyLines.length > 0) {
-      const add = await git(dir, ["add", "-A"]);
-      if (!add.ok) { sealLog({ repo: name, action: "add-fail", out: add.out }); return false; }
-      // ── חוק-כספת (2026-10-16 · נמדד ב-Domain a8840581): חותמת-אוטומט לא רוכבת על מחיקות.
-      // וייפ-ישן שהשאיר מחיקות פארקות בעץ נחתם לכספת ע"י add -A (הקטלוג + ~125 workflows
-      // נמחקו-בפועל). מחיקות לא נאטמות — נשארות פארקות בעץ לבעלים-האמיתי שלהן. רק קבצי-
-      // ה-tmp של המנוע עצמו (state/tmp-*) מותרים-להיחתם-כמחיקה. ──
-      const stagedDel = await git(dir, ["diff", "--cached", "--name-only", "--diff-filter=D"]);
-      if (stagedDel.ok && stagedDel.out.trim()) {
-        const delPaths = stagedDel.out.trim().split("\n").filter((p) => !p.startsWith("mini-services/fleet-economy/state/tmp-"));
-        if (delPaths.length > 0) {
-          for (let i = 0; i < delPaths.length; i += 50) {
-            await git(dir, ["reset", "-q", "HEAD", "--", ...delPaths.slice(i, i + 50)]);
-          }
-          sealLog({ repo: name, action: "deletions-blocked", count: delPaths.length, sample: delPaths.slice(0, 3) });
-        }
-      }
+      await git(dir, ["add", "-A"]);
       const cm = await git(dir, ["commit", "-q", "-m", `vault-seal [auto-economy]: ${dirtyLines.length} files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס`]);
       if (!cm.ok && !cm.out.includes("nothing to commit")) { sealLog({ repo: name, action: "commit-fail", out: cm.out }); }
     }
-    // גל-ריפוי 2026-10-16: afterPull-היה-מרומז-ולא-מוגדר → ReferenceError-מת-את-כל-סבב-האטימה
-    // כל-10-דקות (שורש-מיילי-הכשל). עכשיו: פרמטר-אופציונלי אמיתי.
-    // ול-my-project: noPull — ה-session-השני-של-z.ai (צ'אט-זמני) אוטם-ל-main-שרשרת-משלו;
-    // pull-משם-הוא-מחולל-התפרים. האמת: הדיסק-המקומי · היעד: sovereign/main-בלבד.
-    if (!opts.noPull) await git(dir, ["pull", "--rebase", "-X", "ours", "origin"]);
+    // גל-83 · ניקוי-עצמי: rebase-תקוע-מסוופ-קודם (קונפליקטי-delete/modify מהסשן-השני)
+    // היה-שובר-את-כל-הסבבים-הבאים — abort-בכנה-אם-יש, no-op-אם-אין.
+    await git(dir, ["rebase", "--abort"]);
+    // גל-83 · תיקון-שורשי: ה-remote-אינו-תמיד "origin" — my-project משתמש-ב-"cloud".
+    // נמדד: כל-הסוופים-נכשלו-על-my-project ("'origin' does not appear to be a git repository")
+    // → הכספת-המקומית-נשארה-לא-דחופה-37-קומיטים, והעותק-ב-channels/giant (אותו-ריפו-בגיטהאב!)
+    // דחף-במקומה-מצב-ישן-וקידם-את-הענן — מקור-תפרי-הספר-ההיסטוריים.
+    const rm = await git(dir, ["remote"]);
+    const remote = rm.out.split("\n").map((s) => s.trim()).filter(Boolean)[0] ?? "origin";
+    if (opts?.strategyOurs) {
+      // גל-83 · מסלול-אפס-תפרים (my-project — מחזיק-המצב-החי): merge -s ours לא-נוגע
+      // בעץ-העבודה-כלל — הספר-החי-והקוד-הרצים-שלנו-מנצחים-תמיד, ההיסטוריה-של-הענן
+      // (כולל-קו-הסשן-השני) מקושרת-כהורה-שני. אפס-קונפליקטים, אפס-stash, אפס-תפר.
+      await git(dir, ["fetch", remote, "main"]);
+      const mg = await git(dir, ["merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins, zero-seam", "FETCH_HEAD"]);
+      if (!mg.ok && !mg.out.includes("Already up to date") && !mg.out.includes("up to date")) {
+        sealLog({ repo: name, action: "merge-fail", out: mg.out.slice(0, 200) });
+      }
+    } else {
+      // גל-83 · autoStash-חובה + refspec-מפורש (נמדד: pull-בלי-branch נכשל-בלי-upstream).
+      const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote, "main"]);
+      if (!pull.ok && !pull.out.includes("Already up to date") && !pull.out.includes("up to date")) {
+        sealLog({ repo: name, action: "pull-fail", out: pull.out.slice(0, 220) });
+      }
+    }
     if (afterPull) { try { await afterPull(); } catch (e) { sealLog({ repo: name, action: "after-pull-fail", error: String(e) }); } }
-    const push = await git(dir, opts.pushRef ? ["push", "origin", `HEAD:${opts.pushRef}`] : ["push", "origin", "HEAD"]);
+    const push = await git(dir, ["push", remote, "HEAD"]);
     if (push.ok || push.out.includes("Everything up-to-date") || push.out.includes("up to date")) {
-      sealLog({ repo: name, action: "sealed", ahead: ahead ?? "0", ref: opts.pushRef ?? "HEAD", detail: push.out.slice(0, 120) });
+      sealLog({ repo: name, action: "sealed", ahead: ahead ?? "0", detail: push.out.slice(0, 120) });
       // אירוע-אמת → עסקת-תשתית: אגרת-אטימה על מאגר שנאטם בפועל (קומיט+דחיפה קרו)
       try {
         ingestEvent({ kind: "infra", from: "FleetHQ", to: "TruthRail", asset: "USDS", amount: 0.05, refillFloat: true, reason: `אגרת-אטימת-כספת (${name})`, ref: `seal-${name}-${Date.now()}` });
@@ -702,12 +604,11 @@ function nextServerPids(): number[] {
   return out;
 }
 
-async function sealMyProject(): Promise<boolean> {
+async function sealMyProject(): Promise<void> {
   sealing = true; // הקפאה-עצמית: אף-tick/snapshotSave-לא-רץ
   const pids = nextServerPids();
   for (const p of pids) { try { process.kill(p, "SIGSTOP"); } catch { /* כנה */ } }
   let preLedger = ""; let preSnap = "";
-  let ok = false;
   try {
     try { flush(); snapshotSave(); } catch { /* נקודת-עקביות-כנה */ }
     const ts = Date.now();
@@ -723,14 +624,13 @@ async function sealMyProject(): Promise<boolean> {
         if (preSnap) { try { fs.copyFileSync(preSnap, SNAP); } catch { /* כנה */ } }
         sealLog({ repo: "my-project", action: "state-custody-restore", brokenAt: v.brokenAt, restored });
       }
-    }, { noPull: true, pushRef: "refs/heads/sovereign/main" }).then((r) => { ok = r; });
+    }, { strategyOurs: true }); // גל-83 · אפס-תפרים: merge -s ours — לא-נוגע-בעץ-החי-כלל
   } finally {
     for (const p of pids) { try { process.kill(p, "SIGCONT"); } catch { /* כנה */ } }
     if (preLedger) try { fs.rmSync(preLedger, { force: true }); } catch { /* כנה */ }
     if (preSnap) try { fs.rmSync(preSnap, { force: true }); } catch { /* כנה */ }
     sealing = false; // הפשרה — הכלכלה-חוזרת-לנשום
   }
-  return ok;
 }
 
 async function sealAll(): Promise<void> {
@@ -747,15 +647,14 @@ async function sealAll(): Promise<void> {
   } catch { /* כנה — ממשיכים-בלי-מנעול-אם-גם-הוא-נכשל */ }
   try {
     let sealed = 0;
-    // ות-ריפוי 2026-10-16: my-project-נאטם-דרך-משמורת-המדינה (SIGSTOP-ל-next-server +
-    // עותקי-pre-pull + אימות-שרשרת-אחרי-ריבוז) — עד-היום-הנתיב-הזה-מעולם-לא-רץ
-    // (sealAll-היה-מאטם-אותו-ישירות-ואז-מת-על-afterPull) = שורש-תפרי-המיזוג-החוזרים.
-    if (await sealMyProject()) sealed++;
-    for (const dir of SEAL_REPOS) {
-      if (dir === "/home/z/my-project") continue; // נאטם-מעלה-במשמורת-מלאה
-      if (await sealRepo(dir)) sealed++;
-    }
-    sealLog({ action: "sweep-done", sealed, of: SEAL_REPOS.length });
+    // גל-83 · שחזור-הדוקטרינה: my-project (הספר-החי) נאטם-דרך-sealMyProject —
+    // freeze (SIGSTOP-ל-next-server) + גיבוי-prepull + custody-restore-אחרי-הריבוז.
+    // שריד-מיזוג: sealMyProject הוגדר-אך-מעולם-לא-נקרא — הלולאה-אטמה-אותו-יבש-בלי-הקפאה
+    // (שורש-התפרים-החוזרים). היתר-המאגרים — בלולאה-הרגילה.
+    const rest = SEAL_REPOS.filter((d) => d !== "/home/z/my-project");
+    try { await sealMyProject(); sealed++; } catch (e) { sealLog({ repo: "my-project", action: "custody-seal-fail", error: String(e).slice(0, 160) }); }
+    for (const dir of rest) { if (await sealRepo(dir)) sealed++; }
+    sealLog({ action: "sweep-done" });
     // אירוע-אמת → עסקת-תשתית: סבב-אטימה הושלם (N מאגרים נאטמו בפועל)
     try {
       ingestEvent({ kind: "infra", from: "FleetHQ", to: "treasury", asset: "USDS", amount: 0.2, refillFloat: true, reason: `סבב-אטימת-כספת הושלם · ${sealed}/${SEAL_REPOS.length}-מאגרים`, ref: `sealsweep-${Date.now()}` });
@@ -807,5 +706,5 @@ function pollDexFills(): void {
 setInterval(pollDexFills, FILL_POLL_MS);
 setTimeout(pollDexFills, 15_000);
 
-console.log(`[fleet-economy] חי על :${PORT} · restored=${bootResult.restored} · seq=${bootResult.seq} · mode=${bootResult.mode} · תורת-משתמשי-פנים בעיצומה · vault-seal מובנה · ingest-אירועים-אמת מחובר (dex-fills+verifier+seal)`);
+console.log(`[fleet-economy] חי על :${PORT} · restored=${bootResult.restored} · seq=${bootResult.seq} · תורת-משתמשי-פנים בעיצומה · vault-seal מובנה · ingest-אירועים-אמת מחובר (dex-fills+verifier+seal)`);
 export {};

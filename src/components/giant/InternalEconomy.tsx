@@ -32,6 +32,7 @@ const f2 = (x: number | undefined, digits = 2) => (typeof x === "number" && isFi
 const KIND_HE: Record<string, string> = {
   salary: "משכורות", service: "שירותים-הדדיים", swap: "החלפות-AMM",
   stake: "סטייק", unstake: "ביטול-סטייק", infra: "תשתית", tip: "טיפים",
+  tax: "מס-שירותים 2%", recovery: "ריפוי-ספר", "dex-fee": "עמלות-דקס",
 };
 
 export function InternalEconomy() {
