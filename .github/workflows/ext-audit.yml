@@ -1,0 +1,36 @@
+# ext-audit — סורק-אבטחה-חוץ-רציף (גל-76)
+# ═════════════════════════════════════════════════════════════════════
+# למה: מטריצת-הפער (data/giants-gap.json) דורשת "ביקורות-אבטחה-עצמאיות".
+# סורק-חוץ-אוטומטי (bun audit) אינו ביקורת-פירם — אבל הוא עדות-חיה-רציפה
+# שהתלויות-נסרקות-על-ידי-עיניים-חוץ-והתוצאה-מפורסמת-בעץ (כנות > קישוט).
+# חוקי-כנות: הדוח-מועלה-כמו-שהוא; אדום-לא-מוסתר; המטריצה-נשארת partial
+# עד-משרד-ביקורת-חוץ-אמיתי.
+name: ext-audit
+
+on:
+  schedule:
+    - cron: "23 5 * * 1" # שבועי · שני 05:23 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - name: run external scanner
+        run: bash scripts/ext-audit.sh
+      - name: publish measured report into the tree
+        run: |
+          git config user.name "ext-audit"
+          git config user.email "ext-audit@users.noreply.github.com"
+          git add reports/ext-audit-latest.json reports/ext-audit-latest.md || true
+          if git diff --cached --quiet; then
+            echo "no changes — scanner produced identical report"
+          else
+            git commit -m "ext-audit: external scanner report $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push
+          fi

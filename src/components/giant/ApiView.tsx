@@ -440,9 +440,15 @@ export function ApiView() {
             </div>
           </>
         ) : (
-          <p className="text-sm text-zinc-500">
-            ההנפקה-והביטול-מוגנים-בשער-headcorner — היכנס-דרך-מסך-הערוץ (הדלת-הראשית) וחזור-לכאן.
-          </p>
+          <div className="space-y-2">
+            <p className="text-sm text-zinc-500">
+              ניהול-המפתחות-המלא-מוגן-בשער-headcorner — היכנס-דרך-מסך-הערוץ (הדלת-הראשית) וחזור-לכאן.
+            </p>
+            <p className="text-sm text-zinc-300">
+              משתמש-חוץ? <b>אין-צורך-בבעלים</b> — ההצטרפות-העצמית-חיה:{" "}
+              <a href="/join" className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-1.5 text-sm font-semibold text-amber-300 transition hover:bg-amber-500/20">הנפק-לעצמך-מפתח → /join</a>
+            </p>
+          </div>
         )}
       </section>
 
@@ -455,6 +461,7 @@ export function ApiView() {
           <li>· חשבון-מבודד לכל-מפתח (<code className="text-amber-300">API:&lt;prefix&gt;</code>) — אי-אפשר-לסחור-מכסף-של-אחר, בדיקה: DELETE/POST על-פקודה-זרה → 404.</li>
           <li>· מגבלת-קצב בכותרות <code className="text-amber-300">X-RateLimit-*</code>; חריגה → 429 עם-זמן-המתנה.</li>
           <li>· כל-פקודה-חוצה חתומה בלדג&apos;ר: <code className="text-amber-300">source=API</code> + שם-המפתח — ביקורת-מלאה.</li>
+          <li>· הצטרפות-עצמית (גל-76): <code className="text-amber-300">POST /api/public/v1/keys</code> ללא-אימות — חשבון-נולד-אפס · 5/שעה/IP · תקרה-400 · ביטול-עצמי-בלי-בעלים.</li>
         </ul>
       </section>
     </div>
