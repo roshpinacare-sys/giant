@@ -20,9 +20,13 @@
  * במשך-80-דקות-ובפנים אפס-טיקים (ה-`void tick()`-היה-חבור-ב-callback-של-listen,
  * ו-hot-reload/קריסה-השאירו-פורט-פתוח-בלי-עבודה). החיווט-החדש: הטיק-רץ-מיד-
  * ברמת-המודול — לא-תלוי-ב-listen; מגן-globalThis מונע-ריבוי-מאזינים-ב-hot-reload;
- * כשל-listen = יומן-כנה-ולא-מוות-שקט — העבודה-ממשיכה-גם-בלי-HTTP. */
+ * כשל-listen = יומן-כנה-ולא-מוות-שקט — העבודה-ממשיכה-גם-בלי-HTTP.
+ *
+ * גל-79a · מגן-אין-הוזזה-של-ספרייה-מגוררת: לפני-הסגר/שיבוט-טרי נבדק-אם-לתהליך-חי
+ * יש-cwd-בתוך-העוגן (readlink /proc/‹pid›/cwd). הזזה-כזאת-משאירה-שירותים-עם-inode-מת
+ * ("(deleted)" — נמדד-חי: 4-שירותים-זומבים · :3002-החזיר-500). דילוג-כנה-עד-שהדיירים-מתפנים. */
 import { createServer } from "node:http";
-import { existsSync, mkdirSync, rmSync, renameSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync, renameSync, readFileSync, readdirSync, readlinkSync } from "node:fs";
 import path from "node:path";
 
 const ORG = "roshpinacare-sys";
@@ -61,7 +65,7 @@ interface AnchorState {
   name: string;
   dir: string;
   ok: boolean | null; /* null = טרם-נמדד */
-  state: "pending" | "fresh" | "healed" | "failed";
+  state: "pending" | "fresh" | "healed" | "failed" | "skipped-lived-in";
   detail: string;
   headAgeMin: number | null;
   lastAt: string | null;
@@ -74,6 +78,7 @@ const states: AnchorState[] = ANCHORS.map((a) => ({
 let ticks = 0;
 let heals = 0;
 let fails = 0;
+let skips = 0; /* מגן-79a: דילוגי-הסגר-בגלל-דיירים-חיים */
 let lastTick: string | null = null;
 
 function log(...args: unknown[]) {
@@ -131,6 +136,20 @@ async function headAge(dir: string): Promise<number | null> {
   return Math.max(0, Math.round((Date.now() - t) / 60_000));
 }
 
+/* מגן-79a: האם-לתהליך-חי-כלשהו-יש-cwd-בתוך-הספרייה? (readlink /proc/‹pid›/cwd) */
+function livedIn(dir: string): boolean {
+  const prefix = dir.endsWith("/") ? dir : `${dir}/`;
+  let pids: string[] = [];
+  try { pids = readdirSync("/proc").filter((e) => /^\d+$/.test(e)); } catch { return false; }
+  for (const p of pids) {
+    try {
+      const cwd = readlinkSync(`/proc/${p}/cwd`);
+      if (cwd === dir || cwd.startsWith(prefix)) return true;
+    } catch { /* pid-מת-או-אין-הרשאה — דלג */ }
+  }
+  return false;
+}
+
 /* ריפוי-עצמי: הסגר-של-ספרייה-פגומה ואז-שיבוט-טרי */
 function quarantine(dir: string): string {
   const qu = `${dir}.stale-${Date.now()}`;
@@ -161,6 +180,18 @@ async function syncAnchor(a: Anchor, st: AnchorState, pat: string | null): Promi
       return;
     }
     log("pull-failed → self-heal re-clone:", a.name, r.out.trim().slice(0, 120));
+  }
+
+  /* מגן-79a — אין-הוזזה-של-ספרייה-מגוררת: אם-תהליך-חי-יושב-עם-cwd-בפנים,
+   * הסגר+שיבוט-היו-משאירים-אותו-עם-inode-מת ("(deleted)"). דילוג-כנה-המחזור-הזה;
+   * הטיק-הבא-ינסה-שוב-כשהדיירים-יתפנו. */
+  if (existsSync(a.dir) && livedIn(a.dir)) {
+    skips++;
+    st.ok = false;
+    st.state = "skipped-lived-in";
+    st.detail = `pull-failed · skip-quarantine+re-clone: process cwd lives inside anchor (guard 79-a)`;
+    log("SKIP", a.name, "lived-in — quarantine+re-clone deferred (guard 79-a)");
+    return;
   }
 
   /* חסר/פגום → הסגר-ושיבוט-טרי */
@@ -201,7 +232,7 @@ const health = createServer((req, res) => {
   res.end(JSON.stringify({
     ok: allOk,
     service: "estate-sync",
-    version: 3,
+    version: 4,
     selfHealing: true,
     tickDecoupledFromListen: true,
     pid: process.pid,
@@ -209,7 +240,7 @@ const health = createServer((req, res) => {
     uptimeSec: Math.round((Date.now() - Date.parse(BOOTED_AT)) / 1000),
     listen: listenState,
     anchors: states,
-    ticks, heals, fails,
+    ticks, heals, fails, skips,
     lastTick,
     now: new Date().toISOString(),
   }, null, 2));
@@ -228,7 +259,7 @@ function boot() {
 
   /* העבודה-קודמת-לבריאות: הטיק-רץ-מיד — לא-חבור-ב-callback-של-listen
    * (השורש-של-הזומבי-שנמדד: שרת-200 · אפס-טיקים · 80-דקות). */
-  log(`booting v3 · self-healing · ${ANCHORS.length} anchors · every ${Math.round(INTERVAL_MS / 1000)}s · health :${PORT} · pid ${process.pid}`);
+  log(`booting v4 · self-healing · lived-in-guard(79a) · ${ANCHORS.length} anchors · every ${Math.round(INTERVAL_MS / 1000)}s · health :${PORT} · pid ${process.pid}`);
   void tick();
   setInterval(() => void tick(), INTERVAL_MS);
 
