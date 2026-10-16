@@ -116,10 +116,16 @@ async function measure(): Promise<BootVerify> {
 
   const targets: Array<[string, number]> = [
     ["reception_3000", 3000],
+    ["fleethq_3002", 3002],
+    ["foreman_3010", 3010],
     ["estate_sync_3021", 3021],
     ["sovereign_gateway_3011", 3011],
+    ["selfcheck_3040", 3040],
+    ["recruit_3041", 3041],
   ];
   const extras: Array<[string, number]> = [
+    ["economy_3016", 3016],
+    ["office_live_3036", 3036],
     ["verifier_3042_self", PORT],
   ];
 
