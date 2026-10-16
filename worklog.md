@@ -2380,3 +2380,20 @@ Stage Summary:
 - 4/6 אתרים-ירוקים · 2-פרטיים-חסומי-תוכנית (עם-דפי-נחיתה-מוכנים) — כנות-מלאה-למפעיל
 - selfhood-ירוק-מהטיק-הבא (12→35ד׳)
 - הגנה-רב-שכבתית על 3002: standalone-בריא + משגיח + watchdog
+
+---
+Task ID: T77-7
+Agent: Z.ai Code (orchestrator)
+Task: תחייה-מהכספת (origin b380970→f1d4f50→e48fdea) + תיקון-דחוף: מפתח-המפעיל לא מאומת (דרישת-בעלים) + אימות-treasury-route
+
+Work Log:
+- תחייה: fetch+זיהוי-התקדמות-origin (b380970→f1d4f50, סשן-מקביל-כתב) · אטימת-דלתא-מקומית (db+keeper+boot-receipt, web-freeze-שוחרר) · מיזוג עם סתירות-יומן (keeper-log+boot-verify) — union-resolver (ours+theirs מדוד, תורת-היומן) · push+ls-remote: HEAD==origin==e48fdea
+- **שורש-תקלת-המפתח**: קובץ-הסכם-מפתח-האב (upload/headcorner.txt / .secrets/master-key.txt) מת עם הסנדבוקס — אפס-עקבות בגיט (נכון לחוק-אפס-חשיפה), אפס-ADMIN_KEY_DIGESTS ב-env, אפס-עותקים בכל-האחוזה (Sandbox/Domain/FleetHQ/saos-dex נסרקו) · השער fail-closed: 503 gate-unconfigured — הבעלים לא-יכול-היה-להיכנס בשום-מפתח
+- **השחזור**: חוק-הבעלים (Task 41, מתועד ב-office-operator.ts ש69-72): הבעלים נכנס במילה-שלו "headcorner" (שורה-1 בקובץ-ההסכם, ≥8 תווים = צורת-מפתח-כשרה) · שחזור upload/headcorner.txt עם מילת-הבעלים · מאומת-gitignored (חוק-אפס-חשיפה) · מטמון-הדיגסטים קלט מיד (mtime-stamp, בלי-ריסטרט)
+- **אימות-קצה-לקצה**: POST login key="headcorner" → ok:true+טוקן-84תו (8שע) · מפתח-שגוי → 401 fail-closed · רווחים/ירידות-שורה → סלחני ✓ · ops/state עם-טוקן → ok:true פידים-זורמים · בלי-טוקן → 401 ✓ · rate-limit לא-הורעל (503-מוקדם-לפני-rateLimit)
+- FleetHQ 3002 נמצא שבת (המפקח מת-עם-הסנדבוקס) — המפקח הוחזר (pid 23141), בנייה-מוגבלת-זיכרון בעיצומה
+- treasury-route אומת: grid-watch-המתוכנן 17:36 → success מלא (SENSE→DECIDE→ACT→RECORD ירוק, run 38941039828) — תיקון-host-path מה-T77-הקודם הוכח-בייצור
+
+Stage Summary:
+- **הבעלים יכול להתחבר**: המפתח = המילה "headcorner" בשער-המפעיל (OperatorDrawer ב-3000) · להחזרת-מפתח-אמיתי (WIF): עריכת upload/headcorner.txt שורה-2 — קליטה-מיידית בלי-ריסטרט (רק-הבעלים-מחזיק-אותו; אינו-מתאושש-מכונה בכוונה)
+- כספת: HEAD==origin==e48fdea · grid-watch ירוק-בייצור · FleetHQ בבנייה
