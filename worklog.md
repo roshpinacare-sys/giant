@@ -2472,3 +2472,21 @@ Stage Summary:
 - The owner SEES real liquidity on the DEX page now: on-chain treasury, live, keyless, honest
 - Port-law restored: my-project owns :3000, FleetHQ bound to :3002 by design
 - All work in git: my-project (chain 0e0d5ce+), steem 37147ad, Domain 44052446, FleetHQ 06a09f15
+
+---
+Task ID: 92
+Agent: Z.ai Code (wave-92 · trace 1a14689dd6cf148d)
+Task: "אוקי בבקשה תפעיל" — המפעיל העלה את ההסכם (upload/headcorner.txt: שורה-1 המילה · שורה-2 מפתח-האב) — הפעלת-היד-החותמת + הנזילות-בשוק-הפנימי
+
+Work Log:
+- **האימוץ (paste-revival · נתיב-T-16)**: POST :3044/adopt-credential עם תוכן-הקובץ (הסוד זרם מהדיסק ישירות ל-JSON, מעולם-לא-בשורת-פקודה) → ok:true · VERIFIED · fingerprint c056922c · הסוד נשמר 0600 ב-.secrets/headcorner.key, לא-נרשם, לא-הודפס
+- **אימות-שרשרת מלא**: כל-4-התפקידים נמדדו תואמים-חי (owner STM5aUKy… · active STM5HhJD… · posting STM8m3rB… · memo STM7mBK9…) — foreignCredential:false · credentialAccount==doctrineAccount==headcorner
+- **הצי חי על מייננט אמת (txids מדודים)**: dexflow-trip 70a7f043 (limit_order_create ×2) · hyper-grid e419be19 (cancel ×2 — הניסיון-הראשון 21:09:57 נפל "unknown key" על-טשטוש-מטמון-זהויות-מיד-אחרי-האימוץ, החלמה-עצמית-מדודה ב-21:10:01) · curate 6d73774d/1f98a9ec/fdf196b8 (vote ×3) · cycle-execute 8054e249 (claim_reward_balance, ADAPT-VERIFIED) — מחזור מלא 68ש׳ · health:ok · 21-שלבים ירוקים
+- **הנזילות בפנים**: 26→25→31 פקודות-פתוחות-חיות על שוק-הפנימי (סולם-grid: bids ~0.104 SBD/STEEM · SBD-asks ~9.8 STEEM/SBD · מדוד get_open_orders) · מילויים-אמת ב-hist (bids 6.672 STEEM @ 0.683 SBD) · האוצר-הנזיל נע 17.1→12.9 STEEM / 43.5→17.0 SBD — הפלואט עובד בספר, לא-יושב-מוזנח
+- **באג-כנות-נתפס-ותוקן (route.ts 3406a86)**: get_accounts אינו-מחזיר open_orders → הספירה-הייתה-תמיד-0-שקרית; תוקן ל-get_open_orders לכל-חשבון-ברוסטר (Promise.all-מקונן — ה-bug-שלי-הראשון: spread-של-map פירק-את-המערך-והפך-את-ordersRes-לאובייקט · נתפס-ב-probe-מדוד "ordersRes.reduce is not a function") · כעת הדקס מציג את האמת: 31-פקודות-חיות
+- **push-אומת**: 3406a86 local==origin — גם-אימות-ההרשאות-מהגל-הקודם-נסגר (הדחיפה-עובדת-בסנדבוקס-הזה)
+
+Stage Summary:
+- **המפתח-האמתי על-הסף**: ההסכם שהמפעיל העלה הוא מפתח-האב החי — כל-הסוכנים (curate/execute/promo/soldiers/dexflow/hyper-grid) חתימים שוב, fail-closed התהפך ל-fail-verified
+- הנזילות-שהמפעיל-ביקש: פלואט-חי-על-הספר בשוק-הפנימי של סטים, סולם-דו-צדדי, מילויים-זורמים, מדידה-כנה-בדף-הדקס
+- אפס-חשיפה: המפתח ב-.secrets (0600-gitignored) בלבד · upload/-שני-הריפו-מנוקה-ממנו (המנוע-צרך-את-עותקו) · בגיט-אין-אף-בייט
