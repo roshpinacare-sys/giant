@@ -60,9 +60,9 @@ export function GapView() {
 
   useEffect(() => {
     const ac = new AbortController();
-    load(ac.signal);
+    const t0 = window.setTimeout(() => void load(ac.signal), 0);
     const iv = setInterval(() => load(), 60_000);
-    return () => { ac.abort(); clearInterval(iv); };
+    return () => { window.clearTimeout(t0); ac.abort(); clearInterval(iv); };
   }, [load]);
 
   const toggle = (id: string) => setOpen((s) => ({ ...s, [id]: !s[id] }));
