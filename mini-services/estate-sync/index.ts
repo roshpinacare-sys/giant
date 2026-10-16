@@ -152,9 +152,15 @@ function preserveAndPrune(qu: string, name: string): void {
       log("bundle-preserved:", out, `(${kb}KB)`);
       try { rmSync(qu, { recursive: true, force: true }); log("quarantine-pruned:", qu); } catch { /* כנה */ }
     } else {
-      // bundle-נכשל (הריפו-שהוסגר-פגום) — משאירים-רק-.git (האובייקטים) ומוחקים-את-שאר-הגופה (.next/node_modules)
-      for (const e of readdirSync(qu)) { if (e !== ".git") { try { rmSync(path.join(qu, e), { recursive: true, force: true }); } catch { /* כנה */ } } }
-      log("bundle-fail — kept-.git-only:", qu, String(p.stderr).slice(0, 100));
+      // bundle-נכשל (הריפו-שהוסגר-פגום) — רושמים-את-ה-HEAD-ליומן (לחקירה) ומוחקים-הכל.
+      // גל-87-תיקון-שני: השארת-.git-יצרה-לולאת-כשלים (שיבוט-לתוך-עץ-לא-ריק =
+      // "Untracked working tree file would be overwritten" בכל-טיק). ריפו-פגום-אינו-נכס;
+      // הענן-הוא-האמת, וה-salvage-המוקדם-שמר-את-הייחודי.
+      try {
+        const h = Bun.spawnSync(["git", "rev-parse", "HEAD"], { cwd: qu, stdout: "pipe", stderr: "pipe" });
+        if (h.exitCode === 0) log("bundle-fail — head-recorded:", String(h.stdout).trim().slice(0, 40));
+      } catch { /* כנה */ }
+      try { rmSync(qu, { recursive: true, force: true }); log("quarantine-pruned-full:", qu); } catch { /* כנה */ }
     }
   } catch { /* כנה — השימור-מיטבי; אף-פעם-לא-מפיל-את-הסוופ */ }
 }
@@ -234,17 +240,28 @@ async function syncAnchor(a: Anchor, st: AnchorState, pat: string | null): Promi
     log("pull-failed → graduated-heal-failed → quarantine:", a.name, r.out.trim().slice(0, 120));
   }
 
-  /* חסר/פגום → הסגר-ושיבוט-טרי */
+  /* חסר/פגום → הסגר-ושיבוט-טרי. גל-87 · שיבוט-ל-tmp-ואז-rename — שיבוט-חלקי
+   * (דיסק-מלא/רשת) לא-ישאיר-עץ-הרוס-ביעד; מחלקת-ה"Untracked working tree
+   * file would be overwritten" נעלמת-כולה. */
   if (existsSync(a.dir)) quarantine(a.dir);
+  if (existsSync(a.dir)) {
+    st.ok = false; st.state = "failed"; fails++;
+    st.detail = "clone-deferred — יעד-לא-התפנה (דיסק-נמוך?) — כנה";
+    log("FAIL", a.name, st.detail);
+    return;
+  }
   mkdirSync(path.dirname(a.dir), { recursive: true });
-  const c = await runGit(["clone", "--quiet", url, a.dir], { token, timeoutMs: 180_000 });
+  const tmpClone = `${a.dir}.clone-${Date.now()}`;
+  const c = await runGit(["clone", "--quiet", url, tmpClone], { token, timeoutMs: 180_000 });
   if (c.code === 0) {
+    try { renameSync(tmpClone, a.dir); } catch { try { rmSync(tmpClone, { recursive: true, force: true }); } catch { /* כנה */ } }
     st.ok = true; st.state = "healed"; heals++;
     st.headAgeMin = await headAge(a.dir);
     st.detail = `cloned-from-canon${st.headAgeMin !== null ? ` · head ${st.headAgeMin} דק` : ""}`;
     log("HEALED", a.name, st.detail);
     return;
   }
+  try { rmSync(tmpClone, { recursive: true, force: true }); } catch { /* כנה */ }
   st.ok = false; st.state = "failed"; fails++;
   st.detail = `clone-failed: ${c.out.trim().slice(0, 120) || "no-stderr"}`;
   log("FAIL", a.name, st.detail);
