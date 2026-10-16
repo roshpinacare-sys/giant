@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CandleChart } from "./CandleChart";
 import { TradeDesk } from "./TradeDesk";
 import { SteemBridgePanel } from "./SteemBridgePanel";
+import { SteemAuditPanel } from "./SteemAuditPanel";
 import { Activity, Coins, Flame, Gauge, TrendingUp, Trophy, Layers, Scale, Rocket, CandlestickChart } from "lucide-react";
 
 /* ═══ הדקס — מרכז-הכובד של הריבונות (GIANT · R360 · V3 מיזוג-צי) ══════════
@@ -743,6 +744,8 @@ export function DexView() {
       <TradeDesk />
       {/* גשר-סטים — השוק-האמיתי של סטימיט על-המסך (הוראת-בעלים trace 1a146513162051a5: הכל נזיל) */}
       <SteemBridgePanel />
+      {/* אמת-הכסף — התשובה-המדודה לשאלת-הבעלים "איפה הכסף" (trace 1a14672a193f9255) */}
+      <SteemAuditPanel />
     </div>
   );
 }
