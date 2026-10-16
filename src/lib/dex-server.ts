@@ -212,8 +212,8 @@ export interface ExecuteSwapArgs {
   side: TradeSide;
   amountIn: number;
   slippagePct: number;
-  source: "USER" | "FLEET" | "API";
-  account: string; // OWNER או FLEET:<agentId>
+  source: "USER" | "FLEET" | "API" | "BRIDGE"; // BRIDGE = שסתום-הצמדה של גשר-סטים
+  account: string; // OWNER / FLEET:<agentId> / BRIDGE / API:<prefix>
   agentId?: string;
 }
 
@@ -293,4 +293,130 @@ export async function executeSwap(
     quote,
     newPrice: updated.price,
   };
+}
+
+/* ═══════════ נתב-רב-קפיצות (הוראת-הבעלים: "הכל בדקס יהיה נזיל") ══════════
+ * כל-הבריכות חולקות-את-ה-USDS-כרכזה — כל-אסימון ניתן-להחלפה בכל-אסימון:
+ * קפיצה-ישירה (מול-USDS) או שתי-קפיצות דרך-USDS. כל-קפיצה = executeSwap אמת
+ * (לדג'ר-אמת, רזרבות-אמת, עמלה-אמת). אפס-דרכים-מדומות. */
+
+export interface RouteLeg {
+  pairId: string;
+  base: string;
+  quote: string;
+  side: TradeSide;
+  tokenIn: string;
+  tokenOut: string;
+  amountIn: number;
+  outAmount: number;
+  priceImpactPct: number;
+}
+
+export async function buildRouteQuote(
+  from: string,
+  to: string,
+  amountIn: number,
+  slippagePct: number,
+): Promise<{ quote: SwapQuote; legs: RouteLeg[] } | { error: string; status: number }> {
+  if (!Number.isFinite(amountIn) || amountIn <= 0) {
+    return { error: "סכום-הקלט חייב להיות חיובי", status: 400 };
+  }
+  if (from === to) return { error: "מ-ועד-זהים — אין-מה-להחליף", status: 400 };
+
+  const pairs = await db.dexPair.findMany({ where: { isNative: true, reserveBase: { gt: 0 }, reserveQuote: { gt: 0 } } });
+  const byBase = new Map(pairs.map((p) => [p.base, p]));
+  const tradable = (t: string): boolean => t === "USDS" || byBase.has(t);
+  if (!tradable(from)) return { error: `${from} אינו-נסחר-בדקס (אין-בריכה-ילידה)`, status: 404 };
+  if (!tradable(to)) return { error: `${to} אינו-נסחר-בדקס (אין-בריכה-ילידה)`, status: 404 };
+
+  const legs: RouteLeg[] = [];
+  // --- קפיצה-ראשונה: from → USDS (אם-מתחילים-מ-USDS — אין) ---
+  let carry = amountIn;
+  if (from !== "USDS") {
+    const pair = byBase.get(from);
+    if (!pair) return { error: `אין-בריכת ${from}/USDS`, status: 404 };
+    const res = ammQuote({ base: pair.reserveBase, quote: pair.reserveQuote }, "SELL", carry, pair.feeBps);
+    if (res.outAmount <= 0) return { error: "קפיצה-ראשונה-נכשלה-מתמטית", status: 409 };
+    legs.push({ pairId: pair.id, base: pair.base, quote: pair.quote, side: "SELL", tokenIn: from, tokenOut: "USDS", amountIn: carry, outAmount: res.outAmount, priceImpactPct: res.priceImpactPct });
+    carry = res.outAmount;
+  }
+  // --- קפיצה-שנייה: USDS → to ---
+  if (to !== "USDS") {
+    const pair = byBase.get(to);
+    if (!pair) return { error: `אין-בריכת ${to}/USDS`, status: 404 };
+    const res = ammQuote({ base: pair.reserveBase, quote: pair.reserveQuote }, "BUY", carry, pair.feeBps);
+    if (res.outAmount <= 0) return { error: "הקפיצה-השנייה-נכשלה-מתמטית", status: 409 };
+    legs.push({ pairId: pair.id, base: pair.base, quote: pair.quote, side: "BUY", tokenIn: "USDS", tokenOut: to, amountIn: carry, outAmount: res.outAmount, priceImpactPct: res.priceImpactPct });
+    carry = res.outAmount;
+  }
+  if (!legs.length) return { error: "לא-נמצא-מסלול", status: 404 };
+
+  const last = legs[legs.length - 1];
+  const lastPair = pairs.find((p) => p.id === last.pairId)!;
+  const combinedImpact = legs.reduce((acc, l) => (1 + acc) * (1 + l.priceImpactPct / 100) - 1, 0) * 100;
+  const feePct = pairs
+    .filter((p) => legs.some((l) => l.pairId === p.id))
+    .reduce((s, p) => s + p.feeBps / 100, 0);
+  const quote: SwapQuote = {
+    pairId: last.pairId,
+    side: last.side,
+    amountIn,
+    outAmount: last.outAmount,
+    minOut: last.outAmount * (1 - slippagePct / 100),
+    price: lastPair.price,
+    effectivePrice: amountIn / last.outAmount, // מחיר-אפקטיבי ביחידות-מקור→יעד
+    priceImpactPct: combinedImpact,
+    feePct,
+    slippagePct,
+    route: legs.flatMap((l) => (l === legs[0] ? [l.tokenIn, l.tokenOut] : [l.tokenOut])),
+    reservesAfter: { base: lastPair.reserveBase, quote: lastPair.reserveQuote },
+  };
+  return { quote, legs };
+}
+
+export interface ExecuteRouteSwapArgs {
+  from: string;
+  to: string;
+  amountIn: number;
+  slippagePct: number;
+  source: "USER" | "FLEET" | "API" | "BRIDGE";
+  account: string;
+  agentId?: string;
+}
+
+export async function executeRouteSwap(
+  args: ExecuteRouteSwapArgs,
+): Promise<
+  | { trades: { id: string; side: string; price: number; amount: number; total: number; source: string; t: string }[]; quote: SwapQuote; legs: RouteLeg[]; newPrice: number }
+  | { error: string; status: number }
+> {
+  const q = await buildRouteQuote(args.from, args.to, args.amountIn, args.slippagePct);
+  if ("error" in q) return q;
+  const { legs } = q;
+
+  const trades: { id: string; side: string; price: number; amount: number; total: number; source: string; t: string }[] = [];
+  let carry = args.amountIn;
+  let newPrice = 0;
+  for (const leg of legs) {
+    const res = await executeSwap({
+      pairId: leg.pairId,
+      side: leg.side,
+      amountIn: carry,
+      slippagePct: Math.max(args.slippagePct, 0.5),
+      source: args.source,
+      account: args.account,
+      agentId: args.agentId,
+    });
+    if ("error" in res) {
+      // כנות: קפיצה-ראשונה-בוצעה-והשנייה-נכשלה — מדווחים-במפורש (הכסף-בלדג'ר, אף-הסתרה)
+      const partial = trades.length
+        ? ` (קפיצה-1 בוצעה · trade ${trades[0].id} · יתרת-הביניים בחשבונך)`
+        : "";
+      return { error: `${res.error}${partial}`, status: res.status };
+    }
+    trades.push(res.trade);
+    carry = res.quote.outAmount;
+    newPrice = res.newPrice;
+  }
+  return { trades, quote: q.quote, legs, newPrice };
 }

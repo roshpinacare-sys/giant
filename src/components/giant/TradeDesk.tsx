@@ -4,9 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 import { ownerFetch } from "@/lib/owner-client";
 import { ArrowDownUp, Ban, CircleCheck, Clock, Lock, TicketCheck } from "lucide-react";
 
-/* ═══ דוכן-המסחר — האפליקציה-האמיתית על בריכת-האמת SAOS/USDS ═══════════════
+/* ═══ דוכן-המסחר — האפליקציה-האמיתית על כל-הבריכות-הילידות ═══════════════
  * הוראת-הבעלים (trace 1a13feac8b93b859): "אפליקציה ווב ממש ולא אתר".
- * כאן זה לא מסך-תצוגה — כאן מבצעים: החלפת-שוק (AMM אמת), פקודות-לימיט
+ * וגל-94 (trace 1a146513162051a5): "הכל בדקס יהיה נזיל" — בורר-שוק-חי:
+ * SAOS · STEEM · SBD · כל-הסקטורים — החלפת-שוק (AMM אמת), פקודות-לימיט
  * (נעילת-נזילות בלדג'ר · התאמה בטיקר · מילוי-מיידי לפקודה-ניתנת · ביטול).
  * כל-פעולה-מזיזה-כסף-אמת — חסומה-מאחורי שער-headcorner (401 כנה לאלמוני). */
 
@@ -24,9 +25,17 @@ interface OrderRow {
   createdAt: string;
   closedAt: string | null;
 }
+interface MarketRow {
+  pairId: string;
+  base: string;
+  quote: string;
+  price: number;
+  chain: string;
+}
 interface OrdersPayload {
   ok: boolean;
   orders: OrderRow[];
+  markets: MarketRow[];
   market: { pairId: string; base: string; quote: string; price: number } | null;
   error?: string;
 }
@@ -62,6 +71,7 @@ export function TradeDesk() {
   const [tab, setTab] = useState<Tab>("swap");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
+  const [pairId, setPairId] = useState<string | null>(null); // בורר-השוק (אפס = ברירת-המחדל SAOS)
 
   // טפסים
   const [side, setSide] = useState<Side>("BUY");
@@ -70,13 +80,15 @@ export function TradeDesk() {
   const [limitPrice, setLimitPrice] = useState("");
   const [quote, setQuote] = useState<QuoteBox | null>(null);
 
-  const market = data?.market ?? null;
+  // השוק-הנבחר: מהבורר; ברירת-מחדל — מהשרת (SAOS). עדכון-מחיר-חי מהרשימה.
+  const markets = data?.markets ?? [];
+  const market = markets.find((m) => m.pairId === pairId) ?? data?.market ?? null;
   const nativePrice = market?.price ?? null;
 
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (selPair?: string | null) => {
     try {
       const [ro, rw] = await Promise.all([
-        fetch("/api/dex/orders", { cache: "no-store" }),
+        fetch(`/api/dex/orders${selPair ? `?pairId=${encodeURIComponent(selPair)}` : ""}`, { cache: "no-store" }),
         fetch("/api/dex/wallet", { cache: "no-store" }),
       ]);
       const o = (await ro.json()) as OrdersPayload;
@@ -98,8 +110,8 @@ export function TradeDesk() {
         setOwner(d.owner === true);
       } catch { setOwner(false); }
     })();
-    const iv = setInterval(refresh, 8_000); // קצב-הטיקר — הפקודות מתמלאות-חי
-    const t0 = setTimeout(refresh, 0); // מדידה-ראשונה-מחוץ-גוף-האפקט
+    const iv = setInterval(() => void refresh(currentPair.current), 8_000); // קצב-הטיקר — הפקודות מתמלאות-חי
+    const t0 = setTimeout(() => void refresh(currentPair.current), 0); // מדידה-ראשונה-מחוץ-גוף-האפקט
     return () => { clearTimeout(t0); clearInterval(iv); };
   }, [refresh]);
 
@@ -192,8 +204,20 @@ export function TradeDesk() {
   }
 
   const openCount = (data?.orders ?? []).filter((o) => o.status === "OPEN").length;
-  const tokenIn = side === "BUY" ? "USDS" : "SAOS";
-  const tokenOut = side === "BUY" ? "SAOS" : "USDS";
+  const baseToken = market?.base ?? "SAOS";
+  const tokenIn = side === "BUY" ? "USDS" : baseToken;
+  const tokenOut = side === "BUY" ? baseToken : "USDS";
+
+  // רפרנס-יציב לבורר-השוק (בלי-הדלקת-אפקט-בכל-רינדור)
+  const currentPair = useRef<string | null>(null);
+  currentPair.current = pairId;
+  function switchPair(next: string) {
+    setPairId(next);
+    setQuote(null);
+    setMsg(null);
+    setLimitPrice("");
+    void refresh(next);
+  }
 
   const tabs: Array<{ id: Tab; label: string; icon: typeof ArrowDownUp }> = [
     { id: "swap", label: "החלפת-שוק", icon: ArrowDownUp },
@@ -207,18 +231,32 @@ export function TradeDesk() {
         <div>
           <h3 className="flex items-center gap-2 text-sm font-black text-zinc-100">
             <ArrowDownUp className="h-4 w-4 text-amber-500" aria-hidden />
-            דוכן-המסחר · SAOS/USDS — אפליקציה-אמת, לא-מסך
+            דוכן-המסחר · {baseToken}/USDS — אפליקציה-אמת, לא-מסך
           </h3>
           <p className="mt-0.5 text-[10px] text-zinc-500">
-            מחיר-חי {f2(nativePrice, 5)} USDS · מנוע-AMM חי (טיק 8ש׳) · פקודות-לימיט עם נעילת-נזילות בלדג'ר
+            מחיר-חי {f2(nativePrice, 6)} USDS · מנוע-AMM חי (טיק 8ש׳) · פקודות-לימיט עם נעילת-נזילות בלדג'ר
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <label className="sr-only" htmlFor="market-select">בורר-השוק</label>
+          <select
+            id="market-select"
+            value={market?.pairId ?? ""}
+            onChange={(e) => switchPair(e.target.value)}
+            className="h-9 rounded-lg border border-amber-600/40 bg-zinc-950 px-2 text-xs font-bold text-amber-300 outline-none focus:border-amber-500"
+            aria-label="בחירת-בריכת-מסחר"
+          >
+            {markets.map((m) => (
+              <option key={m.pairId || `m-${m.base}`} value={m.pairId}>
+                {m.base}/USDS · {f2(m.price, m.price > 10 ? 3 : 6)}
+              </option>
+            ))}
+          </select>
           <span className="rounded-lg border border-white/10 bg-zinc-950 px-2.5 py-1 text-[10px] font-bold text-zinc-300" title="יתרת-ארנק-הבעלים מהלדג'ר">
             USDS <span className="font-mono text-amber-400">{f2(wallet.USDS ?? null)}</span>
           </span>
           <span className="rounded-lg border border-white/10 bg-zinc-950 px-2.5 py-1 text-[10px] font-bold text-zinc-300" title="יתרת-ארנק-הבעלים מהלדג'ר">
-            SAOS <span className="font-mono text-amber-400">{f2(wallet.SAOS ?? null)}</span>
+            {baseToken} <span className="font-mono text-amber-400">{f2(wallet[baseToken] ?? null, 4)}</span>
           </span>
         </div>
       </div>
@@ -299,7 +337,7 @@ export function TradeDesk() {
                           : "border-white/10 bg-zinc-950 text-zinc-400 hover:text-zinc-200"
                       }`}
                     >
-                      {s === "BUY" ? "קניית SAOS" : "מכירת SAOS"}
+                      {s === "BUY" ? `קניית ${baseToken}` : `מכירת ${baseToken}`}
                     </button>
                   ))}
                 </div>

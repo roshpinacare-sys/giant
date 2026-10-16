@@ -14,6 +14,7 @@ import { TF_SECONDS } from "@/lib/dex-types";
 import { binanceTickers24h } from "@/lib/market-feed";
 import { matchOpenOrders } from "@/lib/dex-orders";
 import { ensureFleetLoop } from "@/lib/fleet-loop";
+import { ensureSteemBridge, startSteemValve } from "@/lib/steem-bridge";
 
 /* ============================== הגדרות-שוק ============================== */
 
@@ -508,8 +509,14 @@ export async function ensureEngine(): Promise<void> {
   await ensureSeeded();
   startTicker();
   startMatcher(); // מתאים-2ש׳ — לימיטים-חוצים-בזמן-אמת (גל-80)
-  // לקוחות-האמת-הראשונים — הצי-סוחר-על-הבריכה-שלנו-ללא-הפסקה (הוראת-הבעלים)
+  // לקוחות-האמת-הראשונים — הצי-סוחר-על-הבריכות-שלנו-ללא-הפסקה (הוראת-הבעלים)
   void ensureFleetLoop();
+  // גשר-סטים (הוראת-הבעלים trace 1a146513162051a5): בריכות-נזילות STEEM/SBD
+  // + שסתום-הצמדה לשוק-האמת. זריעה-חוזרת-עצמה בכנות אם-האורקל-היה-לא-זמין-בגנזיס.
+  void ensureSteemBridge().catch((err) =>
+    console.error("[dex-engine] steem-bridge genesis failed:", err),
+  );
+  startSteemValve(); // טיק-10ש׳ — תיקוני-הצמדה אמת על הבריכות
 }
 
 export async function engineStatus(): Promise<{

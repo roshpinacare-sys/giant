@@ -64,7 +64,7 @@ export interface PlaceOrderArgs {
   limitPrice: number;
   amountIn: number;
   account?: string; // OWNER (ברירת-מחדל) או FLEET:<agentId>
-  source?: "USER" | "FLEET" | "API";
+  source?: "USER" | "FLEET" | "API" | "BRIDGE";
   agentId?: string;
 }
 

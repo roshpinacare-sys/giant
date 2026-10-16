@@ -1041,3 +1041,17 @@
 {"ts":"2026-10-16T20:01:59.854Z","action":"sweep-done"}
 {"ts":"2026-10-16T20:11:05.397Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for bea999e48b87c86b97be9f57f1d5ca8266b3d4da\nCannot save the current worktree state\nfatal: stash failed"}
 {"ts":"2026-10-16T20:11:05.900Z","repo":"my-project","action":"state-custody-restore","brokenAt":42777,"restored":true}
+{"ts":"2026-10-16T20:11:11.130Z","repo":"my-project","action":"state-custody-restore","brokenAt":42777,"restored":true}
+{"ts":"2026-10-16T20:11:23.122Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   6c7426e..7a34b0f  HEAD -> main"}
+{"ts":"2026-10-16T20:11:25.771Z","repo":"FleetHQ","action":"pull-fail","out":"int: \"git add/rm <conflicted_files>\", then run \"git rebase --continue\".\nhint: You can instead skip this commit: run \"git rebase --skip\".\nhint: To abort and get back to the state before \"git rebase\", run \"git rebase --abo"}
+{"ts":"2026-10-16T20:11:29.599Z","repo":"FleetHQ","action":"commit-fail","out":"src/lib/hq/contract.ts\nU\tsrc/lib/hq/store.ts\nU\tsrc/lib/hq/textures.ts\nU\tsrc/lib/hq/world.ts\nU\tstate/silence-watchdog/state.json\nU\tt19b/Domain\nU\tworklog.md\nerror: Committing is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict."}
+{"ts":"2026-10-16T20:11:38.286Z","repo":"FleetHQ","action":"pull-fail","out":"int: \"git add/rm <conflicted_files>\", then run \"git rebase --continue\".\nhint: You can instead skip this commit: run \"git rebase --skip\".\nhint: To abort and get back to the state before \"git rebase\", run \"git rebase --abo"}
+{"ts":"2026-10-16T20:11:39.078Z","repo":"FleetHQ","action":"push-fail","out":"a ref in \"refs/{heads,tags}/\". If so we add a corresponding\n  refs/{heads,tags}/ prefix on the remote side.\n\nNeither worked, so we gave up. You must fully qualify the ref.\nhint: The <src> part of the refspec is a commit object.\nhint: Did you mean to create a new branch by pushing to\nhint: 'HEAD:refs/heads/HEAD'?\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/FleetHQ.git'"}
+{"ts":"2026-10-16T20:11:41.871Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   acafcf9c..aa84681f  HEAD -> main"}
+{"ts":"2026-10-16T20:11:43.290Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:11:44.748Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:11:47.387Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Sandbox.git\n   e5912e7d..854764e9  HEAD -> main"}
+{"ts":"2026-10-16T20:11:49.455Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:11:50.908Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:11:52.651Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T20:11:52.651Z","action":"sweep-done"}

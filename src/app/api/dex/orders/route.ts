@@ -40,10 +40,21 @@ async function resolveTradeAccount(
 export async function GET(req: NextRequest) {
   try {
     await ensureEngine();
-    const [orders, pair] = await Promise.all([
+    // הוראת-הבעלים "הכל נזיל": כל-הבריכות-הילידות נסחרות מהדוכן —
+    // ?pairId=... בוחר-שוק; בלי-בחירה — בריכת-הבסיס (SAOS/USDS).
+    const [orders, nativePairs] = await Promise.all([
       listOrders(null),
-      db.dexPair.findFirst({ where: { isNative: true } }),
+      db.dexPair.findMany({
+        where: { isNative: true, reserveBase: { gt: 0 }, reserveQuote: { gt: 0 } },
+        orderBy: { sort: "asc" },
+      }),
     ]);
+    const wanted = req.nextUrl.searchParams.get("pairId");
+    const pair =
+      (wanted ? nativePairs.find((p) => p.id === wanted) : undefined) ??
+      nativePairs.find((p) => p.base === "SAOS") ??
+      nativePairs[0] ??
+      null;
     // גשר-חוץ: מפתח-API שנשלח — רואה-את-הפקודות-והיתרות-שלו-בלבד (מעבר-לקריאה-הציבורית)
     let my: Record<string, unknown> = {};
     let rateHeaders: Record<string, string> = {};
@@ -72,6 +83,7 @@ export async function GET(req: NextRequest) {
       {
         ok: true,
         orders,
+        markets: nativePairs.map((p) => ({ pairId: p.id, base: p.base, quote: p.quote, price: p.price, chain: p.chain })),
         market: pair ? { pairId: pair.id, base: pair.base, quote: pair.quote, price: pair.price } : null,
         ...my,
       },
