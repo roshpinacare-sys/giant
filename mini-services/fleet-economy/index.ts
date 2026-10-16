@@ -632,7 +632,7 @@ function git(dir: string, args: string[]): Promise<{ ok: boolean; out: string }>
     });
   });
 }
-async function sealRepo(dir: string): Promise<boolean> {
+async function sealRepo(dir: string, afterPull?: () => void | Promise<void>): Promise<boolean> {
   const name = dir.split("/").filter(Boolean).pop()!;
   for (let attempt = 0; attempt < 2; attempt++) {
     const st = await git(dir, ["status", "--porcelain", "--branch"]);
@@ -640,11 +640,14 @@ async function sealRepo(dir: string): Promise<boolean> {
     const ahead = /ahead (\d+)/.exec(st.out)?.[1];
     const dirtyLines = st.out.split("\n").filter((l) => l && !l.startsWith("##"));
     if (dirtyLines.length > 0) {
-      await git(dir, ["add", "-A"]);
+      const add = await git(dir, ["add", "-A"]);
+      if (!add.ok) { sealLog({ repo: name, action: "add-fail", out: add.out }); return false; }
       const cm = await git(dir, ["commit", "-q", "-m", `vault-seal [auto-economy]: ${dirtyLines.length} files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס`]);
       if (!cm.ok && !cm.out.includes("nothing to commit")) { sealLog({ repo: name, action: "commit-fail", out: cm.out }); }
     }
     await git(dir, ["pull", "--rebase", "-X", "ours", "origin"]);
+    // ות-ריפוי 2026-10-16: afterPull היה-מרומז-ולא-מוגדר → ReferenceError-מת-את-כל-סבב-האטימה
+    // כל-10-דקות (שורש-מיילי-הכשל). עכשיו: פרמטר-אופציונלי אמיתי.
     if (afterPull) { try { await afterPull(); } catch (e) { sealLog({ repo: name, action: "after-pull-fail", error: String(e) }); } }
     const push = await git(dir, ["push", "origin", "HEAD"]);
     if (push.ok || push.out.includes("Everything up-to-date") || push.out.includes("up to date")) {
@@ -682,11 +685,12 @@ function nextServerPids(): number[] {
   return out;
 }
 
-async function sealMyProject(): Promise<void> {
+async function sealMyProject(): Promise<boolean> {
   sealing = true; // הקפאה-עצמית: אף-tick/snapshotSave-לא-רץ
   const pids = nextServerPids();
   for (const p of pids) { try { process.kill(p, "SIGSTOP"); } catch { /* כנה */ } }
   let preLedger = ""; let preSnap = "";
+  let ok = false;
   try {
     try { flush(); snapshotSave(); } catch { /* נקודת-עקביות-כנה */ }
     const ts = Date.now();
@@ -702,13 +706,14 @@ async function sealMyProject(): Promise<void> {
         if (preSnap) { try { fs.copyFileSync(preSnap, SNAP); } catch { /* כנה */ } }
         sealLog({ repo: "my-project", action: "state-custody-restore", brokenAt: v.brokenAt, restored });
       }
-    });
+    }).then((r) => { ok = r; });
   } finally {
     for (const p of pids) { try { process.kill(p, "SIGCONT"); } catch { /* כנה */ } }
     if (preLedger) try { fs.rmSync(preLedger, { force: true }); } catch { /* כנה */ }
     if (preSnap) try { fs.rmSync(preSnap, { force: true }); } catch { /* כנה */ }
     sealing = false; // הפשרה — הכלכלה-חוזרת-לנשום
   }
+  return ok;
 }
 
 async function sealAll(): Promise<void> {
@@ -725,8 +730,15 @@ async function sealAll(): Promise<void> {
   } catch { /* כנה — ממשיכים-בלי-מנעול-אם-גם-הוא-נכשל */ }
   try {
     let sealed = 0;
-    for (const dir of SEAL_REPOS) { if (await sealRepo(dir)) sealed++; }
-    sealLog({ action: "sweep-done" });
+    // ות-ריפוי 2026-10-16: my-project-נאטם-דרך-משמורת-המדינה (SIGSTOP-ל-next-server +
+    // עותקי-pre-pull + אימות-שרשרת-אחרי-ריבוז) — עד-היום-הנתיב-הזה-מעולם-לא-רץ
+    // (sealAll-היה-מאטם-אותו-ישירות-ואז-מת-על-afterPull) = שורש-תפרי-המיזוג-החוזרים.
+    if (await sealMyProject()) sealed++;
+    for (const dir of SEAL_REPOS) {
+      if (dir === "/home/z/my-project") continue; // נאטם-מעלה-במשמורת-מלאה
+      if (await sealRepo(dir)) sealed++;
+    }
+    sealLog({ action: "sweep-done", sealed, of: SEAL_REPOS.length });
     // אירוע-אמת → עסקת-תשתית: סבב-אטימה הושלם (N מאגרים נאטמו בפועל)
     try {
       ingestEvent({ kind: "infra", from: "FleetHQ", to: "treasury", asset: "USDS", amount: 0.2, refillFloat: true, reason: `סבב-אטימת-כספת הושלם · ${sealed}/${SEAL_REPOS.length}-מאגרים`, ref: `sealsweep-${Date.now()}` });
