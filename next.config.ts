@@ -47,3 +47,5 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+/* compiler-restart trigger 1792145919 */

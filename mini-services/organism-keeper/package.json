@@ -1,0 +1,10 @@
+{
+  "name": "organism-keeper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "משגר-האחזקה של הריבונות — מבטיח estate מחובר (clone-if-missing), מקים את שירותי-המשרד (selfcheck→app+foreman · recruit), בודק-בריאות כנה כל-דקה. חוק-נגד-זומבים: מופע-אחד בלבד (flock), אין-כפילויות-פורט.",
+  "scripts": {
+    "dev": "bun --hot index.ts",
+    "start": "bun index.ts"
+  }
+}
