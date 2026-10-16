@@ -548,7 +548,12 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>): Pr
     // דחף-במקומה-מצב-ישן-וקידם-את-הענן — מקור-תפרי-הספר-ההיסטוריים.
     const rm = await git(dir, ["remote"]);
     const remote = rm.out.split("\n").map((s) => s.trim()).filter(Boolean)[0] ?? "origin";
-    await git(dir, ["pull", "--rebase", "-X", "ours", remote]);
+    // גל-83 · autoStash-חובה: המנוע-החי מלכלך-קבצי-מצב-כל-טיק/ingest — pull --rebase
+    // מסרב-לרוץ-על-עץ-מלוכלך-והכשל-היה-שקט (רק-push-fail-נרשם) → כל-סוופ-החמיץ-את-הריבוז.
+    const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote]);
+    if (!pull.ok && !pull.out.includes("Already up to date") && !pull.out.includes("up to date")) {
+      sealLog({ repo: name, action: "pull-fail", out: pull.out.slice(0, 220) });
+    }
     if (afterPull) { try { await afterPull(); } catch (e) { sealLog({ repo: name, action: "after-pull-fail", error: String(e) }); } }
     const push = await git(dir, ["push", remote, "HEAD"]);
     if (push.ok || push.out.includes("Everything up-to-date") || push.out.includes("up to date")) {
