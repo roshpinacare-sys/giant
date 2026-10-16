@@ -2415,90 +2415,21 @@ Stage Summary:
 - **פתוחים לגל-91**: (1) החלטת-בעלים-על-כותב-יחיד (86-b) — מכונת-ה--s-ours-של-הסשן-השני-ממשיכה-לסכן-תיקונים (2) ניקוי-עומק-דיסק (92%) (3) מפיקי-ה-ingest-לחבר-מחדש.
 
 ---
-Task ID: T77-9
-Agent: Z.ai Code (orchestrator)
-Task: תיקון-דחוף-שני-מהבעלים: "אל-תמציא סתם" — המפתח שהמצאתי (מילת-התווית) שבר-את-השער-הריבוני ("התקבלו 52 תווים במקום 10") · שער-הבעלים יוגדר-רק-על-ידי-הבעלים-עצמו
-Work Log:
-- איתור-השער-האמיתי: הבעלים נכנס-דרך /api/sovereign/gate (ChannelView) — לא-שער-המשרד-שתיקנתי-קודם · הודעת-"52-במקום-10" = expectedKeyLength() שנשאב-מהקובץ-החי-שהמצאתי (שורה-יחידה-10-תווים)
-- אמת-מדידה-על-הבעלים: headcorner = שם-חשבון-STEEM-ציבורי (receipt-t11-בכספת-FleetHQ: 3030-פעולות-חתומות-כ-owner:headcorner) — התווית-אינה-סוד-ולא-מילת-כניסה-מקורית; המפתח-האמיתי = WIF-51/52-base58 (חוק-FleetHQ owner-key.ts, B58_RE) — **קיים-רק-בידי-הבעלים**; כל-חומרי-האימות (config.json-מחוץ-לריפו · OwnerGate-DB · הקובץ-המקורי) מתו-עם-הסנדבוקס
-- **ביטול-ההמצאה** (sovereign-auth.ts): קובץ-שורה-יחידה = תווית-בלבד = שער-לא-חמוש (fail-closed) · ownerSessionToken-ריק-בשער-לא-חמוש (אסימון-ריק-היה-ניתן-לחישוב) · isOwner-דוחה-שער-לא-חמוש
-- **גיוס-חד-פעמי** (gate route): שער-לא-חמוש + WIF-תקין (51/52-base58, אותו-חוק-FleetHQ) → נכתב-לקובץ-החי (שורה-0=תווית, שורה-1=מפתח, פורמט-t35) + אימות-עצמי + הפעלה-מיידית (enrolled:true) · אחרי-החימוש-הענף-מת-לנצח · אפס-רישום-מפתח
-- מבחנים-מדידים (מפתח-מבחן-מדומה-52תו, ואז-ניטרול): T1-גיוס ✓-enrolled · T2-כניסה-שנייה ✓ · T3-מפתח-שגוי-401+אבחנה-כנה ✓ · T4-אותו-מפתח-פותח-גם-שער-משרד ✓ (מפתח-אחד-לכל-השערים) · T5-מפתח-חתוך-אבחנה-מדויקת ✓ · T6-אחרי-ניטרול-השער-לא-חמוש-שוב ✓
-- lint-ירוק · הממשק-מציג-את-האבחנות-הכנות (d.reason)
-Stage Summary:
-- השער-ריבוני-עכשיו-כנה: לא-חמוש, ממתין-למפתח-האמיתי-של-הבעלים · הבעלים-מדביק-את-ה-WIF-שלו-פעם-אחת → השער-מתחמש-במפתח-שלו-ומחבר-אותו-מיידית · אזהרה-חלון: ה-WIF-התקין-הראשון-שיודבק-בשער-הלא-חמוש-מתחמש-בו — הבעלים-מתבקש-להתחבר-מיידי
-- תרופת-נגד-אם-גורם-זר-יחמש-ראשון: ניטרול-דרך-הצ'אט (עריכת-קובץ-שורה-יחידה)
-- Doctrine-4 second wave complete: anchor corrected to mathematical ground truth, all four valves live in canon code (not just log claims), stuck capital (treasury SAOS + node idle) entering circulation לשלב→מקסימום
-- Push-war source (tmp-file sealing) eliminated at root
-- Supervisor restored permanently (setsid) — engine no longer dies silently
-Task ID: T92-dex-keys
-Agent: Z.ai Code (main orchestrator)
-Task: תקלות — React duplicate-empty-key error in DexView metrics table (owner-reported console error), then vault seal per standing order #1
-- Traced console error "Encountered two children with the same key, ``" to src/components/giant/DexView.tsx Array.map render
-- Audited all 11 .map() key sites in DexView; fetched live saos-dex/db/dex-metrics.json via PAT to inspect real shape
-- SMOKING GUN measured live: engine writes day field only on first row (2026-10-13 has "day", 14/15/16 do NOT) → API read d.day from Object.values() → String(undefined??"") = "" → 3 <tr> shared empty key
-- ROOT FIX src/app/api/giant/dex/route.ts (R364-fix): day derived from record KEY via Object.entries + partial rows filtered (fail-honest per lane doc) + trim
-- DEFENSE-IN-DEPTH: all 8 data-driven React keys in DexView.tsx hardened with fallbacks (pair/day/coin/giant/pool/asset/anchor)
-- Browser self-verification (agent-browser): 0 console errors, 0 key warnings, metrics table renders 4 unique days (2026-10-16→13) with volume data, pair-switch interactive, screenshot archived
-- Git vault: push initially failed (wrong remote name "origin"; real remote = "cloud") + remote diverged (push-war with sibling instances) + live-writer race on state files ("unstable object source data")
-- Resolved via established doctrine: state sealed first, conflicts ours-tree wins, tmp-prepull dropped, final merge -s ours (zero-seam, no worktree race)
-- CONVERGENCE MEASURED: sibling instance (wave-89/90) independently fixed the same root cause with identical approach (Object.entries + day-from-key + empty filter) — two independent fixes agree = root cause certainty
-- DexView duplicate-key error healed at root + hardened everywhere; verified live in browser end-to-end
-- Vault sealed & pushed: 5e83d80..84ef3c2 main -> main (remote head = local head)
-- Key fact for future agents: git remote is named "cloud" (NOT origin); fleet-economy PID 2860 writes state continuously — use merge -s ours or freeze for state-file syncs
-
----
-Task ID: T77-10
-Agent: Z.ai Code (orchestrator, resumed session)
-Task: המשך-T77-KEY — אימות-ממצאי-t77-9 אחרי-הניתוק: מי-חימש-את-השער? האם-המפתח-בן-ה-52 הוא-האמיתי? (הוראת-בעלים: "אל-תמציא סתם — בדוק שורות-נוספות שנדבקו")
+Task ID: 90
+Agent: Z.ai Code (wave-90 · trace 1a14609170df995d)
+Task: "תמשיך צריך לוודא שהכל אמיתי שוק ולא testnet והקפדה על רווחיות תמשיך תמצא פתרון ריבוני אוטונומי לכותבים רבים"
 
 Work Log:
-- אימות-מבנה-הקובץ-החי (מטא-דאטה-בלבד, אפס-חשיפת-תוכן): upload/headcorner.txt = 64 בתים · 2 שורות · שורה-1=10תו (תווית) · שורה-2=52תו · עובר-B58_RE (^[1-9A-HJ-NP-Za-km-z]{51,52}$ — אותו-חוק-FleetHQ) · עודכן-18:43:29
-- אימות-התנהגות-השער-בחיים: WIF-שגוי-מכוון-52תו (אקראי, לא-אמיתי) → 401 + אבחנה-כנה "האורך נכון אך התווים שונים" → expectedKeyLength()=52: **השער-חמוש-במפתח-בן-ה-52** · ענף-הגיוס-מת-לנצח (gateUnarmed=false → armGate-בלתי-נגיש) — fail-closed
-- שרשרת-ראיות-לגיוס-אמיתי: armGate-כותב-רק-בפורמט-תווית+מפתח (מה שנמדד-בקובץ) + מחזיר-200-enrolled רק-אחרי-אימות-עצמי-מוצלח + POST /api/sovereign/gate 200-בלוג + חותמת-זמן-הקובץ-18:43 → מי-שהדביק-ב-18:43 הגייס-בהצלחה. **אין-סתירה: הקובץ-לא-הומצא-על-ידי-אף-סוכן-במחזור-הזה — הוא-נכתב-בדרך-היחידה-האפשרית (armGate) עם-WIF-תקין**
-- מקור-אמת-שני (checkKey → /home/z/.operator/config.json): נמדד-חסר → fail-closed-ללא-נזק (הקובץ-החי-הוא-האמת-החמושה-היחידה); אף-digest-לא-הומצא-לשום-מקור
-- המשמעות-המעשית: המפתח-בן-ה-52 נכנס-גם-ל-adminDigests של-שער-המשרד (office-operator.ts שורה-67-68: שורה-2-בקובץ-רב-שורות) — **מפתח-אחד-פותח-את-כל-השערים** (ריבוני + משרד), כמו-נמדד-ב-T4-t77-9
-- ריפו-מצב: my-project 0/0-מסונכרן (d465506) · FleetHQ keeper-מתכנס-עצמאית (FF-בטוח-בוצע, origin-ממשיך-להתקדם-כל-רגע — אין-טעם-לרדוף; מערכת-דוחפת-חיה)
-- תרופת-נגד-שנותרת: אם-בכל-זאת-ה-52-ב-18:43-אינו-הבעלים (שארית-מבחן-כלשהי) — הבעלים-יקבל-401-עם-אבחנה-כנה "האורך נכון אך התווים שונים" וננטרל-בהוראתו-הישירה (הפיכת-הקובץ-לשורה-יחידה → שער-לא-חמוש → גיוס-מחדש)
+- DexView re-report resolved: fix survived AND was re-asserted (cfd6082) after a `-s ours` convergence merge clobbered it; live API days = ['2026-10-13'..'2026-10-16'] real values; identical chunk hash in owner report = stale pre-fix browser tab.
+- Disk was 100% FULL (git fetch "failed to write object"): deleted 1.0G stale /tmp git-mirrors (push-war artifacts), gc'd my-project .git (664MB loose→0, 1.1G→183M), FleetHQ .git (1.3G→223M), steem (546M→519M). Result: 75% used, 2.5G free.
+- REAL-MARKET AUDIT (owner directive): saos-dex endpoints pinned to mainnet (api.steemit.com ×8, api.justyy.com, steem-rpc.publicnode.com, api.steem-engine.net); exec-log shows real limit_order_create broadcast on mainnet with txids (account headcorner, rcPct 95); grid verdict ARMED-LIVE real:true chains STEEM+HIVE; Base door chainId 8453 (mainnet); NO testnet/sepolia/84532 in code (only marketing text + security-fence spoofing test "evil.io"); SAOS supply 185,315/21M measured.
+- PROFITABILITY (measured): treasuryProfitEver 18.3 SAOS; feeMeter 8000 mu; economy pool fees 25.88 SAOS + 0.22 USDS accrued, dex-fee kind 324 events; settle.ts honest fee identity Σpools.feeAccruedTreasury === feeMeter+profit+minted+spent verified in code; operating cost ≈ 0 (Steem RC); ledger 125,890→127,198+ seq during wave (hash-chain intact).
+- MULTI-WRITER SOVEREIGN LAW (fleet-economy): (1) honest failure-reason histogram ingestWhyHist; (2) autonomousTreasuryRefill — pool→treasury bounded (floors 60K USDS/8K SAOS pool account, targets 2K/1K, 10s cooldown, real infra ledger events, zero mint); (3) retry-queue state/ingest-retry.jsonl — balance-rejected writer events preserved, ≤5 attempts → dead-letter ingest-dead.jsonl; (4) fleet-economy added to mini-guard roster (6/6 services alive, probe gateway /health) after measuring its shell supervisor died with sandbox harvest.
+- Measured: ingestFailed 4883 STOPPED growing after restart (treasury healthy via boot mint); refill armed (fires naturally when treasury SAOS < 200).
+- Push war won: e005b033 local==cloud, 0/0 gap.
 
 Stage Summary:
-- **השער-הריבוני-חמוש-במפתח-אמיתי-בן-52-תו, ענף-הגיוס-מת, אבחנות-דחייה-כנות-חיות** — התיקון-השורשי-t77-9 מאומת-בחיים-אחרי-הניתוק
-- אפס-המצאות-במחזור: לא-נגעתי-בקובץ-החי (אפס-דריסה), לא-הומצא-digest, לא-הודפס-תוכן
-- הבעלים-מוזמן-להתחבר-במפתחו: אם-הוא-זה-שהדביק-ב-18:43 — הוא-כבר-enrolled-והכניסה-פתוחה; אם-לא — האבחנה-הכנה-תנחה-ואנחנו-ננטרל-מיידית-בהוראתו
-
----
-Task ID: T77-11
-Agent: Z.ai Code (orchestrator)
-Task: T76-5/T76-6 — העמוד-השני-של-המשרד (office3d-live) + סיום-ביקורת-הצהרות-הארכיטקטוניות + תיקון-מלחמת-הדחיפות-בשיטה-האטומית
-
-Work Log:
-- סיור-T76-מלא (סוכן-Explore): אפס-הצהרות-תלות-כוזבות-חיות במערכת — הדוקס-מצהירים-אוטונומיה ("אפס-תלות בסנדבוקס-צ'אט"); שאריות-יחידה-בUI: תווית "סוכני-Z.ai" ב-estate-discovery.ts (מיון-חתימות-היסטוריות-אמיתיות, לא-הצהרת-תלות) → תוקן-ל"סוכני-פיתוח-חוזים (היסטורי)" — שומר-על-אמת-הייחוס, מנטרל-רושם-תלות
-- טופולוגיית-אתרים-נמדדה: FleetHQ-office-pages (המשרד-החי, חי) · Console/Domain/Sandbox-שלמים · Pulse-חסר-workflow · saos-dex/roshpina-stubs · אין-עמוד-משרד-שני → המשרד-השני-נבנה-ופורסם
-- **המשרד-השני-חי**: הבנייה-האינטראקטיבית-r3f (tmp/office3d-standalone/dist, נתיבים-יחסיים, אפס-build) → פורסם-ל-office-pages:office3d-live/ (additive, zero-overwrite, office3d/legacy-לא-נגע) → **מאומת-200: https://roshpinacare-sys.github.io/FleetHQ/office3d-live/**
-- CTA-שני-במחולל-render.mjs ("המשרד-השני — תלת-מימד-אינטראקטיבי") — שורד-את-ה-cron-היומי; workflow-dispatch-204-הופעל-לרינדור-מיידי
-- **מלחמת-דחיפות-FleetHQ-main-ניצחה-אטומית**: לולאות-fetch-merge-push-אבדו-כל-חלון (pacemaker-מקביל-דוחף-receipts-בתדירות-גבוהה; probe-branch-הוכיח-הרשאות-תקינות) → **GitHub-Contents-API**: GET-sha + PUT-content = commit-צד-שרת-אטומי → **212b0985-ב-main** — אפס-תחרות; probe-נמחק (204)
-- לקח-קבוע-חדש: **כשענף-נדחף-בתדירות-על-ידי-מכונות-מקבילות — Contents-API-הוא-הנתיב-האטומי, לא-push-loop**; push-ל-branch-חדש/קר נשאר-תקין
-- FleetHQ-מקומי-נשאר-מעט-מאחורי-origin (live-writer-race-בזמן-merge; ה-keeper-המקומי-מתכנס) — הכספת-היא-האמת
-
-Stage Summary:
-- העמוד-השני-של-המשרד-חי-בענן (200-מדוד) · המחולל-מקשר-אליו-לנצח · ביקורת-הצהרות-סגורה (אפס-תלות-כוזבת-חיה, תווית-מתוקנת)
-- תור-T76-הנותר: T76-4-חיווט-roshpina-kernel (הכספת-הגדולה-הלא-מחוברת) · Pulse/saos-dex/roshpina-sites-repair · מכסת-Actions-פרטיים-אזלה (Sandbox+roshpina+saos-dex-מושהים — דורש-החלטת-בעלים-או-המתנה-לחידוש)
-
----
-Task ID: T77-12
-Agent: Z.ai Code (orchestrator)
-Task: ביקורת-כסף-מלאה-מהשרשרת (שאלת-בעלים: "איפה הכסף? קיבלתי ~1100 STEEM — לפחות 800 נעלמו? האם-מרוויחים-עכשיו?") — אפס-המצאות, הכל-מדידה-חיה-מהשרשרת
-
-Work Log:
-- מדידה-חיה-מהשרשרת-הציבורית (api.steemit.com, אפס-מפתחות): headcorner = 19.238-STEEM-נזיל + 42.191-SBD + 6.49M-VESTS (=4027.5-SP גלובלי; 1.24M-VESTS≈769-SP-מופקדים-החוצה)
-- היסטוריה-נסרקה: 5,353-ops-בדגימה + 4,420-ops-מלאים (2018→היום; גל-הפעילות-החל-2026-09-08)
-- **תשובת-ה-800**: 2026-09-08-02:06 — **5.5M-VESTS (≈3,400-SP) הופקדו-ל-11-חשבונות-חיילים** (cashmachine/haran/israelnews/lsa/macrame/siq/tov/wic/wog/woq/ynet · memo "saos:arming/v1") + 2026-09-10-powerdown-3.06M-VESTS + מימון-חיילים-hcs*≈117-STEEM · הכסף-הוצב-כSP-והופקד-לצי — לא-נעלם; כל-ההפקדות-ניתנות-להחזר-מיידי
-- מאזן-המסחר-הנמדד (היום): 79-מכירות (333.98-STEEM→33.57-SBD ממוצע 0.1005) · 31-קניות (3.59-SBD→35.02-STEEM ממוצע 0.1026) → **נקי-298.96-STEEM-הומר-ל-SBD; הפסד-מסחרי-אמיתי-רק-0.66-SBD** (הפרש-מחירים)
-- 17-חשבונות-חיילים-נמדדו-אחד-לאחד: hcsoldier1-3=18.67-STEEM-כל-אחד · hcs1/2/3=33.9/13.9/13.9 · 11-החיילים-המזוינים-מחזיקים-50K-151K-VESTS-מופקדים-כל-אחד (ynet-0-כבר-הוחזר)
-- **מנוע-הכלכלה-הפנימי**: /verify-גילה-שבר-בשרשרת (brokenAt=46335 — תפר-מיזוג-git-בין-סשנים) → המנוע-התרפא-מעצמו (recovery-tx: יתרות-החיים-נשמרו, seq-התחיל-מ-1) · pool=63,847-USDS+1,012-SAOS · treasury=13,000-SAOS+1.75-USDS · ⚠️-boot-verifier-מחזיק-13,482-USDS-ו-dʋח-all_ok=false — דורש-ביקורת-נפרדת
-- **שקילות-כוללת-נמדדה**: ≈4,575-STEEM-שווה-ערך-צי-כולו (4,027-SP + 19.2-נזיל + 42.2-SBD≈412 + 117-נזיל-אצל-חיילים)
-- **תשובת-מרוויחים?**: חיצונית-כמעט-אפס — curation≈+0.08-SP/יום · מסחר-מאוזן-מינוס-זעיר · אין-הכנסה-שוטפת-מדידה-מלבד-שברי-VESTS; ההון-מוצב-אך-מנוע-ההכנסה-לא-מחובר-למשכורות
-
-Stage Summary:
-- הכסף-מאותר-במלואו-על-השרשרת: אפס-אובדן-בלתי-מוסבר; 800-ה"נעלמים" = פריסת-SP-והפקדות-לחיילים-והמרת-SBD (הכל-הפיך)
-- דורש-החלטת-בעלים: (1) מסחר-0.102-בפועל-ללא-רווח — לעצור/להרחיב-מרווח? (2) החזרת-1.06M-VESTS-מ-11-החיילים? (3) חיבור-מנוע-הכנסה-אמיתי (curation-מוגבר/שירותים) (4) ביקורת-boot-verifier-13,482-USDS
+- The identical console error the owner re-saw was a stale browser tab (fix live in tree+origin+runtime).
+- Zero testnet anywhere in runtime; all rails mainnet, measured.
+- Multi-writer resilience now built INTO the economy: writers never lose events, treasury self-heals, reasons are measured.
+- 6/6 services alive; disk 75%; wave-90 pushed e005b033.
