@@ -31,10 +31,12 @@ export const MINI_SERVICES: MiniServiceDef[] = [
    * מת-עם-קציר-הסנדבוקס — מעכשיו גם-הוא בן-עץ-ה-Next (שושלת-השרדות) עם בריאות-HTTP כנה (/health). */
   { name: "fleet-economy", dir: "mini-services/fleet-economy", port: 3016, he: "הכלכלה-הפנימית (ספר-hash-chain · AMM · תורת-כותבים-רבים)", probe: "gateway" },
   /* גל-90 · מנוע-המסחר-החי על-Steem-מייננט: נמדד שמת מ-12:36 בקציר + האישור נמחק
-   * (קציר-קור-מוחק-סודות-gitignored) → SIGNING-DEAD. ההחייאה-הריבונית: vault-seed.sh
-   * מזריע את סיסמת-האב מהכספת-האטומה (אפס-סודות-על-stdout) → המנוע שופט-מול-השרשרת
-   * ומאמץ-עצמית (T-12 fail-closed). נמדד: פתיחת-הכספת + זריעה עובדים אוטומטית. */
-  { name: "saos-engine", dir: "/home/z/estate/steem/mini-services/saos-engine", port: 3040, he: "מנוע-המסחר-החי על-Steem (hyper-grid · חתימה-ריבונית מהכספת)", probe: "gateway", cmd: "bash tools/vault-seed.sh; [ -d node_modules ] || bun install --silent; exec bun run dev", env: { SAOS_ENGINE_PORT: "3040" } },
+   * (קציר-קור-מוחק-סודות-gitignored) → SIGNING-DEAD. ההחייאה-הריבונית: הכספת-חיה-מהגיט
+   * (T-86 · vault-revival.mjs) — המנוע עצמו פותח-את-הכספת מ-origin/main, מאמת sha256,
+   * ומאמץ-זהויות fail-closed מול-השרשרת (T-12) — אפס-סודות-על-stdout, אפס-סקריפט-חוץ.
+   * גל-91 · תיקון-פורט: T-80 קובע ש-office-selfcheck הוא הבעלים החוקי של :3040
+   * (נמדד-חי: selfcheck=3040) → המנוע נקשר ל-:3044 דרך SAOS_ENGINE_PORT (חוק-אח-לא-נלחם-באח). */
+  { name: "saos-engine", dir: "/home/z/estate/steem/mini-services/saos-engine", port: 3044, he: "מנוע-המסחר-החי על-Steem (hyper-grid · dexflow · חתימה-ריבונית מהכספת-בגיט)", probe: "gateway", cmd: "[ -d node_modules ] || bun install --silent; exec bun run dev", env: { SAOS_ENGINE_PORT: "3044" } },
 ];
 
 export interface MiniServiceDef {
