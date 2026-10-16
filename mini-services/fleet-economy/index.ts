@@ -298,36 +298,97 @@ function seed() {
   // היצע-כולל נשמר: סכום-היתרות + הבריכה = ההצעה הקבועה
 }
 
-function boot() {
+/* boot עמיד-תפרים (גל-ריפוי 2026-10-16): עד-היום כל-restart-עם-זנב-שנכתב-אחרי-ה-snapshot
+ * (או תפר-מיזוג-גיט) מקפיד את-כל-ההיסטוריה וזורע-מחדש — seq 4896→0 ארבע-פעמים-ביום.
+ * הלוגיקה-החדשה: (1) anchor — המקום-בלדג'ר של seq+lastH-ה-snapshot; (2) replay-זנב-אמת
+ * אחריו (אפס-אובדן-עסקאות); (3) אין-anchor → replay-ה-epoch האחרון מהלדג'ר עצמו;
+ * (4) שבר → ארכוב-זנב-להסגר + המשך-מהמאומת. אפס-תיקון-שרשרת, אפס-זריעה-מזויפת. */
+function boot(): { restored: boolean; seq: number; mode: string } {
   fs.mkdirSync(STATE_DIR, { recursive: true });
   try {
     if (fs.existsSync(SNAP)) {
       const s = JSON.parse(fs.readFileSync(SNAP, "utf8"));
-      balances = new Map(Object.entries(s.balances ?? {}).map(([k, v]) => [k, v as any]));
-      pool = s.pool ?? pool; seq = s.seq ?? 0; lastH = s.lastH ?? lastH;
-      byKind = s.byKind ?? {}; byAccount = s.byAccount ?? {}; rejected = s.rejected ?? 0; errors = s.errors ?? 0;
-      ledgerFileNo = s.ledgerFileNo ?? 0;
-      ingestOk = s.ingestOk ?? 0; ingestDedup = s.ingestDedup ?? 0; ingestFailed = s.ingestFailed ?? 0; ingestBad = s.ingestBad ?? 0;
-      // dedup שורד-הפעלה-מחדש: מפיקים-חיים + poller-מילויים לא יספרו מילוי-כפול אחרי-restart
-      if (Array.isArray(s.seenRefs)) for (const [k, v] of s.seenRefs as [string, number][]) seenRefs.set(k, v);
-      if (!balances.has("treasury")) throw new Error("snapshot corrupt");
-      // ריפוי-עצמי בעלייה (גל-82 · שורש-התפר): אם-הספר-על-הדיסק-תפור (תפר-מיזוג-גיט
-      // בין-שרשרת-מקומית-לענן) — אין-המשך-על-ספר-שבור: הסגר-כנה + זריעה-חדשה.
-      const v = verifyChain();
-      if (!v.ok) {
-        quarantineState(`boot-heal-brokenAt-${v.brokenAt}`);
+      const snapBalances = new Map(Object.entries(s.balances ?? {}).map(([k, v]) => [k, v as any]));
+      const snapPool = s.pool ?? pool;
+      const snapSeq = s.seq ?? 0; const snapLastH = s.lastH ?? lastH;
+      if (!snapBalances.has("treasury")) throw new Error("snapshot corrupt");
+      const w = walkLedger();
+      if (w.entries.length === 0) {
+        quarantineState(w.breakAt ? `boot-heal-brokenAt-${w.breakAt.seq ?? "parse"}` : "boot-heal-empty-ledger");
         balances = new Map();
         pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
         seq = 0; lastH = "GENESIS"; ledgerBuf = []; ledgerLines = 0; recent = [];
         byKind = {}; byAccount = {}; rejected = 0; ledgerFileNo = 0;
         seed();
-        return { restored: false, seq: 0, quarantined: true };
+        return { restored: false, seq: 0, mode: "fresh-seed" };
       }
-      return { restored: true, seq };
+      // (1) anchor — מהסוף-אחורה: המקום-בלדג'ר שמתאים-בדיוק-למדינה-החתומה
+      let anchorIdx = -1;
+      for (let i = w.entries.length - 1; i >= 0; i--) {
+        if (w.entries[i].tx.seq === snapSeq && w.entries[i].tx.h === snapLastH) { anchorIdx = i; break; }
+        if (w.entries[i].tx.seq < snapSeq) break;
+      }
+      if (anchorIdx >= 0) {
+        balances = snapBalances; pool = snapPool;
+        byKind = { ...(s.byKind ?? {}) }; byAccount = { ...(s.byAccount ?? {}) };
+        rejected = s.rejected ?? 0; errors = s.errors ?? 0; ledgerFileNo = s.ledgerFileNo ?? 0;
+        ingestOk = s.ingestOk ?? 0; ingestDedup = s.ingestDedup ?? 0; ingestFailed = s.ingestFailed ?? 0; ingestBad = s.ingestBad ?? 0;
+        if (Array.isArray(s.seenRefs)) for (const [k, v] of s.seenRefs as [string, number][]) seenRefs.set(k, v);
+        seq = snapSeq; lastH = snapLastH; ledgerBuf = []; recent = []; tailRing.length = 0;
+        // (2) replay-זנב-אמת אחרי-ה-anchor
+        let prevH = snapLastH; let replayed = 0; let stoppedAt: { file: string; line: number } | null = null;
+        for (let i = anchorIdx + 1; i < w.entries.length; i++) {
+          const e = w.entries[i];
+          if (!replaySealed(e.tx, prevH)) { stoppedAt = { file: e.file, line: e.line }; break; }
+          prevH = e.tx.h; replayed++;
+        }
+        let archived = 0;
+        if (stoppedAt || w.breakAt) {
+          const stop = stoppedAt ?? { file: w.breakAt!.file, line: w.breakAt!.line };
+          archived = archiveOrphanTail(stop.file, stop.line, "boot-anchor-replay-stop");
+        }
+        try { ledgerLines = fs.readFileSync(LEDGER, "utf8").split("\n").filter(Boolean).length; } catch { ledgerLines = 0; }
+        sealLog({ action: "boot-anchor-restore", anchorSeq: snapSeq, replayed, archived, breakAt: w.breakAt?.seq ?? null });
+        flush(); snapshotSave();
+        return { restored: true, seq, mode: `anchor+replay(${replayed})` };
+      }
+      // (3) אין-anchor (snapshot משרשרת-אחרת) → replay-ה-epoch האחרון מהלדג'ר עצמו
+      let epochStart = 0;
+      for (let i = 1; i < w.entries.length; i++) if (w.entries[i].tx.seq <= w.entries[i - 1].tx.seq) epochStart = i;
+      balances = new Map();
+      pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
+      seq = 0; lastH = "GENESIS"; ledgerBuf = []; recent = []; tailRing.length = 0;
+      byKind = {}; byAccount = {}; rejected = 0; errors = 0; ledgerFileNo = 0;
+      ingestOk = 0; ingestDedup = 0; ingestFailed = 0; ingestBad = 0;
+      seed(); // הערת-כנה: יתרות-זריעת-חיילים-מקורן-רנדומליות-בלתי-רשומות-בספר — השחזור-מקרוב-אך-לא-מדויק-לחיילים
+      let prevH = "GENESIS"; let replayed = 0; let stoppedAt: { file: string; line: number } | null = null;
+      for (let i = epochStart; i < w.entries.length; i++) {
+        const e = w.entries[i];
+        if (!replaySealed(e.tx, prevH)) { stoppedAt = { file: e.file, line: e.line }; break; }
+        prevH = e.tx.h; replayed++;
+      }
+      if (replayed === 0) {
+        quarantineState("boot-heal-epoch-replay-empty");
+        balances = new Map();
+        pool = { saos: POOL_SAOS, usds: POOL_USDS, feesUsds: 0, feesSaos: 0 };
+        seq = 0; lastH = "GENESIS"; ledgerBuf = []; ledgerLines = 0; recent = [];
+        byKind = {}; byAccount = {}; rejected = 0; ledgerFileNo = 0;
+        seed();
+        return { restored: false, seq: 0, mode: "fresh-seed" };
+      }
+      let archived = 0;
+      if (stoppedAt || w.breakAt) {
+        const stop = stoppedAt ?? { file: w.breakAt!.file, line: w.breakAt!.line };
+        archived = archiveOrphanTail(stop.file, stop.line, "boot-epoch-replay-stop");
+      }
+      try { ledgerLines = fs.readFileSync(LEDGER, "utf8").split("\n").filter(Boolean).length; } catch { ledgerLines = 0; }
+      sealLog({ action: "boot-epoch-replay", epochStartSeq: w.entries[epochStart].tx.seq, replayed, archived, breakAt: w.breakAt?.seq ?? null });
+      flush(); snapshotSave();
+      return { restored: true, seq, mode: `epoch-replay(${replayed})` };
     }
   } catch { /* snapshot פגום → זריעה-כנה מחדש */ }
   seed();
-  return { restored: false, seq: 0 };
+  return { restored: false, seq: 0, mode: "fresh-seed" };
 }
 
 /* הסגר-כנה של-קבצי-מדינה — אפס-תפירה-מזויפת, כל-ההיסטוריה-נשמרת-לביקורת */
@@ -343,23 +404,97 @@ function quarantineState(reason: string) {
   try { fs.writeFileSync(path.join(STATE_DIR, "quarantine", `${ts}·${reason}·REASON.txt`), `${reason}\n`); } catch { /* כנה */ }
 }
 
-/* אימות-שרשרת מלאה (לתביעה מול-אמת): קורא את הספר כולה ומאמת sha256 */
-function verifyChain(): { ok: boolean; checked: number; brokenAt?: number } {
-  let prev = "GENESIS"; let checked = 0;
+/* ── הליכת-לדג'ר epoch-aware (גל-ריפוי 2026-10-16 · שורש-התפר):
+ * רשומה שה-seq שלה יורד (למשל seq=1 אחרי seq=4896) = פתיחת-ספר-חדש (תפר-מיזוג-גיט
+ * או ריפוי) — prev מתאפס ל-GENESIS והאימות-נמשך. אפס-תיקון-שרשרת: שבר = breakAt כן,
+ * כל-מה-שמעבר-לו לא נחשב. המדידה המקורית (verifyChain) נשארת-מעטפת מעל-ההליכה. */
+type LedgerPos = { tx: Tx; file: string; line: number };
+function walkLedger(): { entries: LedgerPos[]; checked: number; breakAt?: { file: string; line: number; seq: number | null } } {
+  const entries: LedgerPos[] = [];
   const files = fs.readdirSync(STATE_DIR).filter((f) => f === "ledger.jsonl" || f.startsWith("ledger-")).sort();
+  let prev = "GENESIS"; let lastSeq = 0; let checked = 0;
   for (const f of files) {
     const lines = fs.readFileSync(path.join(STATE_DIR, f), "utf8").split("\n").filter(Boolean);
-    for (const line of lines) {
-      try {
-        const t = JSON.parse(line) as Tx;
-        const { h, ...rest } = t;
-        const body = JSON.stringify({ ...rest, prev });
-        if (createHash("sha256").update(body).digest("hex").slice(0, 32) !== h) return { ok: false, checked, brokenAt: t.seq };
-        prev = h; checked++;
-      } catch { return { ok: false, checked, brokenAt: checked }; }
+    for (let i = 0; i < lines.length; i++) {
+      let t: Tx;
+      try { t = JSON.parse(lines[i]) as Tx; } catch { return { entries, checked, breakAt: { file: f, line: i, seq: null } }; }
+      if (typeof t.seq !== "number" || typeof t.h !== "string") return { entries, checked, breakAt: { file: f, line: i, seq: null } };
+      if (t.seq <= lastSeq) prev = "GENESIS"; // גבול-epoch: ספר-חדש התחיל (תפר/ריפוי)
+      const { h, ...rest } = t;
+      const body = JSON.stringify({ ...rest, prev });
+      if (createHash("sha256").update(body).digest("hex").slice(0, 32) !== h) {
+        return { entries, checked, breakAt: { file: f, line: i, seq: t.seq } };
+      }
+      entries.push({ tx: t, file: f, line: i });
+      prev = h; lastSeq = t.seq; checked++;
     }
   }
-  return { ok: true, checked };
+  return { entries, checked };
+}
+
+/* שחזור-אפקט-מדינה מרשומה-חתומה (replay) — בלי-persist (כבר-על-הדיסק) ובלי-חתימה-מחדש.
+ * מאמת hash מול-prev הצפוי ומחיל את אותן-מוטציות-מדינה של apply(). fail-honest: false = שבר. */
+function replaySealed(t: Tx, wantPrev: string): boolean {
+  const { h, ...rest } = t;
+  const body = JSON.stringify({ ...rest, prev: wantPrev });
+  if (createHash("sha256").update(body).digest("hex").slice(0, 32) !== h) return false;
+  const from = bal(t.from), to = bal(t.to);
+  const field = t.asset === "USDS" ? "usds" : "saos";
+  if ((from as any)[field] < t.amount) return false;
+  if (t.kind === "stake") {
+    from.saos -= t.amount; from.saosStaked += t.amount;
+  } else if (t.kind === "unstake") {
+    if (from.saosStaked < t.amount) return false;
+    from.saosStaked -= t.amount; to.saos += t.amount;
+  } else {
+    (from as any)[field] -= t.amount;
+    if (t.kind === "swap") {
+      const feeAmt = t.fee ?? 0;
+      if (t.asset === "USDS") { pool.usds += t.amount; pool.saos -= (t as any).outSaos; to.saos += (t as any).outSaos; pool.feesUsds += feeAmt; }
+      else { pool.saos += t.amount; pool.usds -= (t as any).outUsds; to.usds += (t as any).outUsds; pool.feesSaos += feeAmt; }
+    } else {
+      (to as any)[field] += t.amount;
+    }
+  }
+  byAccount[t.from] = (byAccount[t.from] ?? 0) + 1;
+  byAccount[t.to] = (byAccount[t.to] ?? 0) + 1;
+  byKind[t.kind] = (byKind[t.kind] ?? 0) + 1;
+  seq = t.seq; lastH = h;
+  recent.push(t.ts);
+  tailRing.push(t);
+  if (tailRing.length > 500) tailRing.shift();
+  return true;
+}
+
+/* ארכוב-זנב-יתום להסגר + קיצוץ-הספר-החי עד-נקודת-השחזור.
+ * ההיסטוריה לא נמחקת — היא עוברת להסגר עם REASON לביקורת. מחזיר מספר-רשומות-שאורכו. */
+function archiveOrphanTail(fromFile: string, fromLine: number, reason: string): number {
+  try {
+    const q = path.join(STATE_DIR, "quarantine");
+    fs.mkdirSync(q, { recursive: true });
+    const ts = new Date().toISOString().replace(/[:.]/g, "-");
+    const files = fs.readdirSync(STATE_DIR).filter((f) => f === "ledger.jsonl" || f.startsWith("ledger-")).sort();
+    const idx = files.indexOf(fromFile);
+    if (idx < 0) return -1;
+    let archived = 0;
+    const dump: string[] = [];
+    for (let fi = idx; fi < files.length; fi++) {
+      const lines = fs.readFileSync(path.join(STATE_DIR, files[fi]), "utf8").split("\n").filter(Boolean);
+      const start = fi === idx ? fromLine : 0;
+      for (let i = start; i < lines.length; i++) { dump.push(lines[i]); archived++; }
+    }
+    fs.writeFileSync(path.join(q, `${ts}·orphan-tail·${reason}·ledger.jsonl`), dump.join("\n") + (dump.length ? "\n" : ""));
+    fs.writeFileSync(path.join(q, `${ts}·orphan-tail·${reason}·REASON.txt`), `${reason} · archived=${archived}\n`);
+    const keep = fs.readFileSync(path.join(STATE_DIR, fromFile), "utf8").split("\n").filter(Boolean).slice(0, fromLine);
+    fs.writeFileSync(path.join(STATE_DIR, fromFile), keep.join("\n") + (keep.length ? "\n" : ""));
+    for (let fi = idx + 1; fi < files.length; fi++) { try { fs.rmSync(path.join(STATE_DIR, files[fi]), { force: true }); } catch { /* כנה */ } }
+    return archived;
+  } catch { return -1; }
+}
+
+function verifyChain(): { ok: boolean; checked: number; brokenAt?: number } {
+  const w = walkLedger();
+  return w.breakAt ? { ok: false, checked: w.checked, brokenAt: w.breakAt.seq ?? w.checked } : { ok: true, checked: w.checked };
 }
 
 /* ── HTTP ─────────────────────────────────────────────────────────────────── */
@@ -434,7 +569,9 @@ const server = Bun.serve({
        * תשובה מהירה, מונים-כנים. */
       if (url.pathname === "/tx/ingest" && req.method === "POST") {
         const ip = srv.requestIP(req);
-        const addr = ip ? String(ip.address) : "";
+        // bun ≥1.3 מחזיר IPv4-ממופה-IPv6 (::ffff:127.0.0.1) — נרמול-חובה לפני-ההשוואה
+        // (נמדד 2026-10-16: בלי-זה כל-מילוי-אמת נפל 403 loopback-only — 228+ אירועים אבדו)
+        const addr = ip ? String(ip.address).replace(/^::ffff:/, "") : "";
         if (addr !== "127.0.0.1" && addr !== "::1") {
           return Response.json({ ok: false, error: "loopback-only" }, { status: 403 });
         }
@@ -641,5 +778,5 @@ function pollDexFills(): void {
 setInterval(pollDexFills, FILL_POLL_MS);
 setTimeout(pollDexFills, 15_000);
 
-console.log(`[fleet-economy] חי על :${PORT} · restored=${bootResult.restored} · seq=${bootResult.seq} · תורת-משתמשי-פנים בעיצומה · vault-seal מובנה · ingest-אירועים-אמת מחובר (dex-fills+verifier+seal)`);
+console.log(`[fleet-economy] חי על :${PORT} · restored=${bootResult.restored} · seq=${bootResult.seq} · mode=${bootResult.mode} · תורת-משתמשי-פנים בעיצומה · vault-seal מובנה · ingest-אירועים-אמת מחובר (dex-fills+verifier+seal)`);
 export {};
