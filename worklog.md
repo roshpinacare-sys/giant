@@ -2442,3 +2442,24 @@ Stage Summary:
 - Full self-healing chain restored: office-live keepalive (60s) + local-beats guard + runtime-supervisor table + engine's own dev-guard — four independent revival paths, all port-gated
 - Web dark cascade root-caused and structurally eliminated (engine.lock untracked + layered keepalive)
 - All work sealed in canon; AHEAD:0 BEHIND:0
+
+---
+Task ID: 63
+Agent: orchestrator (operator session, IM trace 1a1461177e108341/1a146179ffd68845)
+Task: הוראת-בעלים — מפתח-לא-מאומת-רק-בסנדבוקס · תיקון-duplicate-key-DexView מהר-ודחיפה (לבדוק-מה-דחפו-אחרים) · הכל-חי-מהשורש-כולל-סוכני-משרד-וותיקים · ודא-עסקאות-בכסף-אמיתי-לא-testnet · תוכנית-נזילות-אמיתית-לצי
+
+Work Log:
+- לידה-מחדש מול-git (תורה-5): fetch/pull — המאגר היה "ahead-2" (refs-ישן; אחרי-fetch בפועל מסונכרן) · אימות-מפתח: credential-helper (upload/pat.env + boot/git-cred.sh) עובד, ls-remote-ודחיפות-המנוע-מוכחות — **המפתח-אומת-בהצלחה** (הכשל-שדווח-היה-תת-הסנדבוקס-המת; לאחר-הלידה-מחדש-הכל-חי)
+- duplicate-key (R364): שורש = שורות-metrics-חיות עם day:null → 3-מפתחות-""; הסשן-השני-כבר-תיקן-בענן (718d85a) — **נתגלה-שה-ours-tree-של-ה-vault-sync-שפך-את-התיקון-מהעץ**; שוחזר-מ-718d85a/736d9a2^ (wave-91 0bd05f7) · **מלחמת-עצים נמדדה**: code-lane-אוטומטי-שלי (736d9a2) זרם-פנימה-גרסה-ישנה-ומחק-את-R364-שוב → גל-93: **code-lane=יומן-בלבד** (לא-checkout; קוד-נכנס-רק-בקליטה-מכוונת-של-סוכן-לפי-"תבדוק-טוב-לפני-ביצוע") · שוחזרו: R364 + office-live-214 · **מאומת-בדפדפן**: DexView-עולה, טבלת-מדדים-4-שורות, **אפס same-key** בקונסולה
+- קליטה-מכוונת-מהענן (גל-94): estate-discovery (תווית-כנה "סוכני-פיתוח-חוזים (היסטורי)") נקלט; fleet-economy/index.ts — **העץ-שלנו-מנצח** (אצלם-חסר-עוגן-3.81±15%+שסתום-דו-כיווני של גל-91); route.ts/DexView — שקולים; office-live — שלנו (214>171)
+- 🔴 **ENOSPC-נמדד (100%-דיסק)** — שורש: db/custom.db (24MB-בינארי) נאטם-בכל-סוויפ → היסטוריה-1.6GB · שוחררו ~1.7GB (מטמוני-bun/tmp/עותקי-.stale-מסונכרנים: estate/steem 751M · channels/giant 673M · 7×stale) · **גל-92: db-מופסק-ממעקב** — הספר-החי=snapshot.json+ledger.jsonl (snapshot+replayTailAbove-מוכח-באתחול); db-נבנה-מחדש-אוטומטית
+- מנוע-כלכלה: נעצר/הוחזר-דרך-הסופרוויזר (רוסטר 6/6) עם wave-90+גל-93 · שני-יתומים-מתיקיות-מחוקות (foreman-4892, selfcheck-4608) הוקפצו-מחדש-מהדיסק-הקנוני (cwd-מאומת) · **מנעול-זומבי-של-keeper** (מ-17:37) חסם-תחייה — תוקן: מנעול-נמחק, keeper-יחיד-חי, כל-הנמלים-ירוקים (reception/fleet-hq-app/foreman/fleet-economy/office-live/office-selfcheck) + git-wiring credHelper:true tokenPresent:true
+- סוכני-המשרד-הוותיקים (הוראה-"מה-איתם"): Domain/agents = **345-קבצי-סוכנים** · רישום-ERC-8004: 6-זהויות (market-exec/fill-ledger/market-cycle/market-grid/venture-desk/principal-owner) — כולם alive:true, 3-עם-הוכחות-מוניטין, 3-validated · STASIS=staged (מנוע-סיכון-מפתחות-מהוראת-בעלים-2026-10-04) · כלי-ההרצה-חיים: lineage-guard/shift-history/post-batcher/telemetry/watchdog/runtime-supervisor
+- כסף-אמיתי-מול-testnet (הוראה): **אפס-testnet-בקוד-פעיל** (ה-"TESTNET" ב-DexView=תווית-כנה-למוצר-EVM-Lab-המתוכנן, מיינט=אישור-דו-מפתח) · market-exec: api.steemit.com בלבד · **חוק-מצב: DRY_RUN-ברירת-מחדל, שידור-אמת-רק-MARKET_EXEC_LIVE=1** (שער-בעלים, STEEM_ACTIVE_WIF-מסביבת-הבעלים)
+- מדידת-כסף-אמיתי (money.json 18:33 + honest-econ 16:33): acct-00-liquid = **14.84-STEEM + 42.14-SBD (≈$23-24-כסף-חוץ-אמיתי)** · powerdown-לא-פעיל (ה-≈470-SP-עורק-הסתיים/הופסק) · TRX-custody-לא-נמדד · **גל-94: money-watch-מודד-מעכשיו-SP-נטו** (vesting+received−delegated × יחס-חי-מהשרשרת) — הותקן-ב-Console, רץ-בסביבה-המוסמכת (FLEET_ROSTER_MAP=Actions-secret; הצנזורה-שומרת-על-השמות)
+
+Stage Summary:
+- תיקוני-שורש: R364-מאומת-דפדפן · code-lane=יומן-בלבד (קץ-מלחמת-העצים) · db-מחוץ-למעקב (קץ-נפיחת-24MB/סוויפ) · ENOSPC-נפתר (83%) · מנעול-זומבי-keeper-תוקן · יתומים-הוחזרו-לדיסק-הקנוני
+- המפתח-מאומת: הדחיפות-עובדות; ההתנגשויות-הנותרות-הן-מירוץ-כותבים-בין-שני-סנדבוקסים-חיים — מתכנסות-דרך-סוויפי-האטימה (ours-tree+יומן-קוד), הקליטה-מכוונת-בלבד-מחליטה-תוכן
+- **תוכנית-נזילות-אמיתית (מדידה→מעסה→יציאה)**: (1) מצב: $23-24-נזילות-אמיתית-בלבד + SP-עתידי-שיימדד-מ-גל-94; (2) מעסה-פנימי: SBD→STEEM-בפקודות-לימיט-בתוך-הפרש (market-exec, DRY_RUN-מוכן, חימוש=בעלים) · SP→נזיל-דרך-powerdown-13-שבועות-כש-SP>0-נמדד; (3) יציאה-חוץ: נדרש-שער-exchange/peg — **החלטת-בעלים-בלבד** (מפתחות-כספת-חוץ-לעולם-לא-אצל-הצי); (4) גשר-הווליום: %-מ-feeMeter-הפנימי-נסחר-חזרה-ל-STEEM/SBD-אמיתיים — כל-עסקה-פנימית-מניבה-נזילות-חוץ (החוק-החסר-למימוש); (5) חסר-מדידה: TRX-custody + SP-לכל-חייל (גל-94-מכסה-acct-00; הרחבה-לחיילים-בתור)
+- AHEAD-מקומי (גל-92/93/94) מתכנס-לענן-דרך-סוויפי-האטימה; Console-גל-94-זהה
