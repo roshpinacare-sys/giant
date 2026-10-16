@@ -710,7 +710,15 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
       // בעץ-העבודה-כלל — הספר-החי-והקוד-הרצים-שלנו-מנצחים-תמיד, ההיסטוריה-של-הענן
       // (כולל-קו-הסשן-השני) מקושרת-כהורה-שני. אפס-קונפליקטים, אפס-stash, אפס-תפר.
       await git(dir, ["fetch", remote, "main"]);
-      const mg = await git(dir, ["merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins, zero-seam", "FETCH_HEAD"]);
+      // גל-87 · סגירת-חלון-הלכלוך: בין-ה-commit-בראש-הלולאה לבין-המיזוג, sealLog/ingestEvent
+      // מוסיפים-רשומות-ספר (seal-log/ledger) → commit-שקט-חוזר כדי-שהמיזוג-ירוץ-על-מצב-עקבי
+      // (no-op-כנה-אם-אין-שינויים).
+      await git(dir, ["add", "-A"]);
+      await git(dir, ["commit", "-q", "-m", "vault-seal [auto-economy]: tail-records-before-link"]);
+      // גל-87 · חיסול-מירוץ-ה-stash: merge.autoStash=false-מפורש. נמדד-פעמיים
+      // (14:36/15:00): stash-על-עץ-חי-של-ספר-שכתיבתו-אינה-פוסקת = "unstable object
+      // source data" → merge-fail. merge -s ours לא-נוגע-בעץ → אין-שום-סיבה-ל-stash.
+      const mg = await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins, zero-seam", "FETCH_HEAD"]);
       if (!mg.ok && !mg.out.includes("Already up to date") && !mg.out.includes("up to date")) {
         sealLog({ repo: name, action: "merge-fail", out: mg.out.slice(0, 200) });
       }
@@ -852,6 +860,7 @@ const FILL_POLL_MS = 45_000;
 const fillBaseline = Date.now(); // רק-מילויים-חדשים מאז-עלייה (היסטוריה לא נספרת)
 let fillPollErrors = 0, fillPollRuns = 0;
 function pollDexFills(): void {
+  if (sealing) return; // גל-87 · אף-קריאת-ספר-בזמן-אטימה (הסבב-הבא-יתפוס-הכל; dedup לפי-ref)
   fillPollRuns++;
   let db: Database | null = null;
   try {
@@ -887,6 +896,7 @@ import net from "node:net";
 import { spawn as cpSpawn } from "child_process";
 const DEV_PORT = 3000;
 let devGuardBusy = false;
+const frozenSeen = new Map<number, number>(); // גל-87 · ספירת-טיקים-רצופים-בהם-התהליך-קפוא
 function tcpOpenFast(port: number, timeoutMs = 2500): Promise<boolean> {
   return new Promise((resolve) => {
     const s = net.connect({ port, host: "127.0.0.1" });
@@ -897,17 +907,27 @@ function tcpOpenFast(port: number, timeoutMs = 2500): Promise<boolean> {
   });
 }
 async function devGuard(): Promise<void> {
-  // הפשרת-יתומים: כל-next-server-במצב-T (SIGSTOP-שנשכח) חוזר-לחיים
+  // הפשרת-יתומים: next-server-במצב-T (SIGSTOP-שנשכח) חוזר-לחיים — בשני-שומרים (גל-87):
+  // (1) בזמן-אטימה (sealing) ההקפאה-מכוונת-לגמרי (חוק-משמורת-מדינה) — אל-תפשיר-באמצע-סוופ.
+  //     נמדד: ההפשרה-באמצע-סוופ העירה-את-Prisma-באמצע-כתיבה → git-התרסק-על
+  //     "unstable object source data" → merge-fail-על-my-project (14:36 + 15:00).
+  // (2) יתום-אמיתי-מופשר-רק-אחרי-שנראה-קפוא-בשני-טיקים-רצופים (60ש׳) — סוופ-מעולם
+  //     לא-אורך-כך-בהקפאה; SIGSTOP-נשכח-אמיתי-נמשך-לנצח. שעון-היתום-מתאפס-בכל-הפשרה-מכוונת.
   try {
     for (const pid of fs.readdirSync("/proc").filter((d) => /^\d+$/.test(d))) {
       try {
         const cmd = fs.readFileSync(`/proc/${pid}/cmdline`, "utf8");
         if (!cmd.includes("next-server")) continue;
-        const st = fs.readFileSync(`/proc/${pid}/status`, "utf8");
-        if (/^State:\s*T/m.test(st)) {
-          process.kill(Number(pid), "SIGCONT");
-          console.log(`[dev-guard] הפשרתי-next-server-קפוא pid=${pid} (SIGSTOP-יתום)`);
-        }
+        const p = Number(pid);
+        const st = fs.readFileSync(`/proc/${p}/status`, "utf8");
+        if (!/^State:\s*T/m.test(st)) { frozenSeen.delete(p); continue; }
+        if (sealing) { frozenSeen.delete(p); continue; } // שומר-1: ההקפאה-חלק-מהסוופ — ידיים-בחוץ
+        const seen = (frozenSeen.get(p) ?? 0) + 1;
+        frozenSeen.set(p, seen);
+        if (seen < 2) continue; // שומר-2: ראייה-ראשונה — טיק-נוסף-לפני-הפשרה
+        process.kill(p, "SIGCONT");
+        frozenSeen.delete(p);
+        console.log(`[dev-guard] הפשרתי-next-server-קפוא pid=${pid} (SIGSTOP-יתום · שתיים-ברצף)`);
       } catch { /* תהליך-נעלם */ }
     }
   } catch { /* כנה */ }
