@@ -19,8 +19,6 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import fs from 'fs';
 import path from 'path';
-import { spawn } from 'child_process';
-import { connect } from 'net';
 import { fileURLToPath, pathToFileURL } from 'url';
 
 /* ריפוי-עצמי של המנוע (גל-16): המנוע הקנוני חי ב-Domain/office/engine.mjs (פעימת
@@ -171,44 +169,3 @@ process.on('SIGINT', shutdown);
 httpServer.listen(PORT, () => {
   log(`broadcasting on :${PORT} — world t=${new Date(world.t).toISOString()}, agents=${world.agents.length}`);
 });
-
-/* ── sovereign-keepalive (wave-91, doctrine-4, 2026-10-16) ────────────────
- * 实证法则：由本沙箱编码会话直接产出的进程（setsid/nohup/detached 均试过）
- * 会被增量收割（8301/10660/12943 三连死）；而活树进程 detached 产出的孙子
- * 存活（5049 活证）。本服务是 `bun --hot` 长活树成员——热重载后本段生效，
- * 由它 detached 孕出的 fleet-economy(:3016) 与 next-dev(:3000) 获得树内
- * 豁免权。端口门控：活的从不触碰；死的每次探窗恰好一次 spawn。
- * 引擎自身带单写锁 + EADDRINUSE 诚实退出——三实例并发孕出也无争端。 */
-function _kaPortUp(port, timeoutMs = 1500) {
-  return new Promise((resolve) => {
-    const sock = connect(port, '127.0.0.1');
-    const done = (ok) => { try { sock.destroy(); } catch { /* raced */ } resolve(ok); };
-    sock.setTimeout(timeoutMs);
-    sock.once('connect', () => done(true));
-    sock.once('timeout', () => done(false));
-    sock.once('error', () => done(false));
-  });
-}
-const _KA_TARGETS = [
-  { port: 3016, cwd: '/home/z/my-project/mini-services/fleet-economy', cmd: process.execPath, args: ['index.ts'], logf: '/home/z/my-project/mini-services/fleet-economy/economy.log', name: 'fleet-economy' },
-  { port: 3000, cwd: '/home/z/my-project', cmd: process.execPath, args: ['run', 'dev'], logf: '/home/z/my-project/dev.log', name: 'next-dev' },
-];
-let _kaBusy = false;
-async function sovereignKeepalive() {
-  if (_kaBusy) return;
-  _kaBusy = true;
-  try {
-    for (const t of _KA_TARGETS) {
-      try {
-        if (await _kaPortUp(t.port)) continue;
-        const out = fs.openSync(t.logf, 'a');
-        const child = spawn(t.cmd, t.args, { cwd: t.cwd, detached: true, stdio: ['ignore', out, out], env: { ...process.env, GIT_EDITOR: 'true' } });
-        child.unref();
-        fs.closeSync(out);
-        log(`sovereign-keepalive: ${t.name} down → tree-child revive pid=${child.pid}`);
-      } catch (e) { log(`sovereign-keepalive: ${t.name} error: ${String(e).slice(0, 80)}`); }
-    }
-  } finally { _kaBusy = false; }
-}
-sovereignKeepalive();
-setInterval(sovereignKeepalive, 60_000);

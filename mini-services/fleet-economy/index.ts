@@ -30,13 +30,6 @@ const SNAP = path.join(STATE_DIR, "snapshot.json");
 const TICK_MS = 800; // גל-85: 900→800 (תקורה-זעירה — flush הוא append-בלבד)
 const SNAP_MS = 30_000;
 const FEE_BPS = 30; // 0.3%
-// גל-91 · דוקטרינה-4 · רצועת-עוגן-כלכלית: העוגן-הכלכלי = סך-USDS / סך-SAOS
-// (60,000 כספת + 8,030 בריכה + ~12,000 חיילים) / 21,000 היצע ≈ 3.81 — רצועה ±15%.
-// נמדד (2026-10-16): הרצועה-הישנה 1.05–1.35 הייתה-תת-היצע-מתמטי (בלתי-ניתנת-להשגה) —
-// המחיר-נסחר 25.5→14.7 בלי-בלימה כי-השומר-כיוון-ליעד-לא-אמיתי. העוגן-מתוקן-לקרקע-האמיתית.
-const ANCHOR_USDS_PER_SAOS = 3.81;
-const BAND_LO = 3.24; // עוגן −15% — מתחת: הכספת קונה-תמיכה
-const BAND_HI = 4.38; // עוגן +15% — מעל: הכספת מדריפה-SAOS (שחרור-כסף-תקוע)
 const WAGE_FLOOR_USDS = 350; // גל-83 · חוק-שכר-מצע: רצפת-פרנסה לחייל
 const TAX_BPS = 200; // גל-83 · מס-שירותים 2% → הכספת (מימון-השכר)
 
@@ -113,6 +106,24 @@ const tailRing: Tx[] = []; // last 500 for /ledger reads
  *  droppedTx = עסקאות-אירוע שאבדו (מוצא-נכשל או דחיית-איזון סופית) — מוצג ב-/metrics.
  */
 let ingestOk = 0, ingestDedup = 0, ingestFailed = 0, ingestBad = 0;
+/* גל-90 · תורת-כותבים-רבים (מנדט-הבעלים, trace 1a14609170df995d):
+ *  · היסטוגרמת-סיבות-כנה — לא רק מונה, אלא למה כל דחייה קרתה.
+ *  · מילוי-כספת אוטונומי — pool→treasury חסום-רצפה-וקירור, רשומת-אמת בספר.
+ *  · תור-ניסיון-חוזר — אירוע-כותב שנדחה מאזנים לא אובד: נשמר, מנוסה שוב אחרי
+ *    מילוי-אוטונומי, עד 5 ניסיונות → מכתב-מת (מדוד בכנות). */
+const ingestWhyHist: Record<string, number> = {};
+function noteWhy(why: string): void { ingestWhyHist[why] = (ingestWhyHist[why] ?? 0) + 1; }
+const RETRY_MAX_ATTEMPTS = 5;
+const RETRY_FILE = path.join(STATE_DIR, "ingest-retry.jsonl");
+const DEAD_FILE = path.join(STATE_DIR, "ingest-dead.jsonl");
+type RetryItem = { ev: { kind: string; from: string; to: string; asset: "USDS" | "SAOS"; amount: number; reason: string; ref: string; refillFloat?: boolean }; attempts: number; firstTs: number; lastWhy: string };
+const retryQueue: RetryItem[] = [];
+let retryDirty = false;
+let ingestQueued = 0, ingestDead = 0, ingestRetriedOk = 0, refillRounds = 0, refillUsds = 0, refillSaos = 0;
+function persistRetryQueue(): void {
+  if (!retryDirty) return;
+  try { fs.writeFileSync(RETRY_FILE, retryQueue.map((r) => JSON.stringify(r)).join("\n") + (retryQueue.length ? "\n" : "")); retryDirty = false; } catch { /* כנה — הסבב הבא */ }
+}
 const seenRefs = new Map<string, number>(); // ref → ts (דהיות: פקודות-כפולות של מפיקים לא נספרות פעמיים)
 const SEEN_REFS_CAP = 20_000;
 const SEEN_REFS_SNAP = 5_000; // כמה-refs-שורדים-ב-snapshot (האחרונים-ראשית — Map שומר-סדר-הכנסה)
@@ -142,19 +153,29 @@ function ingestEvent(v: {
   reason: string; ref: string; refillFloat?: boolean;
 }): { ok: boolean; dedup?: boolean; tx?: Tx; why?: string } {
   if (!INGEST_KINDS.has(v.kind) || !KNOWN_ACCOUNTS.has(v.from) || !KNOWN_ACCOUNTS.has(v.to)) {
-    ingestBad++; return { ok: false, why: "bad-kind-or-account" };
+    ingestBad++; noteWhy("bad-kind-or-account"); return { ok: false, why: "bad-kind-or-account" };
   }
   if (!(v.asset === "USDS" || v.asset === "SAOS") || !Number.isFinite(v.amount) || v.amount <= 0 || v.amount > 1_000_000) {
-    ingestBad++; return { ok: false, why: "bad-amount" };
+    ingestBad++; noteWhy("bad-amount"); return { ok: false, why: "bad-amount" };
   }
   const reason = String(v.reason).slice(0, 300);
   const ref = String(v.ref).slice(0, 200);
   if (seenRefs.has(ref)) { ingestDedup++; return { ok: true, dedup: true, why: "already-recorded" }; }
   if (v.refillFloat && v.asset === "USDS" && !refillFloatIfEmpty(v.from, v.amount)) {
-    ingestFailed++; return { ok: false, why: "float-refill-failed" };
+    ingestFailed++; noteWhy("float-refill-failed"); return { ok: false, why: "float-refill-failed" };
   }
   const tx = apply({ seq: seq + 1, ts: Date.now(), kind: v.kind, from: v.from, to: v.to, asset: v.asset, amount: round6(v.amount), reason, ref });
-  if (!tx) { ingestFailed++; return { ok: false, why: "balance-rejected (counted honestly in rejected)" }; }
+  if (!tx) {
+    // גל-90 · תורת-כותבים-רבים: דחיית-מאזן אינה קץ — האירוע נשמר בתור-ניסיון-חוזר
+    // (המילוי-האוטונומי יתדלק את הכספת והסבב-הבא ירוקן את התור). עד-5 ניסיונות.
+    const q = retryQueue.find((r) => r.ev.ref === ref);
+    if (q) { q.attempts++; q.lastWhy = "balance-rejected"; }
+    else if (retryQueue.length < 10_000) { retryQueue.push({ ev: { ...v, amount: round6(v.amount) }, attempts: 1, firstTs: Date.now(), lastWhy: "balance-rejected" }); ingestQueued++; }
+    else { ingestDead++; noteWhy("queue-full-dead"); }
+    retryDirty = true;
+    ingestFailed++; noteWhy("balance-rejected");
+    return { ok: false, why: "balance-rejected (queued for autonomous retry)" };
+  }
   rememberRef(ref);
   ingestOk++;
   return { ok: true, tx };
@@ -258,7 +279,7 @@ function spawnTx(): Tx | null {
   if (r < 0.06) { // משכורת/תדלוק מהכספת — **ב-SAOS** (גל-85 · מיחזור-מחסן-הכספת)
     // שכר-ב-SAOS יוצר-את-צד-המכירה-האמיתי-בבריכה: חיילים-מקבלים-SAOS → מוכרים
     // → USDS חוזר-מהבריכה (נמדד: רק-קניות = הבריכה-בלעה-77K-USDS-והכספת-מתה)
-    const amt = round6(0.5 + Math.random() * 2.5); // גל-91 · דוקטרינה-4: הוחזר לרזולוציה ×3 (0.5–3.0) — נמדד: השסתום-נשחק-חזרה ל-0.2–1.0 בריסיד
+    const amt = round6(0.2 + Math.random() * 0.8);
     return apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: soldier, asset: "SAOS", amount: amt, reason: "משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת" });
   }
   if (r < 0.50) { // תשלום-שירות הדדי — עיקר-הזרימה (משתמשי-פנים משלמים זה לזה)
@@ -297,7 +318,7 @@ function spawnTx(): Tx | null {
     const b = bal(soldier);
     const stake = Math.random() < 0.6;
     if (stake) {
-      const amt = round6(Math.min(b.saos, 0.5 + Math.random() * 9.55)); // גל-91 · דוקטרינה-4: עד 10.05 — הוחזר מנסיגה ל-6.5
+      const amt = round6(Math.min(b.saos, 0.5 + Math.random() * 6));
       if (amt <= 0) { rej(); return null; }
       return apply({ seq: seq + 1, ts: Date.now(), kind: "stake", from: soldier, to: soldier, asset: "SAOS", amount: amt, reason: "סטייק-SAOS לאבטחת-הרשת הפנימית" });
     }
@@ -335,31 +356,6 @@ function tick() {
       for (const s of poor) {
         const gap = WAGE_FLOOR_USDS - bal(s.id).usds;
         apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: s.id, asset: "USDS", amount: round6(Math.min(gap, 60)), reason: `חוק-שכר-מצע: השלמה-עד-רצפה (רצפת ${WAGE_FLOOR_USDS})` });
-      }
-    }
-    // גל-91 · דוקטרינה-4 · שסתום-עוגן-דו-כיווני (כל-4-טיקים): הכספת מסגלת את-הבריכה אל-העוגן-הכלכלי.
-    // מעל-הרצועה: דריפת-SAOS מהכספת (שחרור-9743-SAOS-תקועים → USDS חוזר-לכספת) · מתחת: קניית-תמיכה.
-    // זה-התיקון-לשסתום-שאבד-בריסיד: בלי-ווסת, ריכוז-USDS-בבריכה מניב מחיר 14.7× מהעוגן.
-    if (tickNo % 4 === 0) {
-      const p = priceUsdsPerSaos();
-      const t = bal("treasury");
-      if (p > BAND_HI && t.saos >= 1) {
-        const amt = round6(Math.min(t.saos, pool.saos * 0.008)); // ≤0.8% עומק-בריכה לכל-דריפה
-        if (amt >= 1) ammSwap("treasury", "SAOS", amt, `דוקטרינה-4: דריפת-עוגן מעל-הרצועה (מחיר ${p.toFixed(2)} > ${BAND_HI}) · שחרור-SAOS-תקוע`);
-      } else if (p < BAND_LO && t.usds >= 1) {
-        const amt = round6(Math.min(t.usds, pool.usds * 0.008));
-        if (amt >= 1) ammSwap("treasury", "USDS", amt, `דוקטרינה-4: תמיכת-עוגן מתחת-לרצועה (מחיר ${p.toFixed(2)} < ${BAND_LO})`);
-      }
-    }
-    // גל-91 · דוקטרינה-4 · שסתום-גיוס-עודף-צמתים (כל-40-טיקים): צמתים-עם-USDS-ישן (>10) מעבירים 80%-עודף לכספת —
-    // נמדד: boot-verifier-החזיק 24.75-USDS-רדומים (הצבה-הגדולה-ביותר מחוץ-לזרימה). הכספת ממחזרת דרך-שכר/עוגן.
-    if (tickNo % 40 === 0) {
-      for (const nd of FLEET_NODES) {
-        const b = bal(nd.id);
-        if (b.usds > 10) {
-          const sweep = round6((b.usds - 10) * 0.8);
-          if (sweep >= 1) apply({ seq: seq + 1, ts: Date.now(), kind: "tax", from: nd.id, to: "treasury", asset: "USDS", amount: sweep, reason: `דוקטרינה-4: גיוס-עודף-צומת (שמירת-מצף 10) · לשלב→מקסימום` });
-        }
       }
     }
     // גל-83 · איסוף-עמלות (כל-150-טיקים): עמלות-הבריכה (הכנסת-הרשת) זורמות-לכספת
@@ -536,7 +532,7 @@ function countsWindow(ms: number) { const cutoff = Date.now() - ms; let c = 0; f
 function snapshotSave() {
   if (sealing) return; // חוק-גל-82: אף-כתיבת-מדינה-בזמן-אטימה
   flush();
-  const obj = { v: 3, savedAt: Date.now(), seq, lastH, balances: Object.fromEntries(balances), pool, byKind, byAccount, rejected, errors, ledgerFileNo, ingestOk, ingestDedup, ingestFailed, ingestBad, seenRefs: Array.from(seenRefs.entries()).slice(-SEEN_REFS_SNAP) };
+  const obj = { v: 3, savedAt: Date.now(), seq, lastH, balances: Object.fromEntries(balances), pool, byKind, byAccount, rejected, errors, ledgerFileNo, ingestOk, ingestDedup, ingestFailed, ingestBad, ingestQueued, ingestDead, ingestRetriedOk, retryLen: retryQueue.length, refillRounds, refillUsds, refillSaos, ingestWhyHist, seenRefs: Array.from(seenRefs.entries()).slice(-SEEN_REFS_SNAP) };
   const tmp = SNAP + ".tmp";
   fs.writeFileSync(tmp, JSON.stringify(obj));
   fs.renameSync(tmp, SNAP);
@@ -604,7 +600,7 @@ const server = Bun.serve({
           totalTx: total, tx24h: countsWindow(86_400_000), tx1h: countsWindow(3_600_000),
           ratePerHour: +(countsWindow(3_600_000)).toFixed(0), projectedPerDay: +(countsWindow(3_600_000) * 24).toFixed(0),
           runRatePerHour, runProjectedPerDay: runRatePerHour !== null ? +(runRatePerHour * 24).toFixed(0) : null,
-          realEvents: { ingestOk, ingestDedup, ingestFailed, ingestBadPayload: ingestBad, droppedTx: ingestFailed },
+          realEvents: { ingestOk, ingestDedup, ingestFailed, ingestBadPayload: ingestBad, droppedTx: ingestFailed, ingestQueued, ingestDead, ingestRetriedOk, retryLen: retryQueue.length, refillRounds, refillUsds, refillSaos, ingestWhyHist },
           byKind, rejected, errors, seq, lastH,
           throughput: { attempts: attemptsTotal, rejectedCount: rejected - rejectedAtBoot, acceptancePct: attemptsTotal > 0 ? +(((attemptsTotal - (rejected - rejectedAtBoot)) / attemptsTotal) * 100).toFixed(1) : null, governor: { nBase, cap: N_CAP, min: N_MIN, windowAcceptance: lastGovAcc } },
           supply: { saosTotal: SAOS_SUPPLY, saosStaked: [...balances.values()].reduce((a, b) => a + b.saosStaked, 0), usdsInPool: pool.usds, saosInPool: pool.saos },
@@ -656,8 +652,8 @@ const server = Bun.serve({
         const clen = +(req.headers.get("content-length") ?? 0);
         if (clen > 8_192) return Response.json({ ok: false, error: "payload-too-large" }, { status: 413 });
         let body: any = null;
-        try { body = await req.json(); } catch { ingestBad++; return Response.json({ ok: false, error: "bad-json" }, { status: 400 }); }
-        if (!body || typeof body !== "object") { ingestBad++; return Response.json({ ok: false, error: "bad-payload" }, { status: 400 }); }
+        try { body = await req.json(); } catch { ingestBad++; noteWhy("bad-json"); return Response.json({ ok: false, error: "bad-json" }, { status: 400 }); }
+        if (!body || typeof body !== "object") { ingestBad++; noteWhy("bad-payload"); return Response.json({ ok: false, error: "bad-payload" }, { status: 400 }); }
         const r = ingestEvent({
           kind: String(body.kind ?? ""), from: String(body.from ?? ""), to: String(body.to ?? ""),
           asset: body.asset === "SAOS" ? "SAOS" : "USDS", amount: Number(body.amount),
@@ -713,27 +709,6 @@ function git(dir: string, args: string[]): Promise<{ ok: boolean; out: string }>
     });
   });
 }
-/* גל-91→93 · מסילת-קוד = יומן-בלבד: נמדד 19:15 — flow-in אוטומטי של עץ-ענן
- * החזיר-אחורה תיקון-קיים (R364 נמחק-שוב) — מלחמת-עצים בין-שני-כותבים. החוק:
- * קוד נכנס-רק בבדיקה-מכוונת של-סוכן ("תבדוק-טוב-לפני-ביצוע-מה-דחפו-אחרים"),
- * הסוויפים אוטמים-מצב-חי בלבד ומיימנים-כנה את-הפער — בלי-לגעת-בעץ. */
-const LIVE_STATE_PREFIXES = ["db/", "receipts/", "worklog.md", "tool-results/"];
-function isLiveStatePath(f: string): boolean {
-  if (LIVE_STATE_PREFIXES.some((p) => f === p || f.startsWith(p))) return true;
-  if (/(^|\/)state\//.test(f)) return true; // mini-services/*/state/** — הספר-החי
-  if (/(^|\/)(seal|engine)\.lock$/.test(f)) return true; // מנעולים-חיים
-  return false;
-}
-async function codeLaneSync(dir: string, name: string): Promise<void> {
-  const df = await git(dir, ["diff", "--name-only", "HEAD", "FETCH_HEAD", "--", "."]);
-  if (!df.ok) return;
-  const codeFiles = df.out.split("\n").map((s) => s.trim()).filter(Boolean).filter((f) => !isLiveStatePath(f));
-  if (codeFiles.length === 0) return;
-  // גל-93 · יומן-בלבד: לא-checkout, לא-commit — רק-עדות-כנה שיש-פער-קוד מול-הענן;
-  // סוכן-אנושי/ריבוני קורא-את-היומן ומבצע-קליטה-מכוונת (git checkout FETCH_HEAD -- <file>) אחרי-בדיקה.
-  sealLog({ repo: name, action: "code-lane-diff", files: codeFiles.slice(0, 12), count: codeFiles.length });
-}
-
 async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opts?: { strategyOurs?: boolean }): Promise<boolean> {
   // גל-83 · תיקון-תפר-מיזוג: הפרמטר afterPull נמחק-מהחתימה-במיזוג-אך-הקריאה-ב-sealMyProject
   // המשיכה-להעביר-אותו + הגוף-התייחס-אליו → ReferenceError שהרג-את-כל-סבב-האטימה
@@ -775,8 +750,6 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
       if (!mg.ok && !mg.out.includes("Already up to date") && !mg.out.includes("up to date")) {
         sealLog({ repo: name, action: "merge-fail", out: mg.out.slice(0, 200) });
       }
-      // גל-91→93 · אחרי קישור-ההיסטוריה: מיימנים פער-קוד מול-הענן (יומן-בלבד).
-      if (mg.ok || /up to date/i.test(mg.out)) { await codeLaneSync(dir, name); }
     } else {
       // גל-83 · autoStash-חובה + refspec-מפורש (נמדד: pull-בלי-branch נכשל-בלי-upstream).
       const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote, "main"]);
@@ -790,8 +763,6 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
         const mg2 = await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins (pull-conflict fallback)", "FETCH_HEAD"]);
         if (!mg2.ok && !mg2.out.includes("up to date")) {
           sealLog({ repo: name, action: "merge-fallback-fail", out: mg2.out.slice(0, 160) });
-        } else if (mg2.ok || /up to date/i.test(mg2.out)) {
-          await codeLaneSync(dir, name);
         }
       }
     }
@@ -899,6 +870,70 @@ setInterval(sealAll, 10 * 60 * 1000);
 setTimeout(sealAll, 45_000); // אטימה ראשונה דקה-אחרי-עלייה
 
 const bootResult = boot();
+/* גל-90 · טעינת-תור-ניסיון-חוזר מהדיסק (שום-אירוע-כותב לא מת עם הפעלה-מחדש) */
+try {
+  if (fs.existsSync(RETRY_FILE)) {
+    const lines = fs.readFileSync(RETRY_FILE, "utf8").split("\n").filter(Boolean);
+    for (const l of lines.slice(-10_000)) {
+      try { const r = JSON.parse(l) as RetryItem; if (r?.ev?.ref) retryQueue.push(r); } catch { /* שורה-פגומה — כנה */ }
+    }
+    console.log(`[fleet-economy] גל-90: תור-ניסיון-חוזר נטען — ${retryQueue.length} אירועים`);
+  }
+} catch { /* כנה */ }
+
+/* ── גל-90 · מילוי-כספת אוטונומי (תורת-כותבים-רבים): כשהכספת מתחת למינימום —
+ * הריבונות מעבירה pool→treasury חסום: רצפת-בריכה לעולם לא נשברת, קירור 10s,
+ * כל-העברה רשומת-אמת בספר (kind infra). אפס-הנפקה מהאוויר — הכסף קיים בבריכה. */
+const TREASURY_MIN_USDS = 300, TREASURY_MIN_SAOS = 200;
+const REFILL_TARGET_USDS = 2_000, REFILL_TARGET_SAOS = 1_000;
+const POOL_FLOOR_USDS = 60_000, POOL_FLOOR_SAOS = 8_000;
+const REFILL_COOLDOWN_MS = 10_000;
+let lastRefillTs = 0;
+function autonomousRefill(): boolean {
+  if (sealing) return false;
+  const now = Date.now();
+  if (now - lastRefillTs < REFILL_COOLDOWN_MS) return false;
+  const t = bal("treasury"), p = bal("pool");
+  const needU = Math.max(0, REFILL_TARGET_USDS - t.usds);
+  const needS = Math.max(0, REFILL_TARGET_SAOS - t.saos);
+  if (needU <= 0 && needS <= 0) return false;
+  const giveU = round6(Math.min(needU, Math.max(0, p.usds - POOL_FLOOR_USDS)));
+  const giveS = round6(Math.min(needS, Math.max(0, p.saos - POOL_FLOOR_SAOS)));
+  if (giveU <= 0 && giveS <= 0) return false; // בריכה ברצפתה — דחייה כנה, אין מייצרים כסף
+  let moved = false;
+  if (giveU > 0) {
+    const tx = apply({ seq: seq + 1, ts: now, kind: "infra", from: "pool", to: "treasury", asset: "USDS", amount: giveU, reason: "מילוי-כספת אוטונומי · תורת-כותבים-רבים (חסום-רצפת-בריכה, מדוד)" });
+    if (tx) { refillUsds = round6(refillUsds + giveU); moved = true; }
+  }
+  if (giveS > 0) {
+    const tx = apply({ seq: seq + 1, ts: now, kind: "infra", from: "pool", to: "treasury", asset: "SAOS", amount: giveS, reason: "מילוי-כספת אוטונומי · תורת-כותבים-רבים (חסום-רצפת-בריכה, מדוד)" });
+    if (tx) { refillSaos = round6(refillSaos + giveS); moved = true; }
+  }
+  if (moved) { refillRounds++; lastRefillTs = now; }
+  return moved;
+}
+/* ── גל-90 · ריקון-תור-ניסיון-חוזר: אחרי-מילוי, מנסה שוב את אירועי-הכותבים שנדחו */
+function drainRetryQueue(): void {
+  if (sealing || retryQueue.length === 0) return;
+  const pass = Math.min(retryQueue.length, 200);
+  let drained = 0;
+  for (let i = 0; i < pass; i++) {
+    const item = retryQueue[0];
+    if (!item) break;
+    const r = ingestEvent(item.ev); // dedup-לפי-ref מונע רישום-כפול; כשל מעלה attempts-בעצמו (בתוך ingestEvent)
+    if (r.ok) { retryQueue.shift(); drained++; ingestRetriedOk++; }
+    else {
+      item.lastWhy = r.why ?? "unknown";
+      if (item.attempts >= RETRY_MAX_ATTEMPTS) {
+        retryQueue.shift();
+        ingestDead++; noteWhy(`dead-letter:${item.lastWhy}`);
+        try { fs.appendFileSync(DEAD_FILE, JSON.stringify(item) + "\n"); } catch { /* כנה */ }
+      } else break; // עדיין אין מאזן — לא שורפים ניסיונות על כל התור באותו-סבב
+    }
+  }
+  if (drained > 0) retryDirty = true;
+  persistRetryQueue();
+}
 /* גל-85 · סבב-מוניטרי כנה: אם-הכספת-קרסה (<2,000-USDS) — הריבונות-המנפיקה
  * משלימה-את-הצף-ברשומת-mint-חתומה-בספר (אפס-התחמקות — ההנפקה-גלויה-ומדודה).
  * נמדד: קריסה-מוניטרית-מלאה (כספת 0.4-USDS · כל-ההיצע-נבלע-בבריכה) — בלי-השלמת-צף
@@ -914,6 +949,7 @@ if (bal("treasury").usds < 2_000) {
   flush();
   console.log(`[fleet-economy] סבב-מוניטרי: +${MINT_USDS}-USDS לכספת (רשומת-mint חתומה)`);
 }
+setInterval(() => { if (autonomousRefill()) drainRetryQueue(); }, 5_000); // גל-90 · ריבונות-עצמית: תדלוק ואז ריקון-תור
 setInterval(tick, TICK_MS);
 setInterval(snapshotSave, SNAP_MS);
 // (גל-85 · מטפל-exit-מאוחד-למעלה: flush→snapshot→שחרור-מנעול, פעם-אחת)

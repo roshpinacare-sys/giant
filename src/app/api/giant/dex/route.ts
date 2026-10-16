@@ -172,12 +172,13 @@ export async function loadDex(force = false): Promise<DexPayload> {
     genesisNote: truth.genesis?.note ?? null,
   };
 
-  /* R364-fix: היום חי-במפתח-הרשומה (המנוע כותב day:null/חסר בשורה-החיה —
-   * נמדד-חי: רק 2026-10-13 נשא day, השאר חסרים → 3 שורות מפתח "" → דריסת-מפתחות-ריאקט).
-   * היום נלקח-מהמפתח; שורות-חלקיות (יום-ריק) נפלטות — כנות, לא-קריסה, לא-המצאה. */
+  /* תיקון-מפתחות-כפולים (גל-89, הוצהר-מחדש-גל-90 אחרי-clobber-ההתכנסות):
+   * התאריך הוא מפתח-המפה ב-dex-metrics.json — בונה-המדדים לא מטמיע שדה-day,
+   * והקריאה-הישנה d.day החזירה "" לכל-השורות → מפתחות-React כפולים.
+   * מעתה: היום-נגזר-ממפתח-המפה; שורות-שלא-נפתרות-לתאריך מושמטות — כנות. */
   const days = Object.entries(metrics?.days ?? {})
     .map(([dayKey, d]) => ({
-      day: String(d.day ?? dayKey ?? "").trim(),
+      day: String(d.day ?? "") || String(dayKey ?? ""),
       beats: Number(d.beats ?? 0),
       ticks: Number(d.ticks ?? 0),
       fills: Number(d.fills ?? d.dFills ?? 0),
@@ -186,7 +187,7 @@ export async function loadDex(force = false): Promise<DexPayload> {
       vol24QuoteMu: Number(d.vol24QuoteMu ?? 0),
       trades24: Number(d.trades24 ?? 0),
     }))
-    .filter((d) => d.day.length > 0)
+    .filter((d) => d.day !== "")
     .sort((a, b) => a.day.localeCompare(b.day))
     .slice(-7);
 

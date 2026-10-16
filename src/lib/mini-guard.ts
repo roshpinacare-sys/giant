@@ -30,6 +30,11 @@ export const MINI_SERVICES: MiniServiceDef[] = [
   /* גל-90 · הכלכלה-הפנימית תחת-המשגיחה: נמדד שמשגיח-ה-shell שלה (supervise-economy.sh)
    * מת-עם-קציר-הסנדבוקס — מעכשיו גם-הוא בן-עץ-ה-Next (שושלת-השרדות) עם בריאות-HTTP כנה (/health). */
   { name: "fleet-economy", dir: "mini-services/fleet-economy", port: 3016, he: "הכלכלה-הפנימית (ספר-hash-chain · AMM · תורת-כותבים-רבים)", probe: "gateway" },
+  /* גל-90 · מנוע-המסחר-החי על-Steem-מייננט: נמדד שמת מ-12:36 בקציר + האישור נמחק
+   * (קציר-קור-מוחק-סודות-gitignored) → SIGNING-DEAD. ההחייאה-הריבונית: vault-seed.sh
+   * מזריע את סיסמת-האב מהכספת-האטומה (אפס-סודות-על-stdout) → המנוע שופט-מול-השרשרת
+   * ומאמץ-עצמית (T-12 fail-closed). נמדד: פתיחת-הכספת + זריעה עובדים אוטומטית. */
+  { name: "saos-engine", dir: "/home/z/estate/steem/mini-services/saos-engine", port: 3040, he: "מנוע-המסחר-החי על-Steem (hyper-grid · חתימה-ריבונית מהכספת)", probe: "gateway", cmd: "bash tools/vault-seed.sh; [ -d node_modules ] || bun install --silent; exec bun run dev", env: { SAOS_ENGINE_PORT: "3040" } },
 ];
 
 export interface MiniServiceDef {
