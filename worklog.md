@@ -1869,3 +1869,50 @@ Stage Summary:
 - **הגשר-הנזילות-החוץ-חי-ומדוד**: מפתח-חוץ-יכול-להיווצר, להתממן-בהפקדה-אמת, לסחור-בלימיט-עם-עיקול-אמת, לראות-רק-את-שלו, לבטל-רק-שלו, להיחסם-במגבלת-קצב-ולמות-בביטול. זו-הפעם-הראשונה-שהחוץ-יכול-לסחור-על-הבריכה-בלי-לגעת-בכספת.
 - **האבטחה-הוקשתה-במקום-שנמצאו-בה-חורים**: שער-בעלים-נעול-לברוטפורס · ולידציה-ברזל · אפס-דליפות-ב-13-ריפו · חוק-חשיפה-שלם-בספר-הציבורי.
 - **הפער-מהענקים: 34.78%→46.74%** — שלוש-יכולות-עברו-מ"רחוק" ל"חלקי" עם-ראיות-חיות. הנותר-הגדול: שרשרת-אמת · נזילות-סינדיקט-חוץ · משתמשי-חוץ-אמיתיים · ביקורת-פירם.
+---
+Task ID: 2-a
+Agent: Explore
+Task: map DEX/agent/auth/roster code for wave-61 internal-users
+
+Work Log:
+- Read worklog end (Tasks 59/59-postmortem/60/60-b/60-continuation/61) — wave-61 established the external-API bridge (resolveTradeAccount), brute-force gate on /api/sovereign/auth, PWA manifest, giants-gap 34.78%→46.74%.
+- Inventoried all 70 route.ts files under src/app/api with exported methods; classified auth: 15 files call isOwnerReq/isOwner, 4 use authenticateApiKey, fleet/trade uses verifyFleetToken, rest public reads.
+- Read full src/lib/sovereign-auth.ts (headcorner gate: HEAD_PATH=upload/headcorner.txt, OWNER_COOKIE=giant_owner, ownerSessionToken=sha256("giant-owner-v1:"+normalized), isOwnerReq accepts x-giant-owner header OR gate token OR cookie) and src/lib/sovereign/gate.ts (memory-only 48-hex tokens, 10-min TTL).
+- Read src/app/api/sovereign/auth/route.ts (GET verify / POST login / DELETE logout, in-memory failMap 5-fails/10-min → 429 exponential cooldown).
+- Read dex stack: /api/dex/pairs (GET, public), /api/dex/orders (GET public+myOrders for key holders, POST/DELETE via resolveTradeAccount OWNER|API), src/lib/dex-orders.ts (ESCROW ledger lock/match/cancel), src/lib/dex-engine.ts (8s ticker, genesis seed, matchOpenOrders each tick), src/lib/dex-server.ts (executeSwap single engine, accountBalance, toPairSummary), src/lib/public-api.ts (sk-saos- keys, sha256-only, rateLimit in-memory).
+- Read prisma/schema.prisma verbatim (12 models: User, Post, SovereignMessage, DexPair, DexCandle, DexTrade, DexLpPosition, DexLedger, DexConfig, SkillRun, FleetAgent, DexOrder, DexApiKey — 13 models) + src/lib/db.ts (log:['error','warn'], DATABASE_URL=file:/home/z/my-project/db/custom.db).
+- Read src/app/page.tsx (RTL, 18 NAV doors, sticky header, mobile fixed bottom-nav, desktop mt-auto footer) + TradeDesk.tsx (430 lines: owner gating via ownerFetch GET /api/sovereign/auth, swap/limit/orders tabs, limit form pairId/side/limitPrice/amountIn, cancel DELETE) + DexView mounts <TradeDesk/> last (line 737).
+- Read mini-services/estate-sync/index.ts ANCHORS = the 13-repo local roster (estate/{Domain,Pulse,Sandbox,FleetHQ,Console,saos-dex,roshpina}, lane/{saos-agents,Defi,Adsmarket,saos-markets}, channels/giant, autonomy-fix→Autonomy).
+- Traced FLEET_ROSTER_MAP: NO local copy — only GitHub Actions secret on Console + untracked engine/.roster-map.local.json convention; tools/fleet/decision-truth.mjs holds FLEET_REFS acct-01..acct-13 and resolves names at runtime via autonomy-fix/engine/refs.mjs (process.env.FLEET_ROSTER_MAP). CONSOLE_PUSH_TOKEN + STEEM/HIVE/BLURT WIFs = cloud secret NAMES on saos-dex only (worklog:1840); zero values in tree.
+- Read src/lib/fleet-loop.ts (20s sweep, hash-personalities, TRADE_USDS_CAP=12, MAX_OPEN_PER_AGENT=2), src/lib/fleet-auth.ts, /api/fleet/allocate (owner-only, raw token once), /api/fleet/trade (agent token), /api/fleet/roster (git-log derived identities).
+- Read data/giants-gap.json verbatim (202 lines, 16 capabilities, score math Σ(weight×rating)/Σweight, external-users still "no").
+- package.json scripts + .gitignore + git ls-files db/ → db/custom.db and db/trust-cache.json ARE tracked (M db/custom.db; commit 8494ffe "live-ledger: wave-61 bridge state committed").
+- Confirmed NO /tmp/owner-token.txt convention; token is stateless-derived server-side; scripts would recompute sha256 or POST /api/sovereign/auth.
+- HARD RULES respected: read-only except this append; upload/pat.env + upload/headcorner.txt never read; zero secret values quoted.
+
+Stage Summary:
+- Owner auth = stateless derived token: secret in upload/headcorner.txt → token=sha256("giant-owner-v1:"+normalize(secret)) 64-hex; sent as header x-giant-owner (or HttpOnly cookie giant_owner, or 10-min memory gate token from /api/sovereign/gate); no server-side token store.
+- /api/dex/pairs GET → { pairs: [{id,base,quote,chain,price,change24h,high24h,low24h,vol24h,vol7d,liquidity,featured,isNative}] } ×16 (1 native SAOS/USDS + 11 Binance refs + 4 sector pairs SC-*) — no order-book data.
+- /api/dex/orders: POST {pairId,side:BUY|SELL,limitPrice,amountIn} → ESCROW ledger lock (account→ESCROW, ref=orderId); FILL = matchOrder in dex-orders.ts called from 8s engine tick + immediate attempt after placement; executes via executeSwap from ESCROW account; cancel releases escrow; GET is public but OrderRow omits `account`/owner (exposure law) — only key holders see myOrders/myBalances.
+- Prisma: sqlite file db/custom.db (git-tracked!), client singleton in src/lib/db.ts.
+- Fleet: 13-repo roster lives ONLY in estate-sync ANCHORS; agent identities acct-01..13 resolved from FLEET_ROSTER_MAP cloud secret; agent trading loop = fleet-loop.ts (the only "market maker" code).
+- Ready for wave-61 internal-users: nothing was modified outside this worklog append.
+
+---
+Task ID: 62
+Agent: zai-main (trace 1a143782a5d9d3a1)
+Task: הוראת-הבעלים "תמשיך כן ודחוף · משתמשים זה משתמשי פנים לא חוץ · אנחנו המשתמשים בריבונות · אין צורך לחוץ · משיגים הכל בעצמנו ולא דרך לקוחות חיצוניים · החיילים הצי והסוכנים הם המשתמשים ברשת כהוכחה ומטרה · לפתח יכולות כלפי פנים ולא כלפי חוץ · איך ואם חסר תבחן ותשפר"
+
+Work Log:
+- **ביטול-כיוון-החוץ נרשם-בספר-עצמו**: data/giants-gap.json — בלוק-doctrine חדש (הנחיית-הבעלים מוטבעת מילה-במילה עם-ה-trace · internalUsers · externalPolicy "הגשר-פתוח-למי-שיבוא-מעצמו — לא-מחפשים-חוץ") · gapPlan-הוחלף-מכיוון-חוצה (נזילות-חוץ/שרשרת-חוץ/ביקורת-חוץ) לכיוון-פנימה (עומק-פנימי-מהקופה · סוכנים-כספקי-נזילות-בריכה · סליקה-פנימית-מבוזרת) · המטריצה-מול-הענקים-נשארת-כנה-ללא-הצפנת-ציון.
+- **מדידת-מצב-פנימי-חי (scripts/check-fleet.mjs)**: 5-סוכנים-פעילים (zai-main·code-3·code-5·fix·sec) כולם-סחרו-בשעה-האחרונה · הלולאה-חיה: 267-סריקות · 31-עסקאות · 28-לימיטים · 0-שגיאות.
+- **שירות-עצמי-מלא-למשתמש-פנים (src/app/api/fleet/trade/route.ts)**: POST type=LIMIT — פקודת-לימיט-אמת-עם-עיקול-לדג'ר (account=FLEET:<id> · source=FLEET) · DELETE — ביטול-עצמי-עם-שחרור-עיקול (בעלות-נאכפת-במנוע) · GET — עולם-הסוכן-בלבד: **תיקון-דליפת-פרטיות** (קודם-הוחזרו-עסקאות-כל-הצי; עכשיו-רק-של-עצמו) · משמעת-קמעונאי: FLEET_ORDER_USDS_CAP=12-בשקלול-USDS — גם-שוק-גם-לימיט, כמו-הלולאה.
+- **מדד-ההוכחה-החי (src/app/api/fleet/state)**: bookShare — חלק-הצי-בספר-הפתוח (פקודות+USDS-נעול+אחוזים) · balanceSaos+openOrders-פר-סוכן · recentTrades-כולל-agentId.
+- **e2e-חי-מדוד (מחזור-חיים-מלא)**: הקצאת-inward-62 (50-USDS-מהקופה-בלדג'ר-אמת) → לימיט BUY-2@1.42536 (0.97×-מהשוק-החי) → פתוחה-עם-עיקול → ראייה-עצמית (USDS-48·פתוחות-1) → שליליים: אסימון-רע→401 · חריגה-99→נחסמת-תקרה · ביטול-פקודת-אחר→"פקודה-של-חשבון-אחר" → רגרסיית-MARKET-אמת (out-0.678-SAOS) → ביטול-עצמי→עיקול-משוחרר (USDS-49+SAOS-0.678·פתוחות-0).
+- **לוח-הצי-חי (FleetView)**: כותרת-הדוקטרינה "הצי — משתמשי-הרשת-הפנימיים" · מקטע "עומק-פנימי — הצי-הוא-הנזילות" (חי) · עמודות-SAOS+פתוחות · שורת-שירות-העצמי-בחוקי-האמת · תיקון-lint (טעינה-מושהית-במקום-setState-בגוף-האפקט) · **אימות-דפדפן**: כל-האזורים-מרונדרים · אפס-שגיאות-קונסולה · צילום reports/g62-internal-users.png.
+- **הצי-דחף-במקביל (הגלים-75/76-שלהם)**: מיזוג-מלא-מיד-לאחר-הקומיט — כולל-self-service-חוץ-מגל-76: לפי-הדוקטרינה-הוא-נשאר-חי-כ"פתוח-למי-שיבוא-מעצמו" ללא-רדיפה-אחרי-חוץ.
+- **bookShare-בזמן-ה-e2e: 75%-מפקודות-הספר-וגם 93%-מהנעול-בעיקול — הצי-הוא-הנזילות-של-הבורסה, מדוד-חי.**
+
+Stage Summary:
+- **הדוקטרינה-הפכה-קוד-ומדידה**: המשתמשים-הם-פנים — לכל-סוכן-צי שירות-עצמי-מלא-כמו-משתמש-בורסה (לימיט-עם-עיקול · ביטול-עצמי · ראייה-עצמית-בלבד) · מדד-עומק-פנימי-חי-ציבורי · פרטיות-בין-סוכנים-תוקנה · הכיוון-החוצה-בוטל-רשמית-בספר-הפערים.
+- אפס-סודות-בפלט-ובגיט · הלדג'ר-החי-נקמט (חוק-59-postmortem) · lint-נקי-בקבצים-שלי.

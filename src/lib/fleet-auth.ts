@@ -20,3 +20,7 @@ export const FLEET_LIMITS = {
   maxPerAgent: 1_000,
   maxTotalFleet: 2_000, // ≤1% מהנפקת-הגנזיס של-USDS (200,000)
 } as const;
+
+// תקרת-פקודה-לסוכן-פנים (שוק-ולימיט כאחד, בשקלול-USDS) — אותו-משמעת-כמו-הלולאה:
+// לקוח-קמעונאי-אמיתי, לא-לוויתן. גל-62 · דוקטרינת-משתמשי-הפנים.
+export const FLEET_ORDER_USDS_CAP = 12;

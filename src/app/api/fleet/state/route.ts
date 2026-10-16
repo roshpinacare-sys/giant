@@ -32,11 +32,33 @@ export async function GET() {
     });
 
     const balances = await db.dexLedger.groupBy({
-      by: ["account"],
+      by: ["account", "token"],
       _sum: { amount: true },
-      where: { account: { startsWith: "FLEET:" }, token: "USDS" },
+      where: { account: { startsWith: "FLEET:" }, token: { in: ["USDS", "SAOS"] } },
     });
-    const balMap = new Map(balances.map((b) => [b.account, b._sum.amount ?? 0]));
+    const balMap = new Map(balances.map((b) => [b.account + ":" + b.token, b._sum.amount ?? 0]));
+
+    // עומק-פנימי (גל-62 · דוקטרינת-משתמשי-פנים): מי-מחזיק-את-הספר-הפתוח?
+    // ההוכחה-החיה שהצי-הוא-הנזילות — נמדד-מהלדג'ר, לא-נטען.
+    const bookBySource = await db.dexOrder.groupBy({
+      by: ["source"],
+      _count: { _all: true },
+      _sum: { amountIn: true },
+      where: { status: "OPEN" },
+    });
+    const fleetBook = bookBySource.find((b) => b.source === "FLEET");
+    const totalOrders = bookBySource.reduce((s, b) => s + b._count._all, 0);
+    const totalLocked = bookBySource.reduce((s, b) => s + (b._sum.amountIn ?? 0), 0);
+    const fleetOrders = fleetBook?._count._all ?? 0;
+    const fleetLocked = fleetBook?._sum.amountIn ?? 0;
+
+    // פקודות-פתוחות-פר-סוכן (שירות-עצמי: רואים-מי-בונה-עומק)
+    const openByAccount = await db.dexOrder.groupBy({
+      by: ["account"],
+      _count: { _all: true },
+      where: { status: "OPEN", account: { startsWith: "FLEET:" } },
+    });
+    const openMap = new Map(openByAccount.map((r) => [r.account, r._count._all]));
 
     // לוח-הובלה: נפח-אמת-פר-סוכן ב-24h (מהעסקאות עצמן)
     const perAgent = await db.dexTrade.groupBy({
@@ -66,16 +88,28 @@ export async function GET() {
         name: a.name,
         active: a.active,
         allocationUsds: a.allocationUsds,
-        balanceUsds: balMap.get(`FLEET:${a.agentId}`) ?? 0,
+        balanceUsds: balMap.get(`FLEET:${a.agentId}:USDS`) ?? 0,
+        balanceSaos: balMap.get(`FLEET:${a.agentId}:SAOS`) ?? 0,
+        openOrders: openMap.get(`FLEET:${a.agentId}`) ?? 0,
         vol24h: volMap.get(a.agentId)?.vol ?? 0,
         trades24h: volMap.get(a.agentId)?.trades ?? 0,
         lastTradeAt: a.lastTradeAt?.toISOString() ?? null,
       })),
+      // מדד-ההוכחה: הצי-הוא-הנזילות של-הבורסה (נמדד-חי-מהלדג'ר)
+      bookShare: {
+        totalOrders,
+        fleetOrders,
+        fleetPct: totalOrders > 0 ? Math.round((fleetOrders / totalOrders) * 100) : 0,
+        totalLocked: Math.round(totalLocked * 100) / 100,
+        fleetLocked: Math.round(fleetLocked * 100) / 100,
+        fleetPctLocked: totalLocked > 0 ? Math.round((fleetLocked / totalLocked) * 100) : 0,
+      },
       recentTrades: recent.map((t) => ({
         side: t.side,
         price: t.price,
         amount: t.amount,
         total: t.total,
+        agentId: t.sourceAgent,
         t: t.t.toISOString(),
       })),
       // בריאות-לולאת-לקוחות-האמת — מדידה-כנה (כולל-כשלים) ולא-ירוק-מזויף

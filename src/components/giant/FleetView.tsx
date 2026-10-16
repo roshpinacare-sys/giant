@@ -16,6 +16,8 @@ interface AgentRow {
   active: boolean;
   allocationUsds: number;
   balanceUsds: number;
+  balanceSaos?: number;
+  openOrders?: number;
   vol24h: number;
   trades24h: number;
   lastTradeAt: string | null;
@@ -38,8 +40,16 @@ interface FleetState {
   fleetVol24h: number;
   fleetTrades24h: number;
   totalAllocated: number;
+  bookShare?: {
+    totalOrders: number;
+    fleetOrders: number;
+    fleetPct: number;
+    totalLocked: number;
+    fleetLocked: number;
+    fleetPctLocked: number;
+  };
   agents: AgentRow[];
-  recentTrades: Array<{ side: string; price: number; amount: number; total: number; t: string }>;
+  recentTrades: Array<{ side: string; price: number; amount: number; total: number; agentId?: string | null; t: string }>;
   loop: LoopHealth | null;
 }
 
@@ -82,9 +92,13 @@ export function FleetView() {
   }, []);
 
   useEffect(() => {
-    void load();
+    // טעינה-ראשונה-מושהית (מחוץ-לגוף-האפקט) + דגימה-חיה-כל-45ש׳
+    const first = setTimeout(() => void load(), 0);
     const iv = setInterval(() => void load(), 45_000);
-    return () => clearInterval(iv);
+    return () => {
+      clearTimeout(first);
+      clearInterval(iv);
+    };
   }, [load]);
 
   const loop = state?.loop ?? null;
@@ -98,8 +112,8 @@ export function FleetView() {
             <Ship className="size-5 text-amber-400" aria-hidden />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-amber-100">הצי — לקוחות-האמת-הראשונים</h2>
-            <p className="text-xs text-zinc-400">הסוכנים-שלנו-מסחררים-על-הבריכה-שלנו · ארנק-אמת · לדג'ר-אמת · אפס-תלות-חוץ</p>
+            <h2 className="text-lg font-semibold text-amber-100">הצי — משתמשי-הרשת-הפנימיים</h2>
+            <p className="text-xs text-zinc-400">החיילים-והסוכנים-הם-המשתמשים-כהוכחה-ומטרה · ארנק-אמת · לדג'ר-אמת · אפס-תלות-חוץ</p>
           </div>
         </div>
         <button
@@ -159,7 +173,8 @@ export function FleetView() {
         <ul className="space-y-1.5 text-xs leading-relaxed text-zinc-400">
           <li>· כל-סוכן-מחזיק-ארנק-אמת (FLEET:&lt;agentId&gt;) — מהקופה, עם-רשומת-מקור-בלדג'ר. אין-הדפסה-סמויה.</li>
           <li>· הסוכנים-מחליטים-בעצמם: התאמת-מלאי-סביב-מחיר-הבריכה · לימיט-ליד-המחיר · ביטול-זקנים — בלי-יד-אנושית.</li>
-          <li>· כל-פעולה-עוברת-את-אותו-מנוע-אמת (עמלות · נעילות · מילויים · השפעת-מחיר) — כמו-לקוח-חוץ-בדיוק.</li>
+          <li>· כל-פעולה-עוברת-את-אותו-מנוע-אמת (עמלות · נעילות · מילויים · השפעת-מחיר) — משתמש-אמת בדיוק.</li>
+          <li>· שירות-עצמי-מלא (גל-62): כל-סוכן-מציב-לימיט-עם-עיקול, מבטל-את-שלו, ורואה-רק-את-שלו — באסימון-הסוכן-שלו.</li>
           <li>· מינון-כנה: פקודה-עד-12 USDS · עד-2 לימיטים-פתוחים-לסוכן · מרווח-בין-פעולות-2–5 דק — לקוח-קמעונאי, לא-לוויתן.</li>
           <li>· הלולאה-איננה-תלויה-בשום-שירות-חוץ — גם-בלי-Binance הצי-ממשיך-לעבוד.</li>
         </ul>
@@ -188,6 +203,34 @@ export function FleetView() {
         </section>
       )}
 
+      {/* ─── עומק-פנימי — הצי-הוא-הנזילות (ההוכחה-החיה) ─── */}
+      {state?.bookShare && (
+        <section
+          aria-label="עומק-פנימי-מהצי"
+          className={`rounded-xl border p-4 ${
+            state.bookShare.fleetPct >= 50
+              ? "border-emerald-500/30 bg-emerald-500/5"
+              : "border-zinc-700 bg-zinc-900/60"
+          }`}
+        >
+          <h3 className="mb-3 text-sm font-medium text-zinc-200">עומק-פנימי — הצי-הוא-הנזילות (נמדד-חי-מהספר-הפתוח)</h3>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              { label: "פקודות-הצי-מהספר", val: `${state.bookShare.fleetOrders}/${state.bookShare.totalOrders}`, sub: `${state.bookShare.fleetPct}% מהספר`, cls: "text-emerald-300" },
+              { label: "נעול-מהצי-בעיקול (USDS)", val: f2(state.bookShare.fleetLocked), sub: `${state.bookShare.fleetPctLocked}% מהנעול`, cls: "text-amber-300" },
+              { label: "סך-הנעול-בספר (USDS)", val: f2(state.bookShare.totalLocked), sub: "כל-החשבונות", cls: "text-zinc-100" },
+              { label: "הוקצה-לצי (USDS)", val: f2(state.totalAllocated, 0), sub: `תקרה ${f2(state.limits.maxTotalFleet, 0)}`, cls: "text-zinc-100" },
+            ].map((s) => (
+              <div key={s.label} className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-3">
+                <p className="text-[11px] text-zinc-500">{s.label}</p>
+                <p className={`mt-1 text-lg font-semibold tabular-nums ${s.cls}`}>{s.val}</p>
+                <p className="text-[10px] text-zinc-500">{s.sub}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* ─── הסוכנים ─── */}
       {state && (
         <section className="rounded-xl border border-zinc-700 bg-zinc-900/60 p-4" aria-label="רשימת-הסוכנים">
@@ -201,9 +244,10 @@ export function FleetView() {
                   <th className="pb-2 font-medium">סוכן</th>
                   <th className="pb-2 font-medium">מצב</th>
                   <th className="pb-2 font-medium">הקצאה</th>
-                  <th className="pb-2 font-medium">יתרה-חופשית (USDS)</th>
+                  <th className="pb-2 font-medium">USDS חופשי</th>
+                  <th className="pb-2 font-medium">SAOS</th>
+                  <th className="pb-2 font-medium">פתוחות</th>
                   <th className="pb-2 font-medium">נפח-24h</th>
-                  <th className="pb-2 font-medium">עסקאות-24h</th>
                   <th className="pb-2 font-medium">סחר-אחרון</th>
                 </tr>
               </thead>
@@ -220,8 +264,17 @@ export function FleetView() {
                     </td>
                     <td className="py-2.5 tabular-nums">{f2(a.allocationUsds, 0)}</td>
                     <td className="py-2.5 tabular-nums text-amber-300">{f2(a.balanceUsds)}</td>
+                    <td className="py-2.5 tabular-nums text-zinc-300">{f2(a.balanceSaos, 2)}</td>
+                    <td className="py-2.5 tabular-nums">
+                      {(a.openOrders ?? 0) > 0 ? (
+                        <span className="rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] text-amber-300 tabular-nums">
+                          {a.openOrders}
+                        </span>
+                      ) : (
+                        <span className="text-zinc-600">0</span>
+                      )}
+                    </td>
                     <td className="py-2.5 tabular-nums">{f2(a.vol24h)}</td>
-                    <td className="py-2.5 tabular-nums">{a.trades24h}</td>
                     <td className="py-2.5 text-zinc-400">{agoHe(a.lastTradeAt)}</td>
                   </tr>
                 ))}
@@ -241,6 +294,9 @@ export function FleetView() {
                 <span className={`font-medium ${t.side === "BUY" ? "text-emerald-300" : "text-orange-300"}`}>
                   {t.side === "BUY" ? "קנייה" : "מכירה"}
                 </span>
+                {t.agentId && (
+                  <span className="rounded-md border border-zinc-700 bg-zinc-900 px-1.5 py-0.5 text-[10px] text-zinc-400">{t.agentId}</span>
+                )}
                 <span className="tabular-nums text-zinc-300">{f2(t.amount, 4)} SAOS @ {f2(t.price, 5)}</span>
                 <span className="tabular-nums text-zinc-400">{f2(t.total)} USDS</span>
                 <span className="text-zinc-500">{timeHe(t.t)}</span>
