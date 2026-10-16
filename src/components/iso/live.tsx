@@ -128,7 +128,8 @@ export function useEased(target: number, seconds = 0.12) {
   const shown = React.useRef(target);
   const [running, setRunning] = React.useState(false);
   React.useEffect(() => {
-    setRunning(true);
+    const id = window.setTimeout(() => setRunning(true), 0);
+    return () => window.clearTimeout(id);
   }, [target]);
   useLoop(
     (dt, calm) => {

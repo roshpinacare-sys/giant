@@ -142,9 +142,11 @@ export function ChannelView() {
   }, []);
 
   useEffect(() => {
-    const t = sessionStorage.getItem(TOKEN_KEY);
-    if (t) setToken(t);
-    const t0 = setTimeout(load, 0);
+    const t0 = setTimeout(() => {
+      const tok = sessionStorage.getItem(TOKEN_KEY);
+      if (tok) setToken(tok);
+      void load();
+    }, 0);
     const iv = setInterval(load, 45_000);
     return () => {
       clearTimeout(t0);

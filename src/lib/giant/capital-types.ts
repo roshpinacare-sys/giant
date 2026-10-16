@@ -174,7 +174,7 @@ export interface RepairRow {
   diagnosisHe: string;
   measuredEvidence: string;
   repairsHe: string[];
-  repairState: "AUTO-FLIP-ARMED" | "IN-FLIGHT" | "MEASURED-ROUTED" | "AWAITING-OWNER";
+  repairState: "FIXED-LIVE" | "AUTO-FLIP-ARMED" | "IN-FLIGHT" | "MEASURED-ROUTED" | "AWAITING-OWNER";
   repairStateHe: string;
 }
 

@@ -21,6 +21,8 @@ import { openSync, closeSync } from "node:fs";
 export const MINI_SERVICES: MiniServiceDef[] = [
   { name: "estate-sync", dir: "mini-services/estate-sync", port: 3021, he: "שומר-העוגנים (estate/lane/channels/law)", probe: "estate-sync" },
   { name: "office-live", dir: "mini-services/office-live", port: 3036, he: "משדר-העולם-התלת-ממדי" },
+  { name: "sovereign-gateway", dir: "mini-services/sovereign-gateway", port: 3011, he: "שער-ה-LLM-הריבוני (כל-סוכן-משוחזר)", probe: "gateway" },
+  { name: "boot-verifier", dir: "mini-services/boot-verifier", port: 3042, he: "מאמת-התחייה — קבלת-בריאות-כל-15דק", probe: "boot-verifier" },
 ];
 
 export interface MiniServiceDef {
@@ -28,8 +30,8 @@ export interface MiniServiceDef {
   dir: string;
   port: number;
   he: string;
-  /** סוג-הבדיקה-הפונקציונלית: "estate-sync" = מדידת-טיקים-מהבריאות-החיה. חסר = פורט-בלבד (socket.io). */
-  probe?: "estate-sync";
+  /** סוג-הבדיקה-הפונקציונלית: "estate-sync" = מדידת-טיקים-מהבריאות-החיה. "gateway"/"boot-verifier" = בריאות-HTTP. חסר = פורט-בלבד (socket.io). */
+  probe?: "estate-sync" | "gateway" | "boot-verifier";
 }
 
 const MIN_SPAWN_INTERVAL_MS = 90_000;
@@ -73,6 +75,16 @@ function killPortHolder(port: number): Promise<string> {
 
 /** קביעת-מצב-פונקציונלית: null = עובד; מחרוזת = כנה; "ZOMBIE:..." = דרוש-הריגה. */
 async function functionalVerdict(svc: MiniServiceDef): Promise<string | null> {
+  if (svc.probe === "gateway" || svc.probe === "boot-verifier") {
+    /* בריאות-HTTP-כנה: הפורט-עונה-ומדבר (gateway:/health · boot-verifier:/latest) */
+    const probePath = svc.probe === "gateway" ? "/health" : "/latest";
+    try {
+      const r = await fetch(`http://127.0.0.1:${svc.port}${probePath}`, { signal: AbortSignal.timeout(2500) });
+      return r.ok ? null : `http-${r.status} on ${probePath} (strike)`;
+    } catch {
+      return `no-http-probe on ${probePath} (strike)`;
+    }
+  }
   if (svc.probe !== "estate-sync") return null;
   const mem = (probeMem[svc.name] ??= { lastTicks: null, stagnantSince: null, httpFails: 0 });
   const p = await probeEstateSync(svc.port);
@@ -116,6 +128,9 @@ export interface MiniServiceHealth {
   note: string;
 }
 
+/* חור-ריפוי-נמדד-חי (T75 · 2026-10-16): אחרי-מחיקת-סנדבוקס node_modules-של-מיני-שירותים-אבד —
+ * ההשקה-הישירה-של-bun-run-dev קרסה-על-חבילה-חסרה (Cannot find package 'socket.io')
+ * והמשגיחה-שגרה-עותק-גוסס-כל-90ש׳. התיקון: ההשקה-מתקינה-תחילה-אם-חסר (מדוד-חי-שוב-אחרי-מחיקה-אמת). */
 function spawnService(svc: MiniServiceDef): string {
   const cwd = path.join(process.cwd(), svc.dir);
   const logPath = path.join(process.cwd(), ".zscripts", `mini-service-${svc.name}.log`);
@@ -123,7 +138,7 @@ function spawnService(svc: MiniServiceDef): string {
   try {
     fd = openSync(logPath, "a");
     const stamp = new Date().toISOString();
-    const child = spawn("bun", ["run", "dev"], {
+    const child = spawn("bash", ["-c", `[ -d node_modules ] || bun install --silent; exec bun run dev`], {
       cwd,
       /* בן-של-שרת-Next (עץ-הפלטפורמה) — בלי-setsid; ההשגחה-החוזרת-מכסה-אם-נעקר */
       stdio: ["ignore", fd, fd],

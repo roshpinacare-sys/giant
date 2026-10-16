@@ -268,7 +268,8 @@ export function TrustView() {
   }, []);
 
   useEffect(() => {
-    load();
+    const id = window.setTimeout(() => void load(), 0);
+    return () => window.clearTimeout(id);
   }, [load]);
 
   const onDeep = useCallback(

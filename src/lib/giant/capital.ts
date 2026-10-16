@@ -56,7 +56,7 @@ async function fetchJson<T>(url: string, init?: RequestInit): Promise<T | null> 
   }
 }
 
-async function steemRpc<T>(method: string, params: unknown[]): Promise<T | null> {
+async function steemRpc<T>(method: string, params: unknown): Promise<T | null> {
   const j = await fetchJson<T>(RPC, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -124,7 +124,7 @@ export async function fetchOrderBook(limit = 50): Promise<OrderBookMeasure | nul
   const mid = bestBid !== null && bestAsk !== null ? (bestBid + bestAsk) / 2 : null;
   const bidDepthSbd = b.reduce((s, r) => s + r.sbd, 0);
   const askDepthSbd = a.reduce((s, r) => s + r.sbd, 0);
-  const spreadPct = bestBid !== null && bestAsk !== null && mid > 0 ? ((bestAsk - bestBid) / mid) * 100 : null;
+  const spreadPct = bestBid !== null && bestAsk !== null && mid !== null && mid > 0 ? ((bestAsk - bestBid) / mid) * 100 : null;
   return { bestBid, bestAsk, spreadPct, bidDepthSbd, askDepthSbd, topBids: b.slice(0, 5).sort((x, y) => y.price - x.price), topAsks: a.slice(0, 5).sort((x, y) => x.price - y.price) };
 }
 
@@ -694,7 +694,7 @@ export function buildStrategies(input: {
       aprPct: market?.spreadPct ?? null,
       aprBasis: "spread% נמדד-חי מ-get_order_book · המיקור-עצמו-חי: fills+ספר-פתוח נמדדים-על-החשבון-הריבוני",
       status: mmLive ? "ACTIVE" : "NEEDS-APPROVAL",
-      liquidity: market && market.totalDepthSbd > 0 ? "MEDIUM" : "NONE",
+      liquidity: market && market.bidDepthSbd + market.askDepthSbd > 0 ? "MEDIUM" : "NONE",
       risk: "MEDIUM",
       capitalFitUsd: realUsd !== null ? Math.round(realUsd * 0.2 * 100) / 100 : null,
       evidence:

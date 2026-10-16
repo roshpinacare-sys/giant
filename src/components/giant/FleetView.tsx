@@ -92,11 +92,10 @@ export function FleetView() {
   }, []);
 
   useEffect(() => {
-    // טעינה-ראשונה-מושהית (מחוץ-לגוף-האפקט) + דגימה-חיה-כל-45ש׳
-    const first = setTimeout(() => void load(), 0);
+    const t0 = window.setTimeout(() => void load(), 0);
     const iv = setInterval(() => void load(), 45_000);
     return () => {
-      clearTimeout(first);
+      window.clearTimeout(t0);
       clearInterval(iv);
     };
   }, [load]);

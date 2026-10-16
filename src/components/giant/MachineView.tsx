@@ -177,6 +177,12 @@ export function MachineView() {
   const coinReq = useRef(false);
   const lastDrop = useRef(0);
 
+  /* stable commit-phase writer for the liquid rigs (no ref access during render) */
+  const setLiq = useCallback((i: number, slot: number) => (el: SVGPathElement | null) => {
+    const arr = liqRefs.current[i] ?? (liqRefs.current[i] = []);
+    arr[slot] = el;
+  }, []);
+
   const still = useStillness();
   const inView = useInView(stageRef);
 
@@ -383,14 +389,13 @@ export function MachineView() {
                     const rig = build.anchors.liquids[i];
                     if (!rig) return null;
                     const cls = rig.amber ? "sm-liq-amber" : "sm-liq-zinc";
-                    const paths = liqRefs.current[i] ?? [];
                     return (
                       <g key={i} className={cls}>
-                        <path className="sm-liq-deep" ref={(el) => { paths[0] = el; }} />
-                        <path className="sm-liq-top" ref={(el) => { paths[1] = el; }} />
-                        <path className="sm-liq-edge" ref={(el) => { paths[2] = el; }} />
+                        <path className="sm-liq-deep" ref={setLiq(i, 0)} />
+                        <path className="sm-liq-top" ref={setLiq(i, 1)} />
+                        <path className="sm-liq-edge" ref={setLiq(i, 2)} />
                         {[0, 1, 2, 3].map((b) => (
-                          <path key={b} className="sm-liq-band" data-band={b} ref={(el) => { paths[3 + b] = el; }} />
+                          <path key={b} className="sm-liq-band" data-band={b} ref={setLiq(i, 3 + b)} />
                         ))}
                       </g>
                     );
@@ -404,7 +409,7 @@ export function MachineView() {
                 {/* fee gauge */}
                 <g className="sm-assembly" onMouseEnter={onAssembly("gauge")} onMouseLeave={onAssemblyLeave}>
                   <g dangerouslySetInnerHTML={{ __html: build.chunks.gauge }} />
-                  <path ref={needleRef} className="sm-needle" d={needlePath(P, needleSt.current.at)} />
+                  <path ref={needleRef} className="sm-needle" d={needlePath(P, 0)} />
                 </g>
                 {/* fills chute */}
                 <g className="sm-assembly" onMouseEnter={onAssembly("chute")} onMouseLeave={onAssemblyLeave}>

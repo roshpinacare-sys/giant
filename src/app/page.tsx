@@ -19,12 +19,13 @@ import { TrustView } from "@/components/giant/TrustView";
 import { MarketingView } from "@/components/giant/MarketingView";
 import { ApiView } from "@/components/giant/ApiView";
 import { FleetView } from "@/components/giant/FleetView";
+import { GapView } from "@/components/giant/GapView";
 import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
 import { DOORS, measureAllDoors, type DoorStatusMap } from "@/lib/giant/doors";
 import {
   Activity, BookOpen, Building2, Coins, Command, Cog, Crown, GitBranch, KeyRound, LineChart, Megaphone, Network,
-  Package, Radio, ScrollText, ShieldCheck, Ship, Trophy, Wallet,
+  Package, Radio, Scale, ScrollText, ShieldCheck, Ship, Trophy, Wallet,
   type LucideIcon,
 } from "lucide-react";
 
@@ -45,7 +46,7 @@ import {
  * משטח-אחד-לכל-יכולת · ערוץ-אחד · אפס-כפילויות · הכל נמדד-חי מהגיט. */
 
 type ViewId =
-  | "submission" | "machine" | "dex" | "league" | "channel" | "wallet" | "desk" | "api"
+  | "submission" | "machine" | "dex" | "league" | "gap" | "channel" | "wallet" | "desk" | "api"
   | "fleet"
   | "capital"
   | "ledger" | "products" | "pulse" | "office" | "estate" | "empire" | "trust"
@@ -57,6 +58,7 @@ const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = 
   { id: "machine", label: "המכונה", he: "מכונת-האמת: הדקס כמכונה חיה (anatomy)", icon: Cog },
   { id: "dex", label: "הדקס", he: "מרכז-הכובד: נרות · קופות · ווליום", icon: LineChart },
   { id: "league", label: "ליגת-הענקים", he: "DefiLlama חי · השורה-שלנו בכנות", icon: Trophy },
+  { id: "gap", label: "מפת-הפער", he: "ההשוואה-הכנה מול-מוצרים-אמתיים · טענות-הסוכנים מול-מה-נמדד · מפת-איחוד M1..M6", icon: Scale },
   { id: "channel", label: "הערוץ", he: "הדלת-הראשית: בעלים ↔ ריבונות", icon: Radio },
   { id: "wallet", label: "הארנק", he: "חשבונות-אמת מהמנוע · יחידות-אנוש", icon: Wallet },
   { id: "desk", label: "השולחן", he: "מנדט · equity · אסטרטגיות", icon: ScrollText },
@@ -364,6 +366,7 @@ export default function Home() {
             {view === "machine" && <MachineView />}
             {view === "dex" && <DexView />}
             {view === "league" && <GiantsView />}
+            {view === "gap" && <GapView />}
             {view === "channel" && <ChannelView />}
             {view === "wallet" && <WalletView />}
             {view === "desk" && <DeskView />}

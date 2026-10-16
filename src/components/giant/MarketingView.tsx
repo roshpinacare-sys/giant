@@ -158,7 +158,10 @@ export function MarketingView() {
     }
   }, []);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    const id = window.setTimeout(() => void load(), 0);
+    return () => window.clearTimeout(id);
+  }, [load]);
 
   const files: MarketingFile[] = data?.files ?? [];
   const active = files.find((f) => f.file === sel) ?? files[0] ?? null;

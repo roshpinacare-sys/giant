@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, type FormEvent } from "react";
+import { useState, useRef, useMemo, type FormEvent } from "react";
 import { Sparkles, Send, Loader2, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -53,29 +53,19 @@ export function AIAssistant({
   const [loading, setLoading] = useState(false);
   const [lastResponse, setLastResponse] = useState<AIResponse | null>(null);
   const [history, setHistory] = useState<ChatMessage[]>([]);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { data: projectsData } = useProjects();
   const startRun = useStartRun();
   const runPreset = useRunPreset(projectId ?? null);
 
-  // Context-aware suggestions.
-  useEffect(() => {
-    if (projectId) {
-      setSuggestions([
-        "Build an APK",
-        "Run tests",
-        "Security audit",
-        "Full CI",
-      ]);
-    } else {
-      setSuggestions([
-        "Build an APK",
-        "Show my projects",
-        "How do I add tests?",
-      ]);
-    }
-  }, [projectId]);
+  // Context-aware suggestions — derived from projectId, no cascading state.
+  const suggestions = useMemo<string[]>(
+    () =>
+      projectId
+        ? ["Build an APK", "Run tests", "Security audit", "Full CI"]
+        : ["Build an APK", "Show my projects", "How do I add tests?"],
+    [projectId],
+  );
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

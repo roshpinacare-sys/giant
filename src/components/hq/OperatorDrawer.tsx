@@ -78,8 +78,11 @@ export function OperatorDrawer() {
   const logRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const t = sessionStorage.getItem("soffice.ops");
-    if (t) setToken(t);
+    const id = window.setTimeout(() => {
+      const tok = sessionStorage.getItem("soffice.ops");
+      if (tok) setToken(tok);
+    }, 0);
+    return () => window.clearTimeout(id);
   }, []);
 
   useEffect(() => {
@@ -108,9 +111,12 @@ export function OperatorDrawer() {
 
   useEffect(() => {
     if (!token || !open) return;
-    loadBoard(token);
+    const t0 = window.setTimeout(() => void loadBoard(token), 0);
     const iv = setInterval(() => loadBoard(token), 30000);
-    return () => clearInterval(iv);
+    return () => {
+      window.clearTimeout(t0);
+      clearInterval(iv);
+    };
   }, [token, open, loadBoard]);
 
   async function login() {

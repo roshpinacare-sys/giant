@@ -114,6 +114,7 @@ async function execute(skill: string, body: Record<string, unknown>): Promise<Ex
       if (!imageUrl) throw new Error("חסרה-כתובת-תמונה-או-העלאה");
       const z = await zai();
       const res = await z.chat.completions.createVision({
+        model: "glm-4.5v", // מודל-הראייה-האמת (דרוש-בחוזה-ה-SDK)
         messages: [
           {
             role: "user",
@@ -140,6 +141,7 @@ async function execute(skill: string, body: Record<string, unknown>): Promise<Ex
       if (!videoUrl) throw new Error("חסרה-כתובת-וידאו");
       const z = await zai();
       const res = await z.chat.completions.createVision({
+        model: "glm-4.5v", // מודל-הראייה-האמת (דרוש-בחוזה-ה-SDK)
         messages: [
           {
             role: "user",
@@ -205,7 +207,9 @@ async function execute(skill: string, body: Record<string, unknown>): Promise<Ex
       const prompt = str(body.prompt, 3000);
       if (!prompt) throw new Error("חסר-פרומפט");
       const sizeRaw = str(body.size, 12);
-      const size = (IMAGE_SIZES as readonly string[]).includes(sizeRaw) ? sizeRaw : "1024x1024";
+      const size: (typeof IMAGE_SIZES)[number] = (IMAGE_SIZES as readonly string[]).includes(sizeRaw)
+        ? (sizeRaw as (typeof IMAGE_SIZES)[number])
+        : "1024x1024";
       const z = await zai();
       const res = await z.images.generations.create({ prompt, size });
       const b64 = res.data?.[0]?.base64;
