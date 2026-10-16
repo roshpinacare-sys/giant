@@ -148,10 +148,18 @@ async function readChainTreasury(): Promise<DexPayload["chainTreasury"]> {
       if (!res.ok) throw new Error(`rpc ${res.status}`);
       return (await res.json()) as { result?: unknown };
     };
-    const [accRes, gpoRes] = await Promise.all([
+    const [accRes, gpoRes, ordersRes] = await Promise.all([
       rpc("condenser_api.get_accounts", [CHAIN_ROSTER]),
       rpc("condenser_api.get_dynamic_global_properties", []),
+      // get_accounts has no open_orders field — honest count needs get_open_orders per account
+      ...CHAIN_ROSTER.map((acc) =>
+        rpc("condenser_api.get_open_orders", [acc]).catch(() => ({ result: [] as unknown[] })),
+      ),
     ]);
+    const openOrders = ordersRes.reduce(
+      (n, r) => n + (Array.isArray(r.result) ? r.result.length : 0),
+      0,
+    );
     const accounts = (accRes.result ?? []) as Array<Record<string, string>>;
     const gpo = (gpoRes.result ?? {}) as Record<string, string>;
     const tv = parseFloat(String(gpo.total_vesting_shares ?? "0"));
@@ -160,7 +168,6 @@ async function readChainTreasury(): Promise<DexPayload["chainTreasury"]> {
     let liquidSteem = 0;
     let liquidSbd = 0;
     let spTotal = 0;
-    let openOrders = 0;
     for (const a of accounts) {
       liquidSteem += parseFloat(String(a.balance ?? "0")) || 0;
       liquidSbd += parseFloat(String(a.sbd_balance ?? "0")) || 0;
@@ -168,11 +175,11 @@ async function readChainTreasury(): Promise<DexPayload["chainTreasury"]> {
       const delegated = parseFloat(String(a.delegated_vesting_shares ?? "0")) || 0;
       const received = parseFloat(String(a.received_vesting_shares ?? "0")) || 0;
       spTotal += vestsPerSp > 0 ? (vests - delegated + received) / vestsPerSp : 0;
-      openOrders += Number(a.open_orders ?? 0) || 0;
     }
     if (!accounts.length) return null;
     return { measuredAt: new Date().toISOString(), accounts: accounts.length, liquidSteem, liquidSbd, spTotal, openOrders, source: "steem-mainnet" };
-  } catch {
+  } catch (e) {
+    console.error("[dex/chainTreasury] failed:", String((e as Error)?.message ?? e));
     return null;
   }
 }
