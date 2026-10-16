@@ -152,8 +152,10 @@ async function readChainTreasury(): Promise<DexPayload["chainTreasury"]> {
       rpc("condenser_api.get_accounts", [CHAIN_ROSTER]),
       rpc("condenser_api.get_dynamic_global_properties", []),
       // get_accounts has no open_orders field — honest count needs get_open_orders per account
-      ...CHAIN_ROSTER.map((acc) =>
-        rpc("condenser_api.get_open_orders", [acc]).catch(() => ({ result: [] as unknown[] })),
+      Promise.all(
+        CHAIN_ROSTER.map((acc) =>
+          rpc("condenser_api.get_open_orders", [acc]).catch(() => ({ result: [] as unknown[] })),
+        ),
       ),
     ]);
     const openOrders = ordersRes.reduce(
