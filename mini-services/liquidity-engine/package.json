@@ -1,0 +1,10 @@
+{
+  "name": "liquidity-engine",
+  "version": "1.0.0",
+  "private": true,
+  "description": "מנוע-הנזילות של הריבונות — אמת-על-השרשרת (STEEM headcorner): שווי · ספר-SP · חריגות · קצב-רווח · תוכנית. אפס-תלות-חוץ, אפס-מפתחות, fail-honest.",
+  "scripts": {
+    "dev": "bun --hot index.ts",
+    "start": "bun index.ts"
+  }
+}

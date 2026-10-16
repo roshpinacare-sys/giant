@@ -2433,3 +2433,27 @@ Stage Summary:
 - Zero testnet anywhere in runtime; all rails mainnet, measured.
 - Multi-writer resilience now built INTO the economy: writers never lose events, treasury self-heals, reasons are measured.
 - 6/6 services alive; disk 75%; wave-90 pushed e005b033.
+
+---
+Task ID: T77-12
+Agent: Z.ai Code (T77-MONEY 金钱审计+流动性引擎)
+Task: 用户指令——金钱审计(1100入/800去向/现在是否盈利) + "להשאיר להם sp לחבר מנוע ולבדוק סכום חריג" (留SP给舰队/接引擎/查异常金额) + 把整个经济变成真实流动性 + 为何未满速
+
+Work Log:
+- 复活校准: my-project origin +13 commits 按学说合并(jsonl union 1872行, receipts→ours, transient flag→rm), 推送 4fef4e8 + ls-remote 验证
+- STEEM 链上全量审计(headcorner, api.steemit.com): 分批拉取 106,153 ops 全史 → 3,816 条资金 ops (transfer 1157 / claim 1544 / fill_order 778 / delegate 226 / 上电 99 / 下电 7 / escrow 4)
+- 真相: 全史收入 5,871.97 STEEM (binance-hot2 5,767.8) + 86.2 SBD; 支出 1,427.9 STEEM (bdhivesteem 1,009.3 于2024-11 / blocktrades 301.9) + 215.4 SBD; 上电 6,035.6 STEEM→SP
+- "消失的800"谜底: (a) 769.4 SP 当前委托给14个舰队账户(cashmachine/haran/israelnews/lsa/macrame/siq/tov/wic/woq/hcsoldier4-6/wog/hive-177702, 实时又变动为~603) (b) 上电进SP (c) 2024-11向bdhivesteem转出1,009 (d) 20.7 STEEM+62.3 SBD锁在29个挂单里
+- 交易引擎实锤: 账户活跃做市(limit_order_create 1882次/2.46天, 118成交); 近2.46日收59.5 STEEM+31.5 SBD, 付313.5 STEEM+6.1 SBD = 仓位转换STEEM→SBD(累计25.4 SBD), 非亏损
+- 崩溃修复: fleet-economy(3016)因磁盘满崩溃(snapshot.json.tmp 0字节)→监督器重启复活(seq53快照恢复); estate-sync红锚点修复(Console dex/giants.json冲突按origin版解决, Domain卡rebase清除, Pulse/giant/Sandbox/FleetHQ fetch修复)
+- 磁盘战争三轮: /home/z/.bun/install/cache 3.2G×2 + FleetHQ.stale副本2.4G(node_modules 1.4G再生删) + quarantine-bundles 932M(全heads验证为origin祖先冗余+stash先保全至refs/bundle-archive/, 写release-receipt-T77MONEY.json) + FleetHQ .git gc 724M→234M
+- 新建 mini-services/liquidity-engine (:3043): 链上真相/snapshot(余额+SP书+挂单+舰队委托+median价+totalUsds) /flow(runrate 24h/7d STEEM-שקול+verdict מרוויח/מפסיד/לא-נמדד) /ledger /anomalies(סכום-חריג规则: 出≥50STEEM/陌生对手方/SP出非舰队) /plan(5步dry-run零签名零密钥); 全局80ms节流+checkpoint断点重扫(1065批)+诚实守卫(<50行强制重扫)+监督器supervise-liquidity.sh自愈(实测复活成功)
+- 接线: src/app/api/giant/treasury (代理3043, fail-honest) + TreasuryView.tsx(希伯来语RTL: 主卡/SP书表/盈亏速率/异常/计划) + page.tsx NAV"האוצר" + doors.ts + GiantPalette
+- OOM对抗: 沙箱4GB被并行会话吃满→引擎被OOM杀×2→单工人+300ms节流+监督自愈
+- 浏览器验证: 页面渲染正常, האוצר门打开显示活数(נזיל9.496/SPנטו3,502.39/SPלצי603.71×14账户/挂单21.7), fail-honest verdicts诚实显示, SP表14行真实账户
+
+Stage Summary:
+- 金钱真相完整交付: 1100≈2024-11存款(379+330+339+470=1519), 其中1009转bdhivesteem+470上电SP; 800"消失"=SP委托舰队+上电+挂单锁定, 无一笔不明转出; 现在做市引擎STEEM→SBD仓位转换+curation, 等深扫完成即出24h/7d盈亏verdict
+- 交付物: liquidity-engine(:3043, 5端点) + /api/giant/treasury + האוצר UI门 + 监督自愈
+- 关键决策: 零签名零密钥(dry-run plan), SP留舰队=运营资本(mandate), fail-honest贯穿
+- 未竟: 深扫完成后runrate verdict自动出现; estate-sync锚点待下tick重测; Actions配额仍冻结(需所有者)

@@ -55,6 +55,7 @@ const MODULES: ModuleEntry[] = [
   { id: "wallet", he: "הארנק", desc: "משמורת · ספרים · יחידות-אנוש", en: "wallet custody books", icon: <Wallet aria-hidden /> },
   { id: "desk", he: "השולחן", desc: "שולחן-המסחר · ספר-הזמנות", en: "desk orderbook trading", icon: <Banknote aria-hidden /> },
   { id: "capital", he: "מנוע-ההון", desc: "שבע-אסטרטגיות נמדדות · דירוג-ROI · תוכניות-ממתינות-לאישור", en: "capital strategies roi approval plans market maker delegate", icon: <Coins aria-hidden /> },
+  { id: "treasury", he: "האוצר-החי", desc: "אמת-על-השרשרת: נזיל · SP-לצי · קצב-רווח · חריגות", en: "treasury chain steem sp liquidity anomalies runrate", icon: <Landmark aria-hidden /> },
   { id: "ledger", he: "הרישום", desc: "רישום-האמת · מילויים · גבהים", en: "ledger fills height", icon: <ScrollText aria-hidden /> },
   { id: "products", he: "המוצרים", desc: "מפת-המוצרים · רישומי-נכסים", en: "products assets map", icon: <Package aria-hidden /> },
   { id: "pulse", he: "הדופק", desc: "שער-האמת · זרמי-הערוץ", en: "pulse truth gate streams", icon: <Activity aria-hidden /> },

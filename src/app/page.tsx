@@ -16,6 +16,7 @@ import { OfficeHqView } from "@/components/giant/OfficeHqView";
 import { EstateView } from "@/components/giant/EstateView";
 import { EmpireView } from "@/components/giant/EmpireView";
 import { TrustView } from "@/components/giant/TrustView";
+import { TreasuryView } from "@/components/giant/TreasuryView";
 import { MarketingView } from "@/components/giant/MarketingView";
 import { ApiView } from "@/components/giant/ApiView";
 import { FleetView } from "@/components/giant/FleetView";
@@ -24,7 +25,7 @@ import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
 import { DOORS, measureAllDoors, type DoorStatusMap } from "@/lib/giant/doors";
 import {
-  Activity, BookOpen, Building2, Coins, Command, Cog, Crown, GitBranch, KeyRound, LineChart, Megaphone, Network,
+  Activity, BookOpen, Building2, Coins, Command, Cog, Crown, GitBranch, KeyRound, Landmark, LineChart, Megaphone, Network,
   Package, Radio, Scale, ScrollText, ShieldCheck, Ship, Trophy, Wallet,
   type LucideIcon,
 } from "lucide-react";
@@ -49,6 +50,7 @@ type ViewId =
   | "submission" | "machine" | "dex" | "league" | "gap" | "channel" | "wallet" | "desk" | "api"
   | "fleet"
   | "capital"
+  | "treasury"
   | "ledger" | "products" | "pulse" | "office" | "estate" | "empire" | "trust"
   | "marketing";
 
@@ -65,6 +67,7 @@ const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = 
   { id: "api", label: "ה-API", he: "מסילות-מפתחות-אמת: הנפקה-עצמית-לסוכנים-שלנו-ולכל-מחזיק-מפתח · חוק-אחד-לכולם · מגבלות-קצב", icon: KeyRound },
   { id: "fleet", label: "הצי", he: "משתמשי-הרשת-פנים-ראשון: החיילים-הצי-והסוכנים הם-המשתמשים · סוחרים-על-הבריכה-שלנו · ארנק-אמת · הפיתוח-כלפי-פנים", icon: Ship },
   { id: "capital", label: "ההון", he: "מנוע-ההון: מנדט-קידום-חי · תנועות-הון מתקדמות-בשערים-הירוקים · לולאת-תיקון-במקום-סגירה", icon: Coins },
+  { id: "treasury", label: "האוצר", he: "אמת-על-השרשרת: נזיל · SBD · SP-לצי · קצב-רווח · סכום-חריג — מנוע-הנזילות", icon: Landmark },
   { id: "ledger", label: "הרישום", he: "כל-ההחלטות · חיפוש", icon: BookOpen },
   { id: "products", label: "המוצרים", he: "קטלוג-אמת · קבלות · מדידות", icon: Package },
   { id: "marketing", label: "השיווק", he: "משטח-Adsmarket-החי: מה-שכתוב-בריפו = מה-שמוצג · אפס-סינתזה", icon: Megaphone },
@@ -373,6 +376,7 @@ export default function Home() {
             {view === "api" && <ApiView />}
             {view === "fleet" && <FleetView />}
             {view === "capital" && <CapitalView />}
+            {view === "treasury" && <TreasuryView />}
             {view === "ledger" && <LedgerView />}
             {view === "products" && <ProductsView />}
             {view === "pulse" && <PulseView />}

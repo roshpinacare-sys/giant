@@ -29,6 +29,7 @@ export const DOORS: DoorDef[] = [
   { id: "wallet", api: "/api/giant/dex" },
   { id: "desk", api: "/api/giant/desk" },
   { id: "capital", api: "/api/giant/capital" },
+  { id: "treasury", api: "/api/giant/treasury" },
   { id: "ledger", api: "/api/giant/decisions" },
   { id: "products", api: "/api/giant/products" },
   { id: "pulse", api: "/api/giant/pulse" },
