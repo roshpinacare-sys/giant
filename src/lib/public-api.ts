@@ -71,7 +71,7 @@ export type KeyAuthResult =
   | { ok: true; key: ApiKeyRow; rate: RateVerdict; rateHeaders: Record<string, string> }
   | { ok: false; status: 401 | 429; error: string; rateHeaders?: Record<string, string> };
 
-function extractRawKey(req: NextRequest): string | null {
+export function extractRawKey(req: NextRequest): string | null {
   const auth = req.headers.get("authorization");
   if (auth) {
     const m = /^Bearer\s+(sk-saos-[0-9a-f]{48})$/i.exec(auth.trim());
