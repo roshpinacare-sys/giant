@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Bot, RefreshCw, Ship } from "lucide-react";
+import { InternalEconomy } from "@/components/giant/InternalEconomy";
 
 /* ═══ הצי — לקוחות-האמת-הראשונים של-הריבונות ═══════════════════════════════
  * הוראת-הבעלים: הסוכנים-והצי עובדים-כלקוחות-האמת-של-הפלטפורמה-שלנו.
@@ -135,6 +136,9 @@ export function FleetView() {
           <span>תקציב-מוקצה: <b className="text-zinc-200">{f2(state?.totalAllocated)} USDS</b></span>
         </div>
       </section>
+
+      {/* ─── הכלכלה-הפנימית — מנוע-העסקאות-הפנימיות (תורת-משתמשי-פנים) ─── */}
+      <InternalEconomy />
 
       {/* ─── בריאות-הלולאה — מדידה-כנה ─── */}
       <section
