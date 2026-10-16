@@ -803,3 +803,18 @@
 {"ts":"2026-10-16T20:42:15.176Z","action":"sweep-skipped-lock-held","ageMs":55912.19189453125}
 {"ts":"2026-10-16T21:37:08.100Z","action":"sweep-skipped-lock-held","ageMs":32451.78125}
 {"ts":"2026-10-16T21:47:08.100Z","action":"stale-lock-broken","ageMs":632451.78125}
+{"ts":"2026-10-16T21:47:09.428Z","repo":"my-project","action":"state-custody-restore","brokenAt":277733,"restored":true}
+{"ts":"2026-10-16T21:47:49.659Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   ec7b07bb..a0162060  HEAD -> main"}
+{"ts":"2026-10-16T21:47:52.678Z","repo":"FleetHQ","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/FleetHQ.git\n   2262a147..7be7af48  HEAD -> main"}
+{"ts":"2026-10-16T21:47:56.591Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   89ebdf59..1c8e70fb  HEAD -> main"}
+{"ts":"2026-10-16T21:47:58.887Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T21:48:01.157Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T21:48:03.397Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T21:48:05.670Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T21:48:07.859Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T21:48:09.901Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T21:48:09.902Z","action":"sweep-done"}
+{"ts":"2026-10-16T21:57:08.738Z","repo":"my-project","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
+{"ts":"2026-10-16T21:57:10.606Z","repo":"my-project","action":"merge-fail","out":"error: unable to create temporary file: No space left on device\nCannot save the current index state\nfatal: stash failed"}
+{"ts":"2026-10-16T21:57:10.648Z","repo":"my-project","action":"state-custody-restore","brokenAt":277733,"restored":true}
+{"ts":"2026-10-16T21:57:14.540Z","repo":"my-project","action":"commit-fail","out":"error: unable to create temporary file: No space left on device\nerror: Error building trees"}
