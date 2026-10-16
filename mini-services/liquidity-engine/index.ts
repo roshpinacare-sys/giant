@@ -125,7 +125,8 @@ async function deepScan() {
         const idx = Number(pair[0]);
         const v = pair[1];
         if (!v?.op) continue;
-        if (idx < s || idx > s + 99) continue;
+        // 注：condenser 语义 = start 为窗口上界，返回 [start-limit, start]——窗口重叠，
+        // 去重靠 seen 集合；不做范围过滤（会误杀）。
         if (seen.has(idx)) continue;
         const t = v.op[0];
         if (KEEP.has(t)) { seen.add(idx); ledger.push({ i: idx, ts: v.timestamp, t, o: v.op[1] }); }

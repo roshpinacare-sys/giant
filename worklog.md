@@ -2457,3 +2457,7 @@ Stage Summary:
 - 交付物: liquidity-engine(:3043, 5端点) + /api/giant/treasury + האוצר UI门 + 监督自愈
 - 关键决策: 零签名零密钥(dry-run plan), SP留舰队=运营资本(mandate), fail-honest贯穿
 - 未竟: 深扫完成后runrate verdict自动出现; estate-sync锚点待下tick重测; Actions配额仍冻结(需所有者)
+
+### T77-12 附注 (同一任务内)
+- condenser API 诡异实测: get_account_history(start=N, limit=L) 返回 [N-L, N] 共 L+1 条——start 是窗口上界而非下界! 引擎深扫首版因范围过滤误杀99% → 已修复(去过滤+seen去重), 1081批重扫中; python 全史扫描(无过滤+去重)3,816条为权威账本
+- SP-מוקצה לצי 实测从769.4→603.71 SP (链上委托实时变动, return_vesting_delegation 15笔今天返还~691 SP) — 这就是为什么 UI 必须活测而非静态数
