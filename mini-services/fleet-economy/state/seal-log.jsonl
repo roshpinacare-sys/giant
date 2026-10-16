@@ -961,3 +961,16 @@
 {"ts":"2026-10-16T19:11:37.643Z","action":"sweep-done"}
 {"ts":"2026-10-16T19:21:05.845Z","repo":"my-project","action":"merge-fail","out":"fatal: confused by unstable object source data for baa8292b5d59675c8ea641babef57d7866d9bfd7\nCannot save the current worktree state\nfatal: stash failed"}
 {"ts":"2026-10-16T19:21:06.165Z","repo":"my-project","action":"state-custody-restore","brokenAt":42777,"restored":true}
+{"ts":"2026-10-16T19:21:12.140Z","repo":"my-project","action":"state-custody-restore","brokenAt":42777,"restored":true}
+{"ts":"2026-10-16T19:21:23.585Z","repo":"my-project","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/giant.git\n   b685103..a059cc0  HEAD -> main"}
+{"ts":"2026-10-16T19:21:24.626Z","repo":"FleetHQ","action":"pull-fail","out":"From https://github.com/roshpinacare-sys/FleetHQ\n * branch                main       -> FETCH_HEAD\n   93fa508b7..43cf5c2ce  main       -> origin/main\nerror: Your local changes to the following files would be overwritten "}
+{"ts":"2026-10-16T19:21:30.853Z","repo":"FleetHQ","action":"pull-fail","out":"tash them before you merge.\nAborting\nhint: Could not execute the todo command\nhint:\nhint:     pick b3fe1f3a07e040d6384c8ddcb675551069179c6c vault-seal [auto-economy]: 18 files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס\nhint:\n"}
+{"ts":"2026-10-16T19:21:31.685Z","repo":"FleetHQ","action":"push-fail","out":"a ref in \"refs/{heads,tags}/\". If so we add a corresponding\n  refs/{heads,tags}/ prefix on the remote side.\n\nNeither worked, so we gave up. You must fully qualify the ref.\nhint: The <src> part of the refspec is a commit object.\nhint: Did you mean to create a new branch by pushing to\nhint: 'HEAD:refs/heads/HEAD'?\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/FleetHQ.git'"}
+{"ts":"2026-10-16T19:21:34.540Z","repo":"Domain","action":"sealed","ahead":"0","detail":"To https://github.com/roshpinacare-sys/Domain.git\n   84abce45..aeb10d12  HEAD -> main"}
+{"ts":"2026-10-16T19:21:36.030Z","repo":"Console","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T19:21:37.457Z","repo":"Pulse","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T19:21:39.459Z","repo":"Sandbox","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T19:21:41.233Z","repo":"roshpina","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T19:21:42.681Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T19:21:44.071Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
+{"ts":"2026-10-16T19:21:44.072Z","action":"sweep-done"}
