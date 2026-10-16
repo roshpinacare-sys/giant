@@ -57,6 +57,29 @@ function sha256(s: string): string {
   return createHash("sha256").update(s).digest("hex");
 }
 
+/* ── מפיק-אירועים-אמת אל כלכלת-הפנים (fleet-economy :3016) ─────────────────────
+ * כל-סריקת-אתחול שהסתיימה בפועל (קבלה נכתבה) = אירוע-חיים אמת → עסקת-תשתית
+ * (אגרת-הוכחת-חיים) בספר-הכלכלה. fire-and-forget: אם המנוע מת — מונה-השמטות
+ * עולה בכנות ולא-קורסים; ה-ref (ה-hash של הקבלה) מבטיח dedup דו-צדדי. */
+const ECONOMY_INGEST = "http://127.0.0.1:3016/tx/ingest";
+const verifierTx = { sent: 0, dropped: 0, lastDropAt: null as string | null };
+function reportScanToEconomy(v: BootVerify): void {
+  const body = JSON.stringify({
+    kind: "infra", from: "boot-verifier", to: "treasury", asset: "USDS",
+    amount: 0.05, refillFloat: true,
+    reason: `אגרת-הוכחת-חיים · boot-verifier scan · all_ok=${v.all_ok}`,
+    ref: `bootverify-${v.sha256}`,
+  });
+  fetch(ECONOMY_INGEST, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body,
+    signal: AbortSignal.timeout(2500),
+  })
+    .then((r) => { if (r.ok) verifierTx.sent++; else { verifierTx.dropped++; verifierTx.lastDropAt = new Date().toISOString(); } })
+    .catch(() => { verifierTx.dropped++; verifierTx.lastDropAt = new Date().toISOString(); }); // כנה — לא קורסים
+}
+
 async function probePort(port: number): Promise<{ up: boolean; ms: number }> {
   const t0 = Date.now();
   try {
@@ -200,6 +223,7 @@ async function tick(): Promise<void> {
   try {
     latest = await measure();
     await persist(latest);
+    reportScanToEconomy(latest); // אירוע-אמת → אגרת-הוכחת-חיים בספר-הכלכלה
     const downs = Object.entries(latest.checks.office)
       .filter(([, v]) => v === "down")
       .map(([k]) => k);
@@ -216,7 +240,7 @@ Bun.serve({
   async fetch(req) {
     const url = new URL(req.url);
     if (url.pathname === "/health") {
-      return Response.json({ ok: latest !== null, service: "boot-verifier", port: PORT, at: latest?.at ?? null });
+      return Response.json({ ok: latest !== null, service: "boot-verifier", port: PORT, at: latest?.at ?? null, economyTx: verifierTx });
     }
     if (url.pathname === "/scan") await tick();
     if (url.pathname === "/latest" && latest) {

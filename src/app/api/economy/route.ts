@@ -9,6 +9,7 @@ import { spawn } from "child_process";
 import { connect } from "net";
 import fs from "fs";
 import path from "path";
+import { economyProducerStats } from "@/lib/economy-tx";
 
 const ECONOMY_PORT = 3016;
 const SVC_DIR = path.join(process.cwd(), "mini-services", "fleet-economy");
@@ -61,8 +62,9 @@ export async function GET(): Promise<Response> {
   try {
     const res = await fetch(`http://127.0.0.1:${ECONOMY_PORT}/metrics`, { signal: AbortSignal.timeout(3000) });
     const data = await res.json();
-    return Response.json({ ok: true, ...data });
+    // שקיפות-מלאה: מוני-השמטות-המפיקים (בתוך-השרת-החי) לצד מוני-המנוע (realEvents.droppedTx)
+    return Response.json({ ok: true, producerDropped: economyProducerStats(), ...data });
   } catch (e) {
-    return Response.json({ ok: false, error: String(e) }, { status: 502 });
+    return Response.json({ ok: false, error: String(e), producerDropped: economyProducerStats() }, { status: 502 });
   }
 }

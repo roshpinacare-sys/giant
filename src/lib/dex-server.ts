@@ -10,6 +10,7 @@ import type {
   TradeSide,
 } from "@/lib/dex-types";
 import { ammQuote, poolAprPct } from "@/lib/dex-math";
+import { economyIngest, dexFillFee } from "@/lib/economy-tx";
 
 type DexPairRow = Awaited<ReturnType<typeof db.dexPair.findFirst>>;
 
@@ -257,6 +258,15 @@ export async function executeSwap(
       source: args.source,
       sourceAgent: args.source === "FLEET" ? (args.agentId ?? null) : null,
     },
+  });
+  // אירוע-אמת → דמי-שירות בכלכלת-הפנים (1:1 למילוי שקרה זה-עתה · fire-and-forget,
+  // לא-חוסם, מוני-השמטות כנים; המנוע מבצע-dedup לפי tradeId — אפס-ספיגה-כפולה)
+  economyIngest({
+    kind: "dex-fee", from: "saos-dex", to: "treasury", asset: "USDS",
+    amount: dexFillFee(args.side === "BUY" ? args.amountIn : quote.outAmount),
+    reason: `דמי-שירות-מילוי-דקס · ${pair.id} ${args.side} · מקור=${args.source}${args.agentId ? `:${args.agentId}` : ""}`,
+    ref: `dexfill-${trade.id}`,
+    refillFloat: true,
   });
   const reasonPrefix = args.source === "FLEET" ? `צי · ${args.agentId} · ` : "";
   await db.dexLedger.create({
