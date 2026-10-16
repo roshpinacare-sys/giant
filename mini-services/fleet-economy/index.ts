@@ -460,9 +460,12 @@ const server = Bun.serve({
        * תשובה מהירה, מונים-כנים. */
       if (url.pathname === "/tx/ingest" && req.method === "POST") {
         const ip = srv.requestIP(req);
-        const addr = ip ? String(ip.address) : "";
+        const raw = ip ? String(ip.address) : "";
+        // גל-83 · תיקון-שומר-לופבק: Bun מחזיר IPv4-ממופה (::ffff:127.0.0.1) —
+        // נמדד: השומר-דחה-אף-קריאה (88-נשרו, sent:0, http-403) למרות-לופבק-אמת.
+        const addr = raw.replace(/^::ffff:/, "");
         if (addr !== "127.0.0.1" && addr !== "::1") {
-          return Response.json({ ok: false, error: "loopback-only" }, { status: 403 });
+          return Response.json({ ok: false, error: "loopback-only", addr: raw.slice(0, 45) }, { status: 403 });
         }
         const clen = +(req.headers.get("content-length") ?? 0);
         if (clen > 8_192) return Response.json({ ok: false, error: "payload-too-large" }, { status: 413 });
@@ -521,7 +524,10 @@ function git(dir: string, args: string[]): Promise<{ ok: boolean; out: string }>
     });
   });
 }
-async function sealRepo(dir: string): Promise<boolean> {
+async function sealRepo(dir: string, afterPull?: () => void | Promise<void>): Promise<boolean> {
+  // גל-83 · תיקון-תפר-מיזוג: הפרמטר afterPull נמחק-מהחתימה-במיזוג-אך-הקריאה-ב-sealMyProject
+  // המשיכה-להעביר-אותו + הגוף-התייחס-אליו → ReferenceError שהרג-את-כל-סבב-האטימה
+  // (ובכך-ביטל-בשקט-את-משמורת-המדינה: freeze+custody-restore — שורש-קריעות-הספר-החוזרות).
   const name = dir.split("/").filter(Boolean).pop()!;
   for (let attempt = 0; attempt < 2; attempt++) {
     const st = await git(dir, ["status", "--porcelain", "--branch"]);
