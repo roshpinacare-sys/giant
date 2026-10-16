@@ -20,6 +20,30 @@ const nextConfig: NextConfig = {
       { source: "/office3d/:path*", destination: "/", permanent: false },
     ];
   },
+  /* אבטחת-כותרות (תיקון-ביקורת-אדומה 61-b): כותרות-מדידה על כל-הנתיבים.
+   * סיכון-מקובל-מתועד: X-Frame-Options אינו-נשלח בכוונה וה-CSP במצב
+   * Report-Only בלבד — פאנל-התצוגה-החוצה של הבעלים ממסגר-את-האפליקציה
+   * ב-iframe, ואכיפת frame-ancestors 'none' תשבור אותו. */
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=(), payment=()",
+          },
+          {
+            key: "Content-Security-Policy-Report-Only",
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' ws: wss: http: https:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; report-uri /api/csp-report",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
