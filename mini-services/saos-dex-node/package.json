@@ -1,0 +1,9 @@
+{
+  "name": "saos-dex-node",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Live node of the real saos-dex sovereign exchange (GitHub clone) — DATABASE_URL wired to the shared book (custom.db) that fleet-economy polls for DexTrade fills. Port 3010, loopback only.",
+  "scripts": {
+    "dev": "bun --hot index.ts"
+  }
+}

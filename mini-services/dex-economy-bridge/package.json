@@ -1,0 +1,9 @@
+{
+  "name": "dex-economy-bridge",
+  "version": "1.0.0",
+  "private": true,
+  "description": "THE missing DexTrade producer: polls the real saos-dex trades API and writes real fills into DexTrade (SQLite) so fleet-economy's pollDexFills can charge real dex fees. Records only what actually happened — zero synthesis. Port 3017 (health).",
+  "scripts": {
+    "dev": "bun --hot index.ts"
+  }
+}
