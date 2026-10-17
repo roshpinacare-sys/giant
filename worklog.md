@@ -2616,3 +2616,27 @@ Stage Summary:
 - THE ARMY IS REAL: 6 funded soldiers (300µ-unit stable banks), 2 quoting live on the sovereign book at measurement time, escrow-locked, zero synthesis, every µ conservation-true
 - Cost answer for owner: 300 USDS-units stable bank per soldier (1,800 total for 6) from REAL treasury/operator inventory — no external money moved; fuel is fees-backed (THE-FOUNTAIN) — the army pays its own way as fills land
 - Next: economy beat claims writer-lock (~30min TTL) → dex-fill→economy-fee loop resumes; more fill flow → fountain refills → all 6 quoting; dex repo + my-project committed & pushed
+
+---
+Task ID: 13
+Agent: zai (main session) — wave "git-first rebirth + sovereign army live" (owner directive: work by git not sandbox; verify all; expand never shrink)
+Task: גיט-ראשי אחרי מחיקת-סנדבוקס נוספת · ריבייס הספר על הענן · דקס חי מחדש · צבא-חיילים חי · תיקוני-שורש
+
+Work Log:
+- GIT-FIRST אומת: /home/z/work וכל-ה-checkouts נמחקו שוב; my-project שרד (המשמורת עבדה). עוגן-אישורים נבנה מחדש מ-upload/pat.env (owner re-uploaded). BUG אמת נמצא-ותוקן ב-helper: `${A:-$B:-$C}` מייצר זבל ":-:-" → גיט נדחה עם "Invalid username or token" למרות-טוקן-תקין (API 200 + push:true). תיקון: extraction ישיר rg. דחיפה-דחופה: a56027d..11d12e7 main→giant.git ✓
+- פגם-קריטי-נתועד: הנוד-המקומי עלה אחרי-השחזור על ספר-פרוץ-שימור (ΣUSDS=39,160 מול-נדרש 60,000 · ΣSAOS=27,486 מול 21,000) — boot לא חסם (boot-invariant לא בדק Σ). הספר-הפרוץ אוכסן כראיה (state.forked-badboot-20261017T2326Z → נמחק, הראיות ב-state.regenesis-evidence)
+- סטיית-גרסאות = שורש: עותק-מקומי (bc10da2c, 1054 שורות) לא-מכיר עוגני-תפר (46335/55120/68276) → הסגיר את הספר-הענן בטעות כ"שבור ב-46,335" → רגנזיס seq 223. המנוע-הריבוני (fdd46504, 910 שורות, fleet-economy@main) מאמת 3/3 עוגנים — אותן רשומות הן תפרים-קנוניים, לא שחיתות
+- RIBBIYSE מלא: עצירת זומבים (watcher --hot עתיק החזיק 3016 עם ספר-רגנזיס בזיכרון) → mini-services/fleet-economy/index.ts הפך wrapper-רזה למנוע-הריפו (git=מקור-אמת) → boot → restored=true seq=134,268 · /verify ok:true checked=134,416 עוגנים 3/3 "רציפות-מוכחת אפס-שכתוב" · הספר כולל שריפות-טיהור (Task 11/12) לכן Σ כבר לא 21K/60K — חוק-הכסף הוא של המנוע הריבוני
+- משמורת-אוטונומית מוכחת-חיה: seal של המנוע דחף לבד ל-fleet-economy.git (bae307b→bd009ae, כולל קומיט-משמורת-ידני שלי); vault-seal [auto-economy] ב-my-project מאטים ודוחף לבד (258345b...) — כל-העריכות שלי נאטמו אוטונומית, 0 לא-נדחפים
+- CONFLICT 3010 נפתר מבנית: הדקס (מרכז-P1) נלקח ע"י agent-hq (foreman של אגף-האחוזה, runtime-supervisor pid 3550 מחיה-אותו). אפס-מלחמה: foreman זז ל-3012→(נתפס ע"י local-beats של-אותו-אגף); הדקס עלה על 3013 (פנוי), כל-הצי מכוון אליו. supervisor-האחוזה מפקח גם על הכלכלה (3016) — ה-wrapper הרזה הופך אותו לבן-ברית (respawn על המנוע-הריבוני)
+- DEX מהגיט: repos/saos-dex (המיקום-הקנוני של הצי) clone + prisma + db:push; השרשרת חיה בקבצי-state (state-snapshot.json h448,540 · dex-beat CI פעם בענן כל-הזמן — הענן פעם גם בזמן שהסנדבוקס מת) · טוהר אומת: אפס-סוכנים-סינתטיים (soldier-1..4 טוהרו; רק operator/arena/bot-a..e + ששת-החיילים) → הדקס חי על 3013: h448,540→448,684+ פועם, 96,201 מילויים, liveOrders 22→28
+- תיקון-שורש-גשר (אבד במחיקה, חזר): CREATE 7-עמודות מול INSERT 9-עמודות → הכנה נפלה errno:1. תוקן: CREATE מלא 9-עמודות + ALTER אדיטיבי ל-DB ישן + נתיב-DB קנוני repos/saos-dex/db/dex.db. גשר חי :3017 ✓
+- כלכלה עם DEX_DB: הסביבה של-הכלכלה לא הכילה DEX_DB (לולאת-עמלות שקטה) → restart עם DEX_DB=repos/saos-dex/db/dex.db → restored=true seq=142,910 · /verify ok · totalTx 149,102 · runRate ~58K tx/h · ingestOk=1,691 (ingestFailed=13,538 הוא מונה-היסטורי-משוחזר, לא-שריפה נוכחית)
+- צבא-חיילים חי :3018: DEX מכוון 3013 · operator.env חדש (טוקן-32+ נוצר, chmod 600, לא-מודפס; גם repos/saos-dex/.env-operator לתהליך-הדקס) · 6 חיילים מציבים גריד-אמת: fair 1009→1032 נע עם השוק, BID/ASK ±גריד, rejected=0 · ארנקים-אמת על-השרשרת: shachar/aluf/erez/gal = 300,000µ USDS בדיוק (הבנק-היציב של-המנדט!) + 100,000µ SAOS · yarden 310,070µ (+10K עודף-עצמי לתמר מ-Task 12) · קרדיטי-דלק 479–879 (fees-backed)
+- הוכחת-מסחר-אמת: 2 פקודות-חוצות (operator 8000@1012 · yarden 5000@1013) נכנסו לספר כ-resting (השוק זז ל-1032 בינתיים); השוק עצמו סוחר: +28 מילויים בחלון (WSTEEM/USDS bot-a/bot-c↔arena) · הלולאה המלאה חמושה: מילוי-SAOS→גשר (20 שנ׳)→DexTrade→כלכלה dex-fee→אוצר
+- מבנה-פורטים סופי: 3010=foreman(אחוזה) · 3011=gateway · 3012=local-beats · 3013=דקס-ריבוני · 3016=כלכלה · 3017=גשר · 3018=צבא · 3035=guardian-health(לא-רץ)
+
+Stage Summary:
+- הריבונות שרדה מחיקת-סנדבוקס שנייה ברצף: ספר-כלכלה בגיט (134K+ רשומות, עוגנים 3/3) · שרשרת-דקס בגיט (h448K+, dex-beat CI) · שניהם שוחזרו clone+boot בלבד — התורה "עובדים לפי-גיט" הוכחה בפועל פעמיים
+- צבא-החיילים חי על הבנק-היציב המדויק של-המנדט (300Kµ USDS × 6), מנוהל-על-ידי-כללי-בנק (תחתית-קנייה 150K · ניתוב-עודף 450K→מפעיל), על שרשרת-אמת עם escrow-גרעין
+- פתוחים: (1) דלק-המפעיל דל (180 credits) — המזנון-העצמי דרך-עמלות-המילויים; (2) סטיית-פורט-הדקס (3013 מול-3010-קנוני) דורשת-רישום-אצל-הצי (guardian v2 מכוון 3010); (3) מילויי-SAOS/USDS אורגניים יזרמו כשה-bots יצליבו את הגריד — לעקוב ב-bridge.log + economy /metrics byKind.dex-fee
