@@ -1,3 +1,4 @@
+import { SAOS_PROJECT_ROOT } from "@/lib/saos-paths";
 // GET /api/merge/truth · המיזוג-האמיתי — כל-טענה-עם-הוכחה-נמדדת-חיה (משימה-51)
 // חוק-אמת: אפס-טענות-סוכנים-קשיחות. הטוב-שהביא-כל-אחד מוצג-כ"טענה→הוכחה-נמדדת"
 // כשההוכחה-נמדדת-בזמן-ריצה (דיסק · grep · DB · git-log) — וכל-נתיב-מקשר-למסך-החי-שבו-הדבר-באמת-חי.
@@ -12,7 +13,7 @@ import { discoverGitRepos, gitMeta, type GitMeta } from "@/lib/estate-discovery"
 
 export const dynamic = "force-dynamic";
 
-const SYS = "/home/z/my-project";
+const SYS = SAOS_PROJECT_ROOT;
 
 async function fileBytes(rel: string): Promise<number | null> {
   try {

@@ -90,14 +90,16 @@ interface StreamEntry {
 }
 
 /* זרמי-אמת קנוניים — הנתיבים האמיתיים (lib/sovereign/channel.ts · engine.ts · routes). */
+const SAOS_HOME = process.env.NEXT_PUBLIC_SAOS_HOME?.trim() || "/home/z"; // גל-86 · ניידות (מוטמע בבנייה)
+
 const STREAMS: StreamEntry[] = [
-  { path: "/home/z/estate/Domain/dex/state.json", he: "מצב-הדקס", en: "dex state", },
-  { path: "/home/z/estate/Domain/truth/latest.json", he: "שער-האמת", en: "truth latest", },
-  { path: "/home/z/estate/Pulse/state/sovereign-channel/directives.jsonl", he: "הוראות-הבעלים", en: "directives", },
-  { path: "/home/z/estate/Pulse/state/sovereign-channel/requests.jsonl", he: "פניות-הריבונות", en: "requests", },
-  { path: "/home/z/estate/Pulse/state/sovereign-channel/notes.jsonl", he: "רישומי-הערוץ", en: "notes", },
-  { path: "/home/z/estate/Pulse/state/sovereign-channel/voice.json", he: "קול-הריבונות", en: "voice", },
-  { path: "/home/z/estate/FleetHQ/office/state/office-state.json", he: "מצב-המשרד", en: "office state", },
+  { path: `${SAOS_HOME}/estate/Domain/dex/state.json`, he: "מצב-הדקס", en: "dex state", },
+  { path: `${SAOS_HOME}/estate/Domain/truth/latest.json`, he: "שער-האמת", en: "truth latest", },
+  { path: `${SAOS_HOME}/estate/Pulse/state/sovereign-channel/directives.jsonl`, he: "הוראות-הבעלים", en: "directives", },
+  { path: `${SAOS_HOME}/estate/Pulse/state/sovereign-channel/requests.jsonl`, he: "פניות-הריבונות", en: "requests", },
+  { path: `${SAOS_HOME}/estate/Pulse/state/sovereign-channel/notes.jsonl`, he: "רישומי-הערוץ", en: "notes", },
+  { path: `${SAOS_HOME}/estate/Pulse/state/sovereign-channel/voice.json`, he: "קול-הריבונות", en: "voice", },
+  { path: `${SAOS_HOME}/estate/FleetHQ/office/state/office-state.json`, he: "מצב-המשרד", en: "office state", },
 ];
 
 function isEditableTarget(el: EventTarget | null): boolean {

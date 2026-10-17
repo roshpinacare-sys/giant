@@ -185,7 +185,7 @@ export interface StrategyRow {
   aprPct: number | null;
   aprBasis: string;
   status: StrategyStatus;
-  liquidity: "FULL" | "HIGH" | "MEDIUM" | "LOCKED-7D" | "NONE";
+  liquidity: "FULL" | "HIGH" | "MEDIUM" | "LOW" | "LOCKED-7D" | "NONE";
   risk: "LOW" | "MEDIUM" | "HIGH";
   capitalFitUsd: number | null;
   evidence: string;

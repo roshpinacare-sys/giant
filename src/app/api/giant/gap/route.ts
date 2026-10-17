@@ -1,3 +1,4 @@
+import { SAOS_ESTATE } from "@/lib/saos-paths";
 /**
  * GET /api/giant/gap — מפת-הפער מול הענקים (T73 · fail-honest)
  *
@@ -114,7 +115,7 @@ export async function GET() {
   /* ה-verdict המדויק — מ-attestation-השער הקנוני אם-הוא-קיים */
   try {
     const { readFile } = await import("node:fs/promises");
-    const raw = await readFile("/home/z/estate/Domain/Pulse/giant/attestation.json", "utf8");
+    const raw = await readFile(`${SAOS_ESTATE}/Domain/Pulse/giant/attestation.json`, "utf8");
     const a = JSON.parse(raw) as { verdict?: string };
     if (typeof a.verdict === "string") truthVerdict = a.verdict;
   } catch { /* כנה — נשאר הערך-הגס */ }

@@ -1,3 +1,4 @@
+import { SAOS_HOME } from "@/lib/saos-paths";
 /**
  * owner-gate — the operator key (מפתח-מנהל). Server-only.
  *
@@ -13,7 +14,7 @@
 import { readFile } from "node:fs/promises";
 import { createHash } from "crypto";
 
-const CONFIG = "/home/z/.operator/config.json";
+const CONFIG = `${SAOS_HOME}/.operator/config.json`;
 const TOKEN_TTL_MS = 10 * 60 * 1000;
 const MAX_ATTEMPTS_PER_MIN = 5;
 

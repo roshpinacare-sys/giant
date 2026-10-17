@@ -1,3 +1,4 @@
+import { SAOS_ESTATE } from "@/lib/saos-paths";
 // giant · שכבת-תוכן-הגיט (גיט→מוצר, v2): קטלוג-מאובטח של התוכן-הטוב-מכל-התיקיות
 // ביטחון: התמדה-ברשימת-ריפו-מותרים · איסור-'..'-וסיומות-סוד · תקרת-קריאה · אין-הדלפת-נתיבים-רגישים
 
@@ -7,12 +8,12 @@ import path from "path";
 export const REPOS: Record<string, string> = {
   /* גל-18 · חיווט-מחדש: העותקים-החיים-על-הדיסק-הם-עוגני-estate-sync
    * (נמשכים-מהקנון-כל-10 דק) — לא-עוד-t36 שנמחק-עם-הסנדבוקס-הקודם. */
-  Sandbox: "/home/z/estate/Sandbox",
-  Domain: "/home/z/estate/Domain",
-  FleetHQ: "/home/z/estate/FleetHQ",
-  "saos-dex": "/home/z/estate/saos-dex",
-  Console: "/home/z/estate/Console",
-  roshpina: "/home/z/estate/roshpina",
+  Sandbox: `${SAOS_ESTATE}/Sandbox`,
+  Domain: `${SAOS_ESTATE}/Domain`,
+  FleetHQ: `${SAOS_ESTATE}/FleetHQ`,
+  "saos-dex": `${SAOS_ESTATE}/saos-dex`,
+  Console: `${SAOS_ESTATE}/Console`,
+  roshpina: `${SAOS_ESTATE}/roshpina`,
 };
 
 // אסור-בתוקף: סודות/טוקנים/סביבה

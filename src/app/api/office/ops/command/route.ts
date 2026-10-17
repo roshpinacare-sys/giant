@@ -1,3 +1,4 @@
+import { SAOS_PROJECT_ROOT } from "@/lib/saos-paths";
 // POST /api/office/ops/command — מנוע-הפקודות של המפעיל: הדרך החכמה להשפיע חזק
 // על כל-האוטונומיה דרך צ'אט-המשרד. כל-פקודה: מדידה → ביצוע → רישום-כנה.
 // חוק-אפס-חשיפה: הטוקן/המפתח לעולם לא ביומן; היומן מחזיק כוונה+תוצאה בלבד.
@@ -189,9 +190,9 @@ export async function POST(req: Request) {
   // יומן-מקומי כנה: כוונה+תוצאה בלבד (אף טוקן, אף מפתח, אף תוכן-מפתח)
   try {
     const { appendFile, mkdir } = await import("node:fs/promises");
-    await mkdir("/home/z/my-project/.ops", { recursive: true });
+    await mkdir(`${SAOS_PROJECT_ROOT}/.ops`, { recursive: true });
     await appendFile(
-      "/home/z/my-project/.ops/journal.jsonl",
+      `${SAOS_PROJECT_ROOT}/.ops/journal.jsonl`,
       JSON.stringify({ at: new Date().toISOString(), intent, ok: reply.length > 0, brief: reply.slice(0, 120).replace(/\n/g, " ") }) + "\n",
       "utf8",
     );

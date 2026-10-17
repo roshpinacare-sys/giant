@@ -1,3 +1,4 @@
+import { SAOS_HOME, SAOS_PROJECT_ROOT, SAOS_ESTATE, SAOS_LANE, SAOS_CHANNELS, SAOS_AUTONOMY } from "@/lib/saos-paths";
 // estate-discovery · גילוי-אמת של כל-תיקיות-הגיט בדיסק + מטא-גיט-חי לכל-אחת
 // חוק-אמת: אין-רשימה-מקודדת-של-המאגרים — סריקה-אמיתית-של-השורשים בכל-קריאה.
 // הבעלים (trace 1a13ca3f1160b6d1): "מחברים את הריבונות להפעלה מלאה מכל תיקיות הגיט".
@@ -13,15 +14,15 @@ import { promisify } from "util";
 
 const execFileAsync = promisify(execFile);
 
-export const ESTATE_ROOT = "/home/z/my-project";
-export const ESTATE_HOME = "/home/z";
+export const ESTATE_ROOT = SAOS_PROJECT_ROOT; // גל-86 · ניידות: מהסביבה, ברירת-מחדל זהה-למקור
+export const ESTATE_HOME = SAOS_HOME;
 
 export const GENERATION_ROOTS: GenerationRoot[] = [
   { root: ESTATE_ROOT, generation: "system" as const, depth: 0 },
-  { root: "/home/z/estate", generation: "live" as const, depth: 1 },      /* estate/Domain · estate/Pulse */
-  { root: "/home/z/lane", generation: "live" as const, depth: 1 },         /* lane/saos-agents · Defi · Adsmarket · saos-markets */
-  { root: "/home/z/channels", generation: "live" as const, depth: 1 },     /* channels/giant */
-  { root: "/home/z/autonomy-fix", generation: "live" as const, depth: 0 }, /* ספר-החוקים (Autonomy) */
+  { root: SAOS_ESTATE, generation: "live" as const, depth: 1 },      /* estate/Domain · estate/Pulse */
+  { root: SAOS_LANE, generation: "live" as const, depth: 1 },         /* lane/saos-agents · Defi · Adsmarket · saos-markets */
+  { root: SAOS_CHANNELS, generation: "live" as const, depth: 1 },     /* channels/giant */
+  { root: SAOS_AUTONOMY, generation: "live" as const, depth: 0 }, /* ספר-החוקים (Autonomy) */
 ];
 
 export interface GenerationRoot {

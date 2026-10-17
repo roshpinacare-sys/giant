@@ -1,3 +1,4 @@
+import { SAOS_PROJECT_ROOT } from "@/lib/saos-paths";
 // giant · שער-הבעלים (headcorner) — חוק-הפרונט/הבק מ-giant/SPEC-CHANNEL.md
 // הסוד נקרא server-side מ-upload/headcorner.txt בלבד; אף-פעם לא בלוג, לא בפלט, לא בגיט.
 
@@ -5,7 +6,7 @@ import { createHash, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 import { readFile } from "fs/promises";
 
-const HEAD_PATH = "/home/z/my-project/upload/headcorner.txt";
+const HEAD_PATH = `${SAOS_PROJECT_ROOT}/upload/headcorner.txt`;
 export const OWNER_COOKIE = "giant_owner";
 
 async function headcornerSecret(): Promise<string> {

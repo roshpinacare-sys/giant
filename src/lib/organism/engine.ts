@@ -1,3 +1,4 @@
+import { SAOS_ESTATE, SAOS_LANE, SAOS_CHANNELS, SAOS_AUTONOMY } from "@/lib/saos-paths";
 /**
  * ORGANISM ENGINE — server-only.
  *
@@ -15,7 +16,7 @@ import { existsSync, promises as fs } from "fs";
 import path from "path";
 import { createHash } from "crypto";
 
-export const ESTATE_DIR = "/home/z/estate";
+export const ESTATE_DIR = SAOS_ESTATE; // גל-86 · ניידות
 
 /* ---------------------------------- types --------------------------------- */
 
@@ -244,10 +245,10 @@ export async function scanEstate(): Promise<{ clones: RepoScan[]; refsSource: st
    * שורש-שהוא-בעצמו-ריפו (autonomy-fix) = מקום-אחד; שורש-אם = כל-בן-עם .git-משלו.
    * זיהוי-הריפו = נוכחות-.git (חד-משמעי) — לא-rev-parse (הוא-true-גם-בתתי-תיקיות). */
   const SCAN_ROOTS: { dir: string; prefix: string }[] = [
-    { dir: "/home/z/estate", prefix: "" },
-    { dir: "/home/z/lane", prefix: "lane/" },
-    { dir: "/home/z/channels", prefix: "channels/" },
-    { dir: "/home/z/autonomy-fix", prefix: "" },
+    { dir: SAOS_ESTATE, prefix: "" },
+    { dir: SAOS_LANE, prefix: "lane/" },
+    { dir: SAOS_CHANNELS, prefix: "channels/" },
+    { dir: SAOS_AUTONOMY, prefix: "" },
   ];
   type Place = { dir: string; repo: string };
   const places: Place[] = [];

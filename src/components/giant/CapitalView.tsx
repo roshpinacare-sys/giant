@@ -33,6 +33,7 @@ const LIQ_HE: Record<StrategyRow["liquidity"], string> = {
   FULL: "מלאה",
   HIGH: "גבוהה",
   MEDIUM: "בינונית",
+  LOW: "נמוכה",
   "LOCKED-7D": "נעולה-7-ימים",
   NONE: "אין",
 };

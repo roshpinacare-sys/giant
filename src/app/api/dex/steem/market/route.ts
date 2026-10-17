@@ -12,6 +12,7 @@ export async function GET() {
   try {
     await ensureEngine();
     const snap = await steemMarketSnapshot();
+    if (!snap) return Response.json({ ok: false, error: "steem-oracle-unavailable" }, { status: 503 });
 
     // מצב-הצמדה: בריכות-הגישור מול-האורקל (מדידה-חיה, לא-טענה)
     const pairs = await db.dexPair.findMany({

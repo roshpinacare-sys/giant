@@ -1,3 +1,4 @@
+import { SAOS_ESTATE } from "@/lib/saos-paths";
 /**
  * truth.ts — "מה קורה אצלנו באמת" — שכבת-האמת הכלכלית (R74 · דרישת-הבעלים).
  *
@@ -17,7 +18,7 @@ import path from "node:path";
 /* ריבונות-נתיבים (חוק-הבעלים: "אתם תכף מתים" — לא בונים על סנדבוקס):
  * הממשק חי מכל-מקום שמושך-את-הספרים; נתיבי-האמת ניתנים-להצבעה ב-env.
  * ברירת-המחדל = מבנה-ה-estate של-הסנדבוקס; בלי-הקבצים — כל-API מידרג בכנה (fail-honest). */
-export const ESTATE_ROOT = process.env.SAOS_ESTATE_DIR?.trim() || "/home/z/estate";
+export const ESTATE_ROOT = process.env.SAOS_ESTATE_DIR?.trim() || SAOS_ESTATE; // גל-86 · ברירת-המחדל מהסביבה
 export const DOMAIN_DIR = path.join(ESTATE_ROOT, "Domain");
 export const DATA_DIR = path.join(process.cwd(), "db");
 export const MU = 1000;

@@ -1,3 +1,4 @@
+import { SAOS_PROJECT_ROOT } from "@/lib/saos-paths";
 // giant · שוק-הסקטורים (M-11) — כלי-הון-פנימיים-מגובים-ביסודות-אמת
 // חוק-אמת: כל-סקטור מייצג מערכת-אחת-אמיתית באחוזה; היסודות נמדדים-חי-מהדיסק
 // ומה-DB. ההנפקה והבריכות מתועדות-בלדג'ר, מהקופה, בתחום-מוצהר. אפס-המצאה.
@@ -7,8 +8,8 @@ import path from "path";
 import { db } from "@/lib/db";
 import { ensureEngine } from "@/lib/dex-engine";
 
-const ESTATE_ROOT = "/home/z/my-project/estate/work/t33-fresh";
-const ROSH_ROOT = "/home/z/my-project/estate/work/t30-fresh/roshpina";
+const ESTATE_ROOT = `${SAOS_PROJECT_ROOT}/estate/work/t33-fresh`; // גל-86 · ניידות
+const ROSH_ROOT = `${SAOS_PROJECT_ROOT}/estate/work/t30-fresh/roshpina`;
 
 export interface SectorDef {
   base: string;

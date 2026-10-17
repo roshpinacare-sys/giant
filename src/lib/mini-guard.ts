@@ -1,3 +1,4 @@
+import { SAOS_ESTATE, SAOS_PROJECT_ROOT } from "@/lib/saos-paths";
 /**
  * mini-guard — המשגיחה-הפנימית (גל-17 · "המכונה-המשגיחה-על-עצמה" · גל-18 · בדיקה-פונקציונלית)
  * ══════════════════════════════════════════════════════════════════
@@ -26,7 +27,7 @@ export const MINI_SERVICES: MiniServiceDef[] = [
   /* גל-87 · נמדד: כל-צוות-FleetHQ-היה-אנשי-מת-מהלכים (קורפסים-מ-FleetHQ.stale-שנמחק) —
    * הממונה-האמיתי-עתה-בן-עץ-ה-Next (שושלת-השרדות); הוא-בעצמו-מחיה-פורנן/gateway/beats-כל-5ש׳.
    * single-flight-מובנה (pid-file+pidAlive) מונע-כפילות-אם-המשגיחה-משגיחה-על-המשגיח. */
-  { name: "fleet-supervisor", dir: "/home/z/estate/FleetHQ/mini-services/agent-hq", port: 3010, he: "ממונה-הצי (FleetHQ: פורנן 3010 + גייטוויי + beats)", cmd: "[ -d node_modules ] || bun install --silent; exec bun tools/runtime-supervisor.ts", env: { AGENT_HQ_DATA_DIR: "/home/z/my-project/Domain" } },
+  { name: "fleet-supervisor", dir: `${SAOS_ESTATE}/FleetHQ/mini-services/agent-hq`, port: 3010, he: "ממונה-הצי (FleetHQ: פורנן 3010 + גייטוויי + beats)", cmd: "[ -d node_modules ] || bun install --silent; exec bun tools/runtime-supervisor.ts", env: { AGENT_HQ_DATA_DIR: `${SAOS_PROJECT_ROOT}/Domain` } },
   /* גל-90 · הכלכלה-הפנימית תחת-המשגיחה: נמדד שמשגיח-ה-shell שלה (supervise-economy.sh)
    * מת-עם-קציר-הסנדבוקס — מעכשיו גם-הוא בן-עץ-ה-Next (שושלת-השרדות) עם בריאות-HTTP כנה (/health). */
   { name: "fleet-economy", dir: "mini-services/fleet-economy", port: 3016, he: "הכלכלה-הפנימית (ספר-hash-chain · AMM · תורת-כותבים-רבים)", probe: "gateway" },
@@ -36,7 +37,7 @@ export const MINI_SERVICES: MiniServiceDef[] = [
    * ומאמץ-זהויות fail-closed מול-השרשרת (T-12) — אפס-סודות-על-stdout, אפס-סקריפט-חוץ.
    * גל-91 · תיקון-פורט: T-80 קובע ש-office-selfcheck הוא הבעלים החוקי של :3040
    * (נמדד-חי: selfcheck=3040) → המנוע נקשר ל-:3044 דרך SAOS_ENGINE_PORT (חוק-אח-לא-נלחם-באח). */
-  { name: "saos-engine", dir: "/home/z/estate/steem/mini-services/saos-engine", port: 3044, he: "מנוע-המסחר-החי על-Steem (hyper-grid · dexflow · חתימה-ריבונית מהכספת-בגיט)", probe: "gateway", cmd: "[ -d node_modules ] || bun install --silent; exec bun run dev", env: { SAOS_ENGINE_PORT: "3044" } },
+  { name: "saos-engine", dir: `${SAOS_ESTATE}/steem/mini-services/saos-engine`, port: 3044, he: "מנוע-המסחר-החי על-Steem (hyper-grid · dexflow · חתימה-ריבונית מהכספת-בגיט)", probe: "gateway", cmd: "[ -d node_modules ] || bun install --silent; exec bun run dev", env: { SAOS_ENGINE_PORT: "3044" } },
 ];
 
 export interface MiniServiceDef {

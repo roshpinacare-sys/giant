@@ -1,3 +1,4 @@
+import { SAOS_HOME } from "@/lib/saos-paths";
 /**
  * runtime-store — מאגר-ריצה-מחוץ-עץ-הפרויקט (מיזוג-גיאנט · תיקון-לולאת-ההידור)
  *
@@ -13,7 +14,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 
-const RUNTIME_DIR = process.env.GIANT_RUNTIME_DIR?.trim() || "/home/z/.giant-runtime";
+const RUNTIME_DIR = process.env.GIANT_RUNTIME_DIR?.trim() || `${SAOS_HOME}/.giant-runtime`; // גל-86 · ניידות
 
 export function runtimePath(name: string): string {
   return path.join(RUNTIME_DIR, name);

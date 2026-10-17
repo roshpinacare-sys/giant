@@ -1,3 +1,4 @@
+import { SAOS_PROJECT_ROOT } from "@/lib/saos-paths";
 // giant · מנוע-הגיט-החי (G-2): קריאת-מצב מה-clone-הקנוני + נחיתת-הוראות-בעלים
 // חוק-הערוץ-האחד (giant/SPEC-CHANNEL.md): היעד-היחיד הוא
 // ops/sovereign/OWNER-CHANNEL/inbox.jsonl (append-bounded 60) — ה-decider קורא-אותו בכל-פעימה.
@@ -7,7 +8,7 @@ import { execFile } from "child_process";
 import { readFile, readdir, writeFile } from "fs/promises";
 import path from "path";
 
-const SBX = "/home/z/my-project/t36/Sandbox";
+const SBX = `${SAOS_PROJECT_ROOT}/t36/Sandbox`;
 const INBOX = path.join(SBX, "ops/sovereign/OWNER-CHANNEL/inbox.jsonl");
 const LEDGER = path.join(SBX, "ops/AGENT-LEDGER.md");
 const REGISTRY = path.join(SBX, "ops/agents/SWARM-REGISTRY.md");

@@ -1,3 +1,4 @@
+import { SAOS_PROJECT_ROOT } from "@/lib/saos-paths";
 // giant · עוגן-ההישרדות (sovereign anchor) — הריבונות-חייבת-לשרוד-מחיקת-סנדבוקס
 // הוראת-הבעלים: "אתם סנדבוקס שנמחק... מחברים את הריבונות להפעלה מלאה".
 //
@@ -13,7 +14,7 @@ import { execFile } from "child_process";
 import { readFile } from "fs/promises";
 import path from "path";
 
-const SYS = "/home/z/my-project";
+const SYS = SAOS_PROJECT_ROOT;
 const PAT_PATH = path.join(SYS, "upload", "pat.env");
 const CLOUD_URL = "https://github.com/roshpinacare-sys/giant.git";
 const ANCHOR_REF = "refs/heads/sovereign/main";

@@ -1,3 +1,4 @@
+import { SAOS_PROJECT_ROOT } from "@/lib/saos-paths";
 /**
  * T70 · פנקס-הזרימה — הזיכרון-העצמי-הכנה של-המערכת.
  *
@@ -12,7 +13,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import type { FlowTrajectory, FlowTrajectoryEntry } from "@/lib/giant/flow-types";
 
-const LEDGER = path.join("/home/z", "my-project", "db", "flow-ledger.json");
+const LEDGER = path.join(SAOS_PROJECT_ROOT, "db", "flow-ledger.json");
 const CAP = 500; // מספיק-לימים-של-דופק-שעתי; הפנקס-לא-בלון
 
 let lastWriteAt = 0; // חנק-כתיבה: לפחות 5 שניות בין-רישומים (מניעת-מירוץ-בין-נקודות-הקצה)

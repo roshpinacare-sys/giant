@@ -1,3 +1,4 @@
+import { SAOS_ESTATE, SAOS_PROJECT_ROOT } from "@/lib/saos-paths";
 /**
  * SOVEREIGN CHANNEL — server-only. The ONE direct Owner <-> Sovereignty channel.
  *
@@ -24,9 +25,9 @@ import { createHash } from "crypto";
 
 const pexec = promisify(execFile);
 
-export const PULSE_DIR = "/home/z/estate/Pulse";
-export const DOMAIN_DIR = "/home/z/estate/Domain";
-export const FLEETHQ_DIR = "/home/z/estate/FleetHQ";
+export const PULSE_DIR = `${SAOS_ESTATE}/Pulse`;
+export const DOMAIN_DIR = `${SAOS_ESTATE}/Domain`;
+export const FLEETHQ_DIR = `${SAOS_ESTATE}/FleetHQ`;
 
 export const STREAM_DIR = path.join(PULSE_DIR, "state/sovereign-channel");
 export const DIRECTIVES_PATH = path.join(STREAM_DIR, "directives.jsonl");
@@ -36,7 +37,7 @@ export const VOICE_PATH = path.join(STREAM_DIR, "voice.json");
 export const LEGACY_BOOK_PATH = path.join(DOMAIN_DIR, "agents/sovereign-requests.json");
 export const DEX_STATE_PATH = path.join(DOMAIN_DIR, "dex/state.json");
 export const OPERATOR_INBOX_PATH = path.join(FLEETHQ_DIR, "office/state/operator-inbox.jsonl");
-export const PAT_ENV_PATH = "/home/z/my-project/upload/pat.env";
+export const PAT_ENV_PATH = `${SAOS_PROJECT_ROOT}/upload/pat.env`;
 
 const PULSE_PUSH_URL = "https://github.com/roshpinacare-sys/Pulse.git";
 const MAX_TEXT = 2000;

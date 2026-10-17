@@ -1,3 +1,4 @@
+import { SAOS_ESTATE } from "@/lib/saos-paths";
 // ═══ אמת-המשרד: גשר-מדידה ל-9 הזנות-החדר + STASIS + פקודות + ריצות ═════════
 // חוק-אמת: מה שנמדד — זה מה שחוזר. כשל = null/UNKNOWN, לעולם לא ירוק-מזויף.
 // ה-caps = אותם ערכי FRESH_MIN של החדר החי (המשרד היחיד — רץ בשורש האפליקציה, RoomRoot).
@@ -198,7 +199,7 @@ export async function dispatchWorkflow(token: string, repo: string, workflow: st
 export async function journalToGit(entry: Record<string, unknown>): Promise<{ ok: boolean; note: string }> {
   try {
     const { spawn } = await import("node:child_process");
-    const repoDir = "/home/z/estate/Sandbox";
+    const repoDir = `${SAOS_ESTATE}/Sandbox`;
     const journalPath = `${repoDir}/ops/office/operator-journal.jsonl`;
     await readFile(journalPath, "utf8").catch(() => "");
     const { appendFile } = await import("node:fs/promises");
