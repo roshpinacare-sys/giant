@@ -14,8 +14,8 @@
 import { Database } from "bun:sqlite";
 import { createHash } from "crypto";
 
-const DEX_DB = process.env.BRIDGE_DEX_DB ?? "/home/z/review/saos-dex/db/dex.db";
-const API = process.env.BRIDGE_DEX_API ?? "http://127.0.0.1:3010/saos-dex/api/dex/trades?pair=SAOS/USDS&limit=500";
+const DEX_DB = process.env.BRIDGE_DEX_DB ?? "/home/z/my-project/db/custom.db";
+const API = process.env.BRIDGE_DEX_API ?? "http://127.0.0.1:3015/saos-dex/api/dex/trades?pair=SAOS/USDS&limit=500";
 const POLL_MS = 20_000;
 const PORT = 3017;
 

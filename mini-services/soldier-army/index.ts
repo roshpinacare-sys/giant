@@ -14,7 +14,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const DEX = "http://127.0.0.1:3010/saos-dex/api/dex";
+const DEX = process.env.ARMY_DEX_URL || "http://127.0.0.1:3015/saos-dex/api/dex";
 const PORT = 3018;
 const ENV_FILE = path.join(import.meta.dir, "..", "saos-dex-node", "operator.env");
 function readToken(): string {
