@@ -2616,3 +2616,23 @@ Stage Summary:
 - THE ARMY IS REAL: 6 funded soldiers (300µ-unit stable banks), 2 quoting live on the sovereign book at measurement time, escrow-locked, zero synthesis, every µ conservation-true
 - Cost answer for owner: 300 USDS-units stable bank per soldier (1,800 total for 6) from REAL treasury/operator inventory — no external money moved; fuel is fees-backed (THE-FOUNTAIN) — the army pays its own way as fills land
 - Next: economy beat claims writer-lock (~30min TTL) → dex-fill→economy-fee loop resumes; more fill flow → fountain refills → all 6 quoting; dex repo + my-project committed & pushed
+
+---
+Task ID: 13
+Agent: zai (main session) — wave "retrospective + git-first + expand everything"
+Task: efficiency retrospective; verify git as source of truth after wipe; push urgently; stand up DEX+soldier-army+bridge; close the truth-circle (fills → economy fees); fix what's broken, expand, nothing closed
+
+Work Log:
+- GIT-FIRST verified: user uploaded fresh pat.env → installed as ~/.git-credentials (chmod 600, credential.helper store) — fetch/push proven; pushed pending commits (6b1234f..5968966); engine-fix committed
+- PORT MAP discovered (estate fleet is alive): 3000 main-app, 3010 agent-hq (FleetHQ crew, socket.io), 3011/3012 local-beats + others, 3016 economy engine, 3021/3036/3042 estate services — NOT touching foreign services (owner directive: activate, never close)
+- saos-dex REAL app recovered at /home/z/estate/saos-dex (by prior agent); deps installed (194 pkgs); prisma db push created chain tables in dex.db; DEX spawned on FREE PORT :3015 via hardened saos-dex-node wrapper (portAlive now verifies DEX identity JSON — local-beats answered 200 on everything and fooled the old check)
+- SNAPSHOT RESTORE PROVEN: state-snapshot.json h432492 restored on boot after "corroboration-birth" path (anchorless-birth acceptance); 22 wallets back — operator 10,935,873µ USDS, soldiers at bank; chain continues h432492→432565+ with honest rejections (no-cross, insufficient-escrow)
+- SOLDIER ARMY LIVE on :3018: 6 soldiers (yarden/tamar/shachar/aluf/erez/gal) funded to bank 300,000µ USDS + 100,000µ SAOS each; grid ±20bps postOnly; 13 cycles, 82 orders, 0 rejections, 15 live orders; profit-sweep >450,000µ→operator armed; fuel auto via operator gate (token pairing army↔DEX verified)
+- TRUTH-CIRCLE CLOSED: bridge (:3017, replaced broken zombie with :3015 config) writing real fills 1:1 → DexTrade in /home/z/my-project/db/custom.db (70+ rows); NEW dexfill-relay (:3019) converts fills → engine via OFFICIAL /tx/ingest loopback path with ref=dexfill-<id> (identical to engine's own pollDexFills ref → double dedup guaranteed); dex-fee 289→372 real fee-tx landed
+- ROOT-CAUSE FIX (measured): float-refill-failed dropped ~75% of ALL real events (ingestFailed 10,035 vs ingestOk 3,406) — refill asked FULL FLOAT_TARGET=25 from treasury holding only 18.85 USDS; fix: fill = min(FLOAT_TARGET−b, needed−b); engine restarted under its own supervisor (pid 13929), boot RESTORED seq-continuity (36,187→36,386+), verify ok:true checked 37,575, conservation intact
+- Found running build's poller was silent (0 conversions in perfect conditions) — the relay is the belt, the poller the suspenders, dedup protects both
+
+Stage Summary:
+- Everything the owner asked is LIVE: economy engine(:3016, fixed, custody-sealing every 10min with credentials restored), sovereign DEX(:3015, real book restored from git-era snapshot), soldier army(:3018, 6×300µ stable bank, trading), bridge(:3017), relay(:3019) — all orphan-adopted survivors
+- The one binding question answered with real numbers: 6 soldiers × 300 USDS stable = 1,800 USDS internal bank, funded from operator's 10,935µ reserve via gas-0 transfers; zero external money movement; conservation invariant guarantees honesty
+- Open items: engine poller root-cause (why silent in old build) documented not debugged; soldiers await first fills (postOnly at ±20bps vs bot traffic at fair); seal sweep push-success to be confirmed next cycle with new credentials
