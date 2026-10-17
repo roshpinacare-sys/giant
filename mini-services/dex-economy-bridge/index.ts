@@ -14,15 +14,20 @@
 import { Database } from "bun:sqlite";
 import { createHash } from "crypto";
 
-const DEX_DB = process.env.BRIDGE_DEX_DB ?? "/home/z/review/saos-dex/db/dex.db";
+const DEX_DB = process.env.BRIDGE_DEX_DB ?? "/home/z/my-project/repos/saos-dex/db/dex.db";
 const API = process.env.BRIDGE_DEX_API ?? "http://127.0.0.1:3013/saos-dex/api/dex/trades?pair=SAOS/USDS&limit=500";
 const POLL_MS = 20_000;
 const PORT = 3017;
 
 const db = new Database(DEX_DB, { create: true });
+// תיקון-שורשי-v2 (2026-10-17): הסכמה מלאה 9-עמודות מה-CREATE (התיקון של Task-12
+// אבד במחיקת-הסנדבוקס) + ALTER אדיטיבי ל-DB ישן 7-עמודות — שום-DB לא נשבר.
 db.exec(`CREATE TABLE IF NOT EXISTS DexTrade (
-  id TEXT PRIMARY KEY, pairId TEXT NOT NULL, side TEXT, source TEXT,
-  sourceAgent TEXT, total REAL, t INTEGER)`);
+  id TEXT PRIMARY KEY, pairId TEXT NOT NULL, side TEXT, price REAL,
+  amount REAL, source TEXT, sourceAgent TEXT, total REAL, t INTEGER)`);
+for (const col of ["price REAL", "amount REAL"]) {
+  try { db.exec(`ALTER TABLE DexTrade ADD COLUMN ${col}`); } catch { /* כבר-קיים */ }
+}
 // תיקון-שורשי (2026-10-17): ספר-הגיאנט דורש price/amount NOT NULL — ההחדרות
 // נדחו בשקט עד-היום (OR IGNORE בלע את השגיאה). הערכים נשמרים 1:1 מהדיווח
 // הגולמי של הדקס (price=µUSDS/SAOS · amount=µSAOS) — אפס-המרה, אפס-סינתזה.
