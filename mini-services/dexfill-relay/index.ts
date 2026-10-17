@@ -49,7 +49,7 @@ async function pushRow(row: { id: string; pairId: string; side: string; source: 
   } catch (e) { errors++; lastErr = String(e).slice(0, 120); }
 }
 
-function poll(): void {
+async function poll(): Promise<void> {
   polls++;
   let db: Database | null = null;
   try {

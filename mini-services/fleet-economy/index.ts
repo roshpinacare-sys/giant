@@ -142,7 +142,12 @@ const FLOAT_TARGET = 25;
 function refillFloatIfEmpty(payer: string, needed: number): boolean {
   const b = bal(payer);
   if (b.usds >= needed) return true;
-  const fill = round6(FLOAT_TARGET - b.usds);
+  /* תיקון-שורשי (2026-10-17 · נמדד-חי): המילוי ביקש את מלוא FLOAT_TARGET (25)
+   * גם-כשהאגרה-הנדרשת הייתה 0.001–2 — וקופת-האוצר (18.85) לא יכלה לכסות 25
+   * → float-refill-failed על ~75% מאירועי-האמת (נמדד: ingestFailed 10,035 מול
+   * ingestOk 3,406). המילוי מכסה עכשיו את-מה-שצריך-בפועל לאגרה-זו (עד-תקרת-הצף).
+   * אפס-הטבעה: העברה-פנימית בלבד מהאוצר; אינווריאנטת-שימור לא נוגעת. */
+  const fill = round6(Math.min(FLOAT_TARGET - b.usds, needed - b.usds));
   if (fill <= 0) return b.usds >= needed;
   const r = apply({ seq: seq + 1, ts: Date.now(), kind: "salary", from: "treasury", to: payer, asset: "USDS", amount: fill, reason: `תדלוק-צף-אגרות-אירועים (${payer})` });
   return r !== null && bal(payer).usds >= needed;
