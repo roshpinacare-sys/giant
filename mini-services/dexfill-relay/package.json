@@ -1,0 +1,7 @@
+{
+  "name": "dexfill-relay",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ממיר-מילויי-דקס → ספר-הכלכלה דרך נתיב-ה-ingest הרשמי (loopback, ref-dedup זהה ל-pollDexFills). פורט 3019.",
+  "scripts": { "dev": "bun --hot index.ts" }
+}
