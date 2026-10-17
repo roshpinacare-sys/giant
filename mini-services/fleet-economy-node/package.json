@@ -1,0 +1,9 @@
+{
+  "name": "fleet-economy-node",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Live node of the real fleet-economy engine (lane ops/a1-economy-ledger-conservation @ f66b356) — module import, zero fork, zero synthesis. Port 3016, loopback ingest.",
+  "scripts": {
+    "dev": "bun --hot index.ts"
+  }
+}
