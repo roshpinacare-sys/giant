@@ -1,7 +1,9 @@
 /* ═══ fleet-economy-node · mini-service wrapper · פורט 3016 ═══
- * מריץ את מנוע-הכלכלה האמיתי מה-lane המתוקן (ops/a1-economy-ledger-conservation
- * @ f66b356, selftest 29/29) ע"י יבוא-מודול ישיר — אפס-fork, אפס-סינתזה.
- * המנוע עצמו מרים Bun.serve(:3016) + טיימרים (tick/seal/snapshot/pollDexFills).
- * מצב: /home/z/work/fleet-economy/state (הספר האמיתי + הסגרים נשמרים שם).
+ * מריץ את מנוע-הכלכלה האמיתי מהריפו הריבוני (git = מקור-האמת):
+ *   /home/z/work/fleet-economy (clone של roshpinacare-sys/fleet-economy @ main,
+ *   economy-beat CI חי — seq 134,268+, עוגנים 3/3)
+ * אפס-fork, אפס-סינתזה. המנוע מרים Bun.serve(:3016) + טיימרים
+ * (tick/seal/snapshot/pollDexFills). ה-state הוא ספר-הגיט עצמו
+ * (state/ בתוך הריפו) — כתיבה מקומית מנוהלת מול ה-CI דרך writer-lock.
  * סודות: אין. רשת: loopback בלבד ל-ingest. */
 import "../../../work/fleet-economy/index.ts";
