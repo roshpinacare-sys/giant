@@ -180,6 +180,12 @@ async function scanFleet(): Promise<Snapshot> {
     try {
       snap.verify = await jget(`${FLEET.economy}/verify`, 12_000);
       if (snap.verify && snap.verify.ok === false) snap.alerts.push(emitAlert("ledger-verify", "critical", `אימות-שרשרת נכשל: ${JSON.stringify(snap.verify).slice(0, 200)}`) ?? null);
+      /* חוק-תקרית-20261018: verify-ok-ללא-עוגנים = רגנזיס-שקטה (הספר-הקנוני-אבד-מבלי-שאף-אזעקה-תרים) */
+      const anchors = Array.isArray(snap.verify?.anchors) ? snap.verify.anchors : null;
+      if (snap.verify?.ok && anchors && anchors.length === 0)
+        snap.alerts.push(emitAlert("verify-without-anchors", "critical", "אימות עובר אך אפס-עוגנים — הספר עלה-רגנזיס-טרייה? דרוש-שחזור-מגיט-מיידי (עוגנים 3/3 = 46335/55120/68276)") ?? null);
+      if (snap.verify?.ok && anchors && anchors.length > 0 && anchors.length < 3)
+        snap.alerts.push(emitAlert("anchors-partial", "critical", `רק ${anchors.length}/3 עוגנים באימות — רציפות-חלקית`) ?? null);
     } catch (e) { snap.errors.push(`verify: ${String(e).slice(0, 60)}`); }
     try {
       const m = await jget(`${FLEET.economy}/metrics`);
