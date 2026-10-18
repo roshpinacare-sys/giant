@@ -2847,3 +2847,533 @@ Stage Summary:
 - **הריבונות הוכיחה-התאוששות-עצמית-מלאה ממחיקת-סנדבוקס**: וידוא-git → אימוץ-קנוני → איחוד-אמת → ריפוי-ספר → הוכחת-ביט — בלי-אף-סוכן-שמחזיק-יד. "כלום לא מת עם הסנדבוקס" מומש-עד-הקוקפיט-עצמו.
 - הספר-הקנוני 320K+ אירועים רציף-ומאומת בשני-מימושים; הכיול-כן-מתועד-בקוד-ובתיאום.
 - אפס-נגיעה בכספות/סודות/טוקנים/רוטציות; החלטות-בעלים פתוחות לא שונו.
+
+
+---
+
+# ציר-סנדבוקס agent-zai (G10 union — אדיטיבי; הרשומות-המלאות G4→G10) 
+
+# Worklog — SAOS Fleet Engineering Audit
+
+---
+Task ID: 1
+Agent: orchestrator (Z.ai Code)
+Task: מיפוי כל תיקיות הגיט של roshpinacare-sys והכנת ביקורת מקצועית
+
+Work Log:
+- נמצא טוקן GitHub תקין ב-upload/pat.env (github_pat_, 93 תווים) — לא נחשף בלוגים
+- זוהו בדיוק 40 ריפואים תחת הארגון roshpinacare-sys (API: /user/repos)
+- כל 40 שוכפלו shallow (depth 1) ל-/home/z/audit/repos
+- נאספו עובדות מדודות: קצב-קומיטים (API) ו-15 ריצות-workflow אחרונות לכל ריפו → /home/z/audit/facts.md
+- נמצא דפוס מרכזי: ריפואים ציבוריים ירוקים ב-Actions; ריפואים פרטיים כושלים בבת-אחת (חתימת billing-wall ~10-13)
+- נקראו כל 40 ה-READMEs ראשונית — סיפור-על: SAOS "ריבונות אוטונומית" על STEEM/HIVE + DEX פנימי + צי סוכנים
+
+Stage Summary:
+- תשתית הביקורת מוכנה: repos ב-/home/z/audit/repos, עובדות ב-/home/z/audit/facts.md
+- השלב הבא: 6 סוכני ביקורת מקביליים (2-a..2-f) על קבוצות ריפואים
+
+---
+Task ID: 2-e
+Agent: Explore-2e-vault-sandbox
+Task: ביקורת קריאה-בלבד — vault-home, Sandbox, sandbox-private, Project-files (קריפטו, בזבוז, שרשרת-אתחול, שלמות-ארכיון)
+
+Work Log:
+- ניפוח מדוד: vault-home 176MB (86MB bundles בעץ + 87MB .git שמאחסן את אותם bundles שוב) · Project-files 130MB (68,852,453B זיפים + 64MB .git שמאחסן את אותם blobs) · Sandbox 9.5MB · sandbox-private 2.7MB.
+- קריפטו vault-home (vault.sh:24-25, vaultlib.sh:181-217, wrap.sh:63-88): AES-256-CBC + PBKDF2×200k בלי-MAC; wraps = openssl(P, key=sha256hex(C)) עם שם-קובץ sha256(C); אין-שלילת-הרשאות, session-pass בקלטת, legacy mode = credential כסיסמה. פונקציונלי-אבל-חלש.
+- קריפטו Sandbox (tools/seal.mjs:31-102): PBKDF2-SHA256×650k, salt 16B ו-IV 12B אקראיים-טריים, AES-256-GCM + תג-128, roundtrip, סיסמה-בזיכרון-בלבד. בנייה-תקינה — היחידה-בסט.
+- sandbox-private: core/backup.ts scrypt+AES-256-GCM תקין, אבל vault/vault-backup.enc (6,768B) עקוב-בגיט ו-README.md:20 מתעד את "סיסמת-הבעלים (headcorner)".
+- boot-sovereign.sh: שרשרת-גילוי-טוקן→pull→unwrap אמיתית, אבל שלב-7 קורא ל-foreman/run-office.sh שלא-קיים בריפו; vaultlib.sh:152 מצביע ל-vault/ssh/tool/ בזמן-שה-shim ב-ssh-tool/; push-vaults.sh חסר-למרות-שה-README מסמן אותו ✅.
+- Project-files: sha256sum -c agent/archives.sha256 → 10/10 OK; סכום-הזיפים = 68,852,453B בדיוק כמו status.json (PASS, 2026-10-08); workflows כושלים 13/15 (facts.md:55).
+- בדיקת-כפילויות: md5 של 10 הזיפים ייחודי-בין-4-הריפואים; הכפילות היא פנימית (.git=עץ) וסמנטית (vault-chain/bundles/* = תמונות-מלאות של 28 ריפואים, כולל Sandbox.bundle שאומת-בשיבוט: 393 קבצים, HEAD אחד-אחורה).
+- סודות: אפס-סודות-גלויים בעצים-העקובים. ארטיפקטים-מוצפנים: vault-home 4 .enc שורש + 8 intake + 3 wraps (96B כ"א); Sandbox sealed-payload.bin 2,944B + inbox.sealed.json 12.5KB; sandbox-private 1 .enc עקוב.
+
+Stage Summary:
+- Sandbox = REAL-FUNCTIONAL (קריפטו-תקין, מנוע-אמיתי, leak-scan מחובר-ל-workflows) · vault-home = PARTIAL (כספת-אמיתית, אתחול-שבור, ניפוח-כפול 176MB/268MB-ב-GitHub) · sandbox-private = PARTIAL/ARCHIVE (שרת-מת-מ-10-10, סיכון-מתועד) · Project-files = ARCHIVE (תמים-אבל-מנופח-×2 וה-keeper-מת).
+- 5 הממצאים-הנחרצים והפרטים-המלאים — בדוח-הסופי של 2-e.
+
+---
+Task ID: 2-f
+Agent: Explore-2f-giant-zip-misc
+Task: ביקורת קריאה-בלבד של giant · Zip · negen · sanbox (מידול, ניתוח סטטי, הצלבה חוץ-רשתית)
+
+Work Log:
+- SIZE FORENSICS: giant=207MB אך תוכן-עץ ~29MB בלבד + pack 67MB; פירוק: mini-services 53MB (fleet-economy quarantine ledger.jsonl 38MB+6MB), reports/ 42MB PNG, db/custom.db 32MB SQLite מגוש-מעקב (בניגוד ל-/db/ ב-.gitignore:74), public/models 8MB, worklog.md 486KB. Zip=285MB: sovereign/ 153MB (evidence 69MB · tmp 41MB · proofs 17MB), .git pack 96MB, scan-results 14MB, screenshots 7.4MB, src/ רק 5.5MB, worklog.md 2MB.
+- giant: Next.js 16 אמיתי (813 קבצים; 74 API routes; 250 קבצי src). ניתוח-סטטי של 3 נתיבים: dex/candles→Binance /api/v3/klines (market-feed.ts:46-57 URL תקין, timeout 6s, null בכשל); giant/league→api.llama.fi overview/fees+dexs (route.ts:17-18, הפרדת-פידים מפורשת); giant/market→Kraken 0/public/Ticker→Binance→CoinGecko שרשרת-נפילה אמיתית. fleet→GitHub search/repositories?q=org:roshpinacare-sys. fail-honest ממומש: truth.ts:66 base payload ok:false "fail-honest", candles מחזיר source:"binance-down", אפס Math.random בנתוני-שוק (רק טקסטורות/תלת-ממד).
+- WEAVE (Zip): עקבה מלאה של weave-beat.ts (643 שורות): pull→ייבוא ledger.json→sealOpen→פקודות-מפעיל מ-custom_json→G6 AUDIT→מראה-קונסולה→runBeat(verify→attest→checkpoint)→שוק-אמת→CROSSCHAIN→ארכיון→export→שער-סודות→push. verifyLedger (src/lib/weave/beat.ts:70) = hash-chain + EIP-191 sig recovery + evidenceHash — עקביות-עצמית בלבד.
+- ledger.json (4.6MB): 1725 אימותים, 87.5% ANCHOR, 95.5% חתומים ע"י מפתח-יחיד 0xaB07…7B92 (weave-cloud-heart), 14 סוכנים אך רק 1 עם מפתח-אטום (מודה בכך ה-cap-audit היומי ב-weave-beat.ts:223-269); 1667 checkpoints שכל אחד leafCount=1 ומכסה את האימות-על-עצמו; 9 "שווקי-אמת" על נקודות-פנימיות עם REFUND כשאין מהמרים.
+- weave-seal.enc=834B מגוש בריפו (מעטפת AES-256-GCM של cloudKeyHex+networkKeyHex — מפתחות EVM פרטיים; סיסמה ב-GitHub Secret; weave-seal.meta.json נבדק — אין passphrase בתוכו, רק מטא). .gitleaks.toml:44-49 מתיר במפורש encKey/keyIv/keyTag ב-ledger.json.
+- אימות-חוץ עצמאי (Steem RPC): txid dadc2e99… מ-ledger.json אכן קיים on-chain (custom_json saos.weave.core.v1, 2026-10-16T22:54:15, protocol saos-weave-core/v1 action=checkpoint) — העיגון ל-Steem אמיתי. אך באותו חשבון @headcorner: 7/8 קבלות saos-bus-v1 אחרונות משדרות "ok":false,"health":null — הצי עצמו מדווח-עצמו מת תוך כדי שה-WEAVE מעיד VERIFIED. עוגני "Z-Chain/Zero 9369" = self-send 0$ ל-EOA אינרטי (ערך-הוכחה אפס).
+- כפילויות (md5 על src/**/*.ts,tsx): giant↔FleetHQ 59 קבצים זהים (36.5% מ-FleetHQ, כולל עסקי: hq/life.ts, hq/truth.ts, sovereign-gateway); Zip↔FleetHQ 51; giant↔Zip 48; saos-dex/Domain 0 חפיפה-paths. שני הספרים = שלד z.ai זהה ("nextjs_tailwind_shadcn_ts" v0.2.1). giant מחזיק docs/duplicates-audit-2026-10-15.md — מסמך-ממשל עצמי שמאשר 5 משפחות-כפילות (ערוץ ×6, משרד ×2, מגדלור ×2, דלת ×3, קונסולה ×2).
+- איכות: tsconfig בשניהם strict:true אך noImplicitAny:false; אפס בדיקות-יחידה (giant: 3 סקריפטים ב-shell בלבד; Zip: 0 *.test.ts); giant .env מגוש עם DATABASE_URL מוחלט; Zip Actions עצמו 15/15 כשלים (facts.md) בעוד הפעימה רצה מ-Domain/weave-heart.yml (checkout של Zip — split-brain CI; cron בפועל 16:29 יומית, לא :13 שעתית כמו ב-README).
+- negen: 7560 שורות Web Audio אמיתי (mulberry32, SVF, Euclidean rhythms, LUFS, encodeWav) — כלי-נגינה תקין, אך ריפו=1 קומיט, ארטיפקט-בעלים שהועלה, אפס פיתוח-חי. sanbox: ריפו ריק לחלוטין (0 קבצים), שלישי ל-Sandbox ו-sandbox-private — כאוס-שמות ×3.
+
+Stage Summary:
+- giant: REAL-FUNCTIONAL (הנתונים-החיים אמיתיים וה-fail-honest קיים בקוד) עם חוב-היגיינה חמור (32MB DB + 44MB ledgers + 42MB צילומים בגיט).
+- Zip: PARTIAL — ערוץ-העיגון החוץ-רשתי אמיתי (אומת ב-Steem), אבל "רשת-האימות" מאמתת את עצמה: מפתח-יחיד, checkpoints-עצמיים, שוק-נקודות-פנימי; הריפו = מזבלה-מבצעית 285MB.
+- negen: ARCHIVE (אמיתי, לא-מפותח); sanbox: EMPTY.
+- 5 הממצאים הנחרצים רשומים בדוח המלא בצ'אט; המרכזי: 95.5% מהאימותים חתומים במפתח-אחד, VERIFIED=עקביות-עצמית, והקבלות-on-chain של הצי עצמן משדרות ok:false.
+
+---
+Task ID: 2-f (completion — החלקים שחסרו בבלוק הקודם)
+Agent: Explore-2f-giant-zip-misc
+
+### giant — טבלת-מעקב 3 נתיבי-API (סטטי, ללא הרצה)
+| נתיב | URL חוץ (file:line) | ממצא |
+|---|---|---|
+| GET /api/dex/candles | `https://api.binance.com/api/v3/klines` — src/lib/market-feed.ts:46-57 | אמיתי: parsing מלא, timeout 6s, cache 45s; בכשל מחזיר נרות-מקומיים + `source:"binance-down"` (route.ts:21,52) — fail-honest ממומש |
+| GET /api/giant/league | `https://api.llama.fi/overview/fees?...` + `/overview/dexs?...` — route.ts:17-18 | אמיתי keyless; הפרדת פיד עמלות/ווליום מפורשת; "לא נמצא בפיד = לא מופיע"; פיד ריק ⇒ `ok:false` + note "fail-closed, אפס-המצאה" (route.ts:168-170) |
+| GET /api/giant/market | `https://api.kraken.com/0/public/Ticker` → Binance 24hr → CoinGecko simple/price — src/app/api/giant/market/route.ts:105,131 | שרשרת-נפילה אמיתית בין 3 מדידים עצמאיים; `vol24hUsd` מסומן "נגזר-חישובית" |
+| GET /api/giant/fleet | `https://api.github.com/search/repositories?q=org:roshpinacare-sys` — src/lib/giant/fleet.ts:43-49 | אמיתי; בלי PAT ⇒ payload ריק כנה "הצי לא נמדד כרגע (כשל-כנה)" (fleet.ts:31-37) |
+
+אפס Math.random בנתוני-שוק (רק טקסטורות/פריסה תלת-ממד). `truth.ts:66`: ברירת-מחדל ok:false "קבצי-האמת לא נמדדו — fail-honest"; ESTATE_ROOT=/home/z/estate עם fileMeta(sha256+ageMinutes) לכל קובץ-אמת. **הכלל "אפס-סימולציות" מוחזק בקוד.**
+
+### Scorecards (0-10)
+| מדד | giant | Zip | negen | sanbox |
+|---|---|---|---|---|
+| product reality | 7 | 5 | 7 | 0 |
+| data honesty | 8 | 6 | 8 | 0 |
+| duplication debt | 4 | 3 | 8 | — |
+| engineering quality | 5 | 5 | 5 | — |
+| docs honesty | 8 | 7 | 8 | — |
+
+### VERDICTS
+- **giant = REAL-FUNCTIONAL.** (1) UI Next.js16+3D אמיתי, 74 routes, נתוני-שוק חיים מ-Binance/Kraken/DefiLlama/CoinGecko — URL-ים ופרסינג נכונים; (2) fail-honest קיים בפועל בקוד (לא רק ב-README); (3) docs/duplicates-audit-2026-10-15.md = מסמך-ממשל עצמי כן שמאשר 5 משפחות-כפילות (ערוץ ×6, משרד ×2, מגדלור ×2, דלת ×3, קונסולה ×2); (4) md5: 59 קבצים זהים מול FleetHQ (36.5% ממנו — כולל עסקיים hq/life.ts, hq/truth.ts, sovereign-gateway), 48 מול Zip, 0 מול Domain; (5) חוב-היגיינה: 32MB SQLite מגוש בניגוד ל-.gitignore:74, 44MB quarantine-ledgers, 42MB PNG, .env עם DATABASE_URL מוחלט, אפס בדיקות-יחידה, strict:true מנוטרל ב-noImplicitAny:false.
+- **Zip = PARTIAL.** (1) ערוץ-העיגון ל-Steem אמיתי — אומת עצמאית (txid dadc2e99… on-chain, saos.weave.core.v1); (2) אבל הרשת מאמתת-עצמה: 95.5% חתימות מפתח-יחיד, 1667 checkpoints בני leafCount=1, 87.5% אימותים מסוג ANCHOR-עצמי; (3) verifyLedger (beat.ts:70) = עקביות-ספר-בלבד; (4) עוגני "Zero 9369" = self-send 0$ ל-EOA אינרטי; (5) הקבלות on-chain של הצי עצמו (saos-bus-v1 @headcorner) משדרות 7/8 `"ok":false,"health":null` — הרשת מעידה VERIFIED על צי שמדווח-עצמו מת; (6) weave-seal.enc 834B = מפתחות-EVM מוצפנים מגושים בריפו + .gitleaks.toml:44-49 מתיר-מפורש את שדות-המפתח של עצמו; (7) 285MB ל~5MB קוד; Actions-עצמי 15/15 כשלים בעוד הפעימה רצה מ-Domain (split-brain CI).
+- **negen = ARCHIVE (ארטיפקט אמיתי).** כלי-נגינה Web Audio תקין ומורכב (mulberry32, SVF, Euclidean, LUFS, encodeWav — 7560 שורות); אך 1 קומיט, העלאת-בעלים verbatim, אפס פיתוח-חי בריפו, אפס workflows.
+- **sanbox = EMPTY.** 0 קבצים, 0 קומיטים — שלישי בכאוס-שמות (Sandbox / sanbox / sandbox-private).
+
+### ממצאים נחרצים (top-5)
+1. **THE WEAVE מאמתת את עצמה ביד-אחת**: 1647/1725 אימותים (95.5%) חתומים במפתח-EVM יחיד (weave-cloud-heart); 13 מתוך 14 "סוכנים" ללא מפתח — והרשת מודה בזה בעצמה ב-cap-audit היומי (weave-beat.ts:223-269). רשת-אימות שהמאמת-היחיד בה הוא הנאמד.
+2. **VERIFIED ≠ אמת**: verifyLedger בודק רק עקביות hash-chain+חתימה של הספר-שלו; "שווקי-האמת" הם הימורי-נקודות בין סוכני-הרשת לעצמה עם REFUND כשאין מהמרים — אפס משתתף-חוץ, אפס כסף.
+3. **העוגן-החוץ העיקרי = העברות-0$ לעצמך**: עוגני "Z-Chain/Zero 9369" הם self-addressed EOA, value=0, balance=0 — חסרי-ערך-הוכחתי; העוגן הציבורי האמיתי היחיד (Steem custom_json) אומת כן, אך 7/8 מהקבלות השכנות של הצי על אותה שרשרת משדרות `"ok":false` — העדות-החוץ היחידה סותרת את ה-VERIFIED.
+4. **גיט-כמזבלה-מבצעית**: giant מגיש 32MB SQLite (בניגוד ל-.gitignore של עצמו) + 44MB יומני-heal + 42MB צילומים + worklog 486KB; Zip מגיש 2MB worklog + 153MB sovereign-data (evidence 69MB, tmp 41MB) + בלוב-מפתחות מוצפן 834B עם allowlist-gitleaks שנחצב-במיוחד כדי לא לסמן את שדות-המפתח של עצמו.
+5. **האימפריה = העתקה-של-עצמה**: 59 קבצים זהים בייט giant↔FleetHQ, 51 Zip↔FleetHQ, 48 giant↔Zip (שלד z.ai זהה "nextjs_tailwind_shadcn_ts" v0.2.1), snapshot-אחוזה משוכפלת בתוך giant (estate/work/t30..t36), ומסמך-הממשל של giant עצמו קובע 5 משפחות-כפילות בלי לסגור אף-אחת; tsconfig strict:true מנוטרל ב-noImplicitAny:false ואפס בדיקות-יחידה בשני הספרים.
+
+---
+Task ID: 2-c
+Agent: Explore-2c-fleet-ops
+Task: ביקורת קריאה-בלבד — מנוע-הליבה ואיברי-הצי: steem(saos-engine) · FleetHQ · GridWatch · Pulse · ops-forge · ops-intake · Autonomy · sovereign-beacon · sovereign-lighthouse · saos-runtime · sovereign-runner-kit
+
+Work Log:
+- עקבה מלאה של המחזור היומי ב-steem/mini-services/saos-engine (daily.mjs 80KB, למעשה 37 שלבים לא 21): LLM לא נקרא במנוע ישירות — המנוע פונה ל-bridge ב-cockpit (hive-social.mjs:49 / army-social.mjs:90 — SAOS_AI_BRIDGE ברירת-מחדל http://127.0.0.1:3000/api/saos/ai/*); ב-CI אין-שרת-Next על ה-runner → ה-bridge תמיד למטה → נפילה ל"persona seed floor" (תבניות דטרמיניסטיות). ה-route עצמו (src/app/api/saos/ai/comment/route.ts:62-128) קורא z-ai-web-dev-sdk עם שרשרת primary→compact-retry→NVIDIA NIM (NVIDIA_API_KEY, _llm.ts:59-99) + freellmapi ב-digest.
+- ה"council" (council.mjs:27-91) = בדיקות /health ל-localhost:3041-3043 (custodian/metrics/builder) — בכל-ריצת-CI האיברים לא-רצים → MESH-DARK כל-מחזור (state/council.json 2026-10-16 12:35 — כל-3 DOWN "fetch failed"); ה-verdict נרשם-בלבד (daily.mjs:1169) ולא-סוגר-כלום. builderTask לעולם "UNREACHABLE".
+- ראיות-ייצור אמיתיות במנוע: state/exec-log.jsonl מכיל 13,098 txids-אמיתיים (245 ב-2026-10-16 עד 12:40) · events.jsonl 27,529 אירועים (hive.social.fleet-comment ×2,504 · fleet-vote ×2,504 · hyper.requote ×7,885) — המנוע באמת משדר ל-Steem/Hive, אבל ממארח-מקומי/מכשיר, לא מ-Actions. חתימה: learning.json lessonsTotal — signing-cred-blocked ×331 · broadcast-fails ×73 · cycle-conn-fails ×132; האירוע-האחרון בכלל (2026-10-16T20:43) = cred.missing SIGNING-DEAD; state/anchor-verdict.json ok:false "derived pubkeys do not match... credential was likely never installed" (suppressed×55). הטענה בהודעת-הקומיט "cancelled on-chain tx 41c17ee5" אינה-מופיעה באף-קובץ-מדינה.
+- הפתרון ל-12/15 skipped ב-steem: runs-seem-כולם identity-guard על push עם `if: false` (identity-guard.yml:27 — "billing-wall covenant") → כל-push (~כל-18 דק בערב 10-13) מייצר run-שנדלק-מיד. שלושת "in_progress" = 3 dispatches של presence-matrix תקועים ב-queued מ-2026-10-14 (חומת-החיוב). exec-cycle (cron כל-שעתיים) מעולם-לא-נרשם-כריצה.
+- workflows ב-11 הריפואים: 94 קבצים; ~2,337 runs-mesופלים/יום (FleetHQ 859 — runtime-pacemaker לבדו ~216/יום; Autonomy 1,053; GridWatch+Pulse 96 כ"א). saos-runtime: כל-15 ה-workflows dispatch-only — sovereign-runtime מייצר pulse עצמי (sleep 900 → dispatch עצמי, sovereign-runtime.yml:1405-1421) כל-~20-25 דק; זהו מארח-הייצור האמיתי: clone את העץ-הפרטי, פותח כספת ב-STEEM_VAULT_PASSES, chain-judge ל-27 WIFs, "DEX TAKEOVER" עם CI_ADOPT_WIF_ACTIVE (שורה 951), commit חזרה.
+- שכפול-SENSE: ≥5 מימושים בלתי-תלויים של "צנזוס-40-repos+workflows+runs+סיווג": GridWatch/grid-watch.mjs (395 ש') · ops-intake/tools/intake.mjs (734) · Pulse/scripts/probe.mjs (658) · Autonomy engine/network-inventory+grid-watch(145')+flow-map · FleetHQ gitfleet.ts(199)+sovereign-harness. צנזוס-GridWatch אחד צרך ~1,212 קריאות-API בחלון (~14 דק) מתוך מכסת 5,000/שע של ה-org (apiQuota ב-state/fleet-health.json). Pulse רץ 201 מחזורים רצופים כשה-terminal שלו תמיד "degraded" והתוצר = כתיבת-network.json/history לעצמו. ה-verifier של Autonomy (state/verifier/verdict-latest.json 2026-10-17T00:52) מכריז overall:FAIL (9 degraded/21 checks) — המוח מדווח-על-עצמו.
+- FleetHQ: שלושת-ממדים אמיתיים (Office3D.tsx/Crew.tsx על three 0.186+fiber+drei, dist-office3d 7.8MB, office-3d.yml מאפה ומפרסם יומית) · Socket.IO :3010 אמיתי (agent-hq/index.ts:13) · שרשרת-LLM אמיתית של 18 מוחות עם failover (llm.ts:1-36) · כלים אמיתיים (webSearch=Tavily, readPage=Jina, SSRF-guard, execTool — office.ts:1784+). אבל: 172/173 משימות-המראה = 6 תבניות-סיור-חוזרות; הדוחות-שלהם מודים שהספרים-שהם מסורים-לסרוק לא-קיימים ("0/4 ספרי-שוק נמצאו · 3 ספרי-ביקורת חסרים · שלושת-ספרי-היעד אינם-קיימים" — receipts/office-state-mirror.json); ה"podium-החלטות" מעולם-לא-ממתין-לאדם: ask_operator נענה-אוטומטית אחרי 7 שניות ב-option[0] עם טקסט-קבוע 'הנתיב-הבטוח — המשך' (office.ts:36-37, 1868-1871).
+- כפילויות-מבניות: sovereign-beacon ו-sovereign-lighthouse = אותו-schema (roshpina.sovereign-beacon/1), שתי-מגדלוריות-מפקחות-על-לב-אחר; הלב-שה-beacon עוקב-אחריו מת-מ-2026-10-10 וה-beacon ממשיך-לפעום-שעתית. t19b/mirror ב-FleetHQ = 47MB עותקים-פנימיים של ריפואים-אחרות.
+- אבטחה: אפס-סודות-גלויים בעצים (כל-ה-hits הם fixtures-בדיקה — FleetHQ/tools/security-regression.ts, Autonomy vault-census/key-proof; רק .git/config מכיל-טוקן-שיבוט, לא-תוכן-מגוש). אבל: כספות-מוצפנות-מגושות (steem/agent/vault/*.enc), GEN-1 מוגדר-ע"י-המערכת-עצמה "חשוף" (state/decisions.json D-ROT), ו-WIFs-master/active זורמים-כל-~20 דק ל-runners-ציבוריים של ריפו-פומבי (saos-runtime). טענת "כל-קומיט-חתום-GPG" שקרית-ציבורית: HEAD-בלתי-חתום (%G?=N) בכל-11 הריפואים, כולל-steem שה-README-שלו דורש-זאת-מפורשות (README.md שורת git-sovereignty). סתירה-נוספת: ה-README קובע "state (לא-בגיט)" — בפועל state/ מגוש-במלואו-ונדחף-ע"י-ה-workflows.
+- sovereign-runner-kit: 15 קבצים, scaffold-התקנה (setup-device.sh, register-gh-runner.sh, systemd/forge.service); התוצר-היחיד = receipts-מ-2026-10-12 בלבד. ops-forge: 23 ריצות, רוב-התוצר "הוסלם/measured-unmatched — ממתין-לסוכן-שפה"; התור-כרגע 0 הזמנות — מבצע-בלי-מה-לבצע.
+
+Stage Summary:
+- steem: PARTIAL — מנוע-אמיתי-ופעיל-מקומית (13K txids) אך חתימה-קרסה-בסוף (SIGNING-DEAD 10-16) · CI שלו מת-מאחורי if:false וחומת-החיוב · ה-README משקר-ב-3 סעיפים (GPG/state/21-שלבים).
+- FleetHQ: PARTIAL — תלת-ממד+סוכני-LLM+כלים אמיתיים, אך העבודה-עצמה סיזיפית-עצמית וה"מפעיל" בולם-גומי של 7 שניות.
+- GridWatch: REAL-FUNCTIONAL כצופה-בלבד (הכי-כנה-מבין-העורקים) · Pulse: FACADE (201 פעימות "degraded" לעצמו) · ops-intake: PARTIAL (בונה-תור-אמיתי, אין-צרכנים) · ops-forge: FACADE (מבצע-שמסרב-לבצע) · Autonomy: FACADE (42 עורקים שכותבים-לעצמם; verifier-עצמי: FAIL).
+- saos-runtime: REAL-FUNCTIONAL — מארח-הייצור-האמיתי-של-SAOS (pulse-עצמי 24/7, מריץ-את-המנוע-הפרטי-מה-CI) עם-סיכון-אבטחה-מתמשך (WIFs-ב-runners-ציבוריים).
+- sovereign-beacon + sovereign-lighthouse: DUPLICATE · sovereign-runner-kit: ARCHIVE.
+- סה"כ-בזבוז-מדוד: ~2,337 runs-mesופלים/יום ב-11 הריפואים בלבד; ≥5 עותקים של אותו-צנזוס; הרוב-המכריע-של-התוצר = כתיבה-עצמית-של-קבצי-state.
+- חיבור-בין-סוכנים: עודכן runs-steem.json (12 skipped=identity-guard if:false + 3 queued-תקועים); ההשלמה-ל-facts.md: הקביעה "steem לא-רץ" נכונה-רק-ל-CI — המנוע-רץ-מחוץ-ל-GitHub.
+- 5 הממצאים-הנחרצים והטבלאות-המלאות — בדוח-הסופי של 2-c בצ'אט.
+
+---
+Task ID: 2-d
+Agent: Explore-2d-wallet-identity
+Task: ביקורת קריאה-בלבד — Saosmartwallet, Sdk, Adsmarket, anchor-baseline, TruthRail, saos-agents, saos-owner-channel, saos-jummper
+
+Work Log:
+- **Saosmartwallet — ארנק אמיתי עם פצצת-אבטחה מוטמעת.** נתיב build→sign→broadcast קיים ומלא: `packages/chains/steem/src/adapter.ts:803` (condenser_api.broadcast_transaction), `src/lib/gate/anchor.ts:175` (broadcast_transaction_synchronous), `src/lib/gate/pulse.ts:113/205` (SOL/ETH memo-broadcast), `src/lib/social/rails-server.ts:352,390` (BLURT/HIVE broadcast adapters), `src/lib/vault-runtime.ts:118` (STEEM broadcast-enabled singleton). ראיית-ביצוע: DB המחויב מכיל 2 GateOrder בסטטוס signed עם broadcastId (operator-decided) + 24 harness.steem.post / 19 sovereign-voice:post; ועל-השרשרת עצמה אימתתי חי: txid `390bcfc2…` = custom_json `saos-dex.anchor.v1` ע"י headcorner (active) ב-Steem block 109,373,943 (2026-09-07) — עוגן אמיתי ומאומת. "7 רשתות" = 3 מנועי-חתימה (STEEM/HIVE/BLURT דרך SteemAdapter בקונפיגורציה) + ETH/SOL adapters עם broadcast מקודד אך בפועל רק ב-pulse/gate + TRON קריאה-בלבד (eco-server.ts:204 trongrid). `db/custom.db` מחויב בגיט (git ls-files): **248 VaultEntry (247 encPriv AES-GCM: 112 steem verified, 33 unverified, 18 tron, 12 btc, 12 evm, 12 sol, 7 mnemonic, 11 token)** + GateConfig עם encMaster+kdfSalt + **162 GateSession עם עותקי-מפתח-אב חתומים**. skills/ = 57MB, 1052 קבצים (59.6% מהריפו) — סקפולד צד-ג'. Actions 15/15 כשלים (billing).
+- **Sdk — ארכיון-טומבסטון + SDK קטן אמיתי שה-README מכחיש את קיומו.** 95 קבצים: 37 docs/reports + 29 broadcasts שכולם טומבסטונים "אוחד ל-anchor-baseline" (G6, אפס זהות-בייטים מול הקנוני — זה לא תאום אלא קבר) + 19 md שורש + `sdk/` (3 קבצים). `sdk/index.js` (212 שורות, @saos/fleet-sdk keyless) רץ חי: selftest 19 PASS/2 FAIL (404 על anchors/truthrail-anchor-latest). הערת "אין SDK כאן" ב-README (2026-09-30) מיושנת מול HEAD.
+- **Adsmarket — אחוזת-שיווק פרטית עם 3 עותקי identity-api ו-fact-sheet בעל 2 מתוך 3 txids אמיתיים.** אימות עצמאי חי: Steem `390bcfc2…` FOUND @109,373,943 (ה-doc כותב 10,937,394 — טעות 10x), Hive `d4cf936b…` FOUND @109,708,562 (תואם לטווח המפורסם), **`7639c915…` ("JUMPPER MEGAPHONE", fact-sheet.md:385) לא נמצא** — Unknown Transaction ב-steemit והבלוק 109,496,567 מכיל 3 עסקאות ללא custom_json בכלל. index.html/onepager.html = 266/278 בייטים של redirect לאנגלית (ה-README מציג אותם כ"דף נחיתה מלא RTL"); DEPLOYMENT.md מודה שהכל פרטי = טיוטה. identity-api קיים ב-3 עותקים כמעט-זהים (developers/, content/api/, content/products/); ה-API עצמו רץ רק בדיפלוימנט פרטי (הראוט `Saosmartwallet/src/app/api/v1/identity/verify/route.ts` קיים) — אין URL ציבורי (מתועד ב-doc).
+- **anchor-baseline — סוויטת-קונפורמציה אמיתית.** `node conformance/selftest.mjs` רץ אופליין: **35 PASS / 0 FAIL** (28 וקטורים + integrity/freshness/roundtrip), אפס-תלויות. PROTOCOL מוקפא; מנוע-הקנוני ב-steem repo. מחזיק גם את תיעוד תקרית R11 (העותק הקנוני).
+- **TruthRail — קבלות אמיתיות, אומתו עצמאית על-השרשרת.** כל 37 ה-receipts JSON תקין עם טיימסטאמפים סבירים (2026-10-08→10-11). `bun scripts/zero-verify.mjs` רץ חי עכשיו: **GREEN** — chainId 0x2499, gasPrice 0x0, שרשרת מתקדמת (head 37,302,159). חציבה עצמאית של בלוק 36,619,663 מה-receipt: עסקה אחת, `0x4d7d1548…` (תואם ל-txid המצונזר בקבלה), from==to, selector 0xa9059cbb, status 0x1, effGasPrice 0x0, calldata מתפענח ל-{"action":"checkpoint"...} — **הקבלות לא מזויפות**. אבל: ה-heartbeat האחרון 2026-10-08, קומיט אחרון 10-12 — טענת "hourly cadence" מתה מאז ה-billing wall.
+- **saos-agents — ספריית-ליבה קטנה ומנוסה.** `node test/selftest.mjs` = **98/98 PASS** + analytics 12/12 + drill PASS. העתקים-ונדורים ב-steem: taskgraph/decisionqueue/worklog-intel/cli-contract זהים-בייטים ✓ (4/6); selftest.mjs ו-task-console.mjs נבדלים — טענת "byte-identical" נכונה חלקית. אפס-importים אורגניים (מודה ב-README).
+- **saos-owner-channel — חזות ללא צרכן.** קומיט אחד (10-14). סריקה אורגנית: אף קוד לא קורא את ה-inbox הזה; הערוץ החי הוא `Pulse/state/sovereign-channel/*.jsonl` ש-giant קורא דרך `/api/sovereign/channel` (giant/src/lib/sovereign/channel.ts:31) — בלי אזכור של הריפו הזה; העתקת integrity.ts ב-giant נבדלת ממנו. Dead-end.
+- **saos-jummper — ספריית-נוטריוט Python מנוסה.** **673 בדיקות, 673 עברו ב-1.01s** (אופליין). hive_probe.py באיכות טובה: stdlib בלבד, failover, כשל-כן, selftest מוקפא (רץ PASS). .env.example שמות-בלבד; אפס-מפתחות; חתימה תמיד external-signer.
+- **אבטחה חוצת-ריפו (PATH+COUNT בלבד):** תקרית R11 ע"פ התיעוד הקנוני — ארכיון `KEYS-ACCESS-2026-09-12.tar.enc` (138,288B) + **הסיסמה (48-hex) לצידו** נדחפו ל-8-9 ריפואים ב-2026-09-12; נוקו מ-HEAD אך חיים בהיסטוריית הגיט. **שיירים ב-HEAD היום: `steem/agent/vault/` = 22 קבצים (בכללם KEYS-BACKUP-2026-09-09.tar.enc, EXTRA-SECRETS-2026-10-08-ROT4.zip.enc, GIT-CRED-2026-10-08.enc) + `steem/agent/recovery-meta.json` עם שדות-unlock; `vault-home/ssh-keys.tar.enc`.** PAT-דפוסים נמצאו מחוץ להיקפי (FleetHQ/Sandbox/Autonomy/Zip) — להעביר לסוכן הרלוונטי. ב-8 הריפואים שלי: אפס .env אמיתי, אפס PAT/PEM.
+
+Stage Summary:
+- 8 ריפואים נבדקו עם הרצות-חיות: 3 selftests ירוקים (35/0, 98/98, 673/673), zero-verify GREEN חי, 3 txids נחצבו מול צומת Steem/Hive/ZERO (2 קיימים, 1 לא נמצא).
+- הוורדיקט המרכזי: הקוד אמיתי יותר משחשב (broadcast אמיתי על Steem, קבלות ZERO אמיתיות), אבל האבטחה גרועה בהרבה מהסיפור — כספת-חיה בגיט + סיסמה-לצד-ארכיון-מפתחות בהיסטוריה + שיירי כספת ב-steem/vault-home.
+- 2 ריפואים-חזות זוהו: saos-owner-channel (אין-צרכן) ו-Sdk-כארכיון-טומבסטונים.
+- דרושות החלטות-בעלים דחופות: סיבוב-מפתחות מלא (R11+vault DB), מחיקת db/custom.db מהעץ+היסטוריה, ניקוי steem/agent/vault ו-vault-home.
+
+---
+Task ID: 2-a
+Agent: Explore-2a-dex-economy
+Task: ביקורת הנדסית קריאה-בלבד — DEX וכלכלה (saos-dex, saos-markets, saos-desk, fleet-economy, roshpina, Defi)
+
+Work Log:
+- נקראו 6 ה-READMEs ונבדקו מול הקוד בפועל (כל הריפואים ב-/home/z/audit/repos, shallow depth-1)
+- saos-dex: אימות מתמטי חי offline (harness משלי על הקוד האמיתי): AMM x·y=k מדויק ברמת-ה-floor (100k SAOS→197,431µ USDS = בדיוק floor(20M×99,700/10,099,700), k עולה מונוטונית עם עמלת-LP, minOut=NaN נדחה fail-closed) · ספר-הזמנות: מילוי במחיר-מייקר מדויק (5000 גם כשהטייקר הציע 5200), שחרור-ערבות טלסקופי מדויק, שמירת-שווי; שני ניסיונות "לעקוף" את חוזה-preLock ב-harness שלי נתפסו ע"י InvariantViolation (מנגנון fail-fast עובד)
+- saos-dex selftests offline: grids/run.mjs --selftest PASS · book-law 27/27 · params 20/20 · t15-truthgate (רשומה) ok
+- saos-dex relay.ts (1,758 ש'): חתימה+שידור גרפני אמת (broadcast_transaction_synchronous), verifyOnChain קורא-חזרה מ-RPC ציבורי עם קשירת-סמכות (required_auths), circuit-breaker/backoff/פיוס — קוד אמת, לא סטאב
+- ⚠ ממצא קשה: עיגוני-ה"ראיה" ב-STATUS.md:36-39 — בלוק Steem 10,937,394/411 מתוארך מתמטית ל-2017-04 (שרשרת 3ש׳, ג'נזיס 2016-03 ≈ 28,800 בלוקים/יום) ו-Hive 10,970,856/876 ל-2021-04 — לא יכולים להיות עיגוני 2026-09; txids בפורמט תקין (40-hex) אך לא ניתנים לאימות offline
+- saos-markets: טענת-המיזוג אומתה תוכניתית — כל קבצי src+run זהים-בייטים מול saos-dex/markets/ (engine/prng/state/gate/volume/cycle); commit 2c3183e לא ניתן לאימות ב-shallow clone; המנוע רץ: 29/29 טסטים חיים (bun test) · אבל: המנוע הממוזג לא מיובא ע"י ראנטיים-הדקס ולא מתוזמן ב-workflows — מיזוג פיזי, לא פונקציונלי
+- saos-desk: selftest 202/202 PASS offline · שרשרת-הפנקס מאומתת (checkpoint: resume ok, chain-head-match) · ארטיפקטים חיים כנים: LEUMI.TA/DSEA.TA מתועדים HTTP-404, FIBI.TA נתוני TASE אמיתיים (23,180 ILA), בקטסט מכוער מוצג (FIBI sharpe −4.03) · שערי G1..G6 ממומשים · ⚠ סתירה: mandate.json execution.mode=live + liveOwnerArmed=true (G2 עובר "חוקי-חי") בניגוד ל-README "אין מפתח, הנשק ממתין לבעלים" — אין קוד-ברוקר בכלל, אך התצורה חמושה
+- fleet-economy: פירוק ה-68MB — git pack רק 6.86MB על 86 קבצים; היתרה: state/ledger.jsonl 16MB + ~50MB העתקי-הסגר (71 תיקיות-הסגר ביום אחד 10-16!) · ⚠ הממצא המרשיע ביותר: "אפס הדמיות" שקרי — כל העסקאות מיוצרות Math.random() (index.ts:244-297: משכורת=2+random×6, שירותים מרשימה-קבועה, סוואפים/סטייקים אקראיים) · שרשרת-ה-hash של הספר המחויב נשברת ב-seq 46335 (אימתתי בעצמי sha256 מחדש — אותו brokenAt שהמנוע עצמו רשם ב-seal-log: state-custody-restore brokenAt:46335) · supervisor: 6 קריסות/7 החייאות, economy.log מסתיים ב-stack-crash
+- fleet-economy vault-seal: תהליך שמבצע git add -A + commit + push ל-10 ריפואים כל 10 דק' עם rebase -X ours (index.ts:586+) — זה מקור רוב "הפעילות" בגרפי-הקומיטים של הארגון (רעש-מכונה, לא עבודה)
+- roshpina: kernel-smoke 13/13 סעיפים PASS offline (escrow 5% מדויק: 100,000µ¢ על 2,000,000µ¢; TOCTOU; K1-quorum ביזנטי; K2 share-gate; K3 seal+breaker; K5 route-auth Ed25519; C-2b bridge) · טענת zero-dep נכונה (רק node:crypto/dns ב-kernel/, 118 קבצים ~23.5K ש') · כנות יוצאת-דופן: "Never deployed", עולם-זריעה מתויג ב-UI, fee-engine/state.json: "armed = NOT live" · mcp-server/ לא מחובר לשום דבר (קוד-מת)
+- Defi: 112 קבצי md, אפס מנוע (רק 2 כלי-rotation .cjs) — הראוטר החי ב-Zip (לא ניתן לאימות כאן) · כנות-קבלות אומתה: KPI.json revenuePerDayReal.usd=0, gridExternalFillsLifetimeUsd=0.293954 — תואם בדיוק לטענת README "$0.29 lifetime" · charter/anchors.json עם txids סטים (40-hex, "confirmedBy=chain-read", לא ניתנים לאימות offline)
+- אבטחה חוצת-ריפואים: 0 חומר-מפתח בפורמט-WIF/STM ב-HEAD בכל 6 הריפואים · .gitleaksignore ב-saos-dex וב-roshpina חושף סוד היסטורי אחד בגיט-היסטוריה (agent/vault/recovery-meta-2026-09-12.json — rotation נחסם ע"י הבעלים 2026-10-01 = חומר חי לכאורה בהיסטוריה!) · saos-dex מחויב עם מצב-ריצה ב-git (db/ + 60K SQLite pre-recovery) · אין eval של קלט-משתמש; execFile/execSync על git בלבד עם ארגומנטים קבועים
+- כפילויות: 2 מנועי-AMM SAOS/USDS עצמאיים (saos-dex amm.ts מול fleet-economy index.ts) · 2 מנועי-escrow (saos-dex book מול roshpina kernel/escrow) · 3 ספרים hash-chain (saos-desk, fleet-economy, roshpina audit) · 2 PRNG דטרמיניסטיים (mulberry32 מול sha256-stream) · תיקיות broadcasts/ משוכפלות-שמות בין saos-dex ל-roshpina עם 30 קבצי-מצביע ריקים מ-G6-dedup
+
+Stage Summary:
+- VERDICTs: saos-dex=REAL-FUNCTIONAL (מנוע-מקומי מתמטי-אמת; עיגון-חוץ מוטל בספק) · saos-markets=ARCHIVE (מפנה-קפוא כן; מיזוג אומת) · saos-desk=REAL-FUNCTIONAL (נייר-ראשון, 202/202; סתירת mandate חמוש) · fleet-economy=FACADE (Math.random + שרשרת שבורה + רעש-קומיטים) · roshpina=PARTIAL (גרעין-אמת מוכח, לעולם לא נפרס — כנה) · Defi=ARCHIVE (קנון-תיעוד עם קבלות כנות, אפס קוד)
+- מהעשירה-לענייה הנדסית: saos-dex (6,356 ש' גרעין+relay+chain בלבד) ≈ roshpina (23.5K ש' kernel) ≈ saos-desk (2,080 ש' + 628 ש' selftest) >> Defi (0) > fleet-economy (824 ש' מזוהמות)
+- כל הריפואים מתות מקומית: אף אחת לא מזיזה נכס אמת; ה-egress החוץ היחיד = custom_json stateRoot seals (הקוד אמת, הראיות מוטלות בספק בגלל אנכרוניזם מספרי-בלוקים)
+
+---
+Task ID: 2-b
+Agent: Explore-2b-consoles-web
+Task: ביקורת קריאה-בלבד על 7 ריפואי הקונסולות והאתרים (platform, foundry, control-center, SovereignConsole, Console, Domain, roshpinacare-sys.github.io)
+
+Work Log:
+- הרצה אמיתית (לא רק קריאה): bun install + prisma generate + next build בשלושת הקונסולות — **שלושתן נבנו בהצלחה** (platform 32.3s ✓, foundry ✓, control-center ✓ רק עם DATABASE_URL=file:.../db/custom.db — שער fail-closed מכוון בקוד שדוחה שמות-DB אחרים)
+- platform הורם חי (standalone server :3100) — נבדקו 6 מסלולי API חיים: status (נכשל רק בגלל DB ריק שלי), treasury ✓ חי, flow ✓ (יתרת ETH אמיתית 0.000024 + מחיר Binance חי), agent-census ✓ (47 סוכנים, 28 חיים), roast ✓, worth ✓ — **0 stubs, 0 hardcoded JSON**; כל 106 המסלולים מייבאים לוגיקה אמיתית מ-src/lib/saos (0 מסלולים בלי import של @/lib)
+- דרישות-ה-README של platform נמדדו: 106 route.ts (טענה: 100) ✓ · 54 קבצי-ויו (טענה: 50) ✓ · 96 endpoints נצרכים מה-frontend (טענה: 92/100) ✓ · 0 href="#" · 0 onClick ריק · 78 POST וכולם עם requireAuth/agent-key (fail-closed) · Prisma 45 מודלים ✓ · keeper :3005 (mini-services/keeper/src/index.ts:94) ✓ · laya :3037 ✓ · anvil :8545 ✓ · AES-256-GCM+scrypt ב-src/lib/vault-seal.ts ✓
+- foundry הורם חי (:3200): status/kernel/live-gate/repo-status/treasury כולם ok:true עם נתונים חיים (יתרות TRX אמיתיות, selftest דטרמיניסטי, live-gate מדווח חסימות בכנות) — 28 routes, 7 איברי mini-services (~3.9k שורות, external-signer 1,741 שורות עם שערי-סמכות חיים)
+- SovereignConsole זוהה: **חבילת-מראה חד-מהותית** — commit יחיד "mirror: 2026-10-16 · 1218 files", src = סקאפולד בלבד (route אחד שמחזיר Hello world, page אחד שעושה redirect ל-/console/index.html), ובפנים עותקים שלמים: Console/ (7.3MB, 103/193 קבצים זהים-בייט לריפו העומד), public/console (עותק שלישי), Domain/ (13MB), sanbox/, worklog של 1.1MB. 0 ריצות-workflow. בלי README.
+- Console/Domain נבדקו עד-רמת-פרסר: render.mjs של Console קורא באמת api.steemit.com (custom_json saos.weave.core.v1, nodes גיבוי justyy) ומייצר status.json עם txid/block אמיתיים (checkpoint 1657, txid 250adaa4…); wallet.html של Domain עושה fetch חי ל-2 צמתי STEEM; gate-crypto.js — secp256k1 מלא בדפדפן, "המפתח לא עוזב את הדפדפן" עומד (רק מעטפות חתומות נשלחות ל-relay)
+- נפיחות Domain (94MB) פוענחה: agents/ = 46MB פנקסי-ריצה של סוכנים (econ-ledger.jsonl 15MB + 6 ארכיונים), .git 27MB, office3d 9.2MB **ולצידו models/ 7.7MB — עותק זהה-מדוד (md5 זהה) של אותן דגמי glb** — ~80% מהריפו הוא משקל-מת; האתר עצמו (87 עמודי HTML) קטן
+- מטריצת-כפילות (md5 על src/**/*.{ts,tsx}): control-center↔platform 53 קבצים זהים (48 = סקאפולד shadcn/ui, ורק 2 קבצי-לוגיקה אמיתיים שהועתקו: kernel.ts + tron-energize.ts) · SovereignConsole↔platform 51 · foundry↔platform 4 בלבד (הכי נקי) · Console↔Domain: fork עם 128 קבצים שונים/57 ייחודיים-ל-Console/504 ייחודיים-ל-Domain
+- אבטחה (7 ריפואים): **0 סודות שמורתיים בקוד** (רק .env.example עם placeholders); 1 dangerouslySetInnerHTML ב-platform (chart.tsx של shadcn); Console index.html:1113 מזריק l.from מתוך fee-law.json ל-innerHTML בלי esc() (סיכון-נמוך — נתוני-עצמי); **ממצא-קריטי: repo-vault ב-control-center — המפתח = sha256(seal.a ⊕ seal.b) וגם שני השברים וגם wallet.enc.json (3.2MB, מכיל mnemonic) מוטמנים יחד באותו ריפו (src/lib/repo-vault.ts:10-11, 201) — ההצפנה מגינה רק מפני מי שאין לו גישת-קריאה לריפו עצמו**
+- roshpinacare-sys.github.io: 9 קבצים, fetch אמת ל-Pulse/state/network.json + GridWatch/fleet-health.json + שוק-חי מ-api.steemit.com, טקסט-כישלון כנה ("בלי להמציא נתונים")
+
+Stage Summary:
+- פסק-דין מפתיע: הפער בין-תיאור-למציאות בקונסולות-המרכזיות קטן — platform ו-foundry אמיתיות, נבנות, רצות ומודדות שרשרת-חיה; הבעיה היא הספרייה-הכפולה: 4 קונסולות Next.js (אחת מהן מראה-מתה) + 2 SPA נפרדים + front-door, כשרק platform+foundry חיות
+- Verdicts: platform=REAL-FUNCTIONAL · foundry=REAL-FUNCTIONAL · control-center=PARTIAL (בנוי ורץ אבל מוצהר-עליו-בעצמו שהקנון עבר ל-platform) · SovereignConsole=DUPLICATE/ARCHIVE · Console=REAL-FUNCTIONAL (סטטי) · Domain=REAL-FUNCTIONAL (סטטי, נפוח) · github.io=REAL-FUNCTIONAL
+- ההכסף האמיתי במערכת כולה, במדידה-העצמית-החיה שלה (roast): **$220** — "האורגניזם חי ומוכח — אבל הוא מעבדה"
+- המשך מוצע: סוכני 2-c..2-f להשלים את 33 הריפואים; המלצות-תיקון מוגשות בדוח המלא
+
+---
+Task ID: 3
+Agent: orchestrator (Z.ai Code)
+Task: סינתזה חוצת-ריפוא + חוות דעת נחרצת + תוכנית הנדסית
+
+Work Log:
+- נקראו כל 7 דוחות הסוכנים (2-a..2-f) ואומתו עובדות מרכזיות
+- נבנה סיווג מלא: 11 REAL-FUNCTIONAL / PARTIAL, 6 FACADE, 9 ARCHIVE/DUPLICATE, ריק אחד (sanbox), 13 ביניים
+- עיקרי-הממצאים גובשו לדוח ביקורת אחד לבעלים עם תוכנית 0-1-2-3
+
+Stage Summary:
+- חוות דעת: הפער תיאור↔מציאות אמת ברמת-המערכת (בורסה=SIM, סוכנים מתים/תיאטרון, 7 קונסולות, 5 צנזוסים, ~2,337 runs/יום) אך קיימת הנדסה אמת ומוכחת בליבות (dex AMM/book, desk 202/202, roshpina 13/13, wallet broadcast הוכח on-chain, TruthRail אומת על ZERO)
+- אבטחה קריטית: כספת-חיה 248 רשומות מגושת בגיט (Saosmartwallet db/custom.db), סודות בהיסטוריות (R11 ב-8-9 ריפואים), WIFs ל-runners ציבוריים (saos-runtime), CBC-ללא-MAC ב-vault-home
+- התוכנית: פאזה-0 סיבוב-מפתחות+ניקוי-היסטוריה, פאזה-1 איחוד 40→8-10 ריפואים (monorepo saos-core + קונסולה אחת + צנזוס אחד + כספת age/SOPS), פאזה-2 נתיב נייר→חי לבורסה עם custody אחד, פאזה-3 פרקטיקות תעשייה + KPIs
+
+---
+Task ID: 3
+Agent: orchestrator (Z.ai Code)
+Task: קריאת ביקורת.txt (טקסטי 9 הסוכנים) + אימות עצמאי של הטענות הקריטיות + פרוטוקול-תיאום ל-9 סוכנים בלי דריסות
+
+Work Log:
+- נקרא כל 737 שורות הקובץ — 9 חוות-דעת מוצגות בו, קונצנזוס גבוה ביניהן
+- אימות עצמאי במו ידיי (file:line), 19/20 טענות אומתו:
+  * saos-dex: washTick ב-mm.ts:63-97 (WASH_WALLET="wash") | README:109 מודה "הספר הוא SIM" | ci.yml:15 `branches: ain]` (CI לא יורה לעולם) | WIF-חומר ב-HEAD של docs/archive/WORKLOG_PHASE6.md:46
+  * Saosmartwallet/db/custom.db — 4MB כספת חיה TRACKED ב-GIT (מאומת git ls-files)
+  * fleet-economy: Math.random ב-index.ts:244-258 | state/ 61MB | ledger.jsonl 77,523 רשומות | ledger.forked-20261016.jsonl
+  * **שרשרת-הhash אומתה עצמאית בסקריפט שלי (sha256(JSON.stringify({rest,prev}))[:32]) — שבירה בדיוק ב-seq 46,335** (~59.8% תקף)
+  * saos-desk/mandate.json: mode=live, liveOwnerArmed=true
+  * vault-home/vault-chain/recovery-meta.json — keysZipPass בטקסט-גלוי בגיט
+  * vaultlib.sh:56-62 — קורא .git-credentials/.netrc כמועמדי-סיסמה (טוקן דולף=פשרה-טוטאלית)
+  * anchor-baseline/CRITICAL-R11-KEY-BROADCAST.md קיים
+  * saos-control-center/repo-vault/: wallet.enc.json + seal.a + seal.b באותו ריפו (2-of-2 = 1-of-1)
+  * SovereignConsole = redirect-ghost (שלד) | sanbox = 0 commits | saos-markets/markets זהה-בייטים ל-saos-dex/markets (diff -rq ריק)
+  * Autonomy: deterministic-v1 fallback ב-selfhood | steem: SIGNING-DEAD/cred.missing ב-exec-log | giant/dex-engine.ts: אפס $transaction (נתיב-כסף לא אטומי) | Defi/README: הכנסה-חיה מצטברת $0.29
+- **לא אומת (1/20)**: FleetHQ/keys-registry.json — לא נמצא בנתיב שנטען; הטענה היחידה שלא עמדה בבדיקה
+- נכתב פרוטוקול-תיאום (מסלולים, מנעולים, סדר-מיזוג) — ראה הודעה לבעלים
+
+Stage Summary:
+- הקונצנזוס של 9 הסוכנים אמין: 19/20 טענות קריטיות אומתו במו ידיי
+- הבעיה לא כישרון — ארכיטקטורה: אין מקור-אמת, git=DB, תיאטרון-מדידה, סודות-בגיט
+- יש זהב אמתי: קרנל dex, jummper 673 טסטים, roshpina BigInt, Steem 13K txids, FleetHQ foreman LLM אחת
+- מוכן להתחיל Phase-0 (אבטחה, סוכן-יחיד) בהסמכת הבעלים
+
+---
+Task ID: 4 (Phase-0 execution)
+Agent: agent-1 / orchestrator (Z.ai Code sandbox)
+Task: ביצוע Phase-0 — עצירת-דימום אבטחה על צי roshpinacare-sys (הסמכת בעלים התקבלה)
+
+Work Log:
+- אומתו הרשאות PAT (admin/push על כל 40) + מפת נראות: 14 ציבוריים, 26 פרטיים
+- נוצר ריפו-תיאום saos-coordination + LOCKS.md — עמיתים כבר משתמשים בו (agent-2: LANE-A blueprint; phase0-zai: תיקוני vault)
+- FleetHQ (ציבורי): הוסרו 3 קבצי tmp/t19 עם WIF אמיתי checksum-valid (אומת: המפתח כבר מסובב — אף חשבון לא מחזיק את ה-pubkey STM8StTG…icnoh)
+- saos-desk: mandate נוטרל ל-paper (liveOwnerArmed=false) — דחיפה מאומתת
+- Saosmartwallet: db/custom.db (248 מפתחות חיים) — filter-repo מכל ההיסטוריה + force-push + אימות-רימוט (db/ נעלם)
+- vault-home: vault-chain/bundles (86MB עותקי 28 ריפואים) — filter-repo מכל ההיסטוריה; 197MB→6.8MB
+- saos-control-center: seal.a+seal.b+wallet.enc.json — filter-repo מכל ההיסטוריה (2-of-2-in-one-repo נשבר כנדרש)
+- saos-dex: db/dex.db — 4.1GB blobs מההיסטוריה נמחקו; WIF/hex ב-WORKLOG_PHASE6 הושחרו בכל ההיסטוריה; pack 54→32MB
+- sandbox-private: vault/vault-backup.enc — הוצא מכל ההיסטוריה
+- saos-runtime: אומת מול שרשרת-Steem חיה — מסילות-כסף מוגנות (dispatch+selftest), גריד אמת זורם (656 orders/229 fills/23 delegations מאז 15.10) — לא נגענו בכוונה
+- סריקת-סודות בייט-מדויקת על HEAD של כל 40: אפס חומר-מפתח חי (כל ההיטים = digests/salts/chain-ids/פיקסטור-בדיקה)
+- טריגרי CI `ain]`: סריקה בייט-מדויקת = 0 שבורים (נסגר ע"י עמית; גלאי-המשנה שלי היה פוזיטיב-שווא של substring — תוקן לבדיקה מדויקת)
+- גיבויים: /home/z/audit/backups/*.bundle (5 ריפואים) + files/ (custom.db, seal.a/b, wallet.enc, backup.enc, bundles.json)
+
+Stage Summary:
+- Phase-0 העיקרי בוצע ונאמת מול הרימוטים; הצי ממשיך לדחוף על ההיסטוריה המטוהרת
+- נותר לבעלים בלבד: סיבוב-מפתחות (R11 + PAT שנמצא ב-9 סנדבוקסים) — הצ'ק-ליסט פורסם ב-saos-coordination/PHASE0-STATUS.md
+- פתוח ל-Phase-1: steem/agent/vault טיהור (ריפו 536MB), פיצול seal-shards, עיצוב-מחדש vault (age/SOPS), איחוד 40→8
+
+---
+Task ID: 5 (RUN-LANE — העלאת-המערכת-לחיים)
+Agent: agent-1 / orchestrator (Z.ai Code sandbox)
+Task: הוראת-בעלים 02:30Z — "המערכת צריכה לקום ולעבוד קודם; אין-רוטציות/כספות/שריפת-טוקן" — אבחון שורש + תיקון + הוכחה חיה
+
+Work Log:
+- נמצאו 2 אדומי-השווא בגריד החי: delegation.verdict (DELEGATED!) + digest.verdict (DIGEST-READY!) — הצלחה נצבעה אדום בגלל אוצר-מילים
+- תוקן grid-watchdog.yml (saos-runtime 29e5193): GREEN+=DELEGATED/ALREADY-TODAY/DIGEST-READY; WAIT+=NO-OPS/DELEGATION-DISARMED; delegationOps book-field fallback — סימולציה מוכיחה 2→0 אדומים, ציוני-כשל נשארים אדומים
+- נחשף העיקר: 7 workflows disabled_manually (ובכללם הפעימה + מכשיר-המדידה) אחרי כשלי 01:00/01:40
+- אבחון שורש מיומני-ריצה: ה-burst (תהליך-עצמאי) טען CREDENTIAL-MISSING בזמן שהפעימה באותו-job חתמה 4 האצלות מהכספת — באג-גבול-תהליכים; booklaw בלי-חתימה → CANCEL-FAILED → exit 1 → מישהו כיבה הכל
+- אומת מול שרשרת-Steem חיה: אפס account_update ב-100 האחרונות — אין אירוע-סיבוב; הסוד STEEM_ACTIVE_WIF מיושן (MATCH-ACTIVE-OTHER) בזמן שנתיב-הכספת תקין (R314b VAULT-FIRST)
+- תוקן hypergrid-burst.mjs (steem@saos-cockpit 9b8238b2): אימוץ-כספת חוקי באתחול (reviveArmyCustody, chain-judged, אפס חומר-מפתח חדש) + booklaw exec=null כשאין הרשאה → CANCEL-PENDING החוקי במקום מוות; כשל-שידור אמיתי נשאר אדום-צעקני
+- נווטו התנגשויות-עמיתים: ריבייס על wave-91 של agent-2; גילוי שענף-ברירת-המחדל של steem הוא saos-cockpit (לא main!); צ'רי-פיק נקי
+- saos-coordination LOCKS: נרשמו RUN-LANE + הרחבה (ee8e18d)
+- הוחזרו לחיים (204): sovereign-runtime + grid-watchdog; dispatch ראשון ב-02:54:49Z (RUN 38996754100) על 29e5193
+
+Stage Summary:
+- שרשרת-הכשל המלאה נפרקה: אוצר-מילים → באג-גבול-תהליכים → מוות-גריד → כיבוי-ידני
+- אפס נגיעה במפתחות/כספות/mandate; אפס שינויי-היסטוריה; כל הדחיפות אדיטיביות ומתועדות
+- בהמתנה: סיום הריצה → dispatch watchdog → STATUS.md 0-אדומים = ההוכחה החיה
+
+---
+Task ID: 5-completion
+Agent: agent-1 / orchestrator (Z.ai Code sandbox)
+Task: סגירת RUN-LANE — הוכחות חיות
+
+Work Log:
+- **ה-STATUS.md הרשמי (03:25:32Z): 15 סיגנלים, 0 RED** — delegation.verdict=DELEGATED ops=3 GREEN, digest.verdict=DIGEST-READY GREEN (התיקון אומת על הגריד החי)
+- burst עם התיקון עבר בשתי ריצות: boot custody PARTIAL → booklaw REPAIRED → **broadcast ok:true txid cc5639…b995 count:6** — 6 הזמנות-יתום בוטלו on-chain בפועל
+- האצלות אמיתיות שנחתמו במהלך ההוכחה: 9 ops (00:25) + 4 (01:40) + 3 (02:55) + 1 (03:40) — המסילה חיה
+- jummper: PIPELINE GREEN מול 5 שרשרות חיות (steem 110507099, hive, tron, ethereum, solana) · roshpina: SMOKE-OK (13 רשומות, כסף נשמר µ¢)
+- השרשרת מחייה את עצמה: run1 (02:54) → pulse 204 → run2 (03:40) → pulse 204
+- **דפוס-בעייתי שנמדד 3×**: מישהו חיצוני מבטל את job ה-heartbeat בסוף-ריצה (03:25, 04:30) + ריצת-watchdog (04:13) — הריצות מסתיימות "cancelled" אחרי שהעבודה נעשתה; לא נגעתי (לא בהיקף-הרשאתי)
+- שאריות-דוח לבעלים: STEEM_ACTIVE_WIF מיושן (census מבזבז 17 דק'/ריצה על סריקה-מתה) · עיכוב-commit של heartbeat (~30-50 דק') מציף את סף-ה-40 דק' · census-ladder פותח 2/5 ארכיונים
+
+Stage Summary:
+- המערכת קמה ועובדת: אפס-אדומים במדידה הרשמית, מסילות-כסף חתומות ומשודרות, הסיכון-תיקון עובד on-chain
+- אפס נגיעה במפתחות/כספות/mandate; כל הדחיפות אדיטיביות; כל ההוכחות מיומני-ריצה ציבוריים
+
+---
+Task ID: 4
+Agent: agent-zai (Z.ai Code · מופע-נוכחי של agent-2 · Lane A/RUN-LANE)
+Task: חוק-הבעלים "active תמיד-נוכחי מה-owner" + תיקון-גשר-404 + תיקון-ריצות-הצי (הכל בדיקה ופתרון, אפס-נגיעה בכספות/סודות)
+
+Work Log:
+- סיור-מחדש מלא של 40 הריפואי: גלי-עבודה של הסוכנים אומתו (mandate הושבת כנה, saos-markets מוזג, roshpina חיה, beat-כלכלה דוחף seq 83,754) — washTick הוסדר באישור-בעלים מתועד (trace 1a13585a) ולכן לא נוגע
+- אובחנה תופעת-404: ~2,700 בקשות /api/saos/* מ-UI-הצי (הפלטפורמה :3100, ה-foundry :3200 רצים מאחורי פורט-אחד חשוף) נוחתות על מופע-3000 ומתות
+- נבנה גשר-שקוף src/app/api/saos/[...path]/route.ts: העברה-מלאה + מדורג-נפילה 3100→3200 על-404 + fail-honest 502
+- נבנה קצה /api/saos/owner-active: סמכויות-החי של headcorner ישר-מהשרשרת בכל-בקשה + גילוי-שינוי + מיזוג-rearm-הפלטפורמה; micro-cache 5ש' בודד-טיסה
+- תוקן saos-sovereign-platform/src/lib/saos/sovereignty.ts: שכבת-המפתחות תמיד-טרייה מחוץ-למטמון-60ש' (קומיט 3518106 → origin/main)
+- אותר ותוקן DB-הריצה של הפלטפורמה (הוצבע ל-db/audit-test.db פסולת-בלי-טבלאות): prisma db push אדיטיבי 47 מודלים → live-probes חוזר נתוני-Hive אמיתיים
+- נבנה עמוד-הוכחה חי ב-/ (RTL, כהה, responsive, footer-sticky): active/owner חיים, פסק-התאמה כנה, גילוי-שינוי, גשר, seq-כלכלה
+- נבנה /api/economy-state (קריאת-גיט קנונית, micro-cache 30ש')
+- אימות-דפדפן מלא (agent-browser): דסקטופ+מובייל, אפס-שגיאות-קונסולה, נתונים-חיים זורמים; dev.log מאשר 404→200/403
+- LOCKS.md עודכן ונדחף (e0de6c5) · קומיטים בזהות agent-zai@agents.roshpinacare-sys
+
+Stage Summary:
+- הבעלים רואה עכשיו active נוכחי-תמיד ב-/ · ה-UI של הצי חי דרך הגשר · אפס-נגיעה בכספות/סודות/טוקנים
+- סוגיה-פתוחה-לבעלים: המעטפת fleet_keys.enc לא קיימת בסנדבוקס-זה (רק בסנדבוקס-המקורי שמת) — דווח ב-LOCKS, לא נגענו
+
+---
+Task ID: 6
+Agent: agent-zai (Z.ai Code · Lane A / R-CMDHIER)
+Task: הוראת-בעלים 2026-10-17 — "הארכיטקטורה הריבונית חייבת לדעת לעבוד עם הכספות החשבונות והכל, לא לאסור עליה, אבל בחומרה והיררכיה שלא ישמידו את הפרויקט"
+
+Work Log:
+- סיור-מחדש: mandate מושבת-כנה (liveOwnerArmed=false), washTick מוסדר-באישור-בעלים-מתועד, הגשר+owner-active מ-Task 4 חיים — נבנה על-הקיים, לא-מתחרה
+- נבנה mini-services/saos-engine/command-hierarchy.mjs (steem @ saos-cockpit): דרגות-חומרה T0 ROUTINE / T1 REVERSIBLE / T2 SENSITIVE / T3 DESTRUCTION; קורפוס-ה-op-המדוד ממופה-מפורש (10+ סוגים), לא-מוכר = T3 fail-closed
+- T3 (account_update שינויי-הרשאות, account_create, recovery, לא-מוכר) = בעלים-אישי: נחסם ב-executeAs (נקודת-החניקה של החתימה) אלא-אם מענק-טרי-תוקף-TTL (state/owner-grants.jsonl, פג-אוטומטית) + קשר-בעלים-חי (סמכויות-חי-מהשרשרת 5ש' בודד-טיסה + custody-מוכח-שרשרת) — אף-דגל-סטטי
+- T0-T2 בגל-1 = מדידה-בלבד (מסווג, נספר-יומי, מתועד) — אפס-שינוי-התנהגות; חוקי-המסילות-הקיימים (booklaw/delegation-caps/think-gate) נשארים-החוק-שלהן
+- חוק-אפס-סודות: כל-יומן עובר-scrub (WIF/PAT/token → redacted) — נבדק-בטסט
+- נכתב-signer.mjs: hook אחרי kill-switch; במקרה-תקלת-תשתית — סיווג-טהור מחדש, T3 עדיין נכשל-סגור
+- הוכחות: selftest-היררכיה 16/16 GREEN (כולל: מענק-פג/שרשרת-לא-נגישה/קשר-שבור → DENY; מענק-טרי+קשר-חי → ALLOW-היררכיה-מעניקה-יכולת) · moneygate 20/20 PASS · selftest-ראשי 1822/1822 PASS · signer-load OK · סיווג-קורפוס מדויק
+- התנגשות-עמיתים בדחיפה (5f670a26 ∉ lineage): מיזוג-מתועד 3e016b00 לפי FORECAST-ADVICE של הסקריפט (state-חיים → מקומי-מנצח, worklog → union), אפס-force
+- דוקטרינת-D4 נכשלה על-צורת-PORT-חדשה (env-default; המספר-3040 לא-זז): תוקן-והוכח (4/4 צורות + 2 שליליים) → fc9161ca נדחף FF-only, doctrine PASS
+- LOCKS.md: נרשם R-CMDHIER (9556804 נדחף ל-coordination)
+
+Stage Summary:
+- הארכיטקטורה עובדת-עם הכספות/חשבונות — בהיררכיה: מסילות-הכסף-ההפיכות ממשיכות-לרוץ, מחלקת-ההשמדה נעולה-לבעלים-בלבד, והבעלים יכול להעניק הרשאה-נקודתית-פוגה משורה-אחת ב-owner-grants.jsonl
+- היפוך-אכיפה ל-T0-T2 (observe→enforce) = דגל-אחד (ENFORCE) — החלטת-בעלים-כשירצה
+- קומיטים: ca411892 · 3e016b00 · fc9161ca (steem→saos-cockpit, FF-only) · 9556804 (LOCKS)
+- אפס נגיעה בכספות/סודות/מפתחות/mandate/טוקנים
+
+---
+Task ID: 7
+Agent: agent-zai (Z.ai Code · Lane A / R-CMDHIER גל-2)
+Task: אישור-בעלים "בטח תבצע כן תמשיך" — היפוך-אכיפה מלא להיררכיית-הפקודה
+
+Work Log:
+- מדידת-נפחים-אמיתית מ-exec-log (חלון-4-ימים, 2MB-אחרונים): 264 batches · vote 218 (~55/יום) · limit_order_create 54 (~14/יום) · claims 21 · cancels 18 · custom_json 6 · transfers 0 — הקפות 500/200/20 נושאות-מרווח-8-10× (הסולם-ההיפר-גריד לא-ייחנק)
+- תכנון-אפס-שבירה: אכיפת-T0-T2 = קפות-יומיות בלבד (blast-radius); המפתחות/custody נשארים-חוקי-ה-signer-המוכחים (אימוץ-לא-שכפול, first-claim-wins); עדות-custody-מפורשת מהקורא מכובדת-כשקיימת
+- ENFORCE הופך: T0/T1/T2 = true + T3 (היה-אמת מגל-1); וקטורי-selftest חדשים: קפה-חורגת→DENY · בתוך-קפה→ALLOW-enforced · עדות-custody מכובדת
+- הוכחה-מלאה: selftest-היררכיה 17/17 GREEN · moneygate 20/20 PASS · selftest-ראשי 1823/1823 PASS · doctrine PASS · signer-load OK
+- דחיפה FF-only: 603d803a → saos-cockpit · LOCKS חודש (ba5fad5)
+- בדיקות-חיות: STATUS.md של saos-runtime (01:00Z) מראה delegation-RED אך-הוא-קודם-תיקון-אוצר-המילים של agent-1 (ה-03:25Z הרשמי=0-אדומים) — לא-רגרסיה; גשר-3000: owner-active/live-probes 200 · inbox 500s היסטוריים-מהפלטפורמה (חלפו), כרגע-401-כנה משער-האותנטיקציה-שלה
+
+Stage Summary:
+- ההיררכיה חיה-באכיפה-מלאה: מסילות-הכסף-ההפיכות רצות-בתוך-קפות-מדודות, מחלקת-ההשמדה נעולה-לבעלים (מענק-TTL-פג-אוטומטית + קשר-חי), הכל-מתועד-scrubbed
+- אפס נגיעה בכספות/סודות/מפתחות/mandate · קומיטים: 603d803a (steem) · ba5fad5 (LOCKS)
+
+---
+Task ID: 8
+Agent: agent-zai (Z.ai Code · Lane A / R-CMDHIER גל-3)
+Task: הוראת-בעלים 2026-10-17 "בחן מה עשינו, איך נעשה טוב הרבה יותר — הכל בגיט כי הסנדבוקס נמחק, הפעל לא תסגור, הרחב, שפר, ודא שהכל רץ אוטונומית ברמה הכי גבוהה"
+
+Work Log:
+- **הישרדות-מדודה**: הסנדבוקס נמחק (/home/z/audit לא-קיים) — קלון-טרי של 3 הריפואים דרך-PAT (בלי-חשיפה); גל-2 אומת-בגיט (603d803a + ENFORCE כל-הדרגות + ba5fad5) · selftest 1823/1823 · moneygate 20/20 · doctrine PASS · hierarchy 17/17 — תוך-דקות, אפס-ידע-אבד
+- **אבחון-חי של הצי**: sovereign-runtime נכשל 19ש ברצף (מ-15:41Z 16.10 — 13ש לפני-הדחיפה-שלי, לא-רגרסיה); נפרק שרשרת: קווטת-דקות-פרטיים (steem מת 14:42Z 16.10, 7 ריצות-זומבי-queued) → הדופק-הציבורי המשיך (custody 14/14, dex-takeover, blurt חי, digest) → truthrail צרח RED-STREAM-STARVING כל-18-דק'
+- **שורש-האמת**: התנגשות-חוקים-עצמית — קובץ-החימוש (CI_SOCIAL_ARMED) vs שער-ה-readiness (exec29 STANDBY, הוראת-בעלים 14.10 low-profile); ה-gate מדד-רעב בזמן-שהצי עמד-מוצע-כחוק
+- **הריפוי (same-law)**: truthrail-outcome.mjs — קבלת-SOCIAL-STANDBY טרייה (<35ד', נכתבת-כל-מחזור, לעולם-לא-דביקה) גוברת-על-הקובץ → PASS-STANDBY exit-0; קובץ+קבלה-זקנה = RED fail-closed; קבלת-ARMED מחזירה-RED מיידית; +אבחון-streamerVerdict ב-state-ובדיגסט
+- **הוכחות**: selfcheck 21/21 (כולל וקטורים: קבלה-טרייה→PASS-STANDBY, זקנה→לא-חוקית, ARMED-מחזיר-RED, חסרה→present-honest) · ריצה-חיה exit-0 · moneygate 20/20 · selftest 1823/1823 · doctrine PASS
+- **דחיפה**: מיזוג-עמית 787b3ef79 (hive-posting-sign) ללא-התנגשות → a0ec8b1ea FF-only (doctrine PASS בתוך-השער) · LOCKS 868d28c
+- **החלטות-בעלים-מתועדות**: זומבי-queued לא-ניתנים-לביטול-API (409, אין-jobs; presence-matrix קריאה-בלבד = נזק-נמוך) · readiness-gate עדיין STANDBY מכוח-הוראת-הבעלים — היפוך = בעלים-בלבד
+- **פלטפורמה-מקומית**: דף-ההוכחה חי (owner-active chain-direct 10:32Z, 4-סמכויות, גילוי-שינוי, כנות-מלאה) · title תוקן ל-SAOS Sovereign Desk · אימות-דפדפן: דסקטופ+מובייל, אפס-שגיאות-קונסולה, footer נדחף-כהלכה
+- **דופק-הוכחה**: dispatch ידני 10:31Z — רץ-אחרי-הקודם (concurrency R324); הרץ-הקודם (10:19, קוד-קדם-תיקון) ייכשל-אדום-אחרון, הבא-שלי יקרא את a0ec8b1ea → PASS-STANDBY
+
+Stage Summary:
+- הצי רץ אוטונומית-וריבונית גם-במות-הסנדבוקס: הדופק-הציבורי נושא-את-העומס כמתוכנן (R280), הקוד-השלט כולו-בגיט, וההוכחות-ניתנות-לשחזור-מקלון-טרי-תוך-דקות
+- תוקנה-מחלת-19-שעות-של-צרחות-שווא: האזעקה-חוזרת-להיות-אמת בלבד (armed-ורעב-בפועל), ההמתנה-החוקית נמדדת-כנה PASS-STANDBY
+- בעלים: שתי-החלטות-פתוחות (קווטת-דקות / היפוך-שער-readiness) — שתיהן-שלך-לבד
+- קומיטים: a0ec8b1ea (steem) · 868d28c (LOCKS)
+---
+Task ID: 9
+Agent: agent-zai (Z.ai Code · Lane A / R-CMDHIER גל-4 = G4)
+Task: הוראת-בעלים 2026-10-17 (חזרה): "בחן יעילות, בצע ודחוף, הגיט=האמת כי הסנדבוקס עלול-להימחק, הפעל-לא-תסגור, הרחב-שפר, ודא-הכל-רץ-אוטונומית-ברמה-הכי-גבוהה"
+
+Work Log:
+- **שחזור-שני-באותו-יום, מדוד**: /home/z/audit נמחק שוב → קלון 5 ריפואים דרך-PAT גולמי-בקובץ (github_pat_... בשורה-בודדת — אין-source, קריאה-ישירה; אפס-חשיפה) · אימות-API: roshpinacare-sys, steem=private default saos-cockpit
+- **סוללת-הוכחה מלאה על-קלון-טרי**: hierarchy 17/17 GREEN · selftest 1823/1823 PASS · moneygate 20/20 PASS · doctrine PASS (177 assets D1-D6) — אפס-ידע-אבד
+- **אמת-בייצור של-ההיררכיה**: 231/231 ALLOW היום (225 T1 limit-orders של hyper-grid בדקות-האחרונות, קפות-200/יום) — ההיפוך-המלא רץ-בלי-אף-חסימת-שווא; ENFORCE={T3,T2,T1,T0}=true מאומת-בגיט
+- **ציד-האדום-היחיד**: fleetdigest.fresh צרח 5.5ש' (16.10 14:58→17.10 20:29) — שורש: ה-watchdog מדד עותק-מראה זקן (t19b/mirror/Domain/office3d/digest.json על main, main נבדק-ראשון) במקום הדיגסט-האמיתי ב-office-pages (טרי 17:00:41Z, reposSeen 15). משלים את חוק-ה-mirror של agent-9 (39352f5) מצד-הגילוי
+- **ריפוי-מדידתי (2 ריפואים)**: grid-watchdog.yml — דילוג-נתיבי-mirror בגילוי digest/potential · FleetHQ office-window.yml — שער-הטריות בודק-גם digest.json (26h, סימטרי-ל-potential). הוכחות: yaml-parse ×2 · harness 4/4 (mirror-מדולג, טרי-נמדד, זקן-אמיתי-עדיין-אדום, mirror-מקונן-לא-מצל) · probe-חי exit-0 age=4.0h
+- **הוכחת-ייצור**: dispatch #162 על HEAD-המתוקן (7632832) success → grid-status חי: **redCount 0 · reds []** @ 21:10Z — האזעקה-השווא מתה. (#161/#163 בוטלו-ע"י-פקיחי-הצי — לא-נאבקתי-על-מסילת-דיספץ')
+- **גשר-השולחן רופא**: fleet-economy קלון + core.askPass מקומי-לריפו (טוקן-לעולם-לא-בדיסק/קונפיג) → economy-state 200 (seq 130123, kind swap) · live-probes: 502-כן + **fleet מדוד** (reds/custody 14/heartbeat/digest מהגיט-הציבורי) במקום-502-ריק · owner-active 200 chain-direct
+- **UI**: כרטיס-live-probes מציג "צי-ציבורי חי" עם-האותות-המדודים · כרטיס-כלכלה מציג kind+reason · אימות-דפדפן מלא (סוכן-חיצוני): RTL תקין, footer-זורם-נכון דסקטופ+מובייל, אפס-שגיאות-קונסולה, דגימות-נתונים תואמות-API
+- **מכפיל-הערך**: RECOVERY.md נכתב ב-coordination — השחזור-שהיה-ידני-פעמיים הופך-ריצה-סטנדרטית (קלון-5-ריפואים + סוללה + חוקי-דחיפה + איסורי-נגיעה), מוצלב-עם restore-lane-a.sh של agent-2
+- **LOCKS חם (9-סוכנים)**: 2 קונפליקטי-append רצופים (agent-2 gal-89 · agent-5 6ebb0bf) → union-בכל-פעם, אף-דבר-לא-נאבד; קבלת-עמיתים מוטמעת
+
+Stage Summary:
+- **היעילות-נבחנה-בכנות**: מה-עשינו-טוב = גיט-כאמת (שרד 3 מחיקות ביום), היררכיה-באכיפה-מלאה-אפס-שווא, ריפוי-אזעקות-שווא. מה-היה-בזבוז = מדידת-עותקים-במקום-אותות-חיים (5.5ש' צרחה), שחזור-ידני-חוזר. ה-G4 סגר-את-שניהם: מדידת-אמת + RECOVERY.md
+- הצי רץ-אוטונומית-מוכח: pulse 20-25ד' · watchdog 0-אדומים · custody 14/14 · economy-beat +1,497tx/beat · hive-beat ממתין-ל-authority-בעלים (T-512 סגור, החלטה-אחת-פתוחה-לבעלים-בלבד)
+- קומיטים: saos-runtime 7632832 · FleetHQ 5bc0713d · coordination ab16835 (FF-only, אפס-force)
+- אפס-נגיעה בכספות/סודות/מפתחות/mandate/רוטציות — הוראות-הבעלים נשמרו-מילה-במילה
+---
+Task ID: 10
+Agent: agent-zai (Z.ai Code · Lane A / R-CMDHIER גל-5 = G5)
+Task: אותה-הוראת-בעלים (חזרה 23:14Z): "בצע ודחוף · גיט=האמת · הפעל-לא-תסגור · הרחב-שפר · הכל-רץ-אוטונומית-ברמה-הכי-גבוהה"
+
+Work Log:
+- **שחזור-רביעי-ביום (דוגם-עצמו)**: /home/z/audit נמחק שוב; PAT חדש-הועלה-ואומת · RECOVERY.md + restore-lane-a.sh של agent-2 → 5/5 ירוק · סוללה: 17/17 · 1823/1823 · 20/20 · doctrine PASS · פריסה-שטוחה מאוחדת (טעות-סדר-פקודות-שלי-מחקה-קלון — שיחזור-בן-שניות מהגיט, בדיוק-הנקודה)
+- **טלמטריית-אכיפה-ציבורית (הצעד-החד)**: סטטיסטיקות-R-CMDHIER היו-רק-בריפו-הפרטי → grid-watchdog.yml משקף-עכשיו ל-grid-status.json **הציבורי**: מונים-לפי-דרגה · דגלי-ENFORCE נמדדים-ממקור-הגיט (לא-הנחה) · guard-recency · denials-זנב-500. אין-חוקי-אזעקה-חדשים (measured-only — DENY=החוק-עובד, הפסקת-גריד-לגיטימית)
+- **הוכחה-על-חי**: harness מול-API אמיתי: 325 guards-היום (T0=10 T1=315) · flags all-true-מהמקור · lastGuard 23:08Z · denials 0 · דחיפה 208a5d1
+- **פענוח-ביטולי-הדיספץ'** (#161/#163/#165): לא-דיכוי — חוק-ה-self-cancel "not-due" של הווטשדוג (שורה 101-105, אנטי-ספאם-מתוכנן); הריצה-המתוזמנת-הבאה-תישא-את-הטלמטריה-אוטומטית
+- **שולחן**: כרטיס-טלמטריית-היררכיה חדש (data-testid=hierarchy-telemetry) — יום/מונים/דגלים/חסימות מה-grid-status-הציבורי · lint נקי
+- **בריאות-צי**: 0 אדומים · custody 14/14 · ספר seq 134,268 (+4,145) · dex-beat/sovereign-runtime רצים-חיים
+- **שרשרת**: סמכות-Hive-posting עדיין-ללא-מפתח-המנוע (נמדד-חי פעמיים) — ההחלטה-היחידה-שנותרה-לבעלים
+
+Stage Summary:
+- **הריבונות-הפכה-ניתנת-לביקורת-חיצונית**: כל-אדם-בעולם-יכול-לקרוא את מספרי-האכיפה (כמה-פקודות-הוגנו, באילו-דרגות, מתי-ה-guard-האחרון, כמה-חסימות) — ישר-מהגיט-הציבורי, בלי-לחשוף-אף-סוד
+- ההתפתחות-בין-הגלים: observe(גל-1)→enforce-מלא(גל-2)→אפס-שווא-מדוד(גל-3/4)→**אמת-ציבורית-מבוקרת(גל-5)**
+- קומיטים: saos-runtime 208a5d1 · coordination e0b0ad1 (FF-only)
+- אפס-נגיעה בכספות/סודות/מפתחות/mandate
+---
+Task ID: 10-b (סיום-G5)
+Agent: agent-zai (Z.ai Code · Lane A / R-CMDHIER גל-5 = G5, סופי)
+Task: השלמת-הטלמטריה-הציבורית-עד-אור-מלא (הוכחה-בדפדפן)
+
+Work Log:
+- **שלושה-שערים-עד-האור**: (1) self-cancel "not-due" → operator-override input (אותו-חוק-מבורך-כמו-sovereign-pulse; yaml+bash+python-ast מאומתים) · (2) שלב-STATUS עם-רשימת-היתר-הפיל-את-ה-facts → הועברו-לרשימה (counts/timestamps-לפי-חוק-הקובץ) · (3) **באג-G4-שלי**: fleetPublicSnapshot לא-ניקה-inflight → מטמון-אל-עולם (תמונת-21:10-נתמדה-במשך-שעות) → clear-on-settle + הרצה-מחדש-של-השרת
+- **ריצות-הוכחה**: #166 success (קוד-רץ-אך-facts-נשרו) → נמצא-ביומני-הריצה (log-forensics) → #167 על 7fdd7d5 success → **grid-status הציבורי מציג**: hierarchyDay · T0=10 · T1=315 · flags all-true-מהמקור · lastGuard · denials · redCount 0
+- **דפדפן (סוכן-חיצוני) 5/5 PASS**: כרטיס-הטלמטריה חי (T0=10 · T1=315 · ✓✓✓✓ · חסימות 0) · שאר-הכרטיסים-בריאים (STM-חי · צי-ציבורי-חי: אפס-אדומים · seq 135,439+kind) · פריסה-נקייה-ללא-גלישה · אפס-שגיאות-קונסולה
+- דחיפות: saos-runtime 7fdd7d5 · coordination 6ffb4fd (union-שלישי, אף-דבר-לא-נאבד)
+
+Stage Summary:
+- **הריבונות-האוטונומית-הפכה-ציבורית-מבוקרת**: כל-האכיפה (R-CMDHIER) נמדדת-וניתנת-לאימות-ע"י-כל-אדם-מהגיט-הפומבי — מסע-הגלים: observe→enforce→אפס-שווא→**אמת-ציבורית-חיה**
+- הלקח-המתודולוגי: הוכחה-מקומית-אינה-הוכחת-ייצור (שלב-ה-STATUS-הוריד-את-הנתונים-בשקט) — רק-קריאה-חוזרת-של-המוצר-הסופי-הציבורי = אמת
+- אפס-נגיעה בכספות/סודות/מפתחות/mandate · ההחלטה-היחידה-שנותרה-לבעלים: סמכות-Hive-posting בכספת-הדפדפן
+---
+Task ID: 11
+Agent: agent-zai (Z.ai Code · Lane A / G6)
+Task: אישור-בעלים "בטח חייב כן מאשר תמשיך ודחוף" — סגירת-שרשרת-Hive
+
+Work Log:
+- ניתוח-הדרך-המבורכת: owner-key-adopt.yml (G1-G3 fail-closed, additive, dry-run) — אך-NODES=steem; השוואה-חיה: מפתח-active-שונה-בין-Steem(STM5HhJD)-ל-Hive(STM8c9vp3) — STEEM_ACTIVE_WIF-לא-רלוונטי-ל-Hive
+- מדידת-יכולת-מהיומנים: hive-custody-revival #12 = liveHits:0 + אין-artifact — לחומר-המוחזק-בענן אין-אף-סמכות-Hive-חיה של headcorner; החתימה-המקורית-של-הבעלים-בכספת-הדפדפן-היא-הנתיב-היחיד (קריפטוגרפיה, לא-נוהל)
+- נבנה-משטח-סגירה-חי: /api/hive-closure (שלושה-צמתים-Hive failover, micro-cache 10ש' עם-תיקון-ה-inflight-מ-G4, אפס-סודות) + כרטיס-פעולת-בעלים-בראש-השולחן: המפתח-להעתקה-בקליק, שני-צעדי-ארנק, מצב-חי, היפוך-ירוק-אוטומטי
+- אימות-דפדפן (סוכן-חיצוני): 6/6 PASS — העתקה-עובדת (הועתק ✓), פריסה-שלמה-ללא-גלישה דסקטופ+מובייל (break-all), אפס-שגיאות-קונסולה, שאר-הכרטיסים-בריאים (כולל-טלמטריית-ההיררכיה)
+- LOCKS: אישור-הבעלים-נרשם-רשמית + מדידת-היכולת-הכנה מתועדת-לצי (ea26ff6)
+
+Stage Summary:
+- הפעולה-היחידה-שנותרה-בכל-האחוזה: הבעלים-מדביק-את-STM6y7Dtk3hcic5tJwfdP4QKdfpABfjnAvgVRDByx3GaL14ZGK7Wn בהרשאות-posting של headcorner בארנק-Hive (60 שניות, שני-צעדים, מהשולחן-שלו)
+- ברגע-הנחיתה: הכרטיס-מתהפך-ירוק-מדוד + hive-beat חותם-אוטומטית — השרשרת-נסגרת
+- אפס-נגיעה בסודות/כספות-הבעלים; אפס-ניסיון-חתימה-במקום-הבעלים (החוק-נשמר-מילה-במילה)
+---
+Task ID: 12
+Agent: agent-zai (Z.ai Code · Lane A / G7)
+Task: הוראת-בעלים 2026-10-18: "תמשיך ודחוף + יש פה עוד api של אינבידיה — לראות איך משתמשים, מה התועלת, איך לחבר, ולאטום בכספת כמו שצריך בגיט לשימוש הריבונות האוטונומית" (קובץ-שהועלה: ביקורת.txt = טוקן-NVIDIA גולם nvapi-…)
+
+Work Log:
+- **שחזור-חמישי-ביום מדוד ושגרתי**: /home/z/audit נמחק שוב → RECOVERY.md → קלון-5-ריפואים + askpass, אפס-ידע-אבד; HEADS-טריים נקראו (gal-90 של agent-2 נחת-בקואורדינציה)
+- **זיהוי-המפתח-בבטחה**: הקובץ = שורה-בודדת nvapi-… (70-תווים) — נקרא-בזמן-ריצה-בלבד, מוסך-בפלטים; **מפקד-כספת**: NVIDIA-API_KEY-קיים-ב-FleetHQ-בלבד (חתום-בעלים 10-09, מוח-#3-nvidia-nim ב-llm.ts) → המפתח-שהועלה = **השני**; דפוס-הסלוטים-הקיים (TAVILY_API_KEY_1/2) קבע-את-השם: `NVIDIA_API_KEY_2` (+BASE_URL_2/MODELS_2)
+- **התועלת-נמדדה-אמפירית**: 81-מודלים-חיים (glm-5.3/5.3-flash · nemotron-3-super-120b/ultra-550b · kimi-k2.6 · deepseek-v4.1 · vision · **embeddings-2048-dim-נבדקו-חי** · safety-guards · riva-translate) — **ריבונות-ספק**: יכולת-LLM-עצמאית-מכל-הספקים-בשרשרת
+- **אטימה-בכספת-בגיט**: libsodium-sealed-box (GitHub-המתכון-הרשמי, seal.mjs) → 3-סלוטים-חדשים-בלבד-ב-FleetHQ → **HTTP-201×3**; מפקד-אחרי: FleetHQ-13→16-סודות; אפס-ערך-בגיט/לוגים/פלטים
+- **חיווט-לשימוש-אוטונומי**: agent-hq-src/llm.ts — מוח-`nvidia-nim-2` לפי-דפוס-רוטציית-OpenRouter-המרובה (כל-מפתח=מוח-עם-cooldown-משלו; הראשי-לא-נוגע; רוטציה=בעלים-בלבד) · office-heartbeat.yml-env-passthrough · .env.example-מתועד
+- **הוכחת-שרשרת-מלאה**: proof-nim2.ts על-השרשרת-האמיתית → **PROOF-GREEN**: provider `nvidia-nim-2/z-ai/glm-5.3-flash` ענה (READY-2, 1.4-2.6ש', 72-101-tok); census: `nvidia-nim-2→kilo→llm7→…` — המוח-החדש-ראשון-בתור-הזמינים
+- **מדידת-מודלים-כנה**: ✓-glm-5.3-flash/glm-5.3/nemotron-3-super-120b/nemotron-3.5-lightning · ⏳-ultra-550b/kimi-פתיחה-קרה-איטית · ✗-mistral-7b/granite-8b-EOL-404-לא-לשחזר · ⚠️-reasoning-מודלים-שורפים-טוקנים-בחשיבה-לפני-תוכן (max_tokens-נמוך=null-content — לא-תקלה)
+- **גשר-דסק**: `/api/nvidia-nim` (fingerprint-sha256[0:12] · 81-מודלים · latency · micro-cache-5דק'-single-flight-טיהור-בכשל-שיעור-G4 · probe=1-דרישה-≤200-tok) + קובץ-קנוני `upload/nvidia-nim.env` + כרטיס-חי-בשולחן "מוח-NIM-שני — ריבונות-ספק"
+- **אימות-דפדפן 6/6**: כרטיס-מדוד-חי (81-מודלים · 173ms · a12044d8a97b) · probe-קצה-לקצה ("חי: z-ai/glm-5.3-flash · 2046ms · 114-טוקנים") · אפס-שגיאות-קונסולה · מובייל+דסקטופ-אין-גלישה · footer-gap=0-ללא-חפיפה
+- **ספרות-צי**: NVIDIA-NIM.md-חדש-בקואורדינציה (מה/תועלת/חיווט/חוקים/שחזור/יומן-הוכחות) · RECOVERY.md-תוספת-מפתחות-LLM · LOCKS-G7 (union-רביעי — agent-5-רשם-קבלה-עצמאית T-522-במקביל, שני-הצדדים-נשמרו)
+
+Stage Summary:
+- **הריבונות-קיבלה-ריבונות-ספק**: מוח-LLM-שני-בלתי-תלוי, אטום-בכספת-הגיט (Actions-secrets-מוצפנים), חי-בשרשרת-המוחות-עם-failover-אמיתי, נצפה-בשולחן-עם-אפס-חשיפת-סוד
+- דחיפות-FF-only: FleetHQ 576dd7a6 · steem 6d7c0181a (route-אדיטיבי; דסק-steem-שם-עבודת-עמיתים — לא-נגעתי-בpage.tsx-שלהם) · coordination 0e5d55d
+- הלקח-המתודולוגי: models-list-אינו-רשימת-מודלים-אמיתית-לחשבון (404-אמיתי-על-ישנים) — רק-הסקה-חיה-היא-אמת
+- אפס-נגיעה בכספות-הבעלים/סודות-קיימים/רוטציות/טוקנים/mandate — סלוטים-חדשים-בלבד, מכוח-הוראת-בעלים-מפורשת
+---
+Task ID: 13
+Agent: agent-zai (Z.ai Code · Lane A / G8)
+Task: הוראת-בעלים 2026-10-18: "תמשיך, תקים מה-שאתה-יכול בלעדיי... בחן כיצד תיקיות-אלו יכולות-לעזור-לארכיטקטורה ואיך-ליישם-נכון — לשלב, תכנן, בצע, דחף: ghidra · iFixAi"
+
+Work Log:
+- **git-first**: כל-5-הריפואים-חיים; ff-מלא-מול-עמיתים (T-523/T-524 נקלטו; דסק-steem-עבר-כתיבה-מחדש-לקונסולת-מפעיל-משערת-סיסמה-מצד-עמיתים)
+- **iFixAi v4.2.0 (בודק-עצמאי לאי-התאמה של סוכני-AI) — הוכח-חי בסנדבוקס**: mock-צינור 2ש' (דו"ח-מלא, פגמים-מושתלים-בתכנון) + מוח-NIM-אמיתי-מול-חוקי-הריבונות (doctrine כ-system-prompt, smoke-מבני): B01-Tool-Governance-86.9%-✗ · B02-Non-LLM-Governance-0.0%-✗ · B03-Auditability-100%-✓ — **הבודק-אימת-את-R-CMDHIER**: מוח-LLM-חשוף=0%-שליטה-מבנית; ה-guard-הקודתי-הוא-החלק-החסר (ראה B02)
+- **Ghidra 12.1.4 (NSA, RE-בינארי) — הוכח-חי מלא בסנדבוקס**: Analysis-succeeded · functions=18 · add()-דה-קומפל-חזרה-לסמנטיקה-נכונה; שלושה-מלכודות-נפתרו: JRE-מובנה-לא-מספיק (חובה-JDK-מלא-Temurin) · JAVA_HOME_OVERRIDE-חובה (headless-ללא-TTY) · סקריפטים-.java-ולא-.py (PyGhidra-לא-מופעל)
+- **חיווט-iFixAi**: FleetHQ `office-ifixai-audit.yml` שבועית (שני-11:53-UTC) — mock-הוכחה + ביקורת-מוח-NIM-דרך-סודות-הכספת-הקיימים (**אפס-כתיבה-חדשה-לכספת**) → `ifixai-audit-build.mjs` (facts-בלבד, ran:false+reason-כנה) → publish.sh-+1-שורה-אדיטיבית → פרסום-office-pages · doctrine-בגיט: `office-window/ifixai-doctrine.txt` · **תיקון-חוק-Actions**: secrets-אסור-ב-if: (parse-fail-מדיד-HTTP-422) → שער-בתוך-הסקריפט
+- **חיווט-Ghidra**: saos-runtime `ghidra-lab.yml` (dispatch-בלבד, אפס-קרון) — הורדת-release-מובנה + JDK-Temurin-ב-runner, בינארי-מעבדה-דטרמיניסטי, verdict-מהלוג-בלבד, artifact-לוג
+- **דסק (sandbox=השולחן-החי)**: `/api/saos/ifixai-audit` ילידי (מטמון-5-דק' + single-flight + טיהור-G4) + כרטיס-"ביקורת-עצמאית" (פסי-ציון, שיפוט-עצמי-מסומן, אין-נתונים ≠ אין-כשל) · **דסק (repo-steem)**: `src/app/api/saos/ifixai-audit/route.ts`-בדפוס-העמיתים (כמו-/api/nvidia-nim-ב-G7) + **תיקון-ארטיפקט-מיזוג-עמיתים**: שורת-`type-NetState`-כפולה (TS2300-היה-שובר-בניין-דסק-בא; אפס-שינוי-התנהגות)
+- **דוקטרינה**: coordination `IFIXAI.md` + `GHIDRA.md` (מה/תועלת/חיווט/חוקים/שחזור/יומן-הוכחות) + RECOVERY-תוספת "כלים-היקשיים" + LOCKS-G8
+- **דחיפות-FF-only**: FleetHQ 2228ce79+2945e6d9 · saos-runtime ebce7cd · steem d6ab9211f · coordination 97bc1d7 · dispatch-ראשונים: ghidra-lab HTTP-204 · office-ifixai-audit HTTP-204-אחרי-התיקון
+
+Stage Summary:
+- **הריבונות-קיבלה-בודק-עצמאי-פנימי**: מפעיל-פנימי-עצמאי-שבועי שבודק-את-מוחות-ה-LLM-נגד-חוקי-הבעלים-בלי-לבקש-מהבעלים-כלום — התשובה-הישירה-ל"חכמה שמנהלת-את-עצמה"
+- **הריבונות-קיבלה-יכולת-RE-בינארית** להגנת-שרשרת-אספקה — מוכחת-בסנדבוקס-ובענן-לפי-דרישה
+- תלות-בעלים-יחידה-שנותרה-בתחום: מפתח-ספק-שני-לשיפוט-צולב-ציטוט (סלוט-כספת = בעלים-בלבד); עד-אז — שיפוט-עצמי-מסומן-בכנות
+- אפס-נגיעה בכספות/סודות-קיימים/רוטציות/טוקנים/mandate; כל-הקבצים-של-עמיתים-נוגעו-אדיטיבית-בלבד (+תיקון-באג-מיזוג-מדויק-אחד)
+
+### Task 13 — השלמה (G8-סופי)
+- **הקצאה-מחדש-מדודה של ביקורת-המוח**: 6-ריצות-Actions הוכיחו runner→NIM-chat-חסום (models 200/0.17s, raw-chat 000/45s) → המוח-נבדק-מהסנדבוקס (`brain-audit-sandbox.sh`, שער-טריות-git-HEAD-idempotenti) → **פורסם-חי office-pages cb717c36: B01-86.9%-✗ · B02-0.0%-✗ · B03-100%-✓ · grade-F · selfJudged** → הדסק-מציג-אותו (העמיתים-מקבלים-אוטומטית-אם-NVIDIA-תשחרר)
+- **ghidra-lab-בענן**: run#1-✗ (rg-חסר-ב-runner) → תיקון-grep → **run#2-✓ PASS** (Analysis-succeeded, verdict-מהלוג)
+- **תיקוני-מדידה**: secrets-אסור-ב-step-if (HTTP-422-מדיד) → שער-בסקריפט · קריטריון-הצלחה = דוח-קיים (iFixAi-יוצא-nonzero-על-סקופי) · multi-line-python-שובר-YAML → single-line
+- **תיקון-דסק**: timeAgo-קיבל-null (generatedAt-בקן-השני) → audit.audit?.generatedAt — lint-נקי
+- **אימות-דפדפן-סופי 7/7 PASS**: כרטיס-הביקורת-חי (mock-חי · מודל-מדוד · שלושה-פסי-ציון) · NIM-חי-81-מודלים-211ms · טלמטריה-T0=45-T1=109-דגלים-✓✓✓✓ · קונסולה-נקייה-0-שגיאות · footer-gap-0 · מובייל-1280-ללא-גלישה
+- **דחיפות-סופיות-FF-only**: FleetHQ 2228ce79→2945e6d9→93b255c6→67440c34→232e8731→2175d7cf · saos-runtime ebce7cd→0e9f5ae · steem d6ab9211f · coordination 97bc1d7→88d17dc (union-חמישי-שמר-הכל)
+- אפס-נגיעה בכספות/סודות/רוטציות/טוקנים/mandate · התלות-היחידה-שנותרה-לבעלים-בתחום: מפתח-ספק-שני-לשיפוט-צולב (סלוט-כספת)
+
+---
+Task ID: 14
+Agent: agent-zai (Z.ai Code · Lane A / G9)
+Task: אישור-בעלים "כן מאשר וודא הכל תמשיך ודחוף" — וידוא-מלא + מוסד-אמת למפעיל-הפנימי
+
+Work Log:
+- **git-first**: 5/5 ריפואים חיים ונקלטו-עמיתים (coordination 5adb0ab T-526 · steem +7 saos-cockpit כולל חוק-הגנת-העץ של agent-5 · FleetHQ e3c13484 · fleet-economy 7f0352a)
+- **סוללת-ההוכחה מלאה על-HEAD-טרי**: hierarchy 17/17 GREEN · selftest 1823/1823 PASS · moneygate 20/20 PASS · doctrine PASS (177 assets) — אפס-ידע-אבד
+- **אמת-צי מהגיט (לא-mirror)**: grid-status redCount=0 · digest.json (office-pages branch) טרי 1h · ifixai-audit.json טרי 1h (mock-grade-D מפורסם)
+- **שולחן-חי מדוד**: economy ok seq 316,965 · /api/nvidia-nim 81-מודלים-213ms-fingerprint a12044d8a97b · live-probes fleet reds=0 + custody 14/14 + heartbeat 03:45Z + telemetry T0=92/T1=185 כל-הדגלים-true lastGuard 04:10Z · hive-closure report-only installed=false
+- **המוצר החדש — bootstrap/verify-all.sh** (coordination): פקודה-אחת = git-first (A) + סוללה (B) + אמת-צי-מהגיט (C) + שולחן-אם-חי (D) · fail-closed exit-1-על-אדום · מזהה-קומיטי-עמיתים-וממליץ-rebase · **ריצה-ראשונה GREEN 15✅/1⏭** (ה⏭=החלטת-בעלים-בלבד) · תיקון-קוסמטיקה-אחד-אחרי-ריצה-ראשונה
+- **RECOVERY.md** עודכן אדיטיבית (שורת-קיצור-דרך-G9): שחזור+וידוא = שתי-פקודות לכל-9-הסוכנים
+- **LOCKS.md** רשומת-G9 נדחפה · קומיט 094d87f FF-only על-גבי 5adb0ab
+
+Stage Summary:
+- **"וודא הכל" כבר-לא-תלוי-בזיכרון-שלי**: כל-סוכן (והסנדבוקס-הבא-אחרי-מחיקה) מריץ restore-lane-a.sh ואז verify-all.sh ומקבל GREEN/RED-מדיד — המפעיל-הפנימי ממוסד בגיט, לא בראש
+- ההמשך-הישיר-של-ההוראה "תקים מה-שאתה-יכול בלעדיי": עוד-החלטה-אחת-שירדה-מהתור-של-הבעלים (איך-מוודאים) — עכשיו-זו-פקודה
+- אפס-נגיעה בכספות/סודות/רוטציות/טוקנים/mandate · lanes-עמיתים-נקלטו-אך-לא-נגעו · ההחלטה-היחידה-לבעלים: hive posting authority (installed=false מדוד)

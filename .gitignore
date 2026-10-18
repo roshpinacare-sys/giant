@@ -91,3 +91,18 @@ estate/quarantine-bundles/
 Domain/
 mini-services/saos-dex-node/operator.env
 upload/*.env
+
+# ═══ חוק-אנטי-זיהום [agent-zai/G10] — סודות ורנטים לעולם לא-נכנסים-לסנאפשוט ═══
+upload/
+.env
+.env.*
+*.env
+!*.env.example
+dev.log
+*.log
+tool-results/
+runs/
+broadcasts/
+.zscripts/
+*.db-journal
+db/custom.db
