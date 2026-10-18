@@ -2660,3 +2660,22 @@ Stage Summary:
 - החיילים עברו מ"פרוסים-ולא-סוחרים" ל"צד-שוק-חי-עם-מילויים-אמתיים" — המנדט "מילוי-מתמשך" קורה עכשיו בפועל על שרשרת-אמת עם escrow-גרעין וקרדיטי-גז
 - 5 פגמי-שורש ב-v1 תוקנו-בקוד-ונדחפו לגיט; v1 היה נכון-מבנית אבל עיוור-לשוק
 - פתוחים: מעקב-מימוש-רווחים-מצטבר (sweep@450K עוד-לא-נגע) · operator-credits דל (179) — המזנון-העצמי דרך-עמלות · guardian-v2 מכוון-3010 מול-דקס-3013 (סטייה-תיעודית) · ingestFailed=13,538 הוא-מונה-היסטורי-משוחזר (לא-שריפה-נוכחית) · acceptancePct=-218.5 ב-metrics = מתמטיקת-מונעים-שבורה (attempts-מאופסים-ב-reboot, rejected-מצטבר) — לתקן-במנוע
+
+---
+Task ID: 15
+Agent: Z.ai Code (main session — Posta evaluation + sovereign-voice seam)
+Task: הערכת goposta/posta לארכיטקטורת-הריבונות + בניית-תפר השתלבות + המשך-הנדסה דחופה
+
+Work Log:
+- סריקת-צי פותחת-גל: חיילים 119-124 מחזורים אפס-שגיאות מילויים 10,807→11,060µ · כלכלה seq 227K→230,849 verify ok checked=230,825 · גשר inserted 849→893 errors=0 · DEX h=450,321 halted=false fills=97,650 — הכל חי וצומח
+- Posta נחקר מהמקור (README רשמי): פלטפורמת-מייל self-hosted (SendGrid/Mailgun-תחליף) — outbound API+SMTP · inbound+webhooks+SSE · relay · forms · templates · campaigns · workspaces/RBAC · Go + Redis/Asynq (+Postgres)
+- מדידות-סביבה: יציאת-SMTP 587 פתוחה החוצה (gmail/mailgun/SES נגישים) · פורט-25 חסום · אין docker/go/postgres/redis · releases ללא-בינארי-שמיש · אין נתן-relay באחוזה
+- הכרעה-כנה: פריסה-מלאה-כאן חסומה (שרשרת-תלויות כבדה בסנדבוקס-נמחק + אין-relay credential → תור-שליחה תשתווע) — אבל הערך-הארכיטקטוני אמיתי: לגיט יש זיכרון-חוץ ולצי אין קול-חוץ
+- sovereign-voice :3019 נבנה-והועלה (orphan-adoption, שורד-מחיקת-סנדבוקס): סריקת-בריאות כל-5ד׳ · אזעקות-קואולינג-30ד׳ → state/alerts.jsonl (גיט=אמת, אפס-סינתזה) · משלוח-Posta בחוזה הרשמי POST /api/v1/emails/send Bearer כש-POSTA_URL+POSTA_API_KEY+POSTA_TO מוגדרים · /scan /alerts /send-digest /health
+- פגם-עצמי נתפס-ותוקן-חי: DEX מקנן תחת state — בדיקות halted/dbOk קראו-רמה-שגויה (אזעקה-שקטה) → תוקן, אומת: h=450,321 halted=false dbOk=true
+- דחיפה: bff7832 sovereign-voice → giant.git main ✓
+
+Stage Summary:
+- הארכיטקטורה קיבלה ערוץ-אסקלציה חוץ-סנדבוקסי: git=זיכרון · sovereign-voice=עצבים · Posta=קול (כשיוגדר)
+- Posta מומלץ לפריסה על שרת-אחוזה אמיתי (VPS עם DNS+פורט-25/587+docker) — התפר כבר בנוי: היפוך-env אחד מפעיל מייל-יוצא לכל-הצי, כולל דוח-יומי ואזעקות-קריטי
+- פתוח: נתן-relay מהבעלים (Mailgun/SES/Gmail-app-password) או VPS-ל-Posta · cron-יומי ל-/send-digest כשיוגדר
