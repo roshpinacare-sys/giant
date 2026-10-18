@@ -8922,3 +8922,24 @@ Stage Summary:
 - שלשת-החובה-בוצעה-מלא: קנוני-מאומץ (d82f390) · תשתיות-חיות-מאומתות (לב 07:59Z הבא · בנאי-מאומת-ידנית · קונסולה-200) · דחיפת-היומן-הזה-ואימותה-מול-origin.
 - עדכון-שיטה-למחיקה-הבאה: זיהוי-ריפו-בית-לפי-דפוס-vault-seal+API עובד-ב-3-פקודות; אימוץ-קנוני-עם-גיבוי-pat.env-מראש-הוא-הנוהל-הבטוח (אפס-אובדן-סודות).
 - אפס-נגיעה בכספות/סודות/טוקנים/רוטציות; החלטות-בעלים-פתוחות לא שונו.
+
+---
+Task ID: 17
+Agent: zai (main session) — wave "ארסנל-93 · ghidra+iFixAi (צו-בעלים) · בונה-ריבוני"
+Task: owner directive "בחן כיצד תיקיות אלו (ghidra/iFixAi) יכולות לעזור לנו לארכיטקטורה ואיך ליישם נכון לשלב תכנן בצע דחף" — evaluate both repos, implement the right phase, push
+
+Work Log:
+- iFixAi EVALUATED (github.com/ifixai-ai/iFixAi · Apache-2.0 · PyPI 4.2.0): independent AI-agent auditing — trajectory assurance against business policy (roles/permissions/budgets), PASSIVE auditor (never executes recorded tools), frozen evidence. EXACT fit: our soldiers trade real bank with no owner present; self-audit is not audit — need an independent judge
+- iFixAi INSTALLED FOR REAL: python3 -m pip "ifixai[openai]" → 4.2.0 live (PEP-668 bypassed via venv pip 25.0.1)
+- ARMY INSTRUMENTED: every real action (order/fuel/xfer) now emits structured event → mini-services/soldier-army/state/actions.jsonl {ts, actor, action, resource, args, outcome, cost_units, detail}; write failures never break trading
+- sovereign-audit :3022 BUILT (mini-services/sovereign-audit): audit_soldiers.py rebuilds native TraceCapture from recorded events (callable = replay of recorded outcome — zero re-execution), AuditPolicy "soldier-mandate-msg8": soldier→order@SAOS/USDS, soldier→fuel@credits, soldier→xfer@operator ONLY, operator→xfer@* (funding), BudgetRule(scope="actor", 300_000µ) PER SOLDIER (the stable-bank ceiling); bun wrapper serves /health + POST /run; every 15min
+- FIRST REAL AUDIT: 18 events (boot funding transfers) → decision=CLEAR, findings=0, evidence frozen at evidence/20261018T074859Z/ (capture.jsonl + reports) — measured, not claimed
+- GUARD MANIFEST +1: sovereign-audit added to mini-guard → child-of-Next lineage, immortal like the rest
+- ghidra EVALUATED (NSA SRE framework): Java 21 present (11.0–11.3 compatible; 11.4 needs 25), headless analyzeHeadless = automated binary truth (supply-chain law: don't trust what a binary CLAIMS, inspect what it DOES); ~400MB release download NOT performed here (honest STAGED status) — wrapper docs/arsenal/ghidra-audit.sh ready (download-once → import → postScript → receipts/ghidra/<bin>.md)
+- DOCS: docs/arsenal/ifixai-integration.md (what was built + next: SUT=http via sovereign-gateway :3011 as judge, Policy Lab pre-mortems for new mandates) + ghidra-integration.md (staged law + integration queue: binary admission gate for arsenal tools, periodic .node addon scans)
+- GIT RACE CAUGHT+FIXED: my arsenal-93 commit was absorbed/lost in race with auto-economy seal service (seal's `git add -A` ran mid-push; soldier-army files landed in ITS commit, sovereign-audit/docs did not land at all) → re-committed explicitly, pushed 247e6ae, verified files on origin via ls-tree
+
+Stage Summary:
+- The sovereignty now has an INDEPENDENT AUDITOR over its armed trading agents — iFixAi trajectory assurance live at :3022, policy = the owner's exact mandate (msg-8), evidence frozen per run, decision CLEAR measured
+- Arsenal doctrine started: evaluate → integrate-the-right-phase → honest status (iFixAi LIVE, ghidra STAGED) — never fake-run
+- Next: voice-builder evolution (self-update commits), Policy-Lab pre-mortems for new mandates, ghidra admission gate when env allows
