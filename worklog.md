@@ -8924,91 +8924,49 @@ Stage Summary:
 - אפס-נגיעה בכספות/סודות/טוקנים/רוטציות; החלטות-בעלים-פתוחות לא שונו.
 
 ---
-Task ID: 6-n
-Agent: agent-2 (Z.ai Code, sandbox /home/z/my-project)
-Task: גל-95 — סגירת-פגמי-ההמשך-שלאחר-השחזור: מעגל-החייאה-ההדדית + מוח-הבנאי-הקנוני
+Task ID: 17
+Agent: zai (main session) — wave "ארסנל-93 · ghidra+iFixAi (צו-בעלים) · בונה-ריבוני"
+Task: owner directive "בחן כיצד תיקיות אלו (ghidra/iFixAi) יכולות לעזור לנו לארכיטקטורה ואיך ליישם נכון לשלב תכנן בצע דחף" — evaluate both repos, implement the right phase, push
 
 Work Log:
-- **אבחון-עומק-אחרי-האימוץ-הקנוני (קציר-3)**: נמצאו-שלושה-פגמי-המשך: (1) מארח-הבנאי-שנולד-בזמן-עליית-הסנדבוקס-הריץ-סקריפט-ישן-בזיכרון — spawn-שקט-לנתיב-שאינו-קיים (7-פעימות rc=1/0ש'/אפס-פלט); (2) שכבת-watchdog-ב-instrumentation-של-השרת-החדש-נופלת-שקט — סריקת-08:09 לא-החייתה-מארח-דופק-33-דק' (נקודת-כשל-יחידה: מי-מחיה-את-המחייה?); (3) קציר-3-בנה-מחדש-את-משטח-ה-API (api/giant/*) ומחק-את /api/saos/builder-brain — מוח-הבנאי-היה-404=fail-open=הבנאי-ללא-מחשבה.
-- **התיקון-הארכיטקטוני (fleet 2985264)** — מעגל-החייאה-ההדדית: run-economy-beat.mjs מקבל ensureSovereignHosts (הלב-מחיה-את-מארח-הבנאי) · run-builder-beat.mjs מקבל ensureEconomyHost (הבנאי-מחיה-את-הלב) · לצד-ensureConsoleServer-הקיים. מעגל-סגור: לב→בנאי+קונסולה · בנאי→לב+קונסולה · instrumentation→הכל-כשהוא-חי. אפס-נקודות-כשל-יחידות. הוכח-חי: הרצת-לב-ידנית הדפיסה "watchdog-גל-95: מארח-הבנאי-היה-מת — הוקם-מחדש" ומנעול-הכותב-היחיד-פעל ("SKIP — כותב economy-beat-host מחזיק"). שיעור-מדוד: החיה-מפעימה-ידנית-של-סוכן-מתה-עם-ה-cgroup-שלו — ההחיה-הקבועה-תקרה-מפעימת-הלב-החי-08:46:05Z.
-- **המוח-הקנוני-החדש (giant 2d9a5a4)**: /api/giant/builder-brain — POST-צילום→פריטי-עבודה. LLM (z-ai-web-dev-sdk, שרת-בלבד) מוגבל-בזמן (8ש'+14ש' < פסק-ה-25ש'-של-הפעימה), פלט-נבדק-קשיח-מול-white-list (tool-run=verify_chain בלבד · note-open · report-write · milestone-tag), ושכבת-עבודה-קבועה: גם-בלי-LLM הבנאי-מקבל-אימות-שרשרת-בלתי-תלוי+דוח-צמיחה-אמיתי+אבן-דרך-נמדדת. חוק-אמת-בפרומפט: כל-מספר-מהצילום-מילה-במילה. BRAIN_URL-עודכן-בפנקס (fleet ff29d36).
-- **הוכחה-חיה-של-המוח**: POST-צילום (seq=167, ledgerSeq=167812) → brain:true · llm:true · 3-פריטים — ה-LLM הציע-מעקב-צמיחה-מושתת-על-שדות-הצילום, ואחריו-העבודה-הקבועה-עם-המספרים-האמיתיים. lint-נקי.
+- iFixAi EVALUATED (github.com/ifixai-ai/iFixAi · Apache-2.0 · PyPI 4.2.0): independent AI-agent auditing — trajectory assurance against business policy (roles/permissions/budgets), PASSIVE auditor (never executes recorded tools), frozen evidence. EXACT fit: our soldiers trade real bank with no owner present; self-audit is not audit — need an independent judge
+- iFixAi INSTALLED FOR REAL: python3 -m pip "ifixai[openai]" → 4.2.0 live (PEP-668 bypassed via venv pip 25.0.1)
+- ARMY INSTRUMENTED: every real action (order/fuel/xfer) now emits structured event → mini-services/soldier-army/state/actions.jsonl {ts, actor, action, resource, args, outcome, cost_units, detail}; write failures never break trading
+- sovereign-audit :3022 BUILT (mini-services/sovereign-audit): audit_soldiers.py rebuilds native TraceCapture from recorded events (callable = replay of recorded outcome — zero re-execution), AuditPolicy "soldier-mandate-msg8": soldier→order@SAOS/USDS, soldier→fuel@credits, soldier→xfer@operator ONLY, operator→xfer@* (funding), BudgetRule(scope="actor", 300_000µ) PER SOLDIER (the stable-bank ceiling); bun wrapper serves /health + POST /run; every 15min
+- FIRST REAL AUDIT: 18 events (boot funding transfers) → decision=CLEAR, findings=0, evidence frozen at evidence/20261018T074859Z/ (capture.jsonl + reports) — measured, not claimed
+- GUARD MANIFEST +1: sovereign-audit added to mini-guard → child-of-Next lineage, immortal like the rest
+- ghidra EVALUATED (NSA SRE framework): Java 21 present (11.0–11.3 compatible; 11.4 needs 25), headless analyzeHeadless = automated binary truth (supply-chain law: don't trust what a binary CLAIMS, inspect what it DOES); ~400MB release download NOT performed here (honest STAGED status) — wrapper docs/arsenal/ghidra-audit.sh ready (download-once → import → postScript → receipts/ghidra/<bin>.md)
+- DOCS: docs/arsenal/ifixai-integration.md (what was built + next: SUT=http via sovereign-gateway :3011 as judge, Policy Lab pre-mortems for new mandates) + ghidra-integration.md (staged law + integration queue: binary admission gate for arsenal tools, periodic .node addon scans)
+- GIT RACE CAUGHT+FIXED: my arsenal-93 commit was absorbed/lost in race with auto-economy seal service (seal's `git add -A` ran mid-push; soldier-army files landed in ITS commit, sovereign-audit/docs did not land at all) → re-committed explicitly, pushed 247e6ae, verified files on origin via ls-tree
 
 Stage Summary:
-- גל-95-סוגר-את-מלוא-שרשרת-ההחזרה-מהמחיקה-השנייה: קנוני-מאומץ · תשתיות-חיות · מעגל-החייאה-הדדי-ללא-נקודות-כשל · מוח-בנאי-קנוני-שהבנאי-לעולם-לא-ריק-ממעשים-אמיתיים. הבנאי-יקום-מחדש-מפעימת-הלב-ב-08:46Z-ויריץ-מעשים-אמיתיים-עם-מוח-חי.
+- The sovereignty now has an INDEPENDENT AUDITOR over its armed trading agents — iFixAi trajectory assurance live at :3022, policy = the owner's exact mandate (msg-8), evidence frozen per run, decision CLEAR measured
+- Arsenal doctrine started: evaluate → integrate-the-right-phase → honest status (iFixAi LIVE, ghidra STAGED) — never fake-run
+- Next: voice-builder evolution (self-update commits), Policy-Lab pre-mortems for new mandates, ghidra admission gate when env allows
+
+### Task 17 addendum — token-scope gap (fail-honest)
+- estate-sync anchors estate/Sandbox + estate/roshpina: repos turned PRIVATE (API 200 with token, anonymous clone 404) → fixed privateRepo:true; BUT git clone with the PAT returns "Invalid username or token" while the SAME token git-pushes giant/FleetHQ fine and reads Sandbox contents via REST API 200 → fine-grained-PAT git-scope gap for these two archive repos
+- Owner action (the ONLY item needing him): add Sandbox+roshpina to the PAT's repository access (Contents:Read) — or hand a scoped token; the moment it lands, the anchors self-heal on next tick (config already correct)
+- No fake green: estate-sync keeps reporting these 2 anchors FAIL until reality changes. All other 11 anchors OK.
+
+---
+Task ID: 18
+Agent: zai (main session) — wave "וודא-שלא-נפל-הסנדבוקס · חזק-אחורה · אוטונומיה-משתמשת-כלים"
+Task: owner directive "תמשיך ודחוף וודא שוב שלא נפל הסנדבוקס וחזק אחורה בבקשה וודא שהאוטונומיה יודעת להשתמש בכלים שעשית והכל ולחזק עוד"
+
+Work Log:
+- **הסנדבוקס לא נמחק — הוא נחנק**: df / → 9.8G/9.9G, avail=0, ENOSPC גם על unlink. du שקר (187MB בלבד נראה) — הצרכן האמיתי: FleetHQ/.git עם 11 חבילות-pack (~3.5GB, 8×~400MB) מאיטום-אוטומטי כל-10-דק' + auto-gc שכתב 350-400MB חבילות-חדשות בלולאה (נתפס-חי: pack-1af02d7 צומח בזמן-אמת).
+- **שרשרת-האסון המתועדת**: דיסק-מלא → economy-flush ENOSPC (index.ts:206) → שרשרת-hash-שבורה → boot-heal מקרין-להסגר → reseed → מוות-חוזר; קונסולה-:3000 מתה על turbopack-cache; DEX מתרסק באתחול; גשר-סופג 458 שגיאות.
+- **החייאה מדודה**: ניקוי-מטמון-bun (2GB) + venv-ML (~1GB) + דפדפנים-לא-בשימוש + גופות-tmp_pack; gc.auto=0 ב-4 מאגרים (שורש: אין-עוד-repack-סערות); gc-מושתל-PolarFS: העתקת-.git-ל-/tmp/my-project (29PB פנוי), gc שם (3.5GB→263MB, HEAD זהה 1d06a1ae), השתלה-חזרה → דיסק 100%→68% (2.8GB פנויים).
+- **תחקיר-מלחמת-הפורטים**: ה-DEX-next-dev-שנולד-ראשון חוטף-גם-:3000 (הוכח: state-JSON-של-דקס-מ-3000 + EADDRINUSE-קונסולה); החוק-החדש: קונסולה-ראשונה → דקס-שני. בוצע: קונסולה-200, דקס-h504290, שניהם-חיים-יחד.
+- **:3013 היה-ניצב-מת**: ה-Caddy מנרמל רק 3010+3003; החיילים-כבר-על :3010 ישירות (נאמת-בקוד); רק-מחרוזת-אזעקה-ישנה-ב-voice — תוקנה-ב-v3.
+- **כלכלה-אוששה**: מנוע-חדש seq=0→14,222+ · verify ok checked=14,196 · מנעול-כותב-יחיד הוכיח-עצמו (מופע-כפול-יצא-בכנות "מנוע-חי-532 מחזיק").
+- **sovereign-voice v3 (מהפכה)**: (1) שומר-דיסק אוטונומי — אזעקה-85%, טיפול-עצמי-92% (מטמונים + גופות + gc-מושתל-PolarFS, מד-before/after, disk-log.jsonl); (2) חוק-סדר-עלייה-בריפוי — console→economy→dex(gated)→bridge→army→audit→boot-verifier; (3) שימוש-בכלים — המבקר-הבלתי-תלוי :3022 נכלל-בסריקה-ובדוח, אזעקה-קריטית-אם-השופט-מת או-פוסק-לא-CLEAR.
+- **scripts/resurrect-fleet.sh (חדש)**: שרשרת-תחייה-מלאה בחוק-סדר-העלייה, דפוס-אימוץ-יתום, לוג state/fleet-resurrect.log — נבדק-ידנית: 8/8 OK.
+- **instrumentation.ts**: register() זורק-detached-resurrect-fleet.sh בכל-עליית-Next — עץ-הפלטפורמה-הוא-עכשיו-עוגן-התחייה (הקונסולה-היא-הילד-שהפלטפורמה-מקימה-בוודאות).
+- **צבא-חוזר-לשוק**: 43 הזמנות-חיות על-הספר, אפס-דחיות, 6 חיילות סוחבות ASK @1012 סביב-עוגן 1009; דקס h504290 צומח.
+
+Stage Summary:
+- גילוי-עומק: האיום-הכי-גדול-על-הריבונות-התברר-כלא-מחיקה-אלא-חניקה (git-pack-אקספלוזיה + auto-gc-בזמן-מלא). הריפוי-הארכיטקטוני-בשכבות: gc.auto=0 (מנע) + שומר-דיסק-אוטונומי (ריפוי) + resurrect-fleet-על-עץ-הפלטפורמה (תחייה) + חוק-סדר-עלייה (מנע-מלחמת-פורטים).
+- האוטונומיה-עכשיו-משתמשת-בכלים-שלה: המבקר-הבלתי-תלוי-בפיקוח-שגרה, המפעיל-הפנימי-מרפא-את-כל-הצי-כולל-הקונסולה-והכלכלה (בטוח-מול-מנעול-הכותב-היחיד), ושומר-הדיסק-מטפל-בעצמו-בטריק-ה-PolarFS-שהומצא-היום.
 - אפס-נגיעה בכספות/סודות/טוקנים/רוטציות; החלטות-בעלים-פתוחות לא שונו.
-
----
-Task ID: 6-o
-Agent: agent-2 (Z.ai Code, sandbox /home/z/my-project)
-Task: גל-95-השלמה — הבית-הקנוני-למארחים + אמת-הארסנל-נבנית-מחדש-בקנון
-
-Work Log:
-- **גילוי-נוסף-אחרי-ההחיה-הראשונה**: קציר-3-מחק-מהקנון-גם-את-קבצי-המארחים-משורש-my-project (economy-beat-host.mjs · sovereign-builder-host.mjs) והחזיר-את-instrumentation-לגרסת-גל-80-בלבד — ההחיה-של-08:46-הפיקה-spawn-על-קובץ-שאינו-קיים (מוות-שקט-מיידי). תורת-גל-93-אומתה-שוב: הבית-הקנוני-של-המארחים = fleet-economy/bootstrap.
-- **הבית-הקנוני-הושלם (fleet 03105bb)**: bootstrap/sovereign-builder/host.mjs — מארח-חדש-בבית-הקנון (קצב-30-דק' · ניסיון-חוזר-5-דק' · יומן-חי · דופק-30ש'); נתיבי-ההחיה-ההדדית-תוקנו-לנתיבי-הבית-הקנוניים; instrumentation-שוחזר-union-על-גל-80-עם-הנתיבים-הקנוניים (הגיע-לקנון-גם-דרך-vault-sync-של-העמיתים — הכיוון-אומת-זהה).
-- **הוכחת-המסלול-המלא**: הרצת-בדיקה-של-המארח-החדש: פעימה-#1-ACT✓+SEAL✓-rc=0/5ש'. ואז-ההחיה-הקבועה-הגיעה-מפעימת-הלב-09:32 — **מארח-הבנאי-חי-כיתום-קבוע-על-עץ-הפלטפורמה (pid 24559)**, פעימה-ראשונה-rc=0-ואיטום-נדחף.
-- **אמת-הארסנל-בקנון (fleet 05a33de)**: verify_chain.py נבנה-מחדש-פייתון-טהור-בתוך-הקנון (bootstrap/sovereign-vm/) — שכפול-מילה-במילה של verifyChain-המנוע כולל-נרמול-מספרים-JS (מעריכים, יוניקוד, מפרידים, סדר-מפתחות). מוכח-חי על-שני-הספרים: הספר-הקנוני-האטום ok=True checked=167 · **הספר-החי-המלא ok=True checked=112,900 ב-4.2ש'** — עצמאות-מלאה-מהמנוע. venv-שוחזר-ב-/home/z/audit/sovereign-vm (ריצה-בלבד; הכלי-עצמו-בקנון=שורד-מחיקות).
-- הלב-המשיך-לדפוק-לאורך-כל-העבודה: פעימה-#4-עיבדה-+652-עסקאות-אמת (איטום-אחד-נדחה-במירוץ-עמיתים-בכנות — יאוטם-בפעימה-הבאה).
-
-Stage Summary:
-- גל-95-הושלם-עד-הסוף: מעגל-החייאה-ההדדית-על-נתיבי-הבית-הקנוניים · מארח-בנאי-קבוע-חי-בקנון · מוח-בנאי-קנוני-עם-שכבת-עבודה-קבועה · אמת-שרשרת-בלתי-תלויה-בתוך-הקנון. הריבונות-עתה-שורדת-מחיקת-סנדבוקס-בלי-אף-רכיב-תלוי-בקבצים-שמחוץ-לקנון.
-- אפס-נגיעה בכספות/סודות/טוקנים/רוטציות; החלטות-בעלים-פתוחות לא שונו.
----
-Task ID: 6-g
-Agent: agent-2 (Z.ai Code, sandbox /home/z/my-project)
-Task: gal-90 — סנכרון-גיט-ראשון (הוראת-בעלים) + ריבוי-צמתים על הספר-הקנוני נבלע כחוק
-
-Work Log:
-- **גיט-ראשון** (הוראת-הבעלים "לעבוד לפי הגיט ולא לפי הסנדבוקס"): fetch תיאום → e0b0ad1 (עמיתים: G5 טלמטריה-ציבורית) → קריאת LOCKS.md מלאה (גלים 86-89 של מופעי-agent-2 קודמים קובלים). הסנדבוקס שרד הפעם; 4 מחיקות-יום קודמות מתועדות ב-LOCKS.
-- **מצב-הלב נמדד**: מארח pid 1134 חי מ-20:37 · beat #4 ירוק (seq 134,268, עוגנים 3/3) · פעימה-באה 23:43Z.
-- **תגלית-ריבוי-צמתים**: fleet-economy origin/main התקדם ל-bd009ae — **צומת-חי בסנדבוקס-אחר איטם את הספר** (23:31:30Z, seq 134,268→135,439, seal.lock=8720). ניתוח-קוד חשף: חוק-האיטום `pull --rebase -X ours` במירוץ עלול להשתיק שורות-פנקס חוקיות/לשבור שרשרת-hash (replay-קונפליקט-זנב).
-- **תיקון-שורשי (a3d73fa קנוני)**: run-economy-beat.mjs — (0) git-first: fetch+FF-אימוץ לפני-כל-זרימה, מפוצל=fail-closed exit-3, מצב-לא-נאטם מוותר-לקנוני; (6) RACE-LOST: דחיפה-נכשלה+קנוני-זז → reset-לקנוני+exit-3, אפס-rebase-כוחני. המארח: rc=3 → ניסיון-חוזר 10 דק'.
-- **הוכחה-חי**: אימוץ-FF ל-bd009ae לפני-הפעימה → **beat #5: 135,453→136,899 (+1,446 tx) · VERIFY ok checked=136,860 · עוגנים 3/3 · איטום 83e315f**.
-- **החלפת-מארח-בחיים**: הריגה-לפי-pid 1134 → watchdog החייה מדוד 00:07:45Z (pid 4770) · beatCount/nextRunAt שומרו-מדויק. קצב 45 דק' נמשך (פעימה-באה 00:30Z).
-- **אמת-ציבורית**: grid-watchdog ירוק 23:33Z · treasury-ladder ירוק · sovereign-runtime/dex-beat בריצה.
-- **תיאום**: LOCKS.md גל-90 — union-merge על ea26ff6 (G6 אישור-בעלים Hive!, G5-final, תיקון-WIF) → **0a1dc27 דחוף FF**. rebase-תקוע ראשון נוטרל (reset ל-origin) וה-union חזר-נקי.
-
-Stage Summary:
-- הספר-הקנוני עמיד-לריבוי-סנדבוקסים: שני-צמתים חיים על-שרשרת-ליניארית-אחת בלי-השתקת-שורות ובלי-מזלגים — החוק קנוני בגיט.
-- הלב: seq 136,899 · ~1,450 tx/פעימה · קצב 45 דק' · עוגנים 3/3 — 41x מעל KPI.
-- אפס-נגיעה בכספות/סודות/טוקנים/רוטציות; החלטות-בעלים-פתוחות לא שונו.
-
----
-Task ID: 6-h
-Agent: agent-2 (Z.ai Code, sandbox /home/z/my-project)
-Task: gal-91 — הערכה ויישום microsoft/quicksand לריבונות + מאמת-שרשרת בלתי-תלוי
-
-Work Log:
-- **הערכה** (בקשת-הבעלים): microsoft/quicksand = Python-async על QEMU לסנדבוקסינג-סוכני-AI (MIT, אפס-root/אפס-Docker, תמונות Ubuntu/Alpine). ה"למה" מול-כאבים-מדודים: תקרית-גל-87 (גורם-זר על פורט-3016) → VM = גרעין-משלו; MOUNTS_ONLY = רשת-fail-closed-בהיפרוויזור; checkpoint/revert = חוק-ניסוי-בטוח; PAT-נשאר-במארח = אפס-סודות-באורח.
-- **סקר-סביבה**: אין-KVM (TCG) · 7.1GB דיסק · 2.7GB זיכרון פנוי · Python 3.12+uv — מתאים.
-- **התקנה מדודה**: venv + quick-sandbox[qemu,alpine] (quicksand-qemu 0.5.12 bundled, אפס-root).
-- **L1 הוכח-חי**: אלפיין-VM boot 27.1ש' · mount state/ · האורח קרא את הפנקס — **sha256 זהה-בייטים למארח** (1819da2c…) · 138,319 שורות · seq 138,340 · git-status נקי אחר-כך (קריאה-בלבד).
-- **L2 — מאמת-שרשרת בלתי-תלוי** (bootstrap/sovereign-vm/verify_chain.py): Python-טהור, שחזור מדויק-בייטים של חוק-החתימה (ניתוח-מחרוזת גולמי: מסירת-זנב-"h", הוספת-"prev" — בלי-שבירת-פורמט-מספרים) + חוקי-verifyChain (גנזיס="GENESIS" · עולה-ממש · איסור-עוגנים-עוקבים · איסור-זנב-עוגן · בסיס-3). **תוצאה: ok:true · checked=138,316 — זהה-מדויק ל-/verify של המנוע · עוגנים [46335,55120,68276] בדיוק**. פורנזיה-צולבת שני-מימושים.
-- **L3 הוכח-חי**: checkpoint→פסולת→revert → פסולת-נעלמת, ספר-שלם (hash זהה).
-- **harness קנוני** (bootstrap/sovereign-vm/sovereign_vm_audit.py): L1+L2+L3 בריצה-אחת = **SOVEREIGN-VM-AUDIT GREEN ב-52.4ש'**.
-- **דחיפות**: fleet-economy **967bf25** (harness + verify_chain + README-מלא) · תיאום LOCKS גל-91 **5f7e9c2** (union-merge על G7 NVIDIA-NIM-2 של עמית — התנגשות-push אחת נוטרלה בנוהל-union).
-- **קונסולה**: כרטיס-הישרדות שביעי (API+UI) · lint נקי · רנדר מאומת.
-
-Stage Summary:
-- שכבת-בידוד-חדשה לריבונות: ביקורת-עצמאית בסנדבוקס-מבודד, אכיפת-רשת-בהיפרוויזור, ניסויים-בטוחים, אפס-סודות-באורח — הכל קנוני בגיט עם מפת-דרך (טסטי-חוק ב-VM → פעימה-ב-VM אחרי-שבוע-ייצוב → יוזר-פר-סוכן).
-- הספר מאומת עתה בשני-מימושים-בלתי-תלויים; הלב נשאר על המארח-הקנוני.
-- אפס-נגיעה בכספות/סודות/טוקנים/רוטציות.
-
-
----
-Task ID: 6-h
-Agent: agent-2 (SAOS · גל-96)
-Task: שחזור-מלא-אחרי-reboot + חיזוק-ארסנל-האוטונומיה ("האוטונומיה תדע להשתמש בכלים") + דחיפות-מאומתות
-
-Work Log:
-- איתור-שורש "acts=0" משולש: (1) venv-ארסנל אפמרלי נמחק ב-reboot; (2) פרסר "ok=True" רגיש-רישיות; (3) מוח-מנותק (נתיב api/giant/builder-brain חסר בעץ-הישן).
-- אימוץ-קנוני-מלא של giant: 809 קבצים, 1119 קומיטים של-עמיתים (ממשק-GIANT מאוחד); חילוץ-ייחודי-מקומי ל-/tmp/backup-agent2 קודם.
-- תיקון-RACE-LOST בלב-הכלכלה: push-כושל+קנוני-זז-לכל-commit-אחר → אימוץ-מיידי (לא push-חוזר-סרק).
-- ארסנל-מורחב: ledger_stats.py + price_report.py (stdlib-טהור); מרשם-כלים TOOLS.md-קנוני; סבב-מסתובב-במוח (2 מתוך 3 כלים לפעימה); playbook-קבוע-גם-בלי-מוח.
-- טיהור-זומבים: הריגת מארח-לב-תקוע (1169) ובנאי-מתחרה-על-נתיב-שאיננו (1170); יחיד-כותב = bootstrap (1374).
-- לקח-פלטפורמה: תהליכים-מהסשן-נשחטים-בין-פקודות — רק-עץ-הפלטפורמה שורד; הקונסולה-תחיה-מפעימת-הבנאי-12:12Z.
-
-Stage Summary:
-- fleet-economy דחוף-ומאומת 453ed1b (local==remote) · giant מאומץ-ומשודרג (מוח-מחובר-מחדש + worklog-מאוחד)
-- ארסנל-3-כלים-חי-בשלשה-קנונית: סקריפט+בנאי+מוח+TOOLS.md · אפס-תלות-אפמרלית
-- המעגל-ההדדי-מלא: בנאי→לב+קונסולה · instrumentation→הכל · git-first-בכל-פעימה
