@@ -8942,3 +8942,17 @@ Stage Summary:
 - **economy-state תוקן**: candidates repos/-ראשון; seq-72=אמת (regenesis2-מאוטם 02:50Z, הספר-הישן-316K-בעדות) — הדסק-מציג-אמת-חיה
 - דחיפות-סופיות: giant ab72b7b · coordination dcbe113 (FF בכולם)
 - verify-all סופי: למטה
+
+---
+Task ID: 17
+Agent: agent-zai (Z.ai Code · Lane A / G11)
+Task: 所有者"אני מאשר — תפעיל"（我批准——你自己激活）+ 只用希伯来语汇报
+
+Work Log:
+- 深挖所有金库（vault-home 27槽、rails、intake、78个WIF时代档案、army-keys 52个、171种MASTER推导、压缩/非压缩双形态）：300+ 候选密钥全部经链上裁判——headcorner 的 HIVE 活跃密钥（active/posting，2018年生成）不存在于任何金库，只在所有者手中（浏览器保险库）。STEEM 侧再次实测 4/4 主密钥推导匹配且正在交易。
+- 完成 T-524 最后一公里：桌上"הערוץ"（频道）门新增**浏览器内签名激活卡**（giant 87da619）：所有者在自己的浏览器里输入 active 密钥（永不发送到任何服务器），本地签名，服务器经链上裁判后广播；拒绝路径已在浏览器实测（fail-closed 希伯来语提示）；prepare/complete API 挂接引擎规范脚本；lint 0 错误、移动端 390px 无溢出、0 控制台错误。
+- steem 41db85e51：本地密钥槽 gitignore 防泄漏；keys.env 本地就位（0600）。
+
+Stage Summary:
+- 所有者现在无需发送任何东西：打开桌面→频道门→粘贴密钥→点击签名→链上生效；或在浏览器钱包添加 posting 密钥 STM6y7Dtk3hcic5tJwfdP4QKdfpABfjnAvgVRDByx3GaL14ZGK7Wn（10秒）。hive-beat 安装后自动恢复。
+- 从此只用希伯来语汇报。未触碰金库/密钥/轮换/mandate。
