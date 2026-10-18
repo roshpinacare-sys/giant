@@ -153,12 +153,60 @@ async function gridCycle(): Promise<void> {
   lastFair = fair; cycles++;
 }
 
+/* ═══ גל-16 · מנגנון-הדופק (MARKET-PULSE) ═══════════════════════════════════
+ * נמדד-חי (2026-10-18): feeMeter נוגע ברצפה LADDER_FUEL_FLOOR=8000 → המזרקה
+ * (mint_fuel) מתה (meterAvail=0) → כל-סולם-המממנים יבש → הבוטים מתים → אפס-חציות
+ * → אפס-עמלות → אפס-גז. טרמינציה-מלאה של השוק.
+ * השבירה החוקית: סוואפ-אמת דרך הבריכה מזרים עמלת-אוצר ישר ל-meter (amm.ts:120,
+ * נמדד: 20,000µ → +30µ) → כשה-meter חוצה 9,000 המזרקה מדליקה mint_fuel →
+ * סולם-הסטיפנד מחייה את-הגריד כולו. הדופק = חשמל-שוק אמיתי: מלאי-אמת, עמלה אמיתית,
+ * מגובה-בנק-החיילים (מעל רצפת-הקנייה). כיוון-מתחלף = נטרול-הטייה-כיוונית. */
+const PULSE_SIZE_MU = 100_000;      // סוואפ-דופק: 100 יח' — עמלת-אוצר ≈150µ פר-פעימה
+const PULSE_FROZEN_CYCLES = 3;      // כמה-מחזורים בלי-מילוי → דופק
+const PULSE_METER_IGNITE = 9_000;   // סף-הדלקת-המזרקה (feeMeter≥9,000 → mint_fuel)
+let lastFillsSeen = -1, frozenCycles = 0, pulseDir: "USDS" | "SAOS" = "USDS";
+let pulses = 0, pulseFeeMu = 0, lastPulseAt = 0, pulseErr = "";
+
+async function marketPulse(fillsNow: number, feeMeter: number): Promise<void> {
+  if (fillsNow === lastFillsSeen) frozenCycles++; else { frozenCycles = 0; lastFillsSeen = fillsNow; }
+  if (frozenCycles < PULSE_FROZEN_CYCLES) return;      // השוק נושם — אין-צורך-בדופק
+  if (feeMeter >= PULSE_METER_IGNITE) return;          // המזרקה חיה — הדופק מיותר
+  // החייל-המדופם: העשיר-ביותר-מעל-רצפת-הקנייה (סבבי)
+  const bals = await balances();
+  const rich = SOLDIERS
+    .map((s) => ({ s, usds: Number(bals[s]?.bal?.USDS ?? 0), saos: Number(bals[s]?.bal?.SAOS ?? 0) }))
+    .filter((x) => (pulseDir === "USDS" ? x.usds - BUY_FLOOR_MU >= PULSE_SIZE_MU : x.saos >= PULSE_SIZE_MU * 2))
+    .sort((a, b) => (pulseDir === "USDS" ? b.usds - a.usds : b.saos - a.saos))[0];
+  if (!rich) { pulseErr = "אין-חייל-מתאים-לדופק"; return; }
+  try {
+    const assetIn = pulseDir, amount = PULSE_SIZE_MU;
+    const q = await jget(`${DEX}/swap?pair=SAOS/USDS&assetIn=${assetIn}&amount=${amount}`);
+    const out = Number(q?.out ?? 0);
+    if (!(out > 0)) { pulseErr = `quote:${q?.error ?? "אפס"}`; return; }
+    const minOut = Math.floor(out * 0.98);            // מגן-החלקה 2%
+    const r = await jpost(`${DEX}/swap`, { pair: "SAOS/USDS", assetIn, amount, minOut, issuer: rich.s });
+    if (r?.ok) {
+      pulses++; lastPulseAt = Date.now(); pulseFeeMu += Math.floor(amount * 0.0015);
+      pulseErr = ""; frozenCycles = 0;
+      pulseDir = pulseDir === "USDS" ? "SAOS" : "USDS";  // מתחלף-כיוון
+      console.log(`[army] דופק ${rich.s}: ${amount}µ ${assetIn}→SAOS/USDS (out≈${out}) — עמלה→meter (feeMeter ${feeMeter})`);
+      act(rich.s, "pulse-swap", "SAOS/USDS", { assetIn, amount, minOut }, "ok", 0, `feeMeter=${feeMeter} frozen=${frozenCycles}`);
+    } else { pulseErr = `swap:${r?.error ?? "?"}`; act(rich.s, "pulse-swap", "SAOS/USDS", { assetIn, amount }, "denied", 0, pulseErr); }
+  } catch (e) { pulseErr = String(e).slice(0, 110); }
+}
+
 let cycles = 0, lastFair = 0, lastErr = "", bootedAt = Date.now();
 async function tick(): Promise<void> {
   try {
     const bals = await balances();
     await fundCycle(bals);
     await gridCycle();
+    // גל-16: מדידה-אחרי-מחזור — דופק-רק-כשהשוק קפוא-והמזרקה יבשה
+    try {
+      const st2 = await jget(`${DEX}/state`);
+      const stt2 = st2?.state ?? st2;
+      await marketPulse(Number(stt2?.fills ?? -1), Number(stt2?.feeMeter ?? 0));
+    } catch { /* מדידת-דופק לעולם-לא-מפילה-מסחר */ }
     lastErr = "";
   } catch (e) { lastErr = String(e).slice(0, 140); console.log(`[army] tick-error: ${lastErr}`); }
 }
@@ -170,10 +218,11 @@ Bun.serve({
     mandate: "בנק-יציב 300µ·יח' פר-חייל · מילוי-מתמשך · ניתוב-רווחים (msg-8 + פקודת-בעלים 2026-10-17)",
     soldiers: SOLDIERS.map((s) => ({ id: s, ...S[s] })),
     cycles, lastFair, bankUsdsMu: BANK_USDS_MU, gridBps: GRID_BPS,
+    pulse: { pulses, pulseFeeMu, frozenCycles, dir: pulseDir, lastPulseAgoSec: lastPulseAt ? Math.round((Date.now() - lastPulseAt) / 1000) : null, err: pulseErr || null },
     lastErr: lastErr || null, upSec: Math.round((Date.now() - bootedAt) / 1000),
   }),
 });
 
-console.log(`[army] חי על :${PORT} · ${SOLDIERS.length} חיילים · בנק ${BANK_USDS_MU}µ USDS פר-חייל`);
+console.log(`[army] חי על :${PORT} · ${SOLDIERS.length} חיילים · בנק ${BANK_USDS_MU}µ USDS פר-חייל · דופק-שוק gal-16 חי`);
 void tick();
 setInterval(() => void tick(), 90_000);
