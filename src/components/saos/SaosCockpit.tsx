@@ -671,7 +671,7 @@ export default function SaosCockpit() {
               ))}
               {!toolsData && <div className="text-xs text-stone-500 p-3 md:col-span-2">טלמטריית-שימושיות בטעינה…</div>}
             </div>
-            <div className="max-h-32 overflow-y-auto rounded-lg border border-stone-800 bg-stone-950/60 p-2 saos-scroll">
+            <div className="max-h-32 overflow-y-auto rounded-lg border border-stone-800 bg-stone-950/60 p-2">
               {(toolsData?.usage ?? []).slice(0, 8).map((u, i) => (
                 <div key={i} className="flex items-center gap-2 text-[11px] py-0.5 border-b border-stone-900 last:border-0">
                   <span className={u.ok ? "text-emerald-400" : "text-rose-400"}>{u.ok ? "✓" : "✗"}</span>
