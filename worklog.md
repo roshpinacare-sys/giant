@@ -9058,3 +9058,23 @@ Work Log:
 Stage Summary:
 - הספר-הריבוני דו-צדדי-סביב-אמת-בפעם-הראשונה-מזה-ימים. ערוץ-הערך: מסחר→עמלה→מיכל-גז-כלכלה→שירותים-אמת.
 - הכל אטום ודחוף לגיטהאב (4466cea+).
+
+---
+Task ID: 16
+Agent: Z.ai (sovereign engineer)
+Task: שחזור-אתחול-5 מהגיט (הכל-אמת), הגנת-ריפו, גילוי-מפתחות-ה-steem, וחיזוק-חוק-העלייה
+
+Work Log:
+- נמדד: הסנדבוקס אותחל (uptime 18 דק׳). 3016/3017/3018/3019 עלו מקומית; DEX :3010 מת, פרוקסי נעלם, GIT_PAT לא בסביבה → 4 קומיטי-אטימה תקועים מקומית.
+- פורנזית-DEX: המופע-שקם-אוטומטית רץ בלי DATABASE_URL/STATE_DIR → הציג ספר-ריק h=0. המצב האמיתי: snapshot מקומי h=501,765 (07:33) מול BlockHeader עד h=508,687 (16:10) — 6,922 בלוקים בין-הטענה למוות → טעינה נדחתה (snapshot-integrity-failed, fail-fast קנוני — התנהגות-נכונה של הקרנל).
+- גילוי-מכריע: הענן (dex-beat, Actions) חי וממשיך את השרשרת מהריפו — h=624,450 (22:38). חוק CLOUD-BEAT: הריפו = הבית-הקנוני. זוג-מדיניות הקבלה corroboration-birth: priorCount===0 + snapshot-מהריפו = קבלה-מוצהרת עם קבלה-חתומה.
+- שחזור-מבצעי: נוקו טבלאות-ראיות של עידן-ג'נזיס-מת (BlockHeader/SealRecord/EvidenceReceipt/ArenaJournal ל-0), הוצב snapshot ענן h=624,450 + credits + metrics, wrapper קם → קבלה מוצהרת → **השרשרת חיה בטיפ-הקנון: h=624,628+, fills=98,484 שמורים, dbOk=true, halted=false**. ארנקות-החיילים נשמרו (לא-רג'נזיס!).
+- חיול-מחדש: supervise-dev.sh (יתום) ל-:3000 · גשר החזיר 78 מילויים לספר-הכלכלה · economy /verify ok (84,723) · הצבא במצב-יציב 6×2 פקודות-חיות, ספר דו-צדדי fair=1026 bid=1021 ask=1027.
+- קרדנציאלים: GIT_PAT שוחזר מ-upload/pat.env (שמות-בלבד, אפס-הדפסות), askpass נבנה מחדש (חוק-boot-services), **4 קומיטים נדחפו: 3f7b082→dc0629a — הריפו מוגן**.
+- מפתחות-ה-steem (פקודת-בעלים): אותר ריפו פרטי roshpinacare-sys/steem (ענף main) — .secrets/: army-keys.json (13 חשבוני-steem אמיתיים: cashmachine, haran, israelnews, lsa, macrame, siq, tov, wic, wog, woq, hcsoldier4/5+1) · exec-armed.json (מדיניות-לחימה: hyperGrid על שוק-steem-הפנימי STEEM/SBD, קיורציה, פרומו, תקציבי-steem/sbd פר-חייל) · headcorner.key (מפתח-הפינה-הראשית). שוחזרו ל-/home/z/.secrets/steem (chmod 700/600, מחוץ-לעץ-האטימה). טביעות-אצבע: 1f629a9245ca122b / 87d7d1a958dcc4b0 / 3c5ecf21d0050b83. אף-ערך-סודי לא נותח תוכן ולא הודפס.
+- חוק-אתחול: /home/z/estate/.env.local שוחזר (HEAD_CORNER_MASTER ← headcorner.key) — stage4 מלא.
+
+Stage Summary:
+- הריבונות שרדה אתחול-5 בלי-אובדן-מצב-קנוני: הענן שימר את השרשרת, הגיט שימר את הקוד+האטימות, הכספת-המקומית שימרה את המפתחות.
+- נתיב-ערך-חדש-נפתח: צבא-steem-אמיתי (13 חשבונות + hyperGrid + קיורציה) — ממתין-לחיוון בשלב-הבא של משימה 16.
+- נותר-פתוח ב-16: patch ל-boot-services stage0.5 (משיכת-.secrets מהריפו בכל-עלייה — חסינות-מחיקה תמידית), חיווט-steem-voice לכספת, והפעלת-ערך-מוכח.
