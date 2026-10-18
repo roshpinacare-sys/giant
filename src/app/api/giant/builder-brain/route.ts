@@ -135,6 +135,23 @@ const SYSTEM = `את מוח-הבנאי של הריבונות (SAOS). מנדט-ה
 עברית, צפוף, ללא-קישוטים. החזר JSON בלבד, ללא-טקסט-אחר:
 {"items":[{"kind":"...","title":"...","why":"..."}]}`;
 
+/* GET — נראות-מלאה: מרשם-הכלים + מצב-הבנאי-החי (גל-96). הבעלים-רואה-ב-UI
+ * אילו-כלים-האוטונומיה-יודעת-להשתמש ומה-ביצעה-בפועל (acts/seals/מקור-ה-backlog). */
+export async function GET() {
+  let state: unknown = null;
+  try {
+    state = JSON.parse(await import("fs").then((f) => f.readFileSync("/home/z/audit/sovereign-builder/state/builder-state.json", "utf8")));
+  } catch { /* fail-honest: state=null כשאין-עדיין */ }
+  return NextResponse.json({
+    brain: true,
+    tools: TOOL_META,
+    playbook: ["verify_chain", "ledger_stats", "price_report"],
+    registry: "bootstrap/sovereign-builder/TOOLS.md",
+    state,
+    at: new Date().toISOString(),
+  });
+}
+
 export async function POST(req: Request) {
   let s: Record<string, unknown> = {};
   try {
