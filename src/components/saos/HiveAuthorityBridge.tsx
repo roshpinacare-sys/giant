@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { sha256 } from "@noble/hashes/sha256";
-import { ripemd160 } from "@noble/hashes/ripemd160";
-import { hmac } from "@noble/hashes/hmac";
+import { sha256 } from "@noble/hashes/sha2.js";
+import { ripemd160 } from "@noble/hashes/legacy.js";
+import { hmac } from "@noble/hashes/hmac.js";
 import * as secp from "@noble/secp256k1";
 import bs58 from "bs58";
 import { KeyRound, ShieldCheck, AlertTriangle, CheckCircle2, Loader2 } from "lucide-react";
@@ -19,9 +19,8 @@ const _concat = (...bs: Uint8Array[]) => {
   }
   return o;
 };
-const _kw = (secp.etc ?? (secp as unknown as { utils: { hmacSha256Sync: unknown } }).utils) as { hmacSha256Sync: (key: Uint8Array, ...msgs: Uint8Array[]) => Uint8Array; hmacSha256Async?: (key: Uint8Array, ...msgs: Uint8Array[]) => Promise<Uint8Array> };
-_kw.hmacSha256Sync = (key, ...msgs) => hmac(sha256, key, _concat(...msgs));
-_kw.hmacSha256Async = async (key, ...msgs) => hmac(sha256, key, _concat(...msgs));
+/* @noble/secp256k1 v3: הנתיב-האסינכרוני (secp.sign await) משתמש-ב-hmacSha256Async-מובנה —
+ * אין-צורך-להזריק-hmacSha256Sync (etc קפוא ב-v3; הזרקה-כזו-הפילה-את-מודול — נמדד 2026-10-18). */
 
 /* ═══ גשר-הרשאת-הפרסום · חתימה-בדפדפן (T-524 השלמת-מסילה) ═══
  * המנוע-מכין (סריאליזציה-בלבד, אפס-סודות) → הדפדפן-שלך-חותם-מקומית
