@@ -55,4 +55,11 @@ for key in bridge:3017 army:3018 voice:3019 audit:3022 boot-verifier:3042; do
   else log "OK $key חי"; fi
 done
 
+# G13 (agent-zai): the posting-stream pacemaker — gates live inside the
+# streamer; this adds only cadence. Idempotent (pgrep-guarded).
+if ! pgrep -f "social-beat" > /dev/null 2>&1; then
+  spawn_dir "/home/z/audit/repos/steem/mini-services/saos-engine" "bun social-beat.mjs >> state/social-beat.log 2>&1" "social-beat"
+  log "SPAWN social-beat (posting stream)"
+else log "OK social-beat חי"; fi
+
 log "═══ resurrect-fleet הסתיים ═══"
