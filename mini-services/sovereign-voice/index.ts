@@ -28,7 +28,7 @@ const CONSECUTIVE_FAILS_TO_HEAL = 2;
 
 const FLEET = {
   economy: "http://127.0.0.1:3016",
-  dex: "http://127.0.0.1:3013/saos-dex/api/dex",
+  dex: "http://127.0.0.1:3010/saos-dex/api/dex",
   bridge: "http://127.0.0.1:3017",
   army: "http://127.0.0.1:3018",
 };

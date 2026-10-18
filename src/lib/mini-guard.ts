@@ -25,8 +25,21 @@ export const MINI_SERVICES: MiniServiceDef[] = [
   { name: "boot-verifier", dir: "mini-services/boot-verifier", port: 3042, he: "מאמת-התחייה — קבלת-בריאות-כל-15דק", probe: "boot-verifier" },
   /* גל-87 · נמדד: כל-צוות-FleetHQ-היה-אנשי-מת-מהלכים (קורפסים-מ-FleetHQ.stale-שנמחק) —
    * הממונה-האמיתי-עתה-בן-עץ-ה-Next (שושלת-השרדות); הוא-בעצמו-מחיה-פורנן/gateway/beats-כל-5ש׳.
-   * single-flight-מובנה (pid-file+pidAlive) מונע-כפילות-אם-המשגיחה-משגיחה-על-המשגיח. */
-  { name: "fleet-supervisor", dir: "/home/z/estate/FleetHQ/mini-services/agent-hq", port: 3010, he: "ממונה-הצי (FleetHQ: פורנן 3010 + גייטוויי + beats)", cmd: "[ -d node_modules ] || bun install --silent; exec bun tools/runtime-supervisor.ts", env: { AGENT_HQ_DATA_DIR: "/home/z/my-project/Domain" } },
+   * single-flight-מובנה (pid-file+pidAlive) מונע-כפילות-אם-המשגיחה-משגיחה-על-המשגיח.
+   * גל-92 · שחזור-קציר-3: הפורנן-גנב-את :3010 מהדקס-האמיתי-אחרי-קציר (נמדד-חי: 07:12
+   * הפורנן-עלה-ראשון-ולקח-את-הפורט-של-הבורסה) → חוק-אח-לא-נלחם-באח: הפורנן עבר ל-:3020,
+   * :3010 שייך-לבורסה-הריבונית-האמיתית (saos-dex). */
+  { name: "fleet-supervisor", dir: "/home/z/estate/FleetHQ/mini-services/agent-hq", port: 3020, he: "ממונה-הצי (FleetHQ: פורנן 3020 + גייטוויי + beats)", cmd: "[ -d node_modules ] || bun install --silent; exec bun tools/runtime-supervisor.ts", env: { AGENT_HQ_DATA_DIR: "/home/z/my-project/Domain", AGENT_HQ_PORT: "3020" } },
+  /* גל-92 · הבורסה-הריבונית-האמיתית (שוחזרה-מקציר-3): ה-wrapper (:3013 היישן — כיום
+   * headless) מקים-את-saos-dex על :3010 עם הספר-המשותף (db/custom.db) + snapshot-המצב.
+   * מטביע-טוקן-מפעיל-עצמית אחרי-קציר — אפס-תלות-אנושית. */
+  { name: "saos-dex-node", dir: "mini-services/saos-dex-node", port: 3010, he: "הבורסה-הריבונית-האמיתית (saos-dex על :3010 · ספר-משותף · snapshot h=501K)", cmd: "[ -d node_modules ] || bun install --silent; exec bun run dev" },
+  /* גל-92 · צבא-החיילים: גריד-מודע-שוק סביב-עוגן-הצדק, בנק-יציב 300µ/חייל, מילוי-מתמשך. */
+  { name: "soldier-army", dir: "mini-services/soldier-army", port: 3018, he: "צבא-החיילים (6 חיילים · גריד-מודע-שוק · בנק-יציב 300µ)", cmd: "[ -d node_modules ] || bun install --silent; exec bun run dev" },
+  /* גל-92 · הגשר dex→economy: מעתיק-מילויים-חיים-אל-הספר-המשותף (dex-fee). */
+  { name: "dex-economy-bridge", dir: "mini-services/dex-economy-bridge", port: 3017, he: "גשר-המילויים dex→economy (dex-fee · שער-אמת)", cmd: "[ -d node_modules ] || bun install --silent; exec bun run dev", env: { BRIDGE_DEX_DB: "/home/z/my-project/db/custom.db", BRIDGE_DEX_API: "http://127.0.0.1:3010/saos-dex/api/dex/trades?pair=SAOS/USDS&limit=500" } },
+  /* גל-92 · קול-הריבונות: סריקת-צי + ריפוי-עצמי + דיווח-חוץ (GitHub-Issues · Posta-seam). */
+  { name: "sovereign-voice", dir: "mini-services/sovereign-voice", port: 3019, he: "קול-הריבונות (סריקה-כל-5דק · ריפוי-עצמי · קול-חוץ)", cmd: "[ -d node_modules ] || bun install --silent; exec bun run dev" },
   /* גל-90 · הכלכלה-הפנימית תחת-המשגיחה: נמדד שמשגיח-ה-shell שלה (supervise-economy.sh)
    * מת-עם-קציר-הסנדבוקס — מעכשיו גם-הוא בן-עץ-ה-Next (שושלת-השרדות) עם בריאות-HTTP כנה (/health). */
   { name: "fleet-economy", dir: "mini-services/fleet-economy", port: 3016, he: "הכלכלה-הפנימית (ספר-hash-chain · AMM · תורת-כותבים-רבים)", probe: "gateway" },
