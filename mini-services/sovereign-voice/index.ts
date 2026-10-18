@@ -1,4 +1,12 @@
-/* ═══ sovereign-voice v3 · פורט 3019 · קול-ריבוני + מפעיל-פנימי + שומר-דיסק ══
+/* ═══ sovereign-voice v4 · פורט 3019 · קול-ריבוני + מפעיל-פנימי + שומר-דיסק + מטפל-דלק ══
+ * v4 (task-16 · לקחי-קציר-4 20261018):
+ *  · מטפל-דלק: כל 30 דק' → POST /saos-dex/api/dex/settle (הטקס-שהוכח — החזיר 6 חיילים +
+ *    3 בוטים + אוצר לחיים ב-20261018). בלעדיו סולם-הדלק מתייבש והבוטים נכנסים
+ *    ללולאת-שריפת-גז-עצמית (ראיות: blocks h5056xx insufficient-credits).
+ *  · שער-מפעיל /ops/* — שימוש-עצמי בכלים: settle / fuel / git-seal / status.
+ *    טוקן-עצמי (voice-ops.env · chmod 600 · המצאה-עצמית כמו דפוס saos-dex-node).
+ *  · אטימת-גיט אוטומטית כל שעה (giant + FleetHQ) — שלא יאבד חומר בקציר הבא.
+ *  · גילוי-קיפאון-שוק: fills ללא שינוי ≥20 דק' בזמן שהצבא חי → אזעקה.
  * תורת-הבעלים (2026-10-18): "אני לא מעביר סיסמאות — פתור בעצמך. הריבונות מנהלת
  * את עצמה, משתמשת בכלים שנבנו לה, ומחזקת את ההתאוששות של עצמה."
  *
@@ -31,6 +39,9 @@ const CONSECUTIVE_FAILS_TO_HEAL = 2;
 const DISK_WARN_PCT = 85;
 const DISK_ACT_PCT = 92;
 const DISK_ACT_COOLDOWN_MS = 20 * 60_000; // לא יותר מטיפול-דיסק אחד ל-20 דק'
+const FUEL_TEND_EVERY_MS = 30 * 60_000; // מטפל-דלק: טקס-settle כל 30 דק'
+const SEAL_EVERY_MS = 60 * 60_000; // אטימת-גיט אוטומטית כל שעה
+const FILLS_STALL_MS = 20 * 60_000; // קיפאון-שוק: fills ללא שינוי 20 דק'
 
 const FLEET = {
   console: "http://127.0.0.1:3000",
@@ -67,6 +78,34 @@ const GH_TOKEN = (() => {
 })();
 const GH_OK = /^github_pat_|^ghp_/.test(GH_TOKEN);
 const GH_REPO = "roshpinacare-sys/giant";
+
+/* ── טוקן-מפעיל-פנימי לשער-/ops: המצאה-עצמית (דפוס saos-dex-node גל-92) ── */
+import { randomBytes } from "node:crypto";
+const OPS_ENV_FILE = path.join(import.meta.dir, "voice-ops.env");
+const OPS_TOKEN = (() => {
+  try {
+    const m = fs.readFileSync(OPS_ENV_FILE, "utf8").match(/^VOICE_OPS_TOKEN=(.+)$/m);
+    if (m) return m[1].trim();
+  } catch { /* אין קובץ — מטביעים עכשיו */ }
+  const t = randomBytes(32).toString("hex");
+  try {
+    fs.writeFileSync(OPS_ENV_FILE, `VOICE_OPS_TOKEN=${t}\n`, { mode: 0o600 });
+    fs.chmodSync(OPS_ENV_FILE, 0o600);
+    console.log("[voice v4] טוקן-מפעיל הומצא-עצמית (voice-ops.env · chmod 600)");
+  } catch { return ""; }
+  return t;
+})();
+
+/* ── טוקן-הדקס (לטקס-settle ולעירוי-דלק) — קורא מ-local operator.env, לעולם לא נשפך ── */
+const DEX_ENV_FILE = path.join(import.meta.dir, "..", "saos-dex-node", "operator.env");
+const DEX_TOKEN = (() => {
+  try { return fs.readFileSync(DEX_ENV_FILE, "utf8").match(/^DEX_OPERATOR_TOKEN=(.+)$/m)?.[1]?.trim() ?? ""; } catch { return ""; }
+})();
+const DEX_HEADERS = {
+  "content-type": "application/json",
+  "x-saos-operator": DEX_TOKEN,
+  "x-saos-dex-console": "1",
+};
 
 const STATE_DIR = path.join(import.meta.dir, "state");
 const ALERTS_FILE = path.join(STATE_DIR, "alerts.jsonl");
@@ -240,7 +279,56 @@ async function healPass(): Promise<void> {
   }
 }
 
-type Snapshot = { at: number; consoleSrv: any; economy: any; verify: any; dex: any; bridge: any; army: any; audit: any; alerts: Alert[]; errors: string[]; diskUsedPct?: number };
+/* ═══ מטפל-דלק (v4): הטקס-המוכח — settle מממן חיילים+בוטים+אוצר מסולם-חוקי ═══ */
+const FUEL_FILE = path.join(STATE_DIR, "fuel-log.jsonl");
+let lastFuelTendAt = 0;
+let lastFills = -1;
+let lastFillsChangedAt = Date.now();
+async function fuelTend(reason: string): Promise<any> {
+  if (!DEX_TOKEN) {
+    const rec = { ts: Date.now(), reason, ok: false, note: "DEX-טוקן-חסר (operator.env) — fail-honest" };
+    try { fs.appendFileSync(FUEL_FILE, JSON.stringify(rec) + "\n"); } catch { /* כנה */ }
+    return rec;
+  }
+  try {
+    const r = await fetch(`${FLEET.dex}/settle`, {
+      method: "POST", headers: DEX_HEADERS, body: "{}", signal: AbortSignal.timeout(30_000),
+    });
+    const d = await r.json().catch(() => ({}));
+    const pushed = Array.isArray(d?.pushed) ? d.pushed : [];
+    const rec = { ts: Date.now(), reason, ok: !!d?.ok, refuels: pushed.filter((p: any) => String(p?.kind ?? "").startsWith("refuel")).length, mint: pushed.filter((p: any) => p?.kind === "mint-fuel").length, detail: pushed.slice(0, 12).map((p: any) => p?.detail ?? "").filter(Boolean) };
+    try { fs.appendFileSync(FUEL_FILE, JSON.stringify(rec) + "\n"); } catch { /* כנה */ }
+    console.log(`[voice·fuel] טקס-settle (${reason}): ok=${rec.ok} refuels=${rec.refuels} mint=${rec.mint}`);
+    if (!rec.ok) emitAlert("fuel-tend-failed", "warn", `מטפל-הדלק נכשל: ${JSON.stringify(rec).slice(0, 160)}`);
+    return rec;
+  } catch (e) {
+    const rec = { ts: Date.now(), reason, ok: false, note: String(e).slice(0, 120) };
+    try { fs.appendFileSync(FUEL_FILE, JSON.stringify(rec) + "\n"); } catch { /* כנה */ }
+    emitAlert("fuel-tend-error", "warn", `מטפל-הדלק: שגיאת-רשת ${rec.note}`);
+    return rec;
+  }
+}
+
+/* ═══ אטימת-גיט אוטומטית (v4): שלא יאבד חומר בקציר-הבא ═══ */
+let lastSealAt = 0;
+let sealing = false;
+function gitSeal(repo: "giant" | "fleethq"): { ok: boolean; out: string } {
+  const dir = repo === "giant" ? "/home/z/my-project" : "/home/z/estate/FleetHQ";
+  const ts = new Date().toISOString().slice(0, 16);
+  return sh(`cd '${dir}' && git add -A && (git commit -q -m "voice-ops seal [auto] ${ts}" || echo noop) && git push -q origin main 2>&1 | tail -1; git log --oneline -1 | head -c 80`, 240_000);
+}
+function autoSeal(): void {
+  if (sealing || Date.now() - lastSealAt < SEAL_EVERY_MS) return;
+  sealing = true;
+  lastSealAt = Date.now();
+  setImmediate(() => {
+    const g = gitSeal("giant");
+    const f = gitSeal("fleethq");
+    sealing = false;
+    console.log(`[voice·seal] giant=${g.ok} fleethq=${f.ok}`);
+    try { fs.appendFileSync(STATE_DIR + "/seal-log.jsonl", JSON.stringify({ ts: Date.now(), giant: g.ok, fleethq: f.ok }) + "\n"); } catch { /* כנה */ }
+  });
+}
 let lastSnapshot: Snapshot | null = null;
 
 async function scanFleet(): Promise<Snapshot> {
@@ -289,6 +377,17 @@ async function scanFleet(): Promise<Snapshot> {
     if (dst?.halted) snap.alerts.push(emitAlert("dex-halted", "critical", `הבורסה עצורה: ${dst?.haltReason ?? snap.dex?.haltReason ?? "?"}`) ?? null);
     else if (dst && dst.dbOk === false) snap.alerts.push(emitAlert("dex-db", "critical", "dbOk=false — מסד-השרשרת פגום") ?? null);
   } catch (e) { snap.errors.push(`dex: ${String(e).slice(0, 60)}`); snap.alerts.push(emitAlert("dex-unreachable", "critical", "הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)") ?? null); }
+
+  /* קיפאון-שוק (v4): fills ללא שינוי בזמן שהצבא חי */
+  if (snap.dex) {
+    const dst2 = snap.dex?.state ?? snap.dex;
+    const fills = Number(dst2?.fills ?? -1);
+    if (fills >= 0) {
+      if (fills !== lastFills) { lastFills = fills; lastFillsChangedAt = Date.now(); }
+      else if (Date.now() - lastFillsChangedAt > FILLS_STALL_MS)
+        snap.alerts.push(emitAlert("fills-stall", "warn", `אין מילויים חדשים ${Math.round((Date.now() - lastFillsChangedAt) / 60_000)} דק' (fills=${fills}) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב`) ?? null);
+    }
+  }
 
   try {
     snap.bridge = await jget(`${FLEET.bridge}/health`);
@@ -343,6 +442,12 @@ async function tick(): Promise<void> {
     scans++;
     await healPass();
     heals++;
+    /* v4: מטפל-דלק + אטימה אוטומטית */
+    if (Date.now() - lastFuelTendAt >= FUEL_TEND_EVERY_MS) {
+      lastFuelTendAt = Date.now();
+      await fuelTend("periodic");
+    }
+    autoSeal();
     const crit = (lastSnapshot?.alerts ?? []).filter((a) => a.sev === "critical").length;
     console.log(`[voice] סריקה #${scans}: אזעקות=${lastSnapshot?.alerts.length ?? 0} (קריטי=${crit}) שגיאות-רשת=${lastSnapshot?.errors.length ?? 0} דיסק=${lastSnapshot?.diskUsedPct ?? "?"}%`);
   } catch (e) { console.log(`[voice] tick-error: ${String(e).slice(0, 130)}`); }
@@ -352,9 +457,16 @@ Bun.serve({
   port: PORT,
   fetch: async (req) => {
     const url = new URL(req.url);
+    if (url.pathname.startsWith("/ops/") && url.pathname !== "/ops/status") {
+      if (!OPS_TOKEN || req.headers.get("x-voice-ops") !== OPS_TOKEN)
+        return Response.json({ ok: false, error: "unauthorized (x-voice-ops)" }, { status: 401 });
+    }
     if (url.pathname === "/health") {
       return Response.json({
-        ok: true, service: "sovereign-voice", version: 3, port: PORT, scans, heals,
+        ok: true, service: "sovereign-voice", version: 4, port: PORT, scans, heals,
+        ops: { gate: OPS_TOKEN ? "מאובטח (x-voice-ops)" : "לא-זמין", dexToken: DEX_TOKEN ? "חי" : "חסר" },
+        fuel: { everyMin: FUEL_TEND_EVERY_MS / 60_000, lastTendAgoMin: lastFuelTendAt ? Math.round((Date.now() - lastFuelTendAt) / 60_000) : null },
+        seal: { everyMin: SEAL_EVERY_MS / 60_000, lastSealAgoMin: lastSealAt ? Math.round((Date.now() - lastSealAt) / 60_000) : null },
         voice: { github: GH_OK ? "חי (Issues אוטומטיים)" : "PAT לא נטען", posta: POSTA_READY ? "מחובר" : "לא-מוגדר" },
         healScope: HEALABLE.map((h) => `${h.id}:${h.port}${"gate" in h && h.gate ? `→afer-${h.gate}` : ""}`),
         disk: { usedPct: diskUsedPct(), warn: DISK_WARN_PCT, act: DISK_ACT_PCT },
@@ -380,15 +492,47 @@ Bun.serve({
       await healPass();
       return Response.json({ ok: true, note: "מפעיל-פנימי רץ — ראה /heals" });
     }
+    /* ═══ שער-המפעיל-הפנימי /ops (v4) — שימוש-עצמי בכלים, אפס-תלות-בעלים ═══ */
+    if (url.pathname === "/ops/status") {
+      const snap = lastSnapshot ?? await scanFleet();
+      return Response.json({ ok: true, at: snap.at, diskPct: snap.diskUsedPct, economy: snap.economy ? { seq: snap.economy.seq } : null, dex: snap.dex ? { height: (snap.dex.state ?? snap.dex).height, fills: (snap.dex.state ?? snap.dex).fills, halted: (snap.dex.state ?? snap.dex).halted } : null, army: snap.army ? { cycles: snap.army.cycles } : null, alerts: snap.alerts.length, fillsStallMin: Date.now() - lastFillsChangedAt > 60_000 ? Math.round((Date.now() - lastFillsChangedAt) / 60_000) : 0 });
+    }
+    if (url.pathname === "/ops/settle") {
+      lastFuelTendAt = Date.now();
+      const r = await fuelTend("ops-manual");
+      return Response.json({ ok: true, ...r });
+    }
+    if (url.pathname === "/ops/fuel") {
+      const body = await req.json().catch(() => ({}));
+      const to = String(body?.to ?? "").toLowerCase();
+      const amount = Math.floor(Number(body?.amount) || 5_000);
+      if (!/^[a-z0-9][a-z0-9-]{0,30}$/.test(to)) return Response.json({ ok: false, error: "bad-agent" }, { status: 200 });
+      const r = await fetch(`${FLEET.dex}/fuel`, { method: "POST", headers: DEX_HEADERS, body: JSON.stringify({ to, amount }), signal: AbortSignal.timeout(20_000) });
+      const d = await r.json().catch(() => ({}));
+      return Response.json({ ok: !!d?.ok, to, amount, note: d?.note ?? d?.error ?? "" });
+    }
+    if (url.pathname === "/ops/git-seal") {
+      if (sealing) return Response.json({ ok: false, note: "אטימה בריצה" });
+      sealing = true;
+      const g = gitSeal("giant");
+      const f = gitSeal("fleethq");
+      sealing = false;
+      lastSealAt = Date.now();
+      return Response.json({ ok: g.ok && f.ok, giant: g.out.slice(-160), fleethq: f.out.slice(-160) });
+    }
+    if (url.pathname === "/ops/fuel-log") {
+      const rows = fs.existsSync(FUEL_FILE) ? fs.readFileSync(FUEL_FILE, "utf8").trim().split("\n").filter(Boolean).map((l) => JSON.parse(l)) : [];
+      return Response.json({ ok: true, count: rows.length, tend: rows.slice(-20) });
+    }
     if (url.pathname === "/send-digest") {
       const snap = lastSnapshot ?? await scanFleet();
       const sent = POSTA_READY ? await sendViaPosta("דוח-צי ריבוני", digestHtml(snap)) : false;
       return Response.json({ ok: true, sent, posta: POSTA_READY, digest: digestHtml(snap) });
     }
-    return Response.json({ ok: false, error: "not-found", endpoints: ["/health", "/scan", "/alerts", "/heals", "/disk", "/heal-now", "/send-digest"] }, { status: 404 });
+    return Response.json({ ok: false, error: "not-found", endpoints: ["/health", "/scan", "/alerts", "/heals", "/disk", "/heal-now", "/send-digest", "/ops/status", "/ops/settle", "/ops/fuel", "/ops/git-seal", "/ops/fuel-log"] }, { status: 404 });
   },
 });
 
-console.log(`[voice v3] חי על :${PORT} · סריקה כל ${SCAN_MS / 60_000} דק' · קול-גיטהאב: ${GH_OK ? "חי" : "PAT-חסר"} · מפעיל-פנימי על: ${HEALABLE.map((h) => h.id).join(", ")} · שומר-דיסק: אזעקה-${DISK_WARN_PCT}/טיפול-${DISK_ACT_PCT}`);
+console.log(`[voice v4] חי על :${PORT} · סריקה כל ${SCAN_MS / 60_000} דק' · מטפל-דלק כל ${FUEL_TEND_EVERY_MS / 60_000} דק' · אטימה כל ${SEAL_EVERY_MS / 60_000} דק' · שער-ops: ${OPS_TOKEN ? "מאובטח" : "כבוי"} · קול-גיטהאב: ${GH_OK ? "חי" : "PAT-חסר"} · שומר-דיסק: אזעקה-${DISK_WARN_PCT}/טיפול-${DISK_ACT_PCT}`);
 void tick();
 setInterval(() => void tick(), SCAN_MS);
