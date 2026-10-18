@@ -21,6 +21,7 @@ import { ApiView } from "@/components/giant/ApiView";
 import { FleetView } from "@/components/giant/FleetView";
 import { GapView } from "@/components/giant/GapView";
 import { BuilderView } from "@/components/giant/BuilderView";
+import { SaosCockpit } from "@/components/saos/SaosCockpit";
 import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
 import { DOORS, measureAllDoors, type DoorStatusMap } from "@/lib/giant/doors";
@@ -52,6 +53,7 @@ type ViewId =
   | "capital"
   | "ledger" | "products" | "pulse" | "office" | "estate" | "empire" | "trust"
   | "builder"
+  | "saos"
   | "marketing";
 
 /* סדר-הפתיחה (T58; גל-9: ההגשה היא דלת-הפתיחה — מנדט-הבעלים "אני עוד לא רואה רבע"). */
@@ -62,6 +64,7 @@ const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = 
   { id: "league", label: "ליגת-הענקים", he: "DefiLlama חי · השורה-שלנו בכנות", icon: Trophy },
   { id: "gap", label: "מפת-הפער", he: "ההשוואה-הכנה מול-מוצרים-אמתיים · טענות-הסוכנים מול-מה-נמדד · מפת-איחוד M1..M6", icon: Scale },
   { id: "builder", label: "הבנאי", he: "הבנאי-הריבוני-החי: לופ-צמיחה observe→think→act→seal · בניה-מתמדכת, לא-רק-בדיקות · תור-בניה ויומן-צמיחה מהגיט", icon: Hammer },
+  { id: "saos", label: "SAOS", he: "קוקפיט-הריבונות של agent-2: כלכלה-חיה · פעימות-עוגנים · צמיחה · ארסנל · ריבוי-צמתים על ספר-אחד (גל-90→93)", icon: Network },
   { id: "channel", label: "הערוץ", he: "הדלת-הראשית: בעלים ↔ ריבונות", icon: Radio },
   { id: "wallet", label: "הארנק", he: "חשבונות-אמת מהמנוע · יחידות-אנוש", icon: Wallet },
   { id: "desk", label: "השולחן", he: "מנדט · equity · אסטרטגיות", icon: ScrollText },
@@ -371,6 +374,7 @@ export default function Home() {
             {view === "league" && <GiantsView />}
             {view === "gap" && <GapView />}
             {view === "builder" && <BuilderView />}
+            {view === "saos" && <SaosCockpit />}
             {view === "channel" && <ChannelView />}
             {view === "wallet" && <WalletView />}
             {view === "desk" && <DeskView />}
