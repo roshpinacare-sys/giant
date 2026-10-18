@@ -378,3 +378,10 @@
 {"ts":1792335573300,"actor":"aluf","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1012,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":10000,"detail":""}
 {"ts":1792335573370,"actor":"erez","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1012,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":10000,"detail":""}
 {"ts":1792335573418,"actor":"gal","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1012,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":10000,"detail":""}
+{"ts":1792335749242,"actor":"operator","action":"xfer","resource":"yarden","args":{"asset":"USDS","amountMu":19990},"outcome":"error","cost_units":0,"detail":"Error: POST http://127.0.0.1:3010/saos-dex/api/dex/transfer → 500 {}"}
+{"ts":1792335749366,"actor":"yarden","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1012,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":10000,"detail":""}
+{"ts":1792335749528,"actor":"tamar","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1012,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":10000,"detail":""}
+{"ts":1792335749608,"actor":"shachar","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1012,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":10000,"detail":""}
+{"ts":1792335749646,"actor":"aluf","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1012,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":10000,"detail":""}
+{"ts":1792335749685,"actor":"erez","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1012,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":10000,"detail":""}
+{"ts":1792335749725,"actor":"gal","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1012,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":10000,"detail":""}
