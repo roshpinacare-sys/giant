@@ -7,6 +7,7 @@
  *    — שער-המפעיל fail-closed נפתח רק מולו.
  * מפקח: אם-הפורט-חי → לא-מקים כפילות; אם-הבן-מת → הקמה-מחדש אחרי 5ש׳. */
 import { spawn } from "child_process";
+import { randomBytes } from "crypto";
 import fs from "fs";
 import path from "path";
 
@@ -29,7 +30,6 @@ function readToken(): string {
     const m = fs.readFileSync(ENV_FILE, "utf8").match(/^DEX_OPERATOR_TOKEN=(.+)$/m);
     if (m) return m[1].trim();
   } catch { /* אין-קובץ — מטביעים-עכשיו */ }
-  const { randomBytes } = require("crypto");
   const token = randomBytes(32).toString("hex");
   try {
     fs.writeFileSync(ENV_FILE, `DEX_OPERATOR_TOKEN=${token}\n`, { mode: 0o600 });
@@ -51,6 +51,38 @@ async function portAlive(): Promise<boolean> {
   }
 }
 
+/* גל-92 · ריפוי-עצמי-מהגיט: אחרי-קציר /home/z/work נמחק-כולו — ה-wrapper היה מת
+ * לנצח (DEX_ROOT חסר). עכשיו: אין-שכפול → משכפל-לבד מ-origin (ריפו-ציבורי),
+ * אין-node_modules → מתקין-לבד, אין-סכימה → prisma-db-push לבד. אפס-אדם. */
+async function ensureDexRoot(): Promise<boolean> {
+  try {
+    if (!fs.existsSync(path.join(DEX_ROOT, ".git"))) {
+      console.info("[saos-dex-node] DEX_ROOT חסר (קציר?) — משכפל-עצמית מהגיט");
+      fs.mkdirSync(path.dirname(DEX_ROOT), { recursive: true });
+      const r = Bun.spawnSync(["git", "clone", "--quiet", "https://github.com/roshpinacare-sys/saos-dex.git", DEX_ROOT], { stdout: "ignore", stderr: "pipe" });
+      if (r.exitCode !== 0) {
+        console.error("[saos-dex-node] שכפול-נכשל — fail-honest");
+        return false;
+      }
+    }
+    if (!fs.existsSync(path.join(DEX_ROOT, "node_modules"))) {
+      console.info("[saos-dex-node] node_modules חסר — מתקין-עצמית");
+      Bun.spawnSync(["bun", "install", "--silent"], { cwd: DEX_ROOT, stdout: "ignore", stderr: "ignore" });
+    }
+    if (!fs.existsSync(DB_FILE.replace(/^file:/, ""))) {
+      console.info("[saos-dex-node] dex.db חסר — מקים-סכימה-עצמית (prisma db push)");
+      Bun.spawnSync(["bunx", "prisma", "db", "push", "--skip-generate"], {
+        cwd: DEX_ROOT, stdout: "ignore", stderr: "ignore",
+        env: { ...process.env, DATABASE_URL: DB_FILE },
+      });
+    }
+    return fs.existsSync(path.join(DEX_ROOT, "package.json"));
+  } catch (e) {
+    console.error(`[saos-dex-node] ריפוי-שורש-נכשל: ${e instanceof Error ? e.message : String(e)}`);
+    return false;
+  }
+}
+
 let child: ReturnType<typeof spawn> | null = null;
 let stopping = false;
 
@@ -64,11 +96,15 @@ async function boot(): Promise<void> {
     console.error("[saos-dex-node] הטבעת-טוקן-נכשלה (fs לא זמין?) — עלייה fail-closed");
     process.exit(1);
   }
+  if (!(await ensureDexRoot())) {
+    console.error("[saos-dex-node] ריפוי-שורש-נכשל — מנסה-שוב-במחזור-הבא (אפס-ירוק-מזויף)");
+    return;
+  }
   child = spawn("bun", ["run", "next", "dev", "-p", "3010", "-H", "127.0.0.1"], {
     cwd: DEX_ROOT,
     env: {
       ...process.env,
-      DATABASE_URL: `file:${DB_FILE}`,
+      DATABASE_URL: DB_FILE, /* כבר-כולל file: */
       SAOS_DEX_STATE_DIR: STATE_DIR,
       DEX_OPERATOR_TOKEN: token,
     },

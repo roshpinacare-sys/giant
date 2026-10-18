@@ -105,7 +105,7 @@ function emitAlert(key: string, sev: Alert["sev"], text: string): Alert | null {
   void (async () => {
     if (sev === "critical") {
       const n = await openIssue(key, text);
-      if (n) a.status = "github-issue", a.issue = n;
+      if (n) { a.status = "github-issue"; a.issue = n; }
     }
     if (POSTA_READY && (sev === "critical" || key.startsWith("economy"))) {
       const ok = await sendViaPosta(`[${sev === "critical" ? "קריטי" : "אזעקה"}] ${key}`, `<p>${text}</p>`);
