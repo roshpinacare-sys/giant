@@ -48,6 +48,8 @@ def build_policy() -> AuditPolicy:
             PermissionRule(role="soldier", action="fuel", resource_scope="credits"),
             # גל-16 · דופק-שוק — סוואפ-אמת מערוץ-החיילים שמזרים עמלה למד-האוצר:
             PermissionRule(role="soldier", action="pulse-swap", resource_scope="SAOS/USDS"),
+            # גל-16 · ציד-זומבים — ביטול-פקודה-עצמית שנטתה >60bps מהשוק-החי (היגיינת-ספר):
+            PermissionRule(role="soldier", action="cancel", resource_scope="SAOS/USDS"),
             # חייל רשאי לנתב עודף-רווחים רק אל-המפעיל (לעולם לא שלישי):
             PermissionRule(role="soldier", action="xfer", resource_scope="operator"),
             # המפעיל מממן את החיילים (העברות-פנימיות):

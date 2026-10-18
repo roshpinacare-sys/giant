@@ -115,11 +115,18 @@ const seenFilled: Record<string, number> = {};
 async function gridCycle(): Promise<void> {
   const st = await jget(`${DEX}/state`);
   const stt = st?.state ?? st;
-  const fair = Number(stt?.ladder?.refPrice ?? stt?.fair ?? 0);
+  /* גל-16 · עוגן-אמת: קודם שוק-האמת (fair = מיזוג ספר+בריכה), נפילות-סודרות:
+   * poolMid → refPrice. נמדד חי: העוגן-הישן (refPrice=1009) נטה 3.1% מהשוק-החי
+   * (fair=1040) → צד-המכירה נשאר ריק והסלוטים נחטפים בבידים-מתים → אפס-חציות. */
+  const mks: any[] = Array.isArray(st?.markets) ? st.markets : [];
+  const mk = mks.find((m) => m?.key === "SAOS/USDS") ?? {};
+  const fairRaw = Number(mk.fair) || Number(mk.poolMid) || Number(stt?.ladder?.refPrice ?? 0);
+  const fair = Math.round(fairRaw);
   if (!(fair > 0)) throw new Error("אין-fair");
   const bid = Math.floor(fair * (1 - GRID_BPS / 10_000));
   const ask = Math.ceil(fair * (1 + GRID_BPS / 10_000));
   const bals = await balances();
+  const STALE_BPS = 60; // פקודה שנטתה מעבר-לזה מהשוק-החי = זומבי — מתבטלת
   for (const s of SOLDIERS) {
     try {
       const mine = await jget(`${DEX}/my-orders?issuer=${s}`);
@@ -134,8 +141,22 @@ async function gridCycle(): Promise<void> {
         }
         seenFilled[String(o.id)] = now;
       }
-      if (orders.length >= MAX_ORDERS) continue;
-      const hasSide = (side: string, price: number) => orders.some((o) => o.side === side && Math.abs(Number(o.price) - price) <= Math.max(2, fair * 0.001));
+      /* גל-16 · ציד-זומבים: פקודה שהתרחקה מעבר ל-STALE_BPS מהשוק-החי לעולם לא תיחתך
+       * במחיר-צדק — היא רק חוטפת סלוט (תקרה 4) ומשאירה את הצד-השני ריק. מתבטלת. */
+      for (const o of orders) {
+        const px = Number(o.price ?? 0);
+        if (!(px > 0)) continue;
+        if (Math.abs(px - fair) * 10_000 > STALE_BPS * fair) {
+          try {
+            const c = await jpost(`${DEX}/cancel`, { orderId: Number(o.id), issuer: s });
+            if (c?.ok) { console.log(`[army] ${s}: זומבי-נטבח order#${o.id} @ ${px} (fair ${fair})`); act(s, "cancel", "SAOS/USDS", { orderId: o.id, price: px, fair }, "ok", 0, "stale>60bps"); }
+            else act(s, "cancel", "SAOS/USDS", { orderId: o.id, price: px, fair }, "denied", 0, c?.error ?? "");
+          } catch (e) { S[s].lastErr = `cancel: ${String(e).slice(0, 90)}`; }
+        }
+      }
+      const live = orders.filter((o) => Math.abs(Number(o.price ?? 0) - fair) * 10_000 <= STALE_BPS * fair);
+      if (live.length >= MAX_ORDERS) continue;
+      const hasSide = (side: string, price: number) => live.some((o) => o.side === side && Math.abs(Number(o.price) - price) <= Math.max(2, fair * 0.001));
       const usds = Number(bals[s]?.bal?.USDS ?? 0), saos = Number(bals[s]?.bal?.SAOS ?? 0);
       if ((bals[s]?.credits ?? 0) < 400) {
         try {
