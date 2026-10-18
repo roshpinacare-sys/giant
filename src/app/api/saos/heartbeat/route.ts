@@ -180,7 +180,7 @@ async function steemVault() {
 /* ארסנל-ההישרדות — לכל כלי: קיום + עדכניות (האוטונומיה רואה את הכלים שלה חיים) */
 async function arsenal() {
   const tools: Array<{ id: string; path: string; note: string }> = [
-    { id: "restore-lane-a", path: `${COORD}/restore-lane-a.sh`, note: "שחזור-אחוזה-בפקודה-אחת" },
+    { id: "restore-lane-a", path: `${COORD}/bootstrap/restore-lane-a.sh`, note: "שחזור-אחוזה-בפקודה-אחת" },
     { id: "run-economy-beat", path: `${BEAT_ROOT}/run-economy-beat.mjs`, note: "הפעימה-הקנונית (חוק-מירוץ a3d73fa)" },
     { id: "economy-beat-host", path: `${BEAT_ROOT}/bootstrap/economy-beat-host.mjs`, note: "מארח-הפעימה (child-of-house)" },
     { id: "sovereign-builder", path: `${BEAT_ROOT}/bootstrap/sovereign-builder/host.mjs`, note: "מארח-הבנאי" },
