@@ -29,8 +29,12 @@ function readEnv() {
 }
 const E = readEnv();
 let client = null;
+/* חוק-החתימה (נמדד-חי 2026-10-18): @hiveio/dhive חותם כבררת-מחדל עם chain-id של
+ * HIVE (beeab0de…) — השידור ל-STEEM (chain-id אפסים) נדחה "Missing Posting Authority"
+ * גם-כשהמפתח-מוכח-נכון. התיקון: chainId אפסים של STEEM. */
+const STEEM_CHAIN_ID = "0000000000000000000000000000000000000000000000000000000000000000";
 function getClient() {
-  if (!client) client = new dhive.Client(RPC, { timeout: 15_000 });
+  if (!client) client = new dhive.Client(RPC, { timeout: 15_000, chainId: STEEM_CHAIN_ID });
   return client;
 }
 const stats = { startedAt: Date.now(), broadcasts: 0, errors: 0, lastErr: "", lastAt: 0, lastPermlink: "" };
