@@ -20,6 +20,7 @@ import { MarketingView } from "@/components/giant/MarketingView";
 import { ApiView } from "@/components/giant/ApiView";
 import { FleetView } from "@/components/giant/FleetView";
 import { GapView } from "@/components/giant/GapView";
+import { HiveAuthorityBridge } from "@/components/saos/HiveAuthorityBridge";
 import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
 import { DOORS, measureAllDoors, type DoorStatusMap } from "@/lib/giant/doors";
@@ -367,7 +368,12 @@ export default function Home() {
             {view === "dex" && <DexView />}
             {view === "league" && <GiantsView />}
             {view === "gap" && <GapView />}
-            {view === "channel" && <ChannelView />}
+            {view === "channel" && (
+              <div className="space-y-6">
+                <HiveAuthorityBridge />
+                <ChannelView />
+              </div>
+            )}
             {view === "wallet" && <WalletView />}
             {view === "desk" && <DeskView />}
             {view === "api" && <ApiView />}
