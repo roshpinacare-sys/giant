@@ -433,6 +433,14 @@ async function scanFleet(): Promise<Snapshot> {
     if (dec && dec !== "CLEAR" && dec !== "clear") snap.alerts.push(emitAlert("audit-not-clear", "critical", `המבקר-הבלתי-תלוי פסק: ${JSON.stringify(dec).slice(0, 120)}`) ?? null);
   } catch (e) { snap.errors.push(`audit: ${String(e).slice(0, 60)}`); snap.alerts.push(emitAlert("audit-unreachable", "critical", "המבקר-הבלתי-תלוי :3022 לא מגיב — צבא-חמוש-בלי-שופט") ?? null); }
 
+  /* מגדל-הנזילות (:3024) — עורק-הערך-מהענקים: ראנר, wash, failover, transfers */
+  try {
+    snap.giant = await jget(`${FLEET["giant-intake"]}/health`);
+    if (snap.giant?.transfersDetected > 0) snap.alerts.push(emitAlert("giant-transfer", "critical", `העברות-אסורות זוהו על הענק: ${snap.giant.transfersDetected}`) ?? null);
+    if (snap.giant?.failoverMode) snap.alerts.push(emitAlert("giant-failover", "warn", "מגדל-הנזילות על משמרת-failover — ראנר-החוץ שקט") ?? null);
+    if (snap.giant?.lastErr) snap.alerts.push(emitAlert("giant-err", "warn", `מגדל-הנזילות: ${String(snap.giant.lastErr).slice(0, 100)}`) ?? null);
+  } catch (e) { snap.errors.push(`giant-intake: ${String(e).slice(0, 60)}`); snap.alerts.push(emitAlert("giant-unreachable", "critical", "מגדל-הנזילות :3024 לא מגיב — עורק-הענקים עיוור") ?? null); }
+
   snap.alerts = snap.alerts.filter(Boolean) as Alert[];
   lastSnapshot = snap;
   return snap;
