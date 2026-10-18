@@ -11,7 +11,7 @@
  *    ניתוב-רווחים: עודף-מעל 450,000µ נסחט חזרה למפעיל (xfer_free, גז-0).
  *  · אפס-סודות כאן: הטוקן נקרא מ-operator.env של saos-dex-node (chmod 600).
  */
-import fs from "node:fs";
+import fs, { appendFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 
 const DEX = "http://127.0.0.1:3010/saos-dex/api/dex";
@@ -43,6 +43,17 @@ type SoldierState = {
 const S: Record<string, SoldierState> = {};
 for (const s of SOLDIERS) S[s] = { fundedUsds: 0, fundedSaos: 0, swept: 0, fuel: 0, placed: 0, rejected: 0, filledMu: 0, lastErr: "" };
 
+/* גל-93 · פליטת-אירועי-פעולה מובנים — החומר-הגלם לביקורת-מסלול בלתי-תלויה (iFixAi).
+ * כל-פעולה-אמיתית (הזמנה/דלק/העברה) נרשמת כאן: מי · מה · על-איזה-משאב · תוצאה · עלות.
+ * הביקורת (sovereign-audit :3022) קוראת את הקובץ-הזה ומקפיאה-הוכחות. כשל-כתיבה לעולם-לא-מפיל-מסחר. */
+const ACTIONS_FILE = path.join(import.meta.dir, "state", "actions.jsonl");
+function act(actor: string, action: string, resource: string, args: Record<string, unknown>, outcome: "ok" | "denied" | "error", costUnits: number, detail = ""): void {
+  try {
+    mkdirSync(path.dirname(ACTIONS_FILE), { recursive: true });
+    appendFileSync(ACTIONS_FILE, JSON.stringify({ ts: Date.now(), actor, action, resource, args, outcome, cost_units: costUnits, detail: String(detail).slice(0, 160) }) + "\n");
+  } catch { /* ביקורת-לעולם-לא-מפילה-מסחר */ }
+}
+
 async function jget(url: string): Promise<any> {
   const r = await fetch(url, { signal: AbortSignal.timeout(8000) });
   if (!r.ok) throw new Error(`GET ${url} → ${r.status}`);
@@ -67,9 +78,10 @@ async function balances(): Promise<Record<string, { bal: Record<string, number>;
 async function xfer(from: string, to: string, asset: string, amountMu: number): Promise<boolean> {
   try {
     const d = await jpost(`${DEX}/transfer`, { from, to, asset, amountMu });
-    if (!d?.ok) { if (S[from]) S[from].lastErr = `xfer: ${d?.error ?? "?"}`; return false; }
+    if (!d?.ok) { if (S[from]) S[from].lastErr = `xfer: ${d?.error ?? "?"}`; act(from, "xfer", to, { asset, amountMu }, "error", 0, d?.error ?? ""); return false; }
+    act(from, "xfer", to, { asset, amountMu }, "ok", 0);
     return true;
-  } catch (e) { if (S[from]) S[from].lastErr = String(e).slice(0, 110); return false; }
+  } catch (e) { if (S[from]) S[from].lastErr = String(e).slice(0, 110); act(from, "xfer", to, { asset, amountMu }, "error", 0, String(e)); return false; }
 }
 
 async function fundCycle(bals: Record<string, { bal: Record<string, number>; credits: number }>): Promise<void> {
@@ -123,15 +135,18 @@ async function gridCycle(): Promise<void> {
           const f = await jpost(`${DEX}/fuel`, { to: s, amount: 600 });
           if (f?.ok) { S[s].fuel++; console.log(`[army] דלק ${s}: ${String(f.note ?? "").slice(0, 90)}`); }
           else { S[s].rejected++; S[s].lastErr = `fuel: ${f?.error}`; }
+          act(s, "fuel", "credits", { amount: 600 }, f?.ok ? "ok" : "denied", 0, f?.error ?? "");
         } catch (e) { S[s].lastErr = `fuel: ${String(e).slice(0, 90)}`; }
       }
       if (!hasSide("buy", bid) && usds - BUY_FLOOR_MU >= bid * ORDER_AMT_MU / 1000) {
         const r = await jpost(`${DEX}/order`, { action: "order", base: "SAOS", quote: "USDS", side: "buy", price: bid, amount: ORDER_AMT_MU, issuer: s, postOnly: true });
         if (r?.ok) { S[s].placed++; console.log(`[army] ${s}: BID ${ORDER_AMT_MU}µ @ ${bid} (fair ${fair})`); } else { S[s].rejected++; S[s].lastErr = `bid: ${r?.error}`; }
+        act(s, "order", "SAOS/USDS", { side: "buy", price: bid, amount: ORDER_AMT_MU, postOnly: true }, r?.ok ? "ok" : "denied", r?.ok ? Math.floor(bid * ORDER_AMT_MU / 1000) : 0, r?.error ?? "");
       }
       if (!hasSide("sell", ask) && saos >= ORDER_AMT_MU * 2) {
         const r = await jpost(`${DEX}/order`, { action: "order", base: "SAOS", quote: "USDS", side: "sell", price: ask, amount: ORDER_AMT_MU, issuer: s, postOnly: true });
         if (r?.ok) { S[s].placed++; console.log(`[army] ${s}: ASK ${ORDER_AMT_MU}µ @ ${ask} (fair ${fair})`); } else { S[s].rejected++; S[s].lastErr = `ask: ${r?.error}`; }
+        act(s, "order", "SAOS/USDS", { side: "sell", price: ask, amount: ORDER_AMT_MU, postOnly: true }, r?.ok ? "ok" : "denied", r?.ok ? ORDER_AMT_MU : 0, r?.error ?? "");
       }
     } catch (e) { S[s].lastErr = String(e).slice(0, 110); }
   }
