@@ -157,12 +157,30 @@ function emitAlert(key: string, sev: Alert["sev"], text: string): Alert | null {
     if (sev === "critical") {
       const n = await openIssue(key, text);
       if (n) { a.status = "github-issue"; a.issue = n; }
+      /* גל-16 · הריבונות משתמשת בכלים שלה עצמה: התראה-קריטית → שידור-אמת על שרשרת-steem
+       * (ערוץ-הקול-החוץ הקבוע · steem-voice :3023 · חשבון-הכתר). מוגבל: לא-יותר
+       * מ-שידור-אחד ל-6 שעות — השרשרת קבועה, אסור-לזהם אותה. כשל-שידור לעולם לא מפיל-סריקה. */
+      if (now - lastSteemAt > STEEM_COOLDOWN_MS) {
+        try {
+          const r = await fetch("http://127.0.0.1:3023/broadcast", {
+            method: "POST", headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              title: `אזעקה-ריבונית · ${key} · ${new Date().toISOString().slice(0, 16)}Z`,
+              body: `<p><b>חומרה:</b> critical</p><p>${String(text).slice(0, 800)}</p><p>— ערוץ-הקול-הריבוני · שידור-אוטומטי · gal-16</p>`,
+              tags: ["saos", "alert"],
+            }),
+            signal: AbortSignal.timeout(20_000),
+          });
+          const d = await r.json().catch(() => ({}));
+          if (d?.ok) { lastSteemAt = now; a.status = `${a.status || "ledger"}+steem`; a.permlink = d.permlink; console.log(`[voice] שידור-שרשרת: ${d.permlink}`); }
+        } catch { /* כנה — הסריקה לא נופלת */ }
+      }
     }
     if (POSTA_READY && (sev === "critical" || key.startsWith("economy"))) {
       const ok = await sendViaPosta(`[${sev === "critical" ? "קריטי" : "אזעקה"}] ${key}`, `<p>${text}</p>`);
       if (ok) a.status = a.issue ? `${a.status}+posta` : "posta";
     }
-    try { fs.appendFileSync(STATE_DIR + "/alert-status.jsonl", JSON.stringify({ ts: Date.now(), key, status: a.status, issue: a.issue ?? null }) + "\n"); } catch { /* כנה */ }
+    try { fs.appendFileSync(STATE_DIR + "/alert-status.jsonl", JSON.stringify({ ts: Date.now(), key, status: a.status, issue: a.issue ?? null, permlink: a.permlink ?? null }) + "\n"); } catch { /* כנה */ }
   })();
   return a;
 }

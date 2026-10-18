@@ -40,36 +40,49 @@ def build_policy() -> AuditPolicy:
         trusted_collectors=("soldier-army",),
         actors=actors,
         permissions=(
-            # חייל רשאי להציב הזמנות postOnly על הזוג-הריבוני בלבד:
+            # חייל רשאי להציב הזמנות postOnly על הזוג-הריבוני בלבד (הצבה=escrow, עלות-0):
             PermissionRule(role="soldier", action="order", resource_scope="SAOS/USDS"),
+            # גל-16 · מילוי-ספר-אמת — העברת-הון-אמת שנמדדה (העלות-האמיתית נרשמת כאן):
+            PermissionRule(role="soldier", action="fill", resource_scope="SAOS/USDS"),
             # חייל רשאי לבקש דלק-קרדיטים (THE-FOUNTAIN):
             PermissionRule(role="soldier", action="fuel", resource_scope="credits"),
+            # גל-16 · דופק-שוק — סוואפ-אמת מערוץ-החיילים שמזרים עמלה למד-האוצר:
+            PermissionRule(role="soldier", action="pulse-swap", resource_scope="SAOS/USDS"),
             # חייל רשאי לנתב עודף-רווחים רק אל-המפעיל (לעולם לא שלישי):
             PermissionRule(role="soldier", action="xfer", resource_scope="operator"),
             # המפעיל מממן את החיילים (העברות-פנימיות):
             PermissionRule(role="operator", action="xfer", resource_scope="*"),
         ),
         budgets=tuple(
+            # תקרת-זרימת-הון-אמת לחלון = תקרת-הבנק (msg-8): מילויים+עמלות-דופק,
+            # לא זרימת-ציטוט (הצבות הן escrow ואינן הוצאה — נמדד 2026-10-18).
             BudgetRule(scope="actor", limit_units=BANK_LIMIT_MU, actor_id=s) for s in SOLDIERS
         ),
         require_citations=False,
     )
 
 
-def load_events(window_s: int) -> list[dict]:
-    """קריאת אירועי-פעולה מהחלון. קובץ-חסר = אין-הוכחות (לא-כשל — הצבא אולי רק-עלה)."""
+def load_events(window_s: int) -> tuple[list[dict], int]:
+    """קריאת אירועי-פעולה מהחלון. קובץ-חסר = אין-הוכחות (לא-כשל — הצבא אולי רק-עלה).
+    גל-16 · חתימת-סמנטיקה: אירועים ללא sem="gal-16" נמדדו בסמנטיקה-ישנה-שגויה
+    (ציטוט-נספר-כהוצאה) — אינם-ראיה על זרימת-הון ולכן אינם נכללים בסיכום-התקציב.
+    מחזיר (אירועים-חתומים, מספר-האירועים-הישנים-שהוצאו-מחוץ-לחלון-לגילוי-נאות)."""
     if not ACTIONS_FILE.exists():
-        return []
+        return [], 0
     cutoff = (time.time() - window_s) * 1000
-    events = []
+    events: list[dict] = []
+    legacy = 0
     for line in ACTIONS_FILE.read_text(encoding="utf-8").splitlines():
         try:
             e = json.loads(line)
             if float(e.get("ts", 0)) >= cutoff:
-                events.append(e)
+                if e.get("sem") == "gal-16":
+                    events.append(e)
+                else:
+                    legacy += 1  # סמנטיקה-ישנה — נמדדה-שגוי, אינה-ראיה על זרימת-הון
         except json.JSONDecodeError:
             continue  # שורה-קרועה = לא-הוכחה
-    return events
+    return events, legacy
 
 
 def rebuild_capture(events: list[dict]):
@@ -97,7 +110,7 @@ def rebuild_capture(events: list[dict]):
 def main() -> int:
     window_s = int(sys.argv[1]) if len(sys.argv) > 1 else 24 * 3600  # ברירת-מחדל: 24 שעות
     policy = build_policy()
-    events = load_events(window_s)
+    events, legacy_excluded = load_events(window_s)
 
     if not events:
         result = {
@@ -137,6 +150,8 @@ def main() -> int:
         "at": time.strftime("%FT%TZ", time.gmtime()),
         "window_s": window_s,
         "events": len(events),
+        "legacy_semantics_excluded": legacy_excluded,  # גל-16 · גילוי-נאות: אירועים-ישנים-שנמדדו-בסמנטיקה-שגויה
+        "cost_semantics": "gal-16 (הצבה=escrow · מילוי=הוצאה · דופק=עמלה)",
         "decision": str(getattr(report, "decision", "?")),
         "findings_count": len(findings),
         "findings": findings[:20],

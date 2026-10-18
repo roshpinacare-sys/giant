@@ -1,0 +1,183 @@
+{
+  "decision": "CLEAR",
+  "violations": [],
+  "coverage_issues": [],
+  "checked_actions": 19,
+  "completed_actions": 19,
+  "failed_actions": 0,
+  "family_counts": {
+    "graph": 21,
+    "permission": 19,
+    "approval": 0,
+    "delegation": 0,
+    "budget": 15,
+    "citation": 0
+  },
+  "family_status": {
+    "graph": "EVALUATED",
+    "permission": "EVALUATED",
+    "approval": "NOT_EVALUATED",
+    "delegation": "NOT_EVALUATED",
+    "budget": "EVALUATED",
+    "citation": "NOT_EVALUATED"
+  },
+  "graph_edges": [
+    [
+      "955a3e8e1b841bbf",
+      "feb23908a3f07af4"
+    ],
+    [
+      "feb23908a3f07af4",
+      "4a8136b756f007a1"
+    ],
+    [
+      "4a8136b756f007a1",
+      "25ff89e2c0fbc513"
+    ],
+    [
+      "25ff89e2c0fbc513",
+      "077cc37f05b141ce"
+    ],
+    [
+      "077cc37f05b141ce",
+      "bb86bddf20920015"
+    ],
+    [
+      "bb86bddf20920015",
+      "03730924202bc12b"
+    ],
+    [
+      "03730924202bc12b",
+      "8e3df80abd892d31"
+    ],
+    [
+      "8e3df80abd892d31",
+      "2f0b53b6f82a725c"
+    ],
+    [
+      "2f0b53b6f82a725c",
+      "d7dfc3de4967d326"
+    ],
+    [
+      "d7dfc3de4967d326",
+      "b3bec67d892f5f0c"
+    ],
+    [
+      "b3bec67d892f5f0c",
+      "5cb79b86deb3e0d1"
+    ],
+    [
+      "5cb79b86deb3e0d1",
+      "ed5025f8a6b80ae1"
+    ],
+    [
+      "ed5025f8a6b80ae1",
+      "e8f213b8c56398e8"
+    ],
+    [
+      "e8f213b8c56398e8",
+      "e5abed754858920e"
+    ],
+    [
+      "e5abed754858920e",
+      "77ce4ab8dcef3512"
+    ],
+    [
+      "77ce4ab8dcef3512",
+      "c4ecab4e9e410f18"
+    ],
+    [
+      "c4ecab4e9e410f18",
+      "ee2e87ec6ef5e851"
+    ],
+    [
+      "ee2e87ec6ef5e851",
+      "5af54aa2d9db0134"
+    ],
+    [
+      "5af54aa2d9db0134",
+      "a43355b59c58f350"
+    ],
+    [
+      "a43355b59c58f350",
+      "a9d894fe8b746958"
+    ]
+  ],
+  "authority_paths": {
+    "feb23908a3f07af4": [
+      "feb23908a3f07af4"
+    ],
+    "4a8136b756f007a1": [
+      "4a8136b756f007a1"
+    ],
+    "25ff89e2c0fbc513": [
+      "25ff89e2c0fbc513"
+    ],
+    "077cc37f05b141ce": [
+      "077cc37f05b141ce"
+    ],
+    "bb86bddf20920015": [
+      "bb86bddf20920015"
+    ],
+    "03730924202bc12b": [
+      "03730924202bc12b"
+    ],
+    "8e3df80abd892d31": [
+      "8e3df80abd892d31"
+    ],
+    "2f0b53b6f82a725c": [
+      "2f0b53b6f82a725c"
+    ],
+    "d7dfc3de4967d326": [
+      "d7dfc3de4967d326"
+    ],
+    "b3bec67d892f5f0c": [
+      "b3bec67d892f5f0c"
+    ],
+    "5cb79b86deb3e0d1": [
+      "5cb79b86deb3e0d1"
+    ],
+    "ed5025f8a6b80ae1": [
+      "ed5025f8a6b80ae1"
+    ],
+    "e8f213b8c56398e8": [
+      "e8f213b8c56398e8"
+    ],
+    "e5abed754858920e": [
+      "e5abed754858920e"
+    ],
+    "77ce4ab8dcef3512": [
+      "77ce4ab8dcef3512"
+    ],
+    "c4ecab4e9e410f18": [
+      "c4ecab4e9e410f18"
+    ],
+    "ee2e87ec6ef5e851": [
+      "ee2e87ec6ef5e851"
+    ],
+    "5af54aa2d9db0134": [
+      "5af54aa2d9db0134"
+    ],
+    "a43355b59c58f350": [
+      "a43355b59c58f350"
+    ]
+  },
+  "budget_totals": {
+    "actor:yarden": 0,
+    "actor:tamar": 5959,
+    "actor:shachar": 0,
+    "actor:aluf": 0,
+    "actor:erez": 0,
+    "actor:gal": 0
+  },
+  "policy_digest": "b8ff4f6600bb9f08bc780f0aee0776bf9ce60f1a1702004f1a0a2fb068ef246c",
+  "capture_digest": "8572777309dd109b87cdd0d570984d83fdefc4a343b33209eee1e2addff3aa61",
+  "limitations": [
+    "Capture completeness, collector identity, actor identity, human approval and costs are caller declarations, not authenticated facts.",
+    "This passive audit inspects already-recorded actions and does not prevent execution or reverse effects.",
+    "Recorded dependency edges establish declared lineage, not physical causality or completeness of unobserved activity.",
+    "Citations verify recorded source identity and content digests, not semantic entailment, factual truth or licensing.",
+    "Integer costs use caller-defined units; this is not billing proof or currency conversion.",
+    "Checksums provide integrity, not authenticity, production certification or deployment authorization."
+  ]
+}

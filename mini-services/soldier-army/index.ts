@@ -50,7 +50,10 @@ const ACTIONS_FILE = path.join(import.meta.dir, "state", "actions.jsonl");
 function act(actor: string, action: string, resource: string, args: Record<string, unknown>, outcome: "ok" | "denied" | "error", costUnits: number, detail = ""): void {
   try {
     mkdirSync(path.dirname(ACTIONS_FILE), { recursive: true });
-    appendFileSync(ACTIONS_FILE, JSON.stringify({ ts: Date.now(), actor, action, resource, args, outcome, cost_units: costUnits, detail: String(detail).slice(0, 160) }) + "\n");
+    /* sem:"gal-16" = חתימת-סמנטיקה: הצבה=escrow (עלות-0) · מילוי=הוצאה-אמת · דופק=עמלה-אמת.
+     * המבקר מסכם-תקציב רק על אירועים חתומים — ההיסטוריה-הישנה נמדדה בסמנטיקה-שגויה
+     * (ציטוט-נספר-כהוצאה) ולכן אינה-ראיה על זרימת-הון. */
+    appendFileSync(ACTIONS_FILE, JSON.stringify({ ts: Date.now(), sem: "gal-16", actor, action, resource, args, outcome, cost_units: costUnits, detail: String(detail).slice(0, 160) }) + "\n");
   } catch { /* ביקורת-לעולם-לא-מפילה-מסחר */ }
 }
 
@@ -124,7 +127,11 @@ async function gridCycle(): Promise<void> {
       for (const o of orders) {
         const prev = seenFilled[String(o.id)] ?? 0;
         const now = Number(o.filled ?? 0);
-        if (now > prev) S[s].filledMu += now - prev;
+        if (now > prev) {
+          S[s].filledMu += now - prev;
+          /* גל-16 · מילוי = העברת-הון-אמת — נרשם כאירוע-עלות לביקורת-המסלול (iFixAi) */
+          act(s, "fill", "SAOS/USDS", { orderId: String(o.id).slice(0, 12), filledMu: now - prev, price: Number(o.price ?? 0) }, "ok", now - prev, "מילוי-ספר-אמת");
+        }
         seenFilled[String(o.id)] = now;
       }
       if (orders.length >= MAX_ORDERS) continue;
@@ -141,12 +148,14 @@ async function gridCycle(): Promise<void> {
       if (!hasSide("buy", bid) && usds - BUY_FLOOR_MU >= bid * ORDER_AMT_MU / 1000) {
         const r = await jpost(`${DEX}/order`, { action: "order", base: "SAOS", quote: "USDS", side: "buy", price: bid, amount: ORDER_AMT_MU, issuer: s, postOnly: true });
         if (r?.ok) { S[s].placed++; console.log(`[army] ${s}: BID ${ORDER_AMT_MU}µ @ ${bid} (fair ${fair})`); } else { S[s].rejected++; S[s].lastErr = `bid: ${r?.error}`; }
-        act(s, "order", "SAOS/USDS", { side: "buy", price: bid, amount: ORDER_AMT_MU, postOnly: true }, r?.ok ? "ok" : "denied", r?.ok ? Math.floor(bid * ORDER_AMT_MU / 1000) : 0, r?.error ?? "");
+        /* גל-16 · סמנטיקת-עלות-כנה: הצבה = escrow (אפס-עלות) — העלות-האמיתית נרשמת רק במילוי.
+         * המבקר (iFixAi) מודד זרימת-הון-אמת מול תקרת-הבנק, לא זרימת-ציטוט. */
+        act(s, "order", "SAOS/USDS", { side: "buy", price: bid, amount: ORDER_AMT_MU, postOnly: true }, r?.ok ? "ok" : "denied", 0, r?.error ?? "");
       }
       if (!hasSide("sell", ask) && saos >= ORDER_AMT_MU * 2) {
         const r = await jpost(`${DEX}/order`, { action: "order", base: "SAOS", quote: "USDS", side: "sell", price: ask, amount: ORDER_AMT_MU, issuer: s, postOnly: true });
         if (r?.ok) { S[s].placed++; console.log(`[army] ${s}: ASK ${ORDER_AMT_MU}µ @ ${ask} (fair ${fair})`); } else { S[s].rejected++; S[s].lastErr = `ask: ${r?.error}`; }
-        act(s, "order", "SAOS/USDS", { side: "sell", price: ask, amount: ORDER_AMT_MU, postOnly: true }, r?.ok ? "ok" : "denied", r?.ok ? ORDER_AMT_MU : 0, r?.error ?? "");
+        act(s, "order", "SAOS/USDS", { side: "sell", price: ask, amount: ORDER_AMT_MU, postOnly: true }, r?.ok ? "ok" : "denied", 0, r?.error ?? "");
       }
     } catch (e) { S[s].lastErr = String(e).slice(0, 110); }
   }
@@ -190,7 +199,7 @@ async function marketPulse(fillsNow: number, feeMeter: number): Promise<void> {
       pulseErr = ""; frozenCycles = 0;
       pulseDir = pulseDir === "USDS" ? "SAOS" : "USDS";  // מתחלף-כיוון
       console.log(`[army] דופק ${rich.s}: ${amount}µ ${assetIn}→SAOS/USDS (out≈${out}) — עמלה→meter (feeMeter ${feeMeter})`);
-      act(rich.s, "pulse-swap", "SAOS/USDS", { assetIn, amount, minOut }, "ok", 0, `feeMeter=${feeMeter} frozen=${frozenCycles}`);
+      act(rich.s, "pulse-swap", "SAOS/USDS", { assetIn, amount, minOut }, "ok", Math.floor(amount * 0.003), `feeMeter=${feeMeter} עמלת-חשמל-שוק אמת`);
     } else { pulseErr = `swap:${r?.error ?? "?"}`; act(rich.s, "pulse-swap", "SAOS/USDS", { assetIn, amount }, "denied", 0, pulseErr); }
   } catch (e) { pulseErr = String(e).slice(0, 110); }
 }
