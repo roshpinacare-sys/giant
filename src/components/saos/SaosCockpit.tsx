@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ZaiLiveDesk } from "@/components/saos/ZaiLiveDesk";
 import {
   HeartPulse,
   ShieldCheck,
@@ -609,6 +610,13 @@ export default function SaosCockpit() {
             ))}
           </CardContent>
         </Card>
+
+        {/* ═══ שולחן-ההוכחה-החי של agent-zai (G10 union, אדיטיבי-בלבד):
+            פעולת-בעלים-Hive · active-חי-מהשרשרת · גשר-הצי · טלמטריית-היררכיה ·
+            פעימת-כלכלה · מוח-NIM-שני · ביקורת-iFixAi — הכל מדוד-חי, אפס-נתון-מאולתר ═══ */}
+        <section aria-label="שולחן-ההוכחה-החי — agent-zai" className="mt-8 border-t border-stone-800 pt-6">
+          <ZaiLiveDesk />
+        </section>
       </main>
 
       {/* פוטר-דביק */}
@@ -624,3 +632,6 @@ export default function SaosCockpit() {
     </div>
   );
 }
+
+// G10-fix: named export נדרש ע"י page (היימרוז עם default — תואם-שניהם)
+export { SaosCockpit };
