@@ -111,3 +111,7 @@
 {"ts":1792361307737,"key":"bridge-unreachable","sev":"warn","text":"הגשר :3017 לא מגיב — המפעיל-הפנימי ינסה-ריפוי","status":"ledger"}
 {"ts":1792361307739,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
 {"ts":1792361320713,"key":"fuel-tend-error","sev":"warn","text":"מטפל-הדלק: שגיאת-רשת Error: Unable to connect. Is the computer able to access the url?","status":"ledger"}
+{"ts":1792361598006,"key":"console-5xx","sev":"critical","text":"הקונסולה :3000 מחזירה 502 — דלת-הבית-פגומה","status":"ledger"}
+{"ts":1792361598247,"key":"dex-halted","sev":"critical","text":"הבורסה עצורה: snapshot-integrity-failed: load refused, evidence preserved (operator reset is the explicit recovery path)","status":"ledger"}
+{"ts":1792361598276,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 3 שגיאות (היה 0)","status":"ledger"}
+{"ts":1792361623295,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (2 כשלים) → respawn=true → verified=false","status":"ledger"}
