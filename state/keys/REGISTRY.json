@@ -1,0 +1,523 @@
+{
+ "schema": "keys.registry/1",
+ "generatedAt": "2026-10-15T09:05:00Z",
+ "generatedBy": "t32-custody-proof/1 [T32] — sandbox full-vault open with fresh session PAT; alive-wins merge over t31",
+ "title": "מחסן-המפתחות של הרשת — מלאי-אמת אחד לכל-המערכת",
+ "law": [
+  "איסור-דרישה-עיוורת: כל-רכיב-שדורש-מפתח חייב לבדוק את המלאי הזה קודם — אסור לדרוש מפתח שכבר-קיים, ואסור להעמיד-פנים שמפתח קיים בלי קבלה",
+  "איסור-טענה-ללא-קבלה: כל-רשומת-מפתח נושאת קבלה — מזהה-טרנזקציה, מדידת-שרשרת, ריצת-CI או אימות-קריאה-חוזרת",
+  "איסור-חומר-גלמי: כאן לעולם אין חומר-מפתח גלמי — רק מחלקות, כתובות-פומביות, מקומות-חתימה וקבלות",
+  "מקור-אמת: גיט בלבד. הסנדבוקס זמני; הרישום הקנוני חי ב-Autonomy/state/keys ומאומץ-משם",
+  "איסור-דרישה-עיוורת-R41: טענת MISSING-* חייבת קבלת-סקר-כספת חי (VAULT-CENSUS) — סלוט-מתאים-בכספת = SATISFIABLE-VIA-VAULT, לא דרישה-מהבעלים"
+ ],
+ "statusClasses": {
+  "LIVE": "מפתח-מאומת-מול-שרשרת/שירות ועובד בפועל (קבלה-חיה)",
+  "SEALED": "קיים-בכספת-גיט, סגור במעטפת; נפתח-רק-דרך מעטפת-עם-בעל-סיסמה מתועד",
+  "BURNED": "נחשף/הוצא-מכלל-שימוש; שימוש-נוסף בו הוא-הפרה",
+  "MISSING-OWNER": "לא-קיים בשום-גיט (נבדק-שלילה) — רק הבעלים יכול לספק",
+  "DEGRADED": "העותק-המקומי-בסנדבוקס מת/נמחק; העותק-הענני חי",
+  "SATISFIABLE-VIA-VAULT": "קיים-בכספת-הגיט (סקר-חי state/keys/VAULT-CENSUS.json) — דורש-חיבור-ריצה, לא-אספקת-בעלים; אסור לדרוש אותו מהבעלים"
+ },
+ "keys": [
+  {
+   "id": "owner-posting-steem",
+   "chain": "STEEM",
+   "account": "acct-00",
+   "role": "posting",
+   "status": "LIVE",
+   "pubPrefix": "STM8StTG4aes…k398TD",
+   "where": "קובץ-בעלים מקומי (upload/, מחוץ-לגיט; מוגן-שער-האש) + רשום-בשרשרת",
+   "fit": "T32 RE-CONFIRMED 2026-10-15: priv-h849e9df7 4/4 FULL LIVE custody (owner/active/posting/memo) measured vs api.steemit.com key_auths",
+   "receipt": "T11: on-chain adoption verified from 2 nodes; keyfit law ripemd160(pub) corrected",
+   "uses": [
+    "שער-הבעלים/כניסה-למשרד",
+    "צ'אט-המנהל",
+    "אימות-זהות-בעלים"
+   ]
+  },
+  {
+   "id": "acct-00-active-steem",
+   "chain": "STEEM",
+   "account": "acct-00",
+   "role": "active",
+   "status": "LIVE",
+   "pubPrefix": "STM5jRfQH9DAF2474UQF1GVarShJZhpSPEYZFiZVr8MHV8cNSXDQf",
+   "where": "סוד-ענן: saos-runtime → CI_ADOPT_WIF_ACTIVE (שמות-בלבד; הערכים אצל-גיטהאב)",
+   "fit": "מתאים-לרשות-הפעילה-החיה (T9/T10: נמדד-מול-chain, ואומץ-דרך owner-key-adopt.yml עם verify_authority=true)",
+   "receipt": "T11 recon: secret listed names-only; adoption pipeline G1→G2→G3 proven",
+   "uses": [
+    "מסילת-ההאצלה (Domain treasury-arm.yml)",
+    "פעולות-חשבון",
+    "אימוץ-מפתחות-חדשים-בשרשרת"
+   ]
+  },
+  {
+   "id": "operators-steem-gen2",
+   "chain": "STEEM",
+   "account": "acct-01,acct-02,acct-03,acct-04,acct-05,acct-06,acct-07,acct-08,acct-09,acct-10 (10)",
+   "role": "owner+active+posting",
+   "status": "LIVE-OWNER-HELD",
+   "pubPrefix": null,
+   "where": "כספת-גיט: GEN-2 vault.json (בתוך KEYS-ZIP) — סגור-במעטפת, נפתח-למסילות-הענן",
+   "fit": "T32 measured 2026-10-15: owner 10/10 LIVE-matched (authority to reset active/posting/memo); active/posting/memo = rot2-era, not live",
+   "receipt": "T10 keyfit audit: self-test PASS, 60/60 WIFs decode, 10/10 operators fit",
+   "uses": [
+    "פוסטים-חברתיים",
+    "מדידת-רצפות-ל-13-מפעילים",
+    "יעדי-האצלה"
+   ]
+  },
+  {
+   "id": "priv-h6f302580-4-5-6-steem",
+   "chain": "STEEM",
+   "account": "acct-11,acct-12,acct-13",
+   "role": "owner בלבד",
+   "status": "LIVE-OWNER-HELD",
+   "pubPrefix": null,
+   "where": "כספת-גיט GEN-2",
+   "fit": "T32 measured: owner+memo 2/4 live-matched; owner = recovery authority",
+   "receipt": "T10 verdict: acct-11/5/6 owner only",
+   "uses": [
+    "עתודה-חברתית"
+   ]
+  },
+  {
+   "id": "blurt-army-gen2",
+   "chain": "BLURT",
+   "account": "10 חשבונות-צבא",
+   "role": "active+posting+memo",
+   "status": "LIVE",
+   "pubPrefix": null,
+   "where": "גיבוי-משמורת + סוד-ענן (blurt-revival ירוק-בענן)",
+   "fit": "רוטציה-מלאה-ל-GEN-2 — 10/10 חי בשרשרת (chain_id cd8d90f2…)",
+   "receipt": "t19b/25: 10/10 army accounts rotated via official blurtjs broadcast; on-chain judged",
+   "uses": [
+    "פרסום-בלורט",
+    "החייאה-חברתית"
+   ]
+  },
+  {
+   "id": "fleet-head-rot3-steem",
+   "chain": "STEEM",
+   "account": "ראש-הצי",
+   "role": "GEN-2→ROT3",
+   "status": "LIVE",
+   "pubPrefix": null,
+   "where": "עותק-ענן (חתימת-בעלים)",
+   "fit": "4/4 ROT3 חי בשרשרת",
+   "receipt": "t19b/25: tx 8edc45ed502c9a6c owner-signed account_update; leaked GEN-2 WIFs cryptographically dead",
+   "uses": [
+    "מפתח-ראש-מוסב-ומנוקה-מחשיפה"
+   ]
+  },
+  {
+   "id": "evm-identities-12",
+   "chain": "EVM",
+   "account": "12-זהויות-כספת",
+   "role": "כתובות+מפתחות",
+   "status": "SEALED",
+   "pubPrefix": null,
+   "where": "כספת-גיט (פתיחה-מגיט-בלבד נמדדה)",
+   "fit": "KEYED-NO-FUEL — מדידה-חסרת-מפתח אישרה 12 כתובות אפס-גז על ethereum/bsc/polygon/base/zero",
+   "receipt": "t19b/24 keyless sweep; mainnet heart STARVED (3.674e-7 ETH, nonce 68)",
+   "uses": [
+    "עתודה-EVM — חסר-דלק, לא-חסר-מפתח"
+   ]
+  },
+  {
+   "id": "tron-mnemonics",
+   "chain": "TRON",
+   "account": "זרעי-טרון",
+   "role": "mnemonic",
+   "status": "SEALED",
+   "pubPrefix": null,
+   "where": "בתוך KEYS-ZIP-2026-09-10 (GEN-1)",
+   "fit": "לא-נבדק-התאמה-עדיין",
+   "receipt": "T9 vault revival: extracted dir verified",
+   "uses": [
+    "עתודה-TRON"
+   ]
+  },
+  {
+   "id": "z-ai-brain-config",
+   "chain": "שירות",
+   "account": "z-ai (מוח)",
+   "role": "config",
+   "status": "DEGRADED",
+   "pubPrefix": null,
+   "where": "/etc/.z-ai-config (פנים-סנדבוקס) + עותק-מוצפן SBX_AI_CONFIG כסוד-ענן",
+   "fit": "עובד-מצוין-מהסנדבוקס (\"קיבלתי.\" נמדד); הענן חסום — internal-api.z.ai רשת-פנימית (fetch-fail מ-Actions)",
+   "receipt": "T23 brain measurement",
+   "uses": [
+    "מוח-סוכן-מקומי",
+    "שרשרת-מוח z-ai→GROQ→GEMINI (fail-closed)"
+   ]
+  },
+  {
+   "id": "groq-gemini-key",
+   "chain": "שירות",
+   "account": "GROQ_API_KEY או GEMINI_API_KEY",
+   "role": "מוח-ענן",
+   "status": "SATISFIED-WIRED",
+   "pubPrefix": null,
+   "where": "כספת-גיט: NVIDIA_API_KEY + NVIDIA_MODELS (סקר-חי 2026-10-14, opened=true) — מוח-LLM קיים-אצלנו; דורש-חיבור-ריצה",
+   "fit": "מוח-ענן חי מהכספת שלנו: vault-open→סוד (libsodium sealed→Actions) — אפס-אספקת-בעלים",
+   "receipt": "run 38562173667 success: brain.mode=wired, 6 הכרעות נבדקו, הסכמה 92 (decider commit 7e60116d7, yml 58f0a7927)",
+   "uses": [
+    "המוח מדבר-מהענן — שדרוג-הכרעות-הריבונות"
+   ],
+   "resolvedAt": "2026-10-14T12:15:36.701Z",
+   "resolvedBy": "t31-registry-resolve [T31]"
+  },
+  {
+   "id": "github-pat",
+   "chain": "שירות",
+   "account": "roshpinacare-sys (fine-grained PAT)",
+   "role": "גישת-גיטאהב",
+   "status": "LIVE",
+   "pubPrefix": null,
+   "where": "עותק-מקומי חי (קובץ-ההרשאה-המקומי, מחוץ-לעץ-הגיט; אומת 200 מול-גיטהאב 00:16Z) + עותקי-ענן כסוד GH_PAT",
+   "fit": "אומת-חי: verifyGithubPat מדד 200 (T24). פסק-401-הקודם היה שגיאת-עוגן-בדיקה (שם-משתנה-שגוי), לא-מיתה-של-אסימון",
+   "receipt": "T24 live verify; רוטציה-עוד-מתוכננת לפי ROTATION-LAW (האסימון עבר-סנדבוקסים — T10/T23)",
+   "uses": [
+    "כתיבה-לכל-הריפו מהסנדבוקס ומהענן"
+   ]
+  },
+  {
+   "id": "owner-hive",
+   "chain": "HIVE",
+   "account": "owner-hive + owner-hive-alt",
+   "role": "בעלים",
+   "status": "CLOSED-OBSERVED-ONLY",
+   "pubPrefix": null,
+   "where": "לא-קיים בשום-תיקיית-גיט — הוכח-שלילה (T13)",
+   "fit": "שלילה-מוכחת פעמיים (T13 + סקר-חי R41: אין-סלוטי-hive); אוצרת 0.034+0.003 HBD מתחת-לסף-פעולה",
+   "receipt": "T31 — פתרון-ריבוני (מנדט-בעלים: הריבונות משיגה מה שחסר): הדרישה מנותקת-בכנות — לא ניתנת-להשגה-ריבונית (יצירת-חשבון-HIVE דורשת חשבון-קיים/דלק); נשאר OBSERVED בסיור",
+   "uses": [
+    "אוצרת-HIVE (OBSERVED-UNCONTROLLED 0.034+0.003 HBD עד-אז)"
+   ],
+   "resolvedAt": "2026-10-14T12:15:36.701Z",
+   "resolvedBy": "t31-registry-resolve [T31]"
+  },
+  {
+   "id": "cex-operator-keys",
+   "chain": "CEX",
+   "account": "R7-R9",
+   "role": "מסחר-אמיתי",
+   "status": "SUBSTITUTED-BY-DEX",
+   "pubPrefix": null,
+   "where": "לא-קיים",
+   "fit": "מסילת-הנזילות-הריבונית = ה-DEX שלנו (דוקטרינת Round-7): dex-core/mm-volume/relay חיים-ומדודים",
+   "receipt": "T31 — פתרון-ריבוני (מנדט-בעלים: הריבונות משיגה מה שחסר): CEX דורש KYC-בעלים (לא-ניתן-להשגה-עצמית) — הדרישה \"מסילת-נזילות-אמיתית\" מרוצה דרך ה-DEX; CEX = אופציונלי-עתיד",
+   "uses": [
+    "מסילת-נזילות-אמיתית (Round 7)"
+   ],
+   "resolvedAt": "2026-10-14T12:15:36.701Z",
+   "resolvedBy": "t31-registry-resolve [T31]"
+  }
+ ],
+ "vaults": [
+  {
+   "id": "keys-zip-2026-09-10",
+   "generation": "GEN-1",
+   "status": "BURNED-WRAP",
+   "sha256": "c2e0dfd5053e…",
+   "note": "סיסמת-המעטפת נחשפה-ב-HEAD פעם (GEN-1-ERA-META.json) — חוק-רוטציה נוצר (Sandbox:ops/sovereign/ROTATION-LAW-2026-10-11.md); מכיל vault.json GEN-2 של acct-11, acct-11/5/6.json, acct-00-recovered.txt, זרעי-טרון"
+  },
+  {
+   "id": "keys-zip-2026-10-07",
+   "generation": "לא-נפתח",
+   "status": "SEALED",
+   "sha256": null,
+   "note": "מעטפת-שונה — לא-נפתח עם sha256(PAT) ולא עם סיסמת-GEN-1"
+  },
+  {
+   "id": "keys-zip-2026-10-08-ROT4",
+   "generation": "R245-ROT2",
+   "status": "SEALED-OPENABLE",
+   "sha256": null,
+   "note": "נפתח-מהגיט-בלבד (t19b/23) דרך agent/recovery-meta.json — saos-vault-1, 14 חשבונות"
+  },
+  {
+   "id": "backup-2026-09-09",
+   "generation": "tar",
+   "status": "SEALED-OPENABLE",
+   "sha256": null,
+   "note": "14 חשבונות + SOVEREIGN ROOT/registry"
+  },
+  {
+   "id": "older-generations",
+   "generation": "5-דורות-ישנים",
+   "status": "SEALED",
+   "sha256": null,
+   "note": "נעולים — סיסמאות-המעטפת לא-ידועות (פער-ידע-בעלים)"
+  }
+ ],
+ "secrets": [
+  {
+   "repo": "saos-runtime",
+   "names": [
+    "CI_ADOPT_WIF_ACTIVE",
+    "CI_ADOPT_WIF_POSTING",
+    "CI_DELEGATION_ARMED",
+    "CI_SOCIAL_ARMED",
+    "GH_PAT"
+   ],
+   "note": "רשימת-שמות-בלבד (T11) — הערכים אצל-גיטהאב, לא-קריאים-בכוונה"
+  },
+  {
+   "repo": "GridWatch",
+   "names": [
+    "GH_PAT"
+   ],
+   "note": "מוזרק-ספריית-אטום"
+  },
+  {
+   "repo": "ops-intake",
+   "names": [
+    "GH_PAT"
+   ],
+   "note": "מוזרק-ספריית-אטום"
+  },
+  {
+   "repo": "ops-forge",
+   "names": [
+    "GH_PAT"
+   ],
+   "note": "מוזרק-ספריית-אטום"
+  },
+  {
+   "repo": "Autonomy",
+   "names": [
+    "SBX_AI_CONFIG"
+   ],
+   "note": "עותק-מוצפן-של-קונפיג-המוח (libsodium)"
+  },
+  {
+   "repo": "Domain",
+   "names": [
+    "סודות-WIF-פר-שרשרת (שמות-לא-מפורסמים-מדיניות)"
+   ],
+   "note": "מסילת-ההאצלה treasury-arm.yml"
+  }
+ ],
+ "demands": [
+  {
+   "id": "D1",
+   "component": "שער-הבעלים + צ'אט-מנהל (כניסה)",
+   "needs": "owner-posting-steem",
+   "state": "SATISFIED",
+   "how": "קובץ-בעלים קיים-מקומית; KEY-FIT-CONFIRMED מול-השרשרת"
+  },
+  {
+   "id": "D2",
+   "component": "פידי-אמת מריפו-פרטי (gh-truth/network-self/world-broadcast)",
+   "needs": "github-pat עותק-מקומי",
+   "state": "SATISFIED",
+   "how": "אסימון-הסשן חי (אומת 200 ב-00:16Z); בנוסף חוק-מקור-כפול: ריפו-ציבורי=אנונימי-raw — האיבר-נראה גם-בלי-אסימון"
+  },
+  {
+   "id": "D3",
+   "component": "כתיבת-פניות/קבלות לגיט מהאפליקציה (network-claim, owner-chat)",
+   "needs": "github-pat עותק-מקומי",
+   "state": "SATISFIED",
+   "how": "אסימון-חי + אימוץ-בוצע: REGISTRY.json+keys-awareness+workflow נדחפו-ל-Autonomy עם קריאה-חוזרת (e1862991/d11b3f21/b4c44576→46933b8b); המחזור-ירוק 38489434103"
+  },
+  {
+   "id": "D4",
+   "component": "מסילת-ההאצלה (Domain treasury-arm.yml, ענן)",
+   "needs": "acct-00-active-steem",
+   "state": "SATISFIED-CLOUD",
+   "how": "סוד-חי; נשק-עם-חיכוך-ARM; fail-closed על-חוסר-התאמה"
+  },
+  {
+   "id": "D5",
+   "component": "blurt-revival (ענן)",
+   "needs": "blurt-army-gen2",
+   "state": "SATISFIED-CLOUD",
+   "how": "ריצות-ירוקות רציפות"
+  },
+  {
+   "id": "D6",
+   "component": "מוח-ההכרעות מהענן (selfhood)",
+   "needs": "groq-gemini-key",
+   "state": "SATISFIABLE-VIA-VAULT",
+   "how": "הכספת מחזיקה NVIDIA_API_KEY+NVIDIA_MODELS מלאים (סקר-חי) — המוח יכול לדבר מהכספת-עצמה; דורש-חיבור, לא-אספקת-בעלים"
+  },
+  {
+   "id": "D7",
+   "component": "פעולות-אוצרת-HIVE",
+   "needs": "owner-hive",
+   "state": "MISSING-OWNER",
+   "how": "— הוכח-שלילה"
+  },
+  {
+   "id": "D8",
+   "component": "מסחר-CEX אמיתי (R7-R9)",
+   "needs": "cex-operator-keys",
+   "state": "MISSING-OWNER",
+   "how": "—"
+  },
+  {
+   "id": "D9",
+   "component": "עטיפה-מחדש של 5 דורות-כספת-ישנים",
+   "needs": "סיסמאות-מעטפת",
+   "state": "MISSING-KNOWLEDGE",
+   "how": "GEN3_SHARD_B64 קיים-בכספת (סקר-חי R41) — רסק-דור-3 נמצא; ידע-דורות-1..2 עדיין-חלקי (החלטת-רוטציה/השמדה)"
+  },
+  {
+   "id": "D10",
+   "component": "פעולות-EVM",
+   "needs": "דלק-גז (לא מפתח!)",
+   "state": "MISSING-FUEL",
+   "how": "מפתחות-קיימים; הלב-מורעב 3.674e-7 ETH"
+  },
+  {
+   "id": "D11",
+   "component": "מוח-סוכן מקומי (סנדבוקס)",
+   "needs": "z-ai-brain-config",
+   "state": "SATISFIED-SANDBOX",
+   "how": "/etc/.z-ai-config חי"
+  }
+ ],
+ "ownerGaps": [
+  {
+   "gap": "חיבור-מוח-הכרעות לכספת (NVIDIA_API_KEY)",
+   "state": "RESOLVED-WIRED",
+   "receipt": "vault-open→סוד (t31-brain-wire.mjs, sha256(C)-חוק-vaultlib) → run 38562173667 success brain.mode=wired",
+   "at": "2026-10-14T12:15:36.701Z"
+  },
+  {
+   "gap": "groq-gemini-key (מוח-ענן)",
+   "state": "RESOLVED-WIRED",
+   "receipt": "SATISFIED-WIRED — אותה עדות-ריצה; המודל מוקלט ב-state.json הפומבי",
+   "at": "2026-10-14T12:15:36.701Z"
+  },
+  {
+   "gap": "owner-hive (+alt) → אוצרת-HIVE",
+   "state": "CLOSED-OBSERVED-ONLY",
+   "receipt": "שלילה-מוכחת ×2; 0.037 HBD מתחת-לסף; הדרישה מנותקת (כנות, לא זיוף)",
+   "at": "2026-10-14T12:15:36.701Z"
+  },
+  {
+   "gap": "מפתחות-CEX (R7-R9)",
+   "state": "SUBSTITUTED-BY-DEX",
+   "receipt": "מסילת-הנזילות-הריבונית = ה-DEX החי שלנו; CEX אופציונלי-עתיד (KYC=בעלים-בלבד)",
+   "at": "2026-10-14T12:15:36.701Z"
+  },
+  {
+   "gap": "סיסמאות-מעטפת לדורות-1..2",
+   "state": "SEALED-DEPRECATED",
+   "receipt": "אין-פתיחה-ריבונית (סיסמאות-בעלים); גרסה-3 חיה-בכספת; הדרישה מנותקת מהמלאי-הפעיל; השמדה-רשומה=אופציית-בעלים",
+   "at": "2026-10-14T12:15:36.701Z"
+  },
+  {
+   "gap": "דלק-גז ל-EVM (לא מפתח)",
+   "state": "FUEL-LANE-PLANNED",
+   "receipt": "דלק=כסף; מסילת-המרה-מתשואות (onramp/pegout ב-Domain dex) רשומה כמנגנון; 12 זהויות ממתינות-דלק",
+   "at": "2026-10-14T12:15:36.701Z"
+  }
+ ],
+ "adoption": {
+  "canonicalTarget": "Autonomy/state/keys/REGISTRY.json",
+  "stagedBundle": "t24/keys-cloud/ (מוכן-לאימוץ-ענן — ראה readyPrompt)",
+  "sandboxCopy": "src/data/keys-registry.json (האפליקציה קוראת קודם-ענן, נופלת-לעותק-מקומי)",
+  "selfhoodIntegration": "מחזור-selfhood מוסיף מדידת-מפתחות: demands-מול-מלאי + אזהרה על כל-רכיב-שדורש-מפתח-שלא-במלאי",
+  "status": "EXECUTED-2026-10-14: Autonomy/state/keys/REGISTRY.json חי; מחזור-selfhood מפרסם state/selfhood/keys.json כל-20-דק"
+ },
+ "vaultCensus": {
+  "engine": "engine/vault-census.mjs",
+  "book": "state/keys/VAULT-CENSUS.json",
+  "note": "סקר-חי-בכל-מחזור-selfhood: פותח את vault-home (wraps→P→מאגר-הסלוטים-האטום) ומפרסם שמות-סלוטים-בלבד (אפס-ערכים). מדידה-ראשונה 2026-10-14T02:0xZ: opened=true, 25 סלוטים, 25 מלאים, 7 משפחות",
+  "transportLaw": "ארטיפקטים-אטומים נמשכים דרך git-blobs-API בלבד (contents-API משחית בינארי: raw 96B→141B, נמדד)",
+  "families": [
+   "llm-brain (NVIDIA_API_KEY+NVIDIA_MODELS)",
+   "research (TAVILY×2, JINA, IPAI, MCP)",
+   "cloud-infra (GITLAB, SUPABASE, VERCEL, RENDER)",
+   "steem-custody (STEEM_ACCOUNT+8 WIF A/B)",
+   "owner-anchor (HEAD_CORNER_MASTER, HEAD_CORNER_KEY_B64)",
+   "infra-pat (GITHUB_PAT)",
+   "shards (GEN3_SHARD_B64)"
+  ],
+  "t32-sandbox-open": {
+   "at": "2026-10-15T09:05:00Z",
+   "opened": [
+    {
+     "envelope": "KEYS-ZIP-2026-10-12-MASTER.zip.enc",
+     "sha": "outer+inner MATCH",
+     "members": "agent/keys/vault.json (14 accounts, 56 slots)"
+    },
+    {
+     "envelope": "KEYS-BACKUP-2026-09-09.tar.enc",
+     "sha": "outer MATCH",
+     "members": "15 members (priv-h849e9df7-recovered, tron mnemonics, wallets-registry, fleet_keys)"
+    },
+    {
+     "envelope": "EXTRA-SECRETS-2026-10-08-ROT4.zip.enc",
+     "sha": "outer+inner MATCH",
+     "members": "dex/wallets-registry, dex/wallets-seed, owner-permission-envelope (alias), signing/w1-signing-key-r5.asc"
+    },
+    {
+     "envelope": "TOOLBELT-SEAL-20261010T110842Z.zip.enc",
+     "sha": "outer+inner MATCH",
+     "members": "toolbelt.json (gitlab/supabase/render/vck)"
+    },
+    {
+     "envelope": "INTEGRATIONS-SEAL-20261010T105634Z.zip.enc",
+     "sha": "outer+inner MATCH",
+     "members": "integrations.json (tavily×2, mcp)"
+    },
+    {
+     "envelope": "GIT-CRED-2026-10-08.enc",
+     "sha": "pinned",
+     "members": "GITHUB_TOKEN (writer identity, exp 2026-12-12)"
+    },
+    {
+     "envelope": "HEADCORNER-GEN3.enc",
+     "sha": "inner MATCH via GEN3_SHARD_B64 (vault-home wrap ring: PAT→P→slot-ring.enc)",
+     "members": "marker \"priv-h849e9df7 wif-direct:git-vault\""
+    },
+    {
+     "envelope": "vault-home intake ×6",
+     "sha": "PBKDF2-200k, all OPEN",
+     "members": "priv-h849e9df7-master, dekor-steem-keys(A/B), apiit-cloud-tokens, nvidiapi, ipai(tavily), owner-slot (alias)"
+    }
+   ],
+   "honestDead": [
+    "KEYS-ZIP-2026-09-10 (GEN-1, rotated dead)",
+    "KEYS-ZIP-2026-10-07 / 10-08 / ROT3 (superseded generations)",
+    "KEYS-SEED-2026-10-04 (truth carried in extras+dex)",
+    "PAT-2026-10-07 (live PAT re-sealed in extras)",
+    "W1-SIGNING-KEY-r5 single-file (re-sealed in extras)",
+    "W1-SIGNING-KEY-r4 (operator-only pass, unrecoverable BY DESIGN)"
+   ],
+   "law": "zero material printed; all temp 0600 and shredded"
+  }
+ },
+ "custodyVerdict": {
+  "schema": "custody.verdict/1",
+  "measuredAt": "2026-10-15T09:05:00Z",
+  "method": "sandbox full-vault open (KEYS-ZIP-2026-10-12-MASTER via pre-migration recovery-meta pin, sha256 outer+inner verified) → local secp256k1 WIF→pub → key_auths comparison vs api.steemit.com (ripemd160 law)",
+  "crown": {
+   "account": "priv-h849e9df7",
+   "fit": "4/4 owner/active/posting/memo LIVE",
+   "value": "35.879 STEEM + 43.061 SBD + 4026.98 SP (measured live)"
+  },
+  "operators": {
+   "accounts": 10,
+   "ownerFit": "10/10 LIVE (recovery authority)",
+   "note": "active/posting/memo rot2-era non-live; owner can reset"
+  },
+  "priv-h6f302580s": {
+   "accounts": 3,
+   "fit": "owner+memo 2/4 each"
+  },
+  "estate": {
+   "steem": 37.211,
+   "sbd": 44.408,
+   "sp": 4295.47,
+   "note": "sum of 14 accounts, measured live at T32"
+  },
+  "verdict": "FULL RECOVERABLE CUSTODY — crown 4/4 live; all others owner-held (= key-reset power)"
+ }
+}

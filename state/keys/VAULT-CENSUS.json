@@ -1,0 +1,198 @@
+{
+ "schema": "keys.vault-census/1",
+ "opened": true,
+ "slotsTotal": 25,
+ "filled": 25,
+ "families": [
+  {
+   "family": "llm-brain",
+   "slots": [
+    "NVIDIA_API_KEY",
+    "NVIDIA_BASE_URL",
+    "NVIDIA_MODELS"
+   ]
+  },
+  {
+   "family": "research",
+   "slots": [
+    "TAVILY_API_KEY_1",
+    "TAVILY_API_KEY_2",
+    "TAVILY_MCP_URL",
+    "JINA_API_KEY",
+    "IPAI_API_KEY"
+   ]
+  },
+  {
+   "family": "cloud-infra",
+   "slots": [
+    "GITLAB_TOKEN",
+    "SUPABASE_TOKEN",
+    "VERCEL_TOKEN",
+    "RENDER_TOKEN"
+   ]
+  },
+  {
+   "family": "steem-custody",
+   "slots": [
+    "STEEM_ACCOUNT",
+    "STEEM_OWNER_WIF_A",
+    "STEEM_ACTIVE_WIF_A",
+    "STEEM_POSTING_WIF_A",
+    "STEEM_MEMO_WIF_A",
+    "STEEM_OWNER_WIF_B",
+    "STEEM_ACTIVE_WIF_B",
+    "STEEM_POSTING_WIF_B",
+    "STEEM_MEMO_WIF_B"
+   ]
+  },
+  {
+   "family": "owner-anchor",
+   "slots": [
+    "HEAD_CORNER_MASTER",
+    "HEAD_CORNER_KEY_B64"
+   ]
+  },
+  {
+   "family": "infra-pat",
+   "slots": [
+    "GITHUB_PAT"
+   ]
+  },
+  {
+   "family": "shards",
+   "slots": [
+    "GEN3_SHARD_B64"
+   ]
+  }
+ ],
+ "slots": [
+  {
+   "name": "NVIDIA_API_KEY",
+   "state": "FILLED",
+   "lenClass": 128
+  },
+  {
+   "name": "NVIDIA_BASE_URL",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "NVIDIA_MODELS",
+   "state": "FILLED",
+   "lenClass": 256
+  },
+  {
+   "name": "GITLAB_TOKEN",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "SUPABASE_TOKEN",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "VERCEL_TOKEN",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "RENDER_TOKEN",
+   "state": "FILLED",
+   "lenClass": 32
+  },
+  {
+   "name": "TAVILY_API_KEY_1",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "TAVILY_API_KEY_2",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "TAVILY_MCP_URL",
+   "state": "FILLED",
+   "lenClass": 128
+  },
+  {
+   "name": "JINA_API_KEY",
+   "state": "FILLED",
+   "lenClass": 128
+  },
+  {
+   "name": "IPAI_API_KEY",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "STEEM_ACCOUNT",
+   "state": "FILLED",
+   "lenClass": 32
+  },
+  {
+   "name": "STEEM_OWNER_WIF_A",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "STEEM_ACTIVE_WIF_A",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "STEEM_POSTING_WIF_A",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "STEEM_MEMO_WIF_A",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "STEEM_OWNER_WIF_B",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "STEEM_ACTIVE_WIF_B",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "STEEM_POSTING_WIF_B",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "STEEM_MEMO_WIF_B",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "HEAD_CORNER_MASTER",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "GITHUB_PAT",
+   "state": "FILLED",
+   "lenClass": 128
+  },
+  {
+   "name": "HEAD_CORNER_KEY_B64",
+   "state": "FILLED",
+   "lenClass": 64
+  },
+  {
+   "name": "GEN3_SHARD_B64",
+   "state": "FILLED",
+   "lenClass": 256
+  }
+ ],
+ "measuredAt": "2026-10-15T01:01:04.602Z",
+ "durationMs": 1854,
+ "source": "vault-home@main"
+}
