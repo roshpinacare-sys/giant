@@ -58,11 +58,13 @@ const ANCHORS: Anchor[] = [
    * Sandbox = ספר-הלדג'ר-והאמנות (ops/AGENT-LEDGER.md) · FleetHQ = מטה-הצי ·
    * Console = הקונסולה-הציבורית · saos-dex = ארכיון-הדקס · roshpina = מאגר-הידע.
    * בלעדיהם שכבת-גיט→מסך (git-content REPOS) קראה-מתיקיות-מתות — נמדד-חי-בגל-18. */
-  { name: "estate/Sandbox", dir: "/home/z/estate/Sandbox", repo: "Sandbox", privateRepo: false },
+  /* גל-93 · נמדד-חי: Sandbox+roshpina הפכו-פרטיים ב-github (API 200-עם-טוקן, 404-אנונימי
+   * → clone-אנונימי-נכשל-עם-בקשת-פרטים). העוגנים-ההיסטוריים האלה עברו-לרשימת-הפרטיים. */
+  { name: "estate/Sandbox", dir: "/home/z/estate/Sandbox", repo: "Sandbox", privateRepo: true },
   { name: "estate/FleetHQ", dir: "/home/z/estate/FleetHQ", repo: "FleetHQ", privateRepo: false },
   { name: "estate/Console", dir: "/home/z/estate/Console", repo: "Console", privateRepo: false },
   { name: "estate/saos-dex", dir: "/home/z/estate/saos-dex", repo: "saos-dex", privateRepo: false },
-  { name: "estate/roshpina", dir: "/home/z/estate/roshpina", repo: "roshpina", privateRepo: false },
+  { name: "estate/roshpina", dir: "/home/z/estate/roshpina", repo: "roshpina", privateRepo: true },
 ];
 
 interface AnchorState {

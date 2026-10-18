@@ -8943,3 +8943,8 @@ Stage Summary:
 - The sovereignty now has an INDEPENDENT AUDITOR over its armed trading agents — iFixAi trajectory assurance live at :3022, policy = the owner's exact mandate (msg-8), evidence frozen per run, decision CLEAR measured
 - Arsenal doctrine started: evaluate → integrate-the-right-phase → honest status (iFixAi LIVE, ghidra STAGED) — never fake-run
 - Next: voice-builder evolution (self-update commits), Policy-Lab pre-mortems for new mandates, ghidra admission gate when env allows
+
+### Task 17 addendum — token-scope gap (fail-honest)
+- estate-sync anchors estate/Sandbox + estate/roshpina: repos turned PRIVATE (API 200 with token, anonymous clone 404) → fixed privateRepo:true; BUT git clone with the PAT returns "Invalid username or token" while the SAME token git-pushes giant/FleetHQ fine and reads Sandbox contents via REST API 200 → fine-grained-PAT git-scope gap for these two archive repos
+- Owner action (the ONLY item needing him): add Sandbox+roshpina to the PAT's repository access (Contents:Read) — or hand a scoped token; the moment it lands, the anchors self-heal on next tick (config already correct)
+- No fake green: estate-sync keeps reporting these 2 anchors FAIL until reality changes. All other 11 anchors OK.
