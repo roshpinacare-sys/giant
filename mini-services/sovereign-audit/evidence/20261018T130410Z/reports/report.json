@@ -1,0 +1,176 @@
+{
+  "decision": "CLEAR",
+  "violations": [],
+  "coverage_issues": [],
+  "checked_actions": 18,
+  "completed_actions": 18,
+  "failed_actions": 0,
+  "family_counts": {
+    "graph": 20,
+    "permission": 18,
+    "approval": 0,
+    "delegation": 0,
+    "budget": 18,
+    "citation": 0
+  },
+  "family_status": {
+    "graph": "EVALUATED",
+    "permission": "EVALUATED",
+    "approval": "NOT_EVALUATED",
+    "delegation": "NOT_EVALUATED",
+    "budget": "EVALUATED",
+    "citation": "NOT_EVALUATED"
+  },
+  "graph_edges": [
+    [
+      "fa95c866a65ac54d",
+      "cd1a5bc6e01c99d2"
+    ],
+    [
+      "cd1a5bc6e01c99d2",
+      "b2591de593989c33"
+    ],
+    [
+      "b2591de593989c33",
+      "f176cfd118c830cd"
+    ],
+    [
+      "f176cfd118c830cd",
+      "280a44e941581a2a"
+    ],
+    [
+      "280a44e941581a2a",
+      "82aae57032815d8c"
+    ],
+    [
+      "82aae57032815d8c",
+      "2501da44bce8e611"
+    ],
+    [
+      "2501da44bce8e611",
+      "ca20ef7eca80df94"
+    ],
+    [
+      "ca20ef7eca80df94",
+      "e8bd7bfa967357f9"
+    ],
+    [
+      "e8bd7bfa967357f9",
+      "b6dad56eaae1cc4b"
+    ],
+    [
+      "b6dad56eaae1cc4b",
+      "548224cb9ffb543c"
+    ],
+    [
+      "548224cb9ffb543c",
+      "07ac7126216e083b"
+    ],
+    [
+      "07ac7126216e083b",
+      "b086da246a69ec7c"
+    ],
+    [
+      "b086da246a69ec7c",
+      "0598b5ad692663cb"
+    ],
+    [
+      "0598b5ad692663cb",
+      "f2dd0408cc188ab5"
+    ],
+    [
+      "f2dd0408cc188ab5",
+      "cc8eff071d00f290"
+    ],
+    [
+      "cc8eff071d00f290",
+      "794f9ddecc3d62f2"
+    ],
+    [
+      "794f9ddecc3d62f2",
+      "f8a6077aa198326a"
+    ],
+    [
+      "f8a6077aa198326a",
+      "7c8a3f154d7641dd"
+    ],
+    [
+      "7c8a3f154d7641dd",
+      "40a59fb864018380"
+    ]
+  ],
+  "authority_paths": {
+    "cd1a5bc6e01c99d2": [
+      "cd1a5bc6e01c99d2"
+    ],
+    "b2591de593989c33": [
+      "b2591de593989c33"
+    ],
+    "f176cfd118c830cd": [
+      "f176cfd118c830cd"
+    ],
+    "280a44e941581a2a": [
+      "280a44e941581a2a"
+    ],
+    "82aae57032815d8c": [
+      "82aae57032815d8c"
+    ],
+    "2501da44bce8e611": [
+      "2501da44bce8e611"
+    ],
+    "ca20ef7eca80df94": [
+      "ca20ef7eca80df94"
+    ],
+    "e8bd7bfa967357f9": [
+      "e8bd7bfa967357f9"
+    ],
+    "b6dad56eaae1cc4b": [
+      "b6dad56eaae1cc4b"
+    ],
+    "548224cb9ffb543c": [
+      "548224cb9ffb543c"
+    ],
+    "07ac7126216e083b": [
+      "07ac7126216e083b"
+    ],
+    "b086da246a69ec7c": [
+      "b086da246a69ec7c"
+    ],
+    "0598b5ad692663cb": [
+      "0598b5ad692663cb"
+    ],
+    "f2dd0408cc188ab5": [
+      "f2dd0408cc188ab5"
+    ],
+    "cc8eff071d00f290": [
+      "cc8eff071d00f290"
+    ],
+    "794f9ddecc3d62f2": [
+      "794f9ddecc3d62f2"
+    ],
+    "f8a6077aa198326a": [
+      "f8a6077aa198326a"
+    ],
+    "7c8a3f154d7641dd": [
+      "7c8a3f154d7641dd"
+    ]
+  },
+  "budget_totals": {
+    "actor:yarden": 30000,
+    "actor:tamar": 30000,
+    "actor:shachar": 30000,
+    "actor:aluf": 30000,
+    "actor:erez": 30000,
+    "actor:gal": 30000
+  },
+  "policy_digest": "713dcde78b42efa5d8ce52a7a189ed9963a9bc30b9d07407369b86d215246079",
+  "capture_digest": "6876077e6d7912e99ece84223942bb2e6dfee65ff8e79b9eb678c5ec89eeedc0",
+  "limitations": [
+    "Capture completeness, collector identity, actor identity, human approval and costs are caller declarations, not authenticated facts.",
+    "This passive audit inspects already-recorded actions and does not prevent execution or reverse effects.",
+    "Recorded dependency edges establish declared lineage, not physical causality or completeness of unobserved activity.",
+    "Citations verify recorded source identity and content digests, not semantic entailment, factual truth or licensing.",
+    "Integer costs use caller-defined units; this is not billing proof or currency conversion.",
+    "Checksums provide integrity, not authenticity, production certification or deployment authorization."
+  ]
+}
