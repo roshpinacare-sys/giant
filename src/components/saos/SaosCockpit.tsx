@@ -72,6 +72,19 @@ type Sovereignty = {
   safety: string;
 };
 
+/* גל-97 · שימושיות-הארסנל — הוכחת-שימוש-חי, לא טענה */
+type ToolRow = { id: string; title: string; script: string; runs: number; ok: number; fail: number; lastOkAt: string | null; lastResult: string | null };
+type UsageEntry = { at: string; tool: string; ok: boolean; durMs: number; result: string };
+type ToolUsability = {
+  at: string;
+  registry: string;
+  tools: ToolRow[];
+  usage: UsageEntry[];
+  kpi: { totalRuns: number; totalOk: number; okRate: number; activeTools: number; toolCount: number; selftestOk: boolean; lastSelftestAt: string | null; builderActs: number | null; builderSeals: number | null };
+  verdict: string;
+  safety: string;
+};
+
 function useCountdown(target: string | null | undefined) {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
@@ -113,6 +126,7 @@ function Sparkline({ points }: { points: SeriesPoint[] }) {
 export default function SaosCockpit() {
   const [data, setData] = useState<Sovereignty | null>(null);
   const [growth, setGrowth] = useState<GrowthData | null>(null);
+  const [toolsData, setToolsData] = useState<ToolUsability | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -139,20 +153,31 @@ export default function SaosCockpit() {
     } catch {}
   }, []);
 
+  /* גל-97 · KPI-שימושיות-הארסנל — נטען עם-אותו-קצב-חי */
+  const loadTools = useCallback(async () => {
+    try {
+      const res = await fetch("/api/giant/tool-usability", { cache: "no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setToolsData((await res.json()) as ToolUsability);
+    } catch {}
+  }, []);
+
   useEffect(() => {
     const boot = setTimeout(() => {
       load();
       loadGrowth();
+      loadTools();
     }, 0);
     timerRef.current = setInterval(() => {
       load();
       loadGrowth();
+      loadTools();
     }, 15_000);
     return () => {
       clearTimeout(boot);
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [load, loadGrowth]);
+  }, [load, loadGrowth, loadTools]);
 
   const builderCountdown = useCountdown(growth?.host?.nextRunAt);
   const builderGreen = !!growth?.host && (growth.host.running === true || (growth.host.lastRc === 0 && !!growth.host.nextRunAt));
@@ -590,6 +615,77 @@ export default function SaosCockpit() {
               <div className="font-mono text-[11px] text-emerald-300">{data?.survival.sovereignVm?.commit}</div>
               <div className="text-[11px] text-emerald-300">{data?.survival.sovereignVm?.verdict}</div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* גל-97 · שימושיות-הארסנל — האוטונומיה משתמשת-בפועל בכלים שנבנו (מנדט-הבעלים) */}
+        <Card className="border-sky-900/60 bg-gradient-to-br from-sky-950/20 to-stone-900/60">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Wrench className="h-5 w-5 text-sky-400" aria-hidden />
+              שימושיות-הארסנל · האוטונומיה משתמשת-בפועל (גל-97)
+              <Badge
+                variant="outline"
+                className={`mr-auto ${toolsData?.kpi?.selftestOk ? "border-emerald-700 text-emerald-300" : "border-stone-700 text-stone-400"}`}
+              >
+                {toolsData?.kpi?.selftestOk ? "מטריצת-הוכחה ירוקה" : "ממתין-לפעימת-הוכחה"}
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="rounded-lg border border-stone-800 bg-stone-950/60 p-3 text-center">
+                <div className="text-xl font-bold tabular-nums text-sky-300">{toolsData?.kpi?.totalRuns ?? "—"}</div>
+                <div className="text-[10px] text-stone-500">הרצות-כלים-בפועל</div>
+              </div>
+              <div className="rounded-lg border border-stone-800 bg-stone-950/60 p-3 text-center">
+                <div className="text-xl font-bold tabular-nums text-emerald-300">{toolsData?.kpi?.okRate != null ? `${toolsData.kpi.okRate}%` : "—"}</div>
+                <div className="text-[10px] text-stone-500">שיעור-הצלחה</div>
+              </div>
+              <div className="rounded-lg border border-stone-800 bg-stone-950/60 p-3 text-center">
+                <div className="text-xl font-bold tabular-nums text-sky-300">
+                  {toolsData?.kpi ? `${toolsData.kpi.activeTools}/${toolsData.kpi.toolCount}` : "—"}
+                </div>
+                <div className="text-[10px] text-stone-500">כלים-פעילים-בשימוש</div>
+              </div>
+              <div className="rounded-lg border border-stone-800 bg-stone-950/60 p-3 text-center">
+                <div className="text-xl font-bold tabular-nums text-emerald-300">{toolsData?.kpi?.builderActs ?? "—"}</div>
+                <div className="text-[10px] text-stone-500">מעשי-בנאי (acts)</div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {(toolsData?.tools ?? []).map((t) => (
+                <div key={t.id} className="rounded-lg border border-stone-800 bg-stone-950/60 p-3 flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="text-sm font-semibold text-stone-100 truncate">{t.title}</div>
+                    <div className="font-mono text-[10px] text-stone-500 truncate">{t.script}</div>
+                    {t.lastResult && <div className="text-[10px] text-stone-400 truncate">{t.lastResult}</div>}
+                  </div>
+                  <div className="text-left shrink-0">
+                    <Badge variant="outline" className={t.ok > 0 ? "border-emerald-700 text-emerald-300" : "border-stone-700 text-stone-500"}>
+                      {t.runs > 0 ? `${t.ok}/${t.runs} ok` : "טרם-הורץ"}
+                    </Badge>
+                    {t.lastOkAt && <div className="text-[10px] text-stone-500 mt-1">{fmtTime(t.lastOkAt)}</div>}
+                  </div>
+                </div>
+              ))}
+              {!toolsData && <div className="text-xs text-stone-500 p-3 md:col-span-2">טלמטריית-שימושיות בטעינה…</div>}
+            </div>
+            <div className="max-h-32 overflow-y-auto rounded-lg border border-stone-800 bg-stone-950/60 p-2 saos-scroll">
+              {(toolsData?.usage ?? []).slice(0, 8).map((u, i) => (
+                <div key={i} className="flex items-center gap-2 text-[11px] py-0.5 border-b border-stone-900 last:border-0">
+                  <span className={u.ok ? "text-emerald-400" : "text-rose-400"}>{u.ok ? "✓" : "✗"}</span>
+                  <span className="font-mono text-stone-500">{fmtTime(u.at)}</span>
+                  <span className="font-mono text-sky-300">{u.tool}</span>
+                  <span className="text-stone-400 truncate">{u.result}</span>
+                  <span className="text-stone-600 shrink-0">{u.durMs}ms</span>
+                </div>
+              ))}
+              {(toolsData?.usage?.length ?? 0) === 0 && (
+                <div className="text-[11px] text-stone-500 p-1">יומן-השימוש ריק — הרישום-החי מתחיל-בפעימה-הבאה</div>
+              )}
+            </div>
+            <p className="text-[11px] text-stone-500">{toolsData?.verdict} · מרשם-קנון: {toolsData?.registry}</p>
           </CardContent>
         </Card>
 
