@@ -632,3 +632,6 @@ export default function SaosCockpit() {
     </div>
   );
 }
+
+// G10-fix: named export נדרש ע"י page (היימרוז עם default — תואם-שניהם)
+export { SaosCockpit };
