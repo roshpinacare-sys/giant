@@ -709,92 +709,10 @@ function git(dir: string, args: string[]): Promise<{ ok: boolean; out: string }>
     });
   });
 }
-
-/* ── חוק-איחוד (תיקון-מבני · 5-הבליעות · 2026-10-18) ─────────────────────────
- * שורש-חמש-הבליעות (כל-פעם-משטחי-עמיתים-נמחקו-מהעץ — כולל-גשר-הפעלת-ה-Hive):
- * merge -s ours / pull -X ours כשהעץ-המקומי-מיושן = הענן-מקושר-כהורה-אך-העץ-שלו
- * נמחק-שלם. החוק-החדש: איחוד-תמיד, אף-צד-לא-נמחק —
- *  · מחיקה-אצלנו + שינוי-אצל-עמית → עמית מנצח (לעולם-לא-מוחקים-שורות-זרות)
- *  · גם-שינויים → git merge-file --union (איחוד-חסר-סימונים)
- *  · גם-הוספות-בלי-בסיס → נספח-איחוד (חוק-ה-worklog)
- * כשל-איחוד → fail-closed כנה (בלי-דחיפה-הסבב), לעולם-לא-פתרון-השמדתי. */
-async function unionResolveConflicts(dir: string): Promise<{ ok: boolean; resolved: number; note: string }> {
-  const U = await git(dir, ["diff", "--name-only", "--diff-filter=U"]);
-  const files = U.out.split("\n").map((s) => s.trim()).filter(Boolean);
-  let resolved = 0;
-  const notes: string[] = [];
-  for (const f of files) {
-    const s1 = await git(dir, ["show", `:1:${f}`]);
-    const s2 = await git(dir, ["show", `:2:${f}`]);
-    const s3 = await git(dir, ["show", `:3:${f}`]);
-    const hasB = s1.ok, hasO = s2.ok, hasT = s3.ok;
-    try {
-      if (hasO && hasT) {
-        if (s2.out === s3.out) {
-          // תוכן-זהה-שני-הצדדים — לוקחים-אחד
-          await git(dir, ["checkout", "--ours", "--", f]);
-        } else if (hasB) {
-          const bf = "/tmp/.u-b", of = "/tmp/.u-o", tf = "/tmp/.u-t";
-          fs.writeFileSync(bf, s1.out); fs.writeFileSync(of, s2.out); fs.writeFileSync(tf, s3.out);
-          const mf = await git(dir, ["merge-file", "--union", "-p", of, bf, tf]);
-          if (!mf.ok) throw new Error("merge-file-fail");
-          fs.writeFileSync(path.join(dir, f), mf.out);
-        } else {
-          // שתי-הוספות-עצמאיות — נספח-איחוד (חוק-worklog): שלנו + של-עמית
-          fs.writeFileSync(path.join(dir, f), s2.out + (s2.out.endsWith("\n") ? "" : "\n") + s3.out);
-        }
-      } else if (hasT && !hasO) {
-        // נמחק-אצלנו, חי-אצל-עמית → עמית מנצח (החוק: אף-שורה-זרה-לא-נמחקת)
-        fs.writeFileSync(path.join(dir, f), s3.out);
-        notes.push(`resurrect:${f}`);
-      } else if (hasO && !hasT) {
-        // נמחק-אצל-עמית, חי-אצלנו → שלנו-נשאר (העץ-החי-הוא-הקנוני)
-        await git(dir, ["add", "--", f]);
-        resolved++;
-        continue;
-      } else {
-        throw new Error("no-sides");
-      }
-      await git(dir, ["add", "--", f]);
-      resolved++;
-    } catch (e) {
-      notes.push(`fail:${f}:${String(e).slice(0, 60)}`);
-    }
-  }
-  const rest = await git(dir, ["diff", "--name-only", "--diff-filter=U"]);
-  const clean = !rest.out.trim();
-  return { ok: clean, resolved, note: notes.join(";").slice(0, 200) };
-}
-
-/* איחוד-כניסה: FF-כשאפשר (נקי-מלחם-הגדרה), מיזוג-איחוד-כשלא. */
-async function unionSync(dir: string, remote: string): Promise<{ ok: boolean; how: string; note: string }> {
-  await git(dir, ["fetch", remote, "main"]);
-  const anc = await git(dir, ["merge-base", "--is-ancestor", "HEAD", "FETCH_HEAD"]);
-  if (anc.ok) {
-    const ff = await git(dir, ["-c", "merge.autoStash=false", "merge", "--ff-only", "FETCH_HEAD"]);
-    return { ok: ff.ok || ff.out.includes("up to date"), how: "ff", note: ff.out.slice(0, 120) };
-  }
-  const mg = await git(dir, ["-c", "merge.autoStash=false", "merge", "-m", "vault-sync [auto-economy]: union-sync — אף-צד-לא-נמחק (חוק-איחוד)", "FETCH_HEAD"]);
-  if (mg.ok || mg.out.includes("Already up to date") || mg.out.includes("up to date")) {
-    return { ok: true, how: "merge", note: mg.out.slice(0, 120) };
-  }
-  const ur = await unionResolveConflicts(dir);
-  if (!ur.ok) {
-    // fail-closed כנה: מפקירים-את-המיזוג, לא-דוחפים, מיגל-הבא-ינסה-שוב
-    await git(dir, ["merge", "--abort"]);
-    return { ok: false, how: "union-fail", note: ur.note };
-  }
-  const uc = await git(dir, ["commit", "-q", "-m", `vault-sync [auto-economy]: union-resolved ${ur.resolved} files — איחוד-ללא-מחיקות (${ur.note.slice(0, 80)})`]);
-  return { ok: uc.ok || uc.out.includes("nothing to commit"), how: "union", note: `resolved=${ur.resolved}` };
-}
-async function sealRepo(dir: string, afterPull?: () => void | Promise<void>): Promise<boolean> {
+async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opts?: { strategyOurs?: boolean }): Promise<boolean> {
   // גל-83 · תיקון-תפר-מיזוג: הפרמטר afterPull נמחק-מהחתימה-במיזוג-אך-הקריאה-ב-sealMyProject
   // המשיכה-להעביר-אותו + הגוף-התייחס-אליו → ReferenceError שהרג-את-כל-סבב-האטימה
   // (ובכך-ביטל-בשקט-את-משמורת-המדינה: freeze+custody-restore — שורש-קריעות-הספר-החוזרות).
-  // 2026-10-18 · תיקון-מבני-5-הבליעות: הפרמטר strategyOurs הוסר לגמרי —
-  // merge -s ours / -X ours היו-המכונה-שאכלה-משטחי-עמיתים (כולל-גשר-ה-Hive) כשהעץ-המקומי
-  // מיושן. מעתה: חוק-איחוד-אחיד (unionSync) לכל-המאגרים; הגנת-המצב-החי-של-my-project
-  // נשארת-ב-afterPull (verifyChain+custody-restore) — לא-בהשמדת-קוד-זר.
   const name = dir.split("/").filter(Boolean).pop()!;
   for (let attempt = 0; attempt < 2; attempt++) {
     const st = await git(dir, ["status", "--porcelain", "--branch"]);
@@ -815,17 +733,38 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>): Pr
     // דחף-במקומה-מצב-ישן-וקידם-את-הענן — מקור-תפרי-הספר-ההיסטוריים.
     const rm = await git(dir, ["remote"]);
     const remote = rm.out.split("\n").map((s) => s.trim()).filter(Boolean)[0] ?? "origin";
-    // גל-87 · סגירת-חלון-הלכלוך: commit-שקט-חוזר לפני-הסנכרון כדי-שהאיחוד-ירוץ-על-מצב-עקבי
-    // (no-op-כנה-אם-אין-שינויים).
-    await git(dir, ["add", "-A"]);
-    await git(dir, ["commit", "-q", "-m", "vault-seal [auto-economy]: tail-records-before-link"]);
-    // 2026-10-18 · חוק-איחוד: FF-כשאפשר, מיזוג+איחוד-סכסוכים-כשלא, fail-closed-כנה.
-    // merge.autoStash=false נשמר (גל-87 · מירוץ-ה-stash-על-ספר-חי).
-    const sync = await unionSync(dir, remote);
-    if (!sync.ok) {
-      sealLog({ repo: name, action: `sync-${sync.how}`, out: sync.note });
+    if (opts?.strategyOurs) {
+      // גל-83 · מסלול-אפס-תפרים (my-project — מחזיק-המצב-החי): merge -s ours לא-נוגע
+      // בעץ-העבודה-כלל — הספר-החי-והקוד-הרצים-שלנו-מנצחים-תמיד, ההיסטוריה-של-הענן
+      // (כולל-קו-הסשן-השני) מקושרת-כהורה-שני. אפס-קונפליקטים, אפס-stash, אפס-תפר.
+      await git(dir, ["fetch", remote, "main"]);
+      // גל-87 · סגירת-חלון-הלכלוך: בין-ה-commit-בראש-הלולאה לבין-המיזוג, sealLog/ingestEvent
+      // מוסיפים-רשומות-ספר (seal-log/ledger) → commit-שקט-חוזר כדי-שהמיזוג-ירוץ-על-מצב-עקבי
+      // (no-op-כנה-אם-אין-שינויים).
+      await git(dir, ["add", "-A"]);
+      await git(dir, ["commit", "-q", "-m", "vault-seal [auto-economy]: tail-records-before-link"]);
+      // גל-87 · חיסול-מירוץ-ה-stash: merge.autoStash=false-מפורש. נמדד-פעמיים
+      // (14:36/15:00): stash-על-עץ-חי-של-ספר-שכתיבתו-אינה-פוסקת = "unstable object
+      // source data" → merge-fail. merge -s ours לא-נוגע-בעץ → אין-שום-סיבה-ל-stash.
+      const mg = await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins, zero-seam", "FETCH_HEAD"]);
+      if (!mg.ok && !mg.out.includes("Already up to date") && !mg.out.includes("up to date")) {
+        sealLog({ repo: name, action: "merge-fail", out: mg.out.slice(0, 200) });
+      }
     } else {
-      sealLog({ repo: name, action: "synced", how: sync.how, out: sync.note });
+      // גל-83 · autoStash-חובה + refspec-מפורש (נמדד: pull-בלי-branch נכשל-בלי-upstream).
+      const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote, "main"]);
+      if (!pull.ok && !pull.out.includes("Already up to date") && !pull.out.includes("up to date")) {
+        sealLog({ repo: name, action: "pull-fail", out: pull.out.slice(0, 220) });
+        // גל-87 · החלמה-מהשורש (נמדד על Domain 15:35): קונפליקט modify/delete לא-נפתר
+        // עם -X ours → הריבוז-נתקע-detached-HEAD → push משתבש → המאגר-נשאר-שבור.
+        // הפתרון: abort-מיידי + fallback למיזוג-אפס-תפרים (-s ours — הדוקטרינה-של-my-project):
+        // ההיסטוריה-מקושרת-כהורה-שני, המצב-המקומי-מנצח, אפס-ריבוז-תקוע.
+        await git(dir, ["rebase", "--abort"]);
+        const mg2 = await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins (pull-conflict fallback)", "FETCH_HEAD"]);
+        if (!mg2.ok && !mg2.out.includes("up to date")) {
+          sealLog({ repo: name, action: "merge-fallback-fail", out: mg2.out.slice(0, 160) });
+        }
+      }
     }
     if (afterPull) { try { await afterPull(); } catch (e) { sealLog({ repo: name, action: "after-pull-fail", error: String(e) }); } }
     const push = await git(dir, ["push", remote, "HEAD"]);
@@ -887,7 +826,7 @@ async function sealMyProject(): Promise<void> {
         if (preSnap) { try { fs.copyFileSync(preSnap, SNAP); } catch { /* כנה */ } }
         sealLog({ repo: "my-project", action: "state-custody-restore", brokenAt: v.brokenAt, restored });
       }
-    }); // 2026-10-18 · חוק-איחוד-אחיד: אין-עוד -s ours — הגנת-המצב-החי ב-custody-restore מעלה
+    }, { strategyOurs: true }); // גל-83 · אפס-תפרים: merge -s ours — לא-נוגע-בעץ-החי-כלל
   } finally {
     for (const p of pids) { try { process.kill(p, "SIGCONT"); } catch { /* כנה */ } }
     if (preLedger) try { fs.rmSync(preLedger, { force: true }); } catch { /* כנה */ }

@@ -1,0 +1,704 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "schema_version": "1",
+    "name": "soldier-mandate-msg8",
+    "tenant_id": "saos",
+    "trusted_collectors": [
+      "soldier-army"
+    ],
+    "actors": {
+      "yarden": {
+        "roles": [
+          "soldier"
+        ],
+        "human": false
+      },
+      "tamar": {
+        "roles": [
+          "soldier"
+        ],
+        "human": false
+      },
+      "shachar": {
+        "roles": [
+          "soldier"
+        ],
+        "human": false
+      },
+      "aluf": {
+        "roles": [
+          "soldier"
+        ],
+        "human": false
+      },
+      "erez": {
+        "roles": [
+          "soldier"
+        ],
+        "human": false
+      },
+      "gal": {
+        "roles": [
+          "soldier"
+        ],
+        "human": false
+      },
+      "operator": {
+        "roles": [
+          "operator"
+        ],
+        "human": false
+      }
+    },
+    "permissions": [
+      {
+        "role": "soldier",
+        "action": "order",
+        "resource_scope": "SAOS/USDS"
+      },
+      {
+        "role": "soldier",
+        "action": "fuel",
+        "resource_scope": "credits"
+      },
+      {
+        "role": "soldier",
+        "action": "xfer",
+        "resource_scope": "operator"
+      },
+      {
+        "role": "operator",
+        "action": "xfer",
+        "resource_scope": "*"
+      }
+    ],
+    "approval_rules": [],
+    "budgets": [
+      {
+        "scope": "actor",
+        "limit_units": 300000,
+        "actor_id": "yarden"
+      },
+      {
+        "scope": "actor",
+        "limit_units": 300000,
+        "actor_id": "tamar"
+      },
+      {
+        "scope": "actor",
+        "limit_units": 300000,
+        "actor_id": "shachar"
+      },
+      {
+        "scope": "actor",
+        "limit_units": 300000,
+        "actor_id": "aluf"
+      },
+      {
+        "scope": "actor",
+        "limit_units": 300000,
+        "actor_id": "erez"
+      },
+      {
+        "scope": "actor",
+        "limit_units": 300000,
+        "actor_id": "gal"
+      }
+    ],
+    "require_citations": false
+  },
+  "capture": {
+    "schema_version": "1",
+    "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+    "tenant_id": "saos",
+    "collector_id": "soldier-army",
+    "events": [
+      {
+        "event_id": "c667e601a50275bd",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 1,
+        "time_ns": 1792310650683386078,
+        "parents": [],
+        "payload": {
+          "kind": "start",
+          "label": ""
+        }
+      },
+      {
+        "event_id": "501ead1552722b58",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 2,
+        "time_ns": 1792310650683611549,
+        "parents": [
+          "c667e601a50275bd"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "yarden",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "bfe0715bab8a3925e8af6bcc3541d844058a78cfc474a21f4fa99235f08bbc84",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "1082014a88bead69",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 3,
+        "time_ns": 1792310650683684951,
+        "parents": [
+          "501ead1552722b58"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "tamar",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "02a5663fd8949489900748942210e18651d9ccdb16c11ff109ab263518a83677",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "aacb3f9a12f46aca",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 4,
+        "time_ns": 1792310650683728317,
+        "parents": [
+          "1082014a88bead69"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "shachar",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "f92ef960cdb727110b71cb212af4b37fac7a15c97fdcde72276e0fa75a90ed3e",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "5d3de2f87cadf1ac",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 5,
+        "time_ns": 1792310650683769786,
+        "parents": [
+          "aacb3f9a12f46aca"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "aluf",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "80519d3db6d8aed52243e4e0f992e95ef3a0b477c2b4bc184069142f5bddf53d",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "d79c4958a79314fd",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 6,
+        "time_ns": 1792310650683800813,
+        "parents": [
+          "5d3de2f87cadf1ac"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "erez",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "1bca77fb61a7f973c1dbc8388bda063fa2ee20347c7dce6801e1b0819c3697f8",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "7257027a7412e71f",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 7,
+        "time_ns": 1792310650683828691,
+        "parents": [
+          "d79c4958a79314fd"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "gal",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "22873f3a297566c795f8f1a9c1e9aba0d6121dc28e523e331a1fdba112b754a4",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "35d8765cf0dc3869",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 8,
+        "time_ns": 1792310650683854012,
+        "parents": [
+          "7257027a7412e71f"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "yarden",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "4e2134a459c790e5ad2650de44624f451c56982114235067e1177e2e62d611e4",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "94fd7e3bb9dfbca7",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 9,
+        "time_ns": 1792310650683879123,
+        "parents": [
+          "35d8765cf0dc3869"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "yarden",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "56fe3da87098cc9b0af7ae2382b0b1507eba2b4c1c9cc76f00783d4b6819e513",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "ceef4796910a0893",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 10,
+        "time_ns": 1792310650683905069,
+        "parents": [
+          "94fd7e3bb9dfbca7"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "tamar",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "800b50be723a49ba89563a04249f71f7549bbd28b508b980b697faf98c64c031",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "1f27c5b68cf58a9b",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 11,
+        "time_ns": 1792310650683929940,
+        "parents": [
+          "ceef4796910a0893"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "tamar",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "15a1fe3ecd8c0d155f9cdb06ed872d472d69da27858cc56832d88343b0fe83b3",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "f669e7ba528f8361",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 12,
+        "time_ns": 1792310650683953950,
+        "parents": [
+          "1f27c5b68cf58a9b"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "shachar",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "55ed0c284476e68a9193f119bf777a466abe072bfc6a2822c897d1fa63a24e5b",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "0cda3a53eace1e69",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 13,
+        "time_ns": 1792310650684119700,
+        "parents": [
+          "f669e7ba528f8361"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "shachar",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "52e2222857cfa0545a8dfbd866d0f92e27011c230f672b0112955fe75e27d553",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "80c93dbd31a8454d",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 14,
+        "time_ns": 1792310650684148976,
+        "parents": [
+          "0cda3a53eace1e69"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "aluf",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "322b0ac27274c5f67e7bd95a7ad1bee386cdecff83c0c12f9e5fed56b3cef666",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "3b56aa608f1476da",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 15,
+        "time_ns": 1792310650684174876,
+        "parents": [
+          "80c93dbd31a8454d"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "aluf",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "bb78ebcf3549e17e9eda7e04ea4e61086e1ae99c521ca6d258ee59b04c349066",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "11d0a90275150fb1",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 16,
+        "time_ns": 1792310650684199856,
+        "parents": [
+          "3b56aa608f1476da"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "erez",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "17f7e72bf306b7cb2b65817daffb7a67880447e77e69680dab6ae90540c30aca",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "872982ddf22e5eba",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 17,
+        "time_ns": 1792310650684224936,
+        "parents": [
+          "11d0a90275150fb1"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "erez",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "ec3800465169eefaed15346e24f022d88f5cbb331ef04a0a6da5f8e4d00b5657",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "0c72f73522a2faa2",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 18,
+        "time_ns": 1792310650684249508,
+        "parents": [
+          "872982ddf22e5eba"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "gal",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "09eb23b6d60de8f3f42cb08ec7c3e1656d2af798ed856487833eb6c1b9fa65d8",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "85e76a79df56bf4b",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 19,
+        "time_ns": 1792310650684273506,
+        "parents": [
+          "0c72f73522a2faa2"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "gal",
+          "action": "order",
+          "resource": "SAOS/USDS",
+          "arguments_digest": "077e1d91ddd03674a07dca62570c6413a3af07075d2aa1285f01a04b5a5828b3",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10000,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "b8063f7b21f412d7",
+        "trace_id": "949aabdad6d9cad7a91e7979a9c41308",
+        "tenant_id": "saos",
+        "sequence": 20,
+        "time_ns": 1792310650684280321,
+        "parents": [
+          "85e76a79df56bf4b"
+        ],
+        "payload": {
+          "kind": "end",
+          "complete": true,
+          "declared_events": 20
+        }
+      }
+    ],
+    "capture_complete": true,
+    "import_warnings": [],
+    "source_format": "native"
+  },
+  "report": {
+    "decision": "CLEAR",
+    "violations": [],
+    "coverage_issues": [],
+    "checked_actions": 18,
+    "completed_actions": 18,
+    "failed_actions": 0,
+    "family_counts": {
+      "graph": 20,
+      "permission": 18,
+      "approval": 0,
+      "delegation": 0,
+      "budget": 18,
+      "citation": 0
+    },
+    "family_status": {
+      "graph": "EVALUATED",
+      "permission": "EVALUATED",
+      "approval": "NOT_EVALUATED",
+      "delegation": "NOT_EVALUATED",
+      "budget": "EVALUATED",
+      "citation": "NOT_EVALUATED"
+    },
+    "graph_edges": [
+      [
+        "c667e601a50275bd",
+        "501ead1552722b58"
+      ],
+      [
+        "501ead1552722b58",
+        "1082014a88bead69"
+      ],
+      [
+        "1082014a88bead69",
+        "aacb3f9a12f46aca"
+      ],
+      [
+        "aacb3f9a12f46aca",
+        "5d3de2f87cadf1ac"
+      ],
+      [
+        "5d3de2f87cadf1ac",
+        "d79c4958a79314fd"
+      ],
+      [
+        "d79c4958a79314fd",
+        "7257027a7412e71f"
+      ],
+      [
+        "7257027a7412e71f",
+        "35d8765cf0dc3869"
+      ],
+      [
+        "35d8765cf0dc3869",
+        "94fd7e3bb9dfbca7"
+      ],
+      [
+        "94fd7e3bb9dfbca7",
+        "ceef4796910a0893"
+      ],
+      [
+        "ceef4796910a0893",
+        "1f27c5b68cf58a9b"
+      ],
+      [
+        "1f27c5b68cf58a9b",
+        "f669e7ba528f8361"
+      ],
+      [
+        "f669e7ba528f8361",
+        "0cda3a53eace1e69"
+      ],
+      [
+        "0cda3a53eace1e69",
+        "80c93dbd31a8454d"
+      ],
+      [
+        "80c93dbd31a8454d",
+        "3b56aa608f1476da"
+      ],
+      [
+        "3b56aa608f1476da",
+        "11d0a90275150fb1"
+      ],
+      [
+        "11d0a90275150fb1",
+        "872982ddf22e5eba"
+      ],
+      [
+        "872982ddf22e5eba",
+        "0c72f73522a2faa2"
+      ],
+      [
+        "0c72f73522a2faa2",
+        "85e76a79df56bf4b"
+      ],
+      [
+        "85e76a79df56bf4b",
+        "b8063f7b21f412d7"
+      ]
+    ],
+    "authority_paths": {
+      "501ead1552722b58": [
+        "501ead1552722b58"
+      ],
+      "1082014a88bead69": [
+        "1082014a88bead69"
+      ],
+      "aacb3f9a12f46aca": [
+        "aacb3f9a12f46aca"
+      ],
+      "5d3de2f87cadf1ac": [
+        "5d3de2f87cadf1ac"
+      ],
+      "d79c4958a79314fd": [
+        "d79c4958a79314fd"
+      ],
+      "7257027a7412e71f": [
+        "7257027a7412e71f"
+      ],
+      "35d8765cf0dc3869": [
+        "35d8765cf0dc3869"
+      ],
+      "94fd7e3bb9dfbca7": [
+        "94fd7e3bb9dfbca7"
+      ],
+      "ceef4796910a0893": [
+        "ceef4796910a0893"
+      ],
+      "1f27c5b68cf58a9b": [
+        "1f27c5b68cf58a9b"
+      ],
+      "f669e7ba528f8361": [
+        "f669e7ba528f8361"
+      ],
+      "0cda3a53eace1e69": [
+        "0cda3a53eace1e69"
+      ],
+      "80c93dbd31a8454d": [
+        "80c93dbd31a8454d"
+      ],
+      "3b56aa608f1476da": [
+        "3b56aa608f1476da"
+      ],
+      "11d0a90275150fb1": [
+        "11d0a90275150fb1"
+      ],
+      "872982ddf22e5eba": [
+        "872982ddf22e5eba"
+      ],
+      "0c72f73522a2faa2": [
+        "0c72f73522a2faa2"
+      ],
+      "85e76a79df56bf4b": [
+        "85e76a79df56bf4b"
+      ]
+    },
+    "budget_totals": {
+      "actor:yarden": 30000,
+      "actor:tamar": 30000,
+      "actor:shachar": 30000,
+      "actor:aluf": 30000,
+      "actor:erez": 30000,
+      "actor:gal": 30000
+    },
+    "policy_digest": "713dcde78b42efa5d8ce52a7a189ed9963a9bc30b9d07407369b86d215246079",
+    "capture_digest": "5036d58fbbe9c0c2d0fa12d385e68eb45b53b69969ed5eb3ee0d5b64066c53f1",
+    "limitations": [
+      "Capture completeness, collector identity, actor identity, human approval and costs are caller declarations, not authenticated facts.",
+      "This passive audit inspects already-recorded actions and does not prevent execution or reverse effects.",
+      "Recorded dependency edges establish declared lineage, not physical causality or completeness of unobserved activity.",
+      "Citations verify recorded source identity and content digests, not semantic entailment, factual truth or licensing.",
+      "Integer costs use caller-defined units; this is not billing proof or currency conversion.",
+      "Checksums provide integrity, not authenticity, production certification or deployment authorization."
+    ]
+  },
+  "integrity_digest": "eab038de11a5ba1935d99f39f3bf605272b727a18e57cbe8ab98b2647cca3e4d"
+}

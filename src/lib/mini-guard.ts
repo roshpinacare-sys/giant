@@ -40,6 +40,10 @@ export const MINI_SERVICES: MiniServiceDef[] = [
   { name: "dex-economy-bridge", dir: "mini-services/dex-economy-bridge", port: 3017, he: "גשר-המילויים dex→economy (dex-fee · שער-אמת)", cmd: "[ -d node_modules ] || bun install --silent; exec bun run dev", env: { BRIDGE_DEX_DB: "/home/z/my-project/db/custom.db", BRIDGE_DEX_API: "http://127.0.0.1:3010/saos-dex/api/dex/trades?pair=SAOS/USDS&limit=500" } },
   /* גל-92 · קול-הריבונות: סריקת-צי + ריפוי-עצמי + דיווח-חוץ (GitHub-Issues · Posta-seam). */
   { name: "sovereign-voice", dir: "mini-services/sovereign-voice", port: 3019, he: "קול-הריבונות (סריקה-כל-5דק · ריפוי-עצמי · קול-חוץ)", cmd: "[ -d node_modules ] || bun install --silent; exec bun run dev" },
+  /* גל-93 · ביקורת-מסלול בלתי-תלויה על הצבא (iFixAi 4.2.0 · צו-בעלים ghidra+iFixAi):
+   * פסיבית-לגמרי · מדיניות-מנדט msg-8 · תקרת-בנק 300µ-יח' פר-חייל · הוכחות-מוקפאות.
+   * תלות: python3 + חבילת-ifixai (מותקנת ב-venv של הסנדבוקס; כשל-פייתון = AUDIT-ERROR כן, לא-קריסה). */
+  { name: "sovereign-audit", dir: "mini-services/sovereign-audit", port: 3022, he: "ביקורת-מסלול בלתי-תלויה על הצבא (iFixAi · CLEAR/FINDINGS · הוכחות)", cmd: "exec bun run index.ts" },
   /* גל-90 · הכלכלה-הפנימית תחת-המשגיחה: נמדד שמשגיח-ה-shell שלה (supervise-economy.sh)
    * מת-עם-קציר-הסנדבוקס — מעכשיו גם-הוא בן-עץ-ה-Next (שושלת-השרדות) עם בריאות-HTTP כנה (/health). */
   { name: "fleet-economy", dir: "mini-services/fleet-economy", port: 3016, he: "הכלכלה-הפנימית (ספר-hash-chain · AMM · תורת-כותבים-רבים)", probe: "gateway" },
