@@ -105,9 +105,12 @@ export function BuilderView() {
   }, []);
 
   useEffect(() => {
-    void load();
+    const t0 = setTimeout(load, 0);
     const t = setInterval(() => void load(true), 60_000);
-    return () => clearInterval(t);
+    return () => {
+      clearTimeout(t0);
+      clearInterval(t);
+    };
   }, [load]);
 
   const acts = typeof data?.state?.acts === "number" ? data.state.acts : null;

@@ -17,7 +17,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { spawn } from "node:child_process";
+import { spawn, execFileSync } from "node:child_process";
 
 const PORT = 3019;
 const SCAN_MS = 5 * 60_000;
@@ -168,11 +168,19 @@ async function healPass(): Promise<void> {
   }
 }
 
-type Snapshot = { at: number; economy: any; verify: any; dex: any; bridge: any; army: any; alerts: Alert[]; errors: string[] };
+type Snapshot = { at: number; economy: any; verify: any; dex: any; bridge: any; army: any; alerts: Alert[]; errors: string[]; diskUsedPct?: number };
 let lastSnapshot: Snapshot | null = null;
 
 async function scanFleet(): Promise<Snapshot> {
   const snap: Snapshot = { at: Date.now(), economy: null, verify: null, dex: null, bridge: null, army: null, alerts: [], errors: [] };
+  /* גל-18 · חוק-הדיסק (לקח-ENOSPC 20261018): הדיסק-המלא-הוא-הרגע-שבו-כל-מכונות-האמת-מתות
+   * בשקט (ledger-flush · vault-seal · beats). אזעקה-קריטית ב-85% — לפני-המוות, לא-אחריו. */
+  try {
+    const df = execFileSync("df", ["-h", "/"], { encoding: "utf8", timeout: 5000 });
+    const usedPct = parseInt(/(\d+)%\s+\/\s*$/m.exec(df)?.[1] ?? "0", 10);
+    snap.diskUsedPct = usedPct;
+    if (usedPct >= 85) snap.alerts.push(emitAlert("disk-full", "critical", `הדיסק ב-${usedPct}% (סף-חירום 85%) — מכונות-העדכון על-סף-מוות-שקט; דרוש-ניקוי/רוטציה מיידי`) ?? null);
+  } catch { /* כנה — מדידת-דיסק לא מפילה סריקה */ }
 
   try {
     snap.economy = await jget(`${FLEET.economy}/health`);
