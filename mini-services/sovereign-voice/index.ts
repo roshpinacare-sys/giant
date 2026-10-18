@@ -34,6 +34,8 @@ const PORT = 3019;
 const SCAN_MS = 5 * 60_000;
 const SEAL_STALL_MS = 30 * 60_000;
 const ALERT_COOLDOWN_MS = 30 * 60_000;
+const STEEM_COOLDOWN_MS = 6 * 3600_000; // גל-16 · השרשרת קבועה — מקסימום שידור-אזעקה אחד ל-6 שעות
+let lastSteemAt = 0;
 const ISSUE_DEDUP_MS = 6 * 60 * 60_000;
 const CONSECUTIVE_FAILS_TO_HEAL = 2;
 const DISK_WARN_PCT = 85;
@@ -118,7 +120,7 @@ const issueMap: Record<string, { ts: number; issue?: number }> = (() => {
 })();
 function saveIssueMap(): void { try { fs.writeFileSync(ISSUE_MAP_FILE, JSON.stringify(issueMap)); } catch { /* כנה */ } }
 
-type Alert = { ts: number; key: string; sev: "critical" | "warn"; text: string; status: string; issue?: number };
+type Alert = { ts: number; key: string; sev: "critical" | "warn"; text: string; status: string; issue?: number; permlink?: string };
 const lastAlertAt: Record<string, number> = {};
 
 async function openIssue(key: string, text: string): Promise<number | null> {

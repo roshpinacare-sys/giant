@@ -1,0 +1,512 @@
+{
+  "decision": "CLEAR",
+  "violations": [],
+  "coverage_issues": [],
+  "checked_actions": 66,
+  "completed_actions": 66,
+  "failed_actions": 0,
+  "family_counts": {
+    "graph": 68,
+    "permission": 66,
+    "approval": 0,
+    "delegation": 0,
+    "budget": 49,
+    "citation": 0
+  },
+  "family_status": {
+    "graph": "EVALUATED",
+    "permission": "EVALUATED",
+    "approval": "NOT_EVALUATED",
+    "delegation": "NOT_EVALUATED",
+    "budget": "EVALUATED",
+    "citation": "NOT_EVALUATED"
+  },
+  "graph_edges": [
+    [
+      "4c0b8d42ccd63c96",
+      "76178d5a9a8c57a7"
+    ],
+    [
+      "76178d5a9a8c57a7",
+      "06128d6c4ce3bd04"
+    ],
+    [
+      "06128d6c4ce3bd04",
+      "4b6cc2b0ea220526"
+    ],
+    [
+      "4b6cc2b0ea220526",
+      "784cfe327519fdb7"
+    ],
+    [
+      "784cfe327519fdb7",
+      "fdf6033fae1c4a92"
+    ],
+    [
+      "fdf6033fae1c4a92",
+      "713e680c64be40f1"
+    ],
+    [
+      "713e680c64be40f1",
+      "93f63768e0517cc0"
+    ],
+    [
+      "93f63768e0517cc0",
+      "dbc731568148c29b"
+    ],
+    [
+      "dbc731568148c29b",
+      "953ba222edb63ad0"
+    ],
+    [
+      "953ba222edb63ad0",
+      "19a162e19412c8f6"
+    ],
+    [
+      "19a162e19412c8f6",
+      "70db0854393475fc"
+    ],
+    [
+      "70db0854393475fc",
+      "ac74c32248a3f4c8"
+    ],
+    [
+      "ac74c32248a3f4c8",
+      "708ff1069b0d2020"
+    ],
+    [
+      "708ff1069b0d2020",
+      "a60c458406b987f1"
+    ],
+    [
+      "a60c458406b987f1",
+      "08bca71f3d19ecf4"
+    ],
+    [
+      "08bca71f3d19ecf4",
+      "41b2c16e2d0f131c"
+    ],
+    [
+      "41b2c16e2d0f131c",
+      "40444d459d9884f5"
+    ],
+    [
+      "40444d459d9884f5",
+      "947f1740a3c4aa76"
+    ],
+    [
+      "947f1740a3c4aa76",
+      "d11cd832cc631344"
+    ],
+    [
+      "d11cd832cc631344",
+      "cf7628e0b933f217"
+    ],
+    [
+      "cf7628e0b933f217",
+      "d1586dca24338093"
+    ],
+    [
+      "d1586dca24338093",
+      "c02c02a1b9ee710f"
+    ],
+    [
+      "c02c02a1b9ee710f",
+      "b156c4e189a69758"
+    ],
+    [
+      "b156c4e189a69758",
+      "3d577eeec454b445"
+    ],
+    [
+      "3d577eeec454b445",
+      "60ad85347f51df15"
+    ],
+    [
+      "60ad85347f51df15",
+      "1193fd7cb6fb7fff"
+    ],
+    [
+      "1193fd7cb6fb7fff",
+      "42f28f3e9a61781e"
+    ],
+    [
+      "42f28f3e9a61781e",
+      "b9b007d3b2e25e5c"
+    ],
+    [
+      "b9b007d3b2e25e5c",
+      "c38916b341bfd936"
+    ],
+    [
+      "c38916b341bfd936",
+      "d7f486c37a3f198a"
+    ],
+    [
+      "d7f486c37a3f198a",
+      "ec26d71189343b7c"
+    ],
+    [
+      "ec26d71189343b7c",
+      "08e916e030ca4cd8"
+    ],
+    [
+      "08e916e030ca4cd8",
+      "92d1f3b32d99aebc"
+    ],
+    [
+      "92d1f3b32d99aebc",
+      "6539425b903c741e"
+    ],
+    [
+      "6539425b903c741e",
+      "3a5f9eec7559a3c1"
+    ],
+    [
+      "3a5f9eec7559a3c1",
+      "3042b58454fea118"
+    ],
+    [
+      "3042b58454fea118",
+      "63cc7ae31f92aeed"
+    ],
+    [
+      "63cc7ae31f92aeed",
+      "16e21d0f4b40aa26"
+    ],
+    [
+      "16e21d0f4b40aa26",
+      "df181704c4fdf58e"
+    ],
+    [
+      "df181704c4fdf58e",
+      "b34cc1402d657477"
+    ],
+    [
+      "b34cc1402d657477",
+      "a836a2ed86e4d109"
+    ],
+    [
+      "a836a2ed86e4d109",
+      "2a2852df3d9afcc4"
+    ],
+    [
+      "2a2852df3d9afcc4",
+      "883587ef0a72d11f"
+    ],
+    [
+      "883587ef0a72d11f",
+      "62aaaef926e76130"
+    ],
+    [
+      "62aaaef926e76130",
+      "1671e133f7cb9bd0"
+    ],
+    [
+      "1671e133f7cb9bd0",
+      "b7b4b3addbbb564b"
+    ],
+    [
+      "b7b4b3addbbb564b",
+      "f8bf1c5ca2e0cac1"
+    ],
+    [
+      "f8bf1c5ca2e0cac1",
+      "b23a8ebba417dd79"
+    ],
+    [
+      "b23a8ebba417dd79",
+      "d463f815d27a37a5"
+    ],
+    [
+      "d463f815d27a37a5",
+      "40efbe2e181be8c6"
+    ],
+    [
+      "40efbe2e181be8c6",
+      "a9450f91e1d3c180"
+    ],
+    [
+      "a9450f91e1d3c180",
+      "dcf45c34c84b01ce"
+    ],
+    [
+      "dcf45c34c84b01ce",
+      "7bef671de7cadc8a"
+    ],
+    [
+      "7bef671de7cadc8a",
+      "ec9d47528e483595"
+    ],
+    [
+      "ec9d47528e483595",
+      "5570ff992a74c576"
+    ],
+    [
+      "5570ff992a74c576",
+      "5d0a004e0e46bb68"
+    ],
+    [
+      "5d0a004e0e46bb68",
+      "4a6b360b108a5adb"
+    ],
+    [
+      "4a6b360b108a5adb",
+      "6c323668b3e6c890"
+    ],
+    [
+      "6c323668b3e6c890",
+      "ca23e879d4f98b3a"
+    ],
+    [
+      "ca23e879d4f98b3a",
+      "866fa3d8e20082f8"
+    ],
+    [
+      "866fa3d8e20082f8",
+      "c3a7a4efb3e9c349"
+    ],
+    [
+      "c3a7a4efb3e9c349",
+      "131058f90deb0322"
+    ],
+    [
+      "131058f90deb0322",
+      "ee2006d39dc7c174"
+    ],
+    [
+      "ee2006d39dc7c174",
+      "e34aced4d1dd7e0e"
+    ],
+    [
+      "e34aced4d1dd7e0e",
+      "cbfabb2d3c435ff8"
+    ],
+    [
+      "cbfabb2d3c435ff8",
+      "f280751333ddd378"
+    ],
+    [
+      "f280751333ddd378",
+      "979b51e3d51146f2"
+    ]
+  ],
+  "authority_paths": {
+    "76178d5a9a8c57a7": [
+      "76178d5a9a8c57a7"
+    ],
+    "06128d6c4ce3bd04": [
+      "06128d6c4ce3bd04"
+    ],
+    "4b6cc2b0ea220526": [
+      "4b6cc2b0ea220526"
+    ],
+    "784cfe327519fdb7": [
+      "784cfe327519fdb7"
+    ],
+    "fdf6033fae1c4a92": [
+      "fdf6033fae1c4a92"
+    ],
+    "713e680c64be40f1": [
+      "713e680c64be40f1"
+    ],
+    "93f63768e0517cc0": [
+      "93f63768e0517cc0"
+    ],
+    "dbc731568148c29b": [
+      "dbc731568148c29b"
+    ],
+    "953ba222edb63ad0": [
+      "953ba222edb63ad0"
+    ],
+    "19a162e19412c8f6": [
+      "19a162e19412c8f6"
+    ],
+    "70db0854393475fc": [
+      "70db0854393475fc"
+    ],
+    "ac74c32248a3f4c8": [
+      "ac74c32248a3f4c8"
+    ],
+    "708ff1069b0d2020": [
+      "708ff1069b0d2020"
+    ],
+    "a60c458406b987f1": [
+      "a60c458406b987f1"
+    ],
+    "08bca71f3d19ecf4": [
+      "08bca71f3d19ecf4"
+    ],
+    "41b2c16e2d0f131c": [
+      "41b2c16e2d0f131c"
+    ],
+    "40444d459d9884f5": [
+      "40444d459d9884f5"
+    ],
+    "947f1740a3c4aa76": [
+      "947f1740a3c4aa76"
+    ],
+    "d11cd832cc631344": [
+      "d11cd832cc631344"
+    ],
+    "cf7628e0b933f217": [
+      "cf7628e0b933f217"
+    ],
+    "d1586dca24338093": [
+      "d1586dca24338093"
+    ],
+    "c02c02a1b9ee710f": [
+      "c02c02a1b9ee710f"
+    ],
+    "b156c4e189a69758": [
+      "b156c4e189a69758"
+    ],
+    "3d577eeec454b445": [
+      "3d577eeec454b445"
+    ],
+    "60ad85347f51df15": [
+      "60ad85347f51df15"
+    ],
+    "1193fd7cb6fb7fff": [
+      "1193fd7cb6fb7fff"
+    ],
+    "42f28f3e9a61781e": [
+      "42f28f3e9a61781e"
+    ],
+    "b9b007d3b2e25e5c": [
+      "b9b007d3b2e25e5c"
+    ],
+    "c38916b341bfd936": [
+      "c38916b341bfd936"
+    ],
+    "d7f486c37a3f198a": [
+      "d7f486c37a3f198a"
+    ],
+    "ec26d71189343b7c": [
+      "ec26d71189343b7c"
+    ],
+    "08e916e030ca4cd8": [
+      "08e916e030ca4cd8"
+    ],
+    "92d1f3b32d99aebc": [
+      "92d1f3b32d99aebc"
+    ],
+    "6539425b903c741e": [
+      "6539425b903c741e"
+    ],
+    "3a5f9eec7559a3c1": [
+      "3a5f9eec7559a3c1"
+    ],
+    "3042b58454fea118": [
+      "3042b58454fea118"
+    ],
+    "63cc7ae31f92aeed": [
+      "63cc7ae31f92aeed"
+    ],
+    "16e21d0f4b40aa26": [
+      "16e21d0f4b40aa26"
+    ],
+    "df181704c4fdf58e": [
+      "df181704c4fdf58e"
+    ],
+    "b34cc1402d657477": [
+      "b34cc1402d657477"
+    ],
+    "a836a2ed86e4d109": [
+      "a836a2ed86e4d109"
+    ],
+    "2a2852df3d9afcc4": [
+      "2a2852df3d9afcc4"
+    ],
+    "883587ef0a72d11f": [
+      "883587ef0a72d11f"
+    ],
+    "62aaaef926e76130": [
+      "62aaaef926e76130"
+    ],
+    "1671e133f7cb9bd0": [
+      "1671e133f7cb9bd0"
+    ],
+    "b7b4b3addbbb564b": [
+      "b7b4b3addbbb564b"
+    ],
+    "f8bf1c5ca2e0cac1": [
+      "f8bf1c5ca2e0cac1"
+    ],
+    "b23a8ebba417dd79": [
+      "b23a8ebba417dd79"
+    ],
+    "d463f815d27a37a5": [
+      "d463f815d27a37a5"
+    ],
+    "40efbe2e181be8c6": [
+      "40efbe2e181be8c6"
+    ],
+    "a9450f91e1d3c180": [
+      "a9450f91e1d3c180"
+    ],
+    "dcf45c34c84b01ce": [
+      "dcf45c34c84b01ce"
+    ],
+    "7bef671de7cadc8a": [
+      "7bef671de7cadc8a"
+    ],
+    "ec9d47528e483595": [
+      "ec9d47528e483595"
+    ],
+    "5570ff992a74c576": [
+      "5570ff992a74c576"
+    ],
+    "5d0a004e0e46bb68": [
+      "5d0a004e0e46bb68"
+    ],
+    "4a6b360b108a5adb": [
+      "4a6b360b108a5adb"
+    ],
+    "6c323668b3e6c890": [
+      "6c323668b3e6c890"
+    ],
+    "ca23e879d4f98b3a": [
+      "ca23e879d4f98b3a"
+    ],
+    "866fa3d8e20082f8": [
+      "866fa3d8e20082f8"
+    ],
+    "c3a7a4efb3e9c349": [
+      "c3a7a4efb3e9c349"
+    ],
+    "131058f90deb0322": [
+      "131058f90deb0322"
+    ],
+    "ee2006d39dc7c174": [
+      "ee2006d39dc7c174"
+    ],
+    "e34aced4d1dd7e0e": [
+      "e34aced4d1dd7e0e"
+    ],
+    "cbfabb2d3c435ff8": [
+      "cbfabb2d3c435ff8"
+    ],
+    "f280751333ddd378": [
+      "f280751333ddd378"
+    ]
+  },
+  "budget_totals": {
+    "actor:yarden": 0,
+    "actor:tamar": 5959,
+    "actor:shachar": 0,
+    "actor:aluf": 300,
+    "actor:erez": 0,
+    "actor:gal": 0
+  },
+  "policy_digest": "b8ff4f6600bb9f08bc780f0aee0776bf9ce60f1a1702004f1a0a2fb068ef246c",
+  "capture_digest": "2678155e879852f7b12665a426985ebd999b1d3e6f673f3d391229bc4cc884cd",
+  "limitations": [
+    "Capture completeness, collector identity, actor identity, human approval and costs are caller declarations, not authenticated facts.",
+    "This passive audit inspects already-recorded actions and does not prevent execution or reverse effects.",
+    "Recorded dependency edges establish declared lineage, not physical causality or completeness of unobserved activity.",
+    "Citations verify recorded source identity and content digests, not semantic entailment, factual truth or licensing.",
+    "Integer costs use caller-defined units; this is not billing proof or currency conversion.",
+    "Checksums provide integrity, not authenticity, production certification or deployment authorization."
+  ]
+}
