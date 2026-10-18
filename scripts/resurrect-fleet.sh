@@ -44,9 +44,10 @@ declare -A SVC=(
   [army:3018]="/home/z/my-project/mini-services/soldier-army|bun run dev >> army.log 2>&1"
   [voice:3019]="/home/z/my-project/mini-services/sovereign-voice|bun run dev >> voice.log 2>&1"
   [audit:3022]="/home/z/my-project/mini-services/sovereign-audit|bun run dev >> audit.log 2>&1"
+  [giant-intake:3024]="/home/z/my-project/mini-services/giant-intake|bun run dev >> giant.log 2>&1"
   [boot-verifier:3042]="/home/z/my-project/mini-services/boot-verifier|bun run dev >> node.log 2>&1"
 )
-for key in bridge:3017 army:3018 voice:3019 audit:3022 boot-verifier:3042; do
+for key in bridge:3017 army:3018 voice:3019 audit:3022 giant-intake:3024 boot-verifier:3042; do
   port="${key##*:}"; name="${key%%:*}"
   IFS='|' read -r dir cmd <<< "${SVC[$key]}"
   if ! probe "$port" "/health"; then

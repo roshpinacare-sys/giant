@@ -52,6 +52,7 @@ const FLEET = {
   bridge: "http://127.0.0.1:3017",
   army: "http://127.0.0.1:3018",
   audit: "http://127.0.0.1:3022",
+  "giant-intake": "http://127.0.0.1:3024",
 };
 
 /* ── חוק-סדר-עלייה: הסדר במערך = סדר-הריפוי. הקונסולה-ראשונה (דלת-הבית), אחר-כך
@@ -63,6 +64,7 @@ const HEALABLE = [
   { id: "bridge", port: 3017, dir: path.join(import.meta.dir, "..", "dex-economy-bridge"), log: "bridge.log", cmd: `cd '${path.join(import.meta.dir, "..", "dex-economy-bridge")}' && setsid nohup bun index.ts >> bridge.log 2>&1 </dev/null &` },
   { id: "army", port: 3018, dir: path.join(import.meta.dir, "..", "soldier-army"), log: "army.log", cmd: `cd '${path.join(import.meta.dir, "..", "soldier-army")}' && setsid nohup bun run dev >> army.log 2>&1 </dev/null &` },
   { id: "audit", port: 3022, dir: path.join(import.meta.dir, "..", "sovereign-audit"), log: "audit.log", cmd: `cd '${path.join(import.meta.dir, "..", "sovereign-audit")}' && setsid nohup bun run dev >> audit.log 2>&1 </dev/null &` },
+  { id: "giant-intake", port: 3024, dir: path.join(import.meta.dir, "..", "giant-intake"), log: "giant.log", cmd: `cd '${path.join(import.meta.dir, "..", "giant-intake")}' && setsid nohup bun run dev >> giant.log 2>&1 </dev/null &` },
   { id: "boot-verifier", port: 3042, dir: path.join(import.meta.dir, "..", "boot-verifier"), log: "node.log", cmd: `cd '${path.join(import.meta.dir, "..", "boot-verifier")}' && setsid nohup bun run dev >> node.log 2>&1 </dev/null &` },
 ] as const;
 
