@@ -16,7 +16,14 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
 const KINDS = ["tool-run", "note-open", "report-write", "milestone-tag"] as const;
-const TOOLS = ["verify_chain"] as const;
+/* גל-96 · ארסנל-מורחב — מתואם 1:1 עם מרשם-הכלים ב-run-builder-beat.mjs וב-TOOLS.md.
+ * הוספת-כלי = שלשה-קנונית: סקריפט ב-sovereign-vm + בנאי + כאן. */
+const TOOLS = ["verify_chain", "ledger_stats", "price_report"] as const;
+const TOOL_META: Record<string, { title: string; why: string }> = {
+  verify_chain: { title: "אימות-שרשרת-בלתי-תלוי על-הספר-החי", why: "מאמת-עצמאית (פייתון-טהור) את אירועי-הפנקס מול עוגני-הבסיס" },
+  ledger_stats: { title: "סטטיסטיקת-פנקס חיה", why: "ספירה, טווח-seq והיסטוגרמת-סוגים של ספר-האמת (גל-96)" },
+  price_report: { title: "דוח-בריכה-ואוצר", why: "מחיר-מחושב מהבריכה, עמלות-דקס ומאזן-אוצר (גל-96)" },
+};
 
 type BeatItem = {
   kind: (typeof KINDS)[number];
@@ -58,13 +65,15 @@ function standingItems(s: Record<string, unknown>): BeatItem[] {
   const ledgerSeq = num(s.ledgerSeq as number) ?? num((s.ledger as Record<string, unknown>)?.seq as number);
   const beatSeq = num((s.beat as Record<string, unknown>)?.seq as number);
 
-  // אימות-שרשרת-בלתי-תלוי — תמיד-אמיתי, תמיד-בעל-ערך
-  items.push({
-    kind: "tool-run",
-    tool: "verify_chain",
-    title: "אימות-שרשרת-בלתי-תלוי על-הספר-החי",
-    why: `מאמת-עצמאית (פייתון-טהור) את אירועי-הפנקס${ledgerSeq !== null ? ` עד seq=${ledgerSeq.toLocaleString("he-IL")}` : ""} מול עוגני-הבסיס`,
-  });
+  /* גל-96 · ארסנל-מורחב בסבב-מסתובב: כל-פעימה מציעה 2 מתוך 3 הכלים לפי שעה —
+   * לאורך-זמן כל-הכלים רצים בקביעות (מנדט-הבעלים: האוטונומיה משתמשת-בכלים-שנבנו). */
+  const hour = Math.floor(Date.now() / 3_600_000);
+  const all = Object.keys(TOOL_META);
+  const a = all[hour % all.length] as string;
+  const b = all[(hour + 1) % all.length] as string;
+  for (const t of [a, b]) {
+    items.push({ kind: "tool-run", tool: t, title: TOOL_META[t]!.title, why: TOOL_META[t]!.why });
+  }
 
   // אבן-דרך-ממספרים-אמיתיים
   if (ledgerSeq !== null && beatSeq !== null) {
@@ -122,7 +131,7 @@ async function zai() {
 const SYSTEM = `את מוח-הבנאי של הריבונות (SAOS). מנדט-הבעלים (גל-91): "בנייה ושיפור תמיד, לא רק בדיקות".
 תפקידך: מצילום-מדידה-אחד להציע עד 2 פריטי-עבודה אמיתיים ומדודים לפעימת-הבנאי.
 חוק-אמת: כל מספר שתכתבי חייב להופיע מילה-במילה בצילום. אין-לך מדידה? אל-תזכירי-מספר.
-סוגים-מותרים בלבד: tool-run (רק tool=verify_chain) · note-open (capability קצר) · report-write · milestone-tag (title קצר).
+סוגים-מותרים בלבד: tool-run (tool מתוך: verify_chain · ledger_stats · price_report) · note-open (capability קצר) · report-write · milestone-tag (title קצר).
 עברית, צפוף, ללא-קישוטים. החזר JSON בלבד, ללא-טקסט-אחר:
 {"items":[{"kind":"...","title":"...","why":"..."}]}`;
 
@@ -176,7 +185,7 @@ export async function POST(req: Request) {
     if (seen.has(key)) continue;
     seen.add(key);
     items.push(it);
-    if (items.length >= 3) break;
+    if (items.length >= 4) break;
   }
 
   return NextResponse.json({
