@@ -45,6 +45,7 @@ declare -A SVC=(
   [voice:3019]="/home/z/my-project/mini-services/sovereign-voice|bun run dev >> voice.log 2>&1"
   [audit:3022]="/home/z/my-project/mini-services/sovereign-audit|bun run dev >> audit.log 2>&1"
   [giant-intake:3024]="/home/z/my-project/mini-services/giant-intake|bun run dev >> giant.log 2>&1"
+  [saosx:3025]="/home/z/my-project/mini-services/sovereign-token|bun run dev >> saosx.log 2>&1"
   [boot-verifier:3042]="/home/z/my-project/mini-services/boot-verifier|bun run dev >> node.log 2>&1"
 )
 # חוק-טיהור-פורט (2026-10-19): bun SO_REUSEPORT מאפשר זומבים-מקבילים שגונבים-חיבורים —
@@ -55,7 +56,7 @@ purge_port() {
     kill -9 "$pid" 2>/dev/null
   done
 }
-for key in bridge:3017 army:3018 voice:3019 audit:3022 giant-intake:3024 boot-verifier:3042; do
+for key in bridge:3017 army:3018 voice:3019 audit:3022 giant-intake:3024 boot-verifier:3042 saosx:3025; do
   port="${key##*:}"; name="${key%%:*}"
   IFS='|' read -r dir cmd <<< "${SVC[$key]}"
   if ! probe "$port" "/health"; then

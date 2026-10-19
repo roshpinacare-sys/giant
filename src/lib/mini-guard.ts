@@ -58,6 +58,9 @@ export const MINI_SERVICES: MiniServiceDef[] = [
    * מחירי-אמת חיים מ-Binance (STEEM/HIVE/BTC/ETH) — נזילות-ייחוס-חוץ לדשבורדים,
    * להחלטות-אוצר ולארביטרז-עתידי. fail-honest לכל-מקור; אפס-מפתחות (ציבורי). */
   { name: "giants-anchor", dir: "mini-services/giants-anchor", port: 3023, he: "עורק-המחיר-מהענקים (Binance חי → עוגן-ערך-חוץ לרשת)", probe: "gateway" },
+  /* Task 21-a · SAOSX — מנוע-הטוקן-והחוזים-החכמים הריבוני: ספר-חתום (secp256k1),
+   * vesting · staking · delegation · HTLC · multisig · airdrop, עיגון-שורש לכלכלה :3016. */
+  { name: "sovereign-token", dir: "mini-services/sovereign-token", port: 3025, he: "SAOSX — טוקן-החוזים-הריבוני (ספר-חתום + חוזה-מתקדם)", probe: "gateway" },
 ];
 
 export interface MiniServiceDef {

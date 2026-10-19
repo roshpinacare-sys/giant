@@ -519,5 +519,29 @@
    "note": "sum of 14 accounts, measured live at T32"
   },
   "verdict": "FULL RECOVERABLE CUSTODY — crown 4/4 live; all others owner-held (= key-reset power)"
- }
+ },
+ "slots": [
+  {
+   "slot": "SAOSX_ISSUER",
+   "family": "sovereign-token",
+   "state": "FILLED",
+   "addedAt": "2026-10-19T02:25:00Z",
+   "addedBy": "Task 21 key-ceremony (gen-issuer.ts) — Z.ai sovereign engineer",
+   "material": "OUT-OF-GIT: /home/z/.secrets/sovereign-token/issuer.json (chmod 600) — wif+pubHex+stmPub+address",
+   "public": {
+    "token": "SAOSX",
+    "stmPub": "STM725U81feqRaDakVD9RzTPop89FYM78iQaKjD6TVoQdNj5NxoMR",
+    "address": "e7f69d80bd23c426521acb3ed78e138b35523b0b",
+    "pubFingerprint": "69f62bb1394fbabe",
+    "privFingerprint": "3226f83db714ff4b"
+   },
+   "receipt": {
+    "kind": "ledger-proven",
+    "service": "sovereign-token :3025",
+    "evidence": "genesis 21,000,000 SAOSX exact · 28 signed ops live · /verify ok (checked=28, brokenAt=null) · anchor ok:true into economy :3016 (ref saosx-*)",
+    "proofFile": "mini-services/sovereign-token/state/proof.json"
+   },
+   "law": "raw-material-never-in-git"
+  }
+ ]
 }

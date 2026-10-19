@@ -1,8 +1,8 @@
 {
  "schema": "keys.vault-census/1",
  "opened": true,
- "slotsTotal": 25,
- "filled": 25,
+ "slotsTotal": 26,
+ "filled": 26,
  "families": [
   {
    "family": "llm-brain",
@@ -62,6 +62,12 @@
    "family": "shards",
    "slots": [
     "GEN3_SHARD_B64"
+   ]
+  },
+  {
+   "family": "sovereign-token",
+   "slots": [
+    "SAOSX_ISSUER"
    ]
   }
  ],
@@ -190,6 +196,11 @@
    "name": "GEN3_SHARD_B64",
    "state": "FILLED",
    "lenClass": 256
+  },
+  {
+   "name": "SAOSX_ISSUER",
+   "state": "FILLED",
+   "lenClass": 64
   }
  ],
  "measuredAt": "2026-10-15T01:01:04.602Z",
