@@ -104,6 +104,11 @@ async function boot(): Promise<void> {
     cwd: DEX_ROOT,
     env: {
       ...process.env,
+      /* FIX(מלחמת-הפורטים · Task 24 · נמדד-חי): המשגיח נולד-בן-קונסולה ויורש
+       * PORT=3000 — ענף-next-dev-שלו אז חוטף-גם-את-:3000 (fd-שני על-אותו-תהליך)
+       * ומוחק-את-דלת-הבית. ה-PORT-הירושה נמחק — הדקס מחזיק-אך-ורק-את-:3010. */
+      ...(Object.fromEntries(Object.entries(process.env).filter(([k]) => k !== "PORT"))),
+      PORT: "3010",
       DATABASE_URL: DB_FILE, /* כבר-כולל file: */
       SAOS_DEX_STATE_DIR: STATE_DIR,
       DEX_OPERATOR_TOKEN: token,
