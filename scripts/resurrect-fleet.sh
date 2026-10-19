@@ -79,4 +79,16 @@ else
   pgrep -f "ci-quota-guard.mjs" >/dev/null 2>&1 && log "OK ci-quota-guard הוקם" || log "FAIL ci-quota-guard"
 fi
 
+# 6. ESC-11 · סדולת-הדיבידנד (dividend-sweep --loop): קציר-עמלות-מתוזמן + מסילת-
+#    דיבידנד-µ→owner-dividend-מהרווח-הנמדד-בלבד (ראצ'ט · רצפת-דלק · תקרת-נזק).
+#    הרגל-החוץ (STEEM→בעלים) נשארת-נעולה-לאישור-מפעיל — כנות-מבנית של bridge.ts.
+DSWEEP="/home/z/estate/saos-dex/grids/dividend-sweep.mjs"
+if pgrep -f "dividend-sweep.mjs --loop" >/dev/null 2>&1; then
+  log "OK dividend-sweep חי (pid=$(pgrep -f 'dividend-sweep.mjs --loop' | head -1))"
+else
+  ( setsid nohup bun "$DSWEEP" --loop >> /home/z/my-project/state/dividend-sweep.log 2>&1 </dev/null & )
+  sleep 2
+  pgrep -f "dividend-sweep.mjs --loop" >/dev/null 2>&1 && log "OK dividend-sweep הוקם" || log "FAIL dividend-sweep"
+fi
+
 log "═══ resurrect-fleet הסתיים ═══"
