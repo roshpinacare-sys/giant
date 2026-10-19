@@ -188,3 +188,6 @@
 {"ts":1792443657823,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:ask: mempool-full · tamar:ask: mempool-full · shachar:ask: mempool-full · aluf:ask: mempool-full · erez:ask: mempool-full · gal:ask: mempool-full","status":"ledger"}
 {"ts":1792444258223,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
 {"ts":1792444858041,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 80 דק' (fills=0) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792445164977,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792445456993,"key":"disk-full","sev":"critical","text":"הדיסק ב-100% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1792445484367,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (68 כשלים) → respawn=true → verified=false","status":"ledger"}
