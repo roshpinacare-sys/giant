@@ -47,10 +47,19 @@ declare -A SVC=(
   [giant-intake:3024]="/home/z/my-project/mini-services/giant-intake|bun run dev >> giant.log 2>&1"
   [boot-verifier:3042]="/home/z/my-project/mini-services/boot-verifier|bun run dev >> node.log 2>&1"
 )
+# חוק-טיהור-פורט (2026-10-19): bun SO_REUSEPORT מאפשר זומבים-מקבילים שגונבים-חיבורים —
+# לפני-כל-הקמה מטהרים כל-מאזין-ישן על-הפורט (הוכח-חי: 4 זומבי-steem-voice גרמו-לדילוג 000/200)
+purge_port() {
+  local port="$1"
+  for pid in $(ss -tlnp 2>/dev/null | grep ":$port " | grep -o 'pid=[0-9]*' | cut -d= -f2); do
+    kill -9 "$pid" 2>/dev/null
+  done
+}
 for key in bridge:3017 army:3018 voice:3019 audit:3022 giant-intake:3024 boot-verifier:3042; do
   port="${key##*:}"; name="${key%%:*}"
   IFS='|' read -r dir cmd <<< "${SVC[$key]}"
   if ! probe "$port" "/health"; then
+    purge_port "$port"; sleep 1
     spawn_dir "$dir" "$cmd" "$key"; sleep 6
     probe "$port" "/health" && log "OK $key הוקם" || log "FAIL $key"
   else log "OK $key חי"; fi
