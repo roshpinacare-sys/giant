@@ -189,3 +189,10 @@
 {"ts":1792371449048,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (8 כשלים) → respawn=true → verified=false","status":"ledger"}
 {"ts":1792372616384,"key":"console-5xx","sev":"critical","text":"הקונסולה :3000 מחזירה 502 — דלת-הבית-פגומה","status":"ledger"}
 {"ts":1792372616997,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 55 דק' (fills=98484) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792372916387,"key":"disk-full","sev":"critical","text":"הדיסק ב-100% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1792372982048,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 100%→100% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792373517036,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:fuel: free-op-cap · shachar:fuel: free-op-cap · aluf:fuel: free-op-cap · erez:fuel: free-op-cap · gal:fuel: free-op-cap","status":"ledger"}
+{"ts":1792373517037,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792373517038,"key":"giant-failover","sev":"warn","text":"מגדל-הנזילות על משמרת-failover — ראנר-החוץ שקט","status":"ledger"}
+{"ts":1792373542044,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (15 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792373855292,"key":"disk-full","sev":"critical","text":"הדיסק ב-99% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
