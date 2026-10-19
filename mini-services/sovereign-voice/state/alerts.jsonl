@@ -205,3 +205,5 @@
 {"ts":1792448320932,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
 {"ts":1792449057051,"key":"disk-full","sev":"critical","text":"הדיסק ב-100% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
 {"ts":1792449058559,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 150 דק' (fills=0) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792449365120,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792449394277,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (81 כשלים) → respawn=true → verified=false","status":"ledger"}
