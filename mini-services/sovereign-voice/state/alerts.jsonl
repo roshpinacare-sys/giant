@@ -196,3 +196,13 @@
 {"ts":1792373517038,"key":"giant-failover","sev":"warn","text":"מגדל-הנזילות על משמרת-failover — ראנר-החוץ שקט","status":"ledger"}
 {"ts":1792373542044,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (15 כשלים) → respawn=true → verified=false","status":"ledger"}
 {"ts":1792373855292,"key":"disk-full","sev":"critical","text":"הדיסק ב-99% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1792373973312,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 99%→100% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792373973590,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792373997593,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1792373997594,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 34 שגיאות (היה 0)","status":"ledger"}
+{"ts":1792373997595,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:fuel: free-op-cap · shachar:fuel: free-op-cap · aluf:fuel: free-op-cap · erez:fuel: free-op-cap · gal:fuel: free-op-cap","status":"ledger"}
+{"ts":1792373997596,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792374003596,"key":"giant-unreachable","sev":"critical","text":"מגדל-הנזילות :3024 לא מגיב — עורק-הענקים עיוור","status":"ledger"}
+{"ts":1792374027603,"key":"fuel-tend-error","sev":"warn","text":"מטפל-הדלק: שגיאת-רשת Error: Unable to connect. Is the computer able to access the url?","status":"ledger"}
+{"ts":1792374280523,"key":"army-unreachable","sev":"warn","text":"צבא-החיילים :3018 לא מגיב — המפעיל-הפנימי ינסה-ריפוי","status":"ledger"}
+{"ts":1792374280528,"key":"giant-failover","sev":"warn","text":"מגדל-הנזילות על משמרת-failover — ראנר-החוץ שקט","status":"ledger"}
