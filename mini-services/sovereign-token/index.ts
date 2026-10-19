@@ -31,6 +31,7 @@ const PUBLISH_LOG = path.join(STATE_DIR, "publish-log.jsonl");
 const DEPOSIT_SEEN = path.join(STATE_DIR, "deposit-seen.json");
 const QUARANTINE_DIR = path.join(STATE_DIR, "quarantine");
 const ISSUER_FILE = "/home/z/.secrets/sovereign-token/issuer.json";
+const GENESIS2_FILE = path.join(STATE_DIR, "genesis-epoch2.json");
 const ECONOMY_INGEST = "http://127.0.0.1:3016/tx/ingest";
 
 /* ── קבועי-הטוקן (מספרים-אמיתיים, כל-היחידות מיקרו) ── */
@@ -445,11 +446,54 @@ function applySignedOp(op: unknown, pub: string, sig: { r: string; s: string }):
 
 /* ── ג'נזיס (seq=1 · חתום-על-ידי-המנפיק · נוצר-פעם-אחת) ── */
 function genesisOp() {
+  /* epoch-2: המשכיות-מלאה מתוך קובץ-ג'נזיס מפורסם (עצמי-מאומת — ה-op כולו נכנס ל-chainHash) */
+  if (fs.existsSync(GENESIS2_FILE)) {
+    const g = JSON.parse(fs.readFileSync(GENESIS2_FILE, "utf8"));
+    return {
+      genesis: true, token: "SAOSX", name: "SAOS Sovereign Contract Token",
+      cap: Number(CAP), epoch: g.epoch ?? 2,
+      allocs: g.allocs,
+      extras: g.extras ?? [],
+      carried: g.carried ?? {},
+      note: g.note ?? "epoch-2 continuity re-genesis",
+      priorEpoch: g.priorEpoch ?? null,
+    };
+  }
   return {
     genesis: true, token: "SAOSX", name: "SAOS Sovereign Contract Token",
     cap: Number(CAP),
     allocs: { staking_pool: Number(GEN_STAKING_POOL), vesting_vault: Number(GEN_VESTING_VAULT), treasury: Number(GEN_TREASURY), airdrop_reserve: Number(GEN_AIRDROP) },
   };
+}
+/* יישום-המשכיות אפוק-2 — זהה בשלושת-האתרים (יצירה / שידוד-חי / שידוד-צל) */
+function applyGenesisContinuity(op: any, t: {
+  sBal: (a: string) => { liquid: bigint; staked: bigint };
+  vestSet?: Map<string, any>; htlcSet?: Map<string, any>; propSet?: Map<string, any>;
+  delegSet?: Map<string, Map<string, bigint>>; airdropSet?: Map<string, bigint>;
+  staking?: any; setBurned?: (n: bigint) => void;
+}): void {
+  for (const [addr, liq, stk] of (op.extras ?? []) as Array<[string, number | string, number | string]>) {
+    const b = t.sBal(String(addr));
+    b.liquid = BigInt(liq);
+    b.staked = BigInt(stk);
+  }
+  const c = op.carried ?? {};
+  for (const v of c.vestings ?? []) t.vestSet?.set(v.id, { id: v.id, beneficiary: v.beneficiary, total: BigInt(v.total), claimed: BigInt(v.claimed), cliffTs: v.cliffTs, endTs: v.endTs });
+  for (const h of c.htlcs ?? []) t.htlcSet?.set(h.id, { ...h, amount: BigInt(h.amount) });
+  for (const p of c.proposals ?? []) t.propSet?.set(p.id, { ...p });
+  for (const [d, arr] of c.delegations ?? []) t.delegSet?.set(d, new Map((arr as Array<[string, string]>).map(([to, a]) => [to, BigInt(a)])));
+  for (const [a, v] of c.airdrop ?? []) {
+    if (t.airdropSet instanceof Map) (t.airdropSet as Map<string, bigint>).set(a, BigInt(v));
+    else if (t.airdropSet) (t.airdropSet as unknown as Set<string>).add(a); /* shadow עוקב-חברות-בלבד */
+  }
+  if (t.staking && c.staking) {
+    t.staking.aprBps = c.staking.aprBps ?? t.staking.aprBps;
+    t.staking.lastAccrualTs = c.staking.lastAccrualTs ?? t.staking.lastAccrualTs;
+    t.staking.index = BigInt(c.staking.index ?? "0");
+    for (const [k, v] of c.staking.paidIndex ?? []) t.staking.paidIndex.set(k, BigInt(v));
+    for (const [k, v] of c.staking.storedAccrued ?? []) t.staking.storedAccrued.set(k, BigInt(v));
+  }
+  if (t.setBurned && c.burnedTotal != null) t.setBurned(BigInt(c.burnedTotal));
 }
 function createGenesis() {
   const op = genesisOp();
@@ -460,10 +504,15 @@ function createGenesis() {
   const h = chainHash("GENESIS-SAOSX", 1, op, ISSUER.pubHex, sig);
   fs.appendFileSync(LEDGER_FILE, JSON.stringify({ seq: 1, ts, kind: "genesis", op, pub: ISSUER.pubHex, sig, h }) + "\n");
   seq = 1; lastH = h;
-  acct(SYS.staking_pool).liquid = GEN_STAKING_POOL;
-  acct(SYS.vesting_vault).liquid = GEN_VESTING_VAULT;
-  acct(SYS.treasury).liquid = GEN_TREASURY;
-  acct(SYS.airdrop_reserve).liquid = GEN_AIRDROP;
+  acct(SYS.staking_pool).liquid = BigInt(op.allocs.staking_pool);
+  acct(SYS.vesting_vault).liquid = BigInt(op.allocs.vesting_vault);
+  acct(SYS.treasury).liquid = BigInt(op.allocs.treasury);
+  acct(SYS.airdrop_reserve).liquid = BigInt(op.allocs.airdrop_reserve);
+  applyGenesisContinuity(op, {
+    sBal: (a) => acct(a),
+    vestSet: vestings, htlcSet: htlcs, propSet: proposals, delegSet: delegOut, airdropSet: airdropClaimed,
+    staking, setBurned: (n) => { burnedTotal = n; },
+  });
   staking.lastAccrualTs = ts;
   pushHistory({ seq: 1, ts, kind: "genesis", op, from: null, to: null, amount: Number(CAP) });
   snapshotSave();
@@ -505,6 +554,11 @@ function replayEntry(e: any) {
     acct(SYS.vesting_vault).liquid = BigInt(a.vesting_vault ?? 0);
     acct(SYS.treasury).liquid = BigInt(a.treasury ?? 0);
     acct(SYS.airdrop_reserve).liquid = BigInt(a.airdrop_reserve ?? 0);
+    applyGenesisContinuity(e.op, {
+      sBal: (x) => acct(x),
+      vestSet: vestings, htlcSet: htlcs, propSet: proposals, delegSet: delegOut, airdropSet: airdropClaimed,
+      staking, setBurned: (n) => { burnedTotal = n; },
+    });
     staking.lastAccrualTs = e.ts;
   } else if (e.kind === "deposit-intake") {
     /* רשומת-קליטה בלבד — אפס-אפקט-יתרות (כנות: ערוץ-הפקדות STEEM נרשם, לא מומר) */
@@ -633,13 +687,18 @@ function verifyChain(): { ok: boolean; checked: number; brokenAt: number | null;
           sBal(SYS.vesting_vault).liquid = BigInt(al.vesting_vault ?? 0);
           sBal(SYS.treasury).liquid = BigInt(al.treasury ?? 0);
           sBal(SYS.airdrop_reserve).liquid = BigInt(al.airdrop_reserve ?? 0);
+          applyGenesisContinuity(e.op, {
+            sBal,
+            vestSet: shadowVest, htlcSet: shadowHtlc, propSet: shadowProposals, delegSet: shadowDeleg, airdropSet: shadowAirdrop,
+            staking: shadowStaking, setBurned: (n) => { shadowBurned = n; },
+          });
           shadowStaking.lastAccrualTs = e.ts;
         } else if (e.kind === "deposit-intake") {
           /* רשומת-קליטה — אפס-אפקט */
         } else {
           applyShadow(e.op, addrFromPub(e.pub) ?? "", e.ts);
         }
-      } catch { brokenAt = s; break; }
+      } catch (e) { console.error("[sovereign-token] verify-shadow-apply-error at seq=" + s + ":", String(e && (e as any).message || e).slice(0, 220)); brokenAt = s; break; }
       prevH = e.h; shadowSeq = s; shadowLast = e.h;
     }
     if (brokenAt === null) {

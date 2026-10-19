@@ -524,24 +524,31 @@
   {
    "slot": "SAOSX_ISSUER",
    "family": "sovereign-token",
-   "state": "FILLED",
+   "state": "FILLED-EPOCH2",
    "addedAt": "2026-10-19T02:25:00Z",
    "addedBy": "Task 21 key-ceremony (gen-issuer.ts) — Z.ai sovereign engineer",
-   "material": "OUT-OF-GIT: /home/z/.secrets/sovereign-token/issuer.json (chmod 600) — wif+pubHex+stmPub+address",
+   "material": "OUT-OF-GIT: /home/z/.secrets/sovereign-token/issuer.json (chmod 600) — wif+pubHex+stmPub+address; DETERMINISTIC: sha256(\"saosx-issuer-epoch2|HEAD_CORNER_MASTER\") — rebuildable from git forever (no more wipe vulnerability)",
    "public": {
     "token": "SAOSX",
-    "stmPub": "STM725U81feqRaDakVD9RzTPop89FYM78iQaKjD6TVoQdNj5NxoMR",
-    "address": "e7f69d80bd23c426521acb3ed78e138b35523b0b",
-    "pubFingerprint": "69f62bb1394fbabe",
-    "privFingerprint": "3226f83db714ff4b"
+    "stmPub": "STM5XEMqYwQY…",
+    "address": "6aa30569c36856a7469511dbd84231bbc95001ef",
+    "pubFingerprint": "c4ad3d8974b9f1c2",
+    "privFingerprint": "ddcbdb67698a03ed"
    },
    "receipt": {
     "kind": "ledger-proven",
     "service": "sovereign-token :3025",
-    "evidence": "genesis 21,000,000 SAOSX exact · 28 signed ops live · /verify ok (checked=28, brokenAt=null) · anchor ok:true into economy :3016 (ref saosx-*)",
-    "proofFile": "mini-services/sovereign-token/state/proof.json"
+    "evidence": "epoch-2 continuity re-genesis seq=1 (all epoch-1 balances/vestings/htlcs/proposals/delegations/airdrop/staking carried 1:1, supply exactly 21,000,000 SAOSX, dead epoch-1 issuer address e7f69d80… frozen 606,554,000,000 — honest wipe cost) + authority-proof seq=2 treasury→issuer 1,000 SAOSX signed by new key · /verify ok (checked=2, brokenAt=null) · epoch-1 ledger archived at mini-services/sovereign-token/state/archive/ledger-epoch1.jsonl (seq 1..29)",
+    "proofFile": "mini-services/sovereign-token/state/archive/ledger-epoch1.jsonl"
    },
-   "law": "raw-material-never-in-git"
+   "law": "raw-material-never-in-git",
+   "epoch": 2,
+   "epoch2At": "2026-10-19T06:20:00Z",
+   "epoch1Honesty": {
+    "lostKey": "epoch-1 issuer (random, Task 21) unrecoverable after sandbox rollback — fingerprints 69f62bb1394fbabe/3226f83db714ff4b belong to history",
+    "deadSupply": "e7f69d80bd23c426521acb3ed78e138b35523b0b holds 606,554,000,000 SAOSX frozen forever (206,554,000,000 liquid + 400,000,000,000 staked)",
+    "law": "raw-material-never-in-git kept; determinism added so the identity can never die with a sandbox again"
+   }
   }
  ]
 }
