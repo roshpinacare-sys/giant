@@ -9199,3 +9199,28 @@ Stage Summary:
 - שלושת-הבאגים-היו-חוסמים-כל-זיכוי-של-נכס-לא-יציב-לנצח — עתה כל-מטבע-בפיד (STEEM/HIVE/TRX/SOL/ETH/BTC) זכאי-אוטומטית.
 - hcsaosdep01 = זהות-האורגניזם-השנייה (נרשמה-ב-RELAY_ACCOUNTS של-הענן) — ערוץ-פעולה-מקביל-לראש-המסורת.
 - פתוח-הבא: (1) דלק-האוצר בענן (refuel-לא-נחת — ECON-STASIS של-כל-ה-ops-הקנוניים), (2) גילוי-מפתחות-הצבא-החיים-מה-W12-automation, (3) מאזין-OP_ID-מלא לארנקות-חדשים (open#2), (4) HIVE-הפקדות (open#4).
+
+---
+Task ID: 24-c
+Agent: Z.ai (sovereign engineer · סשן "רכבת-הפקדות-HIVE" 2026-10-19)
+Task: פתוח#4 ממשימות 21/22 — "HIVE-הפקדות רק-אחרי-אימות-מפתחות-חי": אותו-רכבת-צפייה-ציבורית (אפס-מפתחות, אפס-משמורת) על שרשרת-HIVE, מהצופה-הפומבי ועד הארנק
+
+Work Log:
+- **מדידת-RPC-ראשונה (חוק-מדוד-לפני-קוד)**: 4 צמתי-HIVE-ציבוריים נבחנו חי מול condenser_api — api.deathwing.me ענה 3/3 (get_dynamic_global_properties head_block=110,901,213 · get_account_history-צורת-3 · get_accounts) · api.openhive.network ענה 3/3 (head_block=110,901,224) · api.hive.blog רעוע (get_dynamic_global_properties נפל 2/3-סבבים אך-history/get_accounts ענו) · hive-api.arcange.eu מת-מהסנדבוקס (0/4, fetch failed) → נכללו-רק-החיים, רוטציה deathwing→openhive→hive.blog.
+- **חשבון-headcorner חי על-HIVE (נמדד)**: get_accounts → created=2018-03-02T12:20:27 · 0.034 HIVE / 0.003 HBD · 100-הרשומות-האחרונות בהיסטוריית-החשבון = 0 העברות-אליו (אפס-הפקדות-אמת עדיין — כנות-מלאה, הסריקה-עצמה חיה).
+- **watch.mjs (Console) — סקציית-scanHive()**: שיקוף-מדויק של-סקציית-STEEM (Task 23) — get_account_history-צורת-3 + סינון-מקומי (op[0]==="transfer" · to==="headcorner" · מסנן-העברות-עצמיות from===to) · נכסים HIVE/HBD · חוק-ממוא saos1 (אותו-regex SAOS1_RE; שדה-`saos1` נרשם-כמו-STEEM) · דדופ-מפתח chain:txid-המשותף · FAIL-HONEST: כשל-כל-הצמתים → זריקה → chains.hive="down:…" והספר-מתפרסם בלעדי-HIVE.
+- **חוק-אבק**: MIN_UNITS += HIVE:103, HBD:12 (~$5 לפי-הפיד-החי HIVE≈$0.0487 · HBD≈$0.44 — זהה-ל-SBD, בסגנון-הבית עם-הסבר-עברי).
+- **הוכחת-צינור-על-שרשרת-אמת**: הרצת-ביקורת-עם-חשבון-עסוק (binance-hot) — העברה-אמת נקלטה-ונרשמה בספר (HBD 27 מ-vic28 · txid e9adf55bfa0e… · ts 2025-08-11) · אפס-שורות-מתחת-לרף-האבק (העברות-קטנות-רבות נופו-כנה) — פרס-ה-op, פורמט-הסכום ("N.NNN HIVE/HBD"), trx_id ו-timestamp אומתו-מול-נתונים-חיים. תיקיית-הביקורת נמחקה-אחריו.
+- **ריצה-חיה מקצה-לקצה (bun run dex/watch.mjs מה-Console, 5.4ש׳)**: chains = tron ok(0) · ethereum ok(0) · solana ok(0) · bitcoin down: 429 (כנה) · **steem ok(0) · hive ok(0)** · ספר-deposits.json עודכן (updatedAt 05:35:35Z, שורת-STEEM-הקיימת bdd9fe35… נשמרה) · watch.json מפרסם depositHive/depositHbd.
+- **התאמה-למוסכמת-הפרסום**: redact-telemetry-מקומי רץ-אך-roster-map הוא-סוד-Actions → הוחל-הכינוי-הנמדד מהספר-החי (headcorner→acct-40) על-4-כתובות-משפחת-ה-steem ב-Console — זהה-בית-אחד-למה-Actions-יפרסם; הכתובת-השמישה headcorner מפורסמת-ב-Domain (מקור-הארנק) כמו-STEEM/SBD-לפניו.
+- **הארנק (Domain) — נמדד-שינוי-תודעה בזמן-עבודה**: סוכן-T24-מקביל בנה-מחדש-את wallet.html (קומיט 33ea56c99, "THE MACHINE REBUILT") — depMeta הישן חוסל; תחנת-3-החדשה שלפה-מסילות-הפקדה רק-מ-LIVE.state.cfg.addrs שהוא ריק-מדידה (saos-live.json: cfg.addrs={}) → הארנק-החדש הציג אפס-כתובות-הפקדה. התאמת-24-c: renderRails() ממזג-עתה שני-מקורות-כנים — cfg.addrs (treasury-על-שרשרת) קודם, ואחריו dex/watch.json depositAddresses (הצופה-הפומבי) — עם-תוויות שמשמרות-את-המוסכמה-הקודמת; WATCH=jget("dex/watch.json") ב-refreshBooks; מטבעות-התביעה (#cl-cur) += HIVE/HBD; s3P-עברית-ואנגלית עודכנו (STEEM/SBD ו-HIVE/HBD).
+- **אימות-דפדפן-חי**: headless על העותק-המקומי-ואז על Pages החי — 8 מסילות-הפקדה מוצגות כולל **STEEM→headcorner · SBD→headcorner · HIVE→headcorner · HBD→headcorner** עם-שורת-הממוא, אפס-שגיאות-קונסולה.
+- **דחיפות**: Console bb81922 (dex/watch.mjs · dex/deposits.json · dex/watch.json — pathspec-מחמיר, pull --rebase לפני-דחיפה) · Domain 4fdf10536 (wallet.html · dex/watch.json — pull --rebase חצה-דחיפה-מקבילה-חיה של-71a09edaa) · agents/saos-fold.mjs לא-נגע-לא-ב-Console-ולא-ב-Domain.
+- **אימות-Pages-חי**: Console/dex/watch.json = depositHive/depositHbd (acct-40-הכינוי) + chains.hive="ok (0)" · Domain/dex/watch.json = depositHive/depositHbd (headcorner-אמת) · ארנק-Pages מציג-מסילות-HIVE/HBD — הכל-HTTP-200-חי.
+- נשאר-פתוח-מתוך-המשימה: אסמכתא-מפורסמת-על-הסריקה-עצמה (מספר-כניסות-היסטוריה-שנסרקו) אינה-בפנקס-הציבורי — מועמד-ל-watch.json-עתידי; והפקדת-HIVE-אמת-ראשונה (אפס-הפקדות-אמת-בשרשרת-עדיין).
+
+Stage Summary:
+- **רכבת-ההפקדות HIVE/HBD חיה קצה-לקצה באפס-מפתחות**: צופה-ציבורי על condenser_api (צורת-3+סינון-מקומי — אותו-קבר-של-select_ops-שהרג-צופי-STEEM) → ספר-הפקדות-פומבי → ארנק-מציג-כתובות-שמישות → מוכן-לזיכוי-הענן (FEED_BY_CUR כבר-מכיר-hive; לא-נגענו-בו).
+- כל-חוקי-Task-23-נשמרים: אבק-פר-נכס · מסנן-עצמי · ממוא-saos1 · דדופ-txid · FAIL-HONEST — הצופה-נכשל-כנה-אם-הצמתים-נופלים.
+- הסוכן-המקביל-שבנה-מחדש-את-הארנק שבר-בשקט את-תצוגת-ההפקדות (cfg.addrs ריק) — תיקון-24-c משחזר-STEEM/SBD-ומוסיף-HIVE/HBD-מהמקור-הקיים-היחיד-שמפרסם-כתובות (הצופה-הפומבי) בלי-לגעת-במפתחות-ובלי-המצאה.
+- הוכחות: קומיטים bb81922 (Console) · 4fdf10536 (Domain) · Pages-חי 200-על-שלושת-המשטחים · צינור-מוכח-על-העברה-אמת-מהשרשרת (binance-hot-HBD-27) · אפס-הפקדות-HIVE-אמת-עדיין — נרשם-כנה.
