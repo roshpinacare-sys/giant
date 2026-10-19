@@ -16,6 +16,6 @@
  "version": "1.0.0",
  "main": "index.ts",
  "scripts": {
-  "dev": "bun run patch-secp.ts && bun --hot index.ts"
+  "dev": "bun run patch-secp.ts && bun index.ts"
  }
 }
