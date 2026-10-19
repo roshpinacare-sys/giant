@@ -111,3 +111,7 @@
 {"ts":1792425360720,"key":"army-unreachable","sev":"warn","text":"צבא-החיילים :3018 לא מגיב — המפעיל-הפנימי ינסה-ריפוי","status":"ledger"}
 {"ts":1792425360721,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
 {"ts":1792425373817,"key":"fuel-tend-error","sev":"warn","text":"מטפל-הדלק: שגיאת-רשת Error: Unable to connect. Is the computer able to access the url?","status":"ledger"}
+{"ts":1792425656423,"key":"console-5xx","sev":"critical","text":"הקונסולה :3000 מחזירה 502 — דלת-הבית-פגומה","status":"ledger"}
+{"ts":1792425657167,"key":"dex-halted","sev":"critical","text":"הבורסה עצורה: snapshot-integrity-failed: load refused, evidence preserved (operator reset is the explicit recovery path)","status":"ledger"}
+{"ts":1792425657168,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 2 שגיאות (היה 0)","status":"ledger"}
+{"ts":1792425682232,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (2 כשלים) → respawn=true → verified=false","status":"ledger"}
