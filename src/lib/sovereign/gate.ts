@@ -12,8 +12,36 @@
  */
 import { readFile } from "node:fs/promises";
 import { createHash } from "crypto";
+import { execFile } from "node:child_process";
 
 const CONFIG = "/home/z/.operator/config.json";
+
+/* Task 18 · ריפוי-עצמי של שער-הבעלים: הקונפיג חי מחוץ-לגיט (תורת-האבטחה) →
+ * קציר-סנדבוקס השאיר את-השער fail-closed לנצח ("מפתח לא מאומת" — נמדד 18.10).
+ * התיקון: בניסיון-הראשון השער מריץ gate-repair (מקור-האמת = /home/z/.secrets/.env.local,
+ * נבנה-מחדש אוטומטית באתחול ע"י FleetHQ vault-home) → קובץ-מפתח-חי + דיגסטים, ורק-אז מחליט.
+ * פעם-אחת-לתהליך; אפס-סודות-בפלט; כשל = fail-closed כנה. */
+const gRep = globalThis as unknown as { __gateRepaired?: boolean };
+export async function ensureGateTruths(): Promise<boolean> {
+  if (gRep.__gateRepaired) return true;
+  try {
+    await readFile(CONFIG, "utf8");
+    gRep.__gateRepaired = true;
+    return true;
+  } catch {
+    /* חסר — מרפאים */
+  }
+  await new Promise<void>((res) => {
+    execFile("bun", ["scripts/gate-repair.mjs"], { cwd: "/home/z/my-project", timeout: 20_000 }, () => res());
+  });
+  gRep.__gateRepaired = true;
+  try {
+    await readFile(CONFIG, "utf8");
+    return true;
+  } catch {
+    return false;
+  }
+}
 const TOKEN_TTL_MS = 10 * 60 * 1000;
 const MAX_ATTEMPTS_PER_MIN = 5;
 
@@ -52,6 +80,8 @@ export function verifyToken(token: string): boolean {
 }
 
 export async function checkKey(key: string): Promise<boolean> {
+  /* Task 18: ריפוי-עצמי לפני-פסיקה — אין-קונפיג ≠ דחייה-סופית אם-הכספת-החיה יכולה-לשקם */
+  if (!(await ensureGateTruths())) return false;
   /* תיקון-בעלים (T55, 401-נמדד): קובץ-המפתח של הבעלים נושא שתי-צורות (מילה+טוקן)
      — השער משווה מול כל-הדיגסטים-הרשומים; אפס-מפתח-בקונפיג, דיגסטים-בלבד. */
   let salt = "";

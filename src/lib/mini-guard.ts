@@ -54,6 +54,10 @@ export const MINI_SERVICES: MiniServiceDef[] = [
    * גל-91 · תיקון-פורט: T-80 קובע ש-office-selfcheck הוא הבעלים החוקי של :3040
    * (נמדד-חי: selfcheck=3040) → המנוע נקשר ל-:3044 דרך SAOS_ENGINE_PORT (חוק-אח-לא-נלחם-באח). */
   { name: "saos-engine", dir: "/home/z/estate/steem/mini-services/saos-engine", port: 3044, he: "מנוע-המסחר-החי על-Steem (hyper-grid · dexflow · חתימה-ריבונית מהכספת-בגיט)", probe: "gateway", cmd: "[ -d node_modules ] || bun install --silent; exec bun run dev", env: { SAOS_ENGINE_PORT: "3044" } },
+  /* Task 17 · עורק-המחיר-מהענקים (צו-הבעלים: "למשוך נזילות מהענקים לרשת"): מושך
+   * מחירי-אמת חיים מ-Binance (STEEM/HIVE/BTC/ETH) — נזילות-ייחוס-חוץ לדשבורדים,
+   * להחלטות-אוצר ולארביטרז-עתידי. fail-honest לכל-מקור; אפס-מפתחות (ציבורי). */
+  { name: "giants-anchor", dir: "mini-services/giants-anchor", port: 3023, he: "עורק-המחיר-מהענקים (Binance חי → עוגן-ערך-חוץ לרשת)", probe: "gateway" },
 ];
 
 export interface MiniServiceDef {

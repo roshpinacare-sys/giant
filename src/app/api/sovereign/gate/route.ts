@@ -13,7 +13,7 @@
  * אבחון-דחייה-כנה: השער מסביר מה שגוי בלי לחשוף דבר על הסוד.
  */
 import { NextResponse } from "next/server";
-import { checkKey, issueToken } from "@/lib/sovereign/gate";
+import { checkKey, issueToken, ensureGateTruths } from "@/lib/sovereign/gate";
 import { verifyHeadcorner, diagnoseKeyInput, expectedKeyLength } from "@/lib/sovereign-auth";
 
 export const runtime = "nodejs";
@@ -64,7 +64,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "too-many-attempts" }, { status: 429, headers: { "cache-control": "no-store" } });
   }
 
-  /* שתי-האמתות של השער-האחד (מיזוג-גיאנט): דיגסטים-מחוץ-לריפו וגם קובץ-המפתח-החי */
+  /* שתי-האמתות של השער-האחד (מיזוג-גיאנט): דיגסטים-מחוץ-לריפו וגם קובץ-המפתח-החי
+   * Task 18: לפני-הפסיקה — ריפוי-עצמי (אחרי-קציר-סנדבוקס שני-קבצי-האמת נעלמים) */
+  await ensureGateTruths();
   const ok = (await checkKey(key)) || (await verifyHeadcorner(key));
   if (!ok) {
     return NextResponse.json(
