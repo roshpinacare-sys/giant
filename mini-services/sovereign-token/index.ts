@@ -861,7 +861,7 @@ async function depositWatchOnce() {
       try {
         const r = await fetch(rpc, {
           method: "POST", headers: { "content-type": "application/json" },
-          body: JSON.stringify({ jsonrpc: "2.0", method: "condenser_api.get_account_history", params: ["headcorner", start, 200, { select_ops: ["transfer"] }], id: 1 }),
+          body: JSON.stringify({ jsonrpc: "2.0", method: "condenser_api.get_account_history", params: ["headcorner", start, 100], id: 1 }), // FIX(Task 23): צורת-3 — select_ops-מת-על-הצמתים-החיים ("args.size() == 3", נמדד 2026-10-19); סינון-transfer-מקומי
           signal: AbortSignal.timeout(12000),
         });
         if (!r.ok) throw new Error(`http-${r.status}`);
@@ -880,11 +880,15 @@ async function depositWatchOnce() {
       if (!Array.isArray(op) || op[0] !== "transfer") continue;
       const body = op[1] ?? {};
       const memo = String(body.memo ?? "");
-      if (body.to !== "headcorner" || !memo.trim().toLowerCase().startsWith("saos-deposit")) continue;
+      /* FIX(Task 23): מדיניות-ממוא-קנונית = כתובת-saos1 בממוא (מה שהארנק-הציבורי
+       * מפרסם ב-wallet.html וב-Console/dex/watch.json). הישן — קידומת
+       * "saos-deposit" + כתובת-40hex — לא היה-תואם את-הפרסום וממילא לא את-פורמט
+       * הכתובות (saos1 base58). כל-העברה-פנימה-headcorner נקלטת; ה-saos1 נשלף-כשיש. */
+      if (body.to !== "headcorner") continue;
       const txref = String(ev.trx_id ?? `${ev.block ?? "?"}-${idx}`);
       if (depositSeen[txref]) continue;
-      const m = memo.match(/([0-9a-f]{40})/i);
-      const saosAddr = m ? m[1].toLowerCase() : null;
+      const saos1m = memo.match(/saos1[1-9A-HJ-NP-Za-km-z]{33,35}/);
+      const saosAddr = saos1m ? saos1m[0] : null;
       const amountStr = String(body.amount ?? "");
       const cur = amountStr.split(" ")[1] ?? "";
       const amt = Number(amountStr.split(" ")[0] ?? 0);
