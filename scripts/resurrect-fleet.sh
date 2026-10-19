@@ -55,4 +55,16 @@ for key in bridge:3017 army:3018 voice:3019 audit:3022 boot-verifier:3042; do
   else log "OK $key חי"; fi
 done
 
+# 4. ESC-14 · שומר-הדופק (heartbeat-guard): בודק-HTTP-אמיתי, הורג-תוקעים,
+#    מדליק-כספת-אחרי-קציר. חייב-לרוץ-תמיד — כל-עלייה מאמתת-שהוא-חי ומקימה-אם-מת.
+GUARD="/home/z/my-project/scripts/heartbeat-guard.sh"
+PIDF="/home/z/my-project/state/heartbeat-guard.pid"
+guard_alive() { [ -f "$PIDF" ] && kill -0 "$(cat "$PIDF" 2>/dev/null)" 2>/dev/null; }
+if guard_alive; then log "OK heartbeat-guard חי (pid=$(cat "$PIDF"))";
+else
+  ( setsid nohup bash "$GUARD" --loop >/dev/null 2>&1 </dev/null & )
+  sleep 2
+  guard_alive && log "OK heartbeat-guard הוקם (pid=$(cat "$PIDF" 2>/dev/null))" || log "FAIL heartbeat-guard"
+fi
+
 log "═══ resurrect-fleet הסתיים ═══"
