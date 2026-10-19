@@ -19,6 +19,22 @@ const API = process.env.BRIDGE_DEX_API ?? "http://127.0.0.1:3010/saos-dex/api/de
 const POLL_MS = 20_000;
 const PORT = 3017;
 
+/* ESC-LOCK (2026-10-19 · שורש-השחתה-השני): נמדד-חי — 5 מופעי-גשר רצו במקביל
+ * (הצטברות-הצתות של resurrect/ידני ללא מנעול; כל-מופע = חיבור-SQLite-נוסף-על-אותו-ספר)
+ * → "database disk image is malformed" (1,442 מאורעות + גל-שני). מנעול-חד-פעמי
+ * בדיוק-כמו-הכלכלה (:3016): מופע-שני-יוצא-בכנות-מיד. אפס-כותבים-מקבילים-מעתה. */
+import { writeFileSync, readFileSync, rmSync } from "node:fs";
+const LOCK_FILE = "/home/z/my-project/state/dex-economy-bridge.lock";
+try {
+  const prev = Number(readFileSync(LOCK_FILE, "utf8").trim());
+  if (prev && Number.isFinite(prev)) {
+    try { process.kill(prev, 0); console.log(`[bridge] instance ${prev} alive — exiting honestly (single-flight)`); process.exit(0); }
+    catch { /* נעילת-יתום — ממשיכים */ }
+  }
+} catch { /* אין-נעילה-קודמת */ }
+try { writeFileSync(LOCK_FILE, String(process.pid)); } catch { /* כנה */ }
+process.on("exit", () => { try { if (Number(readFileSync(LOCK_FILE, "utf8").trim()) === process.pid) rmSync(LOCK_FILE, { force: true }); } catch { /* כנה */ } });
+
 const db = new Database(DEX_DB, { create: true });
 /* תיקון-שורשי (2026-10-18 · גל-16): נמדד חי — 482/1295 סקרים נפלו "database is locked"
  * כי הספר-המשותף custom.db נכתב גם על-ידי מנוע-הכלכלה (:3016) וגם על-ידי הגשר,
