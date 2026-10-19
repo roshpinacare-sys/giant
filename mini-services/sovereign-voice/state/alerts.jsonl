@@ -153,3 +153,5 @@
 {"ts":1792435594738,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (35 כשלים) → respawn=true → verified=false","status":"ledger"}
 {"ts":1792435857297,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:Error: The socket connection was closed unexpected · shachar:Error: Unable to connect. Is the computer able to  · aluf:Error: Unable to connect. Is the computer able to  · erez:Error: Unable to connect. Is the computer able to  · gal:Error: Unable to connect. Is the computer able to ","status":"ledger"}
 {"ts":1792436456941,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792437057115,"key":"ledger-verify","sev":"critical","text":"אימות-שרשרת נכשל: {\"ok\":false,\"checked\":42765,\"brokenAt\":45341}","status":"ledger"}
+{"ts":1792437057130,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
