@@ -226,3 +226,9 @@
 {"ts":1792377899581,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
 {"ts":1792377905582,"key":"giant-unreachable","sev":"critical","text":"מגדל-הנזילות :3024 לא מגיב — עורק-הענקים עיוור","status":"ledger"}
 {"ts":1792378236503,"key":"fuel-tend-error","sev":"warn","text":"מטפל-הדלק: שגיאת-רשת TimeoutError: The operation timed out.","status":"ledger"}
+{"ts":1792378522342,"key":"disk-full","sev":"critical","text":"הדיסק ב-92% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1792378605933,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 92%→92% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792378608255,"key":"dex-halted","sev":"critical","text":"הבורסה עצורה: snapshot-integrity-failed: load refused, evidence preserved (operator reset is the explicit recovery path)","status":"ledger"}
+{"ts":1792378608257,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 249 שגיאות (היה 0)","status":"ledger"}
+{"ts":1792378608259,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792378608259,"key":"giant-failover","sev":"warn","text":"מגדל-הנזילות על משמרת-failover — ראנר-החוץ שקט","status":"ledger"}
