@@ -257,3 +257,8 @@
 {"ts":1792383816499,"key":"console-5xx","sev":"critical","text":"הקונסולה :3000 מחזירה 500 — דלת-הבית-פגומה","status":"ledger"}
 {"ts":1792384716481,"key":"disk-full","sev":"critical","text":"הדיסק ב-86% (סף-85) — מעקב-הדוק","status":"ledger"}
 {"ts":1792384718998,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 60 דק' (fills=98484) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792385018912,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792385024914,"key":"giant-unreachable","sev":"critical","text":"מגדל-הנזילות :3024 לא מגיב — עורק-הענקים עיוור","status":"ledger"}
+{"ts":1792385062962,"key":"healed-giant-intake","sev":"warn","text":"מפעיל-פנימי: giant-intake:3024 נפל (0 כשלים) → respawn=true → verified=true","status":"ledger"}
+{"ts":1792385320063,"key":"giant-failover","sev":"warn","text":"מגדל-הנזילות על משמרת-failover — ראנר-החוץ שקט","status":"ledger"}
+{"ts":1792385351435,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (15 כשלים) → respawn=true → verified=false","status":"ledger"}
