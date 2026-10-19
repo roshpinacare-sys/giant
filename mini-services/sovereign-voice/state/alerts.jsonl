@@ -156,3 +156,8 @@
 {"ts":1792437057115,"key":"ledger-verify","sev":"critical","text":"אימות-שרשרת נכשל: {\"ok\":false,\"checked\":42765,\"brokenAt\":45341}","status":"ledger"}
 {"ts":1792437057130,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
 {"ts":1792437682008,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (42 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792437964778,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792437966986,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:Error: The socket connection was closed unexpected · shachar:Error: Unable to connect. Is the computer able to  · aluf:Error: Unable to connect. Is the computer able to  · erez:Error: Unable to connect. Is the computer able to  · gal:Error: Unable to connect. Is the computer able to ","status":"ledger"}
+{"ts":1792438256787,"key":"disk-full","sev":"critical","text":"הדיסק ב-94% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1792438415088,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 94%→90% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792438415829,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
