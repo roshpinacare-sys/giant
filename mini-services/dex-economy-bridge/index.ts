@@ -19,6 +19,26 @@ const API = process.env.BRIDGE_DEX_API ?? "http://127.0.0.1:3010/saos-dex/api/de
 const POLL_MS = 20_000;
 const PORT = 3017;
 
+// ══ ESC-11 · סדולת-קציר-עמלות (החלטה #24/#25 · 2026-10-19) ══
+// המפיק-מריץ-את-כלי-הקציר-הריבוני (grids/fee-harvest.mjs) כל-30-סקרים (~10 דק').
+// הכלי-עצמו fail-honest עם-חוקי-קציר (רצפת-סולם · סף-אבק · אפס-סודות —
+// הטוקן-נשאר-בסביבת-המנוע) — הגשר-רק-מזמין-ומרשים. אפס-המצאה.
+const HARVEST_EVERY_POLLS = 30;
+const HARVEST_CMD = process.env.FEE_HARVEST_CMD ?? "node /home/z/work/saos-dex/grids/fee-harvest.mjs";
+let harvests = 0, lastHarvest = "";
+async function harvestTick(): Promise<void> {
+  try {
+    const p = Bun.spawn(["bash", "-c", HARVEST_CMD], { stdout: "pipe", stderr: "pipe" });
+    const out = await new Response(p.stdout).text();
+    harvests++;
+    lastHarvest = out.trim().slice(0, 300);
+    console.log(`[bridge] fee-harvest #${harvests}: ${lastHarvest}`);
+  } catch (e) {
+    lastHarvest = `fail-honest: ${String(e).slice(0, 120)}`;
+    console.log(`[bridge] fee-harvest-error: ${lastHarvest}`);
+  }
+}
+
 const db = new Database(DEX_DB, { create: true });
 /* תיקון-שורשי (2026-10-18 · גל-16): נמדד חי — 482/1295 סקרים נפלו "database is locked"
  * כי הספר-המשותף custom.db נכתב גם על-ידי מנוע-הכלכלה (:3016) וגם על-ידי הגשר,
@@ -51,6 +71,7 @@ function writeFills(trades: any[]): number {
 
 async function poll(): Promise<void> {
   polls++;
+  if (polls % HARVEST_EVERY_POLLS === 0) void harvestTick(); // ESC-11 — לא-חוסם-את-הסקר
   try {
     const res = await fetch(API, { signal: AbortSignal.timeout(8_000) });
     if (!res.ok) throw new Error(`http-${res.status}`);
@@ -76,6 +97,6 @@ setTimeout(poll, 3_000);
 
 Bun.serve({
   port: PORT,
-  fetch: () => Response.json({ ok: true, bridge: "dex-economy-bridge", polls, inserted, errors, lastAt, lastErr: lastErr || null, db: DEX_DB, wal: true }),
+  fetch: () => Response.json({ ok: true, bridge: "dex-economy-bridge", polls, inserted, errors, lastAt, lastErr: lastErr || null, db: DEX_DB, wal: true, harvests, lastHarvest: lastHarvest || null }),
 });
 console.log(`[bridge] חי על :${PORT} · db=${DEX_DB} · api=${API} · WAL+busy_timeout=8s (גל-16)`);
