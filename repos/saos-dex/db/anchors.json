@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-19T16:55:43.976Z",
+  "updatedAt": "2026-10-19T16:56:25.449Z",
   "anchorId": "saos-dex.anchor.v1",
   "account": "headcorner",
   "tronIdentity": "TDmEwVH3EWwqwcScn21vKLqmgN4j1yyEwS",
@@ -8,12 +8,12 @@
       "status": "anchored",
       "pendingFunding": false,
       "account": "headcorner",
-      "lastTxid": "3d15ed3a3f7a3acfc86b427caecb4504a3a103e4",
-      "lastHeight": 760344,
-      "lastAt": "2026-10-19T16:55:40.197Z",
-      "lastAnchoredTxid": "3d15ed3a3f7a3acfc86b427caecb4504a3a103e4",
-      "anchored": 9,
-      "verified": 7,
+      "lastTxid": "dedccb8a85b38a46d25eb6d3af6618cfed80dd26",
+      "lastHeight": 760356,
+      "lastAt": "2026-10-19T16:56:20.484Z",
+      "lastAnchoredTxid": "dedccb8a85b38a46d25eb6d3af6618cfed80dd26",
+      "anchored": 10,
+      "verified": 8,
       "mismatches": 0,
       "endpointHost": "api.steemit.com",
       "breaker": {
@@ -22,7 +22,7 @@
         "openedAt": null,
         "trips": 0
       },
-      "explorer": "https://steemworld.org/tx/3d15ed3a3f7a3acfc86b427caecb4504a3a103e4",
+      "explorer": "https://steemworld.org/tx/dedccb8a85b38a46d25eb6d3af6618cfed80dd26",
       "lastError": null,
       "lastVerifyError": null
     },
@@ -75,8 +75,8 @@
       "pendingFunding": true,
       "account": "headcorner",
       "lastTxid": null,
-      "lastHeight": 760344,
-      "lastAt": "2026-10-19T16:55:40.197Z",
+      "lastHeight": 760356,
+      "lastAt": "2026-10-19T16:56:20.484Z",
       "lastAnchoredTxid": null,
       "anchored": 0,
       "verified": 0,
@@ -160,12 +160,39 @@
     }
   },
   "totals": {
-    "anchored": 9,
-    "verified": 7,
+    "anchored": 10,
+    "verified": 8,
     "mismatches": 0,
-    "records": 22
+    "records": 24
   },
   "records": [
+    {
+      "chain": "steem",
+      "epoch": "e0",
+      "height": 760356,
+      "stateRoot": "91ccb632f0f3b2920622416787b215b415b90ba08a4d729e7ec8a09bdd484e04",
+      "digest": "456b2409268e4e32e5f88188ba4fdd676e132e7d698ba431c3d9cfa53ed5a94b",
+      "txid": "dedccb8a85b38a46d25eb6d3af6618cfed80dd26",
+      "status": "anchored",
+      "at": "2026-10-19T16:56:20.484Z",
+      "attempt": 1,
+      "verified": null,
+      "verifiedAt": null
+    },
+    {
+      "chain": "tron",
+      "epoch": "e0",
+      "height": 760356,
+      "stateRoot": "91ccb632f0f3b2920622416787b215b415b90ba08a4d729e7ec8a09bdd484e04",
+      "digest": "456b2409268e4e32e5f88188ba4fdd676e132e7d698ba431c3d9cfa53ed5a94b",
+      "txid": null,
+      "status": "pending",
+      "at": "2026-10-19T16:56:20.484Z",
+      "attempt": 1,
+      "verified": null,
+      "verifiedAt": null,
+      "error": "unfunded: 0 sun (<0.3 TRX bandwidth floor) — queued honestly"
+    },
     {
       "chain": "steem",
       "epoch": "e0",
@@ -203,8 +230,8 @@
       "status": "anchored",
       "at": "2026-10-19T16:55:04.228Z",
       "attempt": 1,
-      "verified": null,
-      "verifiedAt": null
+      "verified": true,
+      "verifiedAt": "2026-10-19T16:56:25.449Z"
     },
     {
       "chain": "tron",
