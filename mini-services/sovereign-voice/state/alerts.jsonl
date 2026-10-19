@@ -195,3 +195,6 @@
 {"ts":1792445808527,"key":"dex-halted","sev":"critical","text":"הבורסה עצורה: snapshot-integrity-failed: load refused, evidence preserved (operator reset is the explicit recovery path)","status":"ledger"}
 {"ts":1792445808528,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:ask: mempool-full · tamar:ask: mempool-full · shachar:ask: mempool-full · aluf:ask: mempool-full · erez:ask: mempool-full · gal:ask: mempool-full","status":"ledger"}
 {"ts":1792446366914,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792447015962,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 116 דק' (fills=0) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792447257021,"key":"disk-full","sev":"critical","text":"הדיסק ב-100% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1792447285591,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (74 כשלים) → respawn=true → verified=false","status":"ledger"}
