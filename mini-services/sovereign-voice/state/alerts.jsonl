@@ -132,3 +132,8 @@
 {"ts":1792429857335,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:Error: The socket connection was closed unexpected · shachar:Error: Unable to connect. Is the computer able to  · aluf:Error: Unable to connect. Is the computer able to  · erez:Error: Unable to connect. Is the computer able to  · gal:Error: Unable to connect. Is the computer able to ","status":"ledger"}
 {"ts":1792430156522,"key":"disk-full","sev":"critical","text":"הדיסק ב-88% (סף-85) — מעקב-הדוק","status":"ledger"}
 {"ts":1792430763737,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792431364583,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792431371149,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1792431401167,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (21 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792431796039,"key":"disk-healed","sev":"warn","text":"שומר-הדיסק: 94%→83% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792431796974,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:Error: The socket connection was closed unexpected · shachar:Error: Unable to connect. Is the computer able to  · aluf:Error: Unable to connect. Is the computer able to  · erez:Error: Unable to connect. Is the computer able to  · gal:Error: Unable to connect. Is the computer able to ","status":"ledger"}
