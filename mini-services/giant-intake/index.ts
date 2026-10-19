@@ -107,6 +107,7 @@ stats.opsToday = prog.opsToday;
 async function call(method: string, params: any): Promise<any> {
   const res = await fetch(RPC, {
     method: "POST", headers: { "content-type": "application/json" },
+    signal: AbortSignal.timeout(10_000), // אף-קריאת-RPC לא תשתלט על-הלולאה
     body: JSON.stringify({ jsonrpc: "2.0", method, params, id: 1 }),
   });
   const j = await res.json();
@@ -314,9 +315,15 @@ async function digest(force = false) {
   return j;
 }
 
-// ═══ לולאות
-setInterval(cycle, 10_000);
-setTimeout(cycle, 1_500);
+// ═══ לולאות (שומר-תפוסה: אין-מחזורים-מצטברים — חוק-מנוע-כותב-יחיד גם-כאן)
+let cycleBusy = false;
+async function guardedCycle() {
+  if (cycleBusy) return;
+  cycleBusy = true;
+  try { await cycle(); } finally { cycleBusy = false; }
+}
+setInterval(guardedCycle, 10_000);
+setTimeout(guardedCycle, 1_500);
 setInterval(census, 5 * 60_000);
 setTimeout(census, 5_000);
 
@@ -326,6 +333,7 @@ function authed(req: Request) {
 }
 Bun.serve({
   port: PORT,
+  idleTimeout: 60, // סערות-RPC לא יהרגו תשובות-לוח
   async fetch(req) {
     const u = new URL(req.url);
     if (u.pathname === "/health") return Response.json({

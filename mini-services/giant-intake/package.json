@@ -1,11 +1,12 @@
 {
-  "name": "giant-intake",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "bun --hot index.ts"
-  },
-  "dependencies": {
-    "@hiveio/dhive": "1.3.6"
-  }
+ "name": "giant-intake",
+ "version": "1.0.0",
+ "private": true,
+ "scripts": {
+  "dev": "bun run patch-secp.ts && bun --hot index.ts"
+ },
+ "dependencies": {
+  "@hiveio/dhive": "1.3.6",
+  "elliptic": "6.6.1"
+ }
 }
