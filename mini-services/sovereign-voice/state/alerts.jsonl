@@ -149,3 +149,6 @@
 {"ts":1792434395450,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
 {"ts":1792434657081,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 10 שגיאות (היה 8)","status":"ledger"}
 {"ts":1792434968578,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
+{"ts":1792435564649,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792435594738,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (35 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792435857297,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:Error: The socket connection was closed unexpected · shachar:Error: Unable to connect. Is the computer able to  · aluf:Error: Unable to connect. Is the computer able to  · erez:Error: Unable to connect. Is the computer able to  · gal:Error: Unable to connect. Is the computer able to ","status":"ledger"}
