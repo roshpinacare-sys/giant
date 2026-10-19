@@ -27,6 +27,7 @@ const LEDGER_FILE = path.join(STATE_DIR, "ledger.jsonl");
 const SNAP_FILE = path.join(STATE_DIR, "snapshot.json");
 const ANCHOR_LOG = path.join(STATE_DIR, "anchor-log.jsonl");
 const DEPOSIT_LOG = path.join(STATE_DIR, "deposit-log.jsonl");
+const PUBLISH_LOG = path.join(STATE_DIR, "publish-log.jsonl");
 const DEPOSIT_SEEN = path.join(STATE_DIR, "deposit-seen.json");
 const QUARANTINE_DIR = path.join(STATE_DIR, "quarantine");
 const ISSUER_FILE = "/home/z/.secrets/sovereign-token/issuer.json";
@@ -937,4 +938,25 @@ if (!g.__saosxBooted) {
   }, 60_000);
   setTimeout(() => { void anchorOnce(); setInterval(() => void anchorOnce(), 300_000); }, 15_000);
   setTimeout(() => { void depositWatchOnce(); setInterval(() => void depositWatchOnce(), 120_000); }, 20_000);
+  /* Task 21-open#3 · publisher-מתוזמן לtoken.json (organism loop): כל-10דק' מריץ
+   * tools/publish-saosx.mjs → snapshot חי → Domain/token.json (commit+push).
+   * fail-honest מוחלט: כשל-פרסום לא נוגע בספר-החתום; רק פנקס-ניסיונות כן. */
+  const publishOnce = async (): Promise<void> => {
+    if (quarantined) return;
+    const t0 = Date.now();
+    try {
+      const p = Bun.spawnSync(["bun", "run", "/home/z/my-project/tools/publish-saosx.mjs"], {
+        cwd: "/home/z/my-project", timeout: 90_000, stdout: "pipe", stderr: "pipe",
+      });
+      const out = `${p.stdout?.toString().slice(0, 200) ?? ""}${p.stderr?.toString().slice(0, 200) ?? ""}`.replace(/\s+/g, " ").trim();
+      const rec = { ts: Date.now(), exit: p.exitCode, ms: Date.now() - t0, out: out.slice(0, 180) };
+      try { fs.appendFileSync(PUBLISH_LOG, JSON.stringify(rec) + "\n"); } catch { /* כנה */ }
+      if (p.exitCode === 0) console.info(`[sovereign-token] publish-ok: ${out.slice(0, 120)} (${rec.ms}ms)`);
+      else console.error(`[sovereign-token] publish-fail exit=${p.exitCode}: ${out.slice(0, 120)}`);
+    } catch (e) {
+      try { fs.appendFileSync(PUBLISH_LOG, JSON.stringify({ ts: Date.now(), exit: -1, ms: Date.now() - t0, out: String((e as Error)?.message ?? e).slice(0, 160) }) + "\n"); } catch { /* כנה */ }
+      console.error("[sovereign-token] publish-spawn-fail:", String((e as Error)?.message ?? e).slice(0, 120));
+    }
+  };
+  setTimeout(() => { void publishOnce(); setInterval(() => void publishOnce(), 600_000); }, 45_000);
 }
