@@ -1,4 +1,6 @@
-#!/usr/bin/env bun
+/* ESC-14-c · ריצה תחת node (--watch): ה-native secp256k1 של dhive נבנה ל-ABI של node
+ * ומפיל תהליך-bun על symbol-error (נמדד 3 פעמים חי 17:0xZ). המרה ל-node:http — עובד
+ * תחת-שניהם; ההשקה בפועל: node --watch index.ts. */
 /**
  * steem-voice — ערוץ-הקול-החוץ-הריבוני על בלוקצ'יין-steem (אמת-אמיתית)
  * ═════════════════════════════════════════════════════════════════════════════
@@ -10,6 +12,7 @@
  * כלל-אמת: אפס-ערכי-מפתחות בלוגים/תשובות. fail-closed בלי-כספת.
  */
 import fs from "fs";
+import http from "node:http";
 import dhive from "@hiveio/dhive";
 
 const PORT = Number(process.env.STEEM_VOICE_PORT ?? 3023);
@@ -67,35 +70,39 @@ async function broadcast(title, body, tags) {
   return { permlink, parentPermlink, blockInfo: res?.id ?? null };
 }
 
-const srv = Bun.serve({
-  port: PORT,
-  async fetch(req) {
-    const u = new URL(req.url);
-    if (u.pathname === "/health") {
-      return Response.json({
-        ok: true, service: "steem-voice", port: PORT,
-        custody: keyOk() ? "כספת-חיה (4/4-הוכח)" : "fail-closed",
-        account: E.account || "(חסר)", // שם-חשבון הוא ציבורי
-        ...stats,
-      });
-    }
-    if (u.pathname === "/state") {
-      return Response.json({ ok: true, account: E.account || null, rpc: RPC, ...stats });
-    }
-    if (u.pathname === "/broadcast" && req.method === "POST") {
+const json = (res, code, obj) => { res.writeHead(code, { "content-type": "application/json; charset=utf-8" }); res.end(JSON.stringify(obj)); };
+const srv = http.createServer(async (req, res) => {
+  const u = new URL(req.url ?? "/", `http://127.0.0.1:${PORT}`);
+  if (u.pathname === "/health") {
+    return json(res, 200, {
+      ok: true, service: "steem-voice", port: PORT,
+      custody: keyOk() ? "כספת-חיה (4/4-הוכח)" : "fail-closed",
+      account: E.account || "(חסר)", // שם-חשבון הוא ציבורי
+      ...stats,
+    });
+  }
+  if (u.pathname === "/state") {
+    return json(res, 200, { ok: true, account: E.account || null, rpc: RPC, ...stats });
+  }
+  if (u.pathname === "/broadcast" && req.method === "POST") {
+    let body = "";
+    req.on("data", (c) => { body += c; });
+    req.on("end", async () => {
       try {
-        const b = await req.json().catch(() => ({}));
+        const b = JSON.parse(body || "{}");
         const title = String(b.title ?? "").trim();
-        const body = String(b.body ?? "").trim();
-        if (!title || !body) return Response.json({ ok: false, error: "title+body-required" }, { status: 200 });
-        const r = await broadcast(title, body, Array.isArray(b.tags) ? b.tags.map(String) : undefined);
-        return Response.json({ ok: true, ...r, url: `https://steemit.com/@${E.account}/${r.permlink}` });
+        const bbody = String(b.body ?? "").trim();
+        if (!title || !bbody) return json(res, 200, { ok: false, error: "title+body-required" });
+        const r = await broadcast(title, bbody, Array.isArray(b.tags) ? b.tags.map(String) : undefined);
+        return json(res, 200, { ok: true, ...r, url: `https://steemit.com/@${E.account}/${r.permlink}` });
       } catch (e) {
         stats.errors++; stats.lastErr = String(e?.message ?? e).slice(0, 200);
-        return Response.json({ ok: false, error: stats.lastErr }, { status: 200 });
+        return json(res, 200, { ok: false, error: stats.lastErr });
       }
-    }
-    return Response.json({ ok: false, error: "not-found" }, { status: 404 });
-  },
+    });
+    return;
+  }
+  return json(res, 404, { ok: false, error: "not-found" });
 });
+srv.listen(PORT, "127.0.0.1");
 console.log(`[steem-voice] חי על :${PORT} · חשבון=${E.account ? E.account : "fail-closed"} · כספת=${keyOk() ? "חיה" : "חסרה"}`);
