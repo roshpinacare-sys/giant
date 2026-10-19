@@ -138,3 +138,6 @@
 {"ts":1792431796039,"key":"disk-healed","sev":"warn","text":"שומר-הדיסק: 94%→83% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
 {"ts":1792431796974,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:Error: The socket connection was closed unexpected · shachar:Error: Unable to connect. Is the computer able to  · aluf:Error: Unable to connect. Is the computer able to  · erez:Error: Unable to connect. Is the computer able to  · gal:Error: Unable to connect. Is the computer able to ","status":"ledger"}
 {"ts":1792432556623,"key":"disk-full","sev":"critical","text":"הדיסק ב-86% (סף-85) — מעקב-הדוק","status":"ledger"}
+{"ts":1792433157749,"key":"ledger-verify","sev":"critical","text":"אימות-שרשרת נכשל: {\"ok\":false,\"checked\":140061,\"brokenAt\":146000}","status":"ledger"}
+{"ts":1792433157766,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
+{"ts":1792433483248,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (28 כשלים) → respawn=true → verified=false","status":"ledger"}
