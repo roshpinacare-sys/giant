@@ -6,6 +6,7 @@
       "name": "steem-voice",
       "dependencies": {
         "@hiveio/dhive": "^1.3.6",
+        "@noble/secp256k1": "^3.2.0",
       },
       "devDependencies": {
         "@types/bun": "latest",
@@ -19,6 +20,8 @@
     "@ecency/bytebuffer": ["@ecency/bytebuffer@6.0.0", "", { "dependencies": { "long": "~3" } }, "sha512-rGPjzD7a7cPtMHjpJEtLMt/RmqX8XK25tN5qjuu9iaDMK/Ril86CecU5DN/TXEMUQMY1p6b2cVvKBLTdFMr2DA=="],
 
     "@hiveio/dhive": ["@hiveio/dhive@1.3.6", "", { "dependencies": { "@ecency/bytebuffer": "^6.0.0", "bigi": "^1.4.2", "bs58": "^4.0.1", "core-js": "^3.6.4", "cross-fetch": "^3.0.4", "ecurve": "^1.0.6", "https": "^1.0.0", "jsbi": "^3.1.4", "node-fetch": "^2.6.0", "ripemd160": "^2.0.2", "secp256k1": "^3.8.0", "verror": "^1.10.0", "whatwg-fetch": "^3.0.0" } }, "sha512-d+uNzuIArqoI30IKGpV93JRU/p3LPUY3pmrQqmNb8Iiowd5KxCZ4LIT8gIFQw16OoGKuQ2tY3LXkUBxNb1gWhQ=="],
+
+    "@noble/secp256k1": ["@noble/secp256k1@3.2.0", "", {}, "sha512-Z3ZAWOTxJ0EuTuZTi7Y69iK7GgrLHh8sgm45lVDhg/b3Nk1TpAiKhick2KkZisHuupeepSkyIydN/J459SdX1w=="],
 
     "@types/bun": ["@types/bun@1.4.3", "", { "dependencies": { "bun-types": "1.4.3" } }, "sha512-N67Pqy8JXbAY/j0tNraS3V5mubGvc6rrrNDmDCtZLlFzccbUJPDb0tvgUBC5q4m8ybkP93Jcn1QB+RYQ6PvBhw=="],
 
