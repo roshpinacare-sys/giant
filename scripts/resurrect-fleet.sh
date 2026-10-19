@@ -67,4 +67,16 @@ else
   guard_alive && log "OK heartbeat-guard הוקם (pid=$(cat "$PIDF" 2>/dev/null))" || log "FAIL heartbeat-guard"
 fi
 
+# 5. ESC-CI-GUARD · שומר-CI-הריבוני: סורק-ריצות-כשל-בריפו-הפרטיים, מזהה-חתימת-
+#    קיר-מכסה (אפס-שליחות) ומנטרל-את-ה-workflow-הגורם-בעצמו — הבעלים-לא-מוצף-
+#    באימיילים-עוד. כמו-local-beats: מתזמן-ללא-פורט; probe=pgrep-על-נתיב-הסקריפט.
+QG="/home/z/my-project/scripts/ci-quota-guard.mjs"
+if pgrep -f "ci-quota-guard.mjs" >/dev/null 2>&1; then
+  log "OK ci-quota-guard חי (pid=$(pgrep -f 'ci-quota-guard.mjs' | head -1))"
+else
+  ( cd /home/z/my-project && setsid nohup bun "$QG" >> state/ci-quota-guard.log 2>&1 </dev/null & )
+  sleep 2
+  pgrep -f "ci-quota-guard.mjs" >/dev/null 2>&1 && log "OK ci-quota-guard הוקם" || log "FAIL ci-quota-guard"
+fi
+
 log "═══ resurrect-fleet הסתיים ═══"

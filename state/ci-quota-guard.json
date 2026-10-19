@@ -1,0 +1,60 @@
+{
+  "ok": true,
+  "service": "ci-quota-guard",
+  "pid": 18834,
+  "bootedAt": "2026-10-19T19:21:31.194Z",
+  "scans": 1,
+  "disabledCount": 0,
+  "lastTick": "2026-10-19T19:21:31.202Z",
+  "lastFindings": [
+    {
+      "repo": "Sandbox",
+      "workflow": "artery-catchup",
+      "wfId": 379863372,
+      "run": 39299714363,
+      "alreadyNeutralized": true,
+      "wfState": "disabled_manually"
+    },
+    {
+      "repo": "Sandbox",
+      "workflow": "sovereign-tick",
+      "wfId": 379549510,
+      "run": 39299714301,
+      "alreadyNeutralized": true,
+      "wfState": "disabled_manually"
+    },
+    {
+      "repo": "Sandbox",
+      "workflow": "pages-deploy",
+      "wfId": 379549508,
+      "run": 39299714257,
+      "alreadyNeutralized": true,
+      "wfState": "disabled_manually"
+    },
+    {
+      "repo": "Adsmarket",
+      "workflow": "gitleaks-secret-scan",
+      "wfId": 371400249,
+      "run": 39242691600,
+      "alreadyNeutralized": true,
+      "wfState": "disabled_manually"
+    },
+    {
+      "repo": "Defi",
+      "workflow": "canary",
+      "wfId": 363855980,
+      "run": 39099904733,
+      "alreadyNeutralized": true,
+      "wfState": "disabled_manually"
+    },
+    {
+      "repo": "saos-agents",
+      "workflow": "gitleaks",
+      "wfId": 381334057,
+      "run": 39100229952,
+      "alreadyNeutralized": true,
+      "wfState": "disabled_manually"
+    }
+  ],
+  "now": "2026-10-19T19:21:41.822Z"
+}

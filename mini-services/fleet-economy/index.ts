@@ -714,6 +714,14 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
   // המשיכה-להעביר-אותו + הגוף-התייחס-אליו → ReferenceError שהרג-את-כל-סבב-האטימה
   // (ובכך-ביטל-בשקט-את-משמורת-המדינה: freeze+custody-restore — שורש-קריעות-הספר-החוזרות).
   const name = dir.split("/").filter(Boolean).pop()!;
+  /* ESC-CI-GUARD (2026-10-19 · שורש-הצפת-האימיילים): קיר-המכסה-של-Actions-על-הריפו-הפרטיים
+   * (Sandbox/roshpina — נמדד: ריצות-נכשלות-עם-אפס-שליחות-תוך-2-4-שניות) הציף-את-הבעלים
+   * באימיילי-כשל על כל אטימה. התיקון-המבני: קומיטי-מצב-שגרתיים-לריפו-פרטיים-נושאים
+   * [skip ci] — האטימה-ממשיכה-לזרום, אפס-הצתות-ריצות-מתות. הריפו-הציבוריים-נשארים-עם-CI-חי
+   * (Pages/אודיט — מוכח-ירוק). ה-workflows-בפרטיים-כבר-disabled-מול-ה-API; זו-שכבת-חגורה-וסגרות
+   * לחזרת-המכסה. ריפו-פרטיים-על-פי-ה-API-הנמדד-2026-10-19. */
+  const PRIVATE_SEAL_REPOS = new Set(["/home/z/estate/Sandbox", "/home/z/estate/roshpina"]);
+  const skipCi = PRIVATE_SEAL_REPOS.has(dir) ? " [skip ci]" : "";
   for (let attempt = 0; attempt < 2; attempt++) {
     const st = await git(dir, ["status", "--porcelain", "--branch"]);
     if (!st.ok) { sealLog({ repo: name, action: "status-fail", out: st.out }); return false; }
@@ -721,7 +729,7 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
     const dirtyLines = st.out.split("\n").filter((l) => l && !l.startsWith("##"));
     if (dirtyLines.length > 0) {
       await git(dir, ["add", "-A"]);
-      const cm = await git(dir, ["commit", "-q", "-m", `vault-seal [auto-economy]: ${dirtyLines.length} files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס`]);
+      const cm = await git(dir, ["commit", "-q", "-m", `vault-seal [auto-economy]: ${dirtyLines.length} files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס${skipCi}`]);
       if (!cm.ok && !cm.out.includes("nothing to commit")) { sealLog({ repo: name, action: "commit-fail", out: cm.out }); }
     }
     // גל-83 · ניקוי-עצמי: rebase-תקוע-מסוופ-קודם (קונפליקטי-delete/modify מהסשן-השני)
