@@ -1563,3 +1563,8 @@
 {"ts":1792428158217,"sem":"gal-16","actor":"gal","action":"cancel","resource":"SAOS/USDS","args":{"orderId":704854,"price":1001,"fair":1016},"outcome":"ok","cost_units":0,"detail":"stale>60bps"}
 {"ts":1792428158239,"sem":"gal-16","actor":"gal","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":1013,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
 {"ts":1792428158319,"sem":"gal-16","actor":"gal","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1019,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792432297266,"sem":"gal-16","actor":"yarden","action":"fill","resource":"SAOS/USDS","args":{"orderId":"999378","filledMu":16,"price":1019},"outcome":"ok","cost_units":16,"detail":"מילוי-ספר-אמת"}
+{"ts":1792432387736,"sem":"gal-16","actor":"operator","action":"xfer","resource":"yarden","args":{"asset":"SAOS","amountMu":54},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792432387846,"sem":"gal-16","actor":"yarden","action":"fill","resource":"SAOS/USDS","args":{"orderId":"999378","filledMu":56,"price":1019},"outcome":"ok","cost_units":56,"detail":"מילוי-ספר-אמת"}
+{"ts":1792432477281,"sem":"gal-16","actor":"operator","action":"xfer","resource":"yarden","args":{"asset":"SAOS","amountMu":56},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792432477356,"sem":"gal-16","actor":"yarden","action":"fill","resource":"SAOS/USDS","args":{"orderId":"999378","filledMu":56,"price":1019},"outcome":"ok","cost_units":56,"detail":"מילוי-ספר-אמת"}
