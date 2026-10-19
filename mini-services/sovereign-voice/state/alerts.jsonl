@@ -178,3 +178,6 @@
 {"ts":1792369317779,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
 {"ts":1792369317780,"key":"giant-failover","sev":"warn","text":"מגדל-הנזילות על משמרת-failover — ראנר-החוץ שקט","status":"ledger"}
 {"ts":1792369646331,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (2 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792370576759,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 100%→98% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792370576762,"key":"console-5xx","sev":"critical","text":"הקונסולה :3000 מחזירה 502 — דלת-הבית-פגומה","status":"ledger"}
+{"ts":1792370577507,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 21 דק' (fills=98484) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
