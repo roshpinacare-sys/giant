@@ -172,3 +172,8 @@
 {"ts":1792440368642,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
 {"ts":1792440766055,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 93%→93% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
 {"ts":1792441257302,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 20 דק' (fills=0) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792441566259,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1792441591272,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (55 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792441856882,"key":"disk-full","sev":"critical","text":"הדיסק ב-96% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1792441857639,"key":"dex-halted","sev":"critical","text":"הבורסה עצורה: snapshot-integrity-failed: load refused, evidence preserved (operator reset is the explicit recovery path)","status":"ledger"}
+{"ts":1792441857640,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:Error: The socket connection was closed unexpected · shachar:Error: Unable to connect. Is the computer able to  · aluf:Error: Unable to connect. Is the computer able to  · erez:Error: Unable to connect. Is the computer able to  · gal:Error: Unable to connect. Is the computer able to ","status":"ledger"}
