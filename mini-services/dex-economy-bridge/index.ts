@@ -14,7 +14,7 @@
 import { Database } from "bun:sqlite";
 import { createHash } from "crypto";
 
-const DEX_DB = process.env.BRIDGE_DEX_DB ?? "/home/z/review/saos-dex/db/dex.db";
+const DEX_DB = process.env.BRIDGE_DEX_DB ?? "/home/z/my-project/db/custom.db"; // ESC-FIX (2026-10-19): הברירת-מחדל-הישנה (/home/z/review/...) הייתה-נתיב-מת (סנדבוקס-נמחק) → SQLITE_CANTOPEN-נמדד-חי; הספר-המשותף-האמיתי הוא custom.db של-הקונסולה
 const API = process.env.BRIDGE_DEX_API ?? "http://127.0.0.1:3010/saos-dex/api/dex/trades?pair=SAOS/USDS&limit=500";
 const POLL_MS = 20_000;
 const PORT = 3017;
