@@ -277,3 +277,8 @@
 {"ts":1792389021432,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 92%→91% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
 {"ts":1792389025066,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
 {"ts":1792389546894,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (29 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792389819298,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 275 שגיאות (היה 274)","status":"ledger"}
+{"ts":1792389819302,"key":"giant-failover","sev":"warn","text":"מגדל-הנזילות על משמרת-failover — ראנר-החוץ שקט","status":"ledger"}
+{"ts":1792390116784,"key":"disk-full","sev":"critical","text":"הדיסק ב-93% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1792390211294,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792390226525,"key":"giant-unreachable","sev":"critical","text":"מגדל-הנזילות :3024 לא מגיב — עורק-הענקים עיוור","status":"ledger"}
