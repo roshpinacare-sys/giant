@@ -45,7 +45,19 @@ jobs:
           if git diff --cached --quiet; then
             echo "אין-שינויים-מדודים — אין-קומיט"
           else
-            git pull --rebase --autostash origin main
-            git commit -m "trust-heartbeat: autonomous scan (no-sandbox) — $(date -u +'%Y-%m-%dT%H:%MZ')"
-            git push origin HEAD:main
+            # FIX(2026-10-19 · heartbeat push-races): הקנון-נדחף-גם-ע"י-הבוטים-החיים —
+            # מירוץ-בודד-הפיל-את-הפעימה (02:30Z). לולאת-חוסן: 5-ניסיונות rebase+push,
+            # 10ש׳-ביניהם. התוצר-נוצר-מחדש-כל-פעימה — כל-צד-במירוץ-הוא-אמת-טרייה.
+            OK=0
+            for i in 1 2 3 4 5; do
+              if git pull --rebase --autostash origin main && git commit -m "trust-heartbeat: autonomous scan (no-sandbox) — $(date -u +'%Y-%m-%dT%H:%MZ')" && git push origin HEAD:main; then OK=1; break; fi
+              echo "ניסיון-${i} נכשל (מירוץ-דחיפה) — ממתין-10ש׳"
+              sleep 10
+              git rebase --abort 2>/dev/null || true
+              git add -f db/trust-cache.json || true
+            done
+            if [ "${OK}" != "1" ]; then
+              echo "##[error] הקנון-לא-נדחף-אחרי-5-ניסיונות — הפעימה-הבאה-תנסה-שוב"
+              exit 1
+            fi
           fi
