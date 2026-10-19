@@ -1644,3 +1644,6 @@
 {"ts":1792379196799,"sem":"gal-16","actor":"gal","action":"cancel","resource":"SAOS/USDS","args":{"orderId":704854,"price":1001,"fair":1024},"outcome":"ok","cost_units":0,"detail":"stale>60bps"}
 {"ts":1792379196816,"sem":"gal-16","actor":"gal","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":1021,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
 {"ts":1792379196838,"sem":"gal-16","actor":"gal","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1027,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792379472713,"sem":"gal-16","actor":"yarden","action":"pulse-swap","resource":"SAOS/USDS","args":{"assetIn":"USDS","amount":100000,"minOut":93920},"outcome":"ok","cost_units":300,"detail":"feeMeter=8000 עמלת-חשמל-שוק אמת"}
+{"ts":1792379555184,"sem":"gal-16","actor":"operator","action":"xfer","resource":"yarden","args":{"asset":"USDS","amountMu":89930},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792379555318,"sem":"gal-16","actor":"yarden","action":"xfer","resource":"operator","args":{"asset":"SAOS","amountMu":95837},"outcome":"ok","cost_units":0,"detail":""}
