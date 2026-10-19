@@ -97,4 +97,21 @@ if (!g.__giantsBooted) {
   void refresh().then(() => {
     setInterval(() => void refresh(), REFRESH_MS);
   });
+  /* Task 23 · מסילת-הפיד-הריבוני: כל-5דק' מפרסם את-המדידה-החיה ל-Console Pages
+   * (dex/feed.json) כדי שפעימת-הענן תוכל-לתמחר-גם-כשActions חסום-מול-המקורות.
+   * fail-honest מוחלט: כשל-פרסום לא נוגע במדידה. */
+  const publishFeed = (): void => {
+    try {
+      const p = Bun.spawnSync(["bun", "run", "/home/z/my-project/tools/publish-feed.mjs"], {
+        cwd: "/home/z/my-project", timeout: 90_000, stdout: "pipe", stderr: "pipe",
+      });
+      const out = `${p.stdout?.toString() ?? ""}${p.stderr?.toString() ?? ""}`.replace(/\s+/g, " ").trim();
+      if (p.exitCode === 0) console.info(`[giants-anchor] feed-publish: ${out.slice(0, 90)}`);
+      else console.error(`[giants-anchor] feed-publish-fail exit=${p.exitCode}: ${out.slice(0, 90)}`);
+    } catch (e) {
+      console.error("[giants-anchor] feed-publish-spawn-fail:", String((e as Error)?.message ?? e).slice(0, 100));
+    }
+  };
+  setTimeout(publishFeed, 25_000);
+  setInterval(publishFeed, 300_000);
 }
