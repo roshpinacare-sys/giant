@@ -124,3 +124,5 @@
 {"ts":1792427792414,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (9 כשלים) → respawn=true → verified=false","status":"ledger"}
 {"ts":1792428057105,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:fuel: free-op-cap · shachar:fuel: free-op-cap · aluf:fuel: free-op-cap · erez:fuel: free-op-cap · gal:fuel: free-op-cap","status":"ledger"}
 {"ts":1792428962805,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792429562039,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792429569313,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
