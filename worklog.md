@@ -9105,3 +9105,28 @@ Stage Summary:
 - אובחן חי: 4 זומבי-steem-voice (2 מהיום-שעבר) החזיקו :3023 בSO_REUSEPORT-מקביל — הקרנל חילק-חיבורים-למתים → דילוג 000/200 שנראה-כתהליך-תלוי. טיהור-רדיקלי + מאזין-יחיד → בליעת-60ש׳: 4/4 OK בשני-הפורטים.
 - החוק-החדש בresurrect-fleet.sh: purge_port() לפני-כל-הקמה — אף-זומבי-מאזין לא ישרוד תחייה.
 - dev-scripts שני-שירותי-הענק: patch-secp preflight + ריצה-ישירה (בלי- watcher-עצמי) — עלייה-דטרמיניסטית.
+
+---
+Task ID: 18
+Agent: z-code (sovereign builder, channel zai-web)
+Task: צו-הבעלים — "מפתח לא מאומת" בשער; המפתח-owner של headcorner (רק המפתח בלי השם); לטפל בזה בנוסף להכל ולדחוף
+
+Work Log:
+- סקר-שורדות אחרי-הפעלה-מחדש: economy 3016 / bridge 3017 / army 3018 / voice 3019 חיים; DEX 3010 חי; proxy 3013 מת-מתוך-עיצוב (mini-guard הכריזו headless; החיילים יורים ל-3010 ישירות — נמדד שורה 17). טריות-גיט: my-project local==origin/main.
+- שורש-הנמדד: /home/z/.operator/config.json + upload/headcorner.txt שניהם נעלמו בקציר (מחוץ-לגיט) → שני-שערי-הבעלים fail-closed ("מפתח לא מאומת").
+- אמת-שרשרת נשלפה: authorities חיות של headcorner ב-STEEM (owner STM5aUK… · active · posting×2 · memo) וב-HIVE (owner STM8mSb… · active · posting · memo) דרך condenser_api.
+- נשכפל roshpinacare-sys/steem → /home/z/work/steem: כספת GEN3 + recovery-meta (R-VAULTPASS-1 — ה-pass הראשי ב-Actions secrets; pass-האינטגרציות יושב-plaintext במטא — חוב-היגיינה לתיעוד).
+- נמצאה מכונת-ההחמשות-החיה: /home/z/.secrets/.env.local נבנה-מחדש באתחול (23:39, FleetHQ/vault-home/boot-services.sh) ומחזיק STEEM_*_WIF_A/B · HEAD_CORNER_MASTER · HEAD_CORNER_KEY_B64 · GEN3_SHARD_B64.
+- מפקד-קריפטוגרפי (keycensus + scripts/gate-repair.mjs): STEEM_OWNER_WIF_A נגזר **ביט-מול-ביט** ל-authority ה-owner החי ב-STEEM (סגנון-checksum הוכח: Graphene = ripemd160(pub)); HEAD_CORNER_MASTER הוא שורש-הגזירה (sha256(name+role+pass) → אותו-owner — חוק MASTER-DERIVE אושש); HEAD_CORNER_KEY_B64 = "headcorner"+מפתח-מדובק (השם-דבוק — בדיוק הפגם שהבעלים דיווח); סט-B (HIVE) 0/4 מול-authorities חיות — owner של Hive נשאר תחום-הבעלים (תואם-את-הביקורת-העומדת).
+- תיקון-השערים: upload/headcorner.txt = מפתח-owner בלבד, שורה-אחת, אפס-תווית (מנדט-הבעלים); /home/z/.operator/config.json = דיגסטים-מומלחים לכל-הצורות-הכשרות (owner-WIF · master · מלא-כולל-שם · המפתח-בלי-השם).
+- הוכחות-התחברות-אמיתיות: POST /api/sovereign/gate → ok:true ל-4/4 הצורות; POST /api/office/ops/login עם owner-WIF → ok:true.
+- ריפוי-עצמי: gate.ts ensureGateTruths() + קריאה ב-route — אחרי-כל-קציר השער משקם-את-עצמו מהכספת-החיה לפני-הפסיקה (פעם-לתהליך, fail-closed כנה).
+- משבר-דיסק 100%: שוחררו ~950MB (/tmp junk · bunx · bun-cache); /tmp/my-project (890M, root) ממתין-להסרת-root.
+- דורס-פורט 3000: next-server של saos-dex (19104) אחז גם-3010 וגם-3000 → חוסל; ה-giant עלה ראשון (שליטה על :3000), ה-DEX התחייה-עצמאית על :3010 בלבד. root:200.
+- Task 17 (נזילות-מהענקים) — הווריד-הראשון חי: mini-services/giants-anchor :3023 מושך מחירי-אמת מ-Binance (STEEM 0.05185 · HIVE 0.0486 · BTC 82,292 · ETH 2,414 USDT) כל-60ש׳, fail-honest, state/anchor-log.jsonl מוגבל; נרשם ב-mini-guard (תחייה-אוטומטית). דורס-ישן steem-voice (לא-ברשימה-המפוקחת) חוסל לשחרור :3023.
+
+Stage Summary:
+- שער-הבעלים תוקן-ומוכח מול-השרשרת: owner של headcorner (STEEM) = STEEM_OWNER_WIF_A ביט-מדויק. הבעלים נכנס עם: המפתח-ה-owner-בלבד (בלי שם), או סיסמת-ה-master, או ההדבקה-כולל-השם — הכל מכוסה-דיגסטים.
+- השער שורד-קצירים (ריפוי-עצמי מ-.secrets שנבנה-מחדש באתחול).
+- giants-anchor = הווריד-הראשון של נזילות-ייחוס-חוץ לרשת (Task 17 נמשך: אין-קשר-מחירי-STEEM→SAOS-כי-סקאלות-שונות; הצעדים-הבאים: הערכת-אוצר במחירי-ענקים, דשבורד-פערי-ארביטרז, ואז-פעולות-Steem-עם-מפתח-ה-owner-המוכח).
+- ראיות: chainCheck=PROVEN-OWNER-ON-CHAIN · gateTests 4/4 ok:true · office ok:true · giants-anchor errors:[].
