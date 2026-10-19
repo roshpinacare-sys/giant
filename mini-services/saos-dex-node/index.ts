@@ -88,6 +88,11 @@ async function portAlive(): Promise<boolean> {
  * אין-node_modules → מתקין-לבד, אין-סכימה → prisma-db-push לבד. אפס-אדם. */
 async function ensureDexRoot(): Promise<boolean> {
   try {
+    /* ESC-14-b · חוזה-השלום-קבוע: גשר-ה-preview של הדקס תופס :3000 כשהקונסולה-מתה
+     * וחוסם-את-תחייתה (EADDRINUSE-נמדד 17:00-17:11Z). המתג-המובנה preview-bridge.off
+     * משחרר-את-הפורט-בבקשה-הבאה. נכתב-בכל-עלייה: הדלת-הקדמית-שייכת-לקונסולה-לנצח;
+     * אחרי-קציר (work/ נשכפל-מחדש-בלי-המתג) המשגיח-מחזיר-אותו-מיד. */
+    try { fs.writeFileSync(path.join(DEX_ROOT, "db", "preview-bridge.off"), "off\n"); } catch { /* כנה */ }
     if (!fs.existsSync(path.join(DEX_ROOT, ".git"))) {
       console.info("[saos-dex-node] DEX_ROOT חסר (קציר?) — משכפל-עצמית מהגיט");
       fs.mkdirSync(path.dirname(DEX_ROOT), { recursive: true });
