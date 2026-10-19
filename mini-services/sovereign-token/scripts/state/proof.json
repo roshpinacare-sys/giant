@@ -1,0 +1,155 @@
+{
+ "startedAt": "2026-10-19T02:22:35.611Z",
+ "finishedAt": "2026-10-19T02:23:06.954Z",
+ "issuerAddr": "e7f69d80bd23c426521acb3ed78e138b35523b0b",
+ "secondAddr": "4a70b4767442f3e12ecd07d122389b2610f299f6",
+ "steps": [
+  {
+   "name": "treasury→issuer transfer 100,000",
+   "ok": true,
+   "seq": 18,
+   "h": "de090d2917a5d7060fadf216d900b50d87ffc3a42b434305bbd504d14a775b56",
+   "error": null,
+   "result": {
+    "moved": 100000000000
+   }
+  },
+  {
+   "name": "stake 100,000",
+   "ok": true,
+   "seq": 19,
+   "h": "8020944420d2fb5e6cc6c0744b4e450549014abfab5a191e7857eeb8d89e4314",
+   "error": null,
+   "result": {
+    "staked": 100000000000
+   }
+  },
+  {
+   "name": "delegate 10,000 → self",
+   "ok": true,
+   "seq": 20,
+   "h": "7272dc718b8c0ec2c1921feaba71c2c92b573f81f676baddd85393328135b68b",
+   "error": null,
+   "result": {
+    "delegated": 10000000000,
+    "to": "e7f69d80bd23c426521acb3ed78e138b35523b0b"
+   }
+  },
+  {
+   "name": "create-vesting 50,000 (cliff=now end=now+30s)",
+   "ok": true,
+   "seq": 21,
+   "h": "fa7d0f3b2025224686849b76c6b00e0a8942917811d2ef245218d401c15401ef",
+   "error": null,
+   "result": {
+    "id": "vest-21",
+    "total": 50000000000,
+    "escrowed": true
+   }
+  },
+  {
+   "name": "treasury→issuer transfer 5,000 (htlc funding)",
+   "ok": true,
+   "seq": 22,
+   "h": "8a545b0fadc2861ce5573738b927977a5ac481f4c010ac3a5fd6e7a87f4161b3",
+   "error": null,
+   "result": {
+    "moved": 5000000000
+   }
+  },
+  {
+   "name": "htlc-create 1,000",
+   "ok": true,
+   "seq": 23,
+   "h": "a9bc5bafc5c4893525ac7f3c2d00031a304a3ce719a816e83324f74458763df4",
+   "error": null,
+   "result": {
+    "id": "htlc-23",
+    "amount": 1000000000
+   }
+  },
+  {
+   "name": "multisig-propose transfer 777",
+   "ok": true,
+   "seq": 24,
+   "h": "9f4f33f76388381c398a7179965c14f5eceae75f3f34be1a70f1b06a6a786a38",
+   "error": null,
+   "result": {
+    "id": "ms-24",
+    "required": 1
+   }
+  },
+  {
+   "name": "multisig-approve ms-24",
+   "ok": false,
+   "seq": 24,
+   "h": null,
+   "error": "already-approved",
+   "result": null
+  },
+  {
+   "name": "multisig-execute ms-24",
+   "ok": true,
+   "seq": 25,
+   "h": "a1a7db463ae55d6ce4351077ae1a69da68f76b68ff8e9ce7bfe0dddfea77d48b",
+   "error": null,
+   "result": {
+    "id": "ms-24",
+    "executed": 1,
+    "results": [
+     {
+      "moved": 777000000
+     }
+    ]
+   }
+  },
+  {
+   "name": "airdrop-claim (second keypair)",
+   "ok": true,
+   "seq": 26,
+   "h": "1e164a31784a51d17f28a5513f6733cea8c29b297f0f36528d814d9f9136179c",
+   "error": null,
+   "result": {
+    "paid": 1000000000,
+    "saosAddr": "4a70b4767442f3e12ecd07d122389b2610f299f6"
+   }
+  },
+  {
+   "name": "claim-vesting",
+   "ok": true,
+   "seq": 27,
+   "h": "7f7af00b5486f590ce7a08b58ea264271e6190e836806a87bab499f0f4811a27",
+   "error": null,
+   "result": {
+    "paid": 50000000000,
+    "contracts": [
+     "vest-21"
+    ]
+   }
+  },
+  {
+   "name": "htlc-claim (preimage reveal)",
+   "ok": true,
+   "seq": 28,
+   "h": "3b2110360817f3063cda57dd2a7bc62727341fee1ae6139c143f44a5106dd97c",
+   "error": null,
+   "result": {
+    "id": "htlc-23",
+    "claimed": 1000000000
+   }
+  }
+ ],
+ "verify": {
+  "ok": true,
+  "checked": 28,
+  "brokenAt": null,
+  "ms": 134
+ },
+ "vestingId": "vest-21",
+ "htlcId": "htlc-23",
+ "msId": "ms-24",
+ "delegation": {
+  "delegated": 10000000000,
+  "to": "e7f69d80bd23c426521acb3ed78e138b35523b0b"
+ }
+}
