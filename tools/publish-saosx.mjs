@@ -24,14 +24,17 @@ const doc = {
 };
 const body = JSON.stringify(doc, null, 1);
 
-try { await sh(DOMAIN, ["pull", "--rebase", "-X", "ours", "origin", "main"]); } catch (e) { console.error("pull-warn:", String(e).slice(0, 120)); }
-await import("node:fs").then(async (fs) => {
-  fs.writeFileSync(`${DOMAIN}/token.json`, body);
-  await sh(DOMAIN, ["add", "token.json"]);
-  let dirty = true;
-  try { await sh(DOMAIN, ["diff", "--cached", "--quiet"]); dirty = false; } catch { dirty = true; }
-  if (!dirty) { console.log("no-changes"); process.exit(0); }
-  await sh(DOMAIN, ["commit", "-m", `saosx snapshot: seq=${s.lastSeq} supply=${s.supply} verifyOk=${s.verifyOk} [skip ci]`]);
-  await sh(DOMAIN, ["push", "origin", "main"]);
-  console.log(`published token.json · seq=${s.lastSeq}`);
-});
+/* pull רק-אם-העץ-נקי (עץ-מלוכלך = דלג; push יידחה-בכנות אם-יש-מירוץ — המחזור-הבא מנסה-שוב) */
+try {
+  const st = await sh(DOMAIN, ["status", "--porcelain"]);
+  if (!st.trim()) await sh(DOMAIN, ["pull", "--rebase", "-X", "ours", "origin", "main"]).catch((e) => console.error("pull-warn:", String(e).slice(0, 120)));
+} catch { /* כנה */ }
+const fs = await import("node:fs");
+fs.writeFileSync(`${DOMAIN}/token.json`, body);
+await sh(DOMAIN, ["add", "token.json"]);
+let dirty = true;
+try { await sh(DOMAIN, ["diff", "--cached", "--quiet"]); dirty = false; } catch { dirty = true; }
+if (!dirty) { console.log("no-changes"); process.exit(0); }
+await sh(DOMAIN, ["commit", "-m", `saosx snapshot: seq=${s.lastSeq} supply=${s.supply} verifyOk=${s.verifyOk} [skip ci]`, "--", "token.json"]);
+await sh(DOMAIN, ["push", "origin", "main"]);
+console.log(`published token.json · seq=${s.lastSeq}`);

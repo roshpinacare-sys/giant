@@ -9130,3 +9130,24 @@ Stage Summary:
 - השער שורד-קצירים (ריפוי-עצמי מ-.secrets שנבנה-מחדש באתחול).
 - giants-anchor = הווריד-הראשון של נזילות-ייחוס-חוץ לרשת (Task 17 נמשך: אין-קשר-מחירי-STEEM→SAOS-כי-סקאלות-שונות; הצעדים-הבאים: הערכת-אוצר במחירי-ענקים, דשבורד-פערי-ארביטרז, ואז-פעולות-Steem-עם-מפתח-ה-owner-המוכח).
 - ראיות: chainCheck=PROVEN-OWNER-ON-CHAIN · gateTests 4/4 ok:true · office ok:true · giants-anchor errors:[].
+
+---
+Task ID: 21
+Agent: Z.ai (sovereign engineer · סשן "ארנק-וטוקן-ריבוני" 2026-10-19)
+Task: צו-הבעלים — "לבחון היטב את הארנק, להקים טוקן, לבצע עליו חוזה מתקדם ככל הניתן, לכתוב את מפתחו לכספת, לתקן את כשלי-ההפקדה (שליח-נכשל + הבעלים נכשל), לשפר את ה-UI, ולדחוף"
+
+Work Log:
+- חקירת-אמת של הארנק-החי (Domain/wallet.html · 178KB חד-קובץ): נמדדו שלושה-שורשי-כשל — (1) חומת-מפתח: השידור מאמת רק מול posting.key_auths → מפתח-owner של headcorner נזרק "המפתח אינו מפתח ה-posting"; (2) relay:null ב-world.json החי → השידור-האוטומטי מת והמשתמש נתקע בתור-מקומי; (3) dex/watch.json חי עם 4 כתובות-חוץ אך `ok (0)` — אפס-הפקדות שנקלטו ואין-שורות-STEEM/SBD.
+- משבר-דיסק 100% (פעמיים): שוחררו ~2.9GB — work/saos-dex (1.2G עץ-מת), FleetHQ.stale-6935613 (132M), forge/node_modules (1.3G לא-רץ), ו-gc ל-.git של כספת-steem (526M→152K, אובייקטים-חיים-בלבד).
+- טקס-מפתחות SAOSX (אמת): secp256k1 טהור → זהות-גרפין — STM725U81feqRaDakVD9RzTPop89FYM78iQaKjD6TVoQdNj5NxoMR · כתובת e7f69d80bd23c426521acb3ed78e138b35523b0b · חומר-מלא ב-/home/z/.secrets/sovereign-token/issuer.json (600, מחוץ-לגיט) · קבלה-בלבד ב-REGISTRY+VAULT-CENSUS (26/26).
+- Task 21-a — sovereign-token :3025 (נבנה-במקביל-ע"י-סוכן-והושלם): ספר-חתום hash-linked (secp256k1 · sha256(canonicalJSON)), genesis מדויק 21,000,000 SAOSX (40/35/15/10 — staking_pool/vesting_vault/treasury/airdrop_reserve), חוזה-מתקדם: transfer/burn/stake/unstake/delegate/undelegate/create-vesting/claim-vesting/set-reward-rate/claim-rewards/airdrop-claim/htlc-create/htlc-claim/htlc-refund/multisig(N-of-M)/batch · /verify מחשב-מחדש-הכל · הסגר-כנה בשבר.
+- הוכחת-חוזה חיה: 11/12 מדרגות ✓ (ה-✗ היחיד = already-approved כנה ב-1-of-1) — seq=28, verify ok (checked=28, brokenAt=null), פרסים-נצברים חי (643,071µ בכ-6ש׳), HTLC נפתח-ב-preimage אמת, איירדרופ נתבע מזוג-מפתחות-שני. תיקוני-חוסן: BigInt-safe stringify + רשת-ביטחון על ה-handler (מחלת-status-0 חוסלה) + עיגון amount=0.000001 (הכלכלה דורשת >0) → **anchor ok:true ל-economy :3016 (ref saosx-\*)**.
+- Task 21-b — wallet v2 (נבנה-במקביל-ע"י-סוכן-ואומת): חומת-המפתח הוסרה — classifyKey מול שלוש-הסמכויות (owner>active>posting), active חותם required_auths, owner מקבל-נתיב-מתקדם כן: צירוף-מפתח-posting חדש (account_update חתום-owner, owner/active-נשמרים, אישור-מפורש) · transport-key בזיכרון+sessionStorage-בלבד (צ'יפ-נשלף) · שידור-אוטומטי של כל-פעולה-חתומה דרך RPC-ציבורי (STEEM_NODES-רוטציה) · קסם-התחלה-מהירה 3-מדרגות עם סימון-מצב-אמת · כרטיס-SAOSX מלא (token.json ציבורי) · שורות-הפקדה STEEM/SBD (headcorner + מדיניות-ממוא) · הודעות-שגיאה שאומרות מה-לעשות-הלאה. אומת-דפדפן מקומי + חי: יצירת-ארנק ✓ (saos17cp…), אפס-שגיאות-קונסולה.
+- פרסום-חי ל-Domain: wallet v2 + dex/watch.json (STEEM/SBD ממוזגים-לצורת-הצופה) + token.json (snapshot חי) — pull --rebase -X ours לפני-דחיפה, האוטומציה-החיצונית לא נדרכה. מוציא-חוזר: tools/publish-saosx.mjs (עץ-מלוכלך-בטוח, commit-pathspec, fail-honest).
+- תחייה-אוטומטית: sovereign-token:3025 נרשם ב-resurrect-fleet.sh (עם-טיהור-פורט) + mini-guard.
+
+Stage Summary:
+- **SAOSX חי**: טוקן-ריבוני אמת עם חוזה-מתקדם (12 משפחות-פעולות), ספר-חתום-מאומת, עיגון-קנוני לכלכלה, מפתח-מנפיק בכספת-עם-קבלה — אפס-חומר-בגיט.
+- **הארנק נפתח לעולם**: מפתח-owner כבר לא חוסם (נתיב-צירוף-מתקדם), active/posting משדרים-ישירות מהדפדפן דרך RPC-ציבורי בלי-ריליי, ההפקדה מציגה כתובות-STEEM/SBD אמת, וה-UI מדריך-מדרגה-אחר-מדרגה.
+- פרסומים-חיים: wallet.html v2 · token.json (seq=28 · supply=21M) · dex/watch.json — כל-זה מאומת-HTTP-200-על-GitHub-Pages.
+- פתוח-הבא: (1) קו-זיכוי-הפקדות-אוטומטי (watcher→credit לספר-הדקס), (2) מאזין-קיפול-ה-OP_ID עבור ארנקות-חדשים, (3) publisher-מתוזמן לtoken.json (organism loop), (4) HIVE-הפקדות רק-אחרי-אימות-מפתחות-חי.
