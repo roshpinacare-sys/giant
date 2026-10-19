@@ -101568,3 +101568,308 @@ error: "next" exited with code 1
  GET /api/dex/my-orders?issuer=erez 200 in 5ms (next.js: 1.5ms, proxy.ts: 1.5ms, application-code: 1.9ms)
  GET /api/dex/my-orders?issuer=gal 200 in 5ms (next.js: 1.6ms, proxy.ts: 1.5ms, application-code: 2.0ms)
  GET /api/dex/state 200 in 6ms (next.js: 1.5ms, proxy.ts: 1.5ms, application-code: 3ms)
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 8ms (next.js: 2ms, proxy.ts: 3ms, application-code: 3ms)
+[saos-dex] block h665893: 3/12 ops rejected — order(arena):insufficient-escrow:arena:a947 · pool_swap(bot-b):bad-quote:bot-b:a278 · order(arena):insufficient-escrow:arena:a948
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 9ms (next.js: 2ms, proxy.ts: 3ms, application-code: 4ms)
+[saos-dex] block h665894: 1/11 ops rejected — order(arena):insufficient-escrow:arena:a955
+[saos-dex] block h665895: 2/10 ops rejected — pool_swap(bot-a):bad-quote:bot-a:a251 · fill(bot-a):no-cross:bot-a:a252
+ GET /api/dex/state 200 in 10ms (next.js: 4ms, proxy.ts: 3ms, application-code: 4ms)
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 8ms (next.js: 3ms, proxy.ts: 2ms, application-code: 3ms)
+[saos-dex] block h665896: 1/12 ops rejected — pool_swap(bot-b):bad-quote:bot-b:a281
+[saos-dex] block h665897: 1/12 ops rejected — order(arena):insufficient-escrow:arena:a974
+[saos-dex] block h665899: 2/14 ops rejected — pool_swap(bot-b):bad-quote:bot-b:a284 · pool_swap(bot-b):bad-quote:bot-b:a285
+ GET / 404 in 533ms (next.js: 335ms, application-code: 198ms)
+ GET /api/dex/state 200 in 11ms (next.js: 3ms, proxy.ts: 3ms, application-code: 5ms)
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 8ms (next.js: 2ms, proxy.ts: 3ms, application-code: 3ms)
+[saos-dex] block h665900: 2/11 ops rejected — order(arena):insufficient-escrow:arena:a991 · order(arena):insufficient-escrow:arena:a993
+[saos-dex] block h665901: 2/12 ops rejected — fill(bot-a):no-cross:bot-a:a256 · order(arena):insufficient-escrow:arena:a1000
+[saos-dex] block h665902: 1/13 ops rejected — fill(bot-b):no-cross:bot-b:a287
+[saos-dex] block h665903: 2/16 ops rejected — order(arena):insufficient-escrow:arena:a1017 · order(arena):insufficient-escrow:arena:a1018
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 10ms (next.js: 3ms, proxy.ts: 3ms, application-code: 4ms)
+[saos-dex] block h665904: 1/16 ops rejected — order(arena):insufficient-escrow:arena:a1026
+[saos-dex] block h665905: 2/9 ops rejected — pool_swap(bot-b):bad-quote:bot-b:a288 · fill(bot-b):no-cross:bot-b:a289
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 9ms (next.js: 2ms, proxy.ts: 3ms, application-code: 4ms)
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 8ms (next.js: 2ms, proxy.ts: 2ms, application-code: 3ms)
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 8ms (next.js: 2ms, proxy.ts: 3ms, application-code: 3ms)
+[saos-dex] block h665907: 1/12 ops rejected — order(arena):insufficient-escrow:arena:a1045
+[saos-dex] block h665908: 1/9 ops rejected — fill(bot-b):no-cross:bot-b:a290
+[saos-dex] block h665909: 1/11 ops rejected — pool_swap(bot-c):bad-quote:bot-c:a248
+[saos-dex] block h665910: 2/11 ops rejected — order(arena):insufficient-escrow:arena:a1062 · order(arena):insufficient-escrow:arena:a1064
+[saos-dex] block h665911: 2/12 ops rejected — fill(bot-b):no-cross:bot-b:a292 · order(arena):insufficient-escrow:arena:a1071
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 9ms (next.js: 2.0ms, proxy.ts: 3ms, application-code: 4ms)
+[saos-dex] block h665913: 2/11 ops rejected — order(arena):insufficient-escrow:arena:a1083 · order(arena):insufficient-escrow:arena:a1084
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 8ms (next.js: 2ms, proxy.ts: 3ms, application-code: 4ms)
+[saos-dex] block h665914: 1/11 ops rejected — order(arena):insufficient-escrow:arena:a1091
+[saos-dex] block h665915: 2/10 ops rejected — pool_swap(bot-c):bad-quote:bot-c:a250 · fill(bot-c):no-cross:bot-c:a251
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 10ms (next.js: 3ms, proxy.ts: 3ms, application-code: 4ms)
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 8ms (next.js: 1.8ms, proxy.ts: 2ms, application-code: 4ms)
+[saos-dex] block h665917: 1/12 ops rejected — order(arena):insufficient-escrow:arena:a1110
+[saos-dex] block h665919: 1/11 ops rejected — pool_swap(bot-a):bad-quote:bot-a:a265
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 9ms (next.js: 3ms, proxy.ts: 3ms, application-code: 3ms)
+[saos-dex] block h665920: 4/13 ops rejected — order(arena):insufficient-escrow:arena:a1125 · pool_swap(bot-b):bad-quote:bot-b:a296 · order(arena):insufficient-escrow:arena:a1127 · order(treasury):insufficient-escrow:treasury:a610
+[saos-dex] block h665921: 2/13 ops rejected — fill(bot-c):no-cross:bot-c:a253 · order(arena):insufficient-escrow:arena:a1134
+ GET /api/dex/state 200 in 17ms (next.js: 6ms, proxy.ts: 5ms, application-code: 5ms)
+ GET /api/dex/state 200 in 20ms (next.js: 12ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /api/dex/state 200 in 20ms (next.js: 15ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/dex/state 200 in 8ms (next.js: 2ms, proxy.ts: 2ms, application-code: 4ms)
+ POST /api/dex/transfer 200 in 14ms (next.js: 4ms, proxy.ts: 4ms, application-code: 6ms)
+ GET /api/dex/state 200 in 8ms (next.js: 3ms, proxy.ts: 1.8ms, application-code: 3ms)
+ GET /api/dex/state 200 in 7ms (next.js: 2ms, proxy.ts: 1.9ms, application-code: 3ms)
+ GET /api/dex/my-orders?issuer=yarden 200 in 6ms (next.js: 1.9ms, proxy.ts: 1.9ms, application-code: 3ms)
+ GET /api/dex/my-orders?issuer=tamar 200 in 7ms (next.js: 3ms, proxy.ts: 1.7ms, application-code: 2ms)
+ GET /api/dex/my-orders?issuer=shachar 200 in 5ms (next.js: 1.6ms, proxy.ts: 1.7ms, application-code: 2ms)
+ GET /api/dex/my-orders?issuer=aluf 200 in 6ms (next.js: 1.7ms, proxy.ts: 1.8ms, application-code: 2ms)
+ GET /api/dex/my-orders?issuer=erez 200 in 6ms (next.js: 1.7ms, proxy.ts: 1.8ms, application-code: 2ms)
+ GET /api/dex/my-orders?issuer=gal 200 in 6ms (next.js: 1.8ms, proxy.ts: 1.8ms, application-code: 2ms)
+ GET /api/dex/state 200 in 6ms (next.js: 1.7ms, proxy.ts: 1.8ms, application-code: 3ms)
+[saos-dex] block h665923: 3/12 ops rejected — order(arena):insufficient-escrow:arena:a1146 · pool_swap(bot-b):bad-quote:bot-b:a298 · order(arena):insufficient-escrow:arena:a1147
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 11ms (next.js: 4ms, proxy.ts: 3ms, application-code: 4ms)
+error: Failed to run "next" due to signal SIGKILL
+[saos-dex-node] הדקס-יצא code=null — הקמה-מחדש בעוד 5ש׳
+▲ Next.js 16.3.4 (Turbopack)
+- Local:         http://127.0.0.1:3010
+- Network:       http://127.0.0.1:3010
+✓ Ready in 1195ms
+✓ Running next.config.ts took 184ms
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+
+  To migrate automatically, run:
+  npx @next/codemod@canary middleware-to-proxy .
+
+  Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use 127.0.0.1:3010
+    at <unknown> (Error: listen EADDRINUSE: address already in use 127.0.0.1:3010) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3010
+}
+[?25h
+error: "next" exited with code 1
+[saos-dex-node] הדקס-יצא code=1 — הקמה-מחדש בעוד 5ש׳
+⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use 127.0.0.1:3010
+    at <unknown> (Error: listen EADDRINUSE: address already in use 127.0.0.1:3010) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3010
+}
+[?25h
+error: "next" exited with code 1
+[saos-dex-node] הדקס-יצא code=1 — הקמה-מחדש בעוד 5ש׳
+
+[saos-dex] klines restored from git-backed db/klines.json: 4 pairs, 1156 candles
+[saos-dex] purged 10 stale block headers beyond snapshot h665914 (prior-run evidence)
+[saos-dex] purged 1 stale seal records beyond snapshot h665914
+[saos-dex] receipt-digest chain rehydrated (03bf2048c43c…) — linkage continues across restarts (R17-b·L2)
+[saos-dex] chain live · height 665914 · root 1209b186eeb3… (snapshot — verified vs DB stateRoot)
+[saos-dex] oracle_set queued: WTRX=0.331550$ · WSOL=105.555$ · WSTEEM=0.0525010$ · PHIVE=0.0488000$ · HIVE=0.0488000$ · WSBD=0.490588$ · ETH=2430.58$ · BTC=82742.0$ · WETH=2430.58$ · WBNB=726.530$ · WBASE=2430.58$ (median(WTRX×2,WSOL×2,WSTEEM×3,PHIVE×3))
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 4.7s (next.js: 3.9s, proxy.ts: 409ms, application-code: 371ms)
+○ Compiling /api/dex/trades ...
+[saos-dex] block h665914: 2/13 ops rejected — fill(bot-b):no-cross:bot-b:a212 · order(arena):insufficient-escrow:arena:a358
+error: Failed to run "next" due to signal SIGTERM
+error: Failed to run "next" due to signal SIGTERM
+[saos-dex-node] הדקס-יצא code=null — הקמה-מחדש בעוד 5ש׳
+[saos-dex-node] הדקס-יצא code=null — הקמה-מחדש בעוד 5ש׳
+[?25h
+[saos-dex-node] הדקס-יצא code=0 — הקמה-מחדש בעוד 5ש׳
+▲ Next.js 16.3.4 (Turbopack)
+- Local:         http://127.0.0.1:3010
+- Network:       http://127.0.0.1:3010
+✓ Ready in 2.4s
+⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use 127.0.0.1:3010
+    at <unknown> (Error: listen EADDRINUSE: address already in use 127.0.0.1:3010) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3010
+}
+[?25h
+error: "next" exited with code 1
+[saos-dex-node] הדקס-יצא code=1 — הקמה-מחדש בעוד 5ש׳
+✓ Running next.config.ts took 221ms
+⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use 127.0.0.1:3010
+    at <unknown> (Error: listen EADDRINUSE: address already in use 127.0.0.1:3010) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3010
+}
+[?25h
+error: "next" exited with code 1
+[saos-dex-node] הדקס-יצא code=1 — הקמה-מחדש בעוד 5ש׳
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+
+  To migrate automatically, run:
+  npx @next/codemod@canary middleware-to-proxy .
+
+  Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+[saos-dex] klines restored from git-backed db/klines.json: 4 pairs, 1156 candles
+[saos-dex] purged 1 stale block headers beyond snapshot h665914 (prior-run evidence)
+[saos-dex] receipt-digest chain rehydrated (03bf2048c43c…) — linkage continues across restarts (R17-b·L2)
+[saos-dex] chain live · height 665914 · root 1209b186eeb3… (snapshot — verified vs DB stateRoot)
+[saos-dex] oracle_set queued: WTRX=0.331399$ · WSOL=105.600$ · WSTEEM=0.0524770$ · PHIVE=0.0488000$ · HIVE=0.0488000$ · WSBD=0.490588$ · ETH=2430.34$ · BTC=82709.7$ · WETH=2430.34$ · WBNB=726.730$ · WBASE=2430.34$ (median(WTRX×3,WSOL×3,WSTEEM×4,PHIVE×4))
+⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use 127.0.0.1:3010
+    at <unknown> (Error: listen EADDRINUSE: address already in use 127.0.0.1:3010) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3010
+}
+[?25h
+error: "next" exited with code 1
+[saos-dex-node] הדקס-יצא code=1 — הקמה-מחדש בעוד 5ש׳
+○ Compiling /api/dex/trades ...
+[saos-dex] block h665914: 2/13 ops rejected — fill(bot-b):no-cross:bot-b:a212 · order(arena):insufficient-escrow:arena:a358
+⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use 127.0.0.1:3010
+    at <unknown> (Error: listen EADDRINUSE: address already in use 127.0.0.1:3010) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3010
+}
+[?25h
+error: "next" exited with code 1
+[saos-dex-node] הדקס-יצא code=1 — הקמה-מחדש בעוד 5ש׳
+⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use 127.0.0.1:3010
+    at <unknown> (Error: listen EADDRINUSE: address already in use 127.0.0.1:3010) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3010
+}
+[?25h
+error: "next" exited with code 1
+[saos-dex-node] הדקס-יצא code=1 — הקמה-מחדש בעוד 5ש׳
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 7.6s (next.js: 6.4s, proxy.ts: 420ms, application-code: 795ms)
+[saos-dex] block h665915: 1/9 ops rejected — pool_swap(bot-c):bad-quote:bot-c:a208
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 189ms (next.js: 89ms, proxy.ts: 89ms, application-code: 11ms)
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 108ms (next.js: 38ms, proxy.ts: 66ms, application-code: 4ms)
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 32ms (next.js: 11ms, proxy.ts: 5ms, application-code: 16ms)
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 44ms (next.js: 16ms, proxy.ts: 6ms, application-code: 22ms)
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 38ms (next.js: 29ms, proxy.ts: 4ms, application-code: 5ms)
+[saos-dex] block h665917: 2/13 ops rejected — fill(bot-b):no-cross:bot-b:a221 · order(arena):insufficient-escrow:arena:a688
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 35ms (next.js: 26ms, proxy.ts: 4ms, application-code: 5ms)
+[saos-dex] block h665920: 2/12 ops rejected — order(arena):insufficient-escrow:arena:a861 · order(arena):insufficient-escrow:arena:a870
+[saos-dex] block h665921: 3/13 ops rejected — pool_swap(bot-c):bad-quote:bot-c:a214 · fill(bot-c):no-cross:bot-c:a224 · order(arena):insufficient-escrow:arena:a935
+ GET /api/dex/state 200 in 209ms (next.js: 11ms, proxy.ts: 13ms, application-code: 186ms)
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 80ms (next.js: 6ms, proxy.ts: 10ms, application-code: 64ms)
+ GET /api/dex/state 200 in 57ms (next.js: 6ms, proxy.ts: 4ms, application-code: 47ms)
+[saos-dex] block h665923: 2/11 ops rejected — order(arena):insufficient-escrow:arena:a1062 · order(arena):insufficient-escrow:arena:a1064
+[saos-dex] block h665924: 1/10 ops rejected — order(arena):insufficient-escrow:arena:a1088
+ GET /api/dex/state 200 in 11ms (next.js: 3ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /api/dex/state 200 in 45ms (next.js: 9ms, proxy.ts: 3ms, application-code: 32ms)
+[saos-dex] block h665925: 1/9 ops rejected — pool_swap(bot-a):bad-quote:bot-a:a225
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 10ms (next.js: 3ms, proxy.ts: 4ms, application-code: 3ms)
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 9ms (next.js: 3ms, proxy.ts: 3ms, application-code: 4ms)
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 19ms (next.js: 5ms, proxy.ts: 4ms, application-code: 10ms)
+[saos-dex] block h665926: 1/11 ops rejected — pool_swap(bot-b):bad-quote:bot-b:a230
+[saos-dex] block h665927: 2/13 ops rejected — fill(bot-c):no-cross:bot-c:a227 · order(arena):insufficient-escrow:arena:a1107
+[saos-dex] block h665929: 1/11 ops rejected — pool_swap(bot-b):bad-quote:bot-b:a236
+[saos-dex] block h665930: 2/11 ops rejected — order(arena):insufficient-escrow:arena:a1124 · order(arena):insufficient-escrow:arena:a1126
+ GET /api/dex/state 200 in 72ms (next.js: 40ms, proxy.ts: 5ms, application-code: 27ms)
+ POST /api/dex/transfer 200 in 561ms (next.js: 476ms, proxy.ts: 26ms, application-code: 59ms)
+[saos-dex] block h665931: 3/13 ops rejected — pool_swap(bot-a):bad-quote:bot-a:a232 · fill(bot-a):no-cross:bot-a:a249 · order(arena):insufficient-escrow:arena:a1133
+ GET /api/dex/state 200 in 27ms (next.js: 11ms, proxy.ts: 5ms, application-code: 11ms)
+ GET /api/dex/state 200 in 23ms (next.js: 10ms, proxy.ts: 3ms, application-code: 10ms)
+ GET /api/dex/my-orders?issuer=yarden 200 in 244ms (next.js: 234ms, proxy.ts: 5ms, application-code: 5ms)
+ GET /api/dex/my-orders?issuer=tamar 200 in 9ms (next.js: 3ms, proxy.ts: 2ms, application-code: 3ms)
+ GET /api/dex/my-orders?issuer=shachar 200 in 12ms (next.js: 6ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/dex/my-orders?issuer=aluf 200 in 8ms (next.js: 2ms, proxy.ts: 1.9ms, application-code: 4ms)
+ GET /api/dex/my-orders?issuer=erez 200 in 6ms (next.js: 1.8ms, proxy.ts: 2ms, application-code: 3ms)
+ GET /api/dex/my-orders?issuer=gal 200 in 7ms (next.js: 1.7ms, proxy.ts: 2ms, application-code: 3ms)
+ GET /api/dex/state 200 in 9ms (next.js: 3ms, proxy.ts: 2.0ms, application-code: 4ms)
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 11ms (next.js: 4ms, proxy.ts: 3ms, application-code: 5ms)
+[saos-dex] block h665932: 1/11 ops rejected — pool_swap(bot-b):bad-quote:bot-b:a243
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 27ms (next.js: 4ms, proxy.ts: 4ms, application-code: 20ms)
+[saos-dex] block h665933: 2/11 ops rejected — order(arena):insufficient-escrow:arena:a1145 · order(arena):insufficient-escrow:arena:a1146
+[saos-dex] block h665934: 1/11 ops rejected — order(arena):insufficient-escrow:arena:a1153
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 68ms (next.js: 6ms, proxy.ts: 25ms, application-code: 37ms)
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 28ms (next.js: 9ms, proxy.ts: 6ms, application-code: 13ms)
+[saos-dex] block h665935: 2/12 ops rejected — pool_swap(bot-b):bad-quote:bot-b:a261 · pool_swap(bot-b):bad-quote:bot-b:a264
+ GET /api/dex/state 200 in 13ms (next.js: 3ms, proxy.ts: 4ms, application-code: 5ms)
+[saos-dex] block h665937: 2/13 ops rejected — fill(bot-a):no-cross:bot-a:a261 · order(arena):insufficient-escrow:arena:a1172
+[saos-dex] block h665938: 1/10 ops rejected — fill(bot-b):no-cross:bot-b:a267
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 15ms (next.js: 7ms, proxy.ts: 4ms, application-code: 4ms)
+[saos-dex] block h665940: 2/14 ops rejected — order(arena):insufficient-escrow:arena:a1189 · order(arena):insufficient-escrow:arena:a1191
+[saos-dex] block h665941: 3/12 ops rejected — pool_swap(bot-b):bad-quote:bot-b:a268 · fill(bot-b):no-cross:bot-b:a269 · order(arena):insufficient-escrow:arena:a1198
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 25ms (next.js: 6ms, proxy.ts: 11ms, application-code: 8ms)
+[saos-dex] block h665943: 2/11 ops rejected — order(arena):insufficient-escrow:arena:a1210 · order(arena):insufficient-escrow:arena:a1211
+[saos-dex] block h665944: 2/12 ops rejected — fill(bot-b):no-cross:bot-b:a270 · order(arena):insufficient-escrow:arena:a1218
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 19ms (next.js: 4ms, proxy.ts: 4ms, application-code: 11ms)
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+[saos-dex] block h665945: 1/9 ops rejected — pool_swap(bot-c):bad-quote:bot-c:a250
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 8ms (next.js: 2ms, proxy.ts: 3ms, application-code: 3ms)
+[saos-dex] block h665947: 2/13 ops rejected — fill(bot-b):no-cross:bot-b:a276 · order(arena):insufficient-escrow:arena:a1237
+[saos-dex] block h665950: 2/11 ops rejected — order(arena):insufficient-escrow:arena:a1254 · order(arena):insufficient-escrow:arena:a1256
+[saos-dex] block h665951: 3/13 ops rejected — pool_swap(bot-c):bad-quote:bot-c:a252 · fill(bot-c):no-cross:bot-c:a253 · order(arena):insufficient-escrow:arena:a1263
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 21ms (next.js: 9ms, proxy.ts: 4ms, application-code: 8ms)
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 72ms (next.js: 42ms, proxy.ts: 5ms, application-code: 25ms)
+[saos-dex] block h665953: 2/11 ops rejected — order(arena):insufficient-escrow:arena:a1275 · order(arena):insufficient-escrow:arena:a1276
+[saos-dex] block h665954: 1/10 ops rejected — order(arena):insufficient-escrow:arena:a1283
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 104ms (next.js: 68ms, proxy.ts: 23ms, application-code: 14ms)
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 26ms (next.js: 6ms, proxy.ts: 11ms, application-code: 9ms)
+[saos-dex] block h665955: 1/10 ops rejected — pool_swap(bot-a):bad-quote:bot-a:a270
+[saos-dex] block h665956: 1/11 ops rejected — pool_swap(bot-b):bad-quote:bot-b:a285
+[saos-dex] block h665957: 2/13 ops rejected — fill(bot-c):no-cross:bot-c:a255 · order(arena):insufficient-escrow:arena:a1302
+ GET /api/dex/trades?pair=SAOS/USDS&limit=500 200 in 78ms (next.js: 36ms, proxy.ts: 6ms, application-code: 36ms)
+[saos-dex] block h665959: 1/10 ops rejected — pool_swap(bot-b):bad-quote:bot-b:a288
+[saos-dex] block h665960: 3/12 ops rejected — order(arena):insufficient-escrow:arena:a1317 · order(arena):insufficient-escrow:arena:a1319 · order(treasury):insufficient-escrow:treasury:a721
+ GET /api/dex/state 200 in 38ms (next.js: 13ms, proxy.ts: 4ms, application-code: 20ms)
+ POST /api/dex/transfer 200 in 60ms (next.js: 7ms, proxy.ts: 14ms, application-code: 38ms)
+ GET /api/dex/state 200 in 24ms (next.js: 7ms, proxy.ts: 8ms, application-code: 10ms)
+ GET /api/dex/state 200 in 20ms (next.js: 5ms, proxy.ts: 5ms, application-code: 10ms)
+ GET /api/dex/my-orders?issuer=yarden 200 in 45ms (next.js: 33ms, proxy.ts: 5ms, application-code: 6ms)
+ GET /api/dex/my-orders?issuer=tamar 200 in 46ms (next.js: 8ms, proxy.ts: 14ms, application-code: 23ms)
+ GET /api/dex/my-orders?issuer=shachar 200 in 50ms (next.js: 33ms, proxy.ts: 7ms, application-code: 10ms)
+ GET /api/dex/my-orders?issuer=aluf 200 in 31ms (next.js: 7ms, proxy.ts: 15ms, application-code: 8ms)
+ GET /api/dex/my-orders?issuer=erez 200 in 23ms (next.js: 4ms, proxy.ts: 6ms, application-code: 13ms)
+ GET /api/dex/my-orders?issuer=gal 200 in 48ms (next.js: 8ms, proxy.ts: 33ms, application-code: 7ms)
+ GET /api/dex/state 200 in 16ms (next.js: 6ms, proxy.ts: 3ms, application-code: 6ms)
+[saos-dex] block h665961: 3/14 ops rejected — pool_swap(bot-a):bad-quote:bot-a:a272 · fill(bot-a):no-cross:bot-a:a273 · order(arena):insufficient-escrow:arena:a1326
+[saos-dex] block h665962: 1/11 ops rejected — pool_swap(bot-b):bad-quote:bot-b:a290
+[saos-dex-node] פורט 3010 חי — לא-מקים כפילות
+ GET /api/dex/state 200 in 10ms (next.js: 2ms, proxy.ts: 3ms, application-code: 5ms)
+[saos-dex] block h665963: 2/11 ops rejected — order(arena):insufficient-escrow:arena:a1338 · order(arena):insufficient-escrow:arena:a1339
