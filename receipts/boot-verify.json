@@ -1,11 +1,11 @@
 {
-  "at": "2026-10-19T03:39:58.320Z",
+  "at": "2026-10-19T03:54:57.946Z",
   "producer": "boot-verifier:3042",
   "all_ok": false,
-  "elapsed_s": 1.3,
+  "elapsed_s": 0.9,
   "checks": {
     "office": {
-      "reception_3000": "up",
+      "reception_3000": "down",
       "fleethq_3002": "down",
       "foreman_3020": "up",
       "estate_sync_3021": "up",
@@ -34,5 +34,5 @@
       "method": "git-ls-remote"
     }
   },
-  "sha256": "caa67911309b552b30e30bf61b9646fd41d9a5b52cb259223d889b39decf74b3"
+  "sha256": "dd228e61e3d90c7590fa64a5cea7e9a468dd4f48374886437ad0224d8da000a9"
 }
