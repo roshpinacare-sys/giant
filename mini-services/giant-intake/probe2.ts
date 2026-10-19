@@ -1,0 +1,11 @@
+import dhive from "@hiveio/dhive";
+import fs from "fs";
+const env = fs.readFileSync("/home/z/.secrets/.env.local","utf8");
+const wif = env.match(/^STEEM_ACTIVE_WIF_A=(.+)$/m)?.[1].trim() ?? "";
+console.log("1: wif loaded, len", wif.length);
+const key = dhive.PrivateKey.fromString(wif);
+console.log("2: key derived ok");
+const client = new dhive.Client("https://api.steemit.com", { timeout: 12000, chainId: "0".repeat(64) });
+console.log("3: client built");
+const res = await client.broadcast.sendOperations([["transfer",{from:"headcorner",to:"cashmachine",amount:"1.000 STEEM",memo:"probe-liveness"}]], key);
+console.log("4: broadcast ok", JSON.stringify(res).slice(0,120));
