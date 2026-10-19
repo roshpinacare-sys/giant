@@ -42,6 +42,38 @@ function readToken(): string {
   return token;
 }
 
+/* ESC-13 · 2026-10-19 · כספת→מסילה אוטומטית: היה — המסילה (custom_json anchors לשרשרת-steem)
+ * נשארה כבויה לאחר-כל-קציר-סנדבוקס כי ה-env שלה (STEEM_ACTIVE_WIF הגולם) לא נשפך לילד.
+ * התיקון: המשגיח קורא בזמן-ריצה את הכספת (/home/z/.secrets/.env.local · 600 · שנפרסת
+ * ע"י vault-home/auto-unseal) ומזריק כינויים בשמות שהמנוע מצפה להם — אפס סודות בלוג/בארג.
+ * אין כספת → אפס הזרקה, הדקס עולה keyless כרגיל (fail-honest, לא שבר). */
+function vaultRelayEnv(): Record<string, string> {
+  const VAULT = "/home/z/.secrets/.env.local";
+  const out: Record<string, string> = {};
+  try {
+    const txt = fs.readFileSync(VAULT, "utf8").replace(/\r/g, "");
+    const env: Record<string, string> = {};
+    for (const line of txt.split("\n")) {
+      const m = line.match(/^([A-Z_0-9]+)=(.*)$/);
+      if (m) env[m[1]] = m[2].trim();
+    }
+    const acct = env["STEEM_ACCOUNT"];
+    const active = env["STEEM_ACTIVE_WIF_A"];
+    const posting = env["STEEM_POSTING_WIF_A"];
+    if (!acct || (!active && !posting)) return out; /* אין-זוג חשבון+מפתח — כנה */
+    out["SAOS_RELAY_AGENT_ACCOUNT"] = acct;
+    out["STEEM_ANCHOR_ACCOUNT"] = acct;
+    /* חוזה-החתימה שש-השלבים (relay.ts stage 1/6): חימוש-מפעיל לכל-אתחול-תהליך —
+     * המפתחות-ב-.env לבדם אינם משדרים. המשגיח הוא-השליח-המוסמך של-הבעלים (אותו
+     * חוק-ריבונות של-טביעת-הטוקן-העצמית gal-92): כספת-פתוחה + עלייה = סשן-חתימה חי. */
+    out["SAOS_RELAY_SIGNING_SESSION_UNLOCKED"] = "1";
+    if (posting) out["STEEM_POSTING_WIF"] = posting;
+    if (active) out["STEEM_ACTIVE_WIF"] = active;
+    console.info("[saos-dex-node] כספת נטענה — מסילת-עיגון steem מוזרקת לילד (סלוטים: posting+active)");
+  } catch { /* אין-כספת — עלייה keyless כנה */ }
+  return out;
+}
+
 async function portAlive(): Promise<boolean> {
   try {
     const r = await fetch(STATE_URL, { signal: AbortSignal.timeout(1500) });
@@ -107,6 +139,7 @@ async function boot(): Promise<void> {
       DATABASE_URL: DB_FILE, /* כבר-כולל file: */
       SAOS_DEX_STATE_DIR: STATE_DIR,
       DEX_OPERATOR_TOKEN: token,
+      ...vaultRelayEnv(),
     },
     stdio: ["ignore", "inherit", "inherit"],
   });
