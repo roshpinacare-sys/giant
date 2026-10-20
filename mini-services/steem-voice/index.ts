@@ -24,8 +24,8 @@ function readEnv() {
       if (!lines.length) return "";
       return lines[lines.length - 1].slice(k.length + 1).trim().replace(/^["']|["']$/g, ""); // כמו source: שורה-אחרונה גוברת
     };
-    return { account: get("STEEM_ACCOUNT"), postingWif: get("STEEM_POSTING_WIF_A") };
-  } catch { return { account: "", postingWif: "" }; }
+    return { account: get("STEEM_ACCOUNT"), postingWif: get("STEEM_POSTING_WIF_A"), activeWif: get("STEEM_ACTIVE_WIF_A") };
+  } catch { return { account: "", postingWif: "", activeWif: "" }; }
 }
 const E = readEnv();
 let client = null;
@@ -67,6 +67,54 @@ async function broadcast(title, body, tags) {
   return { permlink, parentPermlink, blockInfo: res?.id ?? null };
 }
 
+/* ══ ESC-11 · הרגל-החוץ · מסילת-transfer ═══════════════════════════════════
+ * POST /transfer {to, amount, memo?} → העברת-STEEM אמת-על-השרשרת (transfer op,
+ * מפתח-ACTIVE מהכספת). זה-הקילומטר-האחרון של מסילת-הדיבידנד (µ→STEEM→בעלים).
+ *
+ * שערים-קשוחים (כל-אחד-כנה-ומתועד):
+ *   T-1 · fail-closed בלי-מפתח-ACTIVE-חי
+ *   T-2 · תקרת-נזק: ≤ MAX_TRANSFER_STEEM (env, ברירת-מחדל 1.000 STEEM) פר-קריאה
+ *   T-3 · קצב: תהליך-אחד-לשעה (מפתח-כבד — השער-הוגן)
+ *   T-4 · אפס-סודות: הקבלה-מתעדת txid/מספרים — לעולם-לא-מפתחות
+ *   T-5 · כנות: כשל-RPC/אימות = הודעה-כנה, הכסף-לא-נזז */
+import { appendFileSync, mkdirSync } from "node:fs";
+import { dirname } from "node:path";
+const TRANSFER_RECEIPTS = "/home/z/my-project/mini-services/steem-voice/state/transfer-receipts.jsonl";
+const MAX_TRANSFER_STEEM = Number(process.env.STEEM_VOICE_MAX_TRANSFER ?? 1.0);
+const TRANSFER_COOLDOWN_MS = 60 * 60 * 1000;
+let lastTransferAt = 0;
+const tstats = { transfers: 0, transferErrors: 0, lastTransferAt: 0, lastTxid: "", lastTransfer: "" };
+
+function assetOk(amount: string): { ok: boolean; value: number; asset: string; str: string } {
+  const m = /^([0-9]+(\.[0-9]{1,3})?) (STEEM|SBD)$/.exec(String(amount ?? "").trim());
+  if (!m) return { ok: false, value: 0, asset: "", str: "" };
+  const value = Number(m[1]);
+  const str = `${value.toFixed(3)} ${m[3]}`; // פורמט-גרפני-מחייב: 3-ספרות
+  return { ok: value > 0 && value <= MAX_TRANSFER_STEEM, value, asset: m[3], str };
+}
+
+async function transfer(to: string, amount: string, memo: string) {
+  if (!E.account || !E.activeWif) throw new Error("fail-closed: אין-כספת/מפתח-ACTIVE (T-1)");
+  const a = assetOk(amount);
+  if (!a.ok) throw new Error(`bad-amount (T-2: חייב "X.XXX STEEM|SBD" ≤ ${MAX_TRANSFER_STEEM})`);
+  if (Date.now() - lastTransferAt < TRANSFER_COOLDOWN_MS) throw new Error("rate-limited: תהליך-אחד-לשעה (T-3)");
+  const toOk = /^[a-z0-9][a-z0-9.-]{1,15}$/.test(String(to ?? ""));
+  if (!toOk) throw new Error("bad-recipient");
+  const c = getClient();
+  const key = dhive.PrivateKey.fromString(E.activeWif);
+  const ops = [["transfer", { from: E.account, to: String(to), amount: a.str, memo: String(memo ?? "").slice(0, 2000) }]];
+  const res = await c.broadcast.sendOperations(ops, key);
+  lastTransferAt = Date.now();
+  tstats.transfers++; tstats.lastTransferAt = lastTransferAt;
+  tstats.lastTxid = String(res?.id ?? "");
+  tstats.lastTransfer = `${a.str} → ${to}`;
+  try {
+    mkdirSync(dirname(TRANSFER_RECEIPTS), { recursive: true });
+    appendFileSync(TRANSFER_RECEIPTS, JSON.stringify({ schema: "STEEM-VOICE-TRANSFER/1", at: new Date().toISOString(), from: E.account, to, amount: a.str, txid: tstats.lastTxid, memo: String(memo ?? "").slice(0, 120) }) + "\n");
+  } catch { /* קבלה-לעולם-לא-מפילה */ }
+  return { txid: tstats.lastTxid, amount: a.str, to };
+}
+
 const srv = Bun.serve({
   port: PORT,
   async fetch(req) {
@@ -75,8 +123,9 @@ const srv = Bun.serve({
       return Response.json({
         ok: true, service: "steem-voice", port: PORT,
         custody: keyOk() ? "כספת-חיה (4/4-הוכח)" : "fail-closed",
+        activeKey: E.activeWif ? "חי (transfer-זמין)" : "fail-closed",
         account: E.account || "(חסר)", // שם-חשבון הוא ציבורי
-        ...stats,
+        ...stats, transfers: tstats.transfers, lastTxid: tstats.lastTxid || null,
       });
     }
     if (u.pathname === "/state") {
@@ -93,6 +142,16 @@ const srv = Bun.serve({
       } catch (e) {
         stats.errors++; stats.lastErr = String(e?.message ?? e).slice(0, 200);
         return Response.json({ ok: false, error: stats.lastErr }, { status: 200 });
+      }
+    }
+    if (u.pathname === "/transfer" && req.method === "POST") {
+      try {
+        const b = await req.json().catch(() => ({}));
+        const r = await transfer(String(b.to ?? ""), String(b.amount ?? ""), String(b.memo ?? ""));
+        return Response.json({ ok: true, ...r });
+      } catch (e) {
+        tstats.transferErrors++; 
+        return Response.json({ ok: false, error: String(e?.message ?? e).slice(0, 200) }, { status: 200 });
       }
     }
     return Response.json({ ok: false, error: "not-found" }, { status: 404 });
