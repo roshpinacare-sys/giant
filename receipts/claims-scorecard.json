@@ -1,11 +1,11 @@
 {
  "schema": "SAOS-CLAIMS-SCORECARD/1",
- "at": "2026-10-20T06:10:32.149Z",
+ "at": "2026-10-20T06:12:19.194Z",
  "law": "צו-בעלים trace 1a1579cc5dfd1b15 — אין-טענה-בלי-ראיה-חיה; חוסר-ראיה = DEGRADED/BROKEN-כנה (LAW-3)",
- "truthScore": 97,
+ "truthScore": 94,
  "counts": {
-  "proven": 16,
-  "degraded": 1,
+  "proven": 15,
+  "degraded": 2,
   "broken": 0,
   "unverifiable": 0
  },
@@ -22,23 +22,23 @@
    "claim": "הקרנל-הריבוני חי ומייצר-בלוקים (h עולה · לא-מושהה)",
    "verdict": "PROVEN",
    "evidence": {
-    "height": 830715,
-    "prevHeight": 830337,
+    "height": 830746,
+    "prevHeight": 830715,
     "advanced": true,
     "halted": false
    },
-   "probeMs": 147
+   "probeMs": 227
   },
   {
    "id": "dex-trading-live",
    "claim": "השוק-הריבוני סוחר-באמת (מילויים-חדשים-זורמים)",
    "verdict": "PROVEN",
    "evidence": {
-    "fillsTotal": 205619,
+    "fillsTotal": 205644,
     "swapsTotal": 72676,
-    "newFillsSinceLastRun": 301
+    "newFillsSinceLastRun": 25
    },
-   "probeMs": 33
+   "probeMs": 76
   },
   {
    "id": "fee-meter-health",
@@ -50,26 +50,26 @@
     "treasuryProfit": 310,
     "ratchetEver": 18404281
    },
-   "probeMs": 66
+   "probeMs": 56
   },
   {
    "id": "economy-engine",
    "claim": "מנוע-הכלכלה (:3016) חי ומונה-רצף",
    "verdict": "PROVEN",
    "evidence": {
-    "seq": 109557,
-    "prevSeq": 95045,
+    "seq": 110622,
+    "prevSeq": 109557,
     "advanced": true
    },
-   "probeMs": 2
+   "probeMs": 24
   },
   {
    "id": "bridge-relay",
    "claim": "גשר-דקס→כלכלה (:3017) משדר-מילויים-אמת-לספר-המשותף",
    "verdict": "PROVEN",
    "evidence": {
-    "polls": 235,
-    "inserted": 621,
+    "polls": 241,
+    "inserted": 636,
     "pollsAdvanced": true,
     "errors": 0
    },
@@ -82,10 +82,10 @@
    "evidence": {
     "soldiers": 6,
     "placedTotal": 27,
-    "filledMuTotal": 11976,
-    "actionsAgeMin": 0
+    "filledMuTotal": 12020,
+    "actionsAgeMin": 1
    },
-   "probeMs": 4
+   "probeMs": 2
   },
   {
    "id": "sovereign-audit-functional",
@@ -94,9 +94,9 @@
    "evidence": {
     "lastDecision": "CLEAR",
     "lastError": null,
-    "runAgeMin": 3
+    "runAgeMin": 5
    },
-   "probeMs": 7
+   "probeMs": 4
   },
   {
    "id": "sovereign-voice-ops",
@@ -105,9 +105,9 @@
    "evidence": {
     "scans": 11,
     "heals": 11,
-    "diskPct": 90
+    "diskPct": 91
    },
-   "probeMs": 11
+   "probeMs": 21
   },
   {
    "id": "steem-voice-custody",
@@ -118,7 +118,7 @@
     "account": "headcorner",
     "broadcasts": 2
    },
-   "probeMs": 3
+   "probeMs": 2
   },
   {
    "id": "boot-verifier",
@@ -138,27 +138,29 @@
     "brains": 13,
     "live": 13
    },
-   "probeMs": 2
+   "probeMs": 6
   },
   {
    "id": "estate-sync-anchors",
    "claim": "סנכרון-העזבון (:3021) מצרף-את-כל-העוגנים",
-   "verdict": "PROVEN",
+   "verdict": "DEGRADED",
    "evidence": {
     "anchors": 13,
-    "ok": 13,
-    "bad": []
+    "ok": 12,
+    "bad": [
+     "estate/Domain"
+    ]
    },
-   "probeMs": 2
+   "probeMs": 5
   },
   {
    "id": "dividend-sweep-alive",
    "claim": "ESC-10/11 · סדולת-הדיבידנד רצה-בלופ (קבלה-טרייה ≤35-דק)",
    "verdict": "PROVEN",
    "evidence": {
-    "lastAt": "2026-10-20T05:50:28.528Z",
+    "lastAt": "2026-10-20T06:12:14.449Z",
     "lastVerdict": "SKIP",
-    "fileAgeMin": 5,
+    "fileAgeMin": 0,
     "loopExpectedMin": 30
    },
    "probeMs": 1
@@ -170,9 +172,9 @@
    "evidence": {
     "schema": "SAOS-INTERNAL-PNL/1",
     "publishedAt": "2026-10-19T14:20:36.991Z",
-    "fileAgeMin": 168
+    "fileAgeMin": 169
    },
-   "probeMs": 3
+   "probeMs": 1
   },
   {
    "id": "self-deposit-accumulator",
@@ -184,7 +186,7 @@
     "profitUsd24h": 0,
     "fileAgeH": 2.8
    },
-   "probeMs": 0
+   "probeMs": 4
   },
   {
    "id": "git-rail-value-flowing",
@@ -200,7 +202,7 @@
      "valueStuck": false
     }
    },
-   "probeMs": 3884
+   "probeMs": 4536
   },
   {
    "id": "dividend-lane-external",
@@ -221,7 +223,7 @@
     "ownerDividendMu": 8000,
     "note": "מסילת-השידור-מוכחת-חיה; תשלום-דיבידנד-לנמען-חוץ-ממתין-לכתובת-בעלים-מפורשת"
    },
-   "probeMs": 1
+   "probeMs": 0
   }
  ]
 }

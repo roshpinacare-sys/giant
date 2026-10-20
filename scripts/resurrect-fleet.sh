@@ -56,3 +56,11 @@ for key in bridge:3017 army:3018 voice:3019 audit:3022 boot-verifier:3042; do
 done
 
 log "═══ resurrect-fleet הסתיים ═══"
+
+# 4. חוק-הפעילות-המתמדת (גל-94): הלופים-הריבוניים עולים-עם-הצי — אטימת-כספת,
+#    מרשם-טענות, סדולת-דיבידנד, פעימת-גיט. אידמפוטנטי (מי-שחי-לא-נוגעים-בו).
+if [ -x "$ROOT/scripts/sovereign-loops.sh" ]; then
+  bash "$ROOT/scripts/sovereign-loops.sh" >> "$ROOT/state/loops/sovereign-loops.log" 2>&1 || log "WARN sovereign-loops נכשל (fail-honest)"
+else
+  log "WARN sovereign-loops.sh חסר — הלופים-לא-יוקמו (fail-honest)"
+fi

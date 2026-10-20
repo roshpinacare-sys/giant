@@ -163,6 +163,10 @@ async function boot(): Promise<void> {
       DATABASE_URL: DB_FILE, /* כבר-כולל file: */
       SAOS_DEX_STATE_DIR: STATE_DIR,
       DEX_OPERATOR_TOKEN: token,
+      /* FIX(g94 · OOM-משמעת): dmesg-מוכח — OOM-killer-הרג-next-server (20.9GB-virtual,
+       * anon-rss 1.1GB · 2026-10-20). הקרנל-הדקס-הוא-קורבן-העבר-והצמתיים-הכבדים.
+       * תקרת-heap-קשיחה: 1024MB — עודף=GC-כפוי במקום-מוות-פתאום-של-השרשרת-כולה. */
+      NODE_OPTIONS: [process.env.NODE_OPTIONS, "--max-old-space-size=1024"].filter(Boolean).join(" "),
     },
     stdio: ["ignore", "inherit", "inherit"],
   });
