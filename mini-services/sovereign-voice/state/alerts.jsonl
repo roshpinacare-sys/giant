@@ -184,3 +184,7 @@
 {"ts":1792509826562,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · tamar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · shachar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · aluf:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · erez:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · gal:Error: POST http://127.0.0.1:3010/saos-dex/api/dex","status":"ledger"}
 {"ts":1792509826565,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"BLOCK\"","status":"ledger"}
 {"ts":1792509875595,"key":"fuel-tend-error","sev":"warn","text":"מטפל-הדלק: שגיאת-רשת Error: Unable to connect. Is the computer able to access the url?","status":"ledger"}
+{"ts":1792510318563,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 94%→97% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:failed","status":"ledger"}
+{"ts":1792510318656,"key":"console-5xx","sev":"critical","text":"הקונסולה :3000 מחזירה 500 — דלת-הבית-פגומה","status":"ledger"}
+{"ts":1792510430599,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792510742836,"key":"heal-failed-dex","sev":"critical","text":"מפעיל-פנימי: dex:3010 נפל (2 כשלים) → respawn=true → verified=false","status":"ledger"}
