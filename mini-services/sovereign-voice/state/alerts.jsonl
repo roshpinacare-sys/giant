@@ -178,3 +178,9 @@
 {"ts":1792508355763,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3050 נפל (2 כשלים) → respawn=true → verified=false","status":"ledger"}
 {"ts":1792508622795,"key":"dex-halted","sev":"critical","text":"הבורסה עצורה: snapshot-integrity-failed: load refused, evidence preserved (operator reset is the explicit recovery path)","status":"ledger"}
 {"ts":1792509248667,"key":"healed-console","sev":"warn","text":"מפעיל-פנימי: console:3050 נפל (0 כשלים) → respawn=true → verified=true","status":"ledger"}
+{"ts":1792509822590,"key":"disk-full","sev":"critical","text":"הדיסק ב-93% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1792509826560,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1792509826562,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 21 שגיאות (היה 11)","status":"ledger"}
+{"ts":1792509826562,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · tamar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · shachar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · aluf:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · erez:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · gal:Error: POST http://127.0.0.1:3010/saos-dex/api/dex","status":"ledger"}
+{"ts":1792509826565,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"BLOCK\"","status":"ledger"}
+{"ts":1792509875595,"key":"fuel-tend-error","sev":"warn","text":"מטפל-הדלק: שגיאת-רשת Error: Unable to connect. Is the computer able to access the url?","status":"ledger"}
