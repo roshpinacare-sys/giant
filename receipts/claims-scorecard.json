@@ -1,12 +1,12 @@
 {
  "schema": "SAOS-CLAIMS-SCORECARD/1",
- "at": "2026-10-20T06:45:33.611Z",
+ "at": "2026-10-20T06:57:23.536Z",
  "law": "צו-בעלים trace 1a1579cc5dfd1b15 — אין-טענה-בלי-ראיה-חיה; חוסר-ראיה = DEGRADED/BROKEN-כנה (LAW-3)",
- "truthScore": 91,
+ "truthScore": 97,
  "counts": {
-  "proven": 15,
+  "proven": 16,
   "degraded": 1,
-  "broken": 1,
+  "broken": 0,
   "unverifiable": 0
  },
  "total": 17,
@@ -22,58 +22,58 @@
    "claim": "הקרנל-הריבוני חי ומייצר-בלוקים (h עולה · לא-מושהה)",
    "verdict": "PROVEN",
    "evidence": {
-    "height": 831393,
-    "prevHeight": 831336,
+    "height": 831623,
+    "prevHeight": 831576,
     "advanced": true,
     "halted": false
    },
-   "probeMs": 54
+   "probeMs": 13
   },
   {
    "id": "dex-trading-live",
    "claim": "השוק-הריבוני סוחר-באמת (מילויים-חדשים-זורמים)",
    "verdict": "PROVEN",
    "evidence": {
-    "fillsTotal": 206160,
-    "swapsTotal": 72677,
-    "newFillsSinceLastRun": 44
+    "fillsTotal": 206351,
+    "swapsTotal": 72690,
+    "newFillsSinceLastRun": 37
    },
-   "probeMs": 11
+   "probeMs": 17
   },
   {
    "id": "fee-meter-health",
    "claim": "בריאות-כלכלית: מד-העמלות-מעל-רצפת-הסולם (המזרקה-חיה)",
    "verdict": "DEGRADED",
    "evidence": {
-    "feeMeter": 42,
+    "feeMeter": 0,
     "floor": 8000,
-    "treasuryProfit": 310,
-    "ratchetEver": 18404281
+    "treasuryProfit": 0,
+    "ratchetEver": 18409415
    },
-   "probeMs": 15
+   "probeMs": 21
   },
   {
    "id": "economy-engine",
    "claim": "מנוע-הכלכלה (:3016) חי ומונה-רצף",
    "verdict": "PROVEN",
    "evidence": {
-    "seq": 133985,
-    "prevSeq": 131658,
+    "seq": 142499,
+    "prevSeq": 140735,
     "advanced": true
    },
-   "probeMs": 2
+   "probeMs": 3
   },
   {
    "id": "bridge-relay",
    "claim": "גשר-דקס→כלכלה (:3017) משדר-מילויים-אמת-לספר-המשותף",
    "verdict": "PROVEN",
    "evidence": {
-    "polls": 340,
-    "inserted": 889,
+    "polls": 376,
+    "inserted": 1004,
     "pollsAdvanced": true,
     "errors": 1
    },
-   "probeMs": 2
+   "probeMs": 30
   },
   {
    "id": "soldier-army-trading",
@@ -81,11 +81,11 @@
    "verdict": "PROVEN",
    "evidence": {
     "soldiers": 6,
-    "placedTotal": 27,
-    "filledMuTotal": 12948,
-    "actionsAgeMin": 1
+    "placedTotal": 39,
+    "filledMuTotal": 14645,
+    "actionsAgeMin": 4
    },
-   "probeMs": 2
+   "probeMs": 1
   },
   {
    "id": "sovereign-audit-functional",
@@ -94,20 +94,20 @@
    "evidence": {
     "lastDecision": "CLEAR",
     "lastError": null,
-    "runAgeMin": 8
+    "runAgeMin": 5
    },
-   "probeMs": 4
+   "probeMs": 2
   },
   {
    "id": "sovereign-voice-ops",
    "claim": "הקול-הריבוני (:3019) סורק-ומרפא-מתמשך",
    "verdict": "PROVEN",
    "evidence": {
-    "scans": 18,
-    "heals": 18,
-    "diskPct": 94
+    "scans": 20,
+    "heals": 20,
+    "diskPct": 95
    },
-   "probeMs": 4
+   "probeMs": 8
   },
   {
    "id": "steem-voice-custody",
@@ -118,14 +118,14 @@
     "account": "headcorner",
     "broadcasts": 3
    },
-   "probeMs": 4
+   "probeMs": 2
   },
   {
    "id": "boot-verifier",
    "claim": "מאמת-האתחול (:3042) מזרים-tx-כלכלה-ללא-הפלות",
    "verdict": "PROVEN",
    "evidence": {
-    "sent": 15,
+    "sent": 16,
     "dropped": 0
    },
    "probeMs": 2
@@ -138,7 +138,7 @@
     "brains": 13,
     "live": 13
    },
-   "probeMs": 3
+   "probeMs": 1
   },
   {
    "id": "estate-sync-anchors",
@@ -156,9 +156,9 @@
    "claim": "ESC-10/11 · סדולת-הדיבידנד רצה-בלופ (קבלה-טרייה ≤35-דק)",
    "verdict": "PROVEN",
    "evidence": {
-    "lastAt": "2026-10-20T06:42:14.398Z",
+    "lastAt": "2026-10-20T06:55:29.526Z",
     "lastVerdict": "SKIP",
-    "fileAgeMin": 3,
+    "fileAgeMin": 2,
     "loopExpectedMin": 30
    },
    "probeMs": 0
@@ -169,10 +169,10 @@
    "verdict": "PROVEN",
    "evidence": {
     "schema": "SAOS-INTERNAL-PNL/1",
-    "publishedAt": "2026-10-19T14:20:36.991Z",
-    "fileAgeMin": 203
+    "publishedAt": "2026-10-20T06:55:10.339Z",
+    "fileAgeMin": 2
    },
-   "probeMs": 1
+   "probeMs": 0
   },
   {
    "id": "self-deposit-accumulator",
@@ -182,25 +182,25 @@
     "lastAt": "2026-10-19T14:24:25.298Z",
     "verdict": "PLAN-READY (census-only — no keys injected, honest)",
     "profitUsd24h": 0,
-    "fileAgeH": 3.4
+    "fileAgeH": 3.6
    },
    "probeMs": 0
   },
   {
    "id": "git-rail-value-flowing",
    "claim": "עורק-הגיט-זורם: אין-ערך-תקוע-מקומי-שלא-נדחף (origin..HEAD == 0 בשני-הריפואים)",
-   "verdict": "BROKEN",
+   "verdict": "PROVEN",
    "evidence": {
     "giant": {
      "unpushedCommits": 0,
      "valueStuck": false
     },
     "saos-dex": {
-     "unpushedCommits": 1,
-     "valueStuck": true
+     "unpushedCommits": 0,
+     "valueStuck": false
     }
    },
-   "probeMs": 4222
+   "probeMs": 4211
   },
   {
    "id": "dividend-lane-external",
@@ -221,7 +221,7 @@
     "ownerDividendMu": 8000,
     "note": "מסילת-השידור-מוכחת-חיה; תשלום-דיבידנד-לנמען-חוץ-ממתין-לכתובת-בעלים-מפורשת"
    },
-   "probeMs": 1
+   "probeMs": 0
   }
  ]
 }
