@@ -4,7 +4,7 @@
  "entries": [
   {
    "name": "sanbox",
-   "scannedAt": "2026-10-19T21:52:44.809Z",
+   "scannedAt": "2026-10-20T00:50:16.851Z",
    "pushedAtAtScan": "2026-10-14T13:01:32Z",
    "row": {
     "name": "sanbox",
@@ -12,7 +12,7 @@
     "pushedAt": "2026-10-14T13:01:32Z",
     "description": null,
     "mode": "unscanned",
-    "scannedAt": "2026-10-19T21:52:44.809Z",
+    "scannedAt": "2026-10-20T00:50:16.851Z",
     "ageMinutes": 0,
     "files": null,
     "capabilities": [],
@@ -24,7 +24,7 @@
   },
   {
    "name": "ops-control",
-   "scannedAt": "2026-10-19T21:52:50.277Z",
+   "scannedAt": "2026-10-20T00:50:22.182Z",
    "pushedAtAtScan": "2026-10-19T18:32:52Z",
    "row": {
     "name": "ops-control",
@@ -32,7 +32,7 @@
     "pushedAt": "2026-10-19T18:32:52Z",
     "description": "SAOS Fleet coordination: claims ledger, ownership partition, freeze zones, verification gates (9-agent operation)",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:50.277Z",
+    "scannedAt": "2026-10-20T00:50:22.182Z",
     "ageMinutes": 0,
     "files": 8,
     "capabilities": [],
@@ -44,15 +44,15 @@
   },
   {
    "name": "Project-files",
-   "scannedAt": "2026-10-19T21:52:50.872Z",
-   "pushedAtAtScan": "2026-10-19T21:01:21Z",
+   "scannedAt": "2026-10-20T00:50:22.763Z",
+   "pushedAtAtScan": "2026-10-19T23:54:03Z",
    "row": {
     "name": "Project-files",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:01:21Z",
+    "pushedAt": "2026-10-19T23:54:03Z",
     "description": "Project-files — ארכיון-ZIP היסטורי ללא קוד (מועמד-פינוי — העתקים נגישים ב-vault-home)",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:50.872Z",
+    "scannedAt": "2026-10-20T00:50:22.763Z",
     "ageMinutes": 0,
     "files": 103,
     "capabilities": [
@@ -67,7 +67,7 @@
   },
   {
    "name": "saos-control-center",
-   "scannedAt": "2026-10-19T21:52:51.468Z",
+   "scannedAt": "2026-10-20T00:50:23.341Z",
    "pushedAtAtScan": "2026-10-19T18:57:48Z",
    "row": {
     "name": "saos-control-center",
@@ -75,7 +75,7 @@
     "pushedAt": "2026-10-19T18:57:48Z",
     "description": "Sovereign Control Center — smart key login (any WIF, live chain-verify), AES-256-GCM vault, owner-lock, agent API, realtime chat. Zero plaintext key material — forensically verified.",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:51.468Z",
+    "scannedAt": "2026-10-20T00:50:23.341Z",
     "ageMinutes": 0,
     "files": 492,
     "capabilities": [
@@ -120,17 +120,17 @@
   },
   {
    "name": "saos-dex",
-   "scannedAt": "2026-10-19T21:52:52.215Z",
-   "pushedAtAtScan": "2026-10-19T21:47:49Z",
+   "scannedAt": "2026-10-20T00:50:23.915Z",
+   "pushedAtAtScan": "2026-10-20T00:47:49Z",
    "row": {
     "name": "saos-dex",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:47:49Z",
+    "pushedAt": "2026-10-20T00:47:49Z",
     "description": "SAOS-DEX — הבורסה הריבונית: ספר-הזמנות דטרמיניסטי + AMM 30bps + ארנת-חיילים אוטונומית (מורשת saos-dex + grid98)",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:52.215Z",
+    "scannedAt": "2026-10-20T00:50:23.915Z",
     "ageMinutes": 0,
-    "files": 772,
+    "files": 787,
     "capabilities": [
      "api",
      "front",
@@ -170,15 +170,15 @@
   },
   {
    "name": "ops-intake",
-   "scannedAt": "2026-10-19T21:52:53.622Z",
-   "pushedAtAtScan": "2026-10-19T19:35:18Z",
+   "scannedAt": "2026-10-20T00:50:24.461Z",
+   "pushedAtAtScan": "2026-10-19T23:13:48Z",
    "row": {
     "name": "ops-intake",
     "branch": "main",
-    "pushedAt": "2026-10-19T19:35:18Z",
+    "pushedAt": "2026-10-19T23:13:48Z",
     "description": "צינור-הקליטה התפעולי של הצי — מדידה, תור עבודות מדודר ומפת-מרחב מלאה, כל 30 דק",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:53.622Z",
+    "scannedAt": "2026-10-20T00:50:24.461Z",
     "ageMinutes": 0,
     "files": 10,
     "capabilities": [
@@ -193,41 +193,16 @@
    }
   },
   {
-   "name": "sovereign-lighthouse",
-   "scannedAt": "2026-10-19T21:52:54.313Z",
-   "pushedAtAtScan": "2026-10-19T21:45:04Z",
-   "row": {
-    "name": "sovereign-lighthouse",
-    "branch": "main",
-    "pushedAt": "2026-10-19T21:45:04Z",
-    "description": "מגדלור ריבוני — Sovereign Lighthouse: זיכרון חוץ-מכונה עצמאי (RTL עברית)",
-    "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:54.313Z",
-    "ageMinutes": 0,
-    "files": 12,
-    "capabilities": [
-     "front",
-     "workflows",
-     "docs",
-     "scripts"
-    ],
-    "signals": [],
-    "redLines": [],
-    "deep": null,
-    "error": null
-   }
-  },
-  {
    "name": "giant",
-   "scannedAt": "2026-10-19T21:52:54.874Z",
-   "pushedAtAtScan": "2026-10-19T21:46:06Z",
+   "scannedAt": "2026-10-20T00:50:25.035Z",
+   "pushedAtAtScan": "2026-10-19T23:36:07Z",
    "row": {
     "name": "giant",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:46:06Z",
+    "pushedAt": "2026-10-19T23:36:07Z",
     "description": "GIANT — מערכת-האמת של SAOS: הפלטפורמה המאוחדת (ערוץ-אחד · אפס-כפילויות · תקן-ענקים). קונברגנציה נדרשת לכל-הליינים (DECISIONS #42).",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:54.874Z",
+    "scannedAt": "2026-10-20T00:50:25.035Z",
     "ageMinutes": 0,
     "files": 985,
     "capabilities": [
@@ -288,8 +263,33 @@
    }
   },
   {
+   "name": "sovereign-lighthouse",
+   "scannedAt": "2026-10-20T00:50:25.716Z",
+   "pushedAtAtScan": "2026-10-20T00:26:56Z",
+   "row": {
+    "name": "sovereign-lighthouse",
+    "branch": "main",
+    "pushedAt": "2026-10-20T00:26:56Z",
+    "description": "מגדלור ריבוני — Sovereign Lighthouse: זיכרון חוץ-מכונה עצמאי (RTL עברית)",
+    "mode": "tree",
+    "scannedAt": "2026-10-20T00:50:25.716Z",
+    "ageMinutes": 0,
+    "files": 12,
+    "capabilities": [
+     "front",
+     "workflows",
+     "docs",
+     "scripts"
+    ],
+    "signals": [],
+    "redLines": [],
+    "deep": null,
+    "error": null
+   }
+  },
+  {
    "name": "saos-jummper",
-   "scannedAt": "2026-10-19T21:52:55.476Z",
+   "scannedAt": "2026-10-20T00:50:26.264Z",
    "pushedAtAtScan": "2026-10-14T02:26:24Z",
    "row": {
     "name": "saos-jummper",
@@ -297,7 +297,7 @@
     "pushedAt": "2026-10-14T02:26:24Z",
     "description": "Cross-chain batched proof notary — anchor any claim to Ethereum mainnet for ~$0.10, witnessed by 5 independent chain clocks. Independent workspace; does not touch other repos.",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:55.476Z",
+    "scannedAt": "2026-10-20T00:50:26.264Z",
     "ageMinutes": 0,
     "files": 226,
     "capabilities": [
@@ -324,7 +324,7 @@
   },
   {
    "name": "TruthRail",
-   "scannedAt": "2026-10-19T21:52:56.112Z",
+   "scannedAt": "2026-10-20T00:50:26.858Z",
    "pushedAtAtScan": "2026-10-17T06:54:27Z",
    "row": {
     "name": "TruthRail",
@@ -332,7 +332,7 @@
     "pushedAt": "2026-10-17T06:54:27Z",
     "description": "Keyless verification layer of the sovereign fleet — ZERO rail (gas 0x0) live verification + Ethereum-mainnet anchor read-back by block scanning. Fail-closed, zero secrets, third-party verifiable.",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:56.112Z",
+    "scannedAt": "2026-10-20T00:50:26.858Z",
     "ageMinutes": 0,
     "files": 47,
     "capabilities": [
@@ -348,7 +348,7 @@
   },
   {
    "name": "saos-sovereign-platform",
-   "scannedAt": "2026-10-19T21:52:56.728Z",
+   "scannedAt": "2026-10-20T00:50:27.402Z",
    "pushedAtAtScan": "2026-10-18T12:15:09Z",
    "row": {
     "name": "saos-sovereign-platform",
@@ -356,7 +356,7 @@
     "pushedAt": "2026-10-18T12:15:09Z",
     "description": "The chosen project - standalone canonical copy. Sovereign anchoring platform (folder B)",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:56.728Z",
+    "scannedAt": "2026-10-20T00:50:27.402Z",
     "ageMinutes": 0,
     "files": 1013,
     "capabilities": [
@@ -385,7 +385,7 @@
   },
   {
    "name": "saos-agents",
-   "scannedAt": "2026-10-19T21:52:57.532Z",
+   "scannedAt": "2026-10-20T00:50:28.095Z",
    "pushedAtAtScan": "2026-10-18T05:20:44Z",
    "row": {
     "name": "saos-agents",
@@ -393,7 +393,7 @@
     "pushedAt": "2026-10-18T05:20:44Z",
     "description": "Self-measuring agent orchestration core: a task graph that cannot be lied to (done-only-via-verified-push), an operator decision queue, append-only worklog telemetry. Zero dependencies. Bun or Node >=",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:57.532Z",
+    "scannedAt": "2026-10-20T00:50:28.095Z",
     "ageMinutes": 0,
     "files": 29,
     "capabilities": [
@@ -410,17 +410,17 @@
   },
   {
    "name": "execution-fabric",
-   "scannedAt": "2026-10-19T21:52:58.226Z",
-   "pushedAtAtScan": "2026-10-19T21:42:46Z",
+   "scannedAt": "2026-10-20T00:50:28.644Z",
+   "pushedAtAtScan": "2026-10-20T00:42:45Z",
    "row": {
     "name": "execution-fabric",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:42:46Z",
+    "pushedAt": "2026-10-20T00:42:45Z",
     "description": "רשת-הביצוע — Execution Fabric: dispatch → LLM ladder → hash-chain ledger. Git = existence.",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:58.226Z",
+    "scannedAt": "2026-10-20T00:50:28.644Z",
     "ageMinutes": 0,
-    "files": 283,
+    "files": 293,
     "capabilities": [
      "api",
      "front",
@@ -442,15 +442,15 @@
   },
   {
    "name": "Sandbox",
-   "scannedAt": "2026-10-19T21:52:58.854Z",
-   "pushedAtAtScan": "2026-10-19T21:35:40Z",
+   "scannedAt": "2026-10-20T00:50:29.231Z",
+   "pushedAtAtScan": "2026-10-20T00:37:01Z",
    "row": {
     "name": "Sandbox",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:35:40Z",
+    "pushedAt": "2026-10-20T00:37:01Z",
     "description": "Sandbox — מראת-הענן החיה של סביבת-הפיתוח הראשית (my-project mirror)",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:58.854Z",
+    "scannedAt": "2026-10-20T00:50:29.231Z",
     "ageMinutes": 0,
     "files": 394,
     "capabilities": [
@@ -467,15 +467,15 @@
   },
   {
    "name": "sovereign-beacon",
-   "scannedAt": "2026-10-19T21:52:59.453Z",
-   "pushedAtAtScan": "2026-10-19T20:38:34Z",
+   "scannedAt": "2026-10-20T00:50:29.817Z",
+   "pushedAtAtScan": "2026-10-20T00:27:19Z",
    "row": {
     "name": "sovereign-beacon",
     "branch": "main",
-    "pushedAt": "2026-10-19T20:38:34Z",
+    "pushedAt": "2026-10-20T00:27:19Z",
     "description": "Rosh Pina — sovereign lighthouse (out-of-machine console)",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:52:59.453Z",
+    "scannedAt": "2026-10-20T00:50:29.817Z",
     "ageMinutes": 0,
     "files": 12,
     "capabilities": [
@@ -491,7 +491,7 @@
   },
   {
    "name": "Adsmarket",
-   "scannedAt": "2026-10-19T21:53:00.015Z",
+   "scannedAt": "2026-10-20T00:50:30.330Z",
    "pushedAtAtScan": "2026-10-19T11:10:15Z",
    "row": {
     "name": "Adsmarket",
@@ -499,7 +499,7 @@
     "pushedAt": "2026-10-19T11:10:15Z",
     "description": "Adsmarket — ערוץ-השיווק: ערכות-קמפיין וחיבור-משטחי-הפצה (ממתין-חיווט למשטח-חי)",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:00.015Z",
+    "scannedAt": "2026-10-20T00:50:30.330Z",
     "ageMinutes": 0,
     "files": 107,
     "capabilities": [
@@ -516,15 +516,15 @@
   },
   {
    "name": "sovereign-executor",
-   "scannedAt": "2026-10-19T21:53:00.608Z",
-   "pushedAtAtScan": "2026-10-19T21:31:50Z",
+   "scannedAt": "2026-10-20T00:50:30.893Z",
+   "pushedAtAtScan": "2026-10-20T00:28:22Z",
    "row": {
     "name": "sovereign-executor",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:31:50Z",
+    "pushedAt": "2026-10-20T00:28:22Z",
     "description": "Sovereign executor plane — free public-minutes carrier for the private fleet lanes (smart separation: content stays private, execution public).",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:00.608Z",
+    "scannedAt": "2026-10-20T00:50:30.893Z",
     "ageMinutes": 0,
     "files": 13,
     "capabilities": [
@@ -539,7 +539,7 @@
   },
   {
    "name": "Defi",
-   "scannedAt": "2026-10-19T21:53:01.177Z",
+   "scannedAt": "2026-10-20T00:50:31.420Z",
    "pushedAtAtScan": "2026-10-19T18:04:57Z",
    "row": {
     "name": "Defi",
@@ -547,7 +547,7 @@
     "pushedAt": "2026-10-19T18:04:57Z",
     "description": "Defi — מסילת-DeFi של הריבונות: מדיניות וניתוח (רול-אפ מתוכנן לתוך saos-dex)",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:01.177Z",
+    "scannedAt": "2026-10-20T00:50:31.420Z",
     "ageMinutes": 0,
     "files": 148,
     "capabilities": [
@@ -563,7 +563,7 @@
   },
   {
    "name": "Saosmartwallet",
-   "scannedAt": "2026-10-19T21:53:01.790Z",
+   "scannedAt": "2026-10-20T00:50:31.962Z",
    "pushedAtAtScan": "2026-10-18T00:37:28Z",
    "row": {
     "name": "Saosmartwallet",
@@ -571,7 +571,7 @@
     "pushedAt": "2026-10-18T00:37:28Z",
     "description": "Saosmartwallet — ארנק ריבוני: כספת AES-256+Shamir, חתימה-אמת STEEM/BLURT/ETH/SOL, קונסולת-רשת (פרוטוטיפ — טרם-נפרס)",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:01.790Z",
+    "scannedAt": "2026-10-20T00:50:31.962Z",
     "ageMinutes": 0,
     "files": 1767,
     "capabilities": [
@@ -609,17 +609,17 @@
   },
   {
    "name": "steem",
-   "scannedAt": "2026-10-19T21:53:02.436Z",
-   "pushedAtAtScan": "2026-10-19T21:52:30Z",
+   "scannedAt": "2026-10-20T00:50:32.633Z",
+   "pushedAtAtScan": "2026-10-20T00:29:35Z",
    "row": {
     "name": "steem",
     "branch": "saos-cockpit",
-    "pushedAt": "2026-10-19T21:52:30Z",
+    "pushedAt": "2026-10-20T00:29:35Z",
     "description": "sovereign fleet monorepo — steem/autonomy lanes",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:02.436Z",
+    "scannedAt": "2026-10-20T00:50:32.633Z",
     "ageMinutes": 0,
-    "files": 2531,
+    "files": 2536,
     "capabilities": [
      "api",
      "front",
@@ -819,7 +819,7 @@
   },
   {
    "name": "sandbox-private",
-   "scannedAt": "2026-10-19T21:53:03.127Z",
+   "scannedAt": "2026-10-20T00:50:33.685Z",
    "pushedAtAtScan": "2026-10-17T06:54:31Z",
    "row": {
     "name": "sandbox-private",
@@ -827,7 +827,7 @@
     "pushedAt": "2026-10-17T06:54:31Z",
     "description": "sandbox-private — מראה-פרטית של סביבת-העבודה (תת-קבוצה של SovereignConsole)",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:03.127Z",
+    "scannedAt": "2026-10-20T00:50:33.685Z",
     "ageMinutes": 0,
     "files": 62,
     "capabilities": [
@@ -845,7 +845,7 @@
   },
   {
    "name": "Sdk",
-   "scannedAt": "2026-10-19T21:53:03.731Z",
+   "scannedAt": "2026-10-20T00:50:34.293Z",
    "pushedAtAtScan": "2026-10-14T02:26:19Z",
    "row": {
     "name": "Sdk",
@@ -853,7 +853,7 @@
     "pushedAt": "2026-10-14T02:26:19Z",
     "description": "Sdk — תמצית-SDK משוחזרת מבסיס anchor-5356dab (מועמד-מיזוג ל-anchor-baseline)",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:03.731Z",
+    "scannedAt": "2026-10-20T00:50:34.293Z",
     "ageMinutes": 0,
     "files": 95,
     "capabilities": [
@@ -869,15 +869,15 @@
   },
   {
    "name": "Domain",
-   "scannedAt": "2026-10-19T21:53:04.424Z",
-   "pushedAtAtScan": "2026-10-19T21:50:32Z",
+   "scannedAt": "2026-10-20T00:50:34.923Z",
+   "pushedAtAtScan": "2026-10-20T00:45:57Z",
    "row": {
     "name": "Domain",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:50:32Z",
+    "pushedAt": "2026-10-20T00:45:57Z",
     "description": "Domain — חזית-הרשת הפומבית של SAOS: דף-המוצרים, חדר-המשרד החי, ועוגני-אמת ציבוריים (GitHub Pages)",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:04.424Z",
+    "scannedAt": "2026-10-20T00:50:34.923Z",
     "ageMinutes": 0,
     "files": 892,
     "capabilities": [
@@ -901,17 +901,17 @@
   },
   {
    "name": "FleetHQ",
-   "scannedAt": "2026-10-19T21:53:05.041Z",
-   "pushedAtAtScan": "2026-10-19T21:47:56Z",
+   "scannedAt": "2026-10-20T00:50:35.470Z",
+   "pushedAtAtScan": "2026-10-20T00:43:13Z",
    "row": {
     "name": "FleetHQ",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:47:56Z",
+    "pushedAt": "2026-10-20T00:43:13Z",
     "description": "Fleet HQ — a live operations room where real AI agents plan, work and report on your data books in real time. מפקדת הצי",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:05.041Z",
+    "scannedAt": "2026-10-20T00:50:35.470Z",
     "ageMinutes": 0,
-    "files": 3057,
+    "files": 3061,
     "capabilities": [
      "api",
      "front",
@@ -1099,7 +1099,7 @@
   },
   {
    "name": "roshpinacare-sys.github.io",
-   "scannedAt": "2026-10-19T21:53:05.743Z",
+   "scannedAt": "2026-10-20T00:50:36.089Z",
    "pushedAtAtScan": "2026-10-14T20:07:04Z",
    "row": {
     "name": "roshpinacare-sys.github.io",
@@ -1107,7 +1107,7 @@
     "pushedAt": "2026-10-14T20:07:04Z",
     "description": "SAOS Network — front door. Live index of public sites & fleet health. Every number measured.",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:05.743Z",
+    "scannedAt": "2026-10-20T00:50:36.089Z",
     "ageMinutes": 0,
     "files": 9,
     "capabilities": [
@@ -1122,15 +1122,15 @@
   },
   {
    "name": "sovereign-runner-kit",
-   "scannedAt": "2026-10-19T21:53:06.345Z",
-   "pushedAtAtScan": "2026-10-19T19:55:18Z",
+   "scannedAt": "2026-10-20T00:50:36.628Z",
+   "pushedAtAtScan": "2026-10-19T23:55:53Z",
    "row": {
     "name": "sovereign-runner-kit",
     "branch": "main",
-    "pushedAt": "2026-10-19T19:55:18Z",
+    "pushedAt": "2026-10-19T23:55:53Z",
     "description": "שכבת-הביצוע-הריבונית — המכשיר שלנו הוא המנוע, GitHub ספר-בלבד. Device-side execution, zero GitHub minutes, blockchain-anchored receipts",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:06.345Z",
+    "scannedAt": "2026-10-20T00:50:36.628Z",
     "ageMinutes": 0,
     "files": 77,
     "capabilities": [
@@ -1146,17 +1146,17 @@
   },
   {
    "name": "saos-runtime",
-   "scannedAt": "2026-10-19T21:53:06.938Z",
-   "pushedAtAtScan": "2026-10-19T21:26:52Z",
+   "scannedAt": "2026-10-20T00:50:37.177Z",
+   "pushedAtAtScan": "2026-10-20T00:29:36Z",
    "row": {
     "name": "saos-runtime",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:26:52Z",
+    "pushedAt": "2026-10-20T00:29:36Z",
     "description": "SAOS sovereign runtime host — Actions runner heartbeat; clones the private engine tree at runtime (R244). No keys, no secrets in tree.",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:06.938Z",
+    "scannedAt": "2026-10-20T00:50:37.177Z",
     "ageMinutes": 0,
-    "files": 141,
+    "files": 142,
     "capabilities": [
      "front",
      "workflows",
@@ -1171,15 +1171,15 @@
   },
   {
    "name": "saos-desk",
-   "scannedAt": "2026-10-19T21:53:07.570Z",
-   "pushedAtAtScan": "2026-10-19T20:10:43Z",
+   "scannedAt": "2026-10-20T00:50:37.690Z",
+   "pushedAtAtScan": "2026-10-19T23:55:27Z",
    "row": {
     "name": "saos-desk",
     "branch": "main",
-    "pushedAt": "2026-10-19T20:10:43Z",
+    "pushedAt": "2026-10-19T23:55:27Z",
     "description": "Sovereign Trading Boardroom (R338) - multi-agent cabinet, deterministic risk kernel, mandate-gated, paper-first, checkpoint-resume, TASE + global universe",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:07.570Z",
+    "scannedAt": "2026-10-20T00:50:37.690Z",
     "ageMinutes": 0,
     "files": 58,
     "capabilities": [
@@ -1196,7 +1196,7 @@
   },
   {
    "name": "SovereignConsole",
-   "scannedAt": "2026-10-19T21:53:08.168Z",
+   "scannedAt": "2026-10-20T00:50:38.241Z",
    "pushedAtAtScan": "2026-10-19T18:33:23Z",
    "row": {
     "name": "SovereignConsole",
@@ -1204,7 +1204,7 @@
     "pushedAt": "2026-10-19T18:33:23Z",
     "description": "הקונסולה-הריבונית החיה (my-project) — מראה-ענן מלאה לשחזור-אוטונומי",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:08.168Z",
+    "scannedAt": "2026-10-20T00:50:38.241Z",
     "ageMinutes": 0,
     "files": 223,
     "capabilities": [
@@ -1232,7 +1232,7 @@
   },
   {
    "name": "vault-home",
-   "scannedAt": "2026-10-19T21:53:08.818Z",
+   "scannedAt": "2026-10-20T00:50:38.865Z",
    "pushedAtAtScan": "2026-10-19T07:54:16Z",
    "row": {
     "name": "vault-home",
@@ -1240,7 +1240,7 @@
     "pushedAt": "2026-10-19T07:54:16Z",
     "description": "Fleet HQ sealed key vault (AES-256, PBKDF2-200k). Keys never travel in plaintext.",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:08.818Z",
+    "scannedAt": "2026-10-20T00:50:38.865Z",
     "ageMinutes": 0,
     "files": 108,
     "capabilities": [
@@ -1261,15 +1261,15 @@
   },
   {
    "name": "Pulse",
-   "scannedAt": "2026-10-19T21:53:09.494Z",
-   "pushedAtAtScan": "2026-10-19T21:30:59Z",
+   "scannedAt": "2026-10-20T00:50:39.454Z",
+   "pushedAtAtScan": "2026-10-20T00:30:45Z",
    "row": {
     "name": "Pulse",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:30:59Z",
+    "pushedAt": "2026-10-20T00:30:45Z",
     "description": "Pulse — איבר-הדופק של הרשת · fleet heartbeat: autonomous census every 30min on GitHub Actions (public = unlimited free minutes), task queue, sandbox-independent. §7 sanitized runner shell.",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:09.494Z",
+    "scannedAt": "2026-10-20T00:50:39.454Z",
     "ageMinutes": 0,
     "files": 45,
     "capabilities": [
@@ -1286,7 +1286,7 @@
   },
   {
    "name": "saos-markets",
-   "scannedAt": "2026-10-19T21:53:10.049Z",
+   "scannedAt": "2026-10-20T00:50:39.972Z",
    "pushedAtAtScan": "2026-10-18T05:21:09Z",
    "row": {
     "name": "saos-markets",
@@ -1294,7 +1294,7 @@
     "pushedAt": "2026-10-18T05:21:09Z",
     "description": "saos-markets — הבורסה-המדומה של-המדינה-הכלכלית: מדדי-שווקים-מובילים דטרמיניסטיים + אוצר-המשרדים (ניסוי AI-מנהל-מדינה) + מנוע-הווליום של-הדקס שלנו. SIM-מוצהר-בהודאה; L6 ב-PoR-1",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:10.049Z",
+    "scannedAt": "2026-10-20T00:50:39.972Z",
     "ageMinutes": 0,
     "files": 23,
     "capabilities": [
@@ -1309,15 +1309,15 @@
   },
   {
    "name": "GridWatch",
-   "scannedAt": "2026-10-19T21:53:10.687Z",
-   "pushedAtAtScan": "2026-10-19T21:16:36Z",
+   "scannedAt": "2026-10-20T00:50:40.514Z",
+   "pushedAtAtScan": "2026-10-19T23:46:17Z",
    "row": {
     "name": "GridWatch",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:16:36Z",
+    "pushedAt": "2026-10-19T23:46:17Z",
     "description": "Fleet control plane: measures every repo & workflow health, auto-remediates failures, feeds the sovereign decider. The grid sees itself.",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:10.687Z",
+    "scannedAt": "2026-10-20T00:50:40.514Z",
     "ageMinutes": 0,
     "files": 8,
     "capabilities": [
@@ -1334,7 +1334,7 @@
   },
   {
    "name": "anchor-baseline",
-   "scannedAt": "2026-10-19T21:53:11.255Z",
+   "scannedAt": "2026-10-20T00:50:41.039Z",
    "pushedAtAtScan": "2026-10-14T02:26:26Z",
    "row": {
     "name": "anchor-baseline",
@@ -1342,7 +1342,7 @@
     "pushedAt": "2026-10-14T02:26:26Z",
     "description": "Folder A - restore of the latest baseline commit 5356dab",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:11.255Z",
+    "scannedAt": "2026-10-20T00:50:41.039Z",
     "ageMinutes": 0,
     "files": 100,
     "capabilities": [
@@ -1358,7 +1358,7 @@
   },
   {
    "name": "saos-coordination",
-   "scannedAt": "2026-10-19T21:53:11.849Z",
+   "scannedAt": "2026-10-20T00:50:41.587Z",
    "pushedAtAtScan": "2026-10-19T19:20:04Z",
    "row": {
     "name": "saos-coordination",
@@ -1366,7 +1366,7 @@
     "pushedAt": "2026-10-19T19:20:04Z",
     "description": "Multi-agent coordination: locks, claims, merge order. READ BEFORE ANY WRITE.",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:11.849Z",
+    "scannedAt": "2026-10-20T00:50:41.587Z",
     "ageMinutes": 0,
     "files": 17,
     "capabilities": [
@@ -1380,15 +1380,15 @@
   },
   {
    "name": "roshpina",
-   "scannedAt": "2026-10-19T21:53:12.444Z",
-   "pushedAtAtScan": "2026-10-19T19:44:15Z",
+   "scannedAt": "2026-10-20T00:50:42.152Z",
+   "pushedAtAtScan": "2026-10-19T23:57:31Z",
    "row": {
     "name": "roshpina",
     "branch": "main",
-    "pushedAt": "2026-10-19T19:44:15Z",
+    "pushedAt": "2026-10-19T23:57:31Z",
     "description": "Roshpina — Sovereign Trust & Value Platform: profit (fee engine + cost arbitrage) + protection (fail-closed guard, hash-linked audit, Ed25519 passports) + intelligence (potential engine) — PRIVATE",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:12.444Z",
+    "scannedAt": "2026-10-20T00:50:42.152Z",
     "ageMinutes": 0,
     "files": 318,
     "capabilities": [
@@ -1420,15 +1420,15 @@
   },
   {
    "name": "ops-forge",
-   "scannedAt": "2026-10-19T21:53:13.092Z",
-   "pushedAtAtScan": "2026-10-19T20:25:08Z",
+   "scannedAt": "2026-10-20T00:50:42.705Z",
+   "pushedAtAtScan": "2026-10-19T23:53:34Z",
    "row": {
     "name": "ops-forge",
     "branch": "main",
-    "pushedAt": "2026-10-19T20:25:08Z",
+    "pushedAt": "2026-10-19T23:53:34Z",
     "description": "ops-forge — סדנת-התפעול של הצי: כלי-עבודה ומסילות-הפעלה פנימיות",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:13.092Z",
+    "scannedAt": "2026-10-20T00:50:42.705Z",
     "ageMinutes": 0,
     "files": 28,
     "capabilities": [
@@ -1444,15 +1444,15 @@
   },
   {
    "name": "Console",
-   "scannedAt": "2026-10-19T21:53:13.690Z",
-   "pushedAtAtScan": "2026-10-19T21:31:40Z",
+   "scannedAt": "2026-10-20T00:50:43.247Z",
+   "pushedAtAtScan": "2026-10-20T00:40:24Z",
    "row": {
     "name": "Console",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:31:40Z",
+    "pushedAt": "2026-10-20T00:40:24Z",
     "description": "Console — קונסולת-ה-DEX הריבונית: dex-beat שעתי, גריד-מסחר מדוד, קבלות-ריצות חיות",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:13.690Z",
+    "scannedAt": "2026-10-20T00:50:43.247Z",
     "ageMinutes": 0,
     "files": 214,
     "capabilities": [
@@ -1475,15 +1475,15 @@
   },
   {
    "name": "fleet-economy",
-   "scannedAt": "2026-10-19T21:53:14.323Z",
-   "pushedAtAtScan": "2026-10-19T21:41:23Z",
+   "scannedAt": "2026-10-20T00:50:43.765Z",
+   "pushedAtAtScan": "2026-10-20T00:42:23Z",
    "row": {
     "name": "fleet-economy",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:41:23Z",
+    "pushedAt": "2026-10-20T00:42:23Z",
     "description": "הכלכלה-הפנימית-הריבונית — ספר-hash-chain חי · auto-sealed",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:14.323Z",
+    "scannedAt": "2026-10-20T00:50:43.765Z",
     "ageMinutes": 0,
     "files": 123,
     "capabilities": [
@@ -1509,15 +1509,15 @@
   },
   {
    "name": "saos-console-zai",
-   "scannedAt": "2026-10-19T21:53:14.892Z",
-   "pushedAtAtScan": "2026-10-19T21:44:53Z",
+   "scannedAt": "2026-10-20T00:50:44.316Z",
+   "pushedAtAtScan": "2026-10-20T00:48:03Z",
    "row": {
     "name": "saos-console-zai",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:44:53Z",
+    "pushedAt": "2026-10-20T00:48:03Z",
     "description": "SAOS console (Z.ai / agent-2 lane) — Next.js 16 sovereignty platform. Loss-protection mirror: the sandbox is ephemeral, git is the survival.",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:14.892Z",
+    "scannedAt": "2026-10-20T00:50:44.316Z",
     "ageMinutes": 0,
     "files": 1429,
     "capabilities": [
@@ -1550,7 +1550,7 @@
   },
   {
    "name": "saos-sovereign-foundry",
-   "scannedAt": "2026-10-19T21:53:15.503Z",
+   "scannedAt": "2026-10-20T00:50:44.890Z",
    "pushedAtAtScan": "2026-10-14T07:13:41Z",
    "row": {
     "name": "saos-sovereign-foundry",
@@ -1558,7 +1558,7 @@
     "pushedAt": "2026-10-14T07:13:41Z",
     "description": "SAOS Sovereign Foundry v2 - cross-network anchoring, energy sovereignty, evidence economy. אנחנו מנצחים את הבלוקצ'יין",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:15.503Z",
+    "scannedAt": "2026-10-20T00:50:44.890Z",
     "ageMinutes": 0,
     "files": 322,
     "capabilities": [
@@ -1586,7 +1586,7 @@
   },
   {
    "name": "saos-owner-channel",
-   "scannedAt": "2026-10-19T21:53:16.154Z",
+   "scannedAt": "2026-10-20T00:50:45.422Z",
    "pushedAtAtScan": "2026-10-19T06:28:01Z",
    "row": {
     "name": "saos-owner-channel",
@@ -1594,7 +1594,7 @@
     "pushedAt": "2026-10-19T06:28:01Z",
     "description": "saos-owner-channel — ערוץ-הבעלים הישיר בעלים↔ריבונות: פרוטוקול-גיט-ילידי, אינטגריות-sha256, מחזור-חיים-משפטי, אין-טענות-דרך-סוכני-חוץ. L7 ב-PoR",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:16.154Z",
+    "scannedAt": "2026-10-20T00:50:45.422Z",
     "ageMinutes": 0,
     "files": 133,
     "capabilities": [
@@ -1613,17 +1613,17 @@
   },
   {
    "name": "Autonomy",
-   "scannedAt": "2026-10-19T21:53:16.757Z",
-   "pushedAtAtScan": "2026-10-19T21:51:44Z",
+   "scannedAt": "2026-10-20T00:50:46.023Z",
+   "pushedAtAtScan": "2026-10-20T00:48:38Z",
    "row": {
     "name": "Autonomy",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:51:44Z",
+    "pushedAt": "2026-10-20T00:48:38Z",
     "description": "המוח הריבוני על דקות-ציבור: עורקי-ההחלטה, הלמידה, הצמיחה — רץ 24/7 ללא תלות בשום סנדבוקס. Public compute, private memory.",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:16.757Z",
+    "scannedAt": "2026-10-20T00:50:46.023Z",
     "ageMinutes": 0,
-    "files": 582,
+    "files": 589,
     "capabilities": [
      "front",
      "workflows",
@@ -1643,7 +1643,7 @@
   },
   {
    "name": "negen",
-   "scannedAt": "2026-10-19T21:53:17.350Z",
+   "scannedAt": "2026-10-20T00:50:46.550Z",
    "pushedAtAtScan": "2026-10-12T16:13:13Z",
    "row": {
     "name": "negen",
@@ -1651,7 +1651,7 @@
     "pushedAt": "2026-10-12T16:13:13Z",
     "description": "NEGEN — כלי נגינה לניגון סט · an instrument for playing a set (Web Audio synth, single-file, V18 RC2). Autonomous dev track.",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:17.350Z",
+    "scannedAt": "2026-10-20T00:50:46.550Z",
     "ageMinutes": 0,
     "files": 6,
     "capabilities": [
@@ -1666,15 +1666,15 @@
   },
   {
    "name": "Zip",
-   "scannedAt": "2026-10-19T21:53:17.986Z",
-   "pushedAtAtScan": "2026-10-19T21:13:06Z",
+   "scannedAt": "2026-10-20T00:50:47.086Z",
+   "pushedAtAtScan": "2026-10-19T22:29:37Z",
    "row": {
     "name": "Zip",
     "branch": "main",
-    "pushedAt": "2026-10-19T21:13:06Z",
+    "pushedAt": "2026-10-19T22:29:37Z",
     "description": "Zip — ארכיון-עבודה היסטורי 136MB (מועמד-פינוי: מראה-אחת + vault-home מספיקים)",
     "mode": "tree",
-    "scannedAt": "2026-10-19T21:53:17.986Z",
+    "scannedAt": "2026-10-20T00:50:47.086Z",
     "ageMinutes": 0,
     "files": 6639,
     "capabilities": [
@@ -1755,5 +1755,5 @@
   }
  ],
  "summary": "נסרקו 44/45 · סימנים 102 · אדומים 46",
- "scannedAt": "2026-10-19T21:53:18.929Z"
+ "scannedAt": "2026-10-20T00:50:48.563Z"
 }
