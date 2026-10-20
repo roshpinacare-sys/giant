@@ -133,3 +133,5 @@
 {"ts":1792500942894,"key":"dex-halted","sev":"critical","text":"הבורסה עצורה: snapshot-integrity-failed: load refused, evidence preserved (operator reset is the explicit recovery path)","status":"ledger"}
 {"ts":1792500942900,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:fuel: free-op-cap · shachar:fuel: free-op-cap · aluf:fuel: free-op-cap · erez:fuel: free-op-cap · gal:fuel: free-op-cap","status":"ledger"}
 {"ts":1792500971505,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (22 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792501246321,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792501252580,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
