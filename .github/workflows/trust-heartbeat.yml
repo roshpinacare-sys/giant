@@ -45,7 +45,19 @@ jobs:
           if git diff --cached --quiet; then
             echo "אין-שינויים-מדודים — אין-קומיט"
           else
-            git pull --rebase --autostash origin main
-            git commit -m "trust-heartbeat: autonomous scan (no-sandbox) — $(date -u +'%Y-%m-%dT%H:%MZ')"
-            git push origin HEAD:main
+            # FIX(2026-10-20 · re-applied): the 5f29046e resilience loop was lost from origin
+            # (blob forensics: origin 8b65aaa0 pre-fix vs a794edd3 post-fix, no touching commit
+            # in log — history-rewrite/stale-reseal machinery). Re-applied verbatim.
+            OK=0
+            for i in 1 2 3 4 5; do
+              if git pull --rebase --autostash origin main && git commit -m "trust-heartbeat: autonomous scan (no-sandbox) — $(date -u +'%Y-%m-%dT%H:%MZ')" && git push origin HEAD:main; then OK=1; break; fi
+              echo "attempt-${i} failed (push race) — sleeping 10s"
+              sleep 10
+              git rebase --abort 2>/dev/null || true
+              git add -f db/trust-cache.json || true
+            done
+            if [ "${OK}" != "1" ]; then
+              echo "##[error] canon not pushed after 5 attempts — next beat retries"
+              exit 1
+            fi
           fi
