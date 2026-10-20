@@ -29,7 +29,7 @@ if probe 3000 ""; then log "OK door:3000 חיה (דקס+גשר-תצוגה)"; els
 
 # 0.5 · גל-94: הקונסולה-האמיתית :3050 — הבית-של-האפליקציה-שהמפעיל-רואה (ניתוב / מהדקס)
 if ! probe 3050 ""; then
-  spawn_dir /home/z/my-project "./node_modules/.bin/next dev -p 3050 >> dev.log 2>&1" "console:3050"
+  spawn_dir /home/z/my-project "NODE_OPTIONS=--max-old-space-size=900 ./node_modules/.bin/next dev -p 3050 >> dev.log 2>&1" "console:3050"
   for i in 1 2 3 4 5 6; do sleep 5; probe 3050 "" && break; done
   probe 3050 "" && log "OK console:3050 הוקמה" || log "FAIL console:3050 (נמדד — ראה dev.log)"
 else log "OK console:3050 חיה"; fi
