@@ -1,6 +1,6 @@
 {
  "schema": "SAOS-CLAIMS-SCORECARD/1",
- "at": "2026-10-20T05:15:26.482Z",
+ "at": "2026-10-20T05:20:08.520Z",
  "law": "צו-בעלים trace 1a1579cc5dfd1b15 — אין-טענה-בלי-ראיה-חיה; חוסר-ראיה = DEGRADED/BROKEN-כנה (LAW-3)",
  "truthScore": 94,
  "counts": {
@@ -22,23 +22,23 @@
    "claim": "הקרנל-הריבוני חי ומייצר-בלוקים (h עולה · לא-מושהה)",
    "verdict": "PROVEN",
    "evidence": {
-    "height": 829648,
-    "prevHeight": 829638,
+    "height": 829741,
+    "prevHeight": 829648,
     "advanced": true,
     "halted": false
    },
-   "probeMs": 113
+   "probeMs": 232
   },
   {
    "id": "dex-trading-live",
    "claim": "השוק-הריבוני סוחר-באמת (מילויים-חדשים-זורמים)",
    "verdict": "PROVEN",
    "evidence": {
-    "fillsTotal": 204764,
-    "swapsTotal": 72669,
-    "newFillsSinceLastRun": 8
+    "fillsTotal": 204839,
+    "swapsTotal": 72670,
+    "newFillsSinceLastRun": 75
    },
-   "probeMs": 81
+   "probeMs": 114
   },
   {
    "id": "fee-meter-health",
@@ -50,15 +50,15 @@
     "treasuryProfit": 2310,
     "ratchetEver": 18404281
    },
-   "probeMs": 11
+   "probeMs": 147
   },
   {
    "id": "economy-engine",
    "claim": "מנוע-הכלכלה (:3016) חי ומונה-רצף",
    "verdict": "PROVEN",
    "evidence": {
-    "seq": 69958,
-    "prevSeq": 69574,
+    "seq": 73401,
+    "prevSeq": 69958,
     "advanced": true
    },
    "probeMs": 2
@@ -68,12 +68,12 @@
    "claim": "גשר-דקס→כלכלה (:3017) משדר-מילויים-אמת-לספר-המשותף",
    "verdict": "PROVEN",
    "evidence": {
-    "polls": 70,
-    "inserted": 182,
+    "polls": 84,
+    "inserted": 219,
     "pollsAdvanced": true,
     "errors": 0
    },
-   "probeMs": 2
+   "probeMs": 1
   },
   {
    "id": "soldier-army-trading",
@@ -82,10 +82,10 @@
    "evidence": {
     "soldiers": 6,
     "placedTotal": 25,
-    "filledMuTotal": 7973,
+    "filledMuTotal": 8105,
     "actionsAgeMin": 1
    },
-   "probeMs": 4
+   "probeMs": 3
   },
   {
    "id": "sovereign-audit-functional",
@@ -94,20 +94,20 @@
    "evidence": {
     "lastDecision": "CLEAR",
     "lastError": null,
-    "runAgeMin": 8
+    "runAgeMin": 13
    },
-   "probeMs": 4
+   "probeMs": 3
   },
   {
    "id": "sovereign-voice-ops",
    "claim": "הקול-הריבוני (:3019) סורק-ומרפא-מתמשך",
    "verdict": "PROVEN",
    "evidence": {
-    "scans": 23,
-    "heals": 23,
-    "diskPct": 89
+    "scans": 1,
+    "heals": 1,
+    "diskPct": 90
    },
-   "probeMs": 16
+   "probeMs": 1489
   },
   {
    "id": "steem-voice-custody",
@@ -116,9 +116,9 @@
    "evidence": {
     "custody": "כספת-חיה (4/4-הוכח)",
     "account": "headcorner",
-    "broadcasts": 0
+    "broadcasts": 1
    },
-   "probeMs": 43
+   "probeMs": 2
   },
   {
    "id": "boot-verifier",
@@ -128,7 +128,7 @@
     "sent": 9,
     "dropped": 0
    },
-   "probeMs": 6
+   "probeMs": 1
   },
   {
    "id": "llm-gateway",
@@ -138,7 +138,7 @@
     "brains": 13,
     "live": 13
    },
-   "probeMs": 3
+   "probeMs": 2
   },
   {
    "id": "estate-sync-anchors",
@@ -151,19 +151,19 @@
      "channels/giant"
     ]
    },
-   "probeMs": 2
+   "probeMs": 4
   },
   {
    "id": "dividend-sweep-alive",
    "claim": "ESC-10/11 · סדולת-הדיבידנד רצה-בלופ (קבלה-טרייה ≤35-דק)",
    "verdict": "PROVEN",
    "evidence": {
-    "lastAt": "2026-10-20T05:00:54.992Z",
-    "lastVerdict": "DIVIDEND",
-    "fileAgeMin": 14,
+    "lastAt": "2026-10-20T05:20:03.204Z",
+    "lastVerdict": "SKIP",
+    "fileAgeMin": 0,
     "loopExpectedMin": 30
    },
-   "probeMs": 0
+   "probeMs": 1
   },
   {
    "id": "internal-pnl-published",
@@ -172,7 +172,7 @@
    "evidence": {
     "schema": "SAOS-INTERNAL-PNL/1",
     "publishedAt": "2026-10-19T14:20:36.991Z",
-    "fileAgeMin": 113
+    "fileAgeMin": 117
    },
    "probeMs": 0
   },
@@ -184,7 +184,7 @@
     "lastAt": "2026-10-19T14:24:25.298Z",
     "verdict": "PLAN-READY (census-only — no keys injected, honest)",
     "profitUsd24h": 0,
-    "fileAgeH": 1.9
+    "fileAgeH": 2
    },
    "probeMs": 0
   },
@@ -202,7 +202,7 @@
      "valueStuck": false
     }
    },
-   "probeMs": 3743
+   "probeMs": 3577
   },
   {
    "id": "dividend-lane-external",
