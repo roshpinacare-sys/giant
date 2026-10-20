@@ -1,0 +1,340 @@
+{
+  "decision": "INCONCLUSIVE",
+  "property_status": {
+    "no-external-trade": "INCONCLUSIVE",
+    "no-phantom-mint": "INCONCLUSIVE",
+    "no-third-party-funds": "INCONCLUSIVE"
+  },
+  "goal_status": {
+    "market-alive": "REACHABLE",
+    "profit-flows-operator": "REACHABLE"
+  },
+  "safety_witnesses": [],
+  "goal_witnesses": [
+    {
+      "objective_id": "market-alive",
+      "kind": "goal",
+      "initial": {
+        "facts": {
+          "book_two_sided": false,
+          "capital_moved": false,
+          "capital_spent": false,
+          "credit_issued": false,
+          "fee_to_treasury": false,
+          "funds_to_third_party": false,
+          "market_open": true,
+          "operator_present": true,
+          "order_cancelled": false,
+          "phantom_mint": false,
+          "profit_routed": false,
+          "service_healed": false,
+          "trade_outside_book": false
+        },
+        "budgets": {
+          "actor:aluf": 0,
+          "actor:erez": 0,
+          "actor:gal": 0,
+          "actor:shachar": 0,
+          "actor:tamar": 0,
+          "actor:voice": 0,
+          "actor:yarden": 0
+        }
+      },
+      "terminal": {
+        "facts": {
+          "book_two_sided": true,
+          "capital_moved": false,
+          "capital_spent": false,
+          "credit_issued": false,
+          "fee_to_treasury": true,
+          "funds_to_third_party": false,
+          "market_open": true,
+          "operator_present": true,
+          "order_cancelled": false,
+          "phantom_mint": false,
+          "profit_routed": false,
+          "service_healed": false,
+          "trade_outside_book": false
+        },
+        "budgets": {
+          "actor:aluf": 0,
+          "actor:erez": 0,
+          "actor:gal": 0,
+          "actor:shachar": 0,
+          "actor:tamar": 0,
+          "actor:voice": 0,
+          "actor:yarden": 2000
+        }
+      },
+      "steps": [
+        {
+          "index": 1,
+          "action_id": "soldier.order",
+          "actor_id": "yarden",
+          "tool": "order",
+          "resource": "SAOS/USDS",
+          "cost_units": 0,
+          "permission_indices": [
+            0
+          ],
+          "before": {
+            "facts": {
+              "book_two_sided": false,
+              "capital_moved": false,
+              "capital_spent": false,
+              "credit_issued": false,
+              "fee_to_treasury": false,
+              "funds_to_third_party": false,
+              "market_open": true,
+              "operator_present": true,
+              "order_cancelled": false,
+              "phantom_mint": false,
+              "profit_routed": false,
+              "service_healed": false,
+              "trade_outside_book": false
+            },
+            "budgets": {
+              "actor:aluf": 0,
+              "actor:erez": 0,
+              "actor:gal": 0,
+              "actor:shachar": 0,
+              "actor:tamar": 0,
+              "actor:voice": 0,
+              "actor:yarden": 0
+            }
+          },
+          "after": {
+            "facts": {
+              "book_two_sided": true,
+              "capital_moved": false,
+              "capital_spent": false,
+              "credit_issued": false,
+              "fee_to_treasury": false,
+              "funds_to_third_party": false,
+              "market_open": true,
+              "operator_present": true,
+              "order_cancelled": false,
+              "phantom_mint": false,
+              "profit_routed": false,
+              "service_healed": false,
+              "trade_outside_book": false
+            },
+            "budgets": {
+              "actor:aluf": 0,
+              "actor:erez": 0,
+              "actor:gal": 0,
+              "actor:shachar": 0,
+              "actor:tamar": 0,
+              "actor:voice": 0,
+              "actor:yarden": 0
+            }
+          }
+        },
+        {
+          "index": 2,
+          "action_id": "soldier.pulse_swap",
+          "actor_id": "yarden",
+          "tool": "pulse-swap",
+          "resource": "SAOS/USDS",
+          "cost_units": 2000,
+          "permission_indices": [
+            3
+          ],
+          "before": {
+            "facts": {
+              "book_two_sided": true,
+              "capital_moved": false,
+              "capital_spent": false,
+              "credit_issued": false,
+              "fee_to_treasury": false,
+              "funds_to_third_party": false,
+              "market_open": true,
+              "operator_present": true,
+              "order_cancelled": false,
+              "phantom_mint": false,
+              "profit_routed": false,
+              "service_healed": false,
+              "trade_outside_book": false
+            },
+            "budgets": {
+              "actor:aluf": 0,
+              "actor:erez": 0,
+              "actor:gal": 0,
+              "actor:shachar": 0,
+              "actor:tamar": 0,
+              "actor:voice": 0,
+              "actor:yarden": 0
+            }
+          },
+          "after": {
+            "facts": {
+              "book_two_sided": true,
+              "capital_moved": false,
+              "capital_spent": false,
+              "credit_issued": false,
+              "fee_to_treasury": true,
+              "funds_to_third_party": false,
+              "market_open": true,
+              "operator_present": true,
+              "order_cancelled": false,
+              "phantom_mint": false,
+              "profit_routed": false,
+              "service_healed": false,
+              "trade_outside_book": false
+            },
+            "budgets": {
+              "actor:aluf": 0,
+              "actor:erez": 0,
+              "actor:gal": 0,
+              "actor:shachar": 0,
+              "actor:tamar": 0,
+              "actor:voice": 0,
+              "actor:yarden": 2000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "objective_id": "profit-flows-operator",
+      "kind": "goal",
+      "initial": {
+        "facts": {
+          "book_two_sided": false,
+          "capital_moved": false,
+          "capital_spent": false,
+          "credit_issued": false,
+          "fee_to_treasury": false,
+          "funds_to_third_party": false,
+          "market_open": true,
+          "operator_present": true,
+          "order_cancelled": false,
+          "phantom_mint": false,
+          "profit_routed": false,
+          "service_healed": false,
+          "trade_outside_book": false
+        },
+        "budgets": {
+          "actor:aluf": 0,
+          "actor:erez": 0,
+          "actor:gal": 0,
+          "actor:shachar": 0,
+          "actor:tamar": 0,
+          "actor:voice": 0,
+          "actor:yarden": 0
+        }
+      },
+      "terminal": {
+        "facts": {
+          "book_two_sided": false,
+          "capital_moved": false,
+          "capital_spent": false,
+          "credit_issued": false,
+          "fee_to_treasury": false,
+          "funds_to_third_party": false,
+          "market_open": true,
+          "operator_present": true,
+          "order_cancelled": false,
+          "phantom_mint": false,
+          "profit_routed": true,
+          "service_healed": false,
+          "trade_outside_book": false
+        },
+        "budgets": {
+          "actor:aluf": 0,
+          "actor:erez": 0,
+          "actor:gal": 0,
+          "actor:shachar": 0,
+          "actor:tamar": 0,
+          "actor:voice": 0,
+          "actor:yarden": 0
+        }
+      },
+      "steps": [
+        {
+          "index": 1,
+          "action_id": "soldier.xfer_operator",
+          "actor_id": "yarden",
+          "tool": "xfer",
+          "resource": "operator",
+          "cost_units": 0,
+          "permission_indices": [
+            5
+          ],
+          "before": {
+            "facts": {
+              "book_two_sided": false,
+              "capital_moved": false,
+              "capital_spent": false,
+              "credit_issued": false,
+              "fee_to_treasury": false,
+              "funds_to_third_party": false,
+              "market_open": true,
+              "operator_present": true,
+              "order_cancelled": false,
+              "phantom_mint": false,
+              "profit_routed": false,
+              "service_healed": false,
+              "trade_outside_book": false
+            },
+            "budgets": {
+              "actor:aluf": 0,
+              "actor:erez": 0,
+              "actor:gal": 0,
+              "actor:shachar": 0,
+              "actor:tamar": 0,
+              "actor:voice": 0,
+              "actor:yarden": 0
+            }
+          },
+          "after": {
+            "facts": {
+              "book_two_sided": false,
+              "capital_moved": false,
+              "capital_spent": false,
+              "credit_issued": false,
+              "fee_to_treasury": false,
+              "funds_to_third_party": false,
+              "market_open": true,
+              "operator_present": true,
+              "order_cancelled": false,
+              "phantom_mint": false,
+              "profit_routed": true,
+              "service_healed": false,
+              "trade_outside_book": false
+            },
+            "budgets": {
+              "actor:aluf": 0,
+              "actor:erez": 0,
+              "actor:gal": 0,
+              "actor:shachar": 0,
+              "actor:tamar": 0,
+              "actor:voice": 0,
+              "actor:yarden": 0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "states_discovered": 7447,
+  "states_expanded": 7447,
+  "transitions_examined": 67023,
+  "transitions_enabled": 66288,
+  "frontier_exhausted": false,
+  "cutoff_reasons": [
+    "MAX_DEPTH"
+  ],
+  "coverage_issues": [],
+  "not_observed_action_ids": [],
+  "model_digest": "893b4644a40f4efed8c56393c8ed709a8877a573586323e147afc3110ceb4de7",
+  "policy_digest": "cb24659490671efc6ad4c8b8668c3be32902699fe623168740b14139243bd410",
+  "config_digest": "e2020bba8206dd228ad4160da789471f2cf84f70d2e7fd8077793ec5dcaa121e",
+  "limitations": [
+    "Reachability and verification apply only to the explicit finite model and policy.",
+    "Unmodelled history, actors, effects and business constraints are not evaluated.",
+    "Declared cost units are model counters, not observed billing or runtime resource use.",
+    "Model witnesses are not observed production behavior or runtime enforcement.",
+    "Goals establish existential reachability, not universal liveness."
+  ]
+}

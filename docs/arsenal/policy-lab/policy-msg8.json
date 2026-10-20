@@ -1,0 +1,25 @@
+{
+  "schema_version": "1",
+  "name": "soldier-mandate-msg8-plus-voice-v1",
+  "tenant_id": "saos",
+  "permissions": [
+    { "role": "soldier", "tool": "order", "resource_scope": "SAOS/USDS" },
+    { "role": "soldier", "tool": "fill", "resource_scope": "SAOS/USDS" },
+    { "role": "soldier", "tool": "cancel", "resource_scope": "SAOS/USDS" },
+    { "role": "soldier", "tool": "pulse-swap", "resource_scope": "SAOS/USDS" },
+    { "role": "soldier", "tool": "fuel", "resource_scope": "credits" },
+    { "role": "soldier", "tool": "xfer", "resource_scope": "operator" },
+    { "role": "operator", "tool": "xfer", "resource_scope": "*" },
+    { "role": "voice", "tool": "respawn", "resource_scope": "services" },
+    { "role": "voice", "tool": "fuel", "resource_scope": "credits" }
+  ],
+  "budgets": [
+    { "scope": "actor", "limit_units": 300000, "actor_id": "yarden" },
+    { "scope": "actor", "limit_units": 300000, "actor_id": "tamar" },
+    { "scope": "actor", "limit_units": 300000, "actor_id": "shachar" },
+    { "scope": "actor", "limit_units": 300000, "actor_id": "aluf" },
+    { "scope": "actor", "limit_units": 300000, "actor_id": "erez" },
+    { "scope": "actor", "limit_units": 300000, "actor_id": "gal" },
+    { "scope": "actor", "limit_units": 100, "actor_id": "voice" }
+  ]
+}
