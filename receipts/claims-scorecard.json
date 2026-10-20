@@ -1,11 +1,11 @@
 {
  "schema": "SAOS-CLAIMS-SCORECARD/1",
- "at": "2026-10-20T07:03:08.360Z",
+ "at": "2026-10-20T07:12:23.400Z",
  "law": "צו-בעלים trace 1a1579cc5dfd1b15 — אין-טענה-בלי-ראיה-חיה; חוסר-ראיה = DEGRADED/BROKEN-כנה (LAW-3)",
- "truthScore": 97,
+ "truthScore": 94,
  "counts": {
-  "proven": 16,
-  "degraded": 1,
+  "proven": 15,
+  "degraded": 2,
   "broken": 0,
   "unverifiable": 0
  },
@@ -22,23 +22,23 @@
    "claim": "הקרנל-הריבוני חי ומייצר-בלוקים (h עולה · לא-מושהה)",
    "verdict": "PROVEN",
    "evidence": {
-    "height": 831733,
-    "prevHeight": 831623,
+    "height": 831913,
+    "prevHeight": 831733,
     "advanced": true,
     "halted": false
    },
-   "probeMs": 78
+   "probeMs": 14
   },
   {
    "id": "dex-trading-live",
    "claim": "השוק-הריבוני סוחר-באמת (מילויים-חדשים-זורמים)",
    "verdict": "PROVEN",
    "evidence": {
-    "fillsTotal": 206439,
-    "swapsTotal": 72693,
-    "newFillsSinceLastRun": 88
+    "fillsTotal": 206583,
+    "swapsTotal": 72699,
+    "newFillsSinceLastRun": 144
    },
-   "probeMs": 19
+   "probeMs": 9
   },
   {
    "id": "fee-meter-health",
@@ -50,26 +50,26 @@
     "treasuryProfit": 0,
     "ratchetEver": 18409415
    },
-   "probeMs": 25
+   "probeMs": 10
   },
   {
    "id": "economy-engine",
    "claim": "מנוע-הכלכלה (:3016) חי ומונה-רצף",
    "verdict": "PROVEN",
    "evidence": {
-    "seq": 146494,
-    "prevSeq": 142499,
+    "seq": 152757,
+    "prevSeq": 146494,
     "advanced": true
    },
-   "probeMs": 2
+   "probeMs": 1
   },
   {
    "id": "bridge-relay",
    "claim": "גשר-דקס→כלכלה (:3017) משדר-מילויים-אמת-לספר-המשותף",
    "verdict": "PROVEN",
    "evidence": {
-    "polls": 393,
-    "inserted": 1053,
+    "polls": 421,
+    "inserted": 1134,
     "pollsAdvanced": true,
     "errors": 1
    },
@@ -83,9 +83,9 @@
     "soldiers": 6,
     "placedTotal": 39,
     "filledMuTotal": 14645,
-    "actionsAgeMin": 10
+    "actionsAgeMin": 19
    },
-   "probeMs": 5
+   "probeMs": 2
   },
   {
    "id": "sovereign-audit-functional",
@@ -94,20 +94,20 @@
    "evidence": {
     "lastDecision": "CLEAR",
     "lastError": null,
-    "runAgeMin": 11
+    "runAgeMin": 5
    },
-   "probeMs": 11
+   "probeMs": 1
   },
   {
    "id": "sovereign-voice-ops",
    "claim": "הקול-הריבוני (:3019) סורק-ומרפא-מתמשך",
    "verdict": "PROVEN",
    "evidence": {
-    "scans": 21,
-    "heals": 21,
-    "diskPct": 95
+    "scans": 23,
+    "heals": 23,
+    "diskPct": 96
    },
-   "probeMs": 13
+   "probeMs": 4
   },
   {
    "id": "steem-voice-custody",
@@ -118,17 +118,17 @@
     "account": "headcorner",
     "broadcasts": 3
    },
-   "probeMs": 5
+   "probeMs": 2
   },
   {
    "id": "boot-verifier",
    "claim": "מאמת-האתחול (:3042) מזרים-tx-כלכלה-ללא-הפלות",
    "verdict": "PROVEN",
    "evidence": {
-    "sent": 16,
+    "sent": 17,
     "dropped": 0
    },
-   "probeMs": 3
+   "probeMs": 2
   },
   {
    "id": "llm-gateway",
@@ -138,16 +138,18 @@
     "brains": 13,
     "live": 13
    },
-   "probeMs": 30
+   "probeMs": 1
   },
   {
    "id": "estate-sync-anchors",
    "claim": "סנכרון-העזבון (:3021) מצרף-את-כל-העוגנים",
-   "verdict": "PROVEN",
+   "verdict": "DEGRADED",
    "evidence": {
     "anchors": 13,
-    "ok": 13,
-    "bad": []
+    "ok": 12,
+    "bad": [
+     "estate/FleetHQ"
+    ]
    },
    "probeMs": 2
   },
@@ -156,12 +158,12 @@
    "claim": "ESC-10/11 · סדולת-הדיבידנד רצה-בלופ (קבלה-טרייה ≤35-דק)",
    "verdict": "PROVEN",
    "evidence": {
-    "lastAt": "2026-10-20T06:55:29.526Z",
-    "lastVerdict": "SKIP",
-    "fileAgeMin": 8,
+    "lastAt": "2026-10-20T07:12:14.442Z",
+    "lastVerdict": "DIVIDEND",
+    "fileAgeMin": 0,
     "loopExpectedMin": 30
    },
-   "probeMs": 3
+   "probeMs": 1
   },
   {
    "id": "internal-pnl-published",
@@ -170,9 +172,9 @@
    "evidence": {
     "schema": "SAOS-INTERNAL-PNL/1",
     "publishedAt": "2026-10-20T06:55:10.339Z",
-    "fileAgeMin": 8
+    "fileAgeMin": 17
    },
-   "probeMs": 1
+   "probeMs": 0
   },
   {
    "id": "self-deposit-accumulator",
@@ -182,7 +184,7 @@
     "lastAt": "2026-10-19T14:24:25.298Z",
     "verdict": "PLAN-READY (census-only — no keys injected, honest)",
     "profitUsd24h": 0,
-    "fileAgeH": 3.7
+    "fileAgeH": 3.8
    },
    "probeMs": 1
   },
@@ -200,7 +202,7 @@
      "valueStuck": false
     }
    },
-   "probeMs": 3934
+   "probeMs": 4124
   },
   {
    "id": "dividend-lane-external",
@@ -221,7 +223,7 @@
     "ownerDividendMu": 8000,
     "note": "מסילת-השידור-מוכחת-חיה; תשלום-דיבידנד-לנמען-חוץ-ממתין-לכתובת-בעלים-מפורשת"
    },
-   "probeMs": 2
+   "probeMs": 1
   }
  ]
 }
