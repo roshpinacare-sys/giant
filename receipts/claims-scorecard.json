@@ -1,11 +1,11 @@
 {
  "schema": "SAOS-CLAIMS-SCORECARD/1",
- "at": "2026-10-20T05:35:32.217Z",
+ "at": "2026-10-20T05:50:32.902Z",
  "law": "צו-בעלים trace 1a1579cc5dfd1b15 — אין-טענה-בלי-ראיה-חיה; חוסר-ראיה = DEGRADED/BROKEN-כנה (LAW-3)",
- "truthScore": 94,
+ "truthScore": 97,
  "counts": {
-  "proven": 15,
-  "degraded": 2,
+  "proven": 16,
+  "degraded": 1,
   "broken": 0,
   "unverifiable": 0
  },
@@ -22,23 +22,23 @@
    "claim": "הקרנל-הריבוני חי ומייצר-בלוקים (h עולה · לא-מושהה)",
    "verdict": "PROVEN",
    "evidence": {
-    "height": 830042,
-    "prevHeight": 829741,
+    "height": 830337,
+    "prevHeight": 830042,
     "advanced": true,
     "halted": false
    },
-   "probeMs": 51
+   "probeMs": 73
   },
   {
    "id": "dex-trading-live",
    "claim": "השוק-הריבוני סוחר-באמת (מילויים-חדשים-זורמים)",
    "verdict": "PROVEN",
    "evidence": {
-    "fillsTotal": 205083,
-    "swapsTotal": 72670,
-    "newFillsSinceLastRun": 244
+    "fillsTotal": 205318,
+    "swapsTotal": 72671,
+    "newFillsSinceLastRun": 235
    },
-   "probeMs": 12
+   "probeMs": 51
   },
   {
    "id": "fee-meter-health",
@@ -50,30 +50,30 @@
     "treasuryProfit": 2310,
     "ratchetEver": 18404281
    },
-   "probeMs": 9
+   "probeMs": 17
   },
   {
    "id": "economy-engine",
    "claim": "מנוע-הכלכלה (:3016) חי ומונה-רצף",
    "verdict": "PROVEN",
    "evidence": {
-    "seq": 84275,
-    "prevSeq": 73401,
+    "seq": 95045,
+    "prevSeq": 84275,
     "advanced": true
    },
-   "probeMs": 2
+   "probeMs": 17
   },
   {
    "id": "bridge-relay",
    "claim": "גשר-דקס→כלכלה (:3017) משדר-מילויים-אמת-לספר-המשותף",
    "verdict": "PROVEN",
    "evidence": {
-    "polls": 130,
-    "inserted": 343,
+    "polls": 175,
+    "inserted": 462,
     "pollsAdvanced": true,
     "errors": 0
    },
-   "probeMs": 2
+   "probeMs": 13
   },
   {
    "id": "soldier-army-trading",
@@ -82,10 +82,10 @@
    "evidence": {
     "soldiers": 6,
     "placedTotal": 27,
-    "filledMuTotal": 10956,
+    "filledMuTotal": 11391,
     "actionsAgeMin": 1
    },
-   "probeMs": 1
+   "probeMs": 15
   },
   {
    "id": "sovereign-audit-functional",
@@ -96,18 +96,18 @@
     "lastError": null,
     "runAgeMin": 13
    },
-   "probeMs": 2
+   "probeMs": 45
   },
   {
    "id": "sovereign-voice-ops",
    "claim": "הקול-הריבוני (:3019) סורק-ומרפא-מתמשך",
    "verdict": "PROVEN",
    "evidence": {
-    "scans": 4,
-    "heals": 4,
-    "diskPct": 91
+    "scans": 7,
+    "heals": 7,
+    "diskPct": 89
    },
-   "probeMs": 3
+   "probeMs": 30
   },
   {
    "id": "steem-voice-custody",
@@ -125,10 +125,10 @@
    "claim": "מאמת-האתחול (:3042) מזרים-tx-כלכלה-ללא-הפלות",
    "verdict": "PROVEN",
    "evidence": {
-    "sent": 10,
+    "sent": 11,
     "dropped": 0
    },
-   "probeMs": 2
+   "probeMs": 28
   },
   {
    "id": "llm-gateway",
@@ -138,32 +138,30 @@
     "brains": 13,
     "live": 13
    },
-   "probeMs": 2
+   "probeMs": 40
   },
   {
    "id": "estate-sync-anchors",
    "claim": "סנכרון-העזבון (:3021) מצרף-את-כל-העוגנים",
-   "verdict": "DEGRADED",
+   "verdict": "PROVEN",
    "evidence": {
     "anchors": 13,
-    "ok": 12,
-    "bad": [
-     "estate/Domain"
-    ]
+    "ok": 13,
+    "bad": []
    },
-   "probeMs": 4
+   "probeMs": 11
   },
   {
    "id": "dividend-sweep-alive",
    "claim": "ESC-10/11 · סדולת-הדיבידנד רצה-בלופ (קבלה-טרייה ≤35-דק)",
    "verdict": "PROVEN",
    "evidence": {
-    "lastAt": "2026-10-20T05:20:03.204Z",
+    "lastAt": "2026-10-20T05:50:28.528Z",
     "lastVerdict": "SKIP",
-    "fileAgeMin": 15,
+    "fileAgeMin": 0,
     "loopExpectedMin": 30
    },
-   "probeMs": 1
+   "probeMs": 0
   },
   {
    "id": "internal-pnl-published",
@@ -172,9 +170,9 @@
    "evidence": {
     "schema": "SAOS-INTERNAL-PNL/1",
     "publishedAt": "2026-10-19T14:20:36.991Z",
-    "fileAgeMin": 133
+    "fileAgeMin": 148
    },
-   "probeMs": 0
+   "probeMs": 18
   },
   {
    "id": "self-deposit-accumulator",
@@ -184,7 +182,7 @@
     "lastAt": "2026-10-19T14:24:25.298Z",
     "verdict": "PLAN-READY (census-only — no keys injected, honest)",
     "profitUsd24h": 0,
-    "fileAgeH": 2.2
+    "fileAgeH": 2.5
    },
    "probeMs": 1
   },
@@ -202,7 +200,7 @@
      "valueStuck": false
     }
    },
-   "probeMs": 3982
+   "probeMs": 4112
   },
   {
    "id": "dividend-lane-external",
