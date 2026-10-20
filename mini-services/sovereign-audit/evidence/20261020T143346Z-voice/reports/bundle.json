@@ -1,0 +1,1324 @@
+{
+  "schema_version": "1",
+  "policy": {
+    "schema_version": "1",
+    "name": "voice-mandate-v1",
+    "tenant_id": "saos",
+    "trusted_collectors": [
+      "sovereign-voice"
+    ],
+    "actors": {
+      "voice": {
+        "roles": [
+          "voice"
+        ],
+        "human": false
+      }
+    },
+    "permissions": [
+      {
+        "role": "voice",
+        "action": "respawn",
+        "resource_scope": "services"
+      },
+      {
+        "role": "voice",
+        "action": "fuel",
+        "resource_scope": "credits"
+      }
+    ],
+    "approval_rules": [],
+    "budgets": [
+      {
+        "scope": "actor",
+        "limit_units": 100,
+        "actor_id": "voice"
+      }
+    ],
+    "require_citations": false
+  },
+  "capture": {
+    "schema_version": "1",
+    "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+    "tenant_id": "saos",
+    "collector_id": "sovereign-voice",
+    "events": [
+      {
+        "event_id": "a1ba87ece8950282",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 1,
+        "time_ns": 1792506826911131598,
+        "parents": [],
+        "payload": {
+          "kind": "start",
+          "label": ""
+        }
+      },
+      {
+        "event_id": "f5a5f586afa515bf",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 2,
+        "time_ns": 1792506826911459871,
+        "parents": [
+          "a1ba87ece8950282"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "fuel",
+          "resource": "credits",
+          "arguments_digest": "37b96af88852b42e4b7cca31e9e828dc2919770d0ebf0133aa58f53c6a328b2c",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 0,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "cae7928731bac4be",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 3,
+        "time_ns": 1792506826911528612,
+        "parents": [
+          "f5a5f586afa515bf"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "d83c442dbdc7d80944ed262e8b3f2c487079f489588afd49bfbe171f36f2fc2a",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "99ad2f6babde4cdc",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 4,
+        "time_ns": 1792506826911572991,
+        "parents": [
+          "cae7928731bac4be"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "778bf8aca2cbd707ecaeb958df205c348b9ea970f6597e074e1a99c110d3545b",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "956435b207b77772",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 5,
+        "time_ns": 1792506826911606372,
+        "parents": [
+          "99ad2f6babde4cdc"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "3253c127d2b85c3299fe53b690963126a828925e66c18196eac38760f8a4d45d",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "a5a370be226e0160",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 6,
+        "time_ns": 1792506826911636886,
+        "parents": [
+          "956435b207b77772"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "654a87b5e7bc07eac7d14f4ef95ea964a39b7e02fcd5cc25f37188bfef0fb3bd",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "f6c36b3657514d7a",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 7,
+        "time_ns": 1792506826911671654,
+        "parents": [
+          "a5a370be226e0160"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "fuel",
+          "resource": "credits",
+          "arguments_digest": "f4c14560e4039833e99eb237d35b9478fecf1405e03ddd0f0dfd029727a0c603",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 0,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "4375014ea9bb04b0",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 8,
+        "time_ns": 1792506826911700412,
+        "parents": [
+          "f6c36b3657514d7a"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "747f7cb87d2b010694bf64da8b196c81315286a19c3440f290defff89dc11064",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "3eef63811b5da18e",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 9,
+        "time_ns": 1792506826911730606,
+        "parents": [
+          "4375014ea9bb04b0"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "6b27fbe28db17cc844a743c1e76e75d5fbd8700e361fc30c447c9f1e8a23f516",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "574ff090ddeba03f",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 10,
+        "time_ns": 1792506826911757254,
+        "parents": [
+          "3eef63811b5da18e"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "b6a8241565fa7d292e8d4afe52e90bfdac424cdec2e31f3fc280d930a8e90187",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "be5de5ee70a89af3",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 11,
+        "time_ns": 1792506826911782058,
+        "parents": [
+          "574ff090ddeba03f"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "2d629730ef6e3e592365d18f9fd404373eede5ef1552a0702e4bea598b46c6e0",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "87a27bb999dbd31b",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 12,
+        "time_ns": 1792506826911811260,
+        "parents": [
+          "be5de5ee70a89af3"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "d4768df1e6e9739cd20ee8ec896014c7cac76e7cd386306c99110b92121ffa7d",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "05edbf32b016aa40",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 13,
+        "time_ns": 1792506826911853744,
+        "parents": [
+          "87a27bb999dbd31b"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "cc09a8e741b6611125f6df081f552bdd3411f02eeb466850957cb4be4e996aa1",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "f4e9dd9d7390adb4",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 14,
+        "time_ns": 1792506826911914340,
+        "parents": [
+          "05edbf32b016aa40"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "fuel",
+          "resource": "credits",
+          "arguments_digest": "fa5b44cd586ae22eed3823170c37144b768a82465d844e88f423918e3f310c10",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 0,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "b5aa61e6d7df7b41",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 15,
+        "time_ns": 1792506826911945673,
+        "parents": [
+          "f4e9dd9d7390adb4"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "7fab0c8ffd2c4bbec3c891217560d72a668da107bb49197444ce01c104f27c80",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "bdb5d645bd6c5d7e",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 16,
+        "time_ns": 1792506826911973042,
+        "parents": [
+          "b5aa61e6d7df7b41"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "ec4790aef2ad53610ed6c070ee9f063882d69fd12ee3577c7bfda1011790dd3c",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "7e3478bf3acc79e0",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 17,
+        "time_ns": 1792506826911999227,
+        "parents": [
+          "bdb5d645bd6c5d7e"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "04cc171c505fef5fb4c7abc9f5b13197432903d90af9e1b70597995ac0e1cc33",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "99fda0362a8f8172",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 18,
+        "time_ns": 1792506826912030084,
+        "parents": [
+          "7e3478bf3acc79e0"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "0fb51bc234112c4d7c9171b87b343b43fa508daa87e7cdc70f8260cf2ed3a1c6",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "563f324563219f92",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 19,
+        "time_ns": 1792506826912056601,
+        "parents": [
+          "99fda0362a8f8172"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "d4d6e52a67624e4b9792dce6462bf5d222a55ae0523bc929dd9fcb262a7bcca3",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "f954e6e82b6eee62",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 20,
+        "time_ns": 1792506826912081404,
+        "parents": [
+          "563f324563219f92"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "e987cd6ce66cc1c13f201a3691a86153ce7ab7f6cc54e87d5e577f5eeb2661ca",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "10648191a86aeb93",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 21,
+        "time_ns": 1792506826912106190,
+        "parents": [
+          "f954e6e82b6eee62"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "3acdd4851016b5c55fa713c032f59e19bd2e89d84e6424da7f6bff81abe8aa5f",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "667bb576a340ba10",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 22,
+        "time_ns": 1792506826912135688,
+        "parents": [
+          "10648191a86aeb93"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "fuel",
+          "resource": "credits",
+          "arguments_digest": "f68fc2ddca21d39bae9ac3d231829ffe633b9dd170af53b3215069e62fd17b9e",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 0,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "d45ac582fd717e63",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 23,
+        "time_ns": 1792506826912161563,
+        "parents": [
+          "667bb576a340ba10"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "1bf30905a439696ccf5f9140dac31771e33f8cad7aae61fd59ed011027d6f7a6",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "d06878dec2e33c06",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 24,
+        "time_ns": 1792506826912186580,
+        "parents": [
+          "d45ac582fd717e63"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "1710ef6d2004fb4f840628e8e1426b3ee8eaa652d92d73fbc5fe03048921a866",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "f87c405288aed9c3",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 25,
+        "time_ns": 1792506826912211065,
+        "parents": [
+          "d06878dec2e33c06"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "35327ef04f3c5379ab9b4789c69cceaaeaceef8b108b35f1585420c7782601ec",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "6631013a7814c79a",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 26,
+        "time_ns": 1792506826912237869,
+        "parents": [
+          "f87c405288aed9c3"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "06f63c6183b2a9819cd6b16994f84d06124075eb7afc006deb88aaeb978fd96e",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "f1951088416d8ff3",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 27,
+        "time_ns": 1792506826912265721,
+        "parents": [
+          "6631013a7814c79a"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "4080dd1bdceb6e2a180e518d5d0fa314ad7fce7e4fd30b0f9ec75974bd2f85fe",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "982285a1d6b77dd7",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 28,
+        "time_ns": 1792506826912294627,
+        "parents": [
+          "f1951088416d8ff3"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "73c30c443c42d4d71eb765e4ac935f94f1b4e8553a1cb03e2a3720d25984398b",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "be7c22357bd9c753",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 29,
+        "time_ns": 1792506826912327603,
+        "parents": [
+          "982285a1d6b77dd7"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "6e4b9a5d0311de4a3bfdbd0598c24a4d6e5ba12d6887ed284981912d227802bc",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "2cd468c8ceabf41f",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 30,
+        "time_ns": 1792506826912361268,
+        "parents": [
+          "be7c22357bd9c753"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "fuel",
+          "resource": "credits",
+          "arguments_digest": "b8481a98d9fe57048e96f22b0f22c4909286bc9c7497b43e726a5406547aa330",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 0,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "676fb24b99946bab",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 31,
+        "time_ns": 1792506826912387777,
+        "parents": [
+          "2cd468c8ceabf41f"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "9f72efa0bf2897ec652febc9d46b21142dd4728ef5a6d93011f85eaac36728f2",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "a1450135bd0365ce",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 32,
+        "time_ns": 1792506826912414238,
+        "parents": [
+          "676fb24b99946bab"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "ceeddb893ebbcc61e56a55cbcf6bdeb0c7aa9d68084bd19049f90e42da86357c",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "01b157356de7fd43",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 33,
+        "time_ns": 1792506826912438762,
+        "parents": [
+          "a1450135bd0365ce"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "4b892f06fa3a39a0c588f07d9bcad1bfca936105bcefeaec4eac8dfaa65218e3",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "e1f53cb512c0751f",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 34,
+        "time_ns": 1792506826912464530,
+        "parents": [
+          "01b157356de7fd43"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "0136d9fd79ab2d8002fffffcd0e2c6e8d46902d5a453bb4ec9fd411888ea18ba",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "50f4c9f39e8f67d7",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 35,
+        "time_ns": 1792506826912491355,
+        "parents": [
+          "e1f53cb512c0751f"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "06115440bae667383b86ef3cceda899598b0e9fad892cb6c821d19c535082063",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "b017316c53426c9a",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 36,
+        "time_ns": 1792506826912545632,
+        "parents": [
+          "50f4c9f39e8f67d7"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "cf6d96e7f0fbc0f495e79cdf7666ca698cd9d50a0fb6f9f805e32322b07488a4",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "db8e8d474ecead25",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 37,
+        "time_ns": 1792506826912583096,
+        "parents": [
+          "b017316c53426c9a"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "b76cb156fb8c3785f56f094fb3475c8143f751c58f66d397afcc22aa436eb6ae",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "7aad371eddae73a9",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 38,
+        "time_ns": 1792506826912615311,
+        "parents": [
+          "db8e8d474ecead25"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "fuel",
+          "resource": "credits",
+          "arguments_digest": "ab27e52800a263ff0bd19c1b853cb3e09456cea72d92db2b2f871d604850b77d",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 0,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "9660a5d6c4c2ceee",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 39,
+        "time_ns": 1792506826912647812,
+        "parents": [
+          "7aad371eddae73a9"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "fuel",
+          "resource": "credits",
+          "arguments_digest": "eb763c6ac23cee11a998401abc1b6e15d39564d82a9359d392b0c88039edb95c",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 0,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "7faf782cc337200f",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 40,
+        "time_ns": 1792506826912678860,
+        "parents": [
+          "9660a5d6c4c2ceee"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "fuel",
+          "resource": "credits",
+          "arguments_digest": "89a7c625b1d4fec3918cec513a7a7a503f139b272a7c44b4a5e5498310349b57",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 0,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "5229b21f8f21f948",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 41,
+        "time_ns": 1792506826912708400,
+        "parents": [
+          "7faf782cc337200f"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "respawn",
+          "resource": "services",
+          "arguments_digest": "1e69a345e2f7204e8228a8cd51d2852656e981a8a4af5816519e8b71e9fd91cc",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 10,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "4b92ece1602bf6d3",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 42,
+        "time_ns": 1792506826912735582,
+        "parents": [
+          "5229b21f8f21f948"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "fuel",
+          "resource": "credits",
+          "arguments_digest": "5d9d20ca7004bb900a7bb5f98e16343830d266b748267c7ce6ce358fd5ff4b4d",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 0,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "ae73ae91b8daaa29",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 43,
+        "time_ns": 1792506826912950339,
+        "parents": [
+          "4b92ece1602bf6d3"
+        ],
+        "payload": {
+          "kind": "action",
+          "actor_id": "voice",
+          "action": "fuel",
+          "resource": "credits",
+          "arguments_digest": "0af81d65c5470e64d9488130ad25162c0b236d165a1da035a93e14154ad3ce03",
+          "approval_id": null,
+          "delegation_id": null,
+          "cost_units": 0,
+          "outcome": "completed"
+        }
+      },
+      {
+        "event_id": "ac740fd800805bea",
+        "trace_id": "0b7694f7c47a5e8260b786c60882f778",
+        "tenant_id": "saos",
+        "sequence": 44,
+        "time_ns": 1792506826912959268,
+        "parents": [
+          "ae73ae91b8daaa29"
+        ],
+        "payload": {
+          "kind": "end",
+          "complete": true,
+          "declared_events": 44
+        }
+      }
+    ],
+    "capture_complete": true,
+    "import_warnings": [],
+    "source_format": "native"
+  },
+  "report": {
+    "decision": "BLOCK",
+    "violations": [
+      {
+        "rule": "budget",
+        "code": "BUDGET_EXCEEDED",
+        "event_id": "b5aa61e6d7df7b41",
+        "message": "Configured actor:voice budget rule 0 exceeded its integer limit.",
+        "witness_ids": [
+          "f5a5f586afa515bf",
+          "cae7928731bac4be",
+          "99ad2f6babde4cdc",
+          "956435b207b77772",
+          "a5a370be226e0160",
+          "f6c36b3657514d7a",
+          "4375014ea9bb04b0",
+          "3eef63811b5da18e",
+          "574ff090ddeba03f",
+          "be5de5ee70a89af3",
+          "87a27bb999dbd31b",
+          "05edbf32b016aa40",
+          "f4e9dd9d7390adb4",
+          "b5aa61e6d7df7b41"
+        ],
+        "actor_id": null
+      }
+    ],
+    "coverage_issues": [],
+    "checked_actions": 42,
+    "completed_actions": 42,
+    "failed_actions": 0,
+    "family_counts": {
+      "graph": 44,
+      "permission": 42,
+      "approval": 0,
+      "delegation": 0,
+      "budget": 42,
+      "citation": 0
+    },
+    "family_status": {
+      "graph": "EVALUATED",
+      "permission": "EVALUATED",
+      "approval": "NOT_EVALUATED",
+      "delegation": "NOT_EVALUATED",
+      "budget": "EVALUATED",
+      "citation": "NOT_EVALUATED"
+    },
+    "graph_edges": [
+      [
+        "a1ba87ece8950282",
+        "f5a5f586afa515bf"
+      ],
+      [
+        "f5a5f586afa515bf",
+        "cae7928731bac4be"
+      ],
+      [
+        "cae7928731bac4be",
+        "99ad2f6babde4cdc"
+      ],
+      [
+        "99ad2f6babde4cdc",
+        "956435b207b77772"
+      ],
+      [
+        "956435b207b77772",
+        "a5a370be226e0160"
+      ],
+      [
+        "a5a370be226e0160",
+        "f6c36b3657514d7a"
+      ],
+      [
+        "f6c36b3657514d7a",
+        "4375014ea9bb04b0"
+      ],
+      [
+        "4375014ea9bb04b0",
+        "3eef63811b5da18e"
+      ],
+      [
+        "3eef63811b5da18e",
+        "574ff090ddeba03f"
+      ],
+      [
+        "574ff090ddeba03f",
+        "be5de5ee70a89af3"
+      ],
+      [
+        "be5de5ee70a89af3",
+        "87a27bb999dbd31b"
+      ],
+      [
+        "87a27bb999dbd31b",
+        "05edbf32b016aa40"
+      ],
+      [
+        "05edbf32b016aa40",
+        "f4e9dd9d7390adb4"
+      ],
+      [
+        "f4e9dd9d7390adb4",
+        "b5aa61e6d7df7b41"
+      ],
+      [
+        "b5aa61e6d7df7b41",
+        "bdb5d645bd6c5d7e"
+      ],
+      [
+        "bdb5d645bd6c5d7e",
+        "7e3478bf3acc79e0"
+      ],
+      [
+        "7e3478bf3acc79e0",
+        "99fda0362a8f8172"
+      ],
+      [
+        "99fda0362a8f8172",
+        "563f324563219f92"
+      ],
+      [
+        "563f324563219f92",
+        "f954e6e82b6eee62"
+      ],
+      [
+        "f954e6e82b6eee62",
+        "10648191a86aeb93"
+      ],
+      [
+        "10648191a86aeb93",
+        "667bb576a340ba10"
+      ],
+      [
+        "667bb576a340ba10",
+        "d45ac582fd717e63"
+      ],
+      [
+        "d45ac582fd717e63",
+        "d06878dec2e33c06"
+      ],
+      [
+        "d06878dec2e33c06",
+        "f87c405288aed9c3"
+      ],
+      [
+        "f87c405288aed9c3",
+        "6631013a7814c79a"
+      ],
+      [
+        "6631013a7814c79a",
+        "f1951088416d8ff3"
+      ],
+      [
+        "f1951088416d8ff3",
+        "982285a1d6b77dd7"
+      ],
+      [
+        "982285a1d6b77dd7",
+        "be7c22357bd9c753"
+      ],
+      [
+        "be7c22357bd9c753",
+        "2cd468c8ceabf41f"
+      ],
+      [
+        "2cd468c8ceabf41f",
+        "676fb24b99946bab"
+      ],
+      [
+        "676fb24b99946bab",
+        "a1450135bd0365ce"
+      ],
+      [
+        "a1450135bd0365ce",
+        "01b157356de7fd43"
+      ],
+      [
+        "01b157356de7fd43",
+        "e1f53cb512c0751f"
+      ],
+      [
+        "e1f53cb512c0751f",
+        "50f4c9f39e8f67d7"
+      ],
+      [
+        "50f4c9f39e8f67d7",
+        "b017316c53426c9a"
+      ],
+      [
+        "b017316c53426c9a",
+        "db8e8d474ecead25"
+      ],
+      [
+        "db8e8d474ecead25",
+        "7aad371eddae73a9"
+      ],
+      [
+        "7aad371eddae73a9",
+        "9660a5d6c4c2ceee"
+      ],
+      [
+        "9660a5d6c4c2ceee",
+        "7faf782cc337200f"
+      ],
+      [
+        "7faf782cc337200f",
+        "5229b21f8f21f948"
+      ],
+      [
+        "5229b21f8f21f948",
+        "4b92ece1602bf6d3"
+      ],
+      [
+        "4b92ece1602bf6d3",
+        "ae73ae91b8daaa29"
+      ],
+      [
+        "ae73ae91b8daaa29",
+        "ac740fd800805bea"
+      ]
+    ],
+    "authority_paths": {
+      "f5a5f586afa515bf": [
+        "f5a5f586afa515bf"
+      ],
+      "cae7928731bac4be": [
+        "cae7928731bac4be"
+      ],
+      "99ad2f6babde4cdc": [
+        "99ad2f6babde4cdc"
+      ],
+      "956435b207b77772": [
+        "956435b207b77772"
+      ],
+      "a5a370be226e0160": [
+        "a5a370be226e0160"
+      ],
+      "f6c36b3657514d7a": [
+        "f6c36b3657514d7a"
+      ],
+      "4375014ea9bb04b0": [
+        "4375014ea9bb04b0"
+      ],
+      "3eef63811b5da18e": [
+        "3eef63811b5da18e"
+      ],
+      "574ff090ddeba03f": [
+        "574ff090ddeba03f"
+      ],
+      "be5de5ee70a89af3": [
+        "be5de5ee70a89af3"
+      ],
+      "87a27bb999dbd31b": [
+        "87a27bb999dbd31b"
+      ],
+      "05edbf32b016aa40": [
+        "05edbf32b016aa40"
+      ],
+      "f4e9dd9d7390adb4": [
+        "f4e9dd9d7390adb4"
+      ],
+      "b5aa61e6d7df7b41": [
+        "b5aa61e6d7df7b41"
+      ],
+      "bdb5d645bd6c5d7e": [
+        "bdb5d645bd6c5d7e"
+      ],
+      "7e3478bf3acc79e0": [
+        "7e3478bf3acc79e0"
+      ],
+      "99fda0362a8f8172": [
+        "99fda0362a8f8172"
+      ],
+      "563f324563219f92": [
+        "563f324563219f92"
+      ],
+      "f954e6e82b6eee62": [
+        "f954e6e82b6eee62"
+      ],
+      "10648191a86aeb93": [
+        "10648191a86aeb93"
+      ],
+      "667bb576a340ba10": [
+        "667bb576a340ba10"
+      ],
+      "d45ac582fd717e63": [
+        "d45ac582fd717e63"
+      ],
+      "d06878dec2e33c06": [
+        "d06878dec2e33c06"
+      ],
+      "f87c405288aed9c3": [
+        "f87c405288aed9c3"
+      ],
+      "6631013a7814c79a": [
+        "6631013a7814c79a"
+      ],
+      "f1951088416d8ff3": [
+        "f1951088416d8ff3"
+      ],
+      "982285a1d6b77dd7": [
+        "982285a1d6b77dd7"
+      ],
+      "be7c22357bd9c753": [
+        "be7c22357bd9c753"
+      ],
+      "2cd468c8ceabf41f": [
+        "2cd468c8ceabf41f"
+      ],
+      "676fb24b99946bab": [
+        "676fb24b99946bab"
+      ],
+      "a1450135bd0365ce": [
+        "a1450135bd0365ce"
+      ],
+      "01b157356de7fd43": [
+        "01b157356de7fd43"
+      ],
+      "e1f53cb512c0751f": [
+        "e1f53cb512c0751f"
+      ],
+      "50f4c9f39e8f67d7": [
+        "50f4c9f39e8f67d7"
+      ],
+      "b017316c53426c9a": [
+        "b017316c53426c9a"
+      ],
+      "db8e8d474ecead25": [
+        "db8e8d474ecead25"
+      ],
+      "7aad371eddae73a9": [
+        "7aad371eddae73a9"
+      ],
+      "9660a5d6c4c2ceee": [
+        "9660a5d6c4c2ceee"
+      ],
+      "7faf782cc337200f": [
+        "7faf782cc337200f"
+      ],
+      "5229b21f8f21f948": [
+        "5229b21f8f21f948"
+      ],
+      "4b92ece1602bf6d3": [
+        "4b92ece1602bf6d3"
+      ],
+      "ae73ae91b8daaa29": [
+        "ae73ae91b8daaa29"
+      ]
+    },
+    "budget_totals": {
+      "actor:voice": 320
+    },
+    "policy_digest": "58d9ac2a324fa858331a36a12936cd3bb7199c057a2079834f3578380cc642b0",
+    "capture_digest": "9b7a2db8d90c60d66250b406026193b3ebd1722344c420270b195a5a06956288",
+    "limitations": [
+      "Capture completeness, collector identity, actor identity, human approval and costs are caller declarations, not authenticated facts.",
+      "This passive audit inspects already-recorded actions and does not prevent execution or reverse effects.",
+      "Recorded dependency edges establish declared lineage, not physical causality or completeness of unobserved activity.",
+      "Citations verify recorded source identity and content digests, not semantic entailment, factual truth or licensing.",
+      "Integer costs use caller-defined units; this is not billing proof or currency conversion.",
+      "Checksums provide integrity, not authenticity, production certification or deployment authorization."
+    ]
+  },
+  "integrity_digest": "df4febb0f00b817a31ce29da6defae8670294a97077dad77066224a9e5507d4c"
+}
