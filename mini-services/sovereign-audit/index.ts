@@ -15,6 +15,20 @@ import path from "node:path";
 const PORT = 3022;
 const HERE = import.meta.dir;
 const AUDIT_SCRIPT = path.join(HERE, "audit_soldiers.py");
+
+/* גל-94 · תיקון-שורש-נמדד: ה-spawnSync("python3") תלוי-PATH-של-השירות — בסנדבוקס-חדש
+ * ה-python3-המערכתי-אינו-מחזיק-את-ifixai (הותקן-ב-venv), והמבקר-הבלתי-תלוי-היה-RED
+ * קבוע (AUDIT-ERROR · נמדד 11:10/11:25/11:40). הסדר: venv-הבית → PATH → fallback. */
+const PYTHON_CANDIDATES = [
+  "/home/z/.venv/bin/python3",
+  "python3",
+];
+function resolvePython(): string {
+  for (const p of PYTHON_CANDIDATES) {
+    if (p === "python3" || existsSync(p)) return p;
+  }
+  return "python3";
+}
 const OUT_JSON = path.join(HERE, "state", "last-audit.json");
 const LOG = path.join(HERE, "state", "audit.log");
 
@@ -22,13 +36,14 @@ let runs = 0;
 let lastRunAt = 0;
 let lastDecision: string | null = null;
 let lastError: string | null = null;
+let selfHealTried = false;
 
 function appendLog(s: string): void {
   try { appendFileSync(LOG, s + "\n"); } catch { /* לוג-לעולם-לא-מפיל-ביקורת */ }
 }
 
 function runAudit(windowS = 24 * 3600): { decision: string; events: number } {
-  const r = spawnSync("python3", [AUDIT_SCRIPT, String(windowS)], {
+  const r = spawnSync(resolvePython(), [AUDIT_SCRIPT, String(windowS)], {
     timeout: 120_000,
     encoding: "utf8",
   });
@@ -43,6 +58,17 @@ function runAudit(windowS = 24 * 3600): { decision: string; events: number } {
   if (r.status !== 0) {
     lastError = `python exit=${r.status}: ${(r.stderr ?? "").slice(-200)}`;
     lastDecision = "AUDIT-ERROR";
+    /* גל-94 · עוגן-שיקום-עצמי: sandbox-חדש מאבד-את-ifixai (venv-אפמרלי). כשל-מודול →
+     * התקנה-עצמית-פעם-בתהליך (venv-python), ואז-ריצה-חוזרת. המבקר-לעולם-לא-נשאר-RED-בשקט. */
+    if (/No module named 'ifixai'/.test(r.stderr ?? "") && !selfHealTried) {
+      selfHealTried = true;
+      const py = resolvePython();
+      const inst = spawnSync(py, ["-m", "pip", "install", "-q", "ifixai==4.2.0"], {
+        timeout: 180_000, encoding: "utf8",
+      });
+      appendLog(`[${new Date().toISOString()}] self-heal pip-install exit=${inst.status}`);
+      if (inst.status === 0) return runAudit(windowS); // ריצה-חוזרת-אחת בלבד
+    }
     return { decision: lastDecision, events: 0 };
   }
   try {

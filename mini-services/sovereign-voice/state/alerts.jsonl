@@ -115,3 +115,6 @@
 {"ts":1792494938912,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 2 שגיאות (היה 0)","status":"ledger"}
 {"ts":1792494963969,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (2 כשלים) → respawn=true → verified=false","status":"ledger"}
 {"ts":1792495838221,"key":"ledger-verify","sev":"critical","text":"אימות-שרשרת נכשל: {\"ok\":false,\"checked\":47295,\"brokenAt\":60407}","status":"ledger"}
+{"ts":1792496440606,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 25 דק' (fills=0) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792496738064,"key":"console-5xx","sev":"critical","text":"הקונסולה :3000 מחזירה 502 — דלת-הבית-פגומה","status":"ledger"}
+{"ts":1792496738132,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
