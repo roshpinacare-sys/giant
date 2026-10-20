@@ -168,3 +168,11 @@
 {"ts":1792505923771,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"BLOCK\"","status":"ledger"}
 {"ts":1792506222556,"key":"disk-full","sev":"critical","text":"הדיסק ב-97% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
 {"ts":1792506461156,"key":"disk-healed","sev":"warn","text":"שומר-הדיסק: 97%→84% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:failed","status":"ledger"}
+{"ts":1792507966073,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 92%→92% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:failed","status":"ledger"}
+{"ts":1792507967802,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
+{"ts":1792507967805,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · tamar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · shachar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · aluf:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · erez:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · gal:Error: POST http://127.0.0.1:3010/saos-dex/api/dex","status":"ledger"}
+{"ts":1792507967806,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"BLOCK\"","status":"ledger"}
+{"ts":1792508022571,"key":"disk-full","sev":"critical","text":"הדיסק ב-90% (סף-85) — מעקב-הדוק","status":"ledger"}
+{"ts":1792508030575,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792508322573,"key":"console-5xx","sev":"critical","text":"הקונסולה :3000 מחזירה 502 — דלת-הבית-פגומה","status":"ledger"}
+{"ts":1792508355763,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3050 נפל (2 כשלים) → respawn=true → verified=false","status":"ledger"}
