@@ -20,7 +20,14 @@ say(){ echo "[$(date -u +%FT%TZ)] $*" >> "$LOG"; }
 if [ ! -s /home/z/.secrets/.env.local ]; then
   say "selfheal-1: הכספת חסרה — פתיחה-אוטונומית מ-vault-home"
   rm -rf /tmp/vault-selfheal
-  if git clone -q --depth 1 "https://github.com/roshpinacare-sys/vault-home.git" /tmp/vault-selfheal 2>>"$LOG"; then
+  # שיעור-2026-10-20: ה-egress-משותף נתקל-בהגבלת-קצב-אנונימית → ניסיונות-חוזרים
+  CLONE_OK=0
+  for attempt in 1 2 3; do
+    if git clone -q --depth 1 "https://github.com/roshpinacare-sys/vault-home.git" /tmp/vault-selfheal 2>>"$LOG"; then CLONE_OK=1; break; fi
+    say "selfheal-1: ניסיון-שיבוט $attempt נכשל (הגבלת-קצב/רשת?) — ממתין 20ש׳"
+    sleep 20
+  done
+  if [ "$CLONE_OK" = "1" ]; then
     if VAULT_ALLOW_DISCOVERY=1 bash /tmp/vault-selfheal/auto-unseal.sh >>"$LOG" 2>&1; then
       # הפריסה ב-layout-standalone נופלת ל-$(dirname של-השיבוט) — מאתרים-את-.env.local-שנוצר
       DEPLOYED=""
@@ -62,8 +69,9 @@ else
   say "selfheal-1: כספת נוכחת — לא-נוגעים"
 fi
 
-# ── 2) עוזר-אישורי-הגיט (חיווט-גלובלי, אפס-סודות-בקונפיג) ──────────────────
-if [ -z "$(git config --global credential.helper 2>/dev/null)" ]; then
+# ── 2) עוזר-אישורי-הגיט (פר-ריפו-בלבד! שיעור-2026-04-20: עוזר-גלובלי-עם-טוקן-מת
+# מרעיל-גם-שיבוטים-פומביים-כשה-IP-מוגבל-קצב — לכן-מחווטים-מקומית-ב-my-project-בלבד) ──
+if [ -z "$(git -C "$ROOT" config credential.helper 2>/dev/null)" ]; then
   mkdir -p /home/z/.gitcred
   cat > /home/z/.gitcred/cred.sh <<'CREDEOF'
 #!/bin/sh
@@ -87,8 +95,8 @@ case "$1" in
 esac
 ASKEOF
   chmod 700 /home/z/.gitcred/cred.sh /home/z/.gitcred/askpass.sh
-  git config --global credential.helper '!/home/z/.gitcred/cred.sh'
-  say "selfheal-2: עוזר-אישורים חווב-מחדש (global credential.helper)"
+  git -C "$ROOT" config credential.helper '!/home/z/.gitcred/cred.sh'
+  say "selfheal-2: עוזר-אישורים חווב (מקומי-my-project · לא-גלובלי — מניעת-הרעלה)"
 else
   say "selfheal-2: עוזר-אישורים נוכח — לא-נוגעים"
 fi
