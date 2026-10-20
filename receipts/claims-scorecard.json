@@ -1,6 +1,6 @@
 {
  "schema": "SAOS-CLAIMS-SCORECARD/1",
- "at": "2026-10-20T05:20:08.520Z",
+ "at": "2026-10-20T05:35:32.217Z",
  "law": "צו-בעלים trace 1a1579cc5dfd1b15 — אין-טענה-בלי-ראיה-חיה; חוסר-ראיה = DEGRADED/BROKEN-כנה (LAW-3)",
  "truthScore": 94,
  "counts": {
@@ -22,23 +22,23 @@
    "claim": "הקרנל-הריבוני חי ומייצר-בלוקים (h עולה · לא-מושהה)",
    "verdict": "PROVEN",
    "evidence": {
-    "height": 829741,
-    "prevHeight": 829648,
+    "height": 830042,
+    "prevHeight": 829741,
     "advanced": true,
     "halted": false
    },
-   "probeMs": 232
+   "probeMs": 51
   },
   {
    "id": "dex-trading-live",
    "claim": "השוק-הריבוני סוחר-באמת (מילויים-חדשים-זורמים)",
    "verdict": "PROVEN",
    "evidence": {
-    "fillsTotal": 204839,
+    "fillsTotal": 205083,
     "swapsTotal": 72670,
-    "newFillsSinceLastRun": 75
+    "newFillsSinceLastRun": 244
    },
-   "probeMs": 114
+   "probeMs": 12
   },
   {
    "id": "fee-meter-health",
@@ -50,15 +50,15 @@
     "treasuryProfit": 2310,
     "ratchetEver": 18404281
    },
-   "probeMs": 147
+   "probeMs": 9
   },
   {
    "id": "economy-engine",
    "claim": "מנוע-הכלכלה (:3016) חי ומונה-רצף",
    "verdict": "PROVEN",
    "evidence": {
-    "seq": 73401,
-    "prevSeq": 69958,
+    "seq": 84275,
+    "prevSeq": 73401,
     "advanced": true
    },
    "probeMs": 2
@@ -68,12 +68,12 @@
    "claim": "גשר-דקס→כלכלה (:3017) משדר-מילויים-אמת-לספר-המשותף",
    "verdict": "PROVEN",
    "evidence": {
-    "polls": 84,
-    "inserted": 219,
+    "polls": 130,
+    "inserted": 343,
     "pollsAdvanced": true,
     "errors": 0
    },
-   "probeMs": 1
+   "probeMs": 2
   },
   {
    "id": "soldier-army-trading",
@@ -81,11 +81,11 @@
    "verdict": "PROVEN",
    "evidence": {
     "soldiers": 6,
-    "placedTotal": 25,
-    "filledMuTotal": 8105,
+    "placedTotal": 27,
+    "filledMuTotal": 10956,
     "actionsAgeMin": 1
    },
-   "probeMs": 3
+   "probeMs": 1
   },
   {
    "id": "sovereign-audit-functional",
@@ -96,18 +96,18 @@
     "lastError": null,
     "runAgeMin": 13
    },
-   "probeMs": 3
+   "probeMs": 2
   },
   {
    "id": "sovereign-voice-ops",
    "claim": "הקול-הריבוני (:3019) סורק-ומרפא-מתמשך",
    "verdict": "PROVEN",
    "evidence": {
-    "scans": 1,
-    "heals": 1,
-    "diskPct": 90
+    "scans": 4,
+    "heals": 4,
+    "diskPct": 91
    },
-   "probeMs": 1489
+   "probeMs": 3
   },
   {
    "id": "steem-voice-custody",
@@ -116,19 +116,19 @@
    "evidence": {
     "custody": "כספת-חיה (4/4-הוכח)",
     "account": "headcorner",
-    "broadcasts": 1
+    "broadcasts": 2
    },
-   "probeMs": 2
+   "probeMs": 3
   },
   {
    "id": "boot-verifier",
    "claim": "מאמת-האתחול (:3042) מזרים-tx-כלכלה-ללא-הפלות",
    "verdict": "PROVEN",
    "evidence": {
-    "sent": 9,
+    "sent": 10,
     "dropped": 0
    },
-   "probeMs": 1
+   "probeMs": 2
   },
   {
    "id": "llm-gateway",
@@ -148,7 +148,7 @@
     "anchors": 13,
     "ok": 12,
     "bad": [
-     "channels/giant"
+     "estate/Domain"
     ]
    },
    "probeMs": 4
@@ -160,7 +160,7 @@
    "evidence": {
     "lastAt": "2026-10-20T05:20:03.204Z",
     "lastVerdict": "SKIP",
-    "fileAgeMin": 0,
+    "fileAgeMin": 15,
     "loopExpectedMin": 30
    },
    "probeMs": 1
@@ -172,7 +172,7 @@
    "evidence": {
     "schema": "SAOS-INTERNAL-PNL/1",
     "publishedAt": "2026-10-19T14:20:36.991Z",
-    "fileAgeMin": 117
+    "fileAgeMin": 133
    },
    "probeMs": 0
   },
@@ -184,9 +184,9 @@
     "lastAt": "2026-10-19T14:24:25.298Z",
     "verdict": "PLAN-READY (census-only — no keys injected, honest)",
     "profitUsd24h": 0,
-    "fileAgeH": 2
+    "fileAgeH": 2.2
    },
-   "probeMs": 0
+   "probeMs": 1
   },
   {
    "id": "git-rail-value-flowing",
@@ -202,7 +202,7 @@
      "valueStuck": false
     }
    },
-   "probeMs": 3577
+   "probeMs": 3982
   },
   {
    "id": "dividend-lane-external",
@@ -223,7 +223,7 @@
     "ownerDividendMu": 8000,
     "note": "מסילת-השידור-מוכחת-חיה; תשלום-דיבידנד-לנמען-חוץ-ממתין-לכתובת-בעלים-מפורשת"
    },
-   "probeMs": 0
+   "probeMs": 1
   }
  ]
 }
