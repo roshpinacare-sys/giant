@@ -1,14 +1,19 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════════════════
-# boot-selfheal.sh — חוק-הרפואה-העצמית של האורגניזם (גל-93 · 2026-10-20)
+# boot-selfheal.sh — חוק-הרפואה-העצמית של האורגניזם (גל-94 · 2026-10-20)
 # ═══════════════════════════════════════════════════════════════════════
 # השיעור-שנמדד-בקציר-2026-10-20T03:21Z: הפלטפורמה החייתה את my-project אבל
 # לא את השכבות-החיות מחוץ-לעץ-הפרויקט — הכספת נשארה fail-closed (steem-voice
 # אילם), עוזר-האישורים אבד (אף-דחיפה לא יוצאת), המבקר איבד את ifixai, והדקס
 # עלה genesis-ריק בזמן שעדות-הגיט החזיקה h=828K. המערכת "התקפלה על עצמה".
 # החוק-החדש: הסקריפט הזה רץ בכל-אתחול (idempotent, אפס-נזק-אם-הכל-תקין)
-# ומרפא-את-כל-ארבעת-הפצעים-המוכחים-בעצמו. fail-honest: כל-שלב מדווח,
+# ומרפא-את-הפצעים-המוכחים-בעצמו. fail-honest: כל-שלב מדווח,
 # שום-כשל לא מזויף כהצלחה.
+#
+# שיעור-2026-10-20T06:0xZ (גל-94): טוקן-מוטמע-בקונפיג-פג-בשקט → כל-הדחיפות
+# מתות-בשקט כולל אטימת-הכספת (push-fail "could not read Username" ×10-ריפואים).
+# התרופה: אימות-חי-מול-API-באתחול → קובץ-TOKEN-מרכזי (0600) → עזר-אחד-שקורא-אותו
+# → חיווט-לכל-ריפואי-האטימה. אימות-חי = לא-סומכים-על-טענת-חיות-של-קובץ.
 # ═══════════════════════════════════════════════════════════════════════
 set -u
 ROOT="/home/z/my-project"
@@ -69,37 +74,48 @@ else
   say "selfheal-1: כספת נוכחת — לא-נוגעים"
 fi
 
-# ── 2) עוזר-אישורי-הגיט (פר-ריפו-בלבד! שיעור-2026-04-20: עוזר-גלובלי-עם-טוקן-מת
-# מרעיל-גם-שיבוטים-פומביים-כשה-IP-מוגבל-קצב — לכן-מחווטים-מקומית-ב-my-project-בלבד) ──
-if [ -z "$(git -C "$ROOT" config credential.helper 2>/dev/null)" ]; then
-  mkdir -p /home/z/.gitcred
-  cat > /home/z/.gitcred/cred.sh <<'CREDEOF'
+# ── 2) עוזר-אישורי-הגיט v2 (שיעור-2026-10-20: טוקן-מוטמע-בקונפיג-פג-בשקט → כל-הדחיפות
+# מתות-בשקט כולל-אטימת-הכספת. החוק: אימות-חי-באתחול-מול-API → קובץ-TOKEN-מרכזי →
+# עזר-אחד-שקורא-אותו → חיווט-לכל-ריפואי-האטימה. לעולם-לא-עוזר-גלובלי — מניעת-הרעלה) ──
+SEAL_REPOS=(
+  "$ROOT"
+  /home/z/estate/FleetHQ /home/z/estate/Domain /home/z/estate/Console
+  /home/z/estate/Pulse /home/z/estate/Sandbox /home/z/estate/roshpina
+  /home/z/estate/saos-dex /home/z/autonomy-fix
+)
+mkdir -p /home/z/.gitcred
+cat > /home/z/.gitcred/cred.sh <<'CREDEOF'
 #!/bin/sh
-# sovereign credential helper (פרוטוקול-git-credential: get) — קורא-PAT-בזמן-ריצה
+# sovereign credential helper v2 — קורא-את-הטוקן-החי-מקובץ-מאובטח (לא-טוקן-מוטמע-שיכול-לפוג)
 case "$1" in
   get)
-    f=/home/z/my-project/upload/pat.env
-    v=$(grep -hE '^[A-Za-z_]+=.' "$f" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"' | tr -d ' ')
-    [ -n "$v" ] || v=$(grep -hvE '^\s*(#|$)' "$f" 2>/dev/null | head -1 | tr -d '"' | tr -d ' ')
     echo "username=x-access-token"
-    echo "password=$v"
+    echo "password=$(cat /home/z/.gitcred/TOKEN 2>/dev/null)"
     ;;
 esac
 CREDEOF
-  cat > /home/z/.gitcred/askpass.sh <<'ASKEOF'
-#!/bin/sh
-case "$1" in
-  Username*) echo "x-access-token" ;;
-  Password*) grep -hvE '^\s*(#|$)' /home/z/my-project/upload/pat.env 2>/dev/null | head -1 | tr -d '"' | tr -d ' ' ;;
-  *) echo ;;
-esac
-ASKEOF
-  chmod 700 /home/z/.gitcred/cred.sh /home/z/.gitcred/askpass.sh
-  git -C "$ROOT" config credential.helper '!/home/z/.gitcred/cred.sh'
-  say "selfheal-2: עוזר-אישורים חווב (מקומי-my-project · לא-גלובלי — מניעת-הרעלה)"
+chmod 700 /home/z/.gitcred/cred.sh
+# אימות-חי: בוחרים-את-המועמד-החי-הראשון (HTTP 200) מבין-קובצי-הטוקן-המוכרים
+TOKEN_FILE=/home/z/.gitcred/TOKEN
+token_alive(){ [ -n "$1" ] && [ "$(curl -s -o /dev/null -w '%{http_code}' -m 12 -H "Authorization: Bearer $1" https://api.github.com/user)" = "200" ]; }
+CURRENT_TOKEN=$(cat "$TOKEN_FILE" 2>/dev/null)
+if ! token_alive "$CURRENT_TOKEN"; then
+  say "selfheal-2: טוקן-נוכחי מת/חסר — סריקת-מועמדים"
+  NEW_OK=0
+  for cand in "$ROOT/upload/גיטראש.txt" "$ROOT/upload/pat.env"; do
+    V=$(grep -hvE '^\s*(#|$)' "$cand" 2>/dev/null | head -1 | tr -d '"' | tr -d ' ')
+    if token_alive "$V"; then printf '%s' "$V" > "$TOKEN_FILE"; chmod 600 "$TOKEN_FILE"; NEW_OK=1; say "selfheal-2: טוקן-חי אומת-והוצב (HTTP 200 · $cand)"; break; fi
+  done
+  [ "$NEW_OK" = "1" ] || say "selfheal-2 WARN: אף-מועמד-לא-חי — fail-honest (דחיפות-ימשיכו-להיכשל-עד-טוקן-חדש)"
 else
-  say "selfheal-2: עוזר-אישורים נוכח — לא-נוגעים"
+  say "selfheal-2: טוקן-חי נוכח (HTTP 200) — לא-נוגעים"
 fi
+# חיווט-פר-ריפו-לכל-יעדי-האטימה (עזר-מרכזי-אחד · לעולם-לא-גלובלי — מניעת-הרעלה)
+WIRED=0
+for d in "${SEAL_REPOS[@]}"; do
+  if [ -d "$d/.git" ]; then git -C "$d" config credential.helper '!/home/z/.gitcred/cred.sh'; WIRED=$((WIRED+1)); else say "selfheal-2 WARN: ריפו-חסר $d"; fi
+done
+say "selfheal-2: חיווט-אישורים הושלם ל-$WIRED-ריפואים"
 
 # ── 3) מפתחות-ssh-ריבוניים (Tier-1 — לעולם-לא-פגים; מכסה saos-dex/FleetHQ/fleet-vault/steem) ──
 if [ ! -x /home/z/.secrets/ssh/tool/git-ssh-shim.mjs ] && [ -f /home/z/.secrets/.env.local ]; then
