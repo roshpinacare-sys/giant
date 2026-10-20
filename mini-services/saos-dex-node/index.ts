@@ -7,6 +7,7 @@
  *    — שער-המפעיל fail-closed נפתח רק מולו.
  * מפקח: אם-הפורט-חי → לא-מקים כפילות; אם-הבן-מת → הקמה-מחדש אחרי 5ש׳. */
 import { spawn } from "child_process";
+import { Database as SqliteDatabase } from "bun:sqlite";
 import { randomBytes } from "crypto";
 import fs from "fs";
 import path from "path";
@@ -86,6 +87,60 @@ async function ensureDexRoot(): Promise<boolean> {
 let child: ReturnType<typeof spawn> | null = null;
 let stopping = false;
 
+/* גל-93 · git-first hydration (2026-10-20 · הניתוח-שנמדד-אחרי-קציר-סנדבוקס):
+ * הקציר השאיר 3 עותקי-מצב סוטים: קרנל-מקומי genesis (h=0) · db-קנוני ישן
+ * (h=501K, מ-18/10) · עדות-גיט-חיה (dex-beat אוטמים h=828K בריפו). הקרנל
+ * דחה-כנה (snapshot-integrity) ואז עלה genesis-ריק בשקט — עולם-על-עולם.
+ * החוק-החדש: לפני-כל-עלייה, אם בעדות-הגיט הטרייה (origin/main:db/state-snapshot.json)
+ * יש גובה גבוה יותר מהקנוני — מזריקים אותה לקנוני ומרוקנים שורות-נגזרת
+ * (BlockHeader/SealRecord — כולן אטומות-בגיט) כדי שחוק-ה-corroboration-birth
+ * של chain.ts יקבל את עדות-הריפו הריבונית. כל-פעולה מגוללת-בלוג. אפס-זיוף:
+ * ה-snapshot שנכנס הוא בדיוק מה שאוטם ב-origin/main. */
+function gitFirstHydration(): void {
+  try {
+    const canonicalSnap = path.join(STATE_DIR, "state-snapshot.json");
+    const h = (p: string): number => {
+      try { return (JSON.parse(fs.readFileSync(p, "utf8")) as { state?: { height?: number } })?.state?.height ?? -1; }
+      catch { return -1; }
+    };
+    const localH = h(canonicalSnap);
+    const fetchRes = Bun.spawnSync(["git", "fetch", "--quiet", "origin", "main"], { cwd: DEX_ROOT, stdout: "ignore", stderr: "ignore" });
+    if (fetchRes.exitCode !== 0) { console.info("[saos-dex-node] hydration: fetch נכשל (לא-חוסם) — ממשיך-עם-המקומי"); return; }
+    const showRes = Bun.spawnSync(["git", "show", "origin/main:db/state-snapshot.json"], { cwd: DEX_ROOT, stdout: "pipe", stderr: "ignore" });
+    if (showRes.exitCode !== 0 || !showRes.stdout?.length) { console.info("[saos-dex-node] hydration: אין-snapshot ב-origin/main — ממשיך-עם-המקומי"); return; }
+    const tmpSnap = `${canonicalSnap}.origin-tmp`;
+    fs.writeFileSync(tmpSnap, showRes.stdout);
+    const originH = h(tmpSnap);
+    if (originH <= localH) {
+      fs.rmSync(tmpSnap, { force: true });
+      console.info(`[saos-dex-node] hydration: מקומי h${localH} ≥ origin h${originH} — לא-נוגעים`);
+      return;
+    }
+    const bk = `${STATE_DIR}/pre-hydration-backup-${Date.now()}`;
+    fs.mkdirSync(bk, { recursive: true });
+    for (const f of ["state-snapshot.json", "dex.db"]) {
+      try { fs.copyFileSync(path.join(STATE_DIR, f), path.join(bk, f)); } catch { /* חסר — נולד-חדש */ }
+    }
+    fs.copyFileSync(tmpSnap, canonicalSnap);
+    fs.rmSync(tmpSnap, { force: true });
+    /* ריקון-שורות-נגזרת: הראיה-הגיטית עדיפה; בלי-זה chain.ts דוחה (priorCount>0
+     * ואין-הקשר-רצוף לגובה-החדש) ועולה genesis. השורות עצמן אטומות-בגיט-HEAD. */
+    try {
+      const db = new SqliteDatabase(DB_FILE.replace(/^file:/, ""));
+      const before = db.query("SELECT COUNT(*) c FROM BlockHeader").get() as { c: number };
+      db.run("DELETE FROM BlockHeader");
+      db.run("DELETE FROM SealRecord");
+      db.run("VACUUM");
+      db.close();
+      console.warn(`[saos-dex-node] HYDRATION git-first: h${localH} → h${originH} (מ-origin/main, גובר על הקנוני) · שורות-נגזרת שנרוקנו: ${before.c} (אטומות-בגיט) · גיבוי: ${bk}`);
+    } catch (e) {
+      console.error(`[saos-dex-node] hydration: הזרקה-בוצעה אך ריקון-השורות-נכשל (${e instanceof Error ? e.message : String(e)}) — הקרנל עשוי-לדחות-כנה (fail-honest, לא-שתיקה)`);
+    }
+  } catch (e) {
+    console.error(`[saos-dex-node] hydration-שגיאה-כללית (לא-חוסם): ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
 async function boot(): Promise<void> {
   if (await portAlive()) {
     console.info("[saos-dex-node] פורט 3010 חי — לא-מקים כפילות");
@@ -100,6 +155,7 @@ async function boot(): Promise<void> {
     console.error("[saos-dex-node] ריפוי-שורש-נכשל — מנסה-שוב-במחזור-הבא (אפס-ירוק-מזויף)");
     return;
   }
+  gitFirstHydration();
   child = spawn("bun", ["run", "next", "dev", "-p", "3010", "-H", "127.0.0.1"], {
     cwd: DEX_ROOT,
     env: {
