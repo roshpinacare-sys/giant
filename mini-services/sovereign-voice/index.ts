@@ -456,6 +456,23 @@ function digestHtml(snap: Snapshot): string {
 }
 
 let scans = 0, heals = 0, bootedAt = Date.now();
+/* v5 · מרשם-הטענות + סדולת-הדיבידנד — מושתלים-בטיק (2026-10-20 · מסקנת-OOM):
+ * תהליכי-node-עצמאיים נקצרים-במחסור-זיכרון (dmesg: OOM-killer · 4GB-סנדבוקס).
+ * הפתרון: spawn-מהטיק-הקבוע — גם-אם-הילד-נקצר, הטיק-הבא-מקים-אותו-מחדש.
+ * זו-תחייה-מתמדת-מבנית: הלולאות-אינן-יכולות-למות-לנצח. */
+const CLAIMS_SCRIPT = "/home/z/my-project/scripts/claims-audit.mjs";
+const SWEEP_SCRIPT = "/home/z/work/saos-dex/grids/dividend-sweep.mjs";
+const CLAIMS_EVERY_MS = 15 * 60_000, SWEEP_EVERY_MS = 30 * 60_000;
+let lastClaimsAt = 0, lastSweepAt = 0;
+function runDetached(script: string, logFile: string, tag: string): void {
+  try {
+    fs.mkdirSync(path.dirname(logFile), { recursive: true });
+    const out = fs.openSync(logFile, "a");
+    const child = spawn("node", [script], { detached: true, stdio: ["ignore", out, out], env: process.env });
+    child.unref();
+    console.log(`[voice v5] ${tag} spawned (pid ${child.pid})`);
+  } catch (e) { console.log(`[voice v5] ${tag} spawn-fail: ${String(e).slice(0, 90)}`); }
+}
 async function tick(): Promise<void> {
   try {
     await scanFleet();
@@ -467,6 +484,9 @@ async function tick(): Promise<void> {
       lastFuelTendAt = Date.now();
       await fuelTend("periodic");
     }
+    /* v5: מרשם-הטענות (כל-15-דק) + סדולת-הדיבידנד (כל-30-דק) — תחייה-מתמדת */
+    if (Date.now() - lastClaimsAt >= CLAIMS_EVERY_MS) { lastClaimsAt = Date.now(); runDetached(CLAIMS_SCRIPT, "/home/z/my-project/receipts/claims-loop.log", "claims-audit"); }
+    if (Date.now() - lastSweepAt >= SWEEP_EVERY_MS) { lastSweepAt = Date.now(); runDetached(SWEEP_SCRIPT, "/home/z/work/saos-dex/grids/state/sweep-loop.log", "dividend-sweep"); }
     autoSeal();
     const crit = (lastSnapshot?.alerts ?? []).filter((a) => a.sev === "critical").length;
     console.log(`[voice] סריקה #${scans}: אזעקות=${lastSnapshot?.alerts.length ?? 0} (קריטי=${crit}) שגיאות-רשת=${lastSnapshot?.errors.length ?? 0} דיסק=${lastSnapshot?.diskUsedPct ?? "?"}%`);
