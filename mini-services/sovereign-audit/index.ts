@@ -87,8 +87,8 @@ function runLane(lane: (typeof LANES)[number], windowS = 24 * 3600): { decision:
   }
 }
 
-/* סדר-קביעת-החמור-מבין-המסילות: FINDINGS > AUDIT-ERROR > NO-EVENTS > CLEAR */
-const WORST_ORDER = ["FINDINGS", "AUDIT-ERROR", "NO-EVENTS", "CLEAR"];
+/* סדר-קביעת-החמור-מבין-המסילות: FINDINGS > BLOCK (הפרת-תקציב-iFixAi, נמדד-גל-94) > AUDIT-ERROR > NO-EVENTS > CLEAR */
+const WORST_ORDER = ["FINDINGS", "BLOCK", "AUDIT-ERROR", "NO-EVENTS", "CLEAR"];
 function worst(decisions: string[]): string {
   for (const d of WORST_ORDER) if (decisions.includes(d)) return d;
   return decisions[0] ?? "?";

@@ -1,0 +1,356 @@
+{
+  "decision": "BLOCK",
+  "violations": [
+    {
+      "rule": "budget",
+      "code": "BUDGET_EXCEEDED",
+      "event_id": "7e4514c502d0daf2",
+      "message": "Configured actor:voice budget rule 0 exceeded its integer limit.",
+      "witness_ids": [
+        "3656af51728a1f1f",
+        "81d0eaded5bf58e2",
+        "abec2b5044c8efb5",
+        "ce6628c44bb07280",
+        "a15bb2679aaa913d",
+        "d00265f56d659a19",
+        "11d06b8e3fed9aae",
+        "9ebbe2fceb353fa2",
+        "29305d4e8450dd48",
+        "eb14e16f5b0ffb86",
+        "0f8aefda486d711e",
+        "dad3c8ec09fd5c8e",
+        "db4557665fcc1dcc",
+        "7e4514c502d0daf2"
+      ],
+      "actor_id": null
+    }
+  ],
+  "coverage_issues": [],
+  "checked_actions": 41,
+  "completed_actions": 41,
+  "failed_actions": 0,
+  "family_counts": {
+    "graph": 43,
+    "permission": 41,
+    "approval": 0,
+    "delegation": 0,
+    "budget": 41,
+    "citation": 0
+  },
+  "family_status": {
+    "graph": "EVALUATED",
+    "permission": "EVALUATED",
+    "approval": "NOT_EVALUATED",
+    "delegation": "NOT_EVALUATED",
+    "budget": "EVALUATED",
+    "citation": "NOT_EVALUATED"
+  },
+  "graph_edges": [
+    [
+      "7d3169d05198e28f",
+      "3656af51728a1f1f"
+    ],
+    [
+      "3656af51728a1f1f",
+      "81d0eaded5bf58e2"
+    ],
+    [
+      "81d0eaded5bf58e2",
+      "abec2b5044c8efb5"
+    ],
+    [
+      "abec2b5044c8efb5",
+      "ce6628c44bb07280"
+    ],
+    [
+      "ce6628c44bb07280",
+      "a15bb2679aaa913d"
+    ],
+    [
+      "a15bb2679aaa913d",
+      "d00265f56d659a19"
+    ],
+    [
+      "d00265f56d659a19",
+      "11d06b8e3fed9aae"
+    ],
+    [
+      "11d06b8e3fed9aae",
+      "9ebbe2fceb353fa2"
+    ],
+    [
+      "9ebbe2fceb353fa2",
+      "29305d4e8450dd48"
+    ],
+    [
+      "29305d4e8450dd48",
+      "eb14e16f5b0ffb86"
+    ],
+    [
+      "eb14e16f5b0ffb86",
+      "0f8aefda486d711e"
+    ],
+    [
+      "0f8aefda486d711e",
+      "dad3c8ec09fd5c8e"
+    ],
+    [
+      "dad3c8ec09fd5c8e",
+      "db4557665fcc1dcc"
+    ],
+    [
+      "db4557665fcc1dcc",
+      "7e4514c502d0daf2"
+    ],
+    [
+      "7e4514c502d0daf2",
+      "7217b08b61071930"
+    ],
+    [
+      "7217b08b61071930",
+      "3bab11b32270337b"
+    ],
+    [
+      "3bab11b32270337b",
+      "4f0ca668d6b2ae00"
+    ],
+    [
+      "4f0ca668d6b2ae00",
+      "d4757ca86d8c16ad"
+    ],
+    [
+      "d4757ca86d8c16ad",
+      "2de7c2ed8422d9b8"
+    ],
+    [
+      "2de7c2ed8422d9b8",
+      "bf6bebae336655cb"
+    ],
+    [
+      "bf6bebae336655cb",
+      "ea458778988a9079"
+    ],
+    [
+      "ea458778988a9079",
+      "6ff9ef6efb427871"
+    ],
+    [
+      "6ff9ef6efb427871",
+      "cbb84e05bac2565f"
+    ],
+    [
+      "cbb84e05bac2565f",
+      "ee39d9fcf43847a4"
+    ],
+    [
+      "ee39d9fcf43847a4",
+      "843c76126402c9f9"
+    ],
+    [
+      "843c76126402c9f9",
+      "8e28bd2430209c9f"
+    ],
+    [
+      "8e28bd2430209c9f",
+      "566c105ea09416ad"
+    ],
+    [
+      "566c105ea09416ad",
+      "cf5399f74aef238c"
+    ],
+    [
+      "cf5399f74aef238c",
+      "a9f42422d9b50f57"
+    ],
+    [
+      "a9f42422d9b50f57",
+      "77187cdd30a5464f"
+    ],
+    [
+      "77187cdd30a5464f",
+      "b82c5c80ce74c01a"
+    ],
+    [
+      "b82c5c80ce74c01a",
+      "cd7f2dee9421248c"
+    ],
+    [
+      "cd7f2dee9421248c",
+      "1a51b4fe5aac8fa3"
+    ],
+    [
+      "1a51b4fe5aac8fa3",
+      "31f95d563acc6280"
+    ],
+    [
+      "31f95d563acc6280",
+      "ab58bb1bb2c210a6"
+    ],
+    [
+      "ab58bb1bb2c210a6",
+      "04632367e1abdaf9"
+    ],
+    [
+      "04632367e1abdaf9",
+      "13ccc31edf193702"
+    ],
+    [
+      "13ccc31edf193702",
+      "cbf5068a5a574aaf"
+    ],
+    [
+      "cbf5068a5a574aaf",
+      "c9c83f7e17a683d3"
+    ],
+    [
+      "c9c83f7e17a683d3",
+      "2f9af8701e58a437"
+    ],
+    [
+      "2f9af8701e58a437",
+      "dc557db8169eb4e5"
+    ],
+    [
+      "dc557db8169eb4e5",
+      "125def44763335df"
+    ]
+  ],
+  "authority_paths": {
+    "3656af51728a1f1f": [
+      "3656af51728a1f1f"
+    ],
+    "81d0eaded5bf58e2": [
+      "81d0eaded5bf58e2"
+    ],
+    "abec2b5044c8efb5": [
+      "abec2b5044c8efb5"
+    ],
+    "ce6628c44bb07280": [
+      "ce6628c44bb07280"
+    ],
+    "a15bb2679aaa913d": [
+      "a15bb2679aaa913d"
+    ],
+    "d00265f56d659a19": [
+      "d00265f56d659a19"
+    ],
+    "11d06b8e3fed9aae": [
+      "11d06b8e3fed9aae"
+    ],
+    "9ebbe2fceb353fa2": [
+      "9ebbe2fceb353fa2"
+    ],
+    "29305d4e8450dd48": [
+      "29305d4e8450dd48"
+    ],
+    "eb14e16f5b0ffb86": [
+      "eb14e16f5b0ffb86"
+    ],
+    "0f8aefda486d711e": [
+      "0f8aefda486d711e"
+    ],
+    "dad3c8ec09fd5c8e": [
+      "dad3c8ec09fd5c8e"
+    ],
+    "db4557665fcc1dcc": [
+      "db4557665fcc1dcc"
+    ],
+    "7e4514c502d0daf2": [
+      "7e4514c502d0daf2"
+    ],
+    "7217b08b61071930": [
+      "7217b08b61071930"
+    ],
+    "3bab11b32270337b": [
+      "3bab11b32270337b"
+    ],
+    "4f0ca668d6b2ae00": [
+      "4f0ca668d6b2ae00"
+    ],
+    "d4757ca86d8c16ad": [
+      "d4757ca86d8c16ad"
+    ],
+    "2de7c2ed8422d9b8": [
+      "2de7c2ed8422d9b8"
+    ],
+    "bf6bebae336655cb": [
+      "bf6bebae336655cb"
+    ],
+    "ea458778988a9079": [
+      "ea458778988a9079"
+    ],
+    "6ff9ef6efb427871": [
+      "6ff9ef6efb427871"
+    ],
+    "cbb84e05bac2565f": [
+      "cbb84e05bac2565f"
+    ],
+    "ee39d9fcf43847a4": [
+      "ee39d9fcf43847a4"
+    ],
+    "843c76126402c9f9": [
+      "843c76126402c9f9"
+    ],
+    "8e28bd2430209c9f": [
+      "8e28bd2430209c9f"
+    ],
+    "566c105ea09416ad": [
+      "566c105ea09416ad"
+    ],
+    "cf5399f74aef238c": [
+      "cf5399f74aef238c"
+    ],
+    "a9f42422d9b50f57": [
+      "a9f42422d9b50f57"
+    ],
+    "77187cdd30a5464f": [
+      "77187cdd30a5464f"
+    ],
+    "b82c5c80ce74c01a": [
+      "b82c5c80ce74c01a"
+    ],
+    "cd7f2dee9421248c": [
+      "cd7f2dee9421248c"
+    ],
+    "1a51b4fe5aac8fa3": [
+      "1a51b4fe5aac8fa3"
+    ],
+    "31f95d563acc6280": [
+      "31f95d563acc6280"
+    ],
+    "ab58bb1bb2c210a6": [
+      "ab58bb1bb2c210a6"
+    ],
+    "04632367e1abdaf9": [
+      "04632367e1abdaf9"
+    ],
+    "13ccc31edf193702": [
+      "13ccc31edf193702"
+    ],
+    "cbf5068a5a574aaf": [
+      "cbf5068a5a574aaf"
+    ],
+    "c9c83f7e17a683d3": [
+      "c9c83f7e17a683d3"
+    ],
+    "2f9af8701e58a437": [
+      "2f9af8701e58a437"
+    ],
+    "dc557db8169eb4e5": [
+      "dc557db8169eb4e5"
+    ]
+  },
+  "budget_totals": {
+    "actor:voice": 320
+  },
+  "policy_digest": "58d9ac2a324fa858331a36a12936cd3bb7199c057a2079834f3578380cc642b0",
+  "capture_digest": "9b9781310a96d489e62c7b34b9463c1775a484a0042e078fd0d84d21481d2aed",
+  "limitations": [
+    "Capture completeness, collector identity, actor identity, human approval and costs are caller declarations, not authenticated facts.",
+    "This passive audit inspects already-recorded actions and does not prevent execution or reverse effects.",
+    "Recorded dependency edges establish declared lineage, not physical causality or completeness of unobserved activity.",
+    "Citations verify recorded source identity and content digests, not semantic entailment, factual truth or licensing.",
+    "Integer costs use caller-defined units; this is not billing proof or currency conversion.",
+    "Checksums provide integrity, not authenticity, production certification or deployment authorization."
+  ]
+}
