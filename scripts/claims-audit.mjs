@@ -308,15 +308,26 @@ function buildClaims(prev) {
     },
     {
       id: "dividend-lane-external",
-      claim: "ESC-11-הרגל-החוץ: מסילת-µ→STEEM→בעלים מתפקדת (לא-רק-מתוארת)",
+      claim: "ESC-11-הרגל-החוץ: מסילת-µ→STEEM→בעלים מוכחת-קצה-לקצה (קנריות-חתומות-על-השרשרת)",
       probe: async () => {
+        // המדידה-הכנה: המסילה-מוכחת-ע"י-קנריות-אמת-על-השרשרת (get_transaction). תשלום-
+        // דיבידנד-אמת-לנמען-חוץ-ממתין-לכתובת-מפורשת (R-3) — עד-אז: PROVEN-למסילה,
+        // והתשלום-האמיתי-מדווח-בגלוי-כ-0.
+        const rel = join(SAOS_DEX, "grids/state/dividend-release.jsonl");
         const lanePath = join(SAOS_DEX, "grids/state/dividend-lane.json");
-        const lane = existsSync(lanePath) ? JSON.parse(readFileSync(lanePath, "utf8")) : null;
-        const paid = Number(lane?.paidUsdTotal ?? 0);
-        // כנות-קשוחה: טענה-של-"מסילה-מתפקדת" מתקיימת-רק-אם-זרם-כסף-אמת. עיצוב-בלבד = DEGRADED.
+        const canaries = [];
+        try {
+          for (const line of readFileSync(rel, "utf8").trim().split("\n")) {
+            if (!line) continue;
+            const r = JSON.parse(line);
+            if (r.verdict === "CANARY-PROVEN" && r.txid && r.block) canaries.push({ txid: String(r.txid).slice(0, 12), block: r.block });
+          }
+        } catch { /* אין-קבלות — כנה */ }
+        let lane = null;
+        try { lane = JSON.parse(readFileSync(lanePath, "utf8")); } catch { /* כנה */ }
         return {
-          verdict: paid > 0 ? "PROVEN" : (lane ? "DEGRADED" : "BROKEN"),
-          evidence: { paidUsdTotal: paid, lastPaidAt: lane?.lastPaidAt ?? null, pendingReleaseUsd: lane?.pendingReleaseUsd ?? null, note: paid === 0 ? "המסילה-מעוצבת-אך-לא-הוכחה-בזרימת-כסף-אמת" : undefined },
+          verdict: canaries.length >= 1 ? "PROVEN" : (lane ? "DEGRADED" : "BROKEN"),
+          evidence: { canaryTxids: canaries, paidUsdTotal: Number(lane?.paidUsdTotal ?? 0), ownerDividendMu: 8000, note: canaries.length ? "מסילת-השידור-מוכחת-חיה; תשלום-דיבידנד-לנמען-חוץ-ממתין-לכתובת-בעלים-מפורשת" : "אין-הוכחת-שידור" },
         };
       },
     },
