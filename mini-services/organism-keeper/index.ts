@@ -34,7 +34,18 @@ fs.mkdirSync(STATE, { recursive: true });
 fs.mkdirSync(ESTATE, { recursive: true });
 fs.mkdirSync(CHANNELS, { recursive: true });
 
-/* ── נגד-זומבים: מופע-יחיד ────────────────────────────────────────────────── */
+/* ── נגד-זומבים: מופע-יחיד + התאוששות-מנעילה-יתומה (גל-94: נמדד — lockfile-יתום
+ * מ-16.10 חסם-את-ה-keeper-מלעלות-ימים; הלוג-קפוא-ואיש-לא-שם-לב) ────────────── */
+function staleLockRecovery(): void {
+  try {
+    const pid = parseInt(fs.readFileSync(LOCK, "utf8").trim(), 10);
+    if (Number.isFinite(pid) && pid > 0) {
+      try { process.kill(pid, 0); console.log(`[keeper] מופע-אחר-חי (pid=${pid}) — יוצא בכבוד`); process.exit(0); }
+      catch { fs.unlinkSync(LOCK); console.log(`[keeper] נעילה-יתומה (pid=${pid} מת) — מנוקה, נכנס`); }
+    } else { fs.unlinkSync(LOCK); }
+  } catch { /* אין-נעילה — ראשון */ }
+}
+staleLockRecovery();
 try {
   const fd = fs.openSync(LOCK, "wx");
   fs.writeSync(fd, String(process.pid));
@@ -141,20 +152,47 @@ async function ensureEstateServices(): Promise<void> {
 /* ── 4 · דופק-בריאות כנה ──────────────────────────────────────────────────── */
 const PROBES: Array<{ name: string; port: number }> = [
   { name: "reception", port: 3000 },
+  { name: "console-home", port: 3050 },   // גל-94 · הבית-האמיתי-של-הקונסולה
   { name: "fleet-hq-app", port: 3002 },
   { name: "foreman", port: 3010 },
+  { name: "gateway", port: 3011 },
   { name: "fleet-economy", port: 3016 },
+  { name: "bridge", port: 3017 },
+  { name: "army", port: 3018 },
+  { name: "voice", port: 3019 },
+  { name: "audit", port: 3022 },
   { name: "office-live", port: 3036 },
   { name: "office-selfcheck", port: 3040 },
   { name: "office-recruit", port: 3041 },
   { name: "boot-verifier", port: 3042 },
 ];
 
-async function healthTick(): Promise<void> {
+/* פורטי-ליבה: אם-אחד-מהם-מת → קריאה-ל-resurrect-fleet.sh (v4 — כולל-קונסולה:3050).
+ * כך-התחייה-כבר-לא-בת-אדון-לעליית-Next (השורש-שנמדד-גל-94) — לולאת-ה-keeper-בת-60 ש׳
+ * מפעילה-אותה-באופן-עצמאי. הסקריפט-אידמפוטנטי (probe-לפני-כל-spawn) — אין-זומבים. */
+const CORE_PORTS = [3000, 3050, 3010, 3016, 3017, 3018, 3022, 3042];
+let lastResurrectAt = 0;
+const RESURRECT_COOLDOWN_MS = 5 * 60_000;
+
+async function healTick(status: Record<string, boolean>): Promise<void> {
+  const deadCore = CORE_PORTS.filter((p) => !status[PROBES.find((x) => x.port === p)?.name ?? ""]);
+  if (deadCore.length === 0) return;
+  const now = Date.now();
+  if (now - lastResurrectAt < RESURRECT_COOLDOWN_MS) {
+    log({ action: "resurrect-skipped-cooldown", deadCore });
+    return;
+  }
+  lastResurrectAt = now;
+  log({ action: "resurrect-invoked", deadCore });
+  spawnDetached("bash", ["/home/z/my-project/scripts/resurrect-fleet.sh"], "/home/z/my-project", "/home/z/my-project/state/keeper-resurrect.log");
+}
+
+async function healthTick(): Promise<Record<string, boolean>> {
   const status: Record<string, boolean> = {};
   for (const p of PROBES) status[p.name] = await tcpOpen(p.port);
   const tokenOk = fs.existsSync(PAT_FILE) && fs.statSync(PAT_FILE).size > 10;
   log({ action: "tick", ports: status, tokenPresent: tokenOk });
+  return status;
 }
 
 /* ── לולאה ────────────────────────────────────────────────────────────────── */
@@ -162,7 +200,9 @@ async function cycle(): Promise<void> {
   try { await ensureGitWiring(); } catch (e) { log({ action: "cycle-error", at: "git-wiring", error: String(e) }); }
   try { await ensureEstate(); } catch (e) { log({ action: "cycle-error", at: "estate", error: String(e) }); }
   try { await ensureEstateServices(); } catch (e) { log({ action: "cycle-error", at: "estate-services", error: String(e) }); }
-  try { await healthTick(); } catch (e) { log({ action: "cycle-error", at: "tick", error: String(e) }); }
+  let status: Record<string, boolean> = {};
+  try { status = await healthTick(); } catch (e) { log({ action: "cycle-error", at: "tick", error: String(e) }); }
+  try { await healTick(status); } catch (e) { log({ action: "cycle-error", at: "heal", error: String(e) }); }
 }
 
 console.log(`[organism-keeper] חי · pid=${process.pid} · estate-orchestrator · חוק-נגד-זומבים פעיל (lockfile + בדיקת-פורט)`);

@@ -1,10 +1,15 @@
 #!/bin/bash
-# resurrect-fleet.sh — שרשרת-התאוששות-ריבונית על-עץ-הפלטפורמה (v3 · 2026-10-18)
-# נזרק-detached מ-instrumentation.ts בכל-עליית-Next (:3000 = דלת-הבית שנולדה).
+# resurrect-fleet.sh — שרשרת-התאוששות-ריבונית על-עץ-הפלטפורמה (v4 · 2026-10-20)
+# נזרק-detached מ-instrumentation.ts בכל-עליית-Next (:3000 = דלת-הבית שנולדה)
+# ומ-organism-keeper כל-דקה-כשפורט-ליבה-מת (גל-94: תחייה-בלתי-תלויה-בקונסולה).
+#
 # חוק-סדר-עלייה (מלחמת-הפורטים 20261018): ה-DEX-next-dev-שנולד-ראשון חוטף-גם-:3000
-# — לכן: קודם מאומתת-הקונסולה (אנחנו-בתוכה), אחר-כך הכלכלה (מנעול-מגן), אחר-כך
-# הדקס-דרך-משגיחו (portAlive-guard), ורק-אז השאר. כל-הקמה = דפוס-אימוץ-יתום
+# — לכן: הקונסולה-חיה-על :3050 (הדקס-מנתב / ← 3050), אחר-כך הכלכלה (מנעול-מגן),
+# אחר-כך הדקס-דרך-משגיחו (portAlive-guard), ורק-אז השאר. כל-הקמה = דפוס-אימוץ-יתום
 # (setsid nohup </dev/null) → מתייתם-ל-init → חי-בקבוצת-הפלטפורמה.
+#
+# גל-94 · תיקון-שורש (נמדד): הקונסולה:3050 לא-הייתה-בכלל-בסקריפט — היא-הוקמה-ידנית
+# וכשמתה, 3000 נפל-ל-502 ואיש-לא-החזיר-אותה. מעתה-היא-ערך-ראשון-כאן-ובמרפא-ב-voice.
 LOG="/home/z/my-project/state/fleet-resurrect.log"
 mkdir -p /home/z/my-project/state
 log() { echo "$(date -u +%FT%TZ) $1" >> "$LOG"; }
@@ -18,9 +23,16 @@ spawn_dir() { # $1=dir $2=cmd $3=name
 
 log "═══ resurrect-fleet התחיל (ppid-tree=platform-via-Next) ═══"
 
-# 0. הדלת שנולדה (אנחנו-בתוכה) — מאומתת לפני-הכל
+# 0. דלת-הבית :3000 (מוחזקת-על-ידי-הדקס-לפי-הדוקטרינה) — מאומתת-לפני-הכל
 for i in 1 2 3 4 5 6; do probe 3000 "" && break; sleep 5; done
-if probe 3000 ""; then log "OK console:3000 חיה (אנחנו-בנה)"; else log "WARN console:3000 לא-מאומתת — ממשיכים-בזהירות"; fi
+if probe 3000 ""; then log "OK door:3000 חיה (דקס+גשר-תצוגה)"; else log "WARN door:3000 לא-מאומתת — ממשיכים-בזהירות"; fi
+
+# 0.5 · גל-94: הקונסולה-האמיתית :3050 — הבית-של-האפליקציה-שהמפעיל-רואה (ניתוב / מהדקס)
+if ! probe 3050 ""; then
+  spawn_dir /home/z/my-project "./node_modules/.bin/next dev -p 3050 >> dev.log 2>&1" "console:3050"
+  for i in 1 2 3 4 5 6; do sleep 5; probe 3050 "" && break; done
+  probe 3050 "" && log "OK console:3050 הוקמה" || log "FAIL console:3050 (נמדד — ראה dev.log)"
+else log "OK console:3050 חיה"; fi
 
 # 1. הלב — כלכלה :3016 (המנעול-מגן-מפני-כותב-כפול; מופע-שני-יוצא-בכנות)
 if ! probe 3016 "/health"; then
@@ -45,8 +57,10 @@ declare -A SVC=(
   [voice:3019]="/home/z/my-project/mini-services/sovereign-voice|bun run dev >> voice.log 2>&1"
   [audit:3022]="/home/z/my-project/mini-services/sovereign-audit|bun run dev >> audit.log 2>&1"
   [boot-verifier:3042]="/home/z/my-project/mini-services/boot-verifier|bun run dev >> node.log 2>&1"
+  [gateway:3011]="/home/z/my-project/mini-services/sovereign-gateway|bun index.ts >> gateway.log 2>&1"
+  [office-live:3036]="/home/z/my-project/mini-services/office-live|bun index.ts >> office-live.log 2>&1"
 )
-for key in bridge:3017 army:3018 voice:3019 audit:3022 boot-verifier:3042; do
+for key in bridge:3017 army:3018 voice:3019 audit:3022 boot-verifier:3042 gateway:3011 office-live:3036; do
   port="${key##*:}"; name="${key%%:*}"
   IFS='|' read -r dir cmd <<< "${SVC[$key]}"
   if ! probe "$port" "/health"; then
