@@ -28,9 +28,18 @@ function appendLog(s: string): void {
 }
 
 function runAudit(windowS = 24 * 3600): { decision: string; events: number } {
-  const r = spawnSync("python3", [AUDIT_SCRIPT, String(windowS)], {
+  // תיקון-שורש (2026-10-20 · מרשם-טענות): spawnSync("python3") היה נופל-על-PATH-של-
+  // השירות-שאינו-מכיל-את-ה-venv (/home/z/.venv) → ModuleNotFoundError: ifixai — המבקר
+  // "חי" ב-port אבל-מת-פונקציונלית (AUDIT-ERROR קבוע). עתה: מוצא-מתוך-שלושה-מועמדים
+  // מוכחים — ה-venv הקנוני, שם-מלא-בשרת, ו-python3 רגיל (גיבוי-אחרון). fail-honest.
+  const CANDIDATES = ["/home/z/.venv/bin/python3", "/usr/bin/python3", "python3"];
+  const py = CANDIDATES.find((c) => {
+    try { return spawnSync(c.startsWith("/") ? c : "which", c.startsWith("/") ? [] : [c]).status === 0; } catch { return false; }
+  }) ?? "python3";
+  const r = spawnSync(py, [AUDIT_SCRIPT, String(windowS)], {
     timeout: 120_000,
     encoding: "utf8",
+    env: { ...process.env, PATH: `/home/z/.venv/bin:${process.env.PATH ?? ""}` },
   });
   lastRunAt = Date.now();
   runs++;
