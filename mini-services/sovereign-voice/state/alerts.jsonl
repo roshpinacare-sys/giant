@@ -142,3 +142,15 @@
 {"ts":1792502778226,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (28 כשלים) → respawn=true → verified=false","status":"ledger"}
 {"ts":1792503046399,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
 {"ts":1792503938452,"key":"console-5xx","sev":"critical","text":"הקונסולה :3000 מחזירה 502 — דלת-הבית-פגומה","status":"ledger"}
+{"ts":1792504838812,"key":"ledger-verify","sev":"critical","text":"אימות-שרשרת נכשל: {\"ok\":false,\"checked\":104994,\"brokenAt\":109860}","status":"ledger"}
+{"ts":1792504838825,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
+{"ts":1792504838827,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · tamar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · shachar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · aluf:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · erez:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · gal:Error: POST http://127.0.0.1:3010/saos-dex/api/dex","status":"ledger"}
+{"ts":1792504863840,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (35 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792505421773,"key":"console-5xx","sev":"critical","text":"הקונסולה :3000 מחזירה 502 — דלת-הבית-פגומה","status":"ledger"}
+{"ts":1792505421813,"key":"console-5xx","sev":"critical","text":"הקונסולה :3000 מחזירה 502 — דלת-הבית-פגומה","status":"ledger"}
+{"ts":1792505421833,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
+{"ts":1792505421833,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 9 שגיאות (היה 0)","status":"ledger"}
+{"ts":1792505421834,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · tamar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · shachar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · aluf:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · erez:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · gal:Error: POST http://127.0.0.1:3010/saos-dex/api/dex","status":"ledger"}
+{"ts":1792505421903,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
+{"ts":1792505421904,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 9 שגיאות (היה 0)","status":"ledger"}
+{"ts":1792505421905,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · tamar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · shachar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · aluf:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · erez:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · gal:Error: POST http://127.0.0.1:3010/saos-dex/api/dex","status":"ledger"}

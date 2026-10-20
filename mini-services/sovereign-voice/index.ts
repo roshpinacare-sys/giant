@@ -54,16 +54,23 @@ const FLEET = {
   audit: "http://127.0.0.1:3022",
 };
 
-/* ── חוק-סדר-עלייה: הסדר במערך = סדר-הריפוי. הקונסולה-ראשונה (דלת-הבית), אחר-כך
- * הלב, אחר-כך הבורסה דרך-המשגיח שלה (יש-לו portAlive-guard משלו), אחר-כך השאר. ── */
+/* ── חוק-סדר-עלייה: הסדר במערך = סדר-הריפוי. הקונסולה-ראשונה, אחר-כך הלב, אחר-כך
+ * הבורסה דרך-המשגיח שלה (יש-לו portAlive-guard משלו), אחר-כך השאר.
+ *
+ * גל-94 · תיקון-מפת-הריפוי (נמדד-חי: heal-log fails:35):
+ *   המרפא-הישן-ניסה-להקים-קונסולה-על :3000 — אבל-חוק-מלחמת-הפורטים קובע-שהדקס-מחזיק
+ *   את :3000 ומנתב / ← קונסולה:3050. התוצאה: EADDRINUSE-אינסופי, respawn=true,
+ *   verified=false, 35 כישלונות. הקונסולה-חוזרת-לביתה :3050. ── */
 const HEALABLE = [
-  { id: "console", port: 3000, dir: "/home/z/my-project", log: "dev.log", cmd: `cd /home/z/my-project && setsid nohup bash -c './node_modules/.bin/next dev -p 3000 > dev.log 2>&1' </dev/null &` },
+  { id: "console", port: 3050, dir: "/home/z/my-project", log: "dev.log", cmd: `cd /home/z/my-project && setsid nohup bash -c './node_modules/.bin/next dev -p 3050 >> dev.log 2>&1' </dev/null &` },
   { id: "economy", port: 3016, dir: path.join(import.meta.dir, "..", "fleet-economy"), log: "economy.log", cmd: `cd '${path.join(import.meta.dir, "..", "fleet-economy")}' && setsid nohup bun index.ts >> economy.log 2>&1 </dev/null &` },
   { id: "dex", port: 3010, dir: path.join(import.meta.dir, "..", "saos-dex-node"), log: "proxy.log", cmd: `cd '${path.join(import.meta.dir, "..", "saos-dex-node")}' && setsid nohup bun index.ts >> proxy.log 2>&1 </dev/null &`, gate: "console" },
   { id: "bridge", port: 3017, dir: path.join(import.meta.dir, "..", "dex-economy-bridge"), log: "bridge.log", cmd: `cd '${path.join(import.meta.dir, "..", "dex-economy-bridge")}' && setsid nohup bun index.ts >> bridge.log 2>&1 </dev/null &` },
   { id: "army", port: 3018, dir: path.join(import.meta.dir, "..", "soldier-army"), log: "army.log", cmd: `cd '${path.join(import.meta.dir, "..", "soldier-army")}' && setsid nohup bun run dev >> army.log 2>&1 </dev/null &` },
   { id: "audit", port: 3022, dir: path.join(import.meta.dir, "..", "sovereign-audit"), log: "audit.log", cmd: `cd '${path.join(import.meta.dir, "..", "sovereign-audit")}' && setsid nohup bun run dev >> audit.log 2>&1 </dev/null &` },
   { id: "boot-verifier", port: 3042, dir: path.join(import.meta.dir, "..", "boot-verifier"), log: "node.log", cmd: `cd '${path.join(import.meta.dir, "..", "boot-verifier")}' && setsid nohup bun run dev >> node.log 2>&1 </dev/null &` },
+  { id: "gateway", port: 3011, dir: path.join(import.meta.dir, "..", "sovereign-gateway"), log: "gateway.log", cmd: `cd '${path.join(import.meta.dir, "..", "sovereign-gateway")}' && setsid nohup bun index.ts >> gateway.log 2>&1 </dev/null &` },
+  { id: "office-live", port: 3036, dir: path.join(import.meta.dir, "..", "office-live"), log: "office-live.log", cmd: `cd '${path.join(import.meta.dir, "..", "office-live")}' && setsid nohup bun index.ts >> office-live.log 2>&1 </dev/null &` },
 ] as const;
 
 /* ── Posta (אופציונלי) ── */
@@ -261,10 +268,17 @@ function diskGuardian(): { acted: boolean; steps: string[]; before: number; afte
 /* ── מפעיל-פנימי: ריפוי-בדפוס-האימוץ + חוק-סדר-עלייה ── */
 const failStreak: Record<string, number> = {};
 const aliveCache: Record<string, boolean> = {};
-async function probe(port: number): Promise<boolean> {
-  try { await jget(`http://127.0.0.1:${port}/`, 4000); return true; } catch {
-    try { await jget(`http://127.0.0.1:${port}/health`, 4000); return true; } catch { return false; }
+/* גל-94 · סמנטיקת-חיות מדויקת (נמדד: dex משיב 404 על / · office-live משיב 400):
+ * חיות = תשובת-HTTP כלשהי (השכבה-חיה) · מוות = שגיאת-רשת/זמן-קצה בלבד.
+ * ה-probe-הישן (r.ok) היה-מתייחס-לשירות-שמשיב-404/400-כמת → מפעל-זומבים.
+ * ה-5xx-ממשיך-להיות-מדווח-כאזעקה בסריקת-הצילום — כאן-זה-מד-דופק, לא-מד-איכות. */
+async function alive(port: number): Promise<boolean> {
+  try { await fetch(`http://127.0.0.1:${port}/`, { signal: AbortSignal.timeout(4000) }); return true; } catch {
+    try { await fetch(`http://127.0.0.1:${port}/health`, { signal: AbortSignal.timeout(4000) }); return true; } catch { return false; }
   }
+}
+async function probe(port: number): Promise<boolean> {
+  return alive(port);
 }
 function respawn(svc: { id: string; cmd: string }): boolean {
   try {
