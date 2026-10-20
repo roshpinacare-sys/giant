@@ -1,6 +1,6 @@
 {
  "schema": "SAOS-CLAIMS-SCORECARD/1",
- "at": "2026-10-20T05:50:32.902Z",
+ "at": "2026-10-20T06:10:32.149Z",
  "law": "צו-בעלים trace 1a1579cc5dfd1b15 — אין-טענה-בלי-ראיה-חיה; חוסר-ראיה = DEGRADED/BROKEN-כנה (LAW-3)",
  "truthScore": 97,
  "counts": {
@@ -22,58 +22,58 @@
    "claim": "הקרנל-הריבוני חי ומייצר-בלוקים (h עולה · לא-מושהה)",
    "verdict": "PROVEN",
    "evidence": {
-    "height": 830337,
-    "prevHeight": 830042,
+    "height": 830715,
+    "prevHeight": 830337,
     "advanced": true,
     "halted": false
    },
-   "probeMs": 73
+   "probeMs": 147
   },
   {
    "id": "dex-trading-live",
    "claim": "השוק-הריבוני סוחר-באמת (מילויים-חדשים-זורמים)",
    "verdict": "PROVEN",
    "evidence": {
-    "fillsTotal": 205318,
-    "swapsTotal": 72671,
-    "newFillsSinceLastRun": 235
+    "fillsTotal": 205619,
+    "swapsTotal": 72676,
+    "newFillsSinceLastRun": 301
    },
-   "probeMs": 51
+   "probeMs": 33
   },
   {
    "id": "fee-meter-health",
    "claim": "בריאות-כלכלית: מד-העמלות-מעל-רצפת-הסולם (המזרקה-חיה)",
    "verdict": "DEGRADED",
    "evidence": {
-    "feeMeter": 0,
+    "feeMeter": 42,
     "floor": 8000,
-    "treasuryProfit": 2310,
+    "treasuryProfit": 310,
     "ratchetEver": 18404281
    },
-   "probeMs": 17
+   "probeMs": 66
   },
   {
    "id": "economy-engine",
    "claim": "מנוע-הכלכלה (:3016) חי ומונה-רצף",
    "verdict": "PROVEN",
    "evidence": {
-    "seq": 95045,
-    "prevSeq": 84275,
+    "seq": 109557,
+    "prevSeq": 95045,
     "advanced": true
    },
-   "probeMs": 17
+   "probeMs": 2
   },
   {
    "id": "bridge-relay",
    "claim": "גשר-דקס→כלכלה (:3017) משדר-מילויים-אמת-לספר-המשותף",
    "verdict": "PROVEN",
    "evidence": {
-    "polls": 175,
-    "inserted": 462,
+    "polls": 235,
+    "inserted": 621,
     "pollsAdvanced": true,
     "errors": 0
    },
-   "probeMs": 13
+   "probeMs": 2
   },
   {
    "id": "soldier-army-trading",
@@ -82,10 +82,10 @@
    "evidence": {
     "soldiers": 6,
     "placedTotal": 27,
-    "filledMuTotal": 11391,
-    "actionsAgeMin": 1
+    "filledMuTotal": 11976,
+    "actionsAgeMin": 0
    },
-   "probeMs": 15
+   "probeMs": 4
   },
   {
    "id": "sovereign-audit-functional",
@@ -94,20 +94,20 @@
    "evidence": {
     "lastDecision": "CLEAR",
     "lastError": null,
-    "runAgeMin": 13
+    "runAgeMin": 3
    },
-   "probeMs": 45
+   "probeMs": 7
   },
   {
    "id": "sovereign-voice-ops",
    "claim": "הקול-הריבוני (:3019) סורק-ומרפא-מתמשך",
    "verdict": "PROVEN",
    "evidence": {
-    "scans": 7,
-    "heals": 7,
-    "diskPct": 89
+    "scans": 11,
+    "heals": 11,
+    "diskPct": 90
    },
-   "probeMs": 30
+   "probeMs": 11
   },
   {
    "id": "steem-voice-custody",
@@ -125,10 +125,10 @@
    "claim": "מאמת-האתחול (:3042) מזרים-tx-כלכלה-ללא-הפלות",
    "verdict": "PROVEN",
    "evidence": {
-    "sent": 11,
+    "sent": 13,
     "dropped": 0
    },
-   "probeMs": 28
+   "probeMs": 3
   },
   {
    "id": "llm-gateway",
@@ -138,7 +138,7 @@
     "brains": 13,
     "live": 13
    },
-   "probeMs": 40
+   "probeMs": 2
   },
   {
    "id": "estate-sync-anchors",
@@ -149,7 +149,7 @@
     "ok": 13,
     "bad": []
    },
-   "probeMs": 11
+   "probeMs": 2
   },
   {
    "id": "dividend-sweep-alive",
@@ -158,10 +158,10 @@
    "evidence": {
     "lastAt": "2026-10-20T05:50:28.528Z",
     "lastVerdict": "SKIP",
-    "fileAgeMin": 0,
+    "fileAgeMin": 5,
     "loopExpectedMin": 30
    },
-   "probeMs": 0
+   "probeMs": 1
   },
   {
    "id": "internal-pnl-published",
@@ -170,9 +170,9 @@
    "evidence": {
     "schema": "SAOS-INTERNAL-PNL/1",
     "publishedAt": "2026-10-19T14:20:36.991Z",
-    "fileAgeMin": 148
+    "fileAgeMin": 168
    },
-   "probeMs": 18
+   "probeMs": 3
   },
   {
    "id": "self-deposit-accumulator",
@@ -182,9 +182,9 @@
     "lastAt": "2026-10-19T14:24:25.298Z",
     "verdict": "PLAN-READY (census-only — no keys injected, honest)",
     "profitUsd24h": 0,
-    "fileAgeH": 2.5
+    "fileAgeH": 2.8
    },
-   "probeMs": 1
+   "probeMs": 0
   },
   {
    "id": "git-rail-value-flowing",
@@ -200,7 +200,7 @@
      "valueStuck": false
     }
    },
-   "probeMs": 4112
+   "probeMs": 3884
   },
   {
    "id": "dividend-lane-external",
