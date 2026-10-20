@@ -1,11 +1,11 @@
 {
  "schema": "SAOS-CLAIMS-SCORECARD/1",
- "at": "2026-10-20T06:12:19.194Z",
+ "at": "2026-10-20T06:30:32.616Z",
  "law": "צו-בעלים trace 1a1579cc5dfd1b15 — אין-טענה-בלי-ראיה-חיה; חוסר-ראיה = DEGRADED/BROKEN-כנה (LAW-3)",
- "truthScore": 94,
+ "truthScore": 97,
  "counts": {
-  "proven": 15,
-  "degraded": 2,
+  "proven": 16,
+  "degraded": 1,
   "broken": 0,
   "unverifiable": 0
  },
@@ -22,23 +22,23 @@
    "claim": "הקרנל-הריבוני חי ומייצר-בלוקים (h עולה · לא-מושהה)",
    "verdict": "PROVEN",
    "evidence": {
-    "height": 830746,
-    "prevHeight": 830715,
+    "height": 831107,
+    "prevHeight": 831044,
     "advanced": true,
     "halted": false
    },
-   "probeMs": 227
+   "probeMs": 50
   },
   {
    "id": "dex-trading-live",
    "claim": "השוק-הריבוני סוחר-באמת (מילויים-חדשים-זורמים)",
    "verdict": "PROVEN",
    "evidence": {
-    "fillsTotal": 205644,
+    "fillsTotal": 205933,
     "swapsTotal": 72676,
-    "newFillsSinceLastRun": 25
+    "newFillsSinceLastRun": 51
    },
-   "probeMs": 76
+   "probeMs": 10
   },
   {
    "id": "fee-meter-health",
@@ -50,26 +50,26 @@
     "treasuryProfit": 310,
     "ratchetEver": 18404281
    },
-   "probeMs": 56
+   "probeMs": 14
   },
   {
    "id": "economy-engine",
    "claim": "מנוע-הכלכלה (:3016) חי ומונה-רצף",
    "verdict": "PROVEN",
    "evidence": {
-    "seq": 110622,
-    "prevSeq": 109557,
+    "seq": 123404,
+    "prevSeq": 121196,
     "advanced": true
    },
-   "probeMs": 24
+   "probeMs": 2
   },
   {
    "id": "bridge-relay",
    "claim": "גשר-דקס→כלכלה (:3017) משדר-מילויים-אמת-לספר-המשותף",
    "verdict": "PROVEN",
    "evidence": {
-    "polls": 241,
-    "inserted": 636,
+    "polls": 295,
+    "inserted": 778,
     "pollsAdvanced": true,
     "errors": 0
    },
@@ -82,7 +82,7 @@
    "evidence": {
     "soldiers": 6,
     "placedTotal": 27,
-    "filledMuTotal": 12020,
+    "filledMuTotal": 12531,
     "actionsAgeMin": 1
    },
    "probeMs": 2
@@ -94,7 +94,7 @@
    "evidence": {
     "lastDecision": "CLEAR",
     "lastError": null,
-    "runAgeMin": 5
+    "runAgeMin": 8
    },
    "probeMs": 4
   },
@@ -103,11 +103,11 @@
    "claim": "הקול-הריבוני (:3019) סורק-ומרפא-מתמשך",
    "verdict": "PROVEN",
    "evidence": {
-    "scans": 11,
-    "heals": 11,
-    "diskPct": 91
+    "scans": 15,
+    "heals": 15,
+    "diskPct": 93
    },
-   "probeMs": 21
+   "probeMs": 3
   },
   {
    "id": "steem-voice-custody",
@@ -116,19 +116,19 @@
    "evidence": {
     "custody": "כספת-חיה (4/4-הוכח)",
     "account": "headcorner",
-    "broadcasts": 2
+    "broadcasts": 3
    },
-   "probeMs": 2
+   "probeMs": 3
   },
   {
    "id": "boot-verifier",
    "claim": "מאמת-האתחול (:3042) מזרים-tx-כלכלה-ללא-הפלות",
    "verdict": "PROVEN",
    "evidence": {
-    "sent": 13,
+    "sent": 14,
     "dropped": 0
    },
-   "probeMs": 3
+   "probeMs": 2
   },
   {
    "id": "llm-gateway",
@@ -138,29 +138,27 @@
     "brains": 13,
     "live": 13
    },
-   "probeMs": 6
+   "probeMs": 2
   },
   {
    "id": "estate-sync-anchors",
    "claim": "סנכרון-העזבון (:3021) מצרף-את-כל-העוגנים",
-   "verdict": "DEGRADED",
+   "verdict": "PROVEN",
    "evidence": {
     "anchors": 13,
-    "ok": 12,
-    "bad": [
-     "estate/Domain"
-    ]
+    "ok": 13,
+    "bad": []
    },
-   "probeMs": 5
+   "probeMs": 3
   },
   {
    "id": "dividend-sweep-alive",
    "claim": "ESC-10/11 · סדולת-הדיבידנד רצה-בלופ (קבלה-טרייה ≤35-דק)",
    "verdict": "PROVEN",
    "evidence": {
-    "lastAt": "2026-10-20T06:12:14.449Z",
+    "lastAt": "2026-10-20T06:23:10.361Z",
     "lastVerdict": "SKIP",
-    "fileAgeMin": 0,
+    "fileAgeMin": 7,
     "loopExpectedMin": 30
    },
    "probeMs": 1
@@ -172,9 +170,9 @@
    "evidence": {
     "schema": "SAOS-INTERNAL-PNL/1",
     "publishedAt": "2026-10-19T14:20:36.991Z",
-    "fileAgeMin": 169
+    "fileAgeMin": 188
    },
-   "probeMs": 1
+   "probeMs": 0
   },
   {
    "id": "self-deposit-accumulator",
@@ -184,9 +182,9 @@
     "lastAt": "2026-10-19T14:24:25.298Z",
     "verdict": "PLAN-READY (census-only — no keys injected, honest)",
     "profitUsd24h": 0,
-    "fileAgeH": 2.8
+    "fileAgeH": 3.1
    },
-   "probeMs": 4
+   "probeMs": 0
   },
   {
    "id": "git-rail-value-flowing",
@@ -202,7 +200,7 @@
      "valueStuck": false
     }
    },
-   "probeMs": 4536
+   "probeMs": 3851
   },
   {
    "id": "dividend-lane-external",
