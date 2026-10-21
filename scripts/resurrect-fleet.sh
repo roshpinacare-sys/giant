@@ -39,14 +39,22 @@ if ! probe 3010 "/saos-dex/api/dex/state"; then
 else log "OK dex:3010 חי"; fi
 
 # 3. השאר — במקביל-לוגי, כל-אחד-עם-guard
+# FIX(fleet-coverage · 2026-10-21): steem-voice:3023 (הקול-על-השרשרת) ו-saos-engine:3040
+# (המנוע: ערוץ-STEEM/onramp + פרסום @הריבונות) נוספו — היו-חוץ-מהרשימה-ומתו-שקט-בקציר.
+# הכספת-נגישה-גם-בנתיב-/home/z/work/vault-home (saos-engine קורא-שם) — קישור-נאמן.
+mkdir -p /home/z/work
+[ -e /home/z/work/vault-home ] || ln -sfn /home/z/vault-home /home/z/work/vault-home 2>/dev/null
+[ -d /home/z/work/steem/mini-services/saos-engine ] && [ ! -d /home/z/work/steem/mini-services/saos-engine/node_modules ] && ( cd /home/z/work/steem/mini-services/saos-engine && bun install --silent >/dev/null 2>&1 ) || true
 declare -A SVC=(
   [bridge:3017]="/home/z/my-project/mini-services/dex-economy-bridge|bun index.ts >> bridge.log 2>&1"
   [army:3018]="/home/z/my-project/mini-services/soldier-army|bun run dev >> army.log 2>&1"
   [voice:3019]="/home/z/my-project/mini-services/sovereign-voice|bun run dev >> voice.log 2>&1"
   [audit:3022]="/home/z/my-project/mini-services/sovereign-audit|bun run dev >> audit.log 2>&1"
+  [steem-voice:3023]="/home/z/my-project/mini-services/steem-voice|bun run dev >> voice-steem.log 2>&1"
+  [saos-engine:3040]="/home/z/work/steem/mini-services/saos-engine|bun index.ts >> /tmp/saos-engine.log 2>&1"
   [boot-verifier:3042]="/home/z/my-project/mini-services/boot-verifier|bun run dev >> node.log 2>&1"
 )
-for key in bridge:3017 army:3018 voice:3019 audit:3022 boot-verifier:3042; do
+for key in bridge:3017 army:3018 voice:3019 audit:3022 steem-voice:3023 saos-engine:3040 boot-verifier:3042; do
   port="${key##*:}"; name="${key%%:*}"
   IFS='|' read -r dir cmd <<< "${SVC[$key]}"
   if ! probe "$port" "/health"; then
