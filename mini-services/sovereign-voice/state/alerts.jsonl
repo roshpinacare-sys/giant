@@ -143,3 +143,11 @@
 {"ts":1792579372555,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
 {"ts":1792579664593,"key":"disk-full","sev":"critical","text":"הדיסק ב-91% (סף-85) — מעקב-הדוק","status":"ledger"}
 {"ts":1792579668380,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792580136122,"key":"disk-full","sev":"critical","text":"הדיסק ב-98% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1792580205525,"key":"disk-healed","sev":"warn","text":"שומר-הדיסק: 98%→92% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792580208703,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 86 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792580208705,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:fuel: free-op-cap · shachar:fuel: free-op-cap · aluf:fuel: free-op-cap · erez:fuel: free-op-cap · gal:fuel: free-op-cap","status":"ledger"}
+{"ts":1792580208706,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792580237037,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (20 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792580321617,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 92%→92% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792580356237,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (22 כשלים) → respawn=true → verified=false","status":"ledger"}
