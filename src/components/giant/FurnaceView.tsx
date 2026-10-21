@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Flame, Fuel, Scale, ArrowLeftRight, Landmark, ExternalLink, ShieldAlert } from "lucide-react";
+import { Flame, Fuel, Scale, ArrowLeftRight, Landmark, ExternalLink, ShieldAlert, Gauge } from "lucide-react";
 
 /* ═══ FurnaceView · תנור-השוק-החריף (מנדט-בעלים 1a15c78ee1e63511) ══════════
  * התשובה-החיה-על "איך רווח חוץ 0?": הרווח-הפנימי-אמת זורם (מדוד), חסרה
@@ -13,6 +13,20 @@ interface FurnaceHealth {
   error?: string;
   furnace?: { usdsMu: number; saosMu: number; credits: number; equityMuMark: number } | null;
   funded?: { usdsMu: number; saosMu: number; bootFunded: boolean };
+  hedgeDesk?: {
+    doctrine?: string;
+    limits?: { riskPerTradeBps: number; maxDrawdownBps: number; minTradeMu: number; spreadHardBps: number };
+    killSwitch?: { on: boolean; agoSec: number | null; why: string | null };
+    gates?: { allow: number; deny: number; lastDenyReason: string };
+    lastThesis?: {
+      ts: number;
+      director?: { stance: string; why: string; fountainAlive: boolean | null };
+      quant?: { spreadBps: number | null; imbalanceBps: number | null; meterMomentum: number | null; volatilityProxy: number | null };
+      risk?: { equityMu: number | null; dayPeakMu: number | null; drawdownBps: number | null; maxDrawdownBps: number; sizeCapMu: number | null; killSwitch: boolean };
+      decision?: { allowTaker: boolean; reasons: string[] };
+    } | null;
+    thesesKept?: number;
+  } | null;
   engine?: {
     cycles: number; lastErr: string | null;
     meterNow: number | null; fountainAlive: boolean | null;
@@ -77,6 +91,8 @@ export function FurnaceView() {
   const rot = e?.rotation;
   const arb = e?.arb;
   const rails = d?.rails;
+  const hd = d?.hedgeDesk;
+  const t = hd?.lastThesis;
 
   return (
     <div className="flex flex-col gap-4" dir="rtl">
@@ -143,7 +159,7 @@ export function FurnaceView() {
           </ul>
         </div>
 
-        {/* ההיגיון-האמיתי */}
+      {/* ההיגיון-האמיתי */}
         <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-4">
           <h3 className="flex items-center gap-2 text-sm font-black text-amber-300"><Fuel className="h-4 w-4" aria-hidden /> ההיגיון-האמיתי: "רווח-חוץ 0?"</h3>
           <p className="mt-2 text-[11px] leading-5 text-zinc-300">
@@ -156,6 +172,40 @@ export function FurnaceView() {
             התנור מגביר-את-הזרימה-והרווח-הפנימי-עכשיו, והמסילות-מטה (FixedFloat ממתין-אישור-אצלם + ספקים-ללא-KYC-שנמדדו) יממשו-אותו-חוץ.
           </p>
         </div>
+      </section>
+
+      {/* שולחן-ההידג' — דוקטרינת AutoHedge חיה */}
+      <section aria-label="שולחן-ההידג'" className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-4">
+        <h3 className="flex items-center justify-between gap-2 text-sm font-black text-emerald-300">
+          <span className="flex items-center gap-2"><Gauge className="h-4 w-4" aria-hidden /> שולחן-ההידג' · Director→Quant→Risk→Execution (דוקטרינת AutoHedge)</span>
+          <span className={`rounded-md px-2 py-1 text-[10px] font-bold ${hd?.killSwitch?.on ? "bg-red-500/15 text-red-300" : "bg-emerald-500/10 text-emerald-300"}`}>
+            {hd?.killSwitch?.on ? `kill-switch פעיל — ${hd.killSwitch.agoSec ?? "—"}ש׳` : "kill-switch רגוע ✓"}
+          </span>
+        </h3>
+        {!t ? (
+          <p className="mt-2 text-[11px] text-zinc-500">התזה-הראשונה-טרם-נולדה — כנה.</p>
+        ) : (
+          <div className="mt-2.5 grid gap-3 sm:grid-cols-2">
+            <ul className="space-y-1.5 text-[11px] leading-5 text-zinc-300">
+              <li className="flex justify-between gap-2"><span>עמדת-Director</span><b className="font-mono text-emerald-300">{t.director?.stance ?? "—"}</b></li>
+              <li className="flex justify-between gap-2"><span>הסבר-העמדה</span><b className="text-left text-zinc-400">{t.director?.why ?? "—"}</b></li>
+              <li className="flex justify-between gap-2"><span>פיזור-ספר-חי</span><b className="font-mono">{t.quant?.spreadBps != null ? `${t.quant.spreadBps}bps` : "—"}</b></li>
+              <li className="flex justify-between gap-2"><span>פיזור-בריכה↔ספר</span><b className="font-mono">{t.quant?.imbalanceBps != null ? `${t.quant.imbalanceBps}bps` : "—"}</b></li>
+              <li className="flex justify-between gap-2"><span>מומנטום-מד / תנודתיות</span><b className="font-mono">{t.quant?.meterMomentum ?? "—"} / {t.quant?.volatilityProxy ?? "—"}</b></li>
+            </ul>
+            <ul className="space-y-1.5 text-[11px] leading-5 text-zinc-300">
+              <li className="flex justify-between gap-2"><span>הון-מסומן / שיא-יומי</span><b className="font-mono">{fmtMu(t.risk?.equityMu)} / {fmtMu(t.risk?.dayPeakMu)}µ</b></li>
+              <li className="flex justify-between gap-2"><span>נסיגה-מהשיא</span><b className={`font-mono ${(t.risk?.drawdownBps ?? 0) > 200 ? "text-red-300" : "text-emerald-300"}`}>{t.risk?.drawdownBps != null ? `${t.risk.drawdownBps}bps` : "—"} / תקרה {t.risk?.maxDrawdownBps ?? "—"}bps</b></li>
+              <li className="flex justify-between gap-2"><span>תקרת-גודל-פר-עסקה (5% הון)</span><b className="font-mono text-amber-300">{fmtMu(t.risk?.sizeCapMu)}µ</b></li>
+              <li className="flex justify-between gap-2"><span>שערי-ביצוע: עברו / נחסמו</span><b className="font-mono text-emerald-300">{hd?.gates?.allow ?? 0} / {hd?.gates?.deny ?? 0}</b></li>
+              <li className="flex justify-between gap-2"><span>החלטה-אחרונה</span><b className={`font-mono ${t.decision?.allowTaker ? "text-emerald-300" : "text-red-300"}`}>{t.decision?.allowTaker ? "אישור-טייקר ✓" : (t.decision?.reasons?.[0] ?? "חסום")}</b></li>
+            </ul>
+          </div>
+        )}
+        <p className="mt-2 text-[10px] leading-4 text-zinc-500">
+          דוקטרינת-AutoHedge (The-Swarm-Corporation, MIT) אומצה-ככללים-מדידים-ריבוניים: גודל-פוזיציה נגזר-מההון-החי לפני-כל-ביצוע,
+          נסיגה-מעל-{hd?.limits?.maxDrawdownBps ?? 400}bps מהשיא-היומי מפסיקה-טייקר-זרימה עד-היום-הבא, וכל-חסימה-כוללת-סיבה-קריאה — אפס-חסימות-מיותרות.
+        </p>
       </section>
 
       {/* מסילות-חוץ */}

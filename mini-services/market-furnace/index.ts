@@ -29,6 +29,7 @@
  */
 import fs, { appendFileSync, mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { HedgeDesk } from "./hedge-desk";
 
 const PORT = 3045;
 const DEX = "http://127.0.0.1:3010/saos-dex/api/dex";
@@ -78,6 +79,8 @@ let rails: unknown = null, railsAt = 0;
 
 const stateFile = path.join(import.meta.dir, "state");
 mkdirSync(stateFile, { recursive: true });
+/* שולחן-ההידג' (דוקטרינת AutoHedge): Director→Quant→Risk→Execution — השער-לפני-כל-טייקר */
+const hedgeDesk = new HedgeDesk(stateFile);
 const ACTIONS_FILE = path.join(stateFile, "actions.jsonl");
 function act(action: string, resource: string, args: Record<string, unknown>, outcome: "ok" | "denied" | "error", costUnits: number, detail = ""): void {
   try {
@@ -201,15 +204,21 @@ async function fireSwap(issuer: string, assetIn: "USDS" | "SAOS", amount: number
   }
 }
 
-/* רצף-הצתה: עד-IGNITE_MAX_STRIKES סוואפים-מתחלפים עד שהמזרקה נושמת */
+/* רצף-הצתה: עד-IGNITE_MAX_STRIKES סוואפים-מתחלפים עד שהמזרקה נושמת — כל-מכה-עוברת-שער-סיכון */
 async function igniteSequence(): Promise<void> {
   for (let i = 0; i < IGNITE_MAX_STRIKES; i++) {
     const st = await dexState().catch(() => null);
     const meter = Number(st?.feeMeter ?? 0);
     if (meter >= IGNITE_TARGET_METER) break;
+    const w = await walletOf(FURNACE).catch(() => null);
+    const midRef = bookCache?.fair || Number(st?.ladder?.refPrice ?? 0);
+    const equityMu = w && midRef > 0 ? Math.round(w.usds + (w.saos * midRef) / 1000) : null;
+    const thesis = hedgeDesk.beginCycle({ equityMu, meter: st?.feeMeter ?? null, book: bookCache }, new Date().toISOString().slice(0, 10));
     const dir = lastSwapDir === "USDS" ? "SAOS" : "USDS"; // מתחלף-כיוון — נטרול-הטיה
-    const r = await fireSwap(FURNACE, dir, IGNITE_SIZE, "ignite");
-    if (r.ok) { lastSwapDir = dir; lastSwapAt = Date.now(); console.log(`[furnace] הצתה ${i + 1}: ${IGNITE_SIZE}µ ${dir} — meter ${meter}→?`); }
+    const g = hedgeDesk.gate("ignite", thesis, IGNITE_SIZE);
+    if (!g.allowed) { console.log(`[furnace] שער-סיכון-חוסם-הצתה: ${g.reason}`); break; }
+    const r = await fireSwap(FURNACE, dir, g.sizeMu, "ignite");
+    if (r.ok) { lastSwapDir = dir; lastSwapAt = Date.now(); console.log(`[furnace] הצתה ${i + 1}: ${g.sizeMu}µ ${dir} — meter ${meter}→?`); }
     else { console.log(`[furnace] הצתה-נדחתה: ${r.err}`); break; }
     await new Promise((res) => setTimeout(res, 5000)); // בלוק-הבא
   }
@@ -380,16 +389,26 @@ async function tick(): Promise<void> {
     const fills = Number(st?.fills ?? 0);
     meterHistory.push({ t: Date.now(), meter, fills });
     if (meterHistory.length > 240) meterHistory = meterHistory.slice(-240);
+    hedgeDesk.feedMeter(meter);
 
-    /* 1. מטבוליזם: מתחת-ליעד-המזרקה → סיבוב-אמת (בתקציב-יומי-ובבנק) */
+    /* שולחן-ההידג': תזה-חיה לכל-מחזור (הספר-האחרון-מ-cache, כנה-כש-null) */
+    const midRef = bookCache?.fair || Number(st?.ladder?.refPrice ?? 0);
+    const equityMu = midRef > 0 ? Math.round(w.usds + (w.saos * midRef) / 1000) : null;
+    const thesis = hedgeDesk.beginCycle({ equityMu, meter: st?.feeMeter ?? null, book: bookCache }, today);
+
+    /* 1. מטבוליזם: מתחת-ליעד-המזרקה → סיבוב-אמת (בתקציב-יומי-ובבנק) — עם-שער-סיכון */
     if (meter < IGNITE_TARGET_METER && spentTodayMu < ROTATE_DAILY_BUDGET
       && w.usds - MIN_USDS >= IGNITE_SIZE && Date.now() - lastSwapAt >= ROTATE_MIN_GAP_MS) {
       const dir = lastSwapDir === "USDS" ? "SAOS" : "USDS";
-      const r = await fireSwap(FURNACE, dir, IGNITE_SIZE, "rotate");
-      if (r.ok) { lastSwapDir = dir; lastSwapAt = Date.now(); }
+      const g = hedgeDesk.gate("rotate", thesis, IGNITE_SIZE);
+      if (!g.allowed) console.log(`[furnace] שער-סיכון-חוסם-סיבוב: ${g.reason}`);
+      else {
+        const r = await fireSwap(FURNACE, dir, g.sizeMu, "rotate");
+        if (r.ok) { lastSwapDir = dir; lastSwapAt = Date.now(); }
+      }
     }
-    /* 2. ארביטראז' — רק-כשיש-פיזור-אמת-מעל-המקף */
-    if (w.usds > MIN_USDS + ARB_SIZE && w.saos > MIN_SAOS + ARB_SIZE) await arbScan({ usds: w.usds, saos: w.saos });
+    /* 2. ארביטראז' — רק-כשיש-פיזור-אמת-מעל-המקף — עם-שער-סיכון */
+    if (hedgeDesk.gate("arb", thesis, ARB_SIZE).allowed && w.usds > MIN_USDS + ARB_SIZE && w.saos > MIN_SAOS + ARB_SIZE) await arbScan({ usds: w.usds, saos: w.saos });
     /* 3. עומק-Maker דו-צדדי */
     await makerCycle({ usds: w.usds, saos: w.saos });
     /* 4. קציר-תקופתי */
@@ -422,6 +441,7 @@ Bun.serve({
       mandate: "שוק-חריף-אמת על-הדקס-שלנו: הצתת-עמלות · ארביטראז' בריכה↔ספר · עומק-Maker · קציר (msg-8) — מנדט-בעלים 1a15c78ee1e63511",
       furnace: w ? { usdsMu: w.usds, saosMu: w.saos, credits: w.credits, equityMuMark: equityMu } : null,
       funded: { usdsMu: fundedUsds, saosMu: fundedSaos, bootFunded },
+      hedgeDesk: hedgeDesk.snapshot(),
       engine: {
         cycles, lastErr: lastErr || null,
         meterNow: st?.feeMeter ?? null, fountainAlive: Number(st?.feeMeter ?? 0) >= IGNITE_TARGET_METER,
@@ -455,4 +475,5 @@ void (async () => {
   setInterval(() => void tick(), 20_000);
   setInterval(() => { void probeRails().catch(() => { /* כנה */ }); }, 30 * 60_000);
   setInterval(persist, 60_000);
+  setInterval(() => hedgeDesk.persist(), 60_000);
 })();

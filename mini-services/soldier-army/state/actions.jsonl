@@ -1363,3 +1363,15 @@
 {"ts":1792548737780,"sem":"gal-16","actor":"tamar","action":"pulse-swap","resource":"SAOS/USDS","args":{"assetIn":"USDS","amount":100000,"minOut":95993},"outcome":"ok","cost_units":300,"detail":"feeMeter=8000 עמלת-חשמל-שוק אמת"}
 {"ts":1792548826986,"sem":"gal-16","actor":"operator","action":"xfer","resource":"tamar","args":{"asset":"USDS","amountMu":89930},"outcome":"ok","cost_units":0,"detail":""}
 {"ts":1792548826997,"sem":"gal-16","actor":"tamar","action":"xfer","resource":"operator","args":{"asset":"SAOS","amountMu":97953},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792558728449,"sem":"gal-16","actor":"yarden","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":1010,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792558728468,"sem":"gal-16","actor":"yarden","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1016,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792558728486,"sem":"gal-16","actor":"tamar","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":1010,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792558728494,"sem":"gal-16","actor":"tamar","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1016,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792558728510,"sem":"gal-16","actor":"shachar","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":1010,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792558728518,"sem":"gal-16","actor":"shachar","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1016,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792558728534,"sem":"gal-16","actor":"aluf","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":1010,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792558728566,"sem":"gal-16","actor":"aluf","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1016,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792558728595,"sem":"gal-16","actor":"erez","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":1010,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792558728676,"sem":"gal-16","actor":"erez","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1016,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792558728791,"sem":"gal-16","actor":"gal","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":1010,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792558728803,"sem":"gal-16","actor":"gal","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1016,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
