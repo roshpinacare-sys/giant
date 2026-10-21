@@ -162,3 +162,5 @@
 {"ts":1792559754808,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 98%→97% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:failed","status":"ledger"}
 {"ts":1792559757570,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 187 דק' (fills=255685) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
 {"ts":1792559986805,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (48 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792560265231,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792560272389,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
