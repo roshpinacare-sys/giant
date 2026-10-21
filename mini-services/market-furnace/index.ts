@@ -353,14 +353,15 @@ async function probeRails(): Promise<void> {
     out.push({ provider: "sideshift", http: r.status, supportsSteem: r.ok && !!j?.rate, supportsHive: null, rate: j?.rate ?? null, err: r.ok ? null : `http-${r.status}`, at });
   } catch (e) { out.push({ provider: "sideshift", http: null, supportsSteem: null, supportsHive: null, rate: null, err: String(e).slice(0, 80), at }); }
   /* FixedFloat — הקבלה-החיה-מעורק-ה-Actions (Autonomy) — מצב-הטוקן-הממתין */
+  let ff: Record<string, unknown>;
   try {
     const r = await fetch("https://raw.githubusercontent.com/roshpinacare-sys/Autonomy/main/receipts/fixedfloat/latest.json", { signal: t8 });
     if (r.ok) {
       const j = await r.json().catch(() => null);
-      (out as any).fixedfloat = { at: j?.at ?? null, verdict: j?.verdict ?? null, steemSupported: j?.steemSupported ?? null, currenciesHttp: j?.currencies?.http ?? null, note: "עורק-Actions-חי-כל-2דק' — הטוקן-ממתין-אישור-אצל-FF (מדידה-מהקבלה)" };
-    } else (out as any).fixedfloat = { at, verdict: null, note: `קבלה-לא-נגישה (http-${r.status}) — כנה` };
-  } catch (e) { (out as any).fixedfloat = { at, verdict: null, note: String(e).slice(0, 80) }; }
-  rails = { at, probes: out };
+      ff = { at: j?.at ?? null, verdict: j?.verdict ?? null, steemSupported: j?.steemSupported ?? null, currenciesHttp: j?.currencies?.http ?? null, note: "עורק-Actions-חי-כל-2דק' — הטוקן-ממתין-אישור-אצל-FF (מדידה-מהקבלה)" };
+    } else ff = { at, verdict: null, note: `קבלה-לא-נגישה (http-${r.status}) — כנה` };
+  } catch (e) { ff = { at, verdict: null, note: String(e).slice(0, 80) }; }
+  rails = { at, probes: out, fixedfloat: ff };
   railsAt = Date.now();
   try { writeFileSync(path.join(stateFile, "rails-latest.json"), JSON.stringify(rails, null, 1)); } catch { /* כנות */ }
   act("rails-probe", "external-bridges", { providers: out.length }, "ok", 0, "סקר-קריאה-בלבד");

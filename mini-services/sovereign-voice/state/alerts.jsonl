@@ -141,3 +141,5 @@
 {"ts":1792553358881,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
 {"ts":1792554297965,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (29 כשלים) → respawn=true → verified=false","status":"ledger"}
 {"ts":1792554557525,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:fuel: free-op-cap · shachar:fuel: free-op-cap · aluf:fuel: free-op-cap · erez:fuel: free-op-cap · gal:fuel: free-op-cap","status":"ledger"}
+{"ts":1792554942983,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 99%→99% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:failed","status":"ledger"}
+{"ts":1792555156980,"key":"disk-full","sev":"critical","text":"הדיסק ב-99% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}

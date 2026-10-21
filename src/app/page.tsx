@@ -9,6 +9,7 @@ import { ChannelView } from "@/components/giant/ChannelView";
 import { WalletView } from "@/components/giant/WalletView";
 import { DeskView } from "@/components/giant/DeskView";
 import { CapitalView } from "@/components/giant/CapitalView";
+import { FurnaceView } from "@/components/giant/FurnaceView";
 import { LedgerView } from "@/components/giant/LedgerView";
 import { ProductsView } from "@/components/giant/ProductsView";
 import { PulseView } from "@/components/giant/PulseView";
@@ -24,7 +25,7 @@ import { TickerTape } from "@/components/giant/TickerTape";
 import { GiantPalette } from "@/components/giant/GiantPalette";
 import { DOORS, measureAllDoors, type DoorStatusMap } from "@/lib/giant/doors";
 import {
-  Activity, BookOpen, Building2, Coins, Command, Cog, Crown, GitBranch, KeyRound, LineChart, Megaphone, Network,
+  Activity, BookOpen, Building2, Coins, Command, Cog, Crown, Flame, GitBranch, KeyRound, LineChart, Megaphone, Network,
   Package, Radio, Scale, ScrollText, ShieldCheck, Ship, Trophy, Wallet,
   type LucideIcon,
 } from "lucide-react";
@@ -50,6 +51,7 @@ type ViewId =
   | "fleet"
   | "capital"
   | "ledger" | "products" | "pulse" | "office" | "estate" | "empire" | "trust"
+  | "furnace"
   | "marketing";
 
 /* סדר-הפתיחה (T58; גל-9: ההגשה היא דלת-הפתיחה — מנדט-הבעלים "אני עוד לא רואה רבע"). */
@@ -65,6 +67,7 @@ const NAV: Array<{ id: ViewId; label: string; he: string; icon: LucideIcon }> = 
   { id: "api", label: "ה-API", he: "מסילות-מפתחות-אמת: הנפקה-עצמית-לסוכנים-שלנו-ולכל-מחזיק-מפתח · חוק-אחד-לכולם · מגבלות-קצב", icon: KeyRound },
   { id: "fleet", label: "הצי", he: "משתמשי-הרשת-פנים-ראשון: החיילים-הצי-והסוכנים הם-המשתמשים · סוחרים-על-הבריכה-שלנו · ארנק-אמת · הפיתוח-כלפי-פנים", icon: Ship },
   { id: "capital", label: "ההון", he: "מנוע-ההון: מנדט-קידום-חי · תנועות-הון מתקדמות-בשערים-הירוקים · לולאת-תיקון-במקום-סגירה", icon: Coins },
+  { id: "furnace", label: "התנור", he: "שוק-חריף-אמת על-הדקס-שלנו: הצתת-עמלות · ארביטראז' בריכה↔ספר · מסילות-מימוש-חוץ", icon: Flame },
   { id: "ledger", label: "הרישום", he: "כל-ההחלטות · חיפוש", icon: BookOpen },
   { id: "products", label: "המוצרים", he: "קטלוג-אמת · קבלות · מדידות", icon: Package },
   { id: "marketing", label: "השיווק", he: "משטח-Adsmarket-החי: מה-שכתוב-בריפו = מה-שמוצג · אפס-סינתזה", icon: Megaphone },
@@ -373,6 +376,7 @@ export default function Home() {
             {view === "api" && <ApiView />}
             {view === "fleet" && <FleetView />}
             {view === "capital" && <CapitalView />}
+            {view === "furnace" && <FurnaceView />}
             {view === "ledger" && <LedgerView />}
             {view === "products" && <ProductsView />}
             {view === "pulse" && <PulseView />}
