@@ -1,24 +1,13 @@
 {
-<<<<<<< HEAD
-  "at": "2026-10-21T11:13:00.295Z",
+  "at": "2026-10-21T11:44:34.896Z",
   "producer": "boot-verifier:3042",
   "all_ok": false,
-  "elapsed_s": 11.2,
-=======
-  "at": "2026-10-21T11:29:30.753Z",
-  "producer": "boot-verifier:3042",
-  "all_ok": false,
-  "elapsed_s": 5.9,
->>>>>>> 00fcf17 (vault-seal [auto-economy]: 11 files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס)
+  "elapsed_s": 6.3,
   "checks": {
     "office": {
-      "reception_3000": "down",
+      "reception_3000": "up",
       "fleethq_3002": "down",
-<<<<<<< HEAD
       "foreman_3020": "up",
-=======
-      "foreman_3020": "down",
->>>>>>> 00fcf17 (vault-seal [auto-economy]: 11 files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס)
       "estate_sync_3021": "up",
       "sovereign_gateway_3011": "up",
       "selfcheck_3040": "down",
@@ -26,29 +15,18 @@
     },
     "fleet_extra": {
       "economy_3016": "up",
-      "office_live_3036": "down",
+      "office_live_3036": "up",
       "verifier_3042_self": "up"
     },
     "sentinels": {
-<<<<<<< HEAD
       "watchdog": true,
       "snapshot": true,
-      "note": "runtime-supervisor state read; foreman childPid=15922"
+      "note": "runtime-supervisor state read; foreman childPid=3543"
     },
     "receipts": {
-      "boot-verify_self_age_s": 901,
-      "gateway-telemetry-latest_age_s": 6897,
-      "boot-watcher-state_age_s": 6897
-=======
-      "watchdog": false,
-      "snapshot": false,
-      "note": "runtime-supervisor state unreadable — sentinel booleans false by honesty, not by guess"
-    },
-    "receipts": {
-      "boot-verify_self_age_s": 1,
-      "gateway-telemetry-latest_age_s": -1,
-      "boot-watcher-state_age_s": -1
->>>>>>> 00fcf17 (vault-seal [auto-economy]: 11 files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס)
+      "boot-verify_self_age_s": 93,
+      "gateway-telemetry-latest_age_s": 619,
+      "boot-watcher-state_age_s": 619
     },
     "private_vault": {
       "repo": "roshpinacare-sys/fleet-vault",
@@ -56,9 +34,5 @@
       "method": "git-ls-remote"
     }
   },
-<<<<<<< HEAD
-  "sha256": "27fc855e8ba4e11dc0d5654c48bad1ff38f1f26bdf208b6825fc2316cac0977b"
-=======
-  "sha256": "29b5ccb21fa22a6e11d4c88200bbc7d32a4f983e2754636edcc5dfe1f0666b99"
->>>>>>> 00fcf17 (vault-seal [auto-economy]: 11 files — אטימה-חוזרת, כלום לא מת עם הסנדבוקס)
+  "sha256": "11f22e85cf14aa6d96f51747244f074192888116c62267bf95469db8d6a533b8"
 }

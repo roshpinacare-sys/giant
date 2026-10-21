@@ -1233,3 +1233,21 @@
 {"ts":1792582792330,"sem":"gal-16","actor":"erez","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"ok","cost_units":0,"detail":""}
 {"ts":1792582792347,"sem":"gal-16","actor":"gal","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"ok","cost_units":0,"detail":""}
 >>>>>>> 9836292 (vault-seal [auto-economy]: sync-window-1)
+{"ts":1792583070931,"sem":"gal-16","actor":"operator","action":"xfer","resource":"yarden","args":{"asset":"USDS","amountMu":300000},"outcome":"error","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071020,"sem":"gal-16","actor":"operator","action":"xfer","resource":"yarden","args":{"asset":"SAOS","amountMu":100000},"outcome":"error","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071099,"sem":"gal-16","actor":"operator","action":"xfer","resource":"tamar","args":{"asset":"USDS","amountMu":300000},"outcome":"error","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071143,"sem":"gal-16","actor":"operator","action":"xfer","resource":"tamar","args":{"asset":"SAOS","amountMu":100000},"outcome":"error","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071215,"sem":"gal-16","actor":"operator","action":"xfer","resource":"shachar","args":{"asset":"USDS","amountMu":300000},"outcome":"error","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071284,"sem":"gal-16","actor":"operator","action":"xfer","resource":"shachar","args":{"asset":"SAOS","amountMu":100000},"outcome":"error","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071333,"sem":"gal-16","actor":"operator","action":"xfer","resource":"aluf","args":{"asset":"USDS","amountMu":300000},"outcome":"error","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071397,"sem":"gal-16","actor":"operator","action":"xfer","resource":"aluf","args":{"asset":"SAOS","amountMu":100000},"outcome":"error","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071432,"sem":"gal-16","actor":"operator","action":"xfer","resource":"erez","args":{"asset":"USDS","amountMu":300000},"outcome":"error","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071503,"sem":"gal-16","actor":"operator","action":"xfer","resource":"erez","args":{"asset":"SAOS","amountMu":100000},"outcome":"error","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071537,"sem":"gal-16","actor":"operator","action":"xfer","resource":"gal","args":{"asset":"USDS","amountMu":300000},"outcome":"error","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071603,"sem":"gal-16","actor":"operator","action":"xfer","resource":"gal","args":{"asset":"SAOS","amountMu":100000},"outcome":"error","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071722,"sem":"gal-16","actor":"yarden","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"denied","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071812,"sem":"gal-16","actor":"tamar","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"denied","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583071888,"sem":"gal-16","actor":"shachar","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"denied","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583072049,"sem":"gal-16","actor":"aluf","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"denied","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583072239,"sem":"gal-16","actor":"erez","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"denied","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792583072330,"sem":"gal-16","actor":"gal","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"denied","cost_units":0,"detail":"free-op-cap"}
