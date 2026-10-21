@@ -120,3 +120,6 @@
 {"ts":1792599847232,"key":"disk-healed","sev":"warn","text":"שומר-הדיסק: 95%→71% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
 {"ts":1792599848196,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
 {"ts":1792599873942,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (8 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792600302297,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792600303997,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 20 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792600303998,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:fuel: free-op-cap · shachar:fuel: free-op-cap · aluf:fuel: free-op-cap · erez:fuel: free-op-cap · gal:fuel: free-op-cap","status":"ledger"}
