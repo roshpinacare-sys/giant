@@ -73,10 +73,23 @@ async function bank(amountUsds: number, reason: string, ref: string): Promise<{ 
   } catch (e) { counters.economyRejected++; counters.lastError = String(e); return { ok: false, why: String(e).slice(0, 80) }; }
 }
 
+/* ── סנכרון-ראיות לעמוד-החי (Domain/evidence) — קבצים-בלבד, אפס-גיט-מה-banker ── */
+function syncEvidenceToDomain() {
+  try {
+    const dst = "/home/z/estate/Domain/evidence";
+    mkdirSync(dst, { recursive: true });
+    for (const f of ["external-profit-public.json", "pnl-audit.json", "oracle-grid-pnl.json"]) {
+      const src = `${DEX_ROOT}/grids/state/${f}`;
+      if (existsSync(src)) { const { copyFileSync } = require("fs"); copyFileSync(src, `${dst}/${f}`); }
+    }
+  } catch { /* fail-honest — העמוד מציג-כנות-מה-שיש */ }
+}
+
 /* ── מקור-1: התגשמות-VESTS (curation/author) — כל-אירוע עם הראיה-שלו ───────── */
 async function measureAndBank(): Promise<{ fresh: number; banked: number; unpriced: number; usds: number }> {
   counters.measureRuns++;
   await new Promise<void>((res) => execFile("node", ["grids/external-profit.mjs", "--measure"], { cwd: DEX_ROOT, timeout: 170_000 }, (err) => { if (err) counters.lastError = `measure: ${String(err).slice(0, 100)}`; res(); }));
+  syncEvidenceToDomain();
   const banked = loadJson<BankedHashes>(BANKED_HASHES, {});
   let fresh = 0, bankedNow = 0, unpriced = 0, usds = 0;
   const lines = readFileSync(EVIDENCE, "utf8").split("\n");
