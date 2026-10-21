@@ -1,0 +1,4 @@
+{"ts":1792554109019,"sem":"furnace-1","actor":"furnace","action":"birth-xfer","resource":"furnace","args":{"asset":"USDS","amountMu":2000000},"outcome":"ok","cost_units":0,"detail":"addBal-ensure-entry"}
+{"ts":1792554113131,"sem":"furnace-1","actor":"furnace","action":"fund","resource":"furnace","args":{"asset":"SAOS","amountMu":600000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792554117312,"sem":"furnace-1","actor":"furnace","action":"fuel","resource":"credits","args":{"amount":4000},"outcome":"ok","cost_units":0,"detail":"furnace +4000µ credits ← operator (had 0)"}
+{"ts":1792554117464,"sem":"furnace-1","actor":"furnace","action":"ignite-swap","resource":"SAOS/USDS","args":{"assetIn":"SAOS","amount":100000,"minOut":99445,"eff":1015},"outcome":"ok","cost_units":300,"detail":"feeMeter↑ עמלת-אמת"}
