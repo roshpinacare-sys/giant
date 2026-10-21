@@ -1017,3 +1017,21 @@
 {"ts":1792337799471,"sem":"gal-16","actor":"gal","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1057,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
 {"ts":1792338069354,"sem":"gal-16","actor":"yarden","action":"pulse-swap","resource":"SAOS/USDS","args":{"assetIn":"USDS","amount":100000,"minOut":89663},"outcome":"ok","cost_units":300,"detail":"feeMeter=8132 עמלת-חשמל-שוק אמת"}
 {"ts":1792338159178,"sem":"gal-16","actor":"yarden","action":"xfer","resource":"operator","args":{"asset":"SAOS","amountMu":91493},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545947298,"sem":"gal-16","actor":"operator","action":"xfer","resource":"yarden","args":{"asset":"USDS","amountMu":300000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545947319,"sem":"gal-16","actor":"operator","action":"xfer","resource":"yarden","args":{"asset":"SAOS","amountMu":100000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545947331,"sem":"gal-16","actor":"operator","action":"xfer","resource":"tamar","args":{"asset":"USDS","amountMu":300000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545947403,"sem":"gal-16","actor":"operator","action":"xfer","resource":"tamar","args":{"asset":"SAOS","amountMu":100000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545947432,"sem":"gal-16","actor":"operator","action":"xfer","resource":"shachar","args":{"asset":"USDS","amountMu":300000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545947484,"sem":"gal-16","actor":"operator","action":"xfer","resource":"shachar","args":{"asset":"SAOS","amountMu":100000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545947500,"sem":"gal-16","actor":"operator","action":"xfer","resource":"aluf","args":{"asset":"USDS","amountMu":300000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545947516,"sem":"gal-16","actor":"operator","action":"xfer","resource":"aluf","args":{"asset":"SAOS","amountMu":100000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545947526,"sem":"gal-16","actor":"operator","action":"xfer","resource":"erez","args":{"asset":"USDS","amountMu":300000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545947584,"sem":"gal-16","actor":"operator","action":"xfer","resource":"erez","args":{"asset":"SAOS","amountMu":100000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545947594,"sem":"gal-16","actor":"operator","action":"xfer","resource":"gal","args":{"asset":"USDS","amountMu":300000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545947613,"sem":"gal-16","actor":"operator","action":"xfer","resource":"gal","args":{"asset":"SAOS","amountMu":100000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545948767,"sem":"gal-16","actor":"yarden","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545948807,"sem":"gal-16","actor":"tamar","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545948864,"sem":"gal-16","actor":"shachar","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545948907,"sem":"gal-16","actor":"aluf","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545948977,"sem":"gal-16","actor":"erez","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792545949013,"sem":"gal-16","actor":"gal","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"ok","cost_units":0,"detail":""}
