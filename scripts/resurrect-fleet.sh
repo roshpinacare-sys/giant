@@ -53,8 +53,9 @@ declare -A SVC=(
   [steem-voice:3023]="/home/z/my-project/mini-services/steem-voice|bun run dev >> voice-steem.log 2>&1"
   [saos-engine:3040]="/home/z/work/steem/mini-services/saos-engine|bun index.ts >> /tmp/saos-engine.log 2>&1"
   [boot-verifier:3042]="/home/z/my-project/mini-services/boot-verifier|bun run dev >> node.log 2>&1"
+  [furnace:3045]="/home/z/my-project/mini-services/market-furnace|bun index.ts >> /tmp/furnace.log 2>&1"
 )
-for key in bridge:3017 army:3018 voice:3019 audit:3022 steem-voice:3023 saos-engine:3040 boot-verifier:3042; do
+for key in bridge:3017 army:3018 voice:3019 audit:3022 steem-voice:3023 saos-engine:3040 boot-verifier:3042 furnace:3045; do
   port="${key##*:}"; name="${key%%:*}"
   IFS='|' read -r dir cmd <<< "${SVC[$key]}"
   if ! probe "$port" "/health"; then

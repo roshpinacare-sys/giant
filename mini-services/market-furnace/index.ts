@@ -168,9 +168,11 @@ async function ensureFunded(): Promise<void> {
     await new Promise((res) => setTimeout(res, 4000));
   }
   w = await walletOf(FURNACE);
-  if (w && Number(w.credits) < 2_000) {
-    const f = await jpost(`${DEX}/fuel`, { to: FURNACE, amount: 4_000 });
-    act("fuel", "credits", { amount: 4_000 }, f?.ok ? "ok" : "denied", 0, f?.error ?? f?.note ?? "");
+  if (w && Number(w.credits) < 400) {
+    /* דלק-צנועה: funderFor-חוזר-operator-כ-fallback-גם-שאינו-יכול-לשלם — נבקש
+     * סכום-ש-operator-באמת-מחזיק (גז-אופים=1µ לפקודה — 1200µ=1200 פקודות, נדיב). */
+    const f = await jpost(`${DEX}/fuel`, { to: FURNACE, amount: 1_200 });
+    act("fuel", "credits", { amount: 1_200 }, f?.ok ? "ok" : "denied", 0, f?.error ?? f?.note ?? "");
   }
   w = await walletOf(FURNACE);
   if (w && Number(w.usds) >= FUND_USDS * 0.9) bootFunded = true;
@@ -403,9 +405,15 @@ async function tick(): Promise<void> {
 /* ═══ שירות-בריאות (:3045) — כנות-מלאה ══════════════════════════════════ */
 Bun.serve({
   port: PORT,
-  fetch: async () => {
-    const w = await walletOf(FURNACE).catch(() => null);
-    const st = await dexState().catch(() => null);
+  fetch: async (req) => {
+    /* בריאות-מהירה: כל-המדידות-במקביל עם-סופ-זמן-קצר — השירות-תמיד-עונה.
+     * כתובת-/health נתמכת-במיוחד (פרוב-resurrect-fleet דוגם-/health). */
+    const path = new URL(req.url).pathname;
+    if (path !== "/" && path !== "/health") return Response.json({ ok: false, error: "not-found", routes: ["/", "/health"] }, { status: 404 });
+    const [w, st] = await Promise.all([
+      walletOf(FURNACE).catch(() => null),
+      dexState().catch(() => null),
+    ]);
     const mid = bookCache?.fair ?? Number(st?.ladder?.refPrice ?? 0);
     const equityMu = w ? Math.round(w.usds + (w.saos * mid) / 1000) : null;
     return Response.json({
@@ -435,6 +443,9 @@ Bun.serve({
 });
 
 console.log(`[furnace] חי על :${PORT} — תנור-השוק-החריף (הצתה+ארב+Maker+קציר)`);
+/* שומרי-תהליך: לעולם-לא-מוות-שקט — כל-שגיאה-נרשמת-והתנור-ממשיך-לנשום */
+process.on("uncaughtException", (e) => { try { appendFileSync(ACTIONS_FILE, JSON.stringify({ ts: Date.now(), sem: "furnace-1", actor: FURNACE, action: "uncaught", outcome: "error", detail: String(e?.stack ?? e).slice(0, 300) }) + "\n"); } catch { } });
+process.on("unhandledRejection", (e) => { try { appendFileSync(ACTIONS_FILE, JSON.stringify({ ts: Date.now(), sem: "furnace-1", actor: FURNACE, action: "unhandled-rejection", outcome: "error", detail: String(e).slice(0, 300) }) + "\n"); } catch { } });
 void (async () => {
   await ensureFunded();
   await igniteSequence();
