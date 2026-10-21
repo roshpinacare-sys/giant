@@ -1334,3 +1334,15 @@
 {"ts":1792602195133,"sem":"gal-16","actor":"gal","action":"fill","resource":"SAOS/USDS","args":{"orderId":"726096","filledMu":5570,"price":1001},"outcome":"ok","cost_units":5570,"detail":"מילוי-ספר-אמת"}
 {"ts":1792602285035,"sem":"gal-16","actor":"operator","action":"xfer","resource":"gal","args":{"asset":"USDS","amountMu":4434},"outcome":"ok","cost_units":0,"detail":""}
 {"ts":1792602285106,"sem":"gal-16","actor":"gal","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":1000,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792602465057,"sem":"gal-16","actor":"operator","action":"xfer","resource":"tamar","args":{"asset":"USDS","amountMu":10000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792602465072,"sem":"gal-16","actor":"operator","action":"xfer","resource":"shachar","args":{"asset":"USDS","amountMu":10000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792602465078,"sem":"gal-16","actor":"operator","action":"xfer","resource":"aluf","args":{"asset":"USDS","amountMu":9785},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792602465123,"sem":"gal-16","actor":"tamar","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":999,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792602465196,"sem":"gal-16","actor":"shachar","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":999,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792602465239,"sem":"gal-16","actor":"aluf","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":999,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792602555175,"sem":"gal-16","actor":"operator","action":"xfer","resource":"yarden","args":{"asset":"USDS","amountMu":9989},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792602555228,"sem":"gal-16","actor":"operator","action":"xfer","resource":"erez","args":{"asset":"USDS","amountMu":10000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792602555297,"sem":"gal-16","actor":"operator","action":"xfer","resource":"gal","args":{"asset":"USDS","amountMu":10000},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792602555598,"sem":"gal-16","actor":"yarden","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":999,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792602555878,"sem":"gal-16","actor":"erez","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":999,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792602556008,"sem":"gal-16","actor":"gal","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":999,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
