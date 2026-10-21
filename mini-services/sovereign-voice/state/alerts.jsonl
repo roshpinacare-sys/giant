@@ -152,3 +152,7 @@
 {"ts":1792556957041,"key":"disk-full","sev":"critical","text":"הדיסק ב-100% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
 {"ts":1792557369262,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 100%→100% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:failed","status":"ledger"}
 {"ts":1792557370386,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792557865085,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792557869972,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 155 דק' (fills=255685) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792558157112,"key":"console-5xx","sev":"critical","text":"הקונסולה :3000 מחזירה 502 — דלת-הבית-פגומה","status":"ledger"}
+{"ts":1792558182752,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (42 כשלים) → respawn=true → verified=false","status":"ledger"}
