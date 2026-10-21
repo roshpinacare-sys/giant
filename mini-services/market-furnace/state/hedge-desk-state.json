@@ -1,795 +1,15 @@
 {
- "at": "2026-10-21T05:33:45.090Z",
+ "at": "2026-10-21T05:43:45.091Z",
  "dayKey": "2026-10-21",
- "dayPeakMu": 1395995,
+ "dayPeakMu": 1398854,
  "killSwitch": false,
  "killSwitchWhy": "",
  "gates": {
-  "allow": 127,
+  "allow": 167,
   "deny": 0,
   "lastDenyReason": ""
  },
  "theses": [
-  {
-   "ts": 1792560005325,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 95,
-    "volatilityProxy": 373
-   },
-   "risk": {
-    "equityMu": 1325105,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 10,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66255,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560025145,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 74,
-    "volatilityProxy": 366
-   },
-   "risk": {
-    "equityMu": 1325105,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 10,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66255,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560045430,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": -325,
-    "volatilityProxy": 366
-   },
-   "risk": {
-    "equityMu": 1325105,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 10,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66255,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560065230,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": -220,
-    "volatilityProxy": 360
-   },
-   "risk": {
-    "equityMu": 1324725,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 13,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66236,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560085186,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": -178,
-    "volatilityProxy": 351
-   },
-   "risk": {
-    "equityMu": 1324725,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 13,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66236,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560105288,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": -136,
-    "volatilityProxy": 340
-   },
-   "risk": {
-    "equityMu": 1324725,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 13,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66236,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560125170,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": -31,
-    "volatilityProxy": 322
-   },
-   "risk": {
-    "equityMu": 1324676,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 13,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66233,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560145279,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 11,
-    "volatilityProxy": 300
-   },
-   "risk": {
-    "equityMu": 1324676,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 13,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66233,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560165230,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 53,
-    "volatilityProxy": 274
-   },
-   "risk": {
-    "equityMu": 1324676,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 13,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66233,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560185146,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 95,
-    "volatilityProxy": 235
-   },
-   "risk": {
-    "equityMu": 1324297,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 16,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66214,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560205264,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 74,
-    "volatilityProxy": 186
-   },
-   "risk": {
-    "equityMu": 1324297,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 16,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66214,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560225333,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 53,
-    "volatilityProxy": 110
-   },
-   "risk": {
-    "equityMu": 1324297,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 16,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66214,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560245327,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 95,
-    "volatilityProxy": 107
-   },
-   "risk": {
-    "equityMu": 1324248,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 16,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66212,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560285176,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 74,
-    "volatilityProxy": 104
-   },
-   "risk": {
-    "equityMu": 1324248,
-    "dayPeakMu": 1326392,
-    "drawdownBps": 16,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 66212,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560309223,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 116,
-    "volatilityProxy": 101
-   },
-   "risk": {
-    "equityMu": 1395995,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 0,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69799,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560325186,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 84,
-    "volatilityProxy": 101
-   },
-   "risk": {
-    "equityMu": 1395995,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 0,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69799,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560345167,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 63,
-    "volatilityProxy": 101
-   },
-   "risk": {
-    "equityMu": 1395995,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 0,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69799,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560365156,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 108,
-    "volatilityProxy": 102
-   },
-   "risk": {
-    "equityMu": 1395942,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 0,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69797,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560385371,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 76,
-    "volatilityProxy": 105
-   },
-   "risk": {
-    "equityMu": 1395942,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 0,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69797,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560405153,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 55,
-    "volatilityProxy": 108
-   },
-   "risk": {
-    "equityMu": 1395942,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 0,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69797,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560425207,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 99,
-    "volatilityProxy": 113
-   },
-   "risk": {
-    "equityMu": 1395542,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 3,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69777,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560445286,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 77,
-    "volatilityProxy": 118
-   },
-   "risk": {
-    "equityMu": 1395542,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 3,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69777,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560465228,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 55,
-    "volatilityProxy": 123
-   },
-   "risk": {
-    "equityMu": 1395542,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 3,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69777,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560485155,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 99,
-    "volatilityProxy": 130
-   },
-   "risk": {
-    "equityMu": 1395490,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 4,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69774,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560505309,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 77,
-    "volatilityProxy": 138
-   },
-   "risk": {
-    "equityMu": 1395490,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 4,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69774,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560525219,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 55,
-    "volatilityProxy": 144
-   },
-   "risk": {
-    "equityMu": 1395490,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 4,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69774,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560545269,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 99,
-    "volatilityProxy": 153
-   },
-   "risk": {
-    "equityMu": 1395090,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 6,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69754,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560565506,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 77,
-    "volatilityProxy": 161
-   },
-   "risk": {
-    "equityMu": 1395090,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 6,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69754,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560585141,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": 55,
-    "volatilityProxy": 169
-   },
-   "risk": {
-    "equityMu": 1395090,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 6,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69754,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
-  {
-   "ts": 1792560605137,
-   "director": {
-    "stance": "ignite",
-    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
-    "fountainAlive": false
-   },
-   "quant": {
-    "spreadBps": null,
-    "imbalanceBps": null,
-    "meterMomentum": -546,
-    "volatilityProxy": 178
-   },
-   "risk": {
-    "equityMu": 1395039,
-    "dayPeakMu": 1395995,
-    "drawdownBps": 7,
-    "maxDrawdownBps": 400,
-    "sizeCapMu": 69751,
-    "killSwitch": false
-   },
-   "decision": {
-    "allowTaker": true,
-    "reasons": []
-   }
-  },
   {
    "ts": 1792560625149,
    "director": {
@@ -1043,6 +263,786 @@
     "drawdownBps": 13,
     "maxDrawdownBps": 400,
     "sizeCapMu": 69709,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792560825147,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 55,
+    "volatilityProxy": 184
+   },
+   "risk": {
+    "equityMu": 1394183,
+    "dayPeakMu": 1395995,
+    "drawdownBps": 13,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69709,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792560845143,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 99,
+    "volatilityProxy": 183
+   },
+   "risk": {
+    "equityMu": 1394135,
+    "dayPeakMu": 1395995,
+    "drawdownBps": 13,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69706,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792560865136,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 77,
+    "volatilityProxy": 183
+   },
+   "risk": {
+    "equityMu": 1394135,
+    "dayPeakMu": 1395995,
+    "drawdownBps": 13,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69706,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792560885148,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 55,
+    "volatilityProxy": 183
+   },
+   "risk": {
+    "equityMu": 1394135,
+    "dayPeakMu": 1395995,
+    "drawdownBps": 13,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69706,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792560909155,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 99,
+    "volatilityProxy": 183
+   },
+   "risk": {
+    "equityMu": 1398854,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 0,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69942,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792560925144,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 77,
+    "volatilityProxy": 183
+   },
+   "risk": {
+    "equityMu": 1398854,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 0,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69942,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792560945153,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 55,
+    "volatilityProxy": 183
+   },
+   "risk": {
+    "equityMu": 1398854,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 0,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69942,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792560965151,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 99,
+    "volatilityProxy": 184
+   },
+   "risk": {
+    "equityMu": 1398807,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 0,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69940,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792560985134,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 77,
+    "volatilityProxy": 184
+   },
+   "risk": {
+    "equityMu": 1398807,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 0,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69940,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561005143,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 55,
+    "volatilityProxy": 184
+   },
+   "risk": {
+    "equityMu": 1398807,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 0,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69940,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561025150,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 99,
+    "volatilityProxy": 185
+   },
+   "risk": {
+    "equityMu": 1398401,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 3,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69920,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561045139,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 77,
+    "volatilityProxy": 185
+   },
+   "risk": {
+    "equityMu": 1398401,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 3,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69920,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561065141,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 55,
+    "volatilityProxy": 185
+   },
+   "risk": {
+    "equityMu": 1398401,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 3,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69920,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561085142,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 99,
+    "volatilityProxy": 186
+   },
+   "risk": {
+    "equityMu": 1398355,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 4,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69917,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561105152,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 77,
+    "volatilityProxy": 187
+   },
+   "risk": {
+    "equityMu": 1398355,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 4,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69917,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561125140,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 55,
+    "volatilityProxy": 187
+   },
+   "risk": {
+    "equityMu": 1398355,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 4,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69917,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561145140,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 99,
+    "volatilityProxy": 188
+   },
+   "risk": {
+    "equityMu": 1397948,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 6,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69897,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561165149,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 77,
+    "volatilityProxy": 189
+   },
+   "risk": {
+    "equityMu": 1397948,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 6,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69897,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561185147,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 55,
+    "volatilityProxy": 190
+   },
+   "risk": {
+    "equityMu": 1397948,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 6,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69897,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561205156,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 99,
+    "volatilityProxy": 192
+   },
+   "risk": {
+    "equityMu": 1397903,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 7,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69895,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561225156,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 77,
+    "volatilityProxy": 192
+   },
+   "risk": {
+    "equityMu": 1397903,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 7,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69895,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561245145,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 55,
+    "volatilityProxy": 190
+   },
+   "risk": {
+    "equityMu": 1397903,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 7,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69895,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561265146,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 99,
+    "volatilityProxy": 192
+   },
+   "risk": {
+    "equityMu": 1397496,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 10,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69874,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561285135,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 77,
+    "volatilityProxy": 192
+   },
+   "risk": {
+    "equityMu": 1397496,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 10,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69874,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561305153,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 55,
+    "volatilityProxy": 190
+   },
+   "risk": {
+    "equityMu": 1397496,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 10,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69874,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561325144,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 99,
+    "volatilityProxy": 192
+   },
+   "risk": {
+    "equityMu": 1397452,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 10,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69872,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561345154,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 77,
+    "volatilityProxy": 192
+   },
+   "risk": {
+    "equityMu": 1397452,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 10,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69872,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561365143,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 55,
+    "volatilityProxy": 190
+   },
+   "risk": {
+    "equityMu": 1397452,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 10,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69872,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561385139,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 99,
+    "volatilityProxy": 192
+   },
+   "risk": {
+    "equityMu": 1397043,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 13,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69852,
+    "killSwitch": false
+   },
+   "decision": {
+    "allowTaker": true,
+    "reasons": []
+   }
+  },
+  {
+   "ts": 1792561405147,
+   "director": {
+    "stance": "ignite",
+    "why": "המזרקה-מתה (מד-מתחת-רצפת-9,000) — עדיפות-הצתה",
+    "fountainAlive": false
+   },
+   "quant": {
+    "spreadBps": null,
+    "imbalanceBps": null,
+    "meterMomentum": 77,
+    "volatilityProxy": 192
+   },
+   "risk": {
+    "equityMu": 1397043,
+    "dayPeakMu": 1398854,
+    "drawdownBps": 13,
+    "maxDrawdownBps": 400,
+    "sizeCapMu": 69852,
     "killSwitch": false
    },
    "decision": {
