@@ -34,7 +34,7 @@ const WAGE_FLOOR_USDS = 350; // גל-83 · חוק-שכר-מצע: רצפת-פרנ
 const TAX_BPS = 200; // גל-83 · מס-שירותים 2% → הכספת (מימון-השכר)
 
 /* ── משתמשי-הפנים ─────────────────────────────────────────────────────────── */
-type Account = { id: string; kind: "treasury" | "soldier" | "fleet" | "pool"; role: string };
+type Account = { id: string; kind: "treasury" | "soldier" | "fleet" | "pool" | "external"; role: string };
 const SOLDIERS = [
   { id: "yarden", role: "סוגרת-פינות משולחן ראש-המטה" },
   { id: "tamar", role: "מעדכנת תזרים בecon-book" },
@@ -58,6 +58,7 @@ const ACCOUNTS: Account[] = [
   ...SOLDIERS.map((s) => ({ id: s.id, kind: "soldier" as const, role: s.role })),
   ...FLEET_NODES.map((n) => ({ id: n.id, kind: "fleet" as const, role: n.role })),
   { id: "boot-verifier", kind: "fleet" as const, role: "מאמת-האתחול :3042 (הוכחת-חיים)" },
+  { id: "external-world", kind: "external" as const, role: "העולם-החוץ — מקור-רווח-אמת (curation/סוחרי-ספר-STEEM/powerdown; כל-כניסה מוכחת-txid)" },
 ];
 
 /* ── הצע-קבוע (חוק-21M המתוקן: אספקת SAOS = 21,000, לעולם לא נרגעת) ────────── */
@@ -127,7 +128,10 @@ function persistRetryQueue(): void {
 const seenRefs = new Map<string, number>(); // ref → ts (דהיות: פקודות-כפולות של מפיקים לא נספרות פעמיים)
 const SEEN_REFS_CAP = 20_000;
 const SEEN_REFS_SNAP = 5_000; // כמה-refs-שורדים-ב-snapshot (האחרונים-ראשית — Map שומר-סדר-הכנסה)
-const INGEST_KINDS = new Set(["dex-fee", "infra", "service"]);
+// gal-95 · רווח-חוץ: kind נפרד מ-dex-fee — dex-fee זה זרימה-פנימית (הבוטים שלנו על הדקס שלנו);
+// external-profit זה ערך-אמת שנכנס מהעולם-החוץ (curation/author/מילויי-סוחרים-חוץ/powerdown)
+// עם ראיות-txid ב-reason ו-ref ייחודי לכל-אירוע-שרשרת. fail-honest: אין-בנקאות בלי-ראיה.
+const INGEST_KINDS = new Set(["dex-fee", "infra", "service", "external-profit"]);
 const KNOWN_ACCOUNTS = new Set(ACCOUNTS.map((a) => a.id));
 function rememberRef(ref: string) {
   if (seenRefs.size >= SEEN_REFS_CAP) {
@@ -219,7 +223,11 @@ function rotate() {
 function apply(t: Omit<Tx, "h">, refH?: string): Tx | null {
   const from = bal(t.from), to = bal(t.to);
   const field = t.asset === "USDS" ? "usds" : "saos";
-  if ((from as any)[field] < t.amount) { rej(); return null; }
+  // gal-95 · external-world הוא דלת-הערך-הנכנס: אין-בדיקת-יתרה עליו והיתרה שלו יורדת
+  // לשלילי — השלילי-המצטבר = הרווח-החוץ-השנבנק (מטריקה-כנה-מוצגת-ב-/balances).
+  // הערך-עצמו לא מונפק-מהאוויר: הוא מתומחר-מהשרשרת (vestSteem/sbdPerSteem/מסילת-מחיר-חוץ)
+  // והראיות (txid/block/opHash) נמצאות ב-reason+ref של כל-רשומה. אספקת-SAOS לא מתרחבת.
+  if (t.kind !== "external-profit" && (from as any)[field] < t.amount) { rej(); return null; }
   if (t.kind === "stake") {
     from.saos -= t.amount; from.saosStaked += t.amount;
   } else if (t.kind === "unstake") {
@@ -610,6 +618,32 @@ const server = Bun.serve({
         });
       }
       if (url.pathname === "/balances") return Response.json({ balances: Object.fromEntries([...balances].map(([k, v]) => [k, { ...v, usds: +v.usds.toFixed(4), saos: +v.saos.toFixed(4) }])) });
+      // gal-95 · דוח-רווח-חוץ: סריקת-זנב-הפנקס (כנות-חלון) + מצטבר-מהיתרה-השלילית של external-world
+      if (url.pathname === "/external") {
+        let bankedUsds = 0, bankedSaos = 0, count = 0;
+        const entries: any[] = [];
+        try {
+          const lines = fs.readFileSync(LEDGER, "utf8").split("\n");
+          for (let i = lines.length - 1; i >= 0 && i >= lines.length - 20_000; i--) {
+            if (!lines[i]) continue;
+            try {
+              const t = JSON.parse(lines[i]);
+              if (t.kind !== "external-profit") continue;
+              count++;
+              if (t.asset === "USDS") bankedUsds += t.amount; else bankedSaos += t.amount;
+              if (entries.length < 25) entries.push({ seq: t.seq, ts: t.ts, asset: t.asset, amount: t.amount, reason: String(t.reason ?? "").slice(0, 240), ref: t.ref, h: t.h });
+            } catch { }
+          }
+        } catch { }
+        const ew = bal("external-world");
+        return Response.json({
+          ok: true, law: "רווח-חוץ = ערך-אמת מהעולם-החוץ בלבד (מדוד-מהשרשרת עם-txid) · עמלות-בוטים-פנימיות לא נחשבות",
+          windowScanned: "last 20,000 ledger entries",
+          banked: { usds: +bankedUsds.toFixed(6), saos: +bankedSaos.toFixed(6), entriesInWindow: count },
+          cumulativeExternalWorldBalance: { usds: +ew.usds.toFixed(6), saos: +ew.saos.toFixed(6) },
+          latest: entries,
+        });
+      }
       if (url.pathname === "/ledger") {
         const lim = Math.min(500, Math.max(1, +(url.searchParams.get("limit") ?? 100)));
         return Response.json({ tail: tailRing.slice(-lim).reverse() });
