@@ -1965,3 +1965,6 @@
 {"ts":1792586673213,"sem":"gal-16","actor":"aluf","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"denied","cost_units":0,"detail":"free-op-cap"}
 {"ts":1792586673353,"sem":"gal-16","actor":"erez","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"denied","cost_units":0,"detail":"free-op-cap"}
 {"ts":1792586673438,"sem":"gal-16","actor":"gal","action":"fuel","resource":"credits","args":{"amount":600},"outcome":"denied","cost_units":0,"detail":"free-op-cap"}
+{"ts":1792587034944,"sem":"gal-16","actor":"tamar","action":"pulse-swap","resource":"SAOS/USDS","args":{"assetIn":"USDS","amount":100000,"minOut":94313},"outcome":"ok","cost_units":300,"detail":"feeMeter=8000 עמלת-חשמל-שוק אמת"}
+{"ts":1792587121497,"sem":"gal-16","actor":"operator","action":"xfer","resource":"tamar","args":{"asset":"USDS","amountMu":89930},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792587121538,"sem":"gal-16","actor":"tamar","action":"xfer","resource":"operator","args":{"asset":"SAOS","amountMu":96238},"outcome":"ok","cost_units":0,"detail":""}

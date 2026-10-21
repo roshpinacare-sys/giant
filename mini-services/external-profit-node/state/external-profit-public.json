@@ -1,30 +1,30 @@
 {
  "schema": "SAOS-EXTERNAL-PROFIT-SNAPSHOT/1",
- "bakedAt": "2026-10-21T12:37:43.083Z",
+ "bakedAt": "2026-10-21T12:54:53.617Z",
  "externalProfit": {
   "schema": "SAOS-EXTERNAL-PROFIT/1",
-  "at": "2026-10-21T12:37:43.066Z",
+  "at": "2026-10-21T12:54:53.587Z",
   "law": "accrual-with-txid · vests-denominated income · zero overlap with liquid-claims census · fills=PnL-of-grid-ledger-only",
   "window": {
-   "sinceIso": "2026-10-21T12:24:15.236Z",
-   "headBlock": 110629639
+   "sinceIso": "2026-10-21T12:51:17.944Z",
+   "headBlock": 110629979
   },
   "pricing": {
-   "vestSteem": 0.0006206025484582922,
+   "vestSteem": 0.0006206030444932252,
    "sbdPerSteem": 0.10408138149254616,
    "external": {
-    "steemUsd": 0.05492,
+    "steemUsd": 0.05496,
     "sbdUsd": null,
     "source": "mexc"
    }
   },
-  "measuredUsd24h": 0.0026,
-  "measuredVests24h": 77.367814,
+  "measuredUsd24h": 0.0082,
+  "measuredVests24h": 241.773817,
   "parts": [
    {
     "id": "chain-curation",
-    "vests": 77.367814,
-    "usd": 0.002637,
+    "vests": 241.773817,
+    "usd": 0.008247,
     "source": "curation_reward ops (accrual, txid-evidenced)"
    }
   ],
@@ -148,6 +148,64 @@
      "weight": 200
     }
    ]
+  },
+  {
+   "schema": "SAOS-CURATE-BEAT/1",
+   "at": "2026-10-21T12:38:09.011Z",
+   "verdict": "VOTED-LIVE",
+   "executed": 8,
+   "planned": 8,
+   "pub": "STM7KqKZ7TmiTBBRoHLHQTmKpfBQk8nYVsJTRLjAe4ALREjGRJpsR",
+   "votes": [
+    {
+     "author": "kellyhong",
+     "permlink": "2rbnzx",
+     "txid": "d575faf06c5fe419ef7075d144e6115eea1e0d0f",
+     "weight": 200
+    },
+    {
+     "author": "cjsdns",
+     "permlink": "fyvyw",
+     "txid": "5e80010185ff6a3834452d13cbc375db2e9193fd",
+     "weight": 200
+    },
+    {
+     "author": "tasonya",
+     "permlink": "photography-dahlia-flower",
+     "txid": "f29c35dab4d8744f94af8fad688e4a2cca7441d3",
+     "weight": 200
+    },
+    {
+     "author": "lyh5926",
+     "permlink": "sfnkx",
+     "txid": "1a2aa1d24ae13dd9eb79cd7635e061d60ea4b991",
+     "weight": 200
+    },
+    {
+     "author": "btcstmtrckr",
+     "permlink": "market-update-1792530007",
+     "txid": "4ca99b55083092ab4a2262cb3eba3ceb31e7b5a5",
+     "weight": 200
+    },
+    {
+     "author": "chorock",
+     "permlink": "53ptme-bitcoin-price-broke-up-mini-downtrend-line",
+     "txid": "b9fdf0f7afc6ddb300bfb78cdba424f3d6820f16",
+     "weight": 200
+    },
+    {
+     "author": "bcs5",
+     "permlink": "btc-price-2026-10-21-1147",
+     "txid": "536c8f01c6981f3c1f87f744e33603c97607026e",
+     "weight": 200
+    },
+    {
+     "author": "maxart",
+     "permlink": "pro-pam-yat",
+     "txid": "db396baa864957eb72cebfbdcbd63486ce0798fd",
+     "weight": 200
+    }
+   ]
   }
  ],
  "selfDeposit": {
@@ -175,7 +233,7 @@
  "service": {
   "port": 3024,
   "cycles": 1,
-  "lastCycleAt": "2026-10-21T12:37:43.079Z",
+  "lastCycleAt": "2026-10-21T12:54:53.615Z",
   "lastCycleErr": ""
  }
 }
