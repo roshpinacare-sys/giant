@@ -131,3 +131,15 @@
 {"ts":1792585765912,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 55 דק' (fills=0) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
 {"ts":1792585765915,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
 {"ts":1792586063424,"key":"dex-halted","sev":"critical","text":"הבורסה עצורה: snapshot-integrity-failed: load refused, evidence preserved (operator reset is the explicit recovery path)","status":"ledger"}
+{"ts":1792586580899,"key":"disk-full","sev":"critical","text":"הדיסק ב-92% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1792586778185,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 92%→94% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792586778201,"key":"disk-full","sev":"critical","text":"הדיסק ב-94% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1792586880128,"key":"disk-healed","sev":"warn","text":"שומר-הדיסק: 94%→76% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792586880150,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792586881120,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 2 שגיאות (היה 0)","status":"ledger"}
+{"ts":1792586888130,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792586888851,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 2 שגיאות (היה 0)","status":"ledger"}
+{"ts":1792586888852,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:fuel: free-op-cap · shachar:fuel: free-op-cap · aluf:fuel: free-op-cap · erez:fuel: free-op-cap · gal:fuel: free-op-cap","status":"ledger"}
+{"ts":1792586889817,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:fuel: free-op-cap · shachar:fuel: free-op-cap · aluf:fuel: free-op-cap · erez:fuel: free-op-cap · gal:fuel: free-op-cap","status":"ledger"}
+{"ts":1792586889817,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792586929893,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (16 כשלים) → respawn=true → verified=false","status":"ledger"}
