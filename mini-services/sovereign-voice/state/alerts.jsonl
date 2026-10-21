@@ -146,3 +146,6 @@
 {"ts":1792555465002,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
 {"ts":1792555471664,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
 {"ts":1792555471669,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792555758700,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 120 דק' (fills=255685) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792556193583,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (35 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792556358789,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: yarden:fuel: free-op-cap · tamar:fuel: free-op-cap · shachar:fuel: free-op-cap · aluf:fuel: free-op-cap · erez:fuel: free-op-cap · gal:fuel: free-op-cap","status":"ledger"}
