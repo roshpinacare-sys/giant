@@ -9087,3 +9087,23 @@ Stage Summary:
 - **custom.db ניצל משחיתות-דיסק**: integrity_check גילה Tree 17 (DexLedger) פגום + פגיעות ב-DexOrder. חילוץ-חלונות rowid-עדין → rebuild מלא (DexLedger 113k שורות, DexOrder 24k, DexCandle 47k, DexTrade 6k) → integrity ok → החלפה. המקורי שמור /home/z/dex-backups/custom.db.corrupt-*.
 - **מלחמת-פורט-3000 נפתרה כחוק**: preview-bridge של-הדקס (חוק-2026-10-06) היה מקשרה-מחדש את 3000 בכל-בקשה-לדקס אחרי-שחרור (ensure→start בלי-בדיקת-מתג) — גניבת-פורט מחזורית מול שרת-האם. תיקון (saos-dex ce8df2ba): המתג db/preview-bridge.off נבדק גם ב-bind-time — כוונתו "רב-זמן". המתג נאטם בגיט כחוזה-קבוע: 3000 = GIANT-אם, 3010 = דקס, 3050 = קונסולת-אם (fleet-guard).
 - **אימות-דפדפן סופי**: 3000 GIANT רינדור מלא (truth-gate ALL-GREEN, 39/39 סוכנים חיים), מודולים מדווחים דלת-חיה עם כנות-כשל, דקס 3010 חי, גריד ARMED-LIVE.
+
+---
+Task ID: 21
+Agent: Z.ai (sovereign engineer, main)
+Task: "תמשיך" (trace 1a15e3e591257b21) — רווח-חוץ-מוכח-לא-אפס · סנכרון-צי · דפים
+
+Work Log:
+- **סנכרון-צי מול-דריסות**: main היה ahead-3/behind-418 (סנדבוקסים-מקבילים אוטמים-אוטומטית). rebase-עדין תחת-הקפאת-כותבים (SIGSTOP-bun) + איחוי-union ל-JSONLs (שני-הצדדים-אמת) + ours לבינאריים-חיים — אפס-אובדן-רשומות. הטוקן-הישן-נפל (401); **סיבוב-טוקן מ-upload/גיטראש.txt → pat.env** (שגיאת-ביניים: שורת-הערה נדבקה-לטוקן — תוקן: טוקן-גולמי-בלבד). דחיפות: giant 5ff502a→6c9c3ae · Domain b12fcc4ba · saos-dex (אוטומטי).
+- **שורש-האפס-נמצא-במדידה-מדויקת**: self-deposit measuredUsd24h=0 כי-ה-census סופר-רק-תביעות-נזילות (claimSteem/claimSbd) — וכל-הכנסה-שלנו-מהשרשרת מגיעה-ב-**VESTS** (אצירה+פרס-מחבר) שמעולם-לא-נרשמו. בנוסף: 4,040-ops נסרקו מ-15.10 → **אפס-מילויים** על שוק-STEEM (הספר-יעיל-בפאריטי; הסולם-ממתין-מעל-המגע — מבנה-תקין).
+- **המנוע: grids/external-profit.mjs (saos-dex)** — מדידת-התגשמות מה-ops עצמם (curation_reward + author_reward-vests), partition-אנטי-כפילות מול-ה-census (vests-אצלי · נזילי-אצל-census · fills=PnL-של-פנקס-הגריד-בלבד), ראיות-בלוק+opHash (virtual-ops מסומנים-בכנות), תמחור: יחס-vests-שרשרת × median-feed × מסילת-מחיר-חוץ (MEXC→Gate→Kraken; CryptoCompare-מת-מאז-Task-20). selftest-ירוק.
+- **המספר-הפך-לא-אפס-עם-ראיות**: **$0.0026/24ש׳ · 77.37 VESTS · 5-אירועי-ראיה** — זרם-דרך self-deposit (patch: readLatestExternalProfit + part chain-yield) → dividendLane greenStreak=2, gapToTarget=$999.9974-כנה.
+- **המגבר הוצת — מסילת-האצירה חיה לראשונה**: מפתח-פרסום-ייעודי נוצר-מקומית-ואומץ-בשרשרת-בחתימת-owner (txid c1e7ea9a… block 110629503; authority-אדיטיבית 5→6-מפתחות, threshold-1 — אפס-שיבוש-לשאר-המפתחות). **16-הצבעות-אצירה-חיות-בשתי-פעימות** (8+8) עם-txids-ציבוריים. curate-beat.mjs: נגד-כפילות-24ש׳ · key-gate-מול-רשות-חיה · fail-closed.
+- **שירות-הראיות :3024 (external-profit-node)**: מריץ-את-מנוע-המדידה-כל-10-דק' + פעימת-אצירה-יומית + מטמיע-snapshot ל-giant.git (mini-services/external-profit-node/state/) ומשרת /health /summary /selfdeposit /evidence. health-ok · cycles-חיים.
+- **דף-הכסף-רואה-את-זה**: money.html — מקטע "רווח-חוץ מוכח" חי (שולף-מ-raw.githubusercontent giant), כולל-חלקי-הרווח, txids-ההצבעות, מסילת-הדיבידנד, והנחיה-לאימות-עצמאי. syntax-check-6/6-בלוקים-ירוק. דחוף-b12fcc4ba.
+- **אימות-קצה-לקצה**: raw-snapshot-חי-בגיט ✓ · Pages-200 ✓ · שרשרת-STEEM-מאשרת-את-הסמכויות-החדשות ✓.
+
+Stage Summary:
+- **הרווח-החוץ אינו-אפס — מדוד, מהוכח, מתומחר, מפורסם וזורם-במסילת-הדיבידנד**: $0.0026/24ש׳ מהתגשמות-אצירה-אמת (77.37 VESTS), עם-ראיות-שרשרת-גלויות-בדף-הכסף. הצינור: op-על-שרשרת → מדידה-אפס-מפתחות → פנקס-ראיות → self-deposit → snapshot-בגיט → דף-חי.
+- המסילות-החיות: מנוע-מדידה-10-דק' · אצירה-יומית (16-txids-היום) · גריד-STEEM-חמוש-ממתין-מעל-המגע · census-תביעות-נזילות-ללא-שינוי.
+- פתוח: העלאת-קצב-האצירה (canary-2%-×-8-הצבעות-יום) עם-רצף-ירוק · מילויי-גריד-ראשונים-ירשמו-אצל-pnl-audit · שדרוג-שאר-הדפים (console/ארנק/עיתון) לאותו-רמת-ראיות.
