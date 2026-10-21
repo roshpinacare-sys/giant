@@ -1375,3 +1375,9 @@
 {"ts":1792558728676,"sem":"gal-16","actor":"erez","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1016,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
 {"ts":1792558728791,"sem":"gal-16","actor":"gal","action":"order","resource":"SAOS/USDS","args":{"side":"buy","price":1010,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
 {"ts":1792558728803,"sem":"gal-16","actor":"gal","action":"order","resource":"SAOS/USDS","args":{"side":"sell","price":1016,"amount":10000,"postOnly":true},"outcome":"ok","cost_units":0,"detail":""}
+{"ts":1792559718714,"sem":"gal-16","actor":"yarden","action":"cancel","resource":"SAOS/USDS","args":{"orderId":1448691,"price":1019,"fair":1012},"outcome":"ok","cost_units":0,"detail":"stale>60bps"}
+{"ts":1792559718731,"sem":"gal-16","actor":"tamar","action":"cancel","resource":"SAOS/USDS","args":{"orderId":1448693,"price":1019,"fair":1012},"outcome":"ok","cost_units":0,"detail":"stale>60bps"}
+{"ts":1792559718775,"sem":"gal-16","actor":"shachar","action":"cancel","resource":"SAOS/USDS","args":{"orderId":1448695,"price":1019,"fair":1012},"outcome":"ok","cost_units":0,"detail":"stale>60bps"}
+{"ts":1792559718808,"sem":"gal-16","actor":"aluf","action":"cancel","resource":"SAOS/USDS","args":{"orderId":1448697,"price":1019,"fair":1012},"outcome":"ok","cost_units":0,"detail":"stale>60bps"}
+{"ts":1792559718825,"sem":"gal-16","actor":"erez","action":"cancel","resource":"SAOS/USDS","args":{"orderId":1448699,"price":1019,"fair":1012},"outcome":"ok","cost_units":0,"detail":"stale>60bps"}
+{"ts":1792559718867,"sem":"gal-16","actor":"gal","action":"cancel","resource":"SAOS/USDS","args":{"orderId":1448701,"price":1019,"fair":1012},"outcome":"ok","cost_units":0,"detail":"stale>60bps"}
