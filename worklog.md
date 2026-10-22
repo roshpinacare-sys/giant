@@ -9115,3 +9115,20 @@ Work Log:
 
 Stage Summary:
 - מחזור-מלא: בחן → תכנן → בצע → ודחף. הרווח-החוץ-לא-אפס-ולא-מזויף: curation מדוד-txid + מילויי-גריד-אמת-מול-צד-שלישי (מהריצה-הבאה-עם-הקוד-המתוקן), עם-קדנס-מוגן-מפני-הצטברות-כותבים ומזכר-תיאום-פורסם-לצי.
+
+---
+Task ID: 21
+Agent: Z.ai (sovereign engineer, main — session web-468de1e9, trace 1a1616b0e7b9acf5)
+Task: "תמשיך ודחוף וודא שאין כפילויות ודריסות וכו שהכל ירוץ ולא יהיו התנגשויות ודחוף"
+
+Work Log:
+- מפת-דרכים-מלאה של כל-הריפו: giant (my-project, main) · saos-dex (/home/z/work/saos-dex, main — זהו תהליך-3010 החי) · FleetHQ (/home/z/estate/FleetHQ) · Domain (/tmp/Domain-audit — מסלול של סוכנים-אחרים, לא-נגעתי).
+- בדיקת-כפילויות-מעמיקה: מיפוי PID→cwd→cmd לכל-מאזין. 15 שירותים ייחודיים, אפס-פורט-כפול, אפס-מופע-כפול: 3000 edge (my-project) · 3010 SAOS-DEX (next-server, cwd=/home/z/work/saos-dex) · 3011 agent-hq · 3012 local-beats · 3016 fleet-economy/boot-verifier · 3017/3018 sovereign-audit · 3019 sovereign-voice · 3020 soldier-army · 3021 estate-sync · 3022 מבקר · 3023 steem-voice · 3036 dex-economy-bridge · 3040 office-selfcheck · 3042 sovereign-gateway. כולם מגיבים (200/404/400 = חי).
+- בדיקת-דריסות-git: giant 0/0 מול-origin (ה-sealer האוטונומי התחייב-ודחף 3909140 במקביל) · FleetHQ 0/0 · saos-dex היה 10-מאחורי (dex-beats/arb-grid/army-ladder של-Actions) → ff-pull נקי ללא-התנגשויות ל-1b6b90d7.
+- **פער-קריטי-שנתפס-ונסגר**: התיקון-הכנות R-GRID-WAR (7820010c — כיוון-maker אמת + selfCross=edge-0 מחוץ-לרווח-החוץ) נדחף-אך-לא-רץ-אף-מחזור-גריד-אמת (הריצה-האחרונה-הייתה 01:32 עם-הקוד-הישן). dispatch-ידני של dex-grid על-main (HTTP 204) → ריצה 39711548276 הושלמה success (02:28-02:29): 4 placed (steem) · 9 cancelled · 115 fills-lifetime · verdict=ARMED-LIVE · keyGate ok+authorityOk · book דו-צדדי חי: bestBid 0.101012 / bestAsk 0.103333, spread 229bps, 9 פקודות-פתוחות · מלאי-מחויב 156.853 STEEM + 1.108 SBD. הריצה-הראשונה-עם-החשבונאות-המתוקנת על-השרשרת.
+- שרשרת-הפרסום-אומתה קצה-לקצה: external-profit-publish (כל-2ש׳, keyless, race-safe עם rebase+retry-push נגד-ה-sealer) → grids/state/external-profit-public.json ב-giant — SAOS-EXTERNAL-PROFIT/1 טרי (00:54Z), measuredUsd24h=$0.01 curation עם-20-ראיות-txid, pricing מ-mexc. Domain Pages כולם 200 (root/console/money/dex-money.json).
+- blocker-ידוע-ונרשם-בכנות בריצת-הגריד: "2/15 chain ops rejected (broadcast answered without id)" — אינטרמיטנטי, ה-verdict נשאר armed; 13 פקודות-זומבי-על-השרשרת (9 בוטלו-בריצה).
+
+Stage Summary:
+- אפס-כפילויות · אפס-דריסות · אפס-התנגשויות — כל-הריפו מסונכרנים (ff-בלבד), כל-15-השירותים חיים, הגריד-החוץ רץ-עם-החשבונאות-הכנה-ומפרסם-ראיות-אוטומטית.
+- נקודה-למחזור-הבא: externalFlowUsd ייבנה-מחדש-ממילויים-עתידיים-בלבד (ההיסטוריה-נשמרת-כפי-שנמדדה); הרווח-המוכח-האיתן נשאר curation-txid + מילויים-אמת-מול-צד-שלישי.
