@@ -131,3 +131,6 @@
 {"ts":1792645256946,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (16 כשלים) → respawn=true → verified=false","status":"ledger"}
 {"ts":1792645519382,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
 {"ts":1792645896178,"key":"disk-healed","sev":"warn","text":"שומר-הדיסק: 92%→74% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:failed","status":"ledger"}
+{"ts":1792646411256,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792646413153,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 90 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792646413155,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
