@@ -1772,3 +1772,17 @@
 {"ts":"2026-10-18T16:02:05.643Z","repo":"saos-dex","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-18T16:02:07.423Z","repo":"autonomy-fix","action":"sealed","ahead":"0","detail":"Everything up-to-date"}
 {"ts":"2026-10-18T16:02:07.423Z","action":"sweep-done"}
+{"ts":"2026-10-22T03:49:08.161Z","repo":"my-project","action":"push-fail","out":"fatal: could not read Username for 'https://github.com': No such device or address"}
+{"ts":"2026-10-22T03:49:08.193Z","repo":"FleetHQ","action":"status-fail","out":""}
+{"ts":"2026-10-22T03:49:16.997Z","repo":"Domain","action":"push-fail","out":"fatal: could not read Username for 'https://github.com': No such device or address"}
+{"ts":"2026-10-22T03:49:17.006Z","repo":"Console","action":"status-fail","out":""}
+{"ts":"2026-10-22T03:49:24.244Z","repo":"Pulse","action":"push-fail","out":"fatal: could not read Username for 'https://github.com': No such device or address"}
+{"ts":"2026-10-22T03:49:25.485Z","repo":"Sandbox","action":"pull-fail","out":"new branch]      main       -> origin/main\nerror: Unable to create '/home/z/estate/Sandbox/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'"}
+{"ts":"2026-10-22T03:49:25.583Z","repo":"Sandbox","action":"merge-fallback-fail","out":"fatal: Unable to create '/home/z/estate/Sandbox/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opene"}
+{"ts":"2026-10-22T03:49:29.276Z","repo":"Sandbox","action":"commit-fail","out":"fatal: cannot lock ref 'HEAD': reference already exists"}
+{"ts":"2026-10-22T03:49:29.365Z","repo":"Sandbox","action":"pull-fail","out":"fatal: Updating an unborn branch with changes added to the index."}
+{"ts":"2026-10-22T03:49:29.510Z","repo":"Sandbox","action":"push-fail","out":"error: src refspec HEAD does not match any\nerror: failed to push some refs to 'https://github.com/roshpinacare-sys/Sandbox.git'"}
+{"ts":"2026-10-22T03:49:29.547Z","repo":"roshpina","action":"status-fail","out":""}
+{"ts":"2026-10-22T03:49:29.559Z","repo":"saos-dex","action":"status-fail","out":""}
+{"ts":"2026-10-22T03:49:38.943Z","repo":"autonomy-fix","action":"push-fail","out":"fatal: could not read Username for 'https://github.com': No such device or address"}
+{"ts":"2026-10-22T03:49:38.944Z","action":"sweep-done"}

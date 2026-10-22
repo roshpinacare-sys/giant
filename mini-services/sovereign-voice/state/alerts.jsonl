@@ -111,3 +111,6 @@
 {"ts":1792640716875,"key":"army-unreachable","sev":"warn","text":"צבא-החיילים :3018 לא מגיב — המפעיל-הפנימי ינסה-ריפוי","status":"ledger"}
 {"ts":1792640716876,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
 {"ts":1792640723189,"key":"fuel-tend-error","sev":"warn","text":"מטפל-הדלק: שגיאת-רשת Error: Unable to connect. Is the computer able to access the url?","status":"ledger"}
+{"ts":1792641010987,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792641045173,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (2 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792641063186,"key":"heal-failed-bridge","sev":"critical","text":"מפעיל-פנימי: bridge:3017 נפל (2 כשלים) → respawn=true → verified=false","status":"ledger"}
