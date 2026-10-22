@@ -134,3 +134,7 @@
 {"ts":1792646411256,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
 {"ts":1792646413153,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 90 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
 {"ts":1792646413155,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792647011280,"key":"disk-full","sev":"critical","text":"הדיסק ב-98% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1792647254983,"key":"ledger-verify","sev":"critical","text":"אימות-שרשרת נכשל: {\"ok\":false,\"checked\":124099,\"brokenAt\":124099}","status":"ledger"}
+{"ts":1792647255055,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 9 שגיאות (היה 8)","status":"ledger"}
+{"ts":1792647281189,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (22 כשלים) → respawn=true → verified=false","status":"ledger"}
