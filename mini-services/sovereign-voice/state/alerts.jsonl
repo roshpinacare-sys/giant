@@ -135,3 +135,6 @@
 {"ts":1792679412597,"key":"disk-healed","sev":"warn","text":"שומר-הדיסק: 96%→86% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:failed","status":"ledger"}
 {"ts":1792679413176,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 4 שגיאות (היה 3)","status":"ledger"}
 {"ts":1792679640291,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792679946839,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792679948382,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 125 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792680265496,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (28 כשלים) → respawn=true → verified=false","status":"ledger"}
