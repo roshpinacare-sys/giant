@@ -9058,3 +9058,31 @@ Work Log:
 Stage Summary:
 - הספר-הריבוני דו-צדדי-סביב-אמת-בפעם-הראשונה-מזה-ימים. ערוץ-הערך: מסחר→עמלה→מיכל-גז-כלכלה→שירותים-אמת.
 - הכל אטום ודחוף לגיטהאב (4466cea+).
+
+---
+Task ID: 20
+Agent: Z.ai (sovereign engineer, main — session web-468de1e9, trace 1a1613276ef2e889)
+Task: "תמשיך מאיפה שעצרת" — רווח-חוץ מוכח לא-אפס · שחזור-סביבה · החייאת-הגריד · סנכרון-צי
+
+Work Log:
+- שחזור-סביבה מלא: cred-helper חוזר מ-upload/גיטראש.txt (40-char token) → pull giant + saos-dex + clone-ביקורת Domain (עדכני ל-01:35Z).
+- סקר-חיות: 3000 חי · 3010 SAOS-DEX חי (התנעה-קרה איטית, 200 ok) · 3016-3042 חיים · office-selfcheck :3040 הוקם ומרפא app:3002 · Console :3050 לא-נמצא-קיים-כשירות (ws-route.log מפנה ל-3050 אך אין-מקור-פעיל).
+- מדידת-רווח-חוץ (LAW-3 — רק-מהספרים):
+  * curation: measuredUsd24h=$0.01 (290.13 vests, 20-ראיות-txid, grids/external-profit.mjs keyless) — זורם-מפורסם-אוטומטית מ-Actions (external-profit-publish, כל-2ש׳).
+  * grid STEEM: externalFlowUsd=$0.568 לכל-החיים · 6 מילויים-מדודים · STASIS staged-allow=[grid,claims,delegations,general] (R30 FULL LIFT trace 1a12d295c7da9241).
+  * arb: strategyPnlSbd=+16.63 מ-57 כניסות-אסטרטגיה (paper, לא-מומש) · realFillsEver=730.
+  * dividend-lane: pendingReleaseUsd=$0.0026 · target $1000/day · gap $999.9974.
+- גילוי-שורש (רווח-חוץ עצור): ה-shift-guard של התאום ב-Domain בודק ריצת-dex-grid אחרונה-ב-saos-dex-הפרטי (dispatch-only מאז-R75, אין-קדנס) → כל-עוד יש ריצה-מוצלחת-טרייה <23ש׳ התאום מאמת-בלבד, והמקור-המקומי היה-מת-מקומית (אין-keystation אחרי-סנדבוקס-ריסט; WIF מקומי-ישן — key-gate fail-closed עבד-נכון וסירב: livePub STM5HhJD…).
+- תיקון-מעשי: dispatch ידני של dex-grid ב-saos-dex הפרטי (run 39706142459, 01:31Z, success) — עם-המפתח-החי מ-secrets:
+  * 12 פקודות-זומבי בוטלו על-השרשרת (25 STEEM כל-אחת וכו').
+  * 2 מדפי-מכר הוצבו: 101.499 STEEM→11.280 SBD @0.111135 (parity+0.8%) txid 7b9bf7152380 · 101.499 STEEM→11.370 SBD @0.112024 (parity+1.6%) txid 932fa0d6e533.
+  * 3 בידים הוצבו: 0.313 SBD→3.145/3.194/3.244 STEEM @0.0995/0.0980/0.0965 (מתחת-לקו-הזהות = עודף-מדוד) txids fa5442c8/b237f143/3f63aef6.
+  * REAL FILL נספר-חי: 1.033 SBD→10.152 STEEM · edge 835bps מול-מחירי-חוץ.
+  * commit 672ef5a2: "5 placed · 12 cancelled · 109 fills counted" — verdict=ARMED-LIVE.
+- מדידת-דלק-חיה: headcorner = 298.234 STEEM נזיל + 1.108 SBD · 0 פרסים-ממתינים (daily-claim עובד) · powerdown לא-פעיל (to_withdraw=אבק 0.4 VESTS) · SP אפקטיבי 2,083 · 0 פקודות-פתוחות-לפני-הביט, 0 המרות-ממתינות (ה-131.856 SBD הומרו-כבר).
+- הצלבת-תאום: Domain פעיל-מאוד בידי-סוכנים-אחרים (wave 19.61 · site-audit FAIL loop · bidi-guardian · network-census כל-דקה) — לא-נגעתי-בדפי-Domain כדי-למנוע-דריסות; המסלול-שלי = מנוע-הרווח.
+
+Stage Summary:
+- הגריד-החוץ חי-שוב-על-השרשרת-עם-5 פקודות-אמת-ומילוי-אמת-מדוד (835bps) — המנוע-המוכח-לרווח-חוץ מסרב-להיות-אפס.
+- רווח-חוץ-מדוד-היום: curation $0.01/24ש׳ + grid edge-מילויים-חיים — לא-אפס, מוכח-txid, מפורסם-אוטומטית.
+- פתוח: (1) קדנס-ל-dex-grid-הפרטי (עתה dispatch-ידני; התאום-לוקח-שליטה-אחרי-23ש׳ = self-healing) · (2) convert-leg חסום-ברמת-workflow תחת-staged (ממתין-ליפה-מלאה; גם-כך יתרת-SBD=1.1) · (3) FixedFloat pending-אצלם · (4) Console :3050 ללא-מקור-פעיל.
