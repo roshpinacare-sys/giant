@@ -69,3 +69,31 @@ declared test data) and yields zero findings — the §12 zero-debt bar applied 
 - `runCli(argv, cwd) → {code, scanned, findings, contracts, outDir, summaryLine}`
 - Consumable artifact: `state/issues.json` (`schema: "meta-planner/issues@1"`) —
   swarm instances can read contracts directly as work items.
+
+## 6. v2 (2026-10-23, trace 1a1697c27e890309 — "שפר את כל מה שעשית")
+
+- **Rule 6 — `type-debt`**: explicit type-suppression markers (ts-ignore / ts-expect-error /
+  ts-nocheck with the @ sigil) are contracted. Self-scan safe: the module's own source never
+  contains the literals (fragmented regex + prose-only references) — the Task-67 lesson applied.
+- **Evidence ingest** (`bun index.ts ingest <evidence.json>`): canonical
+  `meta-planner/evidence@1` docs → IssueContracts. tsc errors group per-file
+  (one contract per file, deterministic EVIDENCE_CAP=12 evidence rows); stranded-work
+  contracts per-item. Fail-closed on malformed evidence (exit 2). All messages redacted (§7B).
+- **Kernel-interop receipts (schema@2)**: every receipt now carries `payloadHash`
+  (SHA-256 of the contract body) — cross-verifiable against the dispatch kernel's
+  `src/lib/dispatch/receipts.ts` chain format (seq|payloadHash|prevHash family).
+- **Handover honored, measured deeper**: convergence-lane (wave 19.79) handed Thread 3
+  "576 pre-existing tsc errors". Measured first-hand on the current tree:
+  `tsc -p . --noEmit` → **2080 errors** → parsed → `state/tsc-evidence.json`
+  (evidence@1) → ingested → **`state/issues-tsc/issues.json`: 542 per-file contracts**.
+- **Measured receipts committed**: self-scan 0/0 @2 · giant-scan 357 contracts
+  (222 orphan-module / 129 silent-catch / 6 placeholder-code / 0 secrets / 0 suppression).
+- **Suite**: 33 tests / 0 fail / 81 expect() — parser, grouping, cap, redaction,
+  payload tamper, ingest CLI fail-closed paths, determinism byte-identical.
+
+## 7. v2 handoff interfaces (additive)
+
+- `parseTscOutput(text) → TscError[]` · `evidenceFromTsc(errors, source) → EvidenceDoc`
+- `contractsFromEvidence(doc) → IssueContract[]` · `readEvidenceDoc(path) → EvidenceDoc` (fail-closed)
+- Consumable artifacts: `state/issues.json` + `state/issues-tsc/issues.json`
+  (`schema: "meta-planner/issues@2"`) — work-item feed for all 9 workers.
