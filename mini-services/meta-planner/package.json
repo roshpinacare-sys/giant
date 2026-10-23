@@ -1,0 +1,11 @@
+{
+  "name": "meta-planner",
+  "version": "1.0.0",
+  "private": true,
+  "description": "R365 — deterministic codebase-inspection engine emitting hash-linked issue-contracts for the swarm (Thread 3, directive trace 1a1693e90c1532dd)",
+  "type": "module",
+  "scripts": {
+    "test": "bun test test/",
+    "selfscan": "bun index.ts . --ignore fixtures --out state"
+  }
+}
