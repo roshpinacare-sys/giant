@@ -16,6 +16,7 @@ import {
 } from "./empire-registry";
 import { EMPIRE_MAP, EMPIRE_GROUPS, GROUP_COLORS } from "./empire-map";
 import { DOORS } from "./doors";
+import { DOORS as TRANSPORT_DOORS } from "@/lib/dispatch/doors";
 
 /** הצי-המדוד מהסנאפשוט-המקוממט (אפס-רשת — דטרמיניזם מלא) */
 function cacheFleetRepos(): string[] {
@@ -110,5 +111,51 @@ describe("empire-registry — חוקי-הרישום-הקנוני (fail-closed)",
     expect(issues.filter((i) => i.code === "ORPHAN-REPO").length).toBe(1);
     // ה-allowlist מגן-בכנה:
     expect(validateEmpireRegistry(["sanbox"]).length).toBe(0);
+  });
+});
+
+describe("חוקי-התיאום-בין-סוכנים (סבב-19.81 — הגבול-מול dispatch-kernel וחוק-מקור-האמת)", () => {
+  test("חוק-אי-הסטייה: union-המודולים המקובל-באוכיף שווה-בדיוק לדלתות-ה-NAV החיות (אפס-עודף, אפס-חסר)", () => {
+    // סטייה-נמדדה-חיה: MODULE_UNION היה-13 מול 16 דלתות (capital/empire/marketing חסרים) —
+    // מפה-עתידית-שתמפה-אליהם הייתה-נופלת BAD-MODULE על-אף-דלת-חיה.
+    // התיקון: האוכיף נגזר-מ-DOORS עצמו (מקור-אמת-יחיד) — המבחן-נועל-את-השוויון.
+    const doorIds = new Set(DOORS.map((d) => d.id));
+    for (const door of DOORS) {
+      // כל-דלת-NAV חיה חייבת-להתקבל-כמודול-חוקי (מפה-עתידית-רשאית-להשתמש-בה)
+      const issues = validateEmpireRegistry(undefined, {
+        Probe: { role: "x", group: "ליבה-מחוברת" as const, module: door.id as never, evidence: "y" },
+      }).filter((i) => i.code === "BAD-MODULE");
+      expect(issues, `דלת "${door.id}" חיה אך נדחית-כמודול`).toEqual([]);
+    }
+    // והכיוון-ההפוך: המפה-האמיתית אינה-ממפה-אל-מודול-שאינו-דלת
+    for (const [key, role] of Object.entries(EMPIRE_MAP)) {
+      if (role.module !== null) expect(doorIds.has(role.module), key).toBe(true);
+    }
+  });
+
+  test("חוק-הגבול: דלתות-NAV (id,api) ודלתות-תעבורה (port,prefix) הן-שני-תחומים-נפרדים-במכוון", () => {
+    // מלכודת-שנמדדה-חיה: שני-המודולים מייצאים בשם DOORS — סוכן-שיחליף-ביניהם
+    // יקרוס-את-חוק-המודולים. הגבול-עצמו נאכף-כאן (§7A — תחומים-מוכרזים):
+    const nav = DOORS as unknown as Array<Record<string, unknown>>;
+    expect(nav.length).toBeGreaterThan(10);
+    for (const d of nav) {
+      expect(typeof d.id).toBe("string");          // NAV: מזוהה-id
+      expect(typeof d.api).toBe("string");         // NAV: נושא-API-פנימי
+      expect(d.port, "דלת-NAV לא נושאת port — זה תחום-התעבורה").toBeUndefined();
+      expect(d.prefix, "דלת-NAV לא נושאת prefix — זה תחום-התעבורה").toBeUndefined();
+    }
+    for (const d of TRANSPORT_DOORS) {
+      expect((d as unknown as Record<string, unknown>).id, "דלת-תעבורה לא נושאת id — זה תחום-ה-NAV").toBeUndefined();
+      expect(typeof d.port).toBe("number");        // תעבורה: מזוהה-port
+      expect(typeof d.prefix).toBe("string");
+    }
+  });
+
+  test("חוק-מנוע-יחיד: סולם-התעבורה נושא בדיוק דלת-מנוע אחת (3040 · engine) — אמת-המנוע משטח-אחד", () => {
+    const engineDoors = TRANSPORT_DOORS.filter((d) => (d as { engine?: unknown }).engine === true);
+    expect(engineDoors.length).toBe(1);
+    expect((engineDoors[0] as unknown as { port: number }).port).toBe(3040);
+    // והרגיסטרי עצמו נשאר קנוני-מלא על הצי-המדוד (שלם-ותקין אחרי-הגבול-המוכרז)
+    expect(empireRegistryIsCanonical(cacheFleetRepos())).toBe(true);
   });
 });

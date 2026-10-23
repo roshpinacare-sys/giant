@@ -21,7 +21,10 @@
  * (רשימת-הצי) ומפה-אופציונלית (ברירת-מחדל: הקנון) לשם-הוכחת-הגלאים.
  */
 import { EMPIRE_MAP, EMPIRE_GROUPS, GROUP_COLORS, type EmpireGroup, type EmpireRole } from "./empire-map";
-import { DOORS } from "./doors";
+// דלתות-NAV של הממשק-המאוחד ({id, api}) — לא-להתבלבל-עם דלתות-התעבורה של
+// dispatch-kernel (../dispatch/doors.ts — {port, prefix}, סולם 3040→3100→3200).
+// הגבול-בין-התחומים נאכף-במבחן (חוק-הגבול, empire-registry.test.ts).
+import { DOORS as NAV_DOORS } from "./doors";
 
 /** ריפו-ים-שנשארים-מחוץ-למפה-בכנה-ומפורש — הסיבה-המדודה-חייבת-להופיע */
 export const UNMAPPED_ALLOWLIST: Record<string, string> = {
@@ -43,18 +46,21 @@ export interface RegistryIssue {
   detail: string;
 }
 
-/** חברי-union המודול (החוזה-הטיפוסי של EmpireRole — נאכף-גם-בזמן-ריצה) */
-const MODULE_UNION = new Set([
-  "submission", "machine", "dex", "league", "channel", "wallet", "desk",
-  "ledger", "products", "pulse", "office", "estate", "trust",
-]);
+/**
+ * מקור-אמת-יחיד למודולים-חוקיים: הדלתות-החיות-עצמן (NAV_DOORS).
+ * רשימה-מקודדת-ידנית (MODULE_UNION) נמחקה — נמדדה-בה-סטייה-חיה
+ * (13-מקודד מול 16-דלתות חיות: capital/empire/marketing חסרים,
+ * מפה-עתידית-אליהם הייתה-נופלת BAD-MODULE על-אף-דלת-חיה).
+ * הטיפוס EmpireRole.module מראה-את-ה-union-המלא; הריצה-נגזרת-מכאן.
+ */
+const DOOR_IDS: ReadonlySet<string> = new Set(NAV_DOORS.map((d) => d.id));
 
 export function validateEmpireRegistry(
   fleetRepos?: readonly string[],
   map: Record<string, EmpireRole> = EMPIRE_MAP,
 ): RegistryIssue[] {
   const issues: RegistryIssue[] = [];
-  const doorIds = new Set(DOORS.map((d) => d.id));
+  const doorIds = DOOR_IDS;
 
   /* 1-3: סכמה · קבוצה · מודול-דלת */
   for (const [key, role] of Object.entries(map)) {
@@ -68,12 +74,8 @@ export function validateEmpireRegistry(
       issues.push({ code: "BAD-GROUP", key, detail: `קבוצה-לא-מוכרת: ${String(role?.group)}` });
     }
     const m = role?.module ?? null;
-    if (m !== null) {
-      if (!MODULE_UNION.has(m)) {
-        issues.push({ code: "BAD-MODULE", key, detail: `מודול-מחוץ-לחוזה: ${String(m)}` });
-      } else if (!doorIds.has(m)) {
-        issues.push({ code: "BAD-MODULE", key, detail: `אין-דלת-חיה עבור המודול: ${String(m)}` });
-      }
+    if (m !== null && !doorIds.has(m)) {
+      issues.push({ code: "BAD-MODULE", key, detail: `אין-דלת-חיה עבור המודול: ${String(m)}` });
     }
   }
 

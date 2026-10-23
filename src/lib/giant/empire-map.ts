@@ -25,10 +25,14 @@ export interface EmpireRole {
   role: string;
   /** קבוצת-החיבור */
   group: EmpireGroup;
-  /** המודול-החי בממשק-המאוחד שהספר מזין (אם-קיים-ומדוד) */
+  /** המודול-החי בממשק-המאוחד שהספר מזין (אם-קיים-ומדוד).
+   *  חייב-לשקף בדיוק את ה-id-ים של DOORS ב-./doors.ts (נאכף-במבחן
+   *  "חוק-אי-הסטייה" ב-empire-registry.test.ts — אפס-עודף, אפס-חסר).
+   *  זיהוי-בריצה נגזר-מ-DOORS עצמו ב-empire-registry.ts (מקור-אמת-יחיד). */
   module:
     | "submission" | "machine" | "dex" | "league" | "channel" | "wallet" | "desk" | "ledger"
-    | "products" | "pulse" | "office" | "estate" | "trust" | null;
+    | "products" | "pulse" | "office" | "estate" | "trust" | "capital" | "empire" | "marketing"
+    | null;
   /** מקור-הראיה לחיבור (מדוד — גל/מדידה) */
   evidence: string;
 }
