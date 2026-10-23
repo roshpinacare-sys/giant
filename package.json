@@ -11,7 +11,8 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset",
-    "office3d:build": "node tools/office3d-r3f/build.mjs"
+    "office3d:build": "node tools/office3d-r3f/build.mjs",
+    "test": "bun test"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
