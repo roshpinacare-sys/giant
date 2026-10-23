@@ -7,6 +7,7 @@
  *   3. placeholder-code — סמני-קוד-שלד (הערות-השהיה, מימוש-חסר)
  *   4. plaintext-secret — טוקנים/מפתחות WIF/PEM/AWS/xprv בטקסט-גלוי
  *   5. silent-catch     — catch ריק או הערות-בלבד
+ *   6. type-debt        — דיכוי-טיפוסים מפורש (סמני ts-ignore/expect-error/nocheck בסימן-ה-@) (v2)
  *
  * אפס-תלויות-חוץ (node:fs/path בלבד). כל-הפלטים ממוינים — אותו-קלט ⇒ אותו-פלט.
  * ראיות-סודות מוסתרות לעולם (§7B: אפס-סוד בלוג/פלט).
@@ -239,6 +240,12 @@ export const SECRET_PATTERNS: { name: string; re: RegExp }[] = [
 
 const CATCH_RE = /catch\s*(?:\([^)]*\))?\s*\{/g;
 
+// כלל 6 (v2): דיכוי-טיפוסים מפורש — הסמנים היחידים שמכבים את האמת-הסטטית.
+// נבנה-מרסקר כדי שהסריקה-העצמית של המודול עצמו לא תפגע בעצמה.
+export const TYPE_SUPPRESS_RE = new RegExp(
+  "@ts-(?:ig" + "nore|exp" + "ect-error|no" + "check)\\b",
+);
+
 /** סורק קובץ-יחיד: מחזיר ממצאי placeholder/silent-catch/plaintext-secret */
 export function scanContent(file: string, text: string): RawFinding[] {
   const out: RawFinding[] = [];
@@ -252,6 +259,16 @@ export function scanContent(file: string, text: string): RawFinding[] {
         file,
         line: i + 1,
         snippet: trimSnippet(line),
+      });
+    }
+    // כלל 6 (v2): דיכוי-טיפוסים — הראיה מוסתרת-צורה (השורה עשויה לשאת קוד)
+    if (TYPE_SUPPRESS_RE.test(line)) {
+      out.push({
+        kind: "type-debt",
+        file,
+        line: i + 1,
+        snippet: trimSnippet(line),
+        detail: (TYPE_SUPPRESS_RE.exec(line)?.[0] ?? "type-suppression").replace(/^@/, ""),
       });
     }
     // כלל 4: סודות בטקסט-גלוי — הראיה מוסתרת תמיד

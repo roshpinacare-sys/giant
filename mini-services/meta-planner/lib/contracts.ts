@@ -15,7 +15,10 @@ export type FindingKind =
   | "circular-import"
   | "placeholder-code"
   | "plaintext-secret"
-  | "silent-catch";
+  | "silent-catch"
+  | "type-debt"
+  | "tsc-error"
+  | "stranded-work";
 
 export interface Evidence {
   /** נתיב יחסי-ממקור-הסריקה, מופרד ב-/ */
@@ -67,6 +70,12 @@ export const KIND_INVARIANT: Record<FindingKind, string> = {
     "§7B Key Isolation — אפס-סודות בטקסט-גלוי; חומר-מפתח אך-ורק בכספת AES-256-GCM.",
   "silent-catch":
     "§3 Fail-Closed Execution — אף-שגיאה לא נבלעת בשקט; כל-תפוס מסלק/מדווח/נכשל-גלוי.",
+  "type-debt":
+    "§12 Zero Technical Debt — אף-דיכוי-טיפוסים (סמני ts-ignore / ts-expect-error / ts-nocheck בסימן-ה-@); האמת-הסטטית של הקנון נשארת מופעלת.",
+  "tsc-error":
+    "§12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.",
+  "stranded-work":
+    "§10 Coordination — עבודת-סוכן שנזרקה לא נעלמת: כל-ענף/PR שנסגרו מתמזגים, משוחזרים או מאורכבים עם-קבלה מפורשת.",
 };
 
 export const KIND_FIX: Record<FindingKind, string> = {
@@ -80,6 +89,12 @@ export const KIND_FIX: Record<FindingKind, string> = {
     "הסר את הסוד מהמאגר (סיבוב-מפתח חובה — הוא נחשף), הזרם דרך משתנה-סביבה/כספת AES-256-GCM.",
   "silent-catch":
     "החלף בטיפול-גלוי: rethrow מטופל, fail-closed מדווח, או רישום-ביקורת מובנה — אל תבלע-שקט.",
+  "type-debt":
+    "תקן את הטיפוס בשורש (הצר/מתג או מבנה-מתאים) והוסף מבחן; אם-הדיכוי-חוקי במקרה-קצה מוכח — החלף ב-cast מבחין-טיפוסים עם נימוק בשורה.",
+  "tsc-error":
+    "תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.",
+  "stranded-work":
+    "שחזר את הענף (הוא קיים ב-git), rebase על הקנון, הרץ את סוויטת-המבחנים במלואה, והנחת ב-main — או ארכב עם קבלה מפורשת שמסבירה מדוע העבודה נגנזת.",
 };
 
 export const KIND_TITLE: Record<FindingKind, string> = {
@@ -88,4 +103,7 @@ export const KIND_TITLE: Record<FindingKind, string> = {
   "placeholder-code": "קוד-שלד (סמני-השהיה / מימוש-חסר) במערכת-הקנון",
   "plaintext-secret": "סוד בטקסט-גלוי בקוד-המקור",
   "silent-catch": "תפיסת-שגיאות שותקת (הפרת fail-closed)",
+  "type-debt": "דיכוי-טיפוסים מפורש (סמני ts-ignore / ts-expect-error / ts-nocheck בסימן-ה-@)",
+  "tsc-error": "שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית)",
+  "stranded-work": "עבודת-סוכן שנסגרה בלי-מיזוג (PR סגור/ענף-מנותק) — מועמד-חילוץ",
 };
