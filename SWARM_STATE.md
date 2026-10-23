@@ -92,6 +92,19 @@
 - **Landing note (honest):** first push of the series (18bef8c) carried the two code commits only — a compound shell pipeline masked a rebase-conflict stop and pushed mid-rebase (53/53 green but without the drift-fix + claim). Caught by self-audit immediately after; this rebase completes the series: claim + drift-fix follow. No force used; pure additive FF both times.
 - **Verification at claim time:** bun test src/lib → 56 pass / 0 fail / 855 expect() (15 registry + 41 dispatch) · tsc slice → 0 errors (pre-existing capital.ts TS2322 documented below, untouched — atomic slice) · coverage law green against main's FRESH db/trust-cache.json (snapshot changed 309+/521− since my base and the registry held)
 
+## Claim: grid-instrument & social-verdict organ (cross-repo truth chain) — Z.ai (wave 19.81, trace 1a16976218075cc5)
+
+- **Registered:** 2026-10-23T16:20Z
+- **Subsystem ownership claim:** the cross-repo grid instrument (saos-runtime `grid-watchdog`) + the social-verdict honesty chain (directive §2 measured-truth law). The fleet's LAST red (`social.verdict` — redCount=1 @ 15:28Z) was diagnosed as a 27-a-family vocabulary drift (instrument's green set lacked the producer verdicts `SOCIAL-IDLE` AND the SUCCESS verdict `SOCIAL-EXECUTED`) plus a shape gap (canonical beat file is FLAT — facts read only `steps.social` → measured permanent nulls). Fixed TDD-first, verified live on cloud.
+- **Active branches:** `saos-runtime@main` (be0638e mine → e07b44c CI-run on top) · `steem@saos-cockpit` (5a3ff2e8a)
+- **Target file paths:**
+  - saos-runtime: `.github/workflows/grid-watchdog.yml` (GREEN['social'] += SOCIAL-IDLE|SOCIAL-EXECUTED in BOTH copies — decide + THRESHOLDS; the same per-instance test caught a second latent drift: THRESHOLDS digest lacked DIGEST-READY, delegation lacked DELEGATED/ALREADY-TODAY · facts fallback ladder `steps.social → flat heartbeat → None` · vocabulary-contract step wired BEFORE decide, fail-loud)
+  - saos-runtime: `scripts/test-grid-vocabulary.mjs` (NEW — 9 deterministic tests, zero deps) · `scripts/check-yml-python.py` (NEW — all 4 embedded python heredoc blocks parse)
+  - steem: `mini-services/saos-engine/ci-cycle.mjs` (summary +`socialRefused` — the flat canonical heartbeat now carries the refusal count; absence was confused with zero)
+- **Exposed interfaces:** `node scripts/test-grid-vocabulary.mjs` (producer-verdicts ⊆ green∪wait contract; fails the watchdog run BEFORE the decide step — a broken instrument must not paint) · facts ladder `so.get("executed", hb.get("socialExecuted"))` / `so.get("refused", hb.get("socialRefused"))`
+- **Cross-agent dependencies / coordination:** zero overlap — no other lane touched saos-runtime .github/scripts or steem ci-cycle; no giant src changes (one-surface law: the instrument's canonical home is saos-runtime; this row is the distillation per G8). steem committed via isolated-worktree cherry-pick (resident custodians hold the main worktree dirty — the reviver's own measured pattern); local branch union-reset to cloud after ff push, nothing erased.
+- **Verification at claim time:** contract test 9/9 green locally AND on the runner (workflow run 39984658419 success — the test step executed on CI) · python heredoc blocks 4/4 parse · dispatched watchdog live with force=true → grid-status.json @ 16:12:34Z: **redCount 0 · reds []** (socialExecuted measured 0 via flat fallback; socialRefused honest-None until the next sovereign-runtime beat commits the producer field — honest absence, never fabricated green) · GPG-signed commits (E0E28CEB sovereign key) · cloud==local verified on both repos (saos-runtime be0638e/e07b44c, steem 5a3ff2e8a)
+
 ## Invariants honored
 - giant remains the canonical trunk; no giant src changes outside declared paths.
 - Zero plaintext secrets; all key material sealed via packages/core cipher (AES-256-GCM envelope, ENVELOPE_VERSION 1) or env-custody keys with fail-closed verifiers (economy-signed-receipts pattern).
