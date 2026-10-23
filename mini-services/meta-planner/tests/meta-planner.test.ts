@@ -7,7 +7,7 @@
  */
 
 import { describe, test, expect } from "bun:test";
-import { mkdtempSync, readFileSync, rmSync, existsSync } from "fs";
+import { mkdtempSync, readFileSync, rmSync, existsSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
 
@@ -20,13 +20,15 @@ import {
   scanContent,
   redactSnippet,
 } from "../lib/scan";
-import { buildContracts, verifyChain, renderMarkdown } from "../lib/issues";
-import { runCli } from "../index";
+import { buildContracts, contractsFromEvidence, verifyChain, renderMarkdown, EVIDENCE_CAP } from "../lib/issues";
+import { parseTscOutput, evidenceFromTsc, EvidenceDoc } from "../lib/tsc";
+import { runCli, readEvidenceDoc } from "../index";
 
 const HERE = import.meta.dir;
 const FIXTURES = join(HERE, "fixtures");
 const DIRTY = join(FIXTURES, "dirty");
 const CLEAN = join(FIXTURES, "clean");
+const TYPES = join(FIXTURES, "typedebt");
 const SELF_ROOT = join(HERE, "..");
 
 // ערכי-הסוד הדמי נבנים-בריצה — אף-ליטרל-סוד בקוד-המקור של המבחן עצמו
@@ -180,7 +182,7 @@ describe("CLI (fail-closed)", () => {
       expect(existsSync(join(out, "issues.json"))).toBe(true);
       expect(existsSync(join(out, "issues.md"))).toBe(true);
       const parsed = JSON.parse(readFileSync(join(out, "issues.json"), "utf8"));
-      expect(parsed.schema).toBe("meta-planner/issues@1");
+      expect(parsed.schema).toBe("meta-planner/issues@2");
       expect(parsed.count).toBe(res.contracts);
     } finally {
       rmSync(out, { recursive: true, force: true });
@@ -194,6 +196,177 @@ describe("CLI (fail-closed)", () => {
       expect(res.code).toBe(0);
       expect(res.findings).toBe(0);
       expect(res.contracts).toBe(0);
+    } finally {
+      rmSync(out, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("rule 6 (v2) — type-debt (explicit type suppression)", () => {
+  test("flags all three suppression markers with exact lines and details", () => {
+    const res = scanTarget(TYPES);
+    const found = res.findings.filter((f) => f.kind === "type-debt");
+    expect(found.map((f) => f.line).sort((x, y) => x - y)).toEqual([2, 5, 8]);
+    expect(found.map((f) => f.detail).sort()).toEqual(["ts-expect-error", "ts-ignore", "ts-nocheck"]);
+  });
+
+  test("the typedebt fixture yields zero orphan findings (rule isolation)", () => {
+    const res = scanTarget(TYPES);
+    expect(res.findings.filter((f) => f.kind === "orphan-module")).toEqual([]);
+  });
+
+  test("sound code without suppression is never flagged", () => {
+    const code = ["// בריא לגמרי", "const x: number = 1;", "export default x;"].join("\n");
+    expect(scanContent("ok.ts", code).filter((f) => f.kind === "type-debt")).toEqual([]);
+  });
+});
+
+describe("v2 — tsc evidence parser (pure, deterministic)", () => {
+  const SAMPLE = [
+    "src/lib/a.ts(12,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.",
+    "junk line that matches nothing",
+    "src/lib/a.ts(3,1): error TS2304: Cannot find name 'foo'.",
+    "src/lib/b.ts(7,9): error TS7006: Parameter 'x' implicitly has an 'any' type.",
+    "not-an-error.ts(1,1): another junk",
+  ].join("\n");
+
+  test("parses only canonical tsc lines, sorted by file then line", () => {
+    const items = parseTscOutput(SAMPLE);
+    expect(items.length).toBe(3);
+    expect(items[0]).toEqual({ file: "src/lib/a.ts", line: 3, col: 1, code: "TS2304", message: "Cannot find name 'foo'." });
+    expect(items[1].line).toBe(12);
+    expect(items[2].file).toBe("src/lib/b.ts");
+    expect(items.every((i) => i.code.startsWith("TS"))).toBe(true);
+  });
+
+  test("determinism — same text yields identical items", () => {
+    expect(JSON.stringify(parseTscOutput(SAMPLE))).toBe(JSON.stringify(parseTscOutput(SAMPLE)));
+  });
+
+  test("evidenceFromTsc produces a schema@1 doc with kind hints", () => {
+    const doc = evidenceFromTsc(parseTscOutput(SAMPLE), "handover: convergence-lane wave 19.79");
+    expect(doc.schema).toBe("meta-planner/evidence@1");
+    expect(doc.items.length).toBe(3);
+    expect(doc.items[0].kind).toBe("tsc-error");
+    expect(doc.items[0].message.startsWith("TS")).toBe(true);
+  });
+});
+
+describe("v2 — contractsFromEvidence (grouping + chain + redaction)", () => {
+  const doc: EvidenceDoc = {
+    schema: "meta-planner/evidence@1",
+    source: "measured: tsc --noEmit on giant main (handover honored)",
+    items: [
+      { file: "src/x/one.ts", line: 1, message: "TS2304: Cannot find name 'a'.", kind: "tsc-error" },
+      { file: "src/x/one.ts", line: 2, message: "TS2322: Type 'number' is not assignable.", kind: "tsc-error" },
+      { file: "src/x/two.ts", line: 9, message: "TS7006: Parameter implicitly 'any'.", kind: "tsc-error" },
+      { file: "(pr:#199)", line: 0, message: "closed unmerged — feat/empire-registry-validator (WS-1)", kind: "stranded-work" },
+    ],
+  };
+
+  test("tsc errors group per-file, stranded work stays per-item", () => {
+    const contracts = contractsFromEvidence(doc);
+    expect(contracts.length).toBe(3); // one.ts, two.ts, #199
+    const tsc = contracts.filter((c) => c.kind === "tsc-error");
+    expect(tsc.map((c) => c.subsystem)).toEqual(["src", "src"]);
+    const stranded = contracts.find((c) => c.kind === "stranded-work");
+    expect(stranded?.severity).toBe("high");
+    expect(stranded?.evidence[0].file).toContain("#199"); // הרפרנס נישא בשדה-המקור
+    expect(stranded?.evidence[0].snippet).toContain("empire-registry-validator");
+  });
+
+  test("tsc title carries the measured per-file count", () => {
+    const contracts = contractsFromEvidence(doc);
+    const one = contracts.find((c) => c.evidence[0].file === "src/x/one.ts");
+    expect(one?.title).toContain("2");
+  });
+
+  test("chain verifies and tampering with payloadHash breaks it", () => {
+    const contracts = contractsFromEvidence(doc);
+    expect(verifyChain(contracts)).toEqual([]);
+    const tampered = contracts.map((c, i) =>
+      i === 1 ? { ...c, receipt: { ...c.receipt, payloadHash: "f".repeat(64) } } : c,
+    );
+    expect(verifyChain(tampered).some((p) => p.includes("payloadHash"))).toBe(true);
+  });
+
+  test("evidence messages are redacted — zero secret bytes survive ingest", () => {
+    const secret = RAW.github;
+    const docSecret: EvidenceDoc = {
+      schema: "meta-planner/evidence@1",
+      source: "t",
+      items: [{ file: "src/s.ts", line: 4, message: `leak: ${secret}`, kind: "tsc-error" }],
+    };
+    const contracts = contractsFromEvidence(docSecret);
+    expect(JSON.stringify(contracts)).not.toContain(secret);
+    expect(contracts[0].evidence[0].snippet).toContain("REDACTED");
+  });
+
+  test("evidence cap — a file with more items than EVIDENCE_CAP keeps exactly the cap, deterministically", () => {
+    const items = Array.from({ length: EVIDENCE_CAP + 7 }, (_, i) => ({
+      file: "src/big.ts",
+      line: i + 1,
+      message: `TS1005: err ${i}`,
+      kind: "tsc-error" as const,
+    }));
+    const contracts = contractsFromEvidence({ schema: "meta-planner/evidence@1", source: "t", items });
+    expect(contracts.length).toBe(1);
+    expect(contracts[0].evidence.length).toBe(EVIDENCE_CAP);
+    expect(contracts[0].evidence[0].line).toBe(1);
+    expect(JSON.stringify(contractsFromEvidence({ schema: "meta-planner/evidence@1", source: "t", items }))).toBe(
+      JSON.stringify(contracts),
+    );
+  });
+});
+
+describe("v2 — CLI ingest (fail-closed)", () => {
+  test("ingests a valid evidence doc and writes schema@2 reports", () => {
+    const out = freshOut();
+    const evPath = join(out, "evidence.json");
+    const doc: EvidenceDoc = {
+      schema: "meta-planner/evidence@1",
+      source: "test",
+      items: [{ file: "src/a.ts", line: 3, message: "TS2304: boom", kind: "tsc-error" }],
+    };
+    writeFileSync(evPath, JSON.stringify(doc));
+    try {
+      const res = runCli(["ingest", evPath, "--out", out, "--fail-on", "high"], HERE);
+      expect(res.code).toBe(0); // tsc-error = medium ⇒ no high breach
+      expect(res.contracts).toBe(1);
+      const parsed = JSON.parse(readFileSync(join(out, "issues.json"), "utf8"));
+      expect(parsed.schema).toBe("meta-planner/issues@2");
+      expect(parsed.contracts[0].receipt.payloadHash).toMatch(/^[0-9a-f]{64}$/);
+    } finally {
+      rmSync(out, { recursive: true, force: true });
+    }
+  });
+
+  test("stranded-work evidence breaches at --fail-on high (rescue-worthy by design)", () => {
+    const out = freshOut();
+    const evPath = join(out, "evidence.json");
+    const doc: EvidenceDoc = {
+      schema: "meta-planner/evidence@1",
+      source: "test",
+      items: [{ file: "(pr:#202)", line: 0, message: "closed unmerged", kind: "stranded-work" }],
+    };
+    writeFileSync(evPath, JSON.stringify(doc));
+    try {
+      const res = runCli(["ingest", evPath, "--out", out], HERE);
+      expect(res.code).toBe(1);
+    } finally {
+      rmSync(out, { recursive: true, force: true });
+    }
+  });
+
+  test("malformed evidence fails closed with exit 2 — never invents contracts", () => {
+    const out = freshOut();
+    const bad = join(out, "bad.json");
+    writeFileSync(bad, JSON.stringify({ schema: "wrong/schema", items: [] }));
+    try {
+      const res = runCli(["ingest", bad, "--out", out], HERE);
+      expect(res.code).toBe(2);
+      expect(res.contracts).toBe(0);
+      expect(() => readEvidenceDoc(bad)).toThrow();
     } finally {
       rmSync(out, { recursive: true, force: true });
     }
