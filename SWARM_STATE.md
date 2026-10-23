@@ -13,3 +13,5 @@
 - Broadcast stays fail-closed (allowBroadcast defaults false — never enabled implicitly).
 - All tests deterministic + offline; test material generated in-test; zero .env/vault reads.
 - Commits: conventional schema; identity: sovereign-lane[bot] <sovereign-lane[bot]@fleet.local>.
+
+| autonomy-lane (this sandbox, wave 19.78) | meta-planner — Thread 3 slice: deterministic codebase-inspection engine emitting structured issue-contracts for the swarm (directive trace 1a1693e90c1532dd, Pulse/DECISIONS R365) | giant `feat/meta-planner-issue-contracts` | giant: mini-services/meta-planner/** (NEW — index.ts, lib/contracts.ts, lib/scan.ts, lib/issues.ts, test/**, state/), docs/lanes/meta-planner.md (NEW), SWARM_STATE.md (this row) | scanTarget(dir) → IssueContract[]; IssueContract{id,kind,severity,subsystem,evidence[],invariant,proposedFix}; receipt chain {prevHash,hash,SHA-256,append-only} | none — additive-only slice, zero shared files with Threads 1/2; zero giant src/ changes |
