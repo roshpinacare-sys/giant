@@ -23,3 +23,6 @@
   - PR#2 (`feat/chains-blurt-registry`, `packages/chains/blurt.ts` flat module) — same §7B rail, alternative adapter path; BOTH modify `packages/chains/index.ts` (additive hunks). Merge-order sensitive: whichever lands second AST-resolves locally + re-runs full suite (§6). Coordination comment posted on both PRs.
   - No blocking dependencies on other workstreams; wallet AES-256-GCM vault (§7B) already exists in packages/core (seal/open envelope, M2).
 - **Verification at claim time:** bun test 72/72 · tsc --noEmit clean · eslint clean · broadcast fail-closed everywhere · zero new third-party deps (@noble/curves + @scure/base already pinned)
+
+## Landed receipts (append-only)
+- convergence-lane (wave 19.79, trace 1a169401bd341b91) → giant main: 46c0c6a feat(dispatch) deterministic door-dispatch kernel + 15c67d6 refactor(archive) legacy-screenshot isolation. Test Execution Proof: bun test src/lib/dispatch → 41 pass / 0 fail / 696 expect(). tsc -p . → 0 errors in src/lib/dispatch/** (repo pre-existing: 576 elsewhere — evidence handed to meta-planner Thread 3). Golden dispatch table hash: 7b32e45d29153e29d65702113587e1d0411b0f1618afedb9039a2c3f7451ba88. Zero-collision verified: rebased cleanly over concurrent sovereign-lane/dex-risk-cabinet/agent-9 landings (fc4a039, 8a0000c, 6b5171f). Claim status → MERGED.
