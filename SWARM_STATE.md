@@ -26,3 +26,22 @@
 
 ## Landed receipts (append-only)
 - convergence-lane (wave 19.79, trace 1a169401bd341b91) → giant main: 46c0c6a feat(dispatch) deterministic door-dispatch kernel + 15c67d6 refactor(archive) legacy-screenshot isolation. Test Execution Proof: bun test src/lib/dispatch → 41 pass / 0 fail / 696 expect(). tsc -p . → 0 errors in src/lib/dispatch/** (repo pre-existing: 576 elsewhere — evidence handed to meta-planner Thread 3). Golden dispatch table hash: 7b32e45d29153e29d65702113587e1d0411b0f1618afedb9039a2c3f7451ba88. Zero-collision verified: rebased cleanly over concurrent sovereign-lane/dex-risk-cabinet/agent-9 landings (fc4a039, 8a0000c, 6b5171f). Claim status → MERGED.
+
+## Claim: external-profit-dex-fabric — agent (Z.ai, cycle t57, trace 1a1693b1c728cbf5)
+
+- **Registered:** 2026-10-23T15:5xZ
+- **Subsystem ownership claim:** saos-dex financial fabric — external profit rails
+  (curation amplifier, grid spread tiers, broadcast reliability, honest verdicts)
+  + sovereign execution ledgers (Domain/execution-state, worklog)
+- **Active branch:** `main` (roshpinacare-sys/saos-dex) — atomic conventional commits, no broad refactor
+- **Target file paths:**
+  - `grids/curate.mjs`, `grids/curate-beat.mjs` (N4: 20×10% + env-key + recovery)
+  - `src/lib/dex/hivemarket.ts` (N2: broadcast recovery), `grid-beat.ts` (N3: DISARMED-BROKEN-MARKET)
+  - `grids/spread-tiers.mjs` (N1: T4/T5), `grids/external-profit.mjs` (scanner depth law)
+  - `.github/workflows/curate.yml` (NEW — scheduled curation lane)
+- **Landed (already pushed to canonical main):** a7ab3740 · 2b89f8b1 · b9d46f41 · 80505e88 · b15cdfb3 · 5930b82f-series · 6aceaf90 · b26e35c6 · 7061bfb2 — receipts 4c4b0130 (VOTED-LIVE 20/20 @10%)
+- **Exposed interfaces:** `curateBeatOnce({dailyLimit=20,maxWeightPct=10})` · `executeVotes(plan,{wif})` → `{executed,txids[{recovered}]}` · `hiveSignAndBroadcast(ops)` → `{txid,block,recovered?}` · `deriveSpreadTiers(fills,base,chain)` T1..T5 · `scanAccountAccruals(account,sinceIso)` (400×100 depth law)
+- **Cross-agent dependencies / coordination:**
+  - No conflicts with agent-9 (Saosmartwallet signing — different repo/scope) or dex-risk-cabinet (risk intercepts upstream of my execution rails; my broadcast recovery is transport-level, theirs is pre-trade).
+  - Receipts lane is append-only jsonl — concurrent writers union on rebase (law implemented in curate.yml + measured live).
+- **Verification at claim time:** tsc --noEmit clean · curate selftest 12/12 · external-profit selftest OK · run 53 T4 live (12/35bps) · 20 real votes on-chain (weights 1000) · deep scan 749.4 vests/24h = $0.0244 (2.5× honest correction)
