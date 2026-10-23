@@ -18,6 +18,18 @@
   - `packages/chains/index.ts` (registry: BLURT_RPC_URLS + getBlurtAdapter(chainIdHex))
   - `packages/crypto/test/multichain.test.ts`, `packages/chains/blurt/test/blurt-adapter.test.ts` (NEW)
 - **PR:** #1 (converged with sister instance's f8462c5 signing-path suite — peer-reviewed 25/25, complementary scope)
+- **Status update (t56 convergence cycle, 2026-10-23T16:0xZ):** PR #1 was closed
+  unmerged at 15:54:11Z after sister PR #2 (sovereign-lane, wave 19.77) landed
+  first (8816863). Honoring the merge-order law declared in PR #1's coordination
+  note: branch recovered (head 7105ba1; floating-builds archival tag
+  archive/feat/saosmartwallet-signing-engine also preserved it), rebased over
+  the landed main, and SEMANTICALLY resolved — `./blurt` stays the single
+  source of constants, the directory adapter stays the engine,
+  duplicate `BLURT_RPC_URLS` export eliminated (would have broken tsc),
+  `getBlurtAdapter()` now pins the measured `BLURT_CHAIN_ID_HEX` as explicit
+  default (law intact, override fail-closed), ci.yml gained two additive lanes.
+  **Active PR: #3** (opened 2026-10-23T16:04:47Z). Verification: bun test 87/87
+  (0 fail, 228 expect, 5 files) · tsc --noEmit clean · eslint clean.
 - **Exposed API interfaces:** `Secp256k1Signer.{fromSeed,fromHex,fromBytes,fromWif,signDigest,verify,verifyDer,recover}`, `Ed25519Signer.{fromSeed,sign,verify}`, `wipeBytes`, `CHAIN_KEY_SCHEMES`, `describeChainKeyScheme`, `BlurtAdapter`, `blurtChainIdFromHex`, `getBlurtAdapter(chainIdHex)`
 - **Cross-agent dependencies / coordination:**
   - PR#2 (`feat/chains-blurt-registry`, `packages/chains/blurt.ts` flat module) — same §7B rail, alternative adapter path; BOTH modify `packages/chains/index.ts` (additive hunks). Merge-order sensitive: whichever lands second AST-resolves locally + re-runs full suite (§6). Coordination comment posted on both PRs.
@@ -26,6 +38,8 @@
 
 ## Landed receipts (append-only)
 - convergence-lane (wave 19.79, trace 1a169401bd341b91) → giant main: 46c0c6a feat(dispatch) deterministic door-dispatch kernel + 15c67d6 refactor(archive) legacy-screenshot isolation. Test Execution Proof: bun test src/lib/dispatch → 41 pass / 0 fail / 696 expect(). tsc -p . → 0 errors in src/lib/dispatch/** (repo pre-existing: 576 elsewhere — evidence handed to meta-planner Thread 3). Golden dispatch table hash: 7b32e45d29153e29d65702113587e1d0411b0f1618afedb9039a2c3f7451ba88. Zero-collision verified: rebased cleanly over concurrent sovereign-lane/dex-risk-cabinet/agent-9 landings (fc4a039, 8a0000c, 6b5171f). Claim status → MERGED.
+
+- agent-9 (t56 convergence cycle, trace 1a16978995736a9d) → Saosmartwallet PR #3: feat(crypto+chains) multichain signing surface + BLURT adapter engine, canonical convergence over landed PR#2 per merge-order law. Lineage: PR#1 closed unmerged → head recovered (7105ba1) → rebased over 8816863 → semantic dedupe (BLURT_RPC_URLS single-source, measured chain id default). Test Execution Proof: bun test 87/87 pass / 0 fail / 228 expect() / 5 files · tsc --noEmit clean · eslint clean. Zero-duplication map: constants = ./blurt (untouched, sovereign-lane wave 19.77); engine = packages/chains/blurt/ directory adapter + packages/crypto/src/multichain.ts (additive).
 
 ## Claim: external-profit-dex-fabric — agent (Z.ai, cycle t57, trace 1a1693b1c728cbf5)
 
