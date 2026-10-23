@@ -312,213 +312,213 @@
 | MP-0306 | medium | tsc-error | mini-services | `mini-services/forge/src/middleware.ts:12` |
 | MP-0307 | medium | tsc-error | mini-services | `mini-services/forge/tailwind.config.ts:1` `mini-services/forge/tailwind.config.ts:2` |
 | MP-0308 | medium | tsc-error | mini-services | `mini-services/meta-planner/index.ts:16` `mini-services/meta-planner/index.ts:17` `mini-services/meta-planner/index.ts:155` `mini-services/meta-planner/index.ts:156` `mini-services/meta-planner/index.ts:156` `mini-services/meta-planner/index.ts:157` |
-| MP-0309 | medium | tsc-error | mini-services | `mini-services/meta-planner/lib/issues.ts:16` `mini-services/meta-planner/lib/issues.ts:17` `mini-services/meta-planner/lib/issues.ts:18` `mini-services/meta-planner/lib/issues.ts:80` `mini-services/meta-planner/lib/issues.ts:92` `mini-services/meta-planner/lib/issues.ts:97` `mini-services/meta-planner/lib/issues.ts:228` |
+| MP-0309 | medium | tsc-error | mini-services | `mini-services/meta-planner/lib/issues.ts:16` `mini-services/meta-planner/lib/issues.ts:17` `mini-services/meta-planner/lib/issues.ts:18` |
 | MP-0310 | medium | tsc-error | mini-services | `mini-services/meta-planner/lib/scan.ts:16` `mini-services/meta-planner/lib/scan.ts:17` |
-| MP-0311 | medium | tsc-error | mini-services | `mini-services/meta-planner/tests/fixtures/typedebt/flagged.ts:5` |
-| MP-0312 | medium | tsc-error | mini-services | `mini-services/meta-planner/tests/meta-planner.test.ts:9` `mini-services/meta-planner/tests/meta-planner.test.ts:10` `mini-services/meta-planner/tests/meta-planner.test.ts:11` `mini-services/meta-planner/tests/meta-planner.test.ts:12` `mini-services/meta-planner/tests/meta-planner.test.ts:27` |
-| MP-0313 | medium | tsc-error | mini-services | `mini-services/office-live/index.ts:18` `mini-services/office-live/index.ts:19` `mini-services/office-live/index.ts:20` `mini-services/office-live/index.ts:21` `mini-services/office-live/index.ts:22` `mini-services/office-live/index.ts:78` `mini-services/office-live/index.ts:93` `mini-services/office-live/index.ts:113` `mini-services/office-live/index.ts:120` `mini-services/office-live/index.ts:139` `mini-services/office-live/index.ts:147` `mini-services/office-live/index.ts:147` |
-| MP-0314 | medium | tsc-error | mini-services | `mini-services/organism-keeper/index.ts:19` `mini-services/organism-keeper/index.ts:20` `mini-services/organism-keeper/index.ts:21` `mini-services/organism-keeper/index.ts:22` `mini-services/organism-keeper/index.ts:23` `mini-services/organism-keeper/index.ts:25` `mini-services/organism-keeper/index.ts:40` `mini-services/organism-keeper/index.ts:43` `mini-services/organism-keeper/index.ts:45` `mini-services/organism-keeper/index.ts:54` `mini-services/organism-keeper/index.ts:76` `mini-services/organism-keeper/index.ts:168` |
-| MP-0315 | medium | tsc-error | mini-services | `mini-services/saos-dex-node/index.ts:9` `mini-services/saos-dex-node/index.ts:10` `mini-services/saos-dex-node/index.ts:11` `mini-services/saos-dex-node/index.ts:12` `mini-services/saos-dex-node/index.ts:21` `mini-services/saos-dex-node/index.ts:62` `mini-services/saos-dex-node/index.ts:70` `mini-services/saos-dex-node/index.ts:74` `mini-services/saos-dex-node/index.ts:76` `mini-services/saos-dex-node/index.ts:97` `mini-services/saos-dex-node/index.ts:106` `mini-services/saos-dex-node/index.ts:123` |
-| MP-0316 | medium | tsc-error | mini-services | `mini-services/soldier-army/index.ts:14` `mini-services/soldier-army/index.ts:15` `mini-services/soldier-army/index.ts:19` `mini-services/soldier-army/index.ts:27` `mini-services/soldier-army/index.ts:49` `mini-services/soldier-army/index.ts:244` |
-| MP-0317 | medium | tsc-error | mini-services | `mini-services/sovereign-audit/index.ts:11` `mini-services/sovereign-audit/index.ts:12` `mini-services/sovereign-audit/index.ts:13` `mini-services/sovereign-audit/index.ts:16` `mini-services/sovereign-audit/index.ts:61` |
-| MP-0318 | medium | tsc-error | mini-services | `mini-services/sovereign-gateway/index.ts:33` `mini-services/sovereign-gateway/index.ts:34` `mini-services/sovereign-gateway/index.ts:35` `mini-services/sovereign-gateway/index.ts:37` `mini-services/sovereign-gateway/index.ts:50` `mini-services/sovereign-gateway/index.ts:55` `mini-services/sovereign-gateway/index.ts:61` `mini-services/sovereign-gateway/index.ts:92` `mini-services/sovereign-gateway/index.ts:95` `mini-services/sovereign-gateway/index.ts:96` `mini-services/sovereign-gateway/index.ts:97` `mini-services/sovereign-gateway/index.ts:101` |
-| MP-0319 | medium | tsc-error | mini-services | `mini-services/sovereign-voice/index.ts:29` `mini-services/sovereign-voice/index.ts:30` `mini-services/sovereign-voice/index.ts:31` `mini-services/sovereign-voice/index.ts:61` `mini-services/sovereign-voice/index.ts:61` `mini-services/sovereign-voice/index.ts:62` `mini-services/sovereign-voice/index.ts:62` `mini-services/sovereign-voice/index.ts:63` `mini-services/sovereign-voice/index.ts:63` `mini-services/sovereign-voice/index.ts:64` `mini-services/sovereign-voice/index.ts:64` `mini-services/sovereign-voice/index.ts:65` |
-| MP-0320 | medium | tsc-error | mini-services | `mini-services/steem-voice/index.ts:12` `mini-services/steem-voice/index.ts:13` `mini-services/steem-voice/index.ts:15` `mini-services/steem-voice/index.ts:17` `mini-services/steem-voice/index.ts:65` `mini-services/steem-voice/index.ts:70` `mini-services/steem-voice/index.ts:94` |
-| MP-0321 | medium | tsc-error | (root) | `next.config.ts:1` |
-| MP-0322 | medium | tsc-error | scripts | `scripts/fleet-probe.ts:1` |
-| MP-0323 | medium | tsc-error | scripts | `scripts/join-golden.ts:20` `scripts/join-golden.ts:84` `scripts/join-golden.ts:87` |
-| MP-0324 | medium | tsc-error | src | `src/app/api/dex/candles/route.ts:5` |
-| MP-0325 | medium | tsc-error | src | `src/app/api/dex/depth/route.ts:5` |
-| MP-0326 | medium | tsc-error | src | `src/app/api/dex/orders/route.ts:9` |
-| MP-0327 | medium | tsc-error | src | `src/app/api/dex/overview/route.ts:4` |
-| MP-0328 | medium | tsc-error | src | `src/app/api/dex/pairs/route.ts:2` |
-| MP-0329 | medium | tsc-error | src | `src/app/api/dex/pools/route.ts:4` |
-| MP-0330 | medium | tsc-error | src | `src/app/api/dex/quote/route.ts:5` |
-| MP-0331 | medium | tsc-error | src | `src/app/api/dex/steem/audit/route.ts:4` |
-| MP-0332 | medium | tsc-error | src | `src/app/api/dex/steem/market/route.ts:4` |
-| MP-0333 | medium | tsc-error | src | `src/app/api/dex/swap/route.ts:6` |
-| MP-0334 | medium | tsc-error | src | `src/app/api/dex/trades/route.ts:4` |
-| MP-0335 | medium | tsc-error | src | `src/app/api/dex/transfer/route.ts:7` |
-| MP-0336 | medium | tsc-error | src | `src/app/api/dex/wallet/faucet/route.ts:6` |
-| MP-0337 | medium | tsc-error | src | `src/app/api/dex/wallet/route.ts:2` |
-| MP-0338 | medium | tsc-error | src | `src/app/api/economy/route.ts:8` `src/app/api/economy/route.ts:9` `src/app/api/economy/route.ts:10` `src/app/api/economy/route.ts:11` `src/app/api/economy/route.ts:15` `src/app/api/economy/route.ts:37` |
-| MP-0339 | medium | tsc-error | src | `src/app/api/estate/state/route.ts:4` `src/app/api/estate/state/route.ts:5` `src/app/api/estate/state/route.ts:6` |
-| MP-0340 | medium | tsc-error | src | `src/app/api/fleet/allocate/route.ts:4` `src/app/api/fleet/allocate/route.ts:5` |
-| MP-0341 | medium | tsc-error | src | `src/app/api/fleet/roster/route.ts:5` `src/app/api/fleet/roster/route.ts:100` `src/app/api/fleet/roster/route.ts:101` `src/app/api/fleet/roster/route.ts:102` `src/app/api/fleet/roster/route.ts:139` `src/app/api/fleet/roster/route.ts:140` |
-| MP-0342 | medium | tsc-error | src | `src/app/api/fleet/state/route.ts:2` `src/app/api/fleet/state/route.ts:94` `src/app/api/fleet/state/route.ts:95` |
-| MP-0343 | medium | tsc-error | src | `src/app/api/fleet/trade/route.ts:12` |
-| MP-0344 | medium | tsc-error | src | `src/app/api/giant/books/route.ts:13` |
-| MP-0345 | medium | tsc-error | src | `src/app/api/giant/capital/route.ts:7` |
-| MP-0346 | medium | tsc-error | src | `src/app/api/giant/channel/directive/route.ts:7` `src/app/api/giant/channel/directive/route.ts:87` `src/app/api/giant/channel/directive/route.ts:118` |
-| MP-0347 | medium | tsc-error | src | `src/app/api/giant/channel/route.ts:5` |
-| MP-0348 | medium | tsc-error | src | `src/app/api/giant/decisions/route.ts:6` |
-| MP-0349 | medium | tsc-error | src | `src/app/api/giant/desk/route.ts:5` |
-| MP-0350 | medium | tsc-error | src | `src/app/api/giant/dex/route.ts:7` |
-| MP-0351 | medium | tsc-error | src | `src/app/api/giant/empire/route.ts:1` |
-| MP-0352 | medium | tsc-error | src | `src/app/api/giant/fleet/route.ts:4` |
-| MP-0353 | medium | tsc-error | src | `src/app/api/giant/gap/route.ts:10` `src/app/api/giant/gap/route.ts:11` `src/app/api/giant/gap/route.ts:12` `src/app/api/giant/gap/route.ts:59` `src/app/api/giant/gap/route.ts:70` `src/app/api/giant/gap/route.ts:73` `src/app/api/giant/gap/route.ts:116` |
-| MP-0354 | medium | tsc-error | src | `src/app/api/giant/giants/route.ts:9` `src/app/api/giant/giants/route.ts:10` `src/app/api/giant/giants/route.ts:11` `src/app/api/giant/giants/route.ts:22` `src/app/api/giant/giants/route.ts:164` |
-| MP-0355 | medium | tsc-error | src | `src/app/api/giant/league/route.ts:6` |
-| MP-0356 | medium | tsc-error | src | `src/app/api/giant/liveness/route.ts:8` |
-| MP-0357 | medium | tsc-error | src | `src/app/api/giant/market/route.ts:10` `src/app/api/giant/market/route.ts:11` `src/app/api/giant/market/route.ts:12` |
-| MP-0358 | medium | tsc-error | src | `src/app/api/giant/marketing/route.ts:14` |
-| MP-0359 | medium | tsc-error | src | `src/app/api/giant/office/route.ts:8` |
-| MP-0360 | medium | tsc-error | src | `src/app/api/giant/products/route.ts:5` |
-| MP-0361 | medium | tsc-error | src | `src/app/api/giant/pulse/route.ts:9` `src/app/api/giant/pulse/route.ts:10` `src/app/api/giant/pulse/route.ts:11` |
-| MP-0362 | medium | tsc-error | src | `src/app/api/giant/trust/route.ts:8` |
-| MP-0363 | medium | tsc-error | src | `src/app/api/git/catalog/route.ts:3` |
-| MP-0364 | medium | tsc-error | src | `src/app/api/git/content/route.ts:3` |
-| MP-0365 | medium | tsc-error | src | `src/app/api/git/land/route.ts:4` `src/app/api/git/land/route.ts:5` |
-| MP-0366 | medium | tsc-error | src | `src/app/api/git/ledger/route.ts:3` |
-| MP-0367 | medium | tsc-error | src | `src/app/api/git/state/route.ts:3` |
-| MP-0368 | medium | tsc-error | src | `src/app/api/material/read/route.ts:5` |
-| MP-0369 | medium | tsc-error | src | `src/app/api/material/state/route.ts:4` |
-| MP-0370 | medium | tsc-error | src | `src/app/api/merge/truth/route.ts:6` `src/app/api/merge/truth/route.ts:7` `src/app/api/merge/truth/route.ts:8` |
-| MP-0371 | medium | tsc-error | src | `src/app/api/office-state/route.ts:5` |
-| MP-0372 | medium | tsc-error | src | `src/app/api/office/ops/command/route.ts:4` `src/app/api/office/ops/command/route.ts:191` |
-| MP-0373 | medium | tsc-error | src | `src/app/api/office/ops/login/route.ts:4` |
-| MP-0374 | medium | tsc-error | src | `src/app/api/office/ops/state/route.ts:3` |
-| MP-0375 | medium | tsc-error | src | `src/app/api/office/state/route.ts:1` `src/app/api/office/state/route.ts:2` `src/app/api/office/state/route.ts:3` `src/app/api/office/state/route.ts:14` |
-| MP-0376 | medium | tsc-error | src | `src/app/api/office/world/route.ts:1` |
-| MP-0377 | medium | tsc-error | src | `src/app/api/organism/route.ts:1` |
-| MP-0378 | medium | tsc-error | src | `src/app/api/public/v1/account/route.ts:5` |
-| MP-0379 | medium | tsc-error | src | `src/app/api/public/v1/candles/route.ts:5` |
-| MP-0380 | medium | tsc-error | src | `src/app/api/public/v1/depth/route.ts:6` |
-| MP-0381 | medium | tsc-error | src | `src/app/api/public/v1/keys/route.ts:14` |
-| MP-0382 | medium | tsc-error | src | `src/app/api/public/v1/markets/route.ts:5` |
-| MP-0383 | medium | tsc-error | src | `src/app/api/public/v1/orders/route.ts:11` |
-| MP-0384 | medium | tsc-error | src | `src/app/api/public/v1/ping/route.ts:5` |
-| MP-0385 | medium | tsc-error | src | `src/app/api/route.ts:1` |
-| MP-0386 | medium | tsc-error | src | `src/app/api/sectors/route.ts:2` |
-| MP-0387 | medium | tsc-error | src | `src/app/api/skills/run/route.ts:3` `src/app/api/skills/run/route.ts:11` `src/app/api/skills/run/route.ts:14` `src/app/api/skills/run/route.ts:180` `src/app/api/skills/run/route.ts:217` |
-| MP-0388 | medium | tsc-error | src | `src/app/api/skills/state/route.ts:3` |
-| MP-0389 | medium | tsc-error | src | `src/app/api/sovereign/anchor/route.ts:5` |
-| MP-0390 | medium | tsc-error | src | `src/app/api/sovereign/api-keys/route.ts:8` |
-| MP-0391 | medium | tsc-error | src | `src/app/api/sovereign/auth/route.ts:4` |
-| MP-0392 | medium | tsc-error | src | `src/app/api/sovereign/channel/ask/route.ts:12` `src/app/api/sovereign/channel/ask/route.ts:13` |
-| MP-0393 | medium | tsc-error | src | `src/app/api/sovereign/channel/route.ts:13` |
-| MP-0394 | medium | tsc-error | src | `src/app/api/sovereign/gate/route.ts:15` |
-| MP-0395 | medium | tsc-error | src | `src/app/api/sovereign/messages/[id]/route.ts:4` `src/app/api/sovereign/messages/[id]/route.ts:5` |
-| MP-0396 | medium | tsc-error | src | `src/app/api/sovereign/messages/route.ts:4` `src/app/api/sovereign/messages/route.ts:5` |
-| MP-0397 | medium | tsc-error | src | `src/app/api/sovereign/relay/process/route.ts:4` |
-| MP-0398 | medium | tsc-error | src | `src/app/join/page.tsx:11` `src/app/join/page.tsx:12` `src/app/join/page.tsx:13` `src/app/join/page.tsx:122` |
-| MP-0399 | medium | tsc-error | src | `src/app/layout.tsx:1` `src/app/layout.tsx:2` `src/app/layout.tsx:23` `src/app/layout.tsx:26` |
-| MP-0400 | medium | tsc-error | src | `src/app/manifest.ts:1` |
-| MP-0401 | medium | tsc-error | src | `src/app/page.tsx:3` `src/app/page.tsx:30` `src/app/page.tsx:199` |
-| MP-0402 | medium | tsc-error | src | `src/components/giant/AnimatedNumber.tsx:3` `src/components/giant/AnimatedNumber.tsx:49` |
-| MP-0403 | medium | tsc-error | src | `src/components/giant/ApiView.tsx:3` `src/components/giant/ApiView.tsx:5` `src/components/giant/ApiView.tsx:190` |
-| MP-0404 | medium | tsc-error | src | `src/components/giant/CandleChart.tsx:50` |
-| MP-0405 | medium | tsc-error | src | `src/components/giant/CapitalView.tsx:3` `src/components/giant/CapitalView.tsx:4` `src/components/giant/CapitalView.tsx:73` |
-| MP-0406 | medium | tsc-error | src | `src/components/giant/ChannelView.tsx:3` `src/components/giant/ChannelView.tsx:10` `src/components/giant/ChannelView.tsx:99` |
-| MP-0407 | medium | tsc-error | src | `src/components/giant/DeskView.tsx:3` `src/components/giant/DeskView.tsx:29` |
-| MP-0408 | medium | tsc-error | src | `src/components/giant/DexView.tsx:3` `src/components/giant/DexView.tsx:9` `src/components/giant/DexView.tsx:187` |
-| MP-0409 | medium | tsc-error | src | `src/components/giant/EmpireView.tsx:3` `src/components/giant/EmpireView.tsx:4` `src/components/giant/EmpireView.tsx:173` |
-| MP-0410 | medium | tsc-error | src | `src/components/giant/EstateView.tsx:11` `src/components/giant/EstateView.tsx:13` `src/components/giant/EstateView.tsx:89` |
-| MP-0411 | medium | tsc-error | src | `src/components/giant/FleetView.tsx:3` `src/components/giant/FleetView.tsx:4` `src/components/giant/FleetView.tsx:107` |
-| MP-0412 | medium | tsc-error | src | `src/components/giant/GapView.tsx:8` `src/components/giant/GapView.tsx:9` `src/components/giant/GapView.tsx:13` `src/components/giant/GapView.tsx:27` `src/components/giant/GapView.tsx:302` `src/components/giant/GapView.tsx:317` |
-| MP-0413 | medium | tsc-error | src | `src/components/giant/GiantPalette.tsx:11` `src/components/giant/GiantPalette.tsx:42` `src/components/giant/GiantPalette.tsx:49` `src/components/giant/GiantPalette.tsx:53` `src/components/giant/GiantPalette.tsx:76` |
-| MP-0414 | medium | tsc-error | src | `src/components/giant/GiantsView.tsx:3` `src/components/giant/GiantsView.tsx:76` |
-| MP-0415 | medium | tsc-error | src | `src/components/giant/InternalEconomy.tsx:3` `src/components/giant/InternalEconomy.tsx:4` `src/components/giant/InternalEconomy.tsx:65` `src/components/giant/InternalEconomy.tsx:104` |
-| MP-0416 | medium | tsc-error | src | `src/components/giant/LeagueView.tsx:3` `src/components/giant/LeagueView.tsx:67` |
-| MP-0417 | medium | tsc-error | src | `src/components/giant/LedgerView.tsx:3` `src/components/giant/LedgerView.tsx:46` |
-| MP-0418 | medium | tsc-error | src | `src/components/giant/MachineView.tsx:3` `src/components/giant/MachineView.tsx:22` `src/components/giant/MachineView.tsx:306` `src/components/giant/MachineView.tsx:313` `src/components/giant/MachineView.tsx:323` `src/components/giant/MachineView.tsx:331` `src/components/giant/MachineView.tsx:345` |
-| MP-0419 | medium | tsc-error | src | `src/components/giant/MarketingView.tsx:10` `src/components/giant/MarketingView.tsx:11` `src/components/giant/MarketingView.tsx:17` `src/components/giant/MarketingView.tsx:18` `src/components/giant/MarketingView.tsx:26` `src/components/giant/MarketingView.tsx:38` |
-| MP-0420 | medium | tsc-error | src | `src/components/giant/OfficeHqView.tsx:17` `src/components/giant/OfficeHqView.tsx:18` `src/components/giant/OfficeHqView.tsx:43` |
-| MP-0421 | medium | tsc-error | src | `src/components/giant/OfficeView.tsx:3` `src/components/giant/OfficeView.tsx:6` `src/components/giant/OfficeView.tsx:80` |
-| MP-0422 | medium | tsc-error | src | `src/components/giant/ProductsView.tsx:3` `src/components/giant/ProductsView.tsx:70` |
-| MP-0423 | medium | tsc-error | src | `src/components/giant/PulseView.tsx:3` `src/components/giant/PulseView.tsx:5` `src/components/giant/PulseView.tsx:58` `src/components/giant/PulseView.tsx:151` `src/components/giant/PulseView.tsx:151` `src/components/giant/PulseView.tsx:152` `src/components/giant/PulseView.tsx:152` `src/components/giant/PulseView.tsx:152` |
-| MP-0424 | medium | tsc-error | src | `src/components/giant/Recipe.tsx:3` `src/components/giant/Recipe.tsx:4` `src/components/giant/Recipe.tsx:38` |
-| MP-0425 | medium | tsc-error | src | `src/components/giant/SteemAuditPanel.tsx:3` `src/components/giant/SteemAuditPanel.tsx:4` `src/components/giant/SteemAuditPanel.tsx:109` |
-| MP-0426 | medium | tsc-error | src | `src/components/giant/SteemBridgePanel.tsx:3` `src/components/giant/SteemBridgePanel.tsx:4` `src/components/giant/SteemBridgePanel.tsx:96` |
-| MP-0427 | medium | tsc-error | src | `src/components/giant/SubmissionView.tsx:11` `src/components/giant/SubmissionView.tsx:12` `src/components/giant/SubmissionView.tsx:24` `src/components/giant/SubmissionView.tsx:176` |
-| MP-0428 | medium | tsc-error | src | `src/components/giant/TickerTape.tsx:9` `src/components/giant/TickerTape.tsx:150` |
-| MP-0429 | medium | tsc-error | src | `src/components/giant/TradeDesk.tsx:3` `src/components/giant/TradeDesk.tsx:5` `src/components/giant/TradeDesk.tsx:231` |
-| MP-0430 | medium | tsc-error | src | `src/components/giant/TrustView.tsx:11` `src/components/giant/TrustView.tsx:14` `src/components/giant/TrustView.tsx:117` `src/components/giant/TrustView.tsx:397` |
-| MP-0431 | medium | tsc-error | src | `src/components/giant/WalletView.tsx:3` `src/components/giant/WalletView.tsx:81` `src/components/giant/WalletView.tsx:86` |
-| MP-0432 | medium | tsc-error | src | `src/components/hq/Architecture.tsx:7` `src/components/hq/Architecture.tsx:8` `src/components/hq/Architecture.tsx:59` `src/components/hq/Architecture.tsx:70` `src/components/hq/Architecture.tsx:75` `src/components/hq/Architecture.tsx:123` |
-| MP-0433 | medium | tsc-error | src | `src/components/hq/Atmosphere.tsx:22` `src/components/hq/Atmosphere.tsx:23` `src/components/hq/Atmosphere.tsx:24` `src/components/hq/Atmosphere.tsx:25` `src/components/hq/Atmosphere.tsx:310` |
-| MP-0434 | medium | tsc-error | src | `src/components/hq/CameraDirector.tsx:17` `src/components/hq/CameraDirector.tsx:18` `src/components/hq/CameraDirector.tsx:19` |
-| MP-0435 | medium | tsc-error | src | `src/components/hq/Crew.tsx:21` `src/components/hq/Crew.tsx:22` `src/components/hq/Crew.tsx:23` `src/components/hq/Crew.tsx:24` `src/components/hq/Crew.tsx:25` `src/components/hq/Crew.tsx:397` `src/components/hq/Crew.tsx:399` |
-| MP-0436 | medium | tsc-error | src | `src/components/hq/GitWallData.tsx:20` |
-| MP-0437 | medium | tsc-error | src | `src/components/hq/Interior.tsx:20` `src/components/hq/Interior.tsx:21` `src/components/hq/Interior.tsx:22` `src/components/hq/Interior.tsx:82` `src/components/hq/Interior.tsx:145` `src/components/hq/Interior.tsx:306` |
-| MP-0438 | medium | tsc-error | src | `src/components/hq/Office3D.tsx:10` `src/components/hq/Office3D.tsx:11` `src/components/hq/Office3D.tsx:12` `src/components/hq/Office3D.tsx:13` `src/components/hq/Office3D.tsx:55` `src/components/hq/Office3D.tsx:102` `src/components/hq/Office3D.tsx:119` |
-| MP-0439 | medium | tsc-error | src | `src/components/hq/OperatorDrawer.tsx:3` `src/components/hq/OperatorDrawer.tsx:184` |
-| MP-0440 | medium | tsc-error | src | `src/components/hq/Realism.tsx:17` `src/components/hq/Realism.tsx:18` `src/components/hq/Realism.tsx:19` `src/components/hq/Realism.tsx:75` |
-| MP-0441 | medium | tsc-error | src | `src/components/hq/Room3D.tsx:9` `src/components/hq/Room3D.tsx:24` |
-| MP-0442 | medium | tsc-error | src | `src/components/hq/RoomRoot.tsx:11` `src/components/hq/RoomRoot.tsx:12` `src/components/hq/RoomRoot.tsx:33` |
-| MP-0443 | medium | tsc-error | src | `src/components/hq/Stations.tsx:10` `src/components/hq/Stations.tsx:11` `src/components/hq/Stations.tsx:12` `src/components/hq/Stations.tsx:146` `src/components/hq/Stations.tsx:148` |
-| MP-0444 | medium | tsc-error | src | `src/components/hq/ViewDeck.tsx:20` `src/components/hq/ViewDeck.tsx:195` |
-| MP-0445 | medium | tsc-error | src | `src/components/iso/draw.tsx:1` `src/components/iso/draw.tsx:19` |
-| MP-0446 | medium | tsc-error | src | `src/components/iso/live.tsx:3` `src/components/iso/live.tsx:53` |
-| MP-0447 | medium | tsc-error | src | `src/components/ui/accordion.tsx:3` `src/components/ui/accordion.tsx:4` `src/components/ui/accordion.tsx:5` `src/components/ui/accordion.tsx:12` |
-| MP-0448 | medium | tsc-error | src | `src/components/ui/alert-dialog.tsx:3` `src/components/ui/alert-dialog.tsx:4` `src/components/ui/alert-dialog.tsx:12` |
-| MP-0449 | medium | tsc-error | src | `src/components/ui/alert.tsx:1` `src/components/ui/alert.tsx:2` `src/components/ui/alert.tsx:28` |
-| MP-0450 | medium | tsc-error | src | `src/components/ui/aspect-ratio.tsx:3` `src/components/ui/aspect-ratio.tsx:7` `src/components/ui/aspect-ratio.tsx:8` |
-| MP-0451 | medium | tsc-error | src | `src/components/ui/avatar.tsx:3` `src/components/ui/avatar.tsx:4` `src/components/ui/avatar.tsx:13` |
-| MP-0452 | medium | tsc-error | src | `src/components/ui/badge.tsx:1` `src/components/ui/badge.tsx:2` `src/components/ui/badge.tsx:3` `src/components/ui/badge.tsx:38` |
-| MP-0453 | medium | tsc-error | src | `src/components/ui/breadcrumb.tsx:1` `src/components/ui/breadcrumb.tsx:2` `src/components/ui/breadcrumb.tsx:3` `src/components/ui/breadcrumb.tsx:8` |
-| MP-0454 | medium | tsc-error | src | `src/components/ui/button.tsx:1` `src/components/ui/button.tsx:2` `src/components/ui/button.tsx:3` `src/components/ui/button.tsx:51` |
-| MP-0455 | medium | tsc-error | src | `src/components/ui/calendar.tsx:3` `src/components/ui/calendar.tsx:8` `src/components/ui/calendar.tsx:9` `src/components/ui/calendar.tsx:29` |
-| MP-0456 | medium | tsc-error | src | `src/components/ui/card.tsx:1` `src/components/ui/card.tsx:7` |
-| MP-0457 | medium | tsc-error | src | `src/components/ui/carousel.tsx:3` `src/components/ui/carousel.tsx:6` `src/components/ui/carousel.tsx:7` `src/components/ui/carousel.tsx:110` |
-| MP-0458 | medium | tsc-error | src | `src/components/ui/chart.tsx:3` `src/components/ui/chart.tsx:4` `src/components/ui/chart.tsx:53` |
-| MP-0459 | medium | tsc-error | src | `src/components/ui/checkbox.tsx:3` `src/components/ui/checkbox.tsx:4` `src/components/ui/checkbox.tsx:5` `src/components/ui/checkbox.tsx:14` |
-| MP-0460 | medium | tsc-error | src | `src/components/ui/collapsible.tsx:3` `src/components/ui/collapsible.tsx:7` `src/components/ui/collapsible.tsx:8` `src/components/ui/collapsible.tsx:13` `src/components/ui/collapsible.tsx:24` |
-| MP-0461 | medium | tsc-error | src | `src/components/ui/command.tsx:3` `src/components/ui/command.tsx:4` `src/components/ui/command.tsx:5` `src/components/ui/command.tsx:21` |
-| MP-0462 | medium | tsc-error | src | `src/components/ui/context-menu.tsx:3` `src/components/ui/context-menu.tsx:4` `src/components/ui/context-menu.tsx:5` `src/components/ui/context-menu.tsx:12` |
-| MP-0463 | medium | tsc-error | src | `src/components/ui/dialog.tsx:3` `src/components/ui/dialog.tsx:4` `src/components/ui/dialog.tsx:5` `src/components/ui/dialog.tsx:12` |
-| MP-0464 | medium | tsc-error | src | `src/components/ui/drawer.tsx:3` `src/components/ui/drawer.tsx:4` `src/components/ui/drawer.tsx:11` |
-| MP-0465 | medium | tsc-error | src | `src/components/ui/dropdown-menu.tsx:3` `src/components/ui/dropdown-menu.tsx:4` `src/components/ui/dropdown-menu.tsx:5` `src/components/ui/dropdown-menu.tsx:12` |
-| MP-0466 | medium | tsc-error | src | `src/components/ui/form.tsx:3` `src/components/ui/form.tsx:4` `src/components/ui/form.tsx:5` `src/components/ui/form.tsx:14` `src/components/ui/form.tsx:80` |
-| MP-0467 | medium | tsc-error | src | `src/components/ui/hover-card.tsx:3` `src/components/ui/hover-card.tsx:4` `src/components/ui/hover-card.tsx:11` |
-| MP-0468 | medium | tsc-error | src | `src/components/ui/input-otp.tsx:3` `src/components/ui/input-otp.tsx:4` `src/components/ui/input-otp.tsx:5` `src/components/ui/input-otp.tsx:17` |
-| MP-0469 | medium | tsc-error | src | `src/components/ui/input.tsx:1` `src/components/ui/input.tsx:7` |
-| MP-0470 | medium | tsc-error | src | `src/components/ui/label.tsx:3` `src/components/ui/label.tsx:4` `src/components/ui/label.tsx:13` |
-| MP-0471 | medium | tsc-error | src | `src/components/ui/menubar.tsx:3` `src/components/ui/menubar.tsx:4` `src/components/ui/menubar.tsx:5` `src/components/ui/menubar.tsx:14` |
-| MP-0472 | medium | tsc-error | src | `src/components/ui/navigation-menu.tsx:1` `src/components/ui/navigation-menu.tsx:2` `src/components/ui/navigation-menu.tsx:3` `src/components/ui/navigation-menu.tsx:4` `src/components/ui/navigation-menu.tsx:17` |
-| MP-0473 | medium | tsc-error | src | `src/components/ui/pagination.tsx:1` `src/components/ui/pagination.tsx:6` `src/components/ui/pagination.tsx:13` |
-| MP-0474 | medium | tsc-error | src | `src/components/ui/popover.tsx:3` `src/components/ui/popover.tsx:4` `src/components/ui/popover.tsx:11` |
-| MP-0475 | medium | tsc-error | src | `src/components/ui/progress.tsx:3` `src/components/ui/progress.tsx:4` `src/components/ui/progress.tsx:14` |
-| MP-0476 | medium | tsc-error | src | `src/components/ui/radio-group.tsx:3` `src/components/ui/radio-group.tsx:4` `src/components/ui/radio-group.tsx:5` `src/components/ui/radio-group.tsx:14` |
-| MP-0477 | medium | tsc-error | src | `src/components/ui/resizable.tsx:3` `src/components/ui/resizable.tsx:4` `src/components/ui/resizable.tsx:5` `src/components/ui/resizable.tsx:14` |
-| MP-0478 | medium | tsc-error | src | `src/components/ui/scroll-area.tsx:3` `src/components/ui/scroll-area.tsx:4` `src/components/ui/scroll-area.tsx:14` |
-| MP-0479 | medium | tsc-error | src | `src/components/ui/select.tsx:3` `src/components/ui/select.tsx:4` `src/components/ui/select.tsx:5` `src/components/ui/select.tsx:12` |
-| MP-0480 | medium | tsc-error | src | `src/components/ui/separator.tsx:3` `src/components/ui/separator.tsx:4` `src/components/ui/separator.tsx:15` |
-| MP-0481 | medium | tsc-error | src | `src/components/ui/sheet.tsx:3` `src/components/ui/sheet.tsx:4` `src/components/ui/sheet.tsx:5` `src/components/ui/sheet.tsx:10` |
-| MP-0482 | medium | tsc-error | src | `src/components/ui/sidebar.tsx:3` `src/components/ui/sidebar.tsx:4` `src/components/ui/sidebar.tsx:5` `src/components/ui/sidebar.tsx:6` `src/components/ui/sidebar.tsx:130` |
-| MP-0483 | medium | tsc-error | src | `src/components/ui/skeleton.tsx:3` `src/components/ui/skeleton.tsx:5` |
-| MP-0484 | medium | tsc-error | src | `src/components/ui/slider.tsx:3` `src/components/ui/slider.tsx:4` `src/components/ui/slider.tsx:27` |
-| MP-0485 | medium | tsc-error | src | `src/components/ui/sonner.tsx:3` `src/components/ui/sonner.tsx:4` `src/components/ui/sonner.tsx:10` `src/components/ui/sonner.tsx:18` |
-| MP-0486 | medium | tsc-error | src | `src/components/ui/switch.tsx:3` `src/components/ui/switch.tsx:4` `src/components/ui/switch.tsx:13` |
-| MP-0487 | medium | tsc-error | src | `src/components/ui/table.tsx:3` `src/components/ui/table.tsx:9` |
-| MP-0488 | medium | tsc-error | src | `src/components/ui/tabs.tsx:3` `src/components/ui/tabs.tsx:4` `src/components/ui/tabs.tsx:13` |
-| MP-0489 | medium | tsc-error | src | `src/components/ui/textarea.tsx:1` `src/components/ui/textarea.tsx:7` |
-| MP-0490 | medium | tsc-error | src | `src/components/ui/toast.tsx:3` `src/components/ui/toast.tsx:4` `src/components/ui/toast.tsx:5` `src/components/ui/toast.tsx:6` `src/components/ui/toast.tsx:16` |
-| MP-0491 | medium | tsc-error | src | `src/components/ui/toaster.tsx:17` |
-| MP-0492 | medium | tsc-error | src | `src/components/ui/toggle-group.tsx:3` `src/components/ui/toggle-group.tsx:4` `src/components/ui/toggle-group.tsx:5` `src/components/ui/toggle-group.tsx:26` |
-| MP-0493 | medium | tsc-error | src | `src/components/ui/toggle.tsx:3` `src/components/ui/toggle.tsx:4` `src/components/ui/toggle.tsx:5` `src/components/ui/toggle.tsx:39` |
-| MP-0494 | medium | tsc-error | src | `src/components/ui/tooltip.tsx:3` `src/components/ui/tooltip.tsx:4` `src/components/ui/tooltip.tsx:13` |
-| MP-0495 | medium | tsc-error | src | `src/hooks/use-mobile.ts:1` |
-| MP-0496 | medium | tsc-error | src | `src/hooks/use-toast.ts:4` |
-| MP-0497 | medium | tsc-error | src | `src/instrumentation.ts:10` |
-| MP-0498 | medium | tsc-error | src | `src/lib/anatomy/react/draw.tsx:1` `src/lib/anatomy/react/draw.tsx:19` |
-| MP-0499 | medium | tsc-error | src | `src/lib/anatomy/react/live.tsx:3` `src/lib/anatomy/react/live.tsx:53` |
-| MP-0500 | medium | tsc-error | src | `src/lib/anchor.ts:12` `src/lib/anchor.ts:13` `src/lib/anchor.ts:14` `src/lib/anchor.ts:42` |
-| MP-0501 | medium | tsc-error | src | `src/lib/compute-wall.ts:13` |
-| MP-0502 | medium | tsc-error | src | `src/lib/db.ts:1` |
-| MP-0503 | medium | tsc-error | src | `src/lib/dex-engine.ts:535` `src/lib/dex-engine.ts:539` `src/lib/dex-engine.ts:540` |
-| MP-0504 | medium | tsc-error | src | `src/lib/dex-server.ts:89` `src/lib/dex-server.ts:90` `src/lib/dex-server.ts:94` `src/lib/dex-server.ts:338` `src/lib/dex-server.ts:338` `src/lib/dex-server.ts:338` `src/lib/dex-server.ts:340` `src/lib/dex-server.ts:340` `src/lib/dex-server.ts:340` `src/lib/dex-server.ts:347` `src/lib/dex-server.ts:347` `src/lib/dex-server.ts:347` |
-| MP-0505 | medium | tsc-error | src | `src/lib/dispatch/doors.test.ts:5` `src/lib/dispatch/doors.test.ts:6` |
-| MP-0506 | medium | tsc-error | src | `src/lib/dispatch/doors.ts:15` |
-| MP-0507 | medium | tsc-error | src | `src/lib/dispatch/receipts.test.ts:4` `src/lib/dispatch/receipts.test.ts:5` |
-| MP-0508 | medium | tsc-error | src | `src/lib/dispatch/receipts.ts:10` |
-| MP-0509 | medium | tsc-error | src | `src/lib/dispatch/redact.test.ts:4` `src/lib/dispatch/redact.test.ts:5` |
-| MP-0510 | medium | tsc-error | src | `src/lib/estate-discovery.ts:9` `src/lib/estate-discovery.ts:10` `src/lib/estate-discovery.ts:11` `src/lib/estate-discovery.ts:12` |
-| MP-0511 | medium | tsc-error | src | `src/lib/fleet-auth.ts:4` `src/lib/fleet-auth.ts:12` `src/lib/fleet-auth.ts:13` |
-| MP-0512 | medium | tsc-error | src | `src/lib/fleet-loop.ts:166` `src/lib/fleet-loop.ts:168` `src/lib/fleet-loop.ts:170` `src/lib/fleet-loop.ts:171` `src/lib/fleet-loop.ts:211` `src/lib/fleet-loop.ts:213` `src/lib/fleet-loop.ts:235` `src/lib/fleet-loop.ts:257` `src/lib/fleet-loop.ts:259` `src/lib/fleet-loop.ts:281` `src/lib/fleet-loop.ts:283` |
-| MP-0513 | medium | tsc-error | src | `src/lib/giant-git.ts:6` `src/lib/giant-git.ts:7` `src/lib/giant-git.ts:8` |
-| MP-0514 | medium | tsc-error | src | `src/lib/giant-integrity.ts:8` |
-| MP-0515 | medium | tsc-error | src | `src/lib/giant/capital.ts:17` `src/lib/giant/capital.ts:18` `src/lib/giant/capital.ts:685` |
+| MP-0311 | medium | tsc-error | mini-services | `mini-services/meta-planner/tests/meta-planner.test.ts:9` `mini-services/meta-planner/tests/meta-planner.test.ts:10` `mini-services/meta-planner/tests/meta-planner.test.ts:11` `mini-services/meta-planner/tests/meta-planner.test.ts:12` `mini-services/meta-planner/tests/meta-planner.test.ts:27` |
+| MP-0312 | medium | tsc-error | mini-services | `mini-services/office-live/index.ts:18` `mini-services/office-live/index.ts:19` `mini-services/office-live/index.ts:20` `mini-services/office-live/index.ts:21` `mini-services/office-live/index.ts:22` `mini-services/office-live/index.ts:78` `mini-services/office-live/index.ts:93` `mini-services/office-live/index.ts:113` `mini-services/office-live/index.ts:120` `mini-services/office-live/index.ts:139` `mini-services/office-live/index.ts:147` `mini-services/office-live/index.ts:147` |
+| MP-0313 | medium | tsc-error | mini-services | `mini-services/organism-keeper/index.ts:19` `mini-services/organism-keeper/index.ts:20` `mini-services/organism-keeper/index.ts:21` `mini-services/organism-keeper/index.ts:22` `mini-services/organism-keeper/index.ts:23` `mini-services/organism-keeper/index.ts:25` `mini-services/organism-keeper/index.ts:40` `mini-services/organism-keeper/index.ts:43` `mini-services/organism-keeper/index.ts:45` `mini-services/organism-keeper/index.ts:54` `mini-services/organism-keeper/index.ts:76` `mini-services/organism-keeper/index.ts:168` |
+| MP-0314 | medium | tsc-error | mini-services | `mini-services/saos-dex-node/index.ts:9` `mini-services/saos-dex-node/index.ts:10` `mini-services/saos-dex-node/index.ts:11` `mini-services/saos-dex-node/index.ts:12` `mini-services/saos-dex-node/index.ts:21` `mini-services/saos-dex-node/index.ts:62` `mini-services/saos-dex-node/index.ts:70` `mini-services/saos-dex-node/index.ts:74` `mini-services/saos-dex-node/index.ts:76` `mini-services/saos-dex-node/index.ts:97` `mini-services/saos-dex-node/index.ts:106` `mini-services/saos-dex-node/index.ts:123` |
+| MP-0315 | medium | tsc-error | mini-services | `mini-services/soldier-army/index.ts:14` `mini-services/soldier-army/index.ts:15` `mini-services/soldier-army/index.ts:19` `mini-services/soldier-army/index.ts:27` `mini-services/soldier-army/index.ts:49` `mini-services/soldier-army/index.ts:244` |
+| MP-0316 | medium | tsc-error | mini-services | `mini-services/sovereign-audit/index.ts:11` `mini-services/sovereign-audit/index.ts:12` `mini-services/sovereign-audit/index.ts:13` `mini-services/sovereign-audit/index.ts:16` `mini-services/sovereign-audit/index.ts:61` |
+| MP-0317 | medium | tsc-error | mini-services | `mini-services/sovereign-gateway/index.ts:33` `mini-services/sovereign-gateway/index.ts:34` `mini-services/sovereign-gateway/index.ts:35` `mini-services/sovereign-gateway/index.ts:37` `mini-services/sovereign-gateway/index.ts:50` `mini-services/sovereign-gateway/index.ts:55` `mini-services/sovereign-gateway/index.ts:61` `mini-services/sovereign-gateway/index.ts:92` `mini-services/sovereign-gateway/index.ts:95` `mini-services/sovereign-gateway/index.ts:96` `mini-services/sovereign-gateway/index.ts:97` `mini-services/sovereign-gateway/index.ts:101` |
+| MP-0318 | medium | tsc-error | mini-services | `mini-services/sovereign-voice/index.ts:29` `mini-services/sovereign-voice/index.ts:30` `mini-services/sovereign-voice/index.ts:31` `mini-services/sovereign-voice/index.ts:61` `mini-services/sovereign-voice/index.ts:61` `mini-services/sovereign-voice/index.ts:62` `mini-services/sovereign-voice/index.ts:62` `mini-services/sovereign-voice/index.ts:63` `mini-services/sovereign-voice/index.ts:63` `mini-services/sovereign-voice/index.ts:64` `mini-services/sovereign-voice/index.ts:64` `mini-services/sovereign-voice/index.ts:65` |
+| MP-0319 | medium | tsc-error | mini-services | `mini-services/steem-voice/index.ts:12` `mini-services/steem-voice/index.ts:13` `mini-services/steem-voice/index.ts:15` `mini-services/steem-voice/index.ts:17` `mini-services/steem-voice/index.ts:65` `mini-services/steem-voice/index.ts:70` `mini-services/steem-voice/index.ts:94` |
+| MP-0320 | medium | tsc-error | (root) | `next.config.ts:1` |
+| MP-0321 | medium | tsc-error | scripts | `scripts/fleet-probe.ts:1` |
+| MP-0322 | medium | tsc-error | scripts | `scripts/join-golden.ts:20` `scripts/join-golden.ts:84` `scripts/join-golden.ts:87` |
+| MP-0323 | medium | tsc-error | src | `src/app/api/dex/candles/route.ts:5` |
+| MP-0324 | medium | tsc-error | src | `src/app/api/dex/depth/route.ts:5` |
+| MP-0325 | medium | tsc-error | src | `src/app/api/dex/orders/route.ts:9` |
+| MP-0326 | medium | tsc-error | src | `src/app/api/dex/overview/route.ts:4` |
+| MP-0327 | medium | tsc-error | src | `src/app/api/dex/pairs/route.ts:2` |
+| MP-0328 | medium | tsc-error | src | `src/app/api/dex/pools/route.ts:4` |
+| MP-0329 | medium | tsc-error | src | `src/app/api/dex/quote/route.ts:5` |
+| MP-0330 | medium | tsc-error | src | `src/app/api/dex/steem/audit/route.ts:4` |
+| MP-0331 | medium | tsc-error | src | `src/app/api/dex/steem/market/route.ts:4` |
+| MP-0332 | medium | tsc-error | src | `src/app/api/dex/swap/route.ts:6` |
+| MP-0333 | medium | tsc-error | src | `src/app/api/dex/trades/route.ts:4` |
+| MP-0334 | medium | tsc-error | src | `src/app/api/dex/transfer/route.ts:7` |
+| MP-0335 | medium | tsc-error | src | `src/app/api/dex/wallet/faucet/route.ts:6` |
+| MP-0336 | medium | tsc-error | src | `src/app/api/dex/wallet/route.ts:2` |
+| MP-0337 | medium | tsc-error | src | `src/app/api/economy/route.ts:8` `src/app/api/economy/route.ts:9` `src/app/api/economy/route.ts:10` `src/app/api/economy/route.ts:11` `src/app/api/economy/route.ts:15` `src/app/api/economy/route.ts:37` |
+| MP-0338 | medium | tsc-error | src | `src/app/api/estate/state/route.ts:4` `src/app/api/estate/state/route.ts:5` `src/app/api/estate/state/route.ts:6` |
+| MP-0339 | medium | tsc-error | src | `src/app/api/fleet/allocate/route.ts:4` `src/app/api/fleet/allocate/route.ts:5` |
+| MP-0340 | medium | tsc-error | src | `src/app/api/fleet/roster/route.ts:5` `src/app/api/fleet/roster/route.ts:100` `src/app/api/fleet/roster/route.ts:101` `src/app/api/fleet/roster/route.ts:102` `src/app/api/fleet/roster/route.ts:139` `src/app/api/fleet/roster/route.ts:140` |
+| MP-0341 | medium | tsc-error | src | `src/app/api/fleet/state/route.ts:2` `src/app/api/fleet/state/route.ts:94` `src/app/api/fleet/state/route.ts:95` |
+| MP-0342 | medium | tsc-error | src | `src/app/api/fleet/trade/route.ts:12` |
+| MP-0343 | medium | tsc-error | src | `src/app/api/giant/books/route.ts:13` |
+| MP-0344 | medium | tsc-error | src | `src/app/api/giant/capital/route.ts:7` |
+| MP-0345 | medium | tsc-error | src | `src/app/api/giant/channel/directive/route.ts:7` `src/app/api/giant/channel/directive/route.ts:87` `src/app/api/giant/channel/directive/route.ts:118` |
+| MP-0346 | medium | tsc-error | src | `src/app/api/giant/channel/route.ts:5` |
+| MP-0347 | medium | tsc-error | src | `src/app/api/giant/decisions/route.ts:6` |
+| MP-0348 | medium | tsc-error | src | `src/app/api/giant/desk/route.ts:5` |
+| MP-0349 | medium | tsc-error | src | `src/app/api/giant/dex/route.ts:7` |
+| MP-0350 | medium | tsc-error | src | `src/app/api/giant/empire/route.ts:1` |
+| MP-0351 | medium | tsc-error | src | `src/app/api/giant/fleet/route.ts:4` |
+| MP-0352 | medium | tsc-error | src | `src/app/api/giant/gap/route.ts:10` `src/app/api/giant/gap/route.ts:11` `src/app/api/giant/gap/route.ts:12` `src/app/api/giant/gap/route.ts:59` `src/app/api/giant/gap/route.ts:70` `src/app/api/giant/gap/route.ts:73` `src/app/api/giant/gap/route.ts:116` |
+| MP-0353 | medium | tsc-error | src | `src/app/api/giant/giants/route.ts:9` `src/app/api/giant/giants/route.ts:10` `src/app/api/giant/giants/route.ts:11` `src/app/api/giant/giants/route.ts:22` `src/app/api/giant/giants/route.ts:164` |
+| MP-0354 | medium | tsc-error | src | `src/app/api/giant/league/route.ts:6` |
+| MP-0355 | medium | tsc-error | src | `src/app/api/giant/liveness/route.ts:8` |
+| MP-0356 | medium | tsc-error | src | `src/app/api/giant/market/route.ts:10` `src/app/api/giant/market/route.ts:11` `src/app/api/giant/market/route.ts:12` |
+| MP-0357 | medium | tsc-error | src | `src/app/api/giant/marketing/route.ts:14` |
+| MP-0358 | medium | tsc-error | src | `src/app/api/giant/office/route.ts:8` |
+| MP-0359 | medium | tsc-error | src | `src/app/api/giant/products/route.ts:5` |
+| MP-0360 | medium | tsc-error | src | `src/app/api/giant/pulse/route.ts:9` `src/app/api/giant/pulse/route.ts:10` `src/app/api/giant/pulse/route.ts:11` |
+| MP-0361 | medium | tsc-error | src | `src/app/api/giant/trust/route.ts:8` |
+| MP-0362 | medium | tsc-error | src | `src/app/api/git/catalog/route.ts:3` |
+| MP-0363 | medium | tsc-error | src | `src/app/api/git/content/route.ts:3` |
+| MP-0364 | medium | tsc-error | src | `src/app/api/git/land/route.ts:4` `src/app/api/git/land/route.ts:5` |
+| MP-0365 | medium | tsc-error | src | `src/app/api/git/ledger/route.ts:3` |
+| MP-0366 | medium | tsc-error | src | `src/app/api/git/state/route.ts:3` |
+| MP-0367 | medium | tsc-error | src | `src/app/api/material/read/route.ts:5` |
+| MP-0368 | medium | tsc-error | src | `src/app/api/material/state/route.ts:4` |
+| MP-0369 | medium | tsc-error | src | `src/app/api/merge/truth/route.ts:6` `src/app/api/merge/truth/route.ts:7` `src/app/api/merge/truth/route.ts:8` |
+| MP-0370 | medium | tsc-error | src | `src/app/api/office-state/route.ts:5` |
+| MP-0371 | medium | tsc-error | src | `src/app/api/office/ops/command/route.ts:4` `src/app/api/office/ops/command/route.ts:191` |
+| MP-0372 | medium | tsc-error | src | `src/app/api/office/ops/login/route.ts:4` |
+| MP-0373 | medium | tsc-error | src | `src/app/api/office/ops/state/route.ts:3` |
+| MP-0374 | medium | tsc-error | src | `src/app/api/office/state/route.ts:1` `src/app/api/office/state/route.ts:2` `src/app/api/office/state/route.ts:3` `src/app/api/office/state/route.ts:14` |
+| MP-0375 | medium | tsc-error | src | `src/app/api/office/world/route.ts:1` |
+| MP-0376 | medium | tsc-error | src | `src/app/api/organism/route.ts:1` |
+| MP-0377 | medium | tsc-error | src | `src/app/api/public/v1/account/route.ts:5` |
+| MP-0378 | medium | tsc-error | src | `src/app/api/public/v1/candles/route.ts:5` |
+| MP-0379 | medium | tsc-error | src | `src/app/api/public/v1/depth/route.ts:6` |
+| MP-0380 | medium | tsc-error | src | `src/app/api/public/v1/keys/route.ts:14` |
+| MP-0381 | medium | tsc-error | src | `src/app/api/public/v1/markets/route.ts:5` |
+| MP-0382 | medium | tsc-error | src | `src/app/api/public/v1/orders/route.ts:11` |
+| MP-0383 | medium | tsc-error | src | `src/app/api/public/v1/ping/route.ts:5` |
+| MP-0384 | medium | tsc-error | src | `src/app/api/route.ts:1` |
+| MP-0385 | medium | tsc-error | src | `src/app/api/sectors/route.ts:2` |
+| MP-0386 | medium | tsc-error | src | `src/app/api/skills/run/route.ts:3` `src/app/api/skills/run/route.ts:11` `src/app/api/skills/run/route.ts:14` `src/app/api/skills/run/route.ts:180` `src/app/api/skills/run/route.ts:217` |
+| MP-0387 | medium | tsc-error | src | `src/app/api/skills/state/route.ts:3` |
+| MP-0388 | medium | tsc-error | src | `src/app/api/sovereign/anchor/route.ts:5` |
+| MP-0389 | medium | tsc-error | src | `src/app/api/sovereign/api-keys/route.ts:8` |
+| MP-0390 | medium | tsc-error | src | `src/app/api/sovereign/auth/route.ts:4` |
+| MP-0391 | medium | tsc-error | src | `src/app/api/sovereign/channel/ask/route.ts:12` `src/app/api/sovereign/channel/ask/route.ts:13` |
+| MP-0392 | medium | tsc-error | src | `src/app/api/sovereign/channel/route.ts:13` |
+| MP-0393 | medium | tsc-error | src | `src/app/api/sovereign/gate/route.ts:15` |
+| MP-0394 | medium | tsc-error | src | `src/app/api/sovereign/messages/[id]/route.ts:4` `src/app/api/sovereign/messages/[id]/route.ts:5` |
+| MP-0395 | medium | tsc-error | src | `src/app/api/sovereign/messages/route.ts:4` `src/app/api/sovereign/messages/route.ts:5` |
+| MP-0396 | medium | tsc-error | src | `src/app/api/sovereign/relay/process/route.ts:4` |
+| MP-0397 | medium | tsc-error | src | `src/app/join/page.tsx:11` `src/app/join/page.tsx:12` `src/app/join/page.tsx:13` `src/app/join/page.tsx:122` |
+| MP-0398 | medium | tsc-error | src | `src/app/layout.tsx:1` `src/app/layout.tsx:2` `src/app/layout.tsx:23` `src/app/layout.tsx:26` |
+| MP-0399 | medium | tsc-error | src | `src/app/manifest.ts:1` |
+| MP-0400 | medium | tsc-error | src | `src/app/page.tsx:3` `src/app/page.tsx:30` `src/app/page.tsx:199` |
+| MP-0401 | medium | tsc-error | src | `src/components/giant/AnimatedNumber.tsx:3` `src/components/giant/AnimatedNumber.tsx:49` |
+| MP-0402 | medium | tsc-error | src | `src/components/giant/ApiView.tsx:3` `src/components/giant/ApiView.tsx:5` `src/components/giant/ApiView.tsx:190` |
+| MP-0403 | medium | tsc-error | src | `src/components/giant/CandleChart.tsx:50` |
+| MP-0404 | medium | tsc-error | src | `src/components/giant/CapitalView.tsx:3` `src/components/giant/CapitalView.tsx:4` `src/components/giant/CapitalView.tsx:73` |
+| MP-0405 | medium | tsc-error | src | `src/components/giant/ChannelView.tsx:3` `src/components/giant/ChannelView.tsx:10` `src/components/giant/ChannelView.tsx:99` |
+| MP-0406 | medium | tsc-error | src | `src/components/giant/DeskView.tsx:3` `src/components/giant/DeskView.tsx:29` |
+| MP-0407 | medium | tsc-error | src | `src/components/giant/DexView.tsx:3` `src/components/giant/DexView.tsx:9` `src/components/giant/DexView.tsx:187` |
+| MP-0408 | medium | tsc-error | src | `src/components/giant/EmpireView.tsx:3` `src/components/giant/EmpireView.tsx:4` `src/components/giant/EmpireView.tsx:173` |
+| MP-0409 | medium | tsc-error | src | `src/components/giant/EstateView.tsx:11` `src/components/giant/EstateView.tsx:13` `src/components/giant/EstateView.tsx:89` |
+| MP-0410 | medium | tsc-error | src | `src/components/giant/FleetView.tsx:3` `src/components/giant/FleetView.tsx:4` `src/components/giant/FleetView.tsx:107` |
+| MP-0411 | medium | tsc-error | src | `src/components/giant/GapView.tsx:8` `src/components/giant/GapView.tsx:9` `src/components/giant/GapView.tsx:13` `src/components/giant/GapView.tsx:27` `src/components/giant/GapView.tsx:302` `src/components/giant/GapView.tsx:317` |
+| MP-0412 | medium | tsc-error | src | `src/components/giant/GiantPalette.tsx:11` `src/components/giant/GiantPalette.tsx:42` `src/components/giant/GiantPalette.tsx:49` `src/components/giant/GiantPalette.tsx:53` `src/components/giant/GiantPalette.tsx:76` |
+| MP-0413 | medium | tsc-error | src | `src/components/giant/GiantsView.tsx:3` `src/components/giant/GiantsView.tsx:76` |
+| MP-0414 | medium | tsc-error | src | `src/components/giant/InternalEconomy.tsx:3` `src/components/giant/InternalEconomy.tsx:4` `src/components/giant/InternalEconomy.tsx:65` `src/components/giant/InternalEconomy.tsx:104` |
+| MP-0415 | medium | tsc-error | src | `src/components/giant/LeagueView.tsx:3` `src/components/giant/LeagueView.tsx:67` |
+| MP-0416 | medium | tsc-error | src | `src/components/giant/LedgerView.tsx:3` `src/components/giant/LedgerView.tsx:46` |
+| MP-0417 | medium | tsc-error | src | `src/components/giant/MachineView.tsx:3` `src/components/giant/MachineView.tsx:22` `src/components/giant/MachineView.tsx:306` `src/components/giant/MachineView.tsx:313` `src/components/giant/MachineView.tsx:323` `src/components/giant/MachineView.tsx:331` `src/components/giant/MachineView.tsx:345` |
+| MP-0418 | medium | tsc-error | src | `src/components/giant/MarketingView.tsx:10` `src/components/giant/MarketingView.tsx:11` `src/components/giant/MarketingView.tsx:17` `src/components/giant/MarketingView.tsx:18` `src/components/giant/MarketingView.tsx:26` `src/components/giant/MarketingView.tsx:38` |
+| MP-0419 | medium | tsc-error | src | `src/components/giant/OfficeHqView.tsx:17` `src/components/giant/OfficeHqView.tsx:18` `src/components/giant/OfficeHqView.tsx:43` |
+| MP-0420 | medium | tsc-error | src | `src/components/giant/OfficeView.tsx:3` `src/components/giant/OfficeView.tsx:6` `src/components/giant/OfficeView.tsx:80` |
+| MP-0421 | medium | tsc-error | src | `src/components/giant/ProductsView.tsx:3` `src/components/giant/ProductsView.tsx:70` |
+| MP-0422 | medium | tsc-error | src | `src/components/giant/PulseView.tsx:3` `src/components/giant/PulseView.tsx:5` `src/components/giant/PulseView.tsx:58` `src/components/giant/PulseView.tsx:151` `src/components/giant/PulseView.tsx:151` `src/components/giant/PulseView.tsx:152` `src/components/giant/PulseView.tsx:152` `src/components/giant/PulseView.tsx:152` |
+| MP-0423 | medium | tsc-error | src | `src/components/giant/Recipe.tsx:3` `src/components/giant/Recipe.tsx:4` `src/components/giant/Recipe.tsx:38` |
+| MP-0424 | medium | tsc-error | src | `src/components/giant/SteemAuditPanel.tsx:3` `src/components/giant/SteemAuditPanel.tsx:4` `src/components/giant/SteemAuditPanel.tsx:109` |
+| MP-0425 | medium | tsc-error | src | `src/components/giant/SteemBridgePanel.tsx:3` `src/components/giant/SteemBridgePanel.tsx:4` `src/components/giant/SteemBridgePanel.tsx:96` |
+| MP-0426 | medium | tsc-error | src | `src/components/giant/SubmissionView.tsx:11` `src/components/giant/SubmissionView.tsx:12` `src/components/giant/SubmissionView.tsx:24` `src/components/giant/SubmissionView.tsx:176` |
+| MP-0427 | medium | tsc-error | src | `src/components/giant/TickerTape.tsx:9` `src/components/giant/TickerTape.tsx:150` |
+| MP-0428 | medium | tsc-error | src | `src/components/giant/TradeDesk.tsx:3` `src/components/giant/TradeDesk.tsx:5` `src/components/giant/TradeDesk.tsx:231` |
+| MP-0429 | medium | tsc-error | src | `src/components/giant/TrustView.tsx:11` `src/components/giant/TrustView.tsx:14` `src/components/giant/TrustView.tsx:117` `src/components/giant/TrustView.tsx:397` |
+| MP-0430 | medium | tsc-error | src | `src/components/giant/WalletView.tsx:3` `src/components/giant/WalletView.tsx:81` `src/components/giant/WalletView.tsx:86` |
+| MP-0431 | medium | tsc-error | src | `src/components/hq/Architecture.tsx:7` `src/components/hq/Architecture.tsx:8` `src/components/hq/Architecture.tsx:59` `src/components/hq/Architecture.tsx:70` `src/components/hq/Architecture.tsx:75` `src/components/hq/Architecture.tsx:123` |
+| MP-0432 | medium | tsc-error | src | `src/components/hq/Atmosphere.tsx:22` `src/components/hq/Atmosphere.tsx:23` `src/components/hq/Atmosphere.tsx:24` `src/components/hq/Atmosphere.tsx:25` `src/components/hq/Atmosphere.tsx:310` |
+| MP-0433 | medium | tsc-error | src | `src/components/hq/CameraDirector.tsx:17` `src/components/hq/CameraDirector.tsx:18` `src/components/hq/CameraDirector.tsx:19` |
+| MP-0434 | medium | tsc-error | src | `src/components/hq/Crew.tsx:21` `src/components/hq/Crew.tsx:22` `src/components/hq/Crew.tsx:23` `src/components/hq/Crew.tsx:24` `src/components/hq/Crew.tsx:25` `src/components/hq/Crew.tsx:397` `src/components/hq/Crew.tsx:399` |
+| MP-0435 | medium | tsc-error | src | `src/components/hq/GitWallData.tsx:20` |
+| MP-0436 | medium | tsc-error | src | `src/components/hq/Interior.tsx:20` `src/components/hq/Interior.tsx:21` `src/components/hq/Interior.tsx:22` `src/components/hq/Interior.tsx:82` `src/components/hq/Interior.tsx:145` `src/components/hq/Interior.tsx:306` |
+| MP-0437 | medium | tsc-error | src | `src/components/hq/Office3D.tsx:10` `src/components/hq/Office3D.tsx:11` `src/components/hq/Office3D.tsx:12` `src/components/hq/Office3D.tsx:13` `src/components/hq/Office3D.tsx:55` `src/components/hq/Office3D.tsx:102` `src/components/hq/Office3D.tsx:119` |
+| MP-0438 | medium | tsc-error | src | `src/components/hq/OperatorDrawer.tsx:3` `src/components/hq/OperatorDrawer.tsx:184` |
+| MP-0439 | medium | tsc-error | src | `src/components/hq/Realism.tsx:17` `src/components/hq/Realism.tsx:18` `src/components/hq/Realism.tsx:19` `src/components/hq/Realism.tsx:75` |
+| MP-0440 | medium | tsc-error | src | `src/components/hq/Room3D.tsx:9` `src/components/hq/Room3D.tsx:24` |
+| MP-0441 | medium | tsc-error | src | `src/components/hq/RoomRoot.tsx:11` `src/components/hq/RoomRoot.tsx:12` `src/components/hq/RoomRoot.tsx:33` |
+| MP-0442 | medium | tsc-error | src | `src/components/hq/Stations.tsx:10` `src/components/hq/Stations.tsx:11` `src/components/hq/Stations.tsx:12` `src/components/hq/Stations.tsx:146` `src/components/hq/Stations.tsx:148` |
+| MP-0443 | medium | tsc-error | src | `src/components/hq/ViewDeck.tsx:20` `src/components/hq/ViewDeck.tsx:195` |
+| MP-0444 | medium | tsc-error | src | `src/components/iso/draw.tsx:1` `src/components/iso/draw.tsx:19` |
+| MP-0445 | medium | tsc-error | src | `src/components/iso/live.tsx:3` `src/components/iso/live.tsx:53` |
+| MP-0446 | medium | tsc-error | src | `src/components/ui/accordion.tsx:3` `src/components/ui/accordion.tsx:4` `src/components/ui/accordion.tsx:5` `src/components/ui/accordion.tsx:12` |
+| MP-0447 | medium | tsc-error | src | `src/components/ui/alert-dialog.tsx:3` `src/components/ui/alert-dialog.tsx:4` `src/components/ui/alert-dialog.tsx:12` |
+| MP-0448 | medium | tsc-error | src | `src/components/ui/alert.tsx:1` `src/components/ui/alert.tsx:2` `src/components/ui/alert.tsx:28` |
+| MP-0449 | medium | tsc-error | src | `src/components/ui/aspect-ratio.tsx:3` `src/components/ui/aspect-ratio.tsx:7` `src/components/ui/aspect-ratio.tsx:8` |
+| MP-0450 | medium | tsc-error | src | `src/components/ui/avatar.tsx:3` `src/components/ui/avatar.tsx:4` `src/components/ui/avatar.tsx:13` |
+| MP-0451 | medium | tsc-error | src | `src/components/ui/badge.tsx:1` `src/components/ui/badge.tsx:2` `src/components/ui/badge.tsx:3` `src/components/ui/badge.tsx:38` |
+| MP-0452 | medium | tsc-error | src | `src/components/ui/breadcrumb.tsx:1` `src/components/ui/breadcrumb.tsx:2` `src/components/ui/breadcrumb.tsx:3` `src/components/ui/breadcrumb.tsx:8` |
+| MP-0453 | medium | tsc-error | src | `src/components/ui/button.tsx:1` `src/components/ui/button.tsx:2` `src/components/ui/button.tsx:3` `src/components/ui/button.tsx:51` |
+| MP-0454 | medium | tsc-error | src | `src/components/ui/calendar.tsx:3` `src/components/ui/calendar.tsx:8` `src/components/ui/calendar.tsx:9` `src/components/ui/calendar.tsx:29` |
+| MP-0455 | medium | tsc-error | src | `src/components/ui/card.tsx:1` `src/components/ui/card.tsx:7` |
+| MP-0456 | medium | tsc-error | src | `src/components/ui/carousel.tsx:3` `src/components/ui/carousel.tsx:6` `src/components/ui/carousel.tsx:7` `src/components/ui/carousel.tsx:110` |
+| MP-0457 | medium | tsc-error | src | `src/components/ui/chart.tsx:3` `src/components/ui/chart.tsx:4` `src/components/ui/chart.tsx:53` |
+| MP-0458 | medium | tsc-error | src | `src/components/ui/checkbox.tsx:3` `src/components/ui/checkbox.tsx:4` `src/components/ui/checkbox.tsx:5` `src/components/ui/checkbox.tsx:14` |
+| MP-0459 | medium | tsc-error | src | `src/components/ui/collapsible.tsx:3` `src/components/ui/collapsible.tsx:7` `src/components/ui/collapsible.tsx:8` `src/components/ui/collapsible.tsx:13` `src/components/ui/collapsible.tsx:24` |
+| MP-0460 | medium | tsc-error | src | `src/components/ui/command.tsx:3` `src/components/ui/command.tsx:4` `src/components/ui/command.tsx:5` `src/components/ui/command.tsx:21` |
+| MP-0461 | medium | tsc-error | src | `src/components/ui/context-menu.tsx:3` `src/components/ui/context-menu.tsx:4` `src/components/ui/context-menu.tsx:5` `src/components/ui/context-menu.tsx:12` |
+| MP-0462 | medium | tsc-error | src | `src/components/ui/dialog.tsx:3` `src/components/ui/dialog.tsx:4` `src/components/ui/dialog.tsx:5` `src/components/ui/dialog.tsx:12` |
+| MP-0463 | medium | tsc-error | src | `src/components/ui/drawer.tsx:3` `src/components/ui/drawer.tsx:4` `src/components/ui/drawer.tsx:11` |
+| MP-0464 | medium | tsc-error | src | `src/components/ui/dropdown-menu.tsx:3` `src/components/ui/dropdown-menu.tsx:4` `src/components/ui/dropdown-menu.tsx:5` `src/components/ui/dropdown-menu.tsx:12` |
+| MP-0465 | medium | tsc-error | src | `src/components/ui/form.tsx:3` `src/components/ui/form.tsx:4` `src/components/ui/form.tsx:5` `src/components/ui/form.tsx:14` `src/components/ui/form.tsx:80` |
+| MP-0466 | medium | tsc-error | src | `src/components/ui/hover-card.tsx:3` `src/components/ui/hover-card.tsx:4` `src/components/ui/hover-card.tsx:11` |
+| MP-0467 | medium | tsc-error | src | `src/components/ui/input-otp.tsx:3` `src/components/ui/input-otp.tsx:4` `src/components/ui/input-otp.tsx:5` `src/components/ui/input-otp.tsx:17` |
+| MP-0468 | medium | tsc-error | src | `src/components/ui/input.tsx:1` `src/components/ui/input.tsx:7` |
+| MP-0469 | medium | tsc-error | src | `src/components/ui/label.tsx:3` `src/components/ui/label.tsx:4` `src/components/ui/label.tsx:13` |
+| MP-0470 | medium | tsc-error | src | `src/components/ui/menubar.tsx:3` `src/components/ui/menubar.tsx:4` `src/components/ui/menubar.tsx:5` `src/components/ui/menubar.tsx:14` |
+| MP-0471 | medium | tsc-error | src | `src/components/ui/navigation-menu.tsx:1` `src/components/ui/navigation-menu.tsx:2` `src/components/ui/navigation-menu.tsx:3` `src/components/ui/navigation-menu.tsx:4` `src/components/ui/navigation-menu.tsx:17` |
+| MP-0472 | medium | tsc-error | src | `src/components/ui/pagination.tsx:1` `src/components/ui/pagination.tsx:6` `src/components/ui/pagination.tsx:13` |
+| MP-0473 | medium | tsc-error | src | `src/components/ui/popover.tsx:3` `src/components/ui/popover.tsx:4` `src/components/ui/popover.tsx:11` |
+| MP-0474 | medium | tsc-error | src | `src/components/ui/progress.tsx:3` `src/components/ui/progress.tsx:4` `src/components/ui/progress.tsx:14` |
+| MP-0475 | medium | tsc-error | src | `src/components/ui/radio-group.tsx:3` `src/components/ui/radio-group.tsx:4` `src/components/ui/radio-group.tsx:5` `src/components/ui/radio-group.tsx:14` |
+| MP-0476 | medium | tsc-error | src | `src/components/ui/resizable.tsx:3` `src/components/ui/resizable.tsx:4` `src/components/ui/resizable.tsx:5` `src/components/ui/resizable.tsx:14` |
+| MP-0477 | medium | tsc-error | src | `src/components/ui/scroll-area.tsx:3` `src/components/ui/scroll-area.tsx:4` `src/components/ui/scroll-area.tsx:14` |
+| MP-0478 | medium | tsc-error | src | `src/components/ui/select.tsx:3` `src/components/ui/select.tsx:4` `src/components/ui/select.tsx:5` `src/components/ui/select.tsx:12` |
+| MP-0479 | medium | tsc-error | src | `src/components/ui/separator.tsx:3` `src/components/ui/separator.tsx:4` `src/components/ui/separator.tsx:15` |
+| MP-0480 | medium | tsc-error | src | `src/components/ui/sheet.tsx:3` `src/components/ui/sheet.tsx:4` `src/components/ui/sheet.tsx:5` `src/components/ui/sheet.tsx:10` |
+| MP-0481 | medium | tsc-error | src | `src/components/ui/sidebar.tsx:3` `src/components/ui/sidebar.tsx:4` `src/components/ui/sidebar.tsx:5` `src/components/ui/sidebar.tsx:6` `src/components/ui/sidebar.tsx:130` |
+| MP-0482 | medium | tsc-error | src | `src/components/ui/skeleton.tsx:3` `src/components/ui/skeleton.tsx:5` |
+| MP-0483 | medium | tsc-error | src | `src/components/ui/slider.tsx:3` `src/components/ui/slider.tsx:4` `src/components/ui/slider.tsx:27` |
+| MP-0484 | medium | tsc-error | src | `src/components/ui/sonner.tsx:3` `src/components/ui/sonner.tsx:4` `src/components/ui/sonner.tsx:10` `src/components/ui/sonner.tsx:18` |
+| MP-0485 | medium | tsc-error | src | `src/components/ui/switch.tsx:3` `src/components/ui/switch.tsx:4` `src/components/ui/switch.tsx:13` |
+| MP-0486 | medium | tsc-error | src | `src/components/ui/table.tsx:3` `src/components/ui/table.tsx:9` |
+| MP-0487 | medium | tsc-error | src | `src/components/ui/tabs.tsx:3` `src/components/ui/tabs.tsx:4` `src/components/ui/tabs.tsx:13` |
+| MP-0488 | medium | tsc-error | src | `src/components/ui/textarea.tsx:1` `src/components/ui/textarea.tsx:7` |
+| MP-0489 | medium | tsc-error | src | `src/components/ui/toast.tsx:3` `src/components/ui/toast.tsx:4` `src/components/ui/toast.tsx:5` `src/components/ui/toast.tsx:6` `src/components/ui/toast.tsx:16` |
+| MP-0490 | medium | tsc-error | src | `src/components/ui/toaster.tsx:17` |
+| MP-0491 | medium | tsc-error | src | `src/components/ui/toggle-group.tsx:3` `src/components/ui/toggle-group.tsx:4` `src/components/ui/toggle-group.tsx:5` `src/components/ui/toggle-group.tsx:26` |
+| MP-0492 | medium | tsc-error | src | `src/components/ui/toggle.tsx:3` `src/components/ui/toggle.tsx:4` `src/components/ui/toggle.tsx:5` `src/components/ui/toggle.tsx:39` |
+| MP-0493 | medium | tsc-error | src | `src/components/ui/tooltip.tsx:3` `src/components/ui/tooltip.tsx:4` `src/components/ui/tooltip.tsx:13` |
+| MP-0494 | medium | tsc-error | src | `src/hooks/use-mobile.ts:1` |
+| MP-0495 | medium | tsc-error | src | `src/hooks/use-toast.ts:4` |
+| MP-0496 | medium | tsc-error | src | `src/instrumentation.ts:10` |
+| MP-0497 | medium | tsc-error | src | `src/lib/anatomy/react/draw.tsx:1` `src/lib/anatomy/react/draw.tsx:19` |
+| MP-0498 | medium | tsc-error | src | `src/lib/anatomy/react/live.tsx:3` `src/lib/anatomy/react/live.tsx:53` |
+| MP-0499 | medium | tsc-error | src | `src/lib/anchor.ts:12` `src/lib/anchor.ts:13` `src/lib/anchor.ts:14` `src/lib/anchor.ts:42` |
+| MP-0500 | medium | tsc-error | src | `src/lib/compute-wall.ts:13` |
+| MP-0501 | medium | tsc-error | src | `src/lib/db.ts:1` |
+| MP-0502 | medium | tsc-error | src | `src/lib/dex-engine.ts:535` `src/lib/dex-engine.ts:539` `src/lib/dex-engine.ts:540` |
+| MP-0503 | medium | tsc-error | src | `src/lib/dex-server.ts:89` `src/lib/dex-server.ts:90` `src/lib/dex-server.ts:94` `src/lib/dex-server.ts:338` `src/lib/dex-server.ts:338` `src/lib/dex-server.ts:338` `src/lib/dex-server.ts:340` `src/lib/dex-server.ts:340` `src/lib/dex-server.ts:340` `src/lib/dex-server.ts:347` `src/lib/dex-server.ts:347` `src/lib/dex-server.ts:347` |
+| MP-0504 | medium | tsc-error | src | `src/lib/dispatch/doors.test.ts:5` `src/lib/dispatch/doors.test.ts:6` |
+| MP-0505 | medium | tsc-error | src | `src/lib/dispatch/doors.ts:15` |
+| MP-0506 | medium | tsc-error | src | `src/lib/dispatch/receipts.test.ts:4` `src/lib/dispatch/receipts.test.ts:5` |
+| MP-0507 | medium | tsc-error | src | `src/lib/dispatch/receipts.ts:10` |
+| MP-0508 | medium | tsc-error | src | `src/lib/dispatch/redact.test.ts:4` `src/lib/dispatch/redact.test.ts:5` |
+| MP-0509 | medium | tsc-error | src | `src/lib/estate-discovery.ts:9` `src/lib/estate-discovery.ts:10` `src/lib/estate-discovery.ts:11` `src/lib/estate-discovery.ts:12` |
+| MP-0510 | medium | tsc-error | src | `src/lib/fleet-auth.ts:4` `src/lib/fleet-auth.ts:12` `src/lib/fleet-auth.ts:13` |
+| MP-0511 | medium | tsc-error | src | `src/lib/fleet-loop.ts:166` `src/lib/fleet-loop.ts:168` `src/lib/fleet-loop.ts:170` `src/lib/fleet-loop.ts:171` `src/lib/fleet-loop.ts:211` `src/lib/fleet-loop.ts:213` `src/lib/fleet-loop.ts:235` `src/lib/fleet-loop.ts:257` `src/lib/fleet-loop.ts:259` `src/lib/fleet-loop.ts:281` `src/lib/fleet-loop.ts:283` |
+| MP-0512 | medium | tsc-error | src | `src/lib/giant-git.ts:6` `src/lib/giant-git.ts:7` `src/lib/giant-git.ts:8` |
+| MP-0513 | medium | tsc-error | src | `src/lib/giant-integrity.ts:8` |
+| MP-0514 | medium | tsc-error | src | `src/lib/giant/capital.ts:17` `src/lib/giant/capital.ts:18` `src/lib/giant/capital.ts:685` |
+| MP-0515 | medium | tsc-error | src | `src/lib/giant/empire-registry.test.ts:9` `src/lib/giant/empire-registry.test.ts:10` `src/lib/giant/empire-registry.test.ts:11` `src/lib/giant/empire-registry.test.ts:24` |
 | MP-0516 | medium | tsc-error | src | `src/lib/giant/flow-ledger.ts:11` `src/lib/giant/flow-ledger.ts:12` |
 | MP-0517 | medium | tsc-error | src | `src/lib/giant/runtime-store.ts:12` `src/lib/giant/runtime-store.ts:13` `src/lib/giant/runtime-store.ts:14` `src/lib/giant/runtime-store.ts:16` |
 | MP-0518 | medium | tsc-error | src | `src/lib/giant/trust-scan.ts:20` `src/lib/giant/trust-scan.ts:21` `src/lib/giant/trust-scan.ts:24` `src/lib/giant/trust-scan.ts:243` |
@@ -4511,19 +4511,15 @@
 
 ## MP-0309 · medium · tsc-error
 
-**שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 7 ב-mini-services/meta-planner/lib/issues.ts**
+**שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-mini-services/meta-planner/lib/issues.ts**
 
 - ראיה: `mini-services/meta-planner/lib/issues.ts:16` — `TS2591: Cannot find name 'crypto'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`…`
 - ראיה: `mini-services/meta-planner/lib/issues.ts:17` — `TS2591: Cannot find name 'fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and…`
 - ראיה: `mini-services/meta-planner/lib/issues.ts:18` — `TS2591: Cannot find name 'path'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` a…`
-- ראיה: `mini-services/meta-planner/lib/issues.ts:80` — `TS2353: Object literal may only specify known properties, and 'payloadHash' does not exist in type 'Receipt'.`
-- ראיה: `mini-services/meta-planner/lib/issues.ts:92` — `TS2353: Object literal may only specify known properties, and 'receipt' does not exist in type 'ContractBody'.`
-- ראיה: `mini-services/meta-planner/lib/issues.ts:97` — `TS2339: Property 'payloadHash' does not exist on type 'Receipt'.`
-- ראיה: `mini-services/meta-planner/lib/issues.ts:228` — `TS2339: Property 'payloadHash' does not exist on type 'Receipt'.`
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=309 sha256=ac0b1161006a0a4718eee5dc5b1b1c84eaffb38439e8519b480e88fbfbf8d700 payload=bdcb375108fb prev=fc6052e13169900cb18808b58790b06fb5432a219bc0f507fd922462554f0a1a
+- קבלה: seq=309 sha256=95f2f1d7b00631c4a99dcae9245acfc7b95d6df6561decd4698b5d12a7f14353 payload=0611b36ee454 prev=fc6052e13169900cb18808b58790b06fb5432a219bc0f507fd922462554f0a1a
 
 ## MP-0310 · medium · tsc-error
 
@@ -4534,19 +4530,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=310 sha256=30daa6da4224a7600c04b933b88e4b1cd701b67ce36e3642c8c3a0c8cd0f6ddd payload=e37609244a08 prev=ac0b1161006a0a4718eee5dc5b1b1c84eaffb38439e8519b480e88fbfbf8d700
+- קבלה: seq=310 sha256=8afce5edc206adcb9b483789d828fde122d16bcfe82aa81327727a5e3496e316 payload=e37609244a08 prev=95f2f1d7b00631c4a99dcae9245acfc7b95d6df6561decd4698b5d12a7f14353
 
 ## MP-0311 · medium · tsc-error
-
-**שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-mini-services/meta-planner/tests/fixtures/typedebt/flagged.ts**
-
-- ראיה: `mini-services/meta-planner/tests/fixtures/typedebt/flagged.ts:5` — `TS2578: Unused '@ts-expect-error' directive.`
-
-- אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
-- תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=311 sha256=de1e113d4af05ce21fe5c9cab8d8fec9bdf270474c49ec5a01232cd411daeb4d payload=764c7a49ff0a prev=30daa6da4224a7600c04b933b88e4b1cd701b67ce36e3642c8c3a0c8cd0f6ddd
-
-## MP-0312 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 5 ב-mini-services/meta-planner/tests/meta-planner.test.ts**
 
@@ -4558,9 +4544,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=312 sha256=f9b959ff09867974e4f0112384b5a276937fcbbb1acd30c7d7fe8ef45dea5dc7 payload=6a7403d9f7c7 prev=de1e113d4af05ce21fe5c9cab8d8fec9bdf270474c49ec5a01232cd411daeb4d
+- קבלה: seq=311 sha256=698ac3973f86755ff67a8262688e5e5096ae58144fbfeeed0da41ee15b33495b payload=77030384d994 prev=8afce5edc206adcb9b483789d828fde122d16bcfe82aa81327727a5e3496e316
 
-## MP-0313 · medium · tsc-error
+## MP-0312 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 20 ב-mini-services/office-live/index.ts**
 
@@ -4579,9 +4565,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=313 sha256=ac399dea4ceeae4e00ccbe84892c7c33a56bfbb93e534b5a7c6edb12cbdc9e0d payload=7914c4d3d30d prev=f9b959ff09867974e4f0112384b5a276937fcbbb1acd30c7d7fe8ef45dea5dc7
+- קבלה: seq=312 sha256=5f84ab253b086af1eaeebf8b7f9dd8dbe0c013f7eed9d6f1b63264eeff703631 payload=2f8450f139b6 prev=698ac3973f86755ff67a8262688e5e5096ae58144fbfeeed0da41ee15b33495b
 
-## MP-0314 · medium · tsc-error
+## MP-0313 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 12 ב-mini-services/organism-keeper/index.ts**
 
@@ -4600,9 +4586,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=314 sha256=16a5c7e4f5e78b9007c9467398881c9f17f02c69ec876ea6f8f6cc60c5709f19 payload=7b1c9b6c944a prev=ac399dea4ceeae4e00ccbe84892c7c33a56bfbb93e534b5a7c6edb12cbdc9e0d
+- קבלה: seq=313 sha256=619e047c691638f90c6c87a5f53d7877d3bd2fc3de958467bf576a8f84c6111d payload=1e4dda637465 prev=5f84ab253b086af1eaeebf8b7f9dd8dbe0c013f7eed9d6f1b63264eeff703631
 
-## MP-0315 · medium · tsc-error
+## MP-0314 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 13 ב-mini-services/saos-dex-node/index.ts**
 
@@ -4621,9 +4607,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=315 sha256=f9d982f3ece09425ab0152af9612201dbcff7d0e8b98d4d6591f58dfb7bba61c payload=c7a75a8594d0 prev=16a5c7e4f5e78b9007c9467398881c9f17f02c69ec876ea6f8f6cc60c5709f19
+- קבלה: seq=314 sha256=400d74134b20a87aa37855c321a6477883e7b88e6853e36cfc31d6cd5df184eb payload=775d3b99f810 prev=619e047c691638f90c6c87a5f53d7877d3bd2fc3de958467bf576a8f84c6111d
 
-## MP-0316 · medium · tsc-error
+## MP-0315 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 6 ב-mini-services/soldier-army/index.ts**
 
@@ -4636,9 +4622,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=316 sha256=b14c88cd2e1d841423c729db943ab54da64e17dffd51113ea15788d8c62961bf payload=3ceb205d18a9 prev=f9d982f3ece09425ab0152af9612201dbcff7d0e8b98d4d6591f58dfb7bba61c
+- קבלה: seq=315 sha256=14bfa9cafa415edd4eee3025cd1f945e379a25ffb0cd19dd98ded666e704f213 payload=6734382fa4b4 prev=400d74134b20a87aa37855c321a6477883e7b88e6853e36cfc31d6cd5df184eb
 
-## MP-0317 · medium · tsc-error
+## MP-0316 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 5 ב-mini-services/sovereign-audit/index.ts**
 
@@ -4650,9 +4636,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=317 sha256=ad777d6263dfc32ce6abf7ab2af3f24d285acaa9d135bda071d539a57cdc41e7 payload=18d4ad72d7b7 prev=b14c88cd2e1d841423c729db943ab54da64e17dffd51113ea15788d8c62961bf
+- קבלה: seq=316 sha256=fa748d21d81af70f5e27a0080a532316294ae7299ad4e28fa13cbc4b03055b11 payload=2aaec626f174 prev=14bfa9cafa415edd4eee3025cd1f945e379a25ffb0cd19dd98ded666e704f213
 
-## MP-0318 · medium · tsc-error
+## MP-0317 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 60 ב-mini-services/sovereign-gateway/index.ts**
 
@@ -4671,9 +4657,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=318 sha256=a1e9cf287be01da9f556599a6f7b87dbbd379835f2fbc5bcf08bd57e8a89181b payload=5d115e8a6f5c prev=ad777d6263dfc32ce6abf7ab2af3f24d285acaa9d135bda071d539a57cdc41e7
+- קבלה: seq=317 sha256=ea39a2d5b538ced15e27ed4a69b7dec6dff4074573df9f305b77be93eb4651d3 payload=7938bbd53180 prev=fa748d21d81af70f5e27a0080a532316294ae7299ad4e28fa13cbc4b03055b11
 
-## MP-0319 · medium · tsc-error
+## MP-0318 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 30 ב-mini-services/sovereign-voice/index.ts**
 
@@ -4692,9 +4678,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=319 sha256=7a55e14cbf56b3e79395dff33871b1064b52e9efddcf13399dd86d8b9d77a974 payload=5df58a0cf5b6 prev=a1e9cf287be01da9f556599a6f7b87dbbd379835f2fbc5bcf08bd57e8a89181b
+- קבלה: seq=318 sha256=2ac0530797251791b7d8a28b1e841b62db7f6121ebc9bdecc3367fca7e0d70e5 payload=1c06eff0268f prev=ea39a2d5b538ced15e27ed4a69b7dec6dff4074573df9f305b77be93eb4651d3
 
-## MP-0320 · medium · tsc-error
+## MP-0319 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 7 ב-mini-services/steem-voice/index.ts**
 
@@ -4708,9 +4694,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=320 sha256=4ad7108a6985e4f5795b25f319fbb6ee00cc009d03f2f88db2e8959b12ec34cb payload=c1cc51b0a8c1 prev=7a55e14cbf56b3e79395dff33871b1064b52e9efddcf13399dd86d8b9d77a974
+- קבלה: seq=319 sha256=7fa1e6cfd9eb348021561643f1d3065d066ab71011fc92ed611d41d91f52d24d payload=32ca03276173 prev=2ac0530797251791b7d8a28b1e841b62db7f6121ebc9bdecc3367fca7e0d70e5
 
-## MP-0321 · medium · tsc-error
+## MP-0320 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-next.config.ts**
 
@@ -4718,9 +4704,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=321 sha256=18697bca0661e65678b45da54795fd0331bdae750ba501e495cc4e9a7be14e00 payload=c16819626e66 prev=4ad7108a6985e4f5795b25f319fbb6ee00cc009d03f2f88db2e8959b12ec34cb
+- קבלה: seq=320 sha256=c2eaa0eb69e8899c438789a6eae571ef3cd5df54d222077abfa7918b24af003e payload=498711d30334 prev=7fa1e6cfd9eb348021561643f1d3065d066ab71011fc92ed611d41d91f52d24d
 
-## MP-0322 · medium · tsc-error
+## MP-0321 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-scripts/fleet-probe.ts**
 
@@ -4728,9 +4714,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=322 sha256=7357d590e2db70a1b41a2887c295dd570bd0c12940ef99d2d7cee5ddd4f0fb02 payload=006eb703e4a1 prev=18697bca0661e65678b45da54795fd0331bdae750ba501e495cc4e9a7be14e00
+- קבלה: seq=321 sha256=8edbc4f30a526067a30b6685962efa037dd03a380d6953dbc6ef8b7e5f969318 payload=4e35fb331a83 prev=c2eaa0eb69e8899c438789a6eae571ef3cd5df54d222077abfa7918b24af003e
 
-## MP-0323 · medium · tsc-error
+## MP-0322 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-scripts/join-golden.ts**
 
@@ -4740,9 +4726,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=323 sha256=b01f7159400aa4e39281e4644a7cd74806221b93918f8eeb51bca567a510d941 payload=e79523df8980 prev=7357d590e2db70a1b41a2887c295dd570bd0c12940ef99d2d7cee5ddd4f0fb02
+- קבלה: seq=322 sha256=eafee82898d078231bdb9436250f1f9fb4250d3001cba0e3485fa14899ead871 payload=b8f615f840b2 prev=8edbc4f30a526067a30b6685962efa037dd03a380d6953dbc6ef8b7e5f969318
 
-## MP-0324 · medium · tsc-error
+## MP-0323 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/candles/route.ts**
 
@@ -4750,9 +4736,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=324 sha256=4c89bb4a848f711ca9b081d39f58ff870be1d2d69ef1b29d09cd5a78308f76c8 payload=b909ae08a59e prev=b01f7159400aa4e39281e4644a7cd74806221b93918f8eeb51bca567a510d941
+- קבלה: seq=323 sha256=91b03828367d5901f11ad141a02f28db44bb059e194df2fd2fd7caf66f6e3c85 payload=99cc1bddf020 prev=eafee82898d078231bdb9436250f1f9fb4250d3001cba0e3485fa14899ead871
 
-## MP-0325 · medium · tsc-error
+## MP-0324 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/depth/route.ts**
 
@@ -4760,9 +4746,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=325 sha256=3ca2462ec8389babbbeb01a01dbfb71b80ae66a4425eb67a958c151e7cd83259 payload=d4618d211243 prev=4c89bb4a848f711ca9b081d39f58ff870be1d2d69ef1b29d09cd5a78308f76c8
+- קבלה: seq=324 sha256=a3ffc5386eab67fedace6bbf415bab7ff82f8ba5bd37a776e6ac667eabac87e6 payload=6401d081f1ea prev=91b03828367d5901f11ad141a02f28db44bb059e194df2fd2fd7caf66f6e3c85
 
-## MP-0326 · medium · tsc-error
+## MP-0325 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/orders/route.ts**
 
@@ -4770,9 +4756,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=326 sha256=499b758538c1cd03968855dc02d894d3a769ee58d2e4f86339f60a2d5f57ddb6 payload=41d15cbdaf7f prev=3ca2462ec8389babbbeb01a01dbfb71b80ae66a4425eb67a958c151e7cd83259
+- קבלה: seq=325 sha256=093f0dcd83703e7f9941b253f2112bb61c2aa602dc7357f4d0dc64bb62a5676a payload=94aa07c038f4 prev=a3ffc5386eab67fedace6bbf415bab7ff82f8ba5bd37a776e6ac667eabac87e6
 
-## MP-0327 · medium · tsc-error
+## MP-0326 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/overview/route.ts**
 
@@ -4780,9 +4766,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=327 sha256=0365be67ea992491f711faffbfc35ad23a6218b836818cd52d97b72002b223fc payload=b6cce0001eb8 prev=499b758538c1cd03968855dc02d894d3a769ee58d2e4f86339f60a2d5f57ddb6
+- קבלה: seq=326 sha256=eb517ca3bc89216a2b13cb93ed8e0e9a6c6a241709ecf51db53f20dff573ab26 payload=2dadb1b798a0 prev=093f0dcd83703e7f9941b253f2112bb61c2aa602dc7357f4d0dc64bb62a5676a
 
-## MP-0328 · medium · tsc-error
+## MP-0327 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/pairs/route.ts**
 
@@ -4790,9 +4776,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=328 sha256=15926d84176ab8f16abdc70c70cda6d044d13932bd28d1e65ffcdf225d73b1d2 payload=0dcdf9268dda prev=0365be67ea992491f711faffbfc35ad23a6218b836818cd52d97b72002b223fc
+- קבלה: seq=327 sha256=6c056fab644d9572fb840838785e243fd363d68cce98d9e973fec706a1ec03dd payload=0b5ee9430d84 prev=eb517ca3bc89216a2b13cb93ed8e0e9a6c6a241709ecf51db53f20dff573ab26
 
-## MP-0329 · medium · tsc-error
+## MP-0328 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/pools/route.ts**
 
@@ -4800,9 +4786,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=329 sha256=7a450e7c4ede01d678eca99c5ae8aa6669ca787304f96d962b535a9b100e5cd4 payload=a8c8c1bcf59e prev=15926d84176ab8f16abdc70c70cda6d044d13932bd28d1e65ffcdf225d73b1d2
+- קבלה: seq=328 sha256=926f5889575949873c474b4370cfdf646eaa3f7e4c55b1dbab1e79b26138af01 payload=0dd5eed0f78c prev=6c056fab644d9572fb840838785e243fd363d68cce98d9e973fec706a1ec03dd
 
-## MP-0330 · medium · tsc-error
+## MP-0329 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/quote/route.ts**
 
@@ -4810,9 +4796,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=330 sha256=8848a3a2a9dcd19fbe9df0a6caee31fe3aa7312091fcdaa0f331eeb9d143325b payload=b8990cf85123 prev=7a450e7c4ede01d678eca99c5ae8aa6669ca787304f96d962b535a9b100e5cd4
+- קבלה: seq=329 sha256=c79f625573f2adf51daa90faafd37a80043f04d55a9c1a830e5d3a7e29a0af56 payload=cf208c13be66 prev=926f5889575949873c474b4370cfdf646eaa3f7e4c55b1dbab1e79b26138af01
 
-## MP-0331 · medium · tsc-error
+## MP-0330 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/steem/audit/route.ts**
 
@@ -4820,9 +4806,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=331 sha256=d46470fed11e330ccbf3744f9a7af8de1a04d5f2576fd2e834cc2c36c33e4476 payload=e73bbdc3b75b prev=8848a3a2a9dcd19fbe9df0a6caee31fe3aa7312091fcdaa0f331eeb9d143325b
+- קבלה: seq=330 sha256=4f560ee0131f7e51be90e9c6cb2ab50ad3069bb52cad0deb0bafb09a28a41d05 payload=459f3506fd2f prev=c79f625573f2adf51daa90faafd37a80043f04d55a9c1a830e5d3a7e29a0af56
 
-## MP-0332 · medium · tsc-error
+## MP-0331 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/steem/market/route.ts**
 
@@ -4830,9 +4816,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=332 sha256=9a076ca9b862f30a305b64fc345119608e5ae1781dd9374f237e1bb9a40fbed0 payload=356c5970d573 prev=d46470fed11e330ccbf3744f9a7af8de1a04d5f2576fd2e834cc2c36c33e4476
+- קבלה: seq=331 sha256=dbb8d2aaea9147b60bb6353852e514aef8c1417fbac781100f652daa97d7d516 payload=60fa29bd518e prev=4f560ee0131f7e51be90e9c6cb2ab50ad3069bb52cad0deb0bafb09a28a41d05
 
-## MP-0333 · medium · tsc-error
+## MP-0332 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/swap/route.ts**
 
@@ -4840,9 +4826,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=333 sha256=b7e347e3da0775d35f4f630b89173e2b3cf279b17df166dc93cfb78bbfc5e1f3 payload=dc5af12e6cec prev=9a076ca9b862f30a305b64fc345119608e5ae1781dd9374f237e1bb9a40fbed0
+- קבלה: seq=332 sha256=a0085c2f2c6647a47cae74c116e85bfed062bbcc580578a4b447836794cab7dc payload=64d2d157ffaa prev=dbb8d2aaea9147b60bb6353852e514aef8c1417fbac781100f652daa97d7d516
 
-## MP-0334 · medium · tsc-error
+## MP-0333 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/trades/route.ts**
 
@@ -4850,9 +4836,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=334 sha256=07c3d81f939c606fb486bc8d24cef3a8faddfd3974a24e80bdd520eabee65bd4 payload=45a52c62e5c5 prev=b7e347e3da0775d35f4f630b89173e2b3cf279b17df166dc93cfb78bbfc5e1f3
+- קבלה: seq=333 sha256=a13b2b95a3ccb85af3ba2be5609fceba3cd8a54e428c7a16c05eaad086edfd5c payload=8dd44fc94535 prev=a0085c2f2c6647a47cae74c116e85bfed062bbcc580578a4b447836794cab7dc
 
-## MP-0335 · medium · tsc-error
+## MP-0334 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/transfer/route.ts**
 
@@ -4860,9 +4846,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=335 sha256=239b9031235f8e328708895f6887af96fc5fb1e5679c71d1958f337afbd4fe53 payload=35c26c25303d prev=07c3d81f939c606fb486bc8d24cef3a8faddfd3974a24e80bdd520eabee65bd4
+- קבלה: seq=334 sha256=4073c602076a621d1377888d5fa0e18810e5778d3dae092bff52660f0a0b3708 payload=b67e93909812 prev=a13b2b95a3ccb85af3ba2be5609fceba3cd8a54e428c7a16c05eaad086edfd5c
 
-## MP-0336 · medium · tsc-error
+## MP-0335 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/wallet/faucet/route.ts**
 
@@ -4870,9 +4856,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=336 sha256=3590b7935266a257e39b9822d288aad27a48320d6f2cb15eab402bccdf575af2 payload=b90d83750e24 prev=239b9031235f8e328708895f6887af96fc5fb1e5679c71d1958f337afbd4fe53
+- קבלה: seq=335 sha256=2bc49e96dab79ee5c39c0378012a988eab544303116dd3ad3bbc1e07bb533527 payload=075857b4aa59 prev=4073c602076a621d1377888d5fa0e18810e5778d3dae092bff52660f0a0b3708
 
-## MP-0337 · medium · tsc-error
+## MP-0336 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/dex/wallet/route.ts**
 
@@ -4880,9 +4866,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=337 sha256=846eb5289baba952cd0dc5dc5b7c0c4cb4f26c2a8c0eb1164efa704f38d37c8f payload=9f5625325824 prev=3590b7935266a257e39b9822d288aad27a48320d6f2cb15eab402bccdf575af2
+- קבלה: seq=336 sha256=9b8bcd57aabb419951f0587a793fc15a701e9f562bbdcd3335c645e4d821585e payload=9a99b965ed9e prev=2bc49e96dab79ee5c39c0378012a988eab544303116dd3ad3bbc1e07bb533527
 
-## MP-0338 · medium · tsc-error
+## MP-0337 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 6 ב-src/app/api/economy/route.ts**
 
@@ -4895,9 +4881,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=338 sha256=41a0bfbbff6f63e688a830d37c9abd218677fc405e972d3826f63313dcb79ca5 payload=72b6303ebe8e prev=846eb5289baba952cd0dc5dc5b7c0c4cb4f26c2a8c0eb1164efa704f38d37c8f
+- קבלה: seq=337 sha256=cdfef4e3c096c504c919816696c02f877a239dd6349cbbba68b1bb114a95044e payload=8c1edf31cbb9 prev=9b8bcd57aabb419951f0587a793fc15a701e9f562bbdcd3335c645e4d821585e
 
-## MP-0339 · medium · tsc-error
+## MP-0338 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/app/api/estate/state/route.ts**
 
@@ -4907,9 +4893,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=339 sha256=af0d5544475d30586c69af0ebdfd44a842486371b82bb05fa819437193aa508f payload=8ede72825fef prev=41a0bfbbff6f63e688a830d37c9abd218677fc405e972d3826f63313dcb79ca5
+- קבלה: seq=338 sha256=1ab6b3510d4b1ad92450ec18c3f2e41adfe69991dbfa7a33477d8cf983d4f134 payload=3944242411d5 prev=cdfef4e3c096c504c919816696c02f877a239dd6349cbbba68b1bb114a95044e
 
-## MP-0340 · medium · tsc-error
+## MP-0339 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/app/api/fleet/allocate/route.ts**
 
@@ -4918,9 +4904,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=340 sha256=d5eb819d995ef94949234f4b00c58c0ee1917ab3f4c1fd3d885072c565904ac3 payload=543e295c4500 prev=af0d5544475d30586c69af0ebdfd44a842486371b82bb05fa819437193aa508f
+- קבלה: seq=339 sha256=09d7b729548f1b0e50e622d0e138dace8181912c1bac6641647deee437475177 payload=702221720a4b prev=1ab6b3510d4b1ad92450ec18c3f2e41adfe69991dbfa7a33477d8cf983d4f134
 
-## MP-0341 · medium · tsc-error
+## MP-0340 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 6 ב-src/app/api/fleet/roster/route.ts**
 
@@ -4933,9 +4919,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=341 sha256=8311c2b7e22098733b4b07bb67ccaeea63103b4fa6329b83e9afd71f305b44f1 payload=bb19be375cf9 prev=d5eb819d995ef94949234f4b00c58c0ee1917ab3f4c1fd3d885072c565904ac3
+- קבלה: seq=340 sha256=48b3359d11f4378e527a3169fe1e0b2c5bc0dea28b59c7a2dfda629415680a6b payload=0ce9f7a66efe prev=09d7b729548f1b0e50e622d0e138dace8181912c1bac6641647deee437475177
 
-## MP-0342 · medium · tsc-error
+## MP-0341 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/app/api/fleet/state/route.ts**
 
@@ -4945,9 +4931,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=342 sha256=82c63f9e6ebfb8c40f6284951413e21e5c09b20c2e21fafe3c65ff58a6cc5bf6 payload=ef98879ea681 prev=8311c2b7e22098733b4b07bb67ccaeea63103b4fa6329b83e9afd71f305b44f1
+- קבלה: seq=341 sha256=1ae4b68dc117800542bde1219bbe61ab0b2ff26c29b984c05e062baebfb02f52 payload=a12373ff9f2c prev=48b3359d11f4378e527a3169fe1e0b2c5bc0dea28b59c7a2dfda629415680a6b
 
-## MP-0343 · medium · tsc-error
+## MP-0342 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/fleet/trade/route.ts**
 
@@ -4955,9 +4941,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=343 sha256=b504a9511ef3b58c4582ec375edaac304d93e64abda48c7c0846c796917eaafe payload=9454ada0a078 prev=82c63f9e6ebfb8c40f6284951413e21e5c09b20c2e21fafe3c65ff58a6cc5bf6
+- קבלה: seq=342 sha256=8da8a92a35761a71d72a04a9b0179d1bc8c7b64d2fd4cd8835bc78950dad2801 payload=eebb655585b7 prev=1ae4b68dc117800542bde1219bbe61ab0b2ff26c29b984c05e062baebfb02f52
 
-## MP-0344 · medium · tsc-error
+## MP-0343 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/books/route.ts**
 
@@ -4965,9 +4951,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=344 sha256=d1092f3c64c39077c5559f32987d1d34dc2f7b781e421579572289697adab30e payload=c51f037d8410 prev=b504a9511ef3b58c4582ec375edaac304d93e64abda48c7c0846c796917eaafe
+- קבלה: seq=343 sha256=3a703e17a6f70deb6114fb675985751b486231c61c77bf1ce005f0524e28d599 payload=0d880c9bc917 prev=8da8a92a35761a71d72a04a9b0179d1bc8c7b64d2fd4cd8835bc78950dad2801
 
-## MP-0345 · medium · tsc-error
+## MP-0344 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/capital/route.ts**
 
@@ -4975,9 +4961,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=345 sha256=e55cdb73494eaf586aefa87e36deb7f676f9e794493573009d6c015b442095b4 payload=02b49418c4c8 prev=d1092f3c64c39077c5559f32987d1d34dc2f7b781e421579572289697adab30e
+- קבלה: seq=344 sha256=ab0fe500e98322b7cc343ae89272d09005e77e408e9bb207177143c2be30f334 payload=56dd4f94b01d prev=3a703e17a6f70deb6114fb675985751b486231c61c77bf1ce005f0524e28d599
 
-## MP-0346 · medium · tsc-error
+## MP-0345 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/app/api/giant/channel/directive/route.ts**
 
@@ -4987,9 +4973,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=346 sha256=d642b0dbaa73ad34ba69a11916ca0233e5c35d1cb9436b186ad1c683cdee15e7 payload=6ce71c1fe996 prev=e55cdb73494eaf586aefa87e36deb7f676f9e794493573009d6c015b442095b4
+- קבלה: seq=345 sha256=c13fd1b9ae608b4761a1a6d9122621488dd083ca758bf32dc9de3ccf23b34be8 payload=9ad7536e8323 prev=ab0fe500e98322b7cc343ae89272d09005e77e408e9bb207177143c2be30f334
 
-## MP-0347 · medium · tsc-error
+## MP-0346 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/channel/route.ts**
 
@@ -4997,9 +4983,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=347 sha256=276f50d08eb4430c0d10a01ff2187f2d05f866619ee53098ce82fcc8e6b930d9 payload=c04480fcfa33 prev=d642b0dbaa73ad34ba69a11916ca0233e5c35d1cb9436b186ad1c683cdee15e7
+- קבלה: seq=346 sha256=a1b90059cef7d4153f53412aee7532afc6ed359982a6260e41c927b1d27ee128 payload=547a8dcb2a49 prev=c13fd1b9ae608b4761a1a6d9122621488dd083ca758bf32dc9de3ccf23b34be8
 
-## MP-0348 · medium · tsc-error
+## MP-0347 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/decisions/route.ts**
 
@@ -5007,9 +4993,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=348 sha256=6a1dfe6abdfd363d227915ed28824298a58a4254b02c2843387098e31010abe2 payload=e20561a37ec5 prev=276f50d08eb4430c0d10a01ff2187f2d05f866619ee53098ce82fcc8e6b930d9
+- קבלה: seq=347 sha256=3f2cd0df5156b16b57d1cb9b072f107b09408d5531b3f293a9ed41438ef8a3da payload=16cf38d61d60 prev=a1b90059cef7d4153f53412aee7532afc6ed359982a6260e41c927b1d27ee128
 
-## MP-0349 · medium · tsc-error
+## MP-0348 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/desk/route.ts**
 
@@ -5017,9 +5003,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=349 sha256=0e7707baeb58b27ec36e45be2f7a8b3349fdd5e31e56014f57b04b320e7b2036 payload=b8105b6f5d15 prev=6a1dfe6abdfd363d227915ed28824298a58a4254b02c2843387098e31010abe2
+- קבלה: seq=348 sha256=7f6cc95c22fa6ba6d680b619efafaa4ac86a46372bec40e39e9b589901859a67 payload=a4985bc2bf54 prev=3f2cd0df5156b16b57d1cb9b072f107b09408d5531b3f293a9ed41438ef8a3da
 
-## MP-0350 · medium · tsc-error
+## MP-0349 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/dex/route.ts**
 
@@ -5027,9 +5013,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=350 sha256=51f4b2b4c20dbed0171343d755768ca39d40b9049010e7b641c0b462c90dc1a7 payload=dd2279832642 prev=0e7707baeb58b27ec36e45be2f7a8b3349fdd5e31e56014f57b04b320e7b2036
+- קבלה: seq=349 sha256=57028f3c60b855e1646a6c269d2ec357103b06b002fa496c5a612e670af81108 payload=a5387456807d prev=7f6cc95c22fa6ba6d680b619efafaa4ac86a46372bec40e39e9b589901859a67
 
-## MP-0351 · medium · tsc-error
+## MP-0350 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/empire/route.ts**
 
@@ -5037,9 +5023,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=351 sha256=0cb926f7bbc6bd990a83ad5384d6ae1623840c91dfcb2e0552af193ed1d6a054 payload=c99f5f9f20aa prev=51f4b2b4c20dbed0171343d755768ca39d40b9049010e7b641c0b462c90dc1a7
+- קבלה: seq=350 sha256=c58eb3d60bc71f1505ef6a434badaa9b99039d23d15ba235e1d957184f7c597e payload=e1209f3e9ee4 prev=57028f3c60b855e1646a6c269d2ec357103b06b002fa496c5a612e670af81108
 
-## MP-0352 · medium · tsc-error
+## MP-0351 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/fleet/route.ts**
 
@@ -5047,9 +5033,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=352 sha256=a18889bad35886f704d7f9e414e37b4b582379607547e222896a380bd48b64a3 payload=5e63dc8704b8 prev=0cb926f7bbc6bd990a83ad5384d6ae1623840c91dfcb2e0552af193ed1d6a054
+- קבלה: seq=351 sha256=9281b0cfbbd229712118dce05c0608ed45eb80e7c4cc3b95b584de603e802b21 payload=fee87a2cb50e prev=c58eb3d60bc71f1505ef6a434badaa9b99039d23d15ba235e1d957184f7c597e
 
-## MP-0353 · medium · tsc-error
+## MP-0352 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 7 ב-src/app/api/giant/gap/route.ts**
 
@@ -5063,9 +5049,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=353 sha256=cbe67af422b233a24d4af4770f6dc5a8af31fc9f1e80046327e58130de86024f payload=a3ba1f16a44f prev=a18889bad35886f704d7f9e414e37b4b582379607547e222896a380bd48b64a3
+- קבלה: seq=352 sha256=631608b02d81c95b4793cdf59a40b91e054e8fffd6589a80beb0a7304755d50f payload=80428b8396f4 prev=9281b0cfbbd229712118dce05c0608ed45eb80e7c4cc3b95b584de603e802b21
 
-## MP-0354 · medium · tsc-error
+## MP-0353 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 5 ב-src/app/api/giant/giants/route.ts**
 
@@ -5077,9 +5063,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=354 sha256=a1ee1f31a7961a6e92bcf0ba98373025a52f0374b06615bdfa4c013a13a9f2a2 payload=13be1a762e5c prev=cbe67af422b233a24d4af4770f6dc5a8af31fc9f1e80046327e58130de86024f
+- קבלה: seq=353 sha256=a66c0b732f6b075dfb0226406cb7330dc8251071f1a094b2667308fc19e85904 payload=fda35e365377 prev=631608b02d81c95b4793cdf59a40b91e054e8fffd6589a80beb0a7304755d50f
 
-## MP-0355 · medium · tsc-error
+## MP-0354 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/league/route.ts**
 
@@ -5087,9 +5073,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=355 sha256=23abe08c90b945bee940adf5a9fe3a435b012b23170fac01efde0f74b9fb6a75 payload=64e0c64522b6 prev=a1ee1f31a7961a6e92bcf0ba98373025a52f0374b06615bdfa4c013a13a9f2a2
+- קבלה: seq=354 sha256=d92cce45a6ce985013eee311ae29bfb6ad5eab3e9520f6c1a1483bf381479ba5 payload=d304252fc02f prev=a66c0b732f6b075dfb0226406cb7330dc8251071f1a094b2667308fc19e85904
 
-## MP-0356 · medium · tsc-error
+## MP-0355 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/liveness/route.ts**
 
@@ -5097,9 +5083,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=356 sha256=c3e153d5d002dd46278b2d51373efbaeb0c453935bbbefffa6819ad0c106171b payload=c3551d0bbf03 prev=23abe08c90b945bee940adf5a9fe3a435b012b23170fac01efde0f74b9fb6a75
+- קבלה: seq=355 sha256=0c19b51c18164582b2c06c57be0054f059db5c21d3dae89942ebc69a57579514 payload=c23f1c545a97 prev=d92cce45a6ce985013eee311ae29bfb6ad5eab3e9520f6c1a1483bf381479ba5
 
-## MP-0357 · medium · tsc-error
+## MP-0356 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/app/api/giant/market/route.ts**
 
@@ -5109,9 +5095,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=357 sha256=b33c84629e37b8540b606f8b6adf9ff43a3111b669125267ae73ad3bb6d5ccb3 payload=fbcf21947fba prev=c3e153d5d002dd46278b2d51373efbaeb0c453935bbbefffa6819ad0c106171b
+- קבלה: seq=356 sha256=b24573510ad25794ec32de12b40abdc0e005b7b4be5637b21801f945d702db94 payload=bb093769cea0 prev=0c19b51c18164582b2c06c57be0054f059db5c21d3dae89942ebc69a57579514
 
-## MP-0358 · medium · tsc-error
+## MP-0357 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/marketing/route.ts**
 
@@ -5119,9 +5105,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=358 sha256=a68155a9383120309dec6641e45b03f804bc79a2958b5d86f07115ebda50cc38 payload=3035df5c8ba6 prev=b33c84629e37b8540b606f8b6adf9ff43a3111b669125267ae73ad3bb6d5ccb3
+- קבלה: seq=357 sha256=172ca4d99e77a64e240338b3c9a3e4bdf16ee3d58fb4150247eafc230321a5cf payload=303e4eabd6b0 prev=b24573510ad25794ec32de12b40abdc0e005b7b4be5637b21801f945d702db94
 
-## MP-0359 · medium · tsc-error
+## MP-0358 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/office/route.ts**
 
@@ -5129,9 +5115,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=359 sha256=55e1fe9f7d811f5cf6bfbf54ee40c6dd177b13fc3ce6bedf75350f1179977f44 payload=1526d3f32bfc prev=a68155a9383120309dec6641e45b03f804bc79a2958b5d86f07115ebda50cc38
+- קבלה: seq=358 sha256=808d7d68175c4eeae1d1ccb82371e32eeb3811a8e418f9434e4e2ed24eb1edee payload=a3e19bbeb47d prev=172ca4d99e77a64e240338b3c9a3e4bdf16ee3d58fb4150247eafc230321a5cf
 
-## MP-0360 · medium · tsc-error
+## MP-0359 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/products/route.ts**
 
@@ -5139,9 +5125,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=360 sha256=299e0be33193f51e9df5bfb276c15cc9b5c137490db9626a861940c492e64fd6 payload=feead5cbe497 prev=55e1fe9f7d811f5cf6bfbf54ee40c6dd177b13fc3ce6bedf75350f1179977f44
+- קבלה: seq=359 sha256=b40e07682cfa8bbb66102e89807330b7cf5ee3938fa0416cff69ca1b75f8298d payload=3c8266282e36 prev=808d7d68175c4eeae1d1ccb82371e32eeb3811a8e418f9434e4e2ed24eb1edee
 
-## MP-0361 · medium · tsc-error
+## MP-0360 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/app/api/giant/pulse/route.ts**
 
@@ -5151,9 +5137,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=361 sha256=e003f9ba1c03e763679d569a85acf7f4b76b0f14ca99180909ce12f13bfe0f91 payload=7e059a61d97b prev=299e0be33193f51e9df5bfb276c15cc9b5c137490db9626a861940c492e64fd6
+- קבלה: seq=360 sha256=c65c98fb255290ec8893a727b10ba79de6721a8b202cd47b5517a508fab292be payload=cb03cf124aba prev=b40e07682cfa8bbb66102e89807330b7cf5ee3938fa0416cff69ca1b75f8298d
 
-## MP-0362 · medium · tsc-error
+## MP-0361 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/giant/trust/route.ts**
 
@@ -5161,9 +5147,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=362 sha256=dd20f325c4160defbcd8a034b2c908aacf126a72c3d4acd130a9f95ff07b0d4f payload=f2a7b55f9fab prev=e003f9ba1c03e763679d569a85acf7f4b76b0f14ca99180909ce12f13bfe0f91
+- קבלה: seq=361 sha256=f8d5384b9f06bddef1399a71337606f84f95da6f112056164032678a33a03e62 payload=c728a9b669cc prev=c65c98fb255290ec8893a727b10ba79de6721a8b202cd47b5517a508fab292be
 
-## MP-0363 · medium · tsc-error
+## MP-0362 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/git/catalog/route.ts**
 
@@ -5171,9 +5157,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=363 sha256=858a3a8c87f97a1be99ccc3d4f88049a9b39ec5cfe921c2b7c89d659332f999d payload=82cf02f253f5 prev=dd20f325c4160defbcd8a034b2c908aacf126a72c3d4acd130a9f95ff07b0d4f
+- קבלה: seq=362 sha256=b0112d100ad054e3423f0bba4b9dd6a2adaa37d59e590474985b3b2c3b52857d payload=1adbdbd3ced5 prev=f8d5384b9f06bddef1399a71337606f84f95da6f112056164032678a33a03e62
 
-## MP-0364 · medium · tsc-error
+## MP-0363 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/git/content/route.ts**
 
@@ -5181,9 +5167,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=364 sha256=381b5d1a5e7e4466262bffdfb89a92242af0b1f9305c1be8d2476bc3c1207048 payload=319a44b9fcc0 prev=858a3a8c87f97a1be99ccc3d4f88049a9b39ec5cfe921c2b7c89d659332f999d
+- קבלה: seq=363 sha256=56e04d877bd02524012c7d3c2b60d8fd0314440bb5c591508687ea2d233b7b56 payload=b8f6e9fd1b15 prev=b0112d100ad054e3423f0bba4b9dd6a2adaa37d59e590474985b3b2c3b52857d
 
-## MP-0365 · medium · tsc-error
+## MP-0364 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/app/api/git/land/route.ts**
 
@@ -5192,9 +5178,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=365 sha256=6da16c9330d164b6702d243be23e283cb0e365de4b0a6aa1ccc1d39fe2f8259b payload=f8d036ee9bb3 prev=381b5d1a5e7e4466262bffdfb89a92242af0b1f9305c1be8d2476bc3c1207048
+- קבלה: seq=364 sha256=5e29627b2c7c3d69919c232db38b269730e5c8b6211aec8481f7922ad4291dfb payload=d44ce5844695 prev=56e04d877bd02524012c7d3c2b60d8fd0314440bb5c591508687ea2d233b7b56
 
-## MP-0366 · medium · tsc-error
+## MP-0365 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/git/ledger/route.ts**
 
@@ -5202,9 +5188,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=366 sha256=31dce2899f3b8cd998846cacb6cc78f80ae17582466497538f9a164fef056d16 payload=9e8ace44b670 prev=6da16c9330d164b6702d243be23e283cb0e365de4b0a6aa1ccc1d39fe2f8259b
+- קבלה: seq=365 sha256=3bc9720063a58bff8f4995577281909a2fc146b79b48867753cf14df8cf92bc1 payload=ad1e5e719e87 prev=5e29627b2c7c3d69919c232db38b269730e5c8b6211aec8481f7922ad4291dfb
 
-## MP-0367 · medium · tsc-error
+## MP-0366 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/git/state/route.ts**
 
@@ -5212,9 +5198,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=367 sha256=a6f049592b1b982ffd52453026cad8e9d27aff20388f4a43dce63bbb6c017ddc payload=99eb3eb3f0f3 prev=31dce2899f3b8cd998846cacb6cc78f80ae17582466497538f9a164fef056d16
+- קבלה: seq=366 sha256=6a30b77ed325c66154480bcc15ef6d7db23421c206e11ada90df5c9772c8952d payload=7b5847f32ebd prev=3bc9720063a58bff8f4995577281909a2fc146b79b48867753cf14df8cf92bc1
 
-## MP-0368 · medium · tsc-error
+## MP-0367 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/material/read/route.ts**
 
@@ -5222,9 +5208,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=368 sha256=73cf2050da8a1788a520db8711735864d569d206e6ee135c89ac786669daf959 payload=6f90f4b2c105 prev=a6f049592b1b982ffd52453026cad8e9d27aff20388f4a43dce63bbb6c017ddc
+- קבלה: seq=367 sha256=5f4b3e358c39a8779742f2e789c9e4732e6208d2dcd5abc1137e9526631bfe91 payload=94e237eb66c0 prev=6a30b77ed325c66154480bcc15ef6d7db23421c206e11ada90df5c9772c8952d
 
-## MP-0369 · medium · tsc-error
+## MP-0368 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/material/state/route.ts**
 
@@ -5232,9 +5218,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=369 sha256=b536dac813cd253131e2a2265b6a9de0dec761cf64f4130b5921802ac400f8cd payload=969b97e1afbd prev=73cf2050da8a1788a520db8711735864d569d206e6ee135c89ac786669daf959
+- קבלה: seq=368 sha256=03f7f1230122564f4f2fa6a82e758910b4722689dd6ac4bec02ff8c9bf79830a payload=47ecf8d54658 prev=5f4b3e358c39a8779742f2e789c9e4732e6208d2dcd5abc1137e9526631bfe91
 
-## MP-0370 · medium · tsc-error
+## MP-0369 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/app/api/merge/truth/route.ts**
 
@@ -5244,9 +5230,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=370 sha256=39f4e447a8c7565774b921209561401687e45c280ae63a59ec5dbb5b4664cfdc payload=a878f7e3f56f prev=b536dac813cd253131e2a2265b6a9de0dec761cf64f4130b5921802ac400f8cd
+- קבלה: seq=369 sha256=e8fa70604ce27ba22078f4bdf466121ba52214c15dc83eb26e639c1ebab2868b payload=d76a055072e7 prev=03f7f1230122564f4f2fa6a82e758910b4722689dd6ac4bec02ff8c9bf79830a
 
-## MP-0371 · medium · tsc-error
+## MP-0370 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/office-state/route.ts**
 
@@ -5254,9 +5240,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=371 sha256=4921ff41ac390f7633692c0053494fb68494afc9cb1ce7b41597f50a90faaae6 payload=2165e221d5bc prev=39f4e447a8c7565774b921209561401687e45c280ae63a59ec5dbb5b4664cfdc
+- קבלה: seq=370 sha256=f907135a964beb350bcf25ce9312a4dce000bfb2112bb9bc4bbbf808acdb49d2 payload=c764bf5a7821 prev=e8fa70604ce27ba22078f4bdf466121ba52214c15dc83eb26e639c1ebab2868b
 
-## MP-0372 · medium · tsc-error
+## MP-0371 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/app/api/office/ops/command/route.ts**
 
@@ -5265,9 +5251,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=372 sha256=c688dc36c35131e29d57a89aa565b686ce2f208bcbb0ebc5b61469ba25f06c15 payload=b001abc58964 prev=4921ff41ac390f7633692c0053494fb68494afc9cb1ce7b41597f50a90faaae6
+- קבלה: seq=371 sha256=6b6c4bf58746f8fac690a505eb6997f54772ab64153641e492ace94222998edb payload=96dda92dcf27 prev=f907135a964beb350bcf25ce9312a4dce000bfb2112bb9bc4bbbf808acdb49d2
 
-## MP-0373 · medium · tsc-error
+## MP-0372 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/office/ops/login/route.ts**
 
@@ -5275,9 +5261,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=373 sha256=dbfd73accd5263e5079d35f95e5ac6d56d00a62307fba4d642fb6dd1396499c5 payload=b0467ae1cdd1 prev=c688dc36c35131e29d57a89aa565b686ce2f208bcbb0ebc5b61469ba25f06c15
+- קבלה: seq=372 sha256=86a21dc2e6e7fd53788dda2b9d57c9926b159c372a50683acb3b5d869e7762c3 payload=7c7ba2574cc6 prev=6b6c4bf58746f8fac690a505eb6997f54772ab64153641e492ace94222998edb
 
-## MP-0374 · medium · tsc-error
+## MP-0373 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/office/ops/state/route.ts**
 
@@ -5285,9 +5271,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=374 sha256=04bd3030a08cc21b8a0b33dba6a2da4298cbf28fcaf1ec67f001352a1d4f9853 payload=4648c5424917 prev=dbfd73accd5263e5079d35f95e5ac6d56d00a62307fba4d642fb6dd1396499c5
+- קבלה: seq=373 sha256=28891c7c3c4dbe511d45d948b4cd0375d1317611506ae592cc1533b95c4ef33b payload=ef9e0d591d1d prev=86a21dc2e6e7fd53788dda2b9d57c9926b159c372a50683acb3b5d869e7762c3
 
-## MP-0375 · medium · tsc-error
+## MP-0374 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/app/api/office/state/route.ts**
 
@@ -5298,9 +5284,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=375 sha256=ec6672b2ad630364794d0f08f29edc6efd7458b22713701977c467321f5163da payload=75600013c2a6 prev=04bd3030a08cc21b8a0b33dba6a2da4298cbf28fcaf1ec67f001352a1d4f9853
+- קבלה: seq=374 sha256=159779dd662fd472006e3b589ec78f3dbf6030dab7988eb306922066f644dc10 payload=49b038f75274 prev=28891c7c3c4dbe511d45d948b4cd0375d1317611506ae592cc1533b95c4ef33b
 
-## MP-0376 · medium · tsc-error
+## MP-0375 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/office/world/route.ts**
 
@@ -5308,9 +5294,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=376 sha256=50e9d1320c89096b05237cb7029b668c0945c7d122fdacea40fe24310651448d payload=3ed77d0d4725 prev=ec6672b2ad630364794d0f08f29edc6efd7458b22713701977c467321f5163da
+- קבלה: seq=375 sha256=e2ac1b4928652750e8af28ebe9c380c17cc3616e44bdbcc25be5181900769c19 payload=6fce97a06fd2 prev=159779dd662fd472006e3b589ec78f3dbf6030dab7988eb306922066f644dc10
 
-## MP-0377 · medium · tsc-error
+## MP-0376 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/organism/route.ts**
 
@@ -5318,9 +5304,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=377 sha256=adf99425618d581989583b8270cd77e12eab1a9b9f7e978ab0ee106e15a5948f payload=8844f60ad1b3 prev=50e9d1320c89096b05237cb7029b668c0945c7d122fdacea40fe24310651448d
+- קבלה: seq=376 sha256=61345c812feaf58f24fc30eda72c1ff7d1e0b0f5fe91e4d935b323bb33671b3c payload=2f11190312e9 prev=e2ac1b4928652750e8af28ebe9c380c17cc3616e44bdbcc25be5181900769c19
 
-## MP-0378 · medium · tsc-error
+## MP-0377 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/public/v1/account/route.ts**
 
@@ -5328,9 +5314,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=378 sha256=5020fc95887121869f698a86eb45fd3805815dc3a40602a013e6f6601fe5a1d8 payload=8012139f4061 prev=adf99425618d581989583b8270cd77e12eab1a9b9f7e978ab0ee106e15a5948f
+- קבלה: seq=377 sha256=fe276ef368b8b9177c76c352bcb287d15c8e91ce80f60018a317b24a4df036fd payload=acf5720f8e22 prev=61345c812feaf58f24fc30eda72c1ff7d1e0b0f5fe91e4d935b323bb33671b3c
 
-## MP-0379 · medium · tsc-error
+## MP-0378 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/public/v1/candles/route.ts**
 
@@ -5338,9 +5324,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=379 sha256=5a2af4087f71b11ad063db0b856306465a41f4d1e1f6ad95e96ef7228716fdfc payload=b3d8d2c81ab8 prev=5020fc95887121869f698a86eb45fd3805815dc3a40602a013e6f6601fe5a1d8
+- קבלה: seq=378 sha256=aff7a20ba89a98e50f4164b0477fae14db322e5f3ffa72b374029fd0ad3d8fe3 payload=b2420c5a692a prev=fe276ef368b8b9177c76c352bcb287d15c8e91ce80f60018a317b24a4df036fd
 
-## MP-0380 · medium · tsc-error
+## MP-0379 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/public/v1/depth/route.ts**
 
@@ -5348,9 +5334,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=380 sha256=52158bd736eedde1f97978cd59281458f2e2f2acfbf7fcbf84a0fce378e37f9d payload=711c503e8508 prev=5a2af4087f71b11ad063db0b856306465a41f4d1e1f6ad95e96ef7228716fdfc
+- קבלה: seq=379 sha256=f6669b3d4988e887eecd77f993bbcaaba3d4ca520047fa2cd47c93ed0a127784 payload=32bbcc8a2f2c prev=aff7a20ba89a98e50f4164b0477fae14db322e5f3ffa72b374029fd0ad3d8fe3
 
-## MP-0381 · medium · tsc-error
+## MP-0380 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/public/v1/keys/route.ts**
 
@@ -5358,9 +5344,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=381 sha256=9b4e52ad909eb2a3cac4aef30d1e82defded4c82151ce5f1a74455e17e2c15fd payload=361f5e849264 prev=52158bd736eedde1f97978cd59281458f2e2f2acfbf7fcbf84a0fce378e37f9d
+- קבלה: seq=380 sha256=12381ef1c972adf8d4f0c7979eb2d446ead7f50ce26ae30f59d8f58828aabed5 payload=76eea35383c5 prev=f6669b3d4988e887eecd77f993bbcaaba3d4ca520047fa2cd47c93ed0a127784
 
-## MP-0382 · medium · tsc-error
+## MP-0381 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/public/v1/markets/route.ts**
 
@@ -5368,9 +5354,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=382 sha256=0830d1ccaf1dff77976b5c52d884b00e5c51b1de719c1fd3732c33859631e920 payload=814219b8daf5 prev=9b4e52ad909eb2a3cac4aef30d1e82defded4c82151ce5f1a74455e17e2c15fd
+- קבלה: seq=381 sha256=d51d7e76f63375f0f02e02e86d66532b3ecb7cc57f5994c0603374d0282c6dad payload=463090502288 prev=12381ef1c972adf8d4f0c7979eb2d446ead7f50ce26ae30f59d8f58828aabed5
 
-## MP-0383 · medium · tsc-error
+## MP-0382 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/public/v1/orders/route.ts**
 
@@ -5378,9 +5364,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=383 sha256=a46017c85e33130b0e06880f6161d6fe69b5ae2304675cc086a70475ca81a305 payload=0bfd821fb9a1 prev=0830d1ccaf1dff77976b5c52d884b00e5c51b1de719c1fd3732c33859631e920
+- קבלה: seq=382 sha256=048283917a217e1ba4e821cc4e39f2edc4ea6d41345c583d67550d2e6496cc79 payload=bb617457fc54 prev=d51d7e76f63375f0f02e02e86d66532b3ecb7cc57f5994c0603374d0282c6dad
 
-## MP-0384 · medium · tsc-error
+## MP-0383 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/public/v1/ping/route.ts**
 
@@ -5388,9 +5374,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=384 sha256=d4c960706feb68fad9662048cc32c5a8b028e9e454d99a85045b441762b6e61b payload=9dd567805817 prev=a46017c85e33130b0e06880f6161d6fe69b5ae2304675cc086a70475ca81a305
+- קבלה: seq=383 sha256=c7b63b39f16c0a2839e1f087ac8f0a39fbb1e796c8ad599a43b6385a1263eee8 payload=423e643009ca prev=048283917a217e1ba4e821cc4e39f2edc4ea6d41345c583d67550d2e6496cc79
 
-## MP-0385 · medium · tsc-error
+## MP-0384 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/route.ts**
 
@@ -5398,9 +5384,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=385 sha256=51a55747fe8e8ccf1589e2cb5ec8a799bea572ae7d9c027764e98e21c68be169 payload=97d089ccc9ce prev=d4c960706feb68fad9662048cc32c5a8b028e9e454d99a85045b441762b6e61b
+- קבלה: seq=384 sha256=7e0a2a74468ba66d100a87b0a76aae1fe019d37551fbefdca2aee2c0875f1fff payload=d9808f52fa22 prev=c7b63b39f16c0a2839e1f087ac8f0a39fbb1e796c8ad599a43b6385a1263eee8
 
-## MP-0386 · medium · tsc-error
+## MP-0385 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/sectors/route.ts**
 
@@ -5408,9 +5394,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=386 sha256=2b2353523b7f8ac92403807eb4640ad67224702a0278498ec175bfb3ad824993 payload=fb1c9db55952 prev=51a55747fe8e8ccf1589e2cb5ec8a799bea572ae7d9c027764e98e21c68be169
+- קבלה: seq=385 sha256=9359c42bd9b263d3a04f5eb32a2d618981a5f5ed9ddd9e479b13f15b968a79f0 payload=14d023dd2d0d prev=7e0a2a74468ba66d100a87b0a76aae1fe019d37551fbefdca2aee2c0875f1fff
 
-## MP-0387 · medium · tsc-error
+## MP-0386 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 5 ב-src/app/api/skills/run/route.ts**
 
@@ -5422,9 +5408,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=387 sha256=b8d931c275e584a6c05f4425f78f8acd77c8daddf00e91561f506d3e1b02f9b5 payload=5bb2aa5f8c3b prev=2b2353523b7f8ac92403807eb4640ad67224702a0278498ec175bfb3ad824993
+- קבלה: seq=386 sha256=abcc884941e897542bc4ca41f61174e17037db3b5f82b45cdb25bd86ccd8b3b4 payload=3920998c954c prev=9359c42bd9b263d3a04f5eb32a2d618981a5f5ed9ddd9e479b13f15b968a79f0
 
-## MP-0388 · medium · tsc-error
+## MP-0387 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/skills/state/route.ts**
 
@@ -5432,9 +5418,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=388 sha256=f89edcf07bed4a4de44b353f79014d3e50b76a27e3cb45b75d634e5ba481289f payload=2fdb46141e01 prev=b8d931c275e584a6c05f4425f78f8acd77c8daddf00e91561f506d3e1b02f9b5
+- קבלה: seq=387 sha256=1580d587bf082d830a1a626a42bc43143f4f2102a3443129a37e23b5cd85678f payload=8543ac684845 prev=abcc884941e897542bc4ca41f61174e17037db3b5f82b45cdb25bd86ccd8b3b4
 
-## MP-0389 · medium · tsc-error
+## MP-0388 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/sovereign/anchor/route.ts**
 
@@ -5442,9 +5428,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=389 sha256=f8819992ec0e53b2cc5e140c062844f3b6ef5d15fd42eeda42ce262b16a4ed89 payload=0c9957e4f42d prev=f89edcf07bed4a4de44b353f79014d3e50b76a27e3cb45b75d634e5ba481289f
+- קבלה: seq=388 sha256=a530e89ae49b7f52dca6d9263150657ad9b8be61b61fb1e8ca840d9e7273bb78 payload=70cf8856bcac prev=1580d587bf082d830a1a626a42bc43143f4f2102a3443129a37e23b5cd85678f
 
-## MP-0390 · medium · tsc-error
+## MP-0389 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/sovereign/api-keys/route.ts**
 
@@ -5452,9 +5438,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=390 sha256=87db55de6b6a545094137955c909aa83ff47e446c880924cccca76c07aba4a01 payload=672976307499 prev=f8819992ec0e53b2cc5e140c062844f3b6ef5d15fd42eeda42ce262b16a4ed89
+- קבלה: seq=389 sha256=31d25da412d5a4388c827341d8a0ceed8b60e79a33f72a58890191d3c788dd2a payload=b7f9a5c0f258 prev=a530e89ae49b7f52dca6d9263150657ad9b8be61b61fb1e8ca840d9e7273bb78
 
-## MP-0391 · medium · tsc-error
+## MP-0390 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/sovereign/auth/route.ts**
 
@@ -5462,9 +5448,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=391 sha256=aaeef0f0911788097517a2cca1a027cc55b945c872bd8504a50f10d4c0eb7e74 payload=956a02601096 prev=87db55de6b6a545094137955c909aa83ff47e446c880924cccca76c07aba4a01
+- קבלה: seq=390 sha256=9f2f3a5cf23efffc4ca42adf77773d0a8013482680afdac57f158aeb9db46357 payload=9989e9d44253 prev=31d25da412d5a4388c827341d8a0ceed8b60e79a33f72a58890191d3c788dd2a
 
-## MP-0392 · medium · tsc-error
+## MP-0391 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/app/api/sovereign/channel/ask/route.ts**
 
@@ -5473,9 +5459,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=392 sha256=c2b8efdb2b4f62e1dff135404805157ccc8f8f80f60f9ae4b3ad2011343d9e30 payload=6ddfac983c8e prev=aaeef0f0911788097517a2cca1a027cc55b945c872bd8504a50f10d4c0eb7e74
+- קבלה: seq=391 sha256=383c17b23878c58863dfb6b61eae5b7567b9ca424615ae96e8a6d868c611025b payload=6a26aa3fd65d prev=9f2f3a5cf23efffc4ca42adf77773d0a8013482680afdac57f158aeb9db46357
 
-## MP-0393 · medium · tsc-error
+## MP-0392 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/sovereign/channel/route.ts**
 
@@ -5483,9 +5469,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=393 sha256=64cbc99f830acfb950847edaaa6d2d4419c8d0ff2f8e2d525c054464706291bd payload=fca891b93dce prev=c2b8efdb2b4f62e1dff135404805157ccc8f8f80f60f9ae4b3ad2011343d9e30
+- קבלה: seq=392 sha256=cff345eda28fa894e3de2b29e1236bd84b4f1a7f0e64eb4b9795013d8a3ddf72 payload=8cf125efd94a prev=383c17b23878c58863dfb6b61eae5b7567b9ca424615ae96e8a6d868c611025b
 
-## MP-0394 · medium · tsc-error
+## MP-0393 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/sovereign/gate/route.ts**
 
@@ -5493,9 +5479,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=394 sha256=104ac5d4b018a8ff0323e383d809cda150f2f8d435fe076e0c1565f7bcedafc6 payload=223188a2c869 prev=64cbc99f830acfb950847edaaa6d2d4419c8d0ff2f8e2d525c054464706291bd
+- קבלה: seq=393 sha256=18fa33ef06276d6ffab8bc82b7b248971835c5136d9d4fb0c981ef1ea3a79af0 payload=d5a3cea48a63 prev=cff345eda28fa894e3de2b29e1236bd84b4f1a7f0e64eb4b9795013d8a3ddf72
 
-## MP-0395 · medium · tsc-error
+## MP-0394 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/app/api/sovereign/messages/[id]/route.ts**
 
@@ -5504,9 +5490,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=395 sha256=4d8d44cb96e8e5f5fd672b17e5ca4e778b8793f29a6a2360dba1594d205800a2 payload=974e18577daa prev=104ac5d4b018a8ff0323e383d809cda150f2f8d435fe076e0c1565f7bcedafc6
+- קבלה: seq=394 sha256=7995a2600b334dce63175a97a740a17846455a5c3721b730e35d94a80f430295 payload=cab1dbe48443 prev=18fa33ef06276d6ffab8bc82b7b248971835c5136d9d4fb0c981ef1ea3a79af0
 
-## MP-0396 · medium · tsc-error
+## MP-0395 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/app/api/sovereign/messages/route.ts**
 
@@ -5515,9 +5501,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=396 sha256=25d88e2cd068ca85270103ff9ff73c45bc78147012cef252948981d16eaf2bd0 payload=de8a95cbb175 prev=4d8d44cb96e8e5f5fd672b17e5ca4e778b8793f29a6a2360dba1594d205800a2
+- קבלה: seq=395 sha256=7679b119e7dc67a66322a919c97ab8f9777f9b398166b04e1323b001c04ee270 payload=74a3f47bd170 prev=7995a2600b334dce63175a97a740a17846455a5c3721b730e35d94a80f430295
 
-## MP-0397 · medium · tsc-error
+## MP-0396 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/api/sovereign/relay/process/route.ts**
 
@@ -5525,9 +5511,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=397 sha256=7ab620e811f6f5e371e8b205ad5f24ca5240a2712b449598022a8cc386aa464c payload=2b543e81611d prev=25d88e2cd068ca85270103ff9ff73c45bc78147012cef252948981d16eaf2bd0
+- קבלה: seq=396 sha256=35f01b86e5f035e98ba9e05adaceda9e91b60be9ac1b647ded1ac9b3d7c791a1 payload=888a8780326a prev=7679b119e7dc67a66322a919c97ab8f9777f9b398166b04e1323b001c04ee270
 
-## MP-0398 · medium · tsc-error
+## MP-0397 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/app/join/page.tsx**
 
@@ -5538,9 +5524,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=398 sha256=5fd49eeda388c18641494121e06ef8d6331a3d2b5109c4777b7d790c483b57c0 payload=9fa8381a2ae0 prev=7ab620e811f6f5e371e8b205ad5f24ca5240a2712b449598022a8cc386aa464c
+- קבלה: seq=397 sha256=9e681f817e0864af07c1faaeaf46ee3aaf87c52ad40cca534e7e286484790997 payload=fe8f9b074342 prev=35f01b86e5f035e98ba9e05adaceda9e91b60be9ac1b647ded1ac9b3d7c791a1
 
-## MP-0399 · medium · tsc-error
+## MP-0398 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/app/layout.tsx**
 
@@ -5551,9 +5537,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=399 sha256=542b7e8b0d155a5feea8cdaf243c7349d3f89025ae487d33896b56ec4e029e03 payload=aca9d7fe278d prev=5fd49eeda388c18641494121e06ef8d6331a3d2b5109c4777b7d790c483b57c0
+- קבלה: seq=398 sha256=63f10b3374fb13b2216e0311614ffc9037b7d6c862d8e476273ec1d5eedc0778 payload=f4dff3e66b4d prev=9e681f817e0864af07c1faaeaf46ee3aaf87c52ad40cca534e7e286484790997
 
-## MP-0400 · medium · tsc-error
+## MP-0399 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/app/manifest.ts**
 
@@ -5561,9 +5547,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=400 sha256=703848b9137edfec304a1e6e3aa00567e5f06bfba2e908b2dfd6ab775bb26b8d payload=052909078c7f prev=542b7e8b0d155a5feea8cdaf243c7349d3f89025ae487d33896b56ec4e029e03
+- קבלה: seq=399 sha256=89b6be74db765f846674c5169f96147037496e5d07128e135d1c288a851c81ee payload=4e6b021c7e1b prev=63f10b3374fb13b2216e0311614ffc9037b7d6c862d8e476273ec1d5eedc0778
 
-## MP-0401 · medium · tsc-error
+## MP-0400 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/app/page.tsx**
 
@@ -5573,9 +5559,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=401 sha256=eb3a543b428c6b3562c434b4f04a5832f87b89fd8b849183fdbcf59b9940c3ee payload=ffa9c9ef6561 prev=703848b9137edfec304a1e6e3aa00567e5f06bfba2e908b2dfd6ab775bb26b8d
+- קבלה: seq=400 sha256=4060b07b458a7d857ac67b20e503f16139ee4a3ef8abccb3dd80348014848de0 payload=b2f2e5f6c6b3 prev=89b6be74db765f846674c5169f96147037496e5d07128e135d1c288a851c81ee
 
-## MP-0402 · medium · tsc-error
+## MP-0401 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/giant/AnimatedNumber.tsx**
 
@@ -5584,9 +5570,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=402 sha256=49df372f64abedf16cf0d04aa7b1e54758be8faeb5159108478bc3bde4de3bbb payload=8601275f007f prev=eb3a543b428c6b3562c434b4f04a5832f87b89fd8b849183fdbcf59b9940c3ee
+- קבלה: seq=401 sha256=d6907806d7d06989a89c2b086e76cc67c4a4f8fb8fdf7d76bd7a497a85abd154 payload=b7dc34c80f22 prev=4060b07b458a7d857ac67b20e503f16139ee4a3ef8abccb3dd80348014848de0
 
-## MP-0403 · medium · tsc-error
+## MP-0402 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/ApiView.tsx**
 
@@ -5596,9 +5582,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=403 sha256=d4aeb09deaa9182622da554a92127f2b72ee980c8833a0aeae3847c114040b06 payload=b0ac6e51a391 prev=49df372f64abedf16cf0d04aa7b1e54758be8faeb5159108478bc3bde4de3bbb
+- קבלה: seq=402 sha256=5e6033a6ae69f8424cb15d9966c6ab87aeac39460c8ead460db18ab5240ade52 payload=efefbdb67f43 prev=d6907806d7d06989a89c2b086e76cc67c4a4f8fb8fdf7d76bd7a497a85abd154
 
-## MP-0404 · medium · tsc-error
+## MP-0403 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/components/giant/CandleChart.tsx**
 
@@ -5606,9 +5592,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=404 sha256=8e922e9c402b638fe0d09999a7abf97f595fb4ee6583f7635401ccd65dd34535 payload=c39ab498e869 prev=d4aeb09deaa9182622da554a92127f2b72ee980c8833a0aeae3847c114040b06
+- קבלה: seq=403 sha256=408da25f0d0ac41d72324de775cb7953e03aa4a1205573c44a2f28ba5020bd14 payload=385bcee72ebb prev=5e6033a6ae69f8424cb15d9966c6ab87aeac39460c8ead460db18ab5240ade52
 
-## MP-0405 · medium · tsc-error
+## MP-0404 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/CapitalView.tsx**
 
@@ -5618,9 +5604,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=405 sha256=c0d2b72166628654036ea238a73b78b4c048c9341ebcad126fbd6081bfbea350 payload=f4dc48239b6b prev=8e922e9c402b638fe0d09999a7abf97f595fb4ee6583f7635401ccd65dd34535
+- קבלה: seq=404 sha256=d57986e65d0b13b87c04b0e2b9416f2d104f746f40ba967f3b1dcea7b170e7d9 payload=973b5615238a prev=408da25f0d0ac41d72324de775cb7953e03aa4a1205573c44a2f28ba5020bd14
 
-## MP-0406 · medium · tsc-error
+## MP-0405 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/ChannelView.tsx**
 
@@ -5630,9 +5616,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=406 sha256=eac6355ded950c8625a8c2b6dda3800ee5dd74c4fb68ae3bcdc06e38d3930d9d payload=3f74c227cc68 prev=c0d2b72166628654036ea238a73b78b4c048c9341ebcad126fbd6081bfbea350
+- קבלה: seq=405 sha256=95347fadd890d145390be23dba40a5ea1b007d0a654de19684a254a7e525ebb8 payload=c687f4a503ed prev=d57986e65d0b13b87c04b0e2b9416f2d104f746f40ba967f3b1dcea7b170e7d9
 
-## MP-0407 · medium · tsc-error
+## MP-0406 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/giant/DeskView.tsx**
 
@@ -5641,9 +5627,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=407 sha256=12e1317ff2cf07045b6e572158f37cd8e53c6ca0c7bc1ca5379c6dd4374a54e1 payload=cfed59c2ccb1 prev=eac6355ded950c8625a8c2b6dda3800ee5dd74c4fb68ae3bcdc06e38d3930d9d
+- קבלה: seq=406 sha256=ab5f803887b163f58f3e0defe2a716a1d3b753f077d9897e46bbf69b925e6ad1 payload=0a35ecfe6fef prev=95347fadd890d145390be23dba40a5ea1b007d0a654de19684a254a7e525ebb8
 
-## MP-0408 · medium · tsc-error
+## MP-0407 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/DexView.tsx**
 
@@ -5653,9 +5639,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=408 sha256=42bf7297830098840e0f2faea4a5092e336caa40e24e3ec1d5f715275fd5f86b payload=ed3240f2b9dd prev=12e1317ff2cf07045b6e572158f37cd8e53c6ca0c7bc1ca5379c6dd4374a54e1
+- קבלה: seq=407 sha256=485f12c6a4d34668a718d714731f28a34d68cbdc2bd620958396f698083028a6 payload=047dece53ec3 prev=ab5f803887b163f58f3e0defe2a716a1d3b753f077d9897e46bbf69b925e6ad1
 
-## MP-0409 · medium · tsc-error
+## MP-0408 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/EmpireView.tsx**
 
@@ -5665,9 +5651,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=409 sha256=413082e11c40f3661170db4a1f28e7b6ecf149ca0278342d811a3d919ac12934 payload=37cc03955b87 prev=42bf7297830098840e0f2faea4a5092e336caa40e24e3ec1d5f715275fd5f86b
+- קבלה: seq=408 sha256=7945cef4e8007f4a7d569ee0ae54d2c9766468c500b29894f7161618165abd2a payload=ba5a8f413b8c prev=485f12c6a4d34668a718d714731f28a34d68cbdc2bd620958396f698083028a6
 
-## MP-0410 · medium · tsc-error
+## MP-0409 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/EstateView.tsx**
 
@@ -5677,9 +5663,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=410 sha256=60a75840ddd96301b48116f1c9a9b7b7f35b0eb0e5218855b10ff48ec870e769 payload=09720fc5f09a prev=413082e11c40f3661170db4a1f28e7b6ecf149ca0278342d811a3d919ac12934
+- קבלה: seq=409 sha256=cc576fb1e62eaa04268fd764571b644922536bfe59ce83ccc662e7475917cec0 payload=8be03b0b6eb0 prev=7945cef4e8007f4a7d569ee0ae54d2c9766468c500b29894f7161618165abd2a
 
-## MP-0411 · medium · tsc-error
+## MP-0410 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/FleetView.tsx**
 
@@ -5689,9 +5675,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=411 sha256=07a2aa8250d967a048cb03406ce65f5b9eeadfc6ee1f803c098d35b1aaabf665 payload=7bc5aeac3aa7 prev=60a75840ddd96301b48116f1c9a9b7b7f35b0eb0e5218855b10ff48ec870e769
+- קבלה: seq=410 sha256=8397015a4694a04d2f890af0437617d1a0c798da90adefd07ab7327ea792dbe7 payload=88d40c81fca1 prev=cc576fb1e62eaa04268fd764571b644922536bfe59ce83ccc662e7475917cec0
 
-## MP-0412 · medium · tsc-error
+## MP-0411 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 6 ב-src/components/giant/GapView.tsx**
 
@@ -5704,9 +5690,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=412 sha256=298c97b7102c9e8dda915a044b48a04a17c285d03032094ac700389597a40b4e payload=876ee4b8a6b1 prev=07a2aa8250d967a048cb03406ce65f5b9eeadfc6ee1f803c098d35b1aaabf665
+- קבלה: seq=411 sha256=56be33785c2a4776d42c71d76d2c5494f910e96a2d4e3a3d9ec80d6e6bab4a22 payload=2ff07d912021 prev=8397015a4694a04d2f890af0437617d1a0c798da90adefd07ab7327ea792dbe7
 
-## MP-0413 · medium · tsc-error
+## MP-0412 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 5 ב-src/components/giant/GiantPalette.tsx**
 
@@ -5718,9 +5704,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=413 sha256=eab2ec35f891fb9fe8503e93225941e8d141ac97b2d86382e1367b246c6c2464 payload=9dddb25a6bad prev=298c97b7102c9e8dda915a044b48a04a17c285d03032094ac700389597a40b4e
+- קבלה: seq=412 sha256=7c553b959c27cdc1da2ee00592b947bca9fbf090107b255784d8bba0a12b10b6 payload=27ec19736648 prev=56be33785c2a4776d42c71d76d2c5494f910e96a2d4e3a3d9ec80d6e6bab4a22
 
-## MP-0414 · medium · tsc-error
+## MP-0413 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/giant/GiantsView.tsx**
 
@@ -5729,9 +5715,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=414 sha256=4558422c2a6c3623ed8ec7ba906336a98bb8ce4e719e6f341d53792465321f69 payload=19e67cf22467 prev=eab2ec35f891fb9fe8503e93225941e8d141ac97b2d86382e1367b246c6c2464
+- קבלה: seq=413 sha256=6b5d3544410cb6d590d02f3cc3cee0f421f80ab44cb7ff3a0fd706303361bd06 payload=42597e7fcba6 prev=7c553b959c27cdc1da2ee00592b947bca9fbf090107b255784d8bba0a12b10b6
 
-## MP-0415 · medium · tsc-error
+## MP-0414 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/giant/InternalEconomy.tsx**
 
@@ -5742,9 +5728,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=415 sha256=25056088940f02b00f90a1280b77ff25a7f8e3e033b6c755e7c2003b185ccca5 payload=98a53eeb3508 prev=4558422c2a6c3623ed8ec7ba906336a98bb8ce4e719e6f341d53792465321f69
+- קבלה: seq=414 sha256=eea807b996cfa537cbd5e50a3ea6f349cbc185bc2a78c75bcf685f45fd94a47a payload=390bd44665db prev=6b5d3544410cb6d590d02f3cc3cee0f421f80ab44cb7ff3a0fd706303361bd06
 
-## MP-0416 · medium · tsc-error
+## MP-0415 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/giant/LeagueView.tsx**
 
@@ -5753,9 +5739,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=416 sha256=d101370d57609c7e5a49a695617476337c8e98f5faff358aa8bfa4d8e7eb4199 payload=233cc92e185c prev=25056088940f02b00f90a1280b77ff25a7f8e3e033b6c755e7c2003b185ccca5
+- קבלה: seq=415 sha256=f7a69904874bb57015fb8d6f419f1b44385441108a2c40aff1ce52c21bc9eeb0 payload=1209618a48a9 prev=eea807b996cfa537cbd5e50a3ea6f349cbc185bc2a78c75bcf685f45fd94a47a
 
-## MP-0417 · medium · tsc-error
+## MP-0416 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/giant/LedgerView.tsx**
 
@@ -5764,9 +5750,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=417 sha256=c2af40a45241e0d633561f82660613cd25a5c813156877d80801a5c632ab0bb5 payload=f99e136721d3 prev=d101370d57609c7e5a49a695617476337c8e98f5faff358aa8bfa4d8e7eb4199
+- קבלה: seq=416 sha256=34621c80c4aa41f6386c74a70162ee0a5d2d29f3af844d23c5c8c56f22558f42 payload=0a075688e6b9 prev=f7a69904874bb57015fb8d6f419f1b44385441108a2c40aff1ce52c21bc9eeb0
 
-## MP-0418 · medium · tsc-error
+## MP-0417 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 7 ב-src/components/giant/MachineView.tsx**
 
@@ -5780,9 +5766,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=418 sha256=0c4edf41250546d6ff235962d3ceeab2e73506068fc5afa0abf16ab44d14aae8 payload=914b495c6e19 prev=c2af40a45241e0d633561f82660613cd25a5c813156877d80801a5c632ab0bb5
+- קבלה: seq=417 sha256=f829915b0d0be9e79c84a28506a73e4882ff324a09de2a2cd2180e85e0232eb2 payload=e5c08759a155 prev=34621c80c4aa41f6386c74a70162ee0a5d2d29f3af844d23c5c8c56f22558f42
 
-## MP-0419 · medium · tsc-error
+## MP-0418 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 6 ב-src/components/giant/MarketingView.tsx**
 
@@ -5795,9 +5781,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=419 sha256=90acd6fbd9f89134fc00e23ecbc430abbccbb401b65637653f7f6661afe86f82 payload=fab3b929d204 prev=0c4edf41250546d6ff235962d3ceeab2e73506068fc5afa0abf16ab44d14aae8
+- קבלה: seq=418 sha256=793d62e29bb7d37c8cf1e9b32d6a98a8eeedaa6dd65959cb332abcc456f7986e payload=4ba37549052b prev=f829915b0d0be9e79c84a28506a73e4882ff324a09de2a2cd2180e85e0232eb2
 
-## MP-0420 · medium · tsc-error
+## MP-0419 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/OfficeHqView.tsx**
 
@@ -5807,9 +5793,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=420 sha256=5c637c18a37ed1b672b15de0a38f34e0e17663cb0391f2e8a53583e88df57ca2 payload=149cbee97c3d prev=90acd6fbd9f89134fc00e23ecbc430abbccbb401b65637653f7f6661afe86f82
+- קבלה: seq=419 sha256=ed5b7dd61da7dfddf880b0668cb4123a5e56f77699430b7023277a155ef565a9 payload=6bb4ce40cde0 prev=793d62e29bb7d37c8cf1e9b32d6a98a8eeedaa6dd65959cb332abcc456f7986e
 
-## MP-0421 · medium · tsc-error
+## MP-0420 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/OfficeView.tsx**
 
@@ -5819,9 +5805,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=421 sha256=32635e8f88719c2017bfae9a88881289ecfe840cbe7167acd3c8a070abfdaae9 payload=0adb8ea5b3ae prev=5c637c18a37ed1b672b15de0a38f34e0e17663cb0391f2e8a53583e88df57ca2
+- קבלה: seq=420 sha256=b3b71d32cc03b2678d32464ab6bc2fc0296d33bbc2ee1dd3f0a91355a785805b payload=314d0ed19552 prev=ed5b7dd61da7dfddf880b0668cb4123a5e56f77699430b7023277a155ef565a9
 
-## MP-0422 · medium · tsc-error
+## MP-0421 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/giant/ProductsView.tsx**
 
@@ -5830,9 +5816,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=422 sha256=7e39f3ecc2f9774e19136c6bc80f0d38c4755733978152a6127f5eca3acafc37 payload=c17b7dd10a52 prev=32635e8f88719c2017bfae9a88881289ecfe840cbe7167acd3c8a070abfdaae9
+- קבלה: seq=421 sha256=4d26f59461a1cab2b0e855bbd62e374065fd499ce21aecc72b37b44d4895d70f payload=ee5905d160b7 prev=b3b71d32cc03b2678d32464ab6bc2fc0296d33bbc2ee1dd3f0a91355a785805b
 
-## MP-0423 · medium · tsc-error
+## MP-0422 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 8 ב-src/components/giant/PulseView.tsx**
 
@@ -5847,9 +5833,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=423 sha256=4275db54436b58e1b0668c56c5caa6a9f92bd70f43a60e75184f468bae92f6d4 payload=0cfc57a1f3a2 prev=7e39f3ecc2f9774e19136c6bc80f0d38c4755733978152a6127f5eca3acafc37
+- קבלה: seq=422 sha256=b8a5f1c4aa5e63c0f270db820d287b1097d6a94a943e40bbb357bd8c6eefb8b6 payload=48386cf998a3 prev=4d26f59461a1cab2b0e855bbd62e374065fd499ce21aecc72b37b44d4895d70f
 
-## MP-0424 · medium · tsc-error
+## MP-0423 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/Recipe.tsx**
 
@@ -5859,9 +5845,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=424 sha256=bc765e43b9cb83c5b44d5de24203097440739cf6456bc0ceb01c3fff301d67b6 payload=2001a4095323 prev=4275db54436b58e1b0668c56c5caa6a9f92bd70f43a60e75184f468bae92f6d4
+- קבלה: seq=423 sha256=7ce03195c2a5996819e48889a80c98fc31a77a791aa8839c724fd68da5e24e6a payload=8cc0700e1a4c prev=b8a5f1c4aa5e63c0f270db820d287b1097d6a94a943e40bbb357bd8c6eefb8b6
 
-## MP-0425 · medium · tsc-error
+## MP-0424 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/SteemAuditPanel.tsx**
 
@@ -5871,9 +5857,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=425 sha256=196f06dbe99e03e91eb85b76a593c76c3d2f971c07303fb6383e9e2b2118640d payload=7ea3b7117a53 prev=bc765e43b9cb83c5b44d5de24203097440739cf6456bc0ceb01c3fff301d67b6
+- קבלה: seq=424 sha256=d2143d002eb706dc6993b9ad36aff460a62ebfa422a3f7a3b8cb1c8c404677c0 payload=3cf1d32f9c9d prev=7ce03195c2a5996819e48889a80c98fc31a77a791aa8839c724fd68da5e24e6a
 
-## MP-0426 · medium · tsc-error
+## MP-0425 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/SteemBridgePanel.tsx**
 
@@ -5883,9 +5869,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=426 sha256=c545134fbea268159baf11eeb65308c4ea47905054d9e458bed9937267c1a52f payload=8a171ce82b64 prev=196f06dbe99e03e91eb85b76a593c76c3d2f971c07303fb6383e9e2b2118640d
+- קבלה: seq=425 sha256=4d3d6558206ae827caebbe05bd35f460fadd6826e0d732057f606736802259fa payload=e1a4ef986377 prev=d2143d002eb706dc6993b9ad36aff460a62ebfa422a3f7a3b8cb1c8c404677c0
 
-## MP-0427 · medium · tsc-error
+## MP-0426 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/giant/SubmissionView.tsx**
 
@@ -5896,9 +5882,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=427 sha256=78de9be151aaffbab01853317cb98880d473508542ce00eaaf00e8eb7d1a004b payload=db0559d3a844 prev=c545134fbea268159baf11eeb65308c4ea47905054d9e458bed9937267c1a52f
+- קבלה: seq=426 sha256=56d0cd3a8fd250001b331baccfb84140dc9d7f178c01438541d0492afcca2be5 payload=ff333b4d707d prev=4d3d6558206ae827caebbe05bd35f460fadd6826e0d732057f606736802259fa
 
-## MP-0428 · medium · tsc-error
+## MP-0427 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/giant/TickerTape.tsx**
 
@@ -5907,9 +5893,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=428 sha256=b7f6a4814ca2131e37c90d1a6f76573819e40b9039f12ca6a82f4acc1336bfd5 payload=2dadee14ac79 prev=78de9be151aaffbab01853317cb98880d473508542ce00eaaf00e8eb7d1a004b
+- קבלה: seq=427 sha256=52dfe3cc1364cdbe19135b8351940da15607b79645a3caccc1c9f6ed7b5d93b0 payload=7f6c926fe286 prev=56d0cd3a8fd250001b331baccfb84140dc9d7f178c01438541d0492afcca2be5
 
-## MP-0429 · medium · tsc-error
+## MP-0428 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/TradeDesk.tsx**
 
@@ -5919,9 +5905,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=429 sha256=d98e99d78e4c80efbe3ff4d7cbdcdbae3b44315f2efe99afded8e88d98c2d578 payload=53f05fa73068 prev=b7f6a4814ca2131e37c90d1a6f76573819e40b9039f12ca6a82f4acc1336bfd5
+- קבלה: seq=428 sha256=9c82c2edc007f48c9693b887ca8486faea743b8c1b8a8b86e548f3d4e621c8d8 payload=89cdadbee3f9 prev=52dfe3cc1364cdbe19135b8351940da15607b79645a3caccc1c9f6ed7b5d93b0
 
-## MP-0430 · medium · tsc-error
+## MP-0429 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/giant/TrustView.tsx**
 
@@ -5932,9 +5918,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=430 sha256=a4ff92c9c466b778205909d7dc580d316d9e183e47756b38b635fa9762d973c7 payload=438926ed9905 prev=d98e99d78e4c80efbe3ff4d7cbdcdbae3b44315f2efe99afded8e88d98c2d578
+- קבלה: seq=429 sha256=9e57f9354e93aad25d158b51214a77e5675ac35c6b5857ffa02c3e702a615307 payload=b18677267175 prev=9c82c2edc007f48c9693b887ca8486faea743b8c1b8a8b86e548f3d4e621c8d8
 
-## MP-0431 · medium · tsc-error
+## MP-0430 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/giant/WalletView.tsx**
 
@@ -5944,9 +5930,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=431 sha256=31cbc7b1f48bce912a61fbcdacb0216da24e7554a205cc7ffccb16d4bb5ef274 payload=1004402fad1a prev=a4ff92c9c466b778205909d7dc580d316d9e183e47756b38b635fa9762d973c7
+- קבלה: seq=430 sha256=5d8401f3596923eafca8fef2f27efdb56fde076b26c8d01c1b52d9932185d6c9 payload=62b832291e1a prev=9e57f9354e93aad25d158b51214a77e5675ac35c6b5857ffa02c3e702a615307
 
-## MP-0432 · medium · tsc-error
+## MP-0431 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 6 ב-src/components/hq/Architecture.tsx**
 
@@ -5959,9 +5945,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=432 sha256=3b8044b8cc06ec1ff9403f142854656ba72da9fb66fd03bdd563faad62d5ff17 payload=c10165960658 prev=31cbc7b1f48bce912a61fbcdacb0216da24e7554a205cc7ffccb16d4bb5ef274
+- קבלה: seq=431 sha256=57ed8997584f8d68ccd31bc0103b1c57366290ca6a75b9cf3325b382b19b5b8d payload=552783d2199c prev=5d8401f3596923eafca8fef2f27efdb56fde076b26c8d01c1b52d9932185d6c9
 
-## MP-0433 · medium · tsc-error
+## MP-0432 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 5 ב-src/components/hq/Atmosphere.tsx**
 
@@ -5973,9 +5959,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=433 sha256=b1a6831dce58b5ba6445dbf6241b919140480a93b68614abd73361f75c46e1b3 payload=d1cad50c569b prev=3b8044b8cc06ec1ff9403f142854656ba72da9fb66fd03bdd563faad62d5ff17
+- קבלה: seq=432 sha256=754362428a631da3a7074548d4660e3edb03548904b0edde033763dae1a9d188 payload=4a7a39b4a53c prev=57ed8997584f8d68ccd31bc0103b1c57366290ca6a75b9cf3325b382b19b5b8d
 
-## MP-0434 · medium · tsc-error
+## MP-0433 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/hq/CameraDirector.tsx**
 
@@ -5985,9 +5971,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=434 sha256=e9cbef1a223b449379117839e6a6044fd45462f6c79f4e90bb9e1713710731e2 payload=f41f2725b781 prev=b1a6831dce58b5ba6445dbf6241b919140480a93b68614abd73361f75c46e1b3
+- קבלה: seq=433 sha256=d1ac08ecb542a058bd4fcafefb7547babc6c7e7104aaa33bb4a4ac3f722fc87c payload=d9f323052f9b prev=754362428a631da3a7074548d4660e3edb03548904b0edde033763dae1a9d188
 
-## MP-0435 · medium · tsc-error
+## MP-0434 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 7 ב-src/components/hq/Crew.tsx**
 
@@ -6001,9 +5987,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=435 sha256=e309ddecd1b6d08bb4e6c4da1a708a75cd9a380131346873e8ae62e1c7777e6b payload=2e5a8a174d09 prev=e9cbef1a223b449379117839e6a6044fd45462f6c79f4e90bb9e1713710731e2
+- קבלה: seq=434 sha256=4f3312ee3258a5826eb5cda84aceae3423f85a20b56287ba70ff4e3f5d0fc5c7 payload=48a315ef7339 prev=d1ac08ecb542a058bd4fcafefb7547babc6c7e7104aaa33bb4a4ac3f722fc87c
 
-## MP-0436 · medium · tsc-error
+## MP-0435 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/components/hq/GitWallData.tsx**
 
@@ -6011,9 +5997,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=436 sha256=fa7f624e2f885be1f420fc8b0ce9c89adb80b9667d03a16f7fb1ff431d56c1e5 payload=1008021c2fdc prev=e309ddecd1b6d08bb4e6c4da1a708a75cd9a380131346873e8ae62e1c7777e6b
+- קבלה: seq=435 sha256=31cfec437ce7fbdf57103555c259d2ac0da45eae1cc28f42fd2e16182e5ad9bc payload=e6af0720a5ec prev=4f3312ee3258a5826eb5cda84aceae3423f85a20b56287ba70ff4e3f5d0fc5c7
 
-## MP-0437 · medium · tsc-error
+## MP-0436 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 6 ב-src/components/hq/Interior.tsx**
 
@@ -6026,9 +6012,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=437 sha256=caadeebd90fac77f30b56b7223b43e9a5cd950d354e2cc0bb39da00118007e61 payload=cf1d40970e4a prev=fa7f624e2f885be1f420fc8b0ce9c89adb80b9667d03a16f7fb1ff431d56c1e5
+- קבלה: seq=436 sha256=b8e016554aa20e11e13b316f7b7136692f5ba42d0705d3211f59a4a47c46fcd5 payload=c9b59881670b prev=31cfec437ce7fbdf57103555c259d2ac0da45eae1cc28f42fd2e16182e5ad9bc
 
-## MP-0438 · medium · tsc-error
+## MP-0437 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 7 ב-src/components/hq/Office3D.tsx**
 
@@ -6042,9 +6028,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=438 sha256=f51c26bf7ed31a080b7a2dcf29aecd1b062ea731d0d4b198455d9d55cfb36643 payload=36bb69984db7 prev=caadeebd90fac77f30b56b7223b43e9a5cd950d354e2cc0bb39da00118007e61
+- קבלה: seq=437 sha256=f7d249132593f59020828e57f66e968548ed846a0f6b0a4288de558868f5589e payload=ef051bf0e7fa prev=b8e016554aa20e11e13b316f7b7136692f5ba42d0705d3211f59a4a47c46fcd5
 
-## MP-0439 · medium · tsc-error
+## MP-0438 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/hq/OperatorDrawer.tsx**
 
@@ -6053,9 +6039,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=439 sha256=730f1ea01ffa6834aeddde1383593cde7522e800a45c1db1a10ab5d89dec0149 payload=f9d45d812739 prev=f51c26bf7ed31a080b7a2dcf29aecd1b062ea731d0d4b198455d9d55cfb36643
+- קבלה: seq=438 sha256=dba0205a596e923a9f1f2092216474b36a409c1cce8ba9a1abbe99801d154823 payload=df6eefa53cbe prev=f7d249132593f59020828e57f66e968548ed846a0f6b0a4288de558868f5589e
 
-## MP-0440 · medium · tsc-error
+## MP-0439 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/hq/Realism.tsx**
 
@@ -6066,9 +6052,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=440 sha256=2b02e8fd5ad6bb387f3c10d04eadfd11a86a7513a652f167c9af1bfe7da424cc payload=c357ba9cf650 prev=730f1ea01ffa6834aeddde1383593cde7522e800a45c1db1a10ab5d89dec0149
+- קבלה: seq=439 sha256=681e0aacf06e59b0e6eeaf5bbab3c104a053bfbb7f99d146e1d90193a1b1ccc6 payload=7caeba82aec9 prev=dba0205a596e923a9f1f2092216474b36a409c1cce8ba9a1abbe99801d154823
 
-## MP-0441 · medium · tsc-error
+## MP-0440 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/hq/Room3D.tsx**
 
@@ -6077,9 +6063,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=441 sha256=055d98db1fe8be1ea18f9ae2626b25f078ab398d100ae8381b2a96d407f39eb9 payload=3f531da5c7d6 prev=2b02e8fd5ad6bb387f3c10d04eadfd11a86a7513a652f167c9af1bfe7da424cc
+- קבלה: seq=440 sha256=6e1148a11da8d5c2bfb75716774c71c6139a4be0dcebb2e1153cccf6e18a5e4e payload=9cac9abd39ff prev=681e0aacf06e59b0e6eeaf5bbab3c104a053bfbb7f99d146e1d90193a1b1ccc6
 
-## MP-0442 · medium · tsc-error
+## MP-0441 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/hq/RoomRoot.tsx**
 
@@ -6089,9 +6075,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=442 sha256=c0c354aba8ab81f796c8d35bb6cf48fc77b39bae3c1dfda39e56a2e6bf871724 payload=80ea3d342104 prev=055d98db1fe8be1ea18f9ae2626b25f078ab398d100ae8381b2a96d407f39eb9
+- קבלה: seq=441 sha256=1177b7365ea0743ddf8a0092d7a1a3b931194f0363695ef1e370001b29cc9cff payload=7c0e38e3586c prev=6e1148a11da8d5c2bfb75716774c71c6139a4be0dcebb2e1153cccf6e18a5e4e
 
-## MP-0443 · medium · tsc-error
+## MP-0442 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 5 ב-src/components/hq/Stations.tsx**
 
@@ -6103,9 +6089,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=443 sha256=71adc9ee68d1b1ad3613c0e6ec703fc7e2f51478fbb9cc45ff53656b6c749abe payload=c5f86f684f39 prev=c0c354aba8ab81f796c8d35bb6cf48fc77b39bae3c1dfda39e56a2e6bf871724
+- קבלה: seq=442 sha256=33d1be0902b073e859135b27c86403a970f2f65130a248e221aba3873fd7b90e payload=ee4db4b893d6 prev=1177b7365ea0743ddf8a0092d7a1a3b931194f0363695ef1e370001b29cc9cff
 
-## MP-0444 · medium · tsc-error
+## MP-0443 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/hq/ViewDeck.tsx**
 
@@ -6114,9 +6100,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=444 sha256=e8158055c61dc291f1591db2271d2d97ba6c1f2bc7bbafe3ad26a7c4f41c6bd5 payload=b8c3bd3c1cd6 prev=71adc9ee68d1b1ad3613c0e6ec703fc7e2f51478fbb9cc45ff53656b6c749abe
+- קבלה: seq=443 sha256=79d116edd45d265d49ffd29ef865e1d372f397b8d03287fc76e52fd6751ae726 payload=3909e824af4f prev=33d1be0902b073e859135b27c86403a970f2f65130a248e221aba3873fd7b90e
 
-## MP-0445 · medium · tsc-error
+## MP-0444 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/iso/draw.tsx**
 
@@ -6125,9 +6111,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=445 sha256=04b04bcca9b00377bf2a9467e1ec74247f7066730e7cc448387c3a888c76e17a payload=1daa9990496a prev=e8158055c61dc291f1591db2271d2d97ba6c1f2bc7bbafe3ad26a7c4f41c6bd5
+- קבלה: seq=444 sha256=8e6ffb52f31af3a4c50d199d35292d9fe93e628a057e78c04d89e75ea6ed725e payload=dd4bb4bcac8a prev=79d116edd45d265d49ffd29ef865e1d372f397b8d03287fc76e52fd6751ae726
 
-## MP-0446 · medium · tsc-error
+## MP-0445 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/iso/live.tsx**
 
@@ -6136,9 +6122,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=446 sha256=1b4610032b9edfa6fc4dbbd03545539e1d07d68c6e8b92758ed9b1b04ca9c563 payload=8b1e3d5cb8a9 prev=04b04bcca9b00377bf2a9467e1ec74247f7066730e7cc448387c3a888c76e17a
+- קבלה: seq=445 sha256=936c87df4199b2e862ac87e7f2ab14405d93248b981b71b7c395b3a77f2ec496 payload=66fb793ca6ea prev=8e6ffb52f31af3a4c50d199d35292d9fe93e628a057e78c04d89e75ea6ed725e
 
-## MP-0447 · medium · tsc-error
+## MP-0446 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/accordion.tsx**
 
@@ -6149,9 +6135,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=447 sha256=32954d070d832544ce69865428a33a766eb9893add52f8e620169f882ee5cac0 payload=f2a5bf0926a3 prev=1b4610032b9edfa6fc4dbbd03545539e1d07d68c6e8b92758ed9b1b04ca9c563
+- קבלה: seq=446 sha256=1ef3858bf3c899f98b558f624f0b331d98c676b10dc612241276cb9fdfbd24d9 payload=1e5ab12693e5 prev=936c87df4199b2e862ac87e7f2ab14405d93248b981b71b7c395b3a77f2ec496
 
-## MP-0448 · medium · tsc-error
+## MP-0447 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/alert-dialog.tsx**
 
@@ -6161,9 +6147,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=448 sha256=32448cb1e150c27472e5cc02390f4cb00baa6e511568b2ac3f7ed1ecda14611b payload=cb692d78b735 prev=32954d070d832544ce69865428a33a766eb9893add52f8e620169f882ee5cac0
+- קבלה: seq=447 sha256=b2f4613c06224056c16a7483855c8c1f5e8f617e511c2aab6fd1ce116bdf09bb payload=0b2426c2582a prev=1ef3858bf3c899f98b558f624f0b331d98c676b10dc612241276cb9fdfbd24d9
 
-## MP-0449 · medium · tsc-error
+## MP-0448 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/alert.tsx**
 
@@ -6173,9 +6159,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=449 sha256=11e0a6514c5f240fc740514951822efcb8eb49f6453635c540c0b48c48928e4c payload=8a614360b305 prev=32448cb1e150c27472e5cc02390f4cb00baa6e511568b2ac3f7ed1ecda14611b
+- קבלה: seq=448 sha256=6a95706029c4c6077338a50e0ebe60d8e6181d49aa61153ab32f1b207aa485d4 payload=b2d61bee72b9 prev=b2f4613c06224056c16a7483855c8c1f5e8f617e511c2aab6fd1ce116bdf09bb
 
-## MP-0450 · medium · tsc-error
+## MP-0449 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/aspect-ratio.tsx**
 
@@ -6185,9 +6171,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=450 sha256=c69045f586323f138882879f2073b1489d111e739e2d74df582bc4417d57e804 payload=89d540e17f49 prev=11e0a6514c5f240fc740514951822efcb8eb49f6453635c540c0b48c48928e4c
+- קבלה: seq=449 sha256=34ed9e9b2ce0a79eceb91d0ac2b8f696ef0ae0fb5748df0c534b95e3045428fe payload=6077bd2ebbd4 prev=6a95706029c4c6077338a50e0ebe60d8e6181d49aa61153ab32f1b207aa485d4
 
-## MP-0451 · medium · tsc-error
+## MP-0450 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/avatar.tsx**
 
@@ -6197,9 +6183,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=451 sha256=00fd713a8552db64c2ade103060d61e57ab77530b77134dddf87394bdae4ba48 payload=d71c902fd2df prev=c69045f586323f138882879f2073b1489d111e739e2d74df582bc4417d57e804
+- קבלה: seq=450 sha256=8f19a2254d55fc3c22a187ad37f8923c5ab3cf2470ddb3a6dc1aee6b36d5786f payload=0c908f5d69ce prev=34ed9e9b2ce0a79eceb91d0ac2b8f696ef0ae0fb5748df0c534b95e3045428fe
 
-## MP-0452 · medium · tsc-error
+## MP-0451 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/badge.tsx**
 
@@ -6210,9 +6196,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=452 sha256=f1131cb7439032ef19d9ed40c365ef932f0ec64295f09e8521cfca25fe1289f0 payload=2a89add0e4a1 prev=00fd713a8552db64c2ade103060d61e57ab77530b77134dddf87394bdae4ba48
+- קבלה: seq=451 sha256=d2af069c50544ef76716e9c2e12d61598596dbb6f835dacfffa39c2fa6d43744 payload=519d3b170ee5 prev=8f19a2254d55fc3c22a187ad37f8923c5ab3cf2470ddb3a6dc1aee6b36d5786f
 
-## MP-0453 · medium · tsc-error
+## MP-0452 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/breadcrumb.tsx**
 
@@ -6223,9 +6209,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=453 sha256=28160c48f12926693289c94cb10691c6ff146255ead68d6d4c9c8fbc1314c8b7 payload=7e22dfb69636 prev=f1131cb7439032ef19d9ed40c365ef932f0ec64295f09e8521cfca25fe1289f0
+- קבלה: seq=452 sha256=68f1caa32e834dc38a768ea1421aafd00c55e5a7be5aa53edb27723d7b3fc8cf payload=8c4d35bdc86a prev=d2af069c50544ef76716e9c2e12d61598596dbb6f835dacfffa39c2fa6d43744
 
-## MP-0454 · medium · tsc-error
+## MP-0453 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/button.tsx**
 
@@ -6236,9 +6222,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=454 sha256=094f044ab01f0dc9b7ae3d57ff0707b61c95cad555520b3bbcd9bb76328267a4 payload=72a664964dd5 prev=28160c48f12926693289c94cb10691c6ff146255ead68d6d4c9c8fbc1314c8b7
+- קבלה: seq=453 sha256=2cb853cf436a94c10a699dae683f4a69e029cbce1da5e6dc0f927bd34fdf21b2 payload=051664e28296 prev=68f1caa32e834dc38a768ea1421aafd00c55e5a7be5aa53edb27723d7b3fc8cf
 
-## MP-0455 · medium · tsc-error
+## MP-0454 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/calendar.tsx**
 
@@ -6249,9 +6235,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=455 sha256=d3a997fc1c7407eac32eb7d855baf4caf54cf15455806723cd8e5fe4f852ab65 payload=48187f8d4dc3 prev=094f044ab01f0dc9b7ae3d57ff0707b61c95cad555520b3bbcd9bb76328267a4
+- קבלה: seq=454 sha256=dd51ab618ded65145630aacc70fda510bd5f8bf8908e9f0cb4274c74ad0589ca payload=1e3d803ef7f6 prev=2cb853cf436a94c10a699dae683f4a69e029cbce1da5e6dc0f927bd34fdf21b2
 
-## MP-0456 · medium · tsc-error
+## MP-0455 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/ui/card.tsx**
 
@@ -6260,9 +6246,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=456 sha256=ab7c106c21b1712b52b43fc305458b4e75769b95c197fcfdf3a711363670589c payload=4f8805a01048 prev=d3a997fc1c7407eac32eb7d855baf4caf54cf15455806723cd8e5fe4f852ab65
+- קבלה: seq=455 sha256=50c3d04e999e9b77d972d218002b0ff468cffad65c718880f4f1b83fe5542984 payload=ca9570425230 prev=dd51ab618ded65145630aacc70fda510bd5f8bf8908e9f0cb4274c74ad0589ca
 
-## MP-0457 · medium · tsc-error
+## MP-0456 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/carousel.tsx**
 
@@ -6273,9 +6259,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=457 sha256=3977408acd5f276a0a0ae17ce2946066819135b8a7d4d0a4c9dcad4c90d447b4 payload=537b441130db prev=ab7c106c21b1712b52b43fc305458b4e75769b95c197fcfdf3a711363670589c
+- קבלה: seq=456 sha256=c094db7190695789ccca021e0d3a8eb6e9e703deaa7be4501b6bcdb906bfb671 payload=0e9cd4350590 prev=50c3d04e999e9b77d972d218002b0ff468cffad65c718880f4f1b83fe5542984
 
-## MP-0458 · medium · tsc-error
+## MP-0457 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/chart.tsx**
 
@@ -6285,9 +6271,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=458 sha256=eebedeccc28efea328fb9d9a57e65969b18ee16e68ff91222003dba3678d4cdb payload=2d119bc5c5dd prev=3977408acd5f276a0a0ae17ce2946066819135b8a7d4d0a4c9dcad4c90d447b4
+- קבלה: seq=457 sha256=8f2c6497474107e0bc266437ef604b9e72f4da518523ea6b95fb65fcd4080267 payload=9b22c3490179 prev=c094db7190695789ccca021e0d3a8eb6e9e703deaa7be4501b6bcdb906bfb671
 
-## MP-0459 · medium · tsc-error
+## MP-0458 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/checkbox.tsx**
 
@@ -6298,9 +6284,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=459 sha256=2057293fb074658fa31d51828819f2953e940311da95520887763536c76385aa payload=15275823feec prev=eebedeccc28efea328fb9d9a57e65969b18ee16e68ff91222003dba3678d4cdb
+- קבלה: seq=458 sha256=b05d82fe9f8b2398cb33372e0cc69caa3ef38838e6e75e27c27560d7e7367dba payload=6538a519af0b prev=8f2c6497474107e0bc266437ef604b9e72f4da518523ea6b95fb65fcd4080267
 
-## MP-0460 · medium · tsc-error
+## MP-0459 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 5 ב-src/components/ui/collapsible.tsx**
 
@@ -6312,9 +6298,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=460 sha256=212538084541d83f91bcc9444167a8fcc7fbe9649e56addaeff7bbf8bbe9333c payload=26d83c661be3 prev=2057293fb074658fa31d51828819f2953e940311da95520887763536c76385aa
+- קבלה: seq=459 sha256=d7fd184a76c42a1bc33c103108cb2aaee0935833f3aca37201212ab6bf05cefc payload=add6a4780b79 prev=b05d82fe9f8b2398cb33372e0cc69caa3ef38838e6e75e27c27560d7e7367dba
 
-## MP-0461 · medium · tsc-error
+## MP-0460 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/command.tsx**
 
@@ -6325,9 +6311,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=461 sha256=5c7bf761052dc1533be7d4d5aceab936747be5dad6259b93cdfdf152e3ca35e4 payload=cea6f691f413 prev=212538084541d83f91bcc9444167a8fcc7fbe9649e56addaeff7bbf8bbe9333c
+- קבלה: seq=460 sha256=1983dd1d02b7a2e14d64cc996eca10ade8dfa86b79e456073ee0d5d7d1da68a6 payload=35d8db668a08 prev=d7fd184a76c42a1bc33c103108cb2aaee0935833f3aca37201212ab6bf05cefc
 
-## MP-0462 · medium · tsc-error
+## MP-0461 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/context-menu.tsx**
 
@@ -6338,9 +6324,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=462 sha256=3c80f4924cb3e6308142f0631676f674e8dc16c781738520aeeec775fb0509ff payload=7c05805c248c prev=5c7bf761052dc1533be7d4d5aceab936747be5dad6259b93cdfdf152e3ca35e4
+- קבלה: seq=461 sha256=fafc0f1331dbd663d59f4e0b151409eff00d31ddd1d2fca5a8052c53a169bdbf payload=9d27a2a8ea44 prev=1983dd1d02b7a2e14d64cc996eca10ade8dfa86b79e456073ee0d5d7d1da68a6
 
-## MP-0463 · medium · tsc-error
+## MP-0462 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/dialog.tsx**
 
@@ -6351,9 +6337,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=463 sha256=aa80b474e05cbca006d80a0f5e1fc4076424fe7d94b6edc70a28cf9287a34403 payload=13af65924503 prev=3c80f4924cb3e6308142f0631676f674e8dc16c781738520aeeec775fb0509ff
+- קבלה: seq=462 sha256=a092884f9922d9541367f2797a16d79be81a1c10b711bec650ab71bf7057f0ba payload=149157e1d87b prev=fafc0f1331dbd663d59f4e0b151409eff00d31ddd1d2fca5a8052c53a169bdbf
 
-## MP-0464 · medium · tsc-error
+## MP-0463 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/drawer.tsx**
 
@@ -6363,9 +6349,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=464 sha256=512714a9d6aea222fda8a184a06d0b71a7c0668806274e7a4d303c8ecf9f7cad payload=70632420c0a6 prev=aa80b474e05cbca006d80a0f5e1fc4076424fe7d94b6edc70a28cf9287a34403
+- קבלה: seq=463 sha256=526a97ce3fbf6dc06e5d623c337e7fe730a8af01bbc6eee5302b6e8ba4e4c2e6 payload=7be789d5bbdd prev=a092884f9922d9541367f2797a16d79be81a1c10b711bec650ab71bf7057f0ba
 
-## MP-0465 · medium · tsc-error
+## MP-0464 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/dropdown-menu.tsx**
 
@@ -6376,9 +6362,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=465 sha256=5336c74fd7bb79f6e9dc901bf84449f382f0b9f7ded91366465b76c3b026da2f payload=5662e3f86852 prev=512714a9d6aea222fda8a184a06d0b71a7c0668806274e7a4d303c8ecf9f7cad
+- קבלה: seq=464 sha256=1bdc08017a514a65ac5d357c807a3db5ccea555b47c4665679562f6564c1279d payload=89aa598248ff prev=526a97ce3fbf6dc06e5d623c337e7fe730a8af01bbc6eee5302b6e8ba4e4c2e6
 
-## MP-0466 · medium · tsc-error
+## MP-0465 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 5 ב-src/components/ui/form.tsx**
 
@@ -6390,9 +6376,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=466 sha256=9b0b839fb0ffc30685c4ee69d015b8dfa88af36f30757604c994e3543099bb15 payload=45dd7801c477 prev=5336c74fd7bb79f6e9dc901bf84449f382f0b9f7ded91366465b76c3b026da2f
+- קבלה: seq=465 sha256=56ece9bd3485ff163c1ce37e11786a256a50a34d0a96b175a33408279e07aa8a payload=b4384fec40bd prev=1bdc08017a514a65ac5d357c807a3db5ccea555b47c4665679562f6564c1279d
 
-## MP-0467 · medium · tsc-error
+## MP-0466 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/hover-card.tsx**
 
@@ -6402,9 +6388,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=467 sha256=647adb912ada4b0d65507e014caf86bf675246fa612906c167f16a5983d3cccc payload=f6d2df9e7052 prev=9b0b839fb0ffc30685c4ee69d015b8dfa88af36f30757604c994e3543099bb15
+- קבלה: seq=466 sha256=23cded8c46c3031adde323232260a63897857e30cecbaa1599b4eba3b62ebfce payload=ee75fce20b20 prev=56ece9bd3485ff163c1ce37e11786a256a50a34d0a96b175a33408279e07aa8a
 
-## MP-0468 · medium · tsc-error
+## MP-0467 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/input-otp.tsx**
 
@@ -6415,9 +6401,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=468 sha256=5e1116fc96d96d22b93ab3b21877bac4d5d212680c733740ef678336fe34ce80 payload=364a6333056d prev=647adb912ada4b0d65507e014caf86bf675246fa612906c167f16a5983d3cccc
+- קבלה: seq=467 sha256=81fea65cc03445115ce3b47b06d38d9b9061cae7a865c23c910cbf449c6d2984 payload=8bd5f04673d6 prev=23cded8c46c3031adde323232260a63897857e30cecbaa1599b4eba3b62ebfce
 
-## MP-0469 · medium · tsc-error
+## MP-0468 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/ui/input.tsx**
 
@@ -6426,9 +6412,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=469 sha256=e0b1fcdb0002c48538b12207edd226b4d4ce94e846c7af2ba2f0b057b294e0a2 payload=84474385577c prev=5e1116fc96d96d22b93ab3b21877bac4d5d212680c733740ef678336fe34ce80
+- קבלה: seq=468 sha256=08b4eff7d1e90c469f9a833e2814a5d9ec9c9fa12cc11160a787e82c65436f40 payload=aa848e57723d prev=81fea65cc03445115ce3b47b06d38d9b9061cae7a865c23c910cbf449c6d2984
 
-## MP-0470 · medium · tsc-error
+## MP-0469 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/label.tsx**
 
@@ -6438,9 +6424,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=470 sha256=54a07fba64336c52a874d5ca97889ead19225c2412b40cbf9e85c970e1c4249d payload=f2667a7488bb prev=e0b1fcdb0002c48538b12207edd226b4d4ce94e846c7af2ba2f0b057b294e0a2
+- קבלה: seq=469 sha256=563ef84b633b8fb51310ff6524b5463ee6a7c9425cb6e6b47cdb8de36a65e9ab payload=7a4abf17d509 prev=08b4eff7d1e90c469f9a833e2814a5d9ec9c9fa12cc11160a787e82c65436f40
 
-## MP-0471 · medium · tsc-error
+## MP-0470 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/menubar.tsx**
 
@@ -6451,9 +6437,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=471 sha256=52136ead34de0dcea8e95834b2359b27e5d427d9e2f134b9ac9ff1bd24680741 payload=e22576d41bee prev=54a07fba64336c52a874d5ca97889ead19225c2412b40cbf9e85c970e1c4249d
+- קבלה: seq=470 sha256=9e57de978e6b0b4a2e8767e107951b78996396c5cc59df42d11bda1e1e9cebcd payload=495b5ef4d815 prev=563ef84b633b8fb51310ff6524b5463ee6a7c9425cb6e6b47cdb8de36a65e9ab
 
-## MP-0472 · medium · tsc-error
+## MP-0471 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 5 ב-src/components/ui/navigation-menu.tsx**
 
@@ -6465,9 +6451,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=472 sha256=4fcdcf7206ffdd20eb4835a38aa660302b74f85925196d642e886a57344e4cdb payload=ef366986bf13 prev=52136ead34de0dcea8e95834b2359b27e5d427d9e2f134b9ac9ff1bd24680741
+- קבלה: seq=471 sha256=f237d4d3569812fa24ace0aebab96febae1f58956c17ab2c970f21cc5428d477 payload=0d684e029f85 prev=9e57de978e6b0b4a2e8767e107951b78996396c5cc59df42d11bda1e1e9cebcd
 
-## MP-0473 · medium · tsc-error
+## MP-0472 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/pagination.tsx**
 
@@ -6477,9 +6463,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=473 sha256=954cc65cea0983633c5206f779224d4197296c704f198ca9112a0fbb99984300 payload=258efc5625cc prev=4fcdcf7206ffdd20eb4835a38aa660302b74f85925196d642e886a57344e4cdb
+- קבלה: seq=472 sha256=e4784a27e29b3687f60952148ee347ab0980dbf821666c958a80ae0967486933 payload=ef0c386b8fe9 prev=f237d4d3569812fa24ace0aebab96febae1f58956c17ab2c970f21cc5428d477
 
-## MP-0474 · medium · tsc-error
+## MP-0473 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/popover.tsx**
 
@@ -6489,9 +6475,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=474 sha256=cf05688ab473cdb37c747f105e176fd4eb65d7a885ccac8e5864d6558f1d9bf3 payload=3ef8b98a6943 prev=954cc65cea0983633c5206f779224d4197296c704f198ca9112a0fbb99984300
+- קבלה: seq=473 sha256=6d71c82149d10bab816a0d4250b0da5b41cd1f77debf02ccc8e62ea8a73956c0 payload=4fbf285e74f6 prev=e4784a27e29b3687f60952148ee347ab0980dbf821666c958a80ae0967486933
 
-## MP-0475 · medium · tsc-error
+## MP-0474 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/progress.tsx**
 
@@ -6501,9 +6487,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=475 sha256=2892c1a3e8b76df7df82f245a44c14d2a227e54d24536702403f013970237377 payload=6b17b524578c prev=cf05688ab473cdb37c747f105e176fd4eb65d7a885ccac8e5864d6558f1d9bf3
+- קבלה: seq=474 sha256=feeb3e362743b03eb7e8e2b0f8a4540945a2705c652163d3e2e250fa1f0ccc0c payload=03a6def0882a prev=6d71c82149d10bab816a0d4250b0da5b41cd1f77debf02ccc8e62ea8a73956c0
 
-## MP-0476 · medium · tsc-error
+## MP-0475 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/radio-group.tsx**
 
@@ -6514,9 +6500,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=476 sha256=2a3677970a8b79d39810df9fc9c3490ce9e1f3619e97b9056a040b8e89bcc627 payload=62b5dc7d4ad5 prev=2892c1a3e8b76df7df82f245a44c14d2a227e54d24536702403f013970237377
+- קבלה: seq=475 sha256=44635c60e14ddaff53c63c6f122ff1f7ad971fa7eb2188de269fb1eb41f9090e payload=a1a2ab64236b prev=feeb3e362743b03eb7e8e2b0f8a4540945a2705c652163d3e2e250fa1f0ccc0c
 
-## MP-0477 · medium · tsc-error
+## MP-0476 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/resizable.tsx**
 
@@ -6527,9 +6513,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=477 sha256=433f2c978b6430fd6eb1681f2168fd5fe4a46a3d598ef9113bef162cc118636c payload=dea7bca3bbb9 prev=2a3677970a8b79d39810df9fc9c3490ce9e1f3619e97b9056a040b8e89bcc627
+- קבלה: seq=476 sha256=b0eda881de238bbdada3e1bd906c735598b473e72ecdb3bc85756324806b505e payload=7ffa317a6cb9 prev=44635c60e14ddaff53c63c6f122ff1f7ad971fa7eb2188de269fb1eb41f9090e
 
-## MP-0478 · medium · tsc-error
+## MP-0477 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/scroll-area.tsx**
 
@@ -6539,9 +6525,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=478 sha256=fe26c9497e2c8fa84590cc2703a7c53f3f2b8157b935e054defeb0db259d8936 payload=ec8a5e2d2e2f prev=433f2c978b6430fd6eb1681f2168fd5fe4a46a3d598ef9113bef162cc118636c
+- קבלה: seq=477 sha256=347d35d8e1fa07ff97c2835a006d9840796f1da60ea865600052f6d742979338 payload=2b49eaa31bce prev=b0eda881de238bbdada3e1bd906c735598b473e72ecdb3bc85756324806b505e
 
-## MP-0479 · medium · tsc-error
+## MP-0478 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/select.tsx**
 
@@ -6552,9 +6538,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=479 sha256=11ccd7e53c3b7c575364b4d4a6b3e4402895c1a1b3da6367d20b65e538d3a646 payload=55b029f3c962 prev=fe26c9497e2c8fa84590cc2703a7c53f3f2b8157b935e054defeb0db259d8936
+- קבלה: seq=478 sha256=887753252a85069c535391d03b448ae9d7fcf933fa0820da6255e7dd0344d249 payload=800bfc15098c prev=347d35d8e1fa07ff97c2835a006d9840796f1da60ea865600052f6d742979338
 
-## MP-0480 · medium · tsc-error
+## MP-0479 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/separator.tsx**
 
@@ -6564,9 +6550,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=480 sha256=f3a637abd360060505a6d2095461c9728c6a1c63b513ad381f7774c6740b019e payload=32199cc8c6b9 prev=11ccd7e53c3b7c575364b4d4a6b3e4402895c1a1b3da6367d20b65e538d3a646
+- קבלה: seq=479 sha256=acc41cc48b53efa386403d02734dc8a6016ed83609153965f1f7d725622aaef4 payload=ee180bcc5c0f prev=887753252a85069c535391d03b448ae9d7fcf933fa0820da6255e7dd0344d249
 
-## MP-0481 · medium · tsc-error
+## MP-0480 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/sheet.tsx**
 
@@ -6577,9 +6563,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=481 sha256=4b69cf3fbd0f9954db74b831b9337cd4ada21982d8646dbc290030395bc834b7 payload=6f45ba5b4653 prev=f3a637abd360060505a6d2095461c9728c6a1c63b513ad381f7774c6740b019e
+- קבלה: seq=480 sha256=3573436342c6beba10cc9bb4a56d9e4a14995cefd5da35a3021dead1b359a276 payload=a821d62a9849 prev=acc41cc48b53efa386403d02734dc8a6016ed83609153965f1f7d725622aaef4
 
-## MP-0482 · medium · tsc-error
+## MP-0481 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 5 ב-src/components/ui/sidebar.tsx**
 
@@ -6591,9 +6577,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=482 sha256=f75530491539d1c2ea88ef449c874a5b5843c6dc974793b4e23a7351123dae0a payload=14f7090d7a05 prev=4b69cf3fbd0f9954db74b831b9337cd4ada21982d8646dbc290030395bc834b7
+- קבלה: seq=481 sha256=c4038d96f5964b1422797fdf8ea1da72b803f2736c81a6b02940c59454c854a6 payload=76b82c770cbb prev=3573436342c6beba10cc9bb4a56d9e4a14995cefd5da35a3021dead1b359a276
 
-## MP-0483 · medium · tsc-error
+## MP-0482 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/ui/skeleton.tsx**
 
@@ -6602,9 +6588,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=483 sha256=206193177aa71bad509ba13bb0aadd11b1e8679fe2a18b24b894737c0dbe6fd5 payload=ee558c59da7b prev=f75530491539d1c2ea88ef449c874a5b5843c6dc974793b4e23a7351123dae0a
+- קבלה: seq=482 sha256=af9f6e77f9bf2c6534e95643a02864855499ba5c2b68057b6a24f52b629e12b3 payload=d2f8dedf821e prev=c4038d96f5964b1422797fdf8ea1da72b803f2736c81a6b02940c59454c854a6
 
-## MP-0484 · medium · tsc-error
+## MP-0483 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/slider.tsx**
 
@@ -6614,9 +6600,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=484 sha256=f0477b56a6232a76c7092411231734d9420edceceaf7e37c313c257e4d853613 payload=7f3c28b5f025 prev=206193177aa71bad509ba13bb0aadd11b1e8679fe2a18b24b894737c0dbe6fd5
+- קבלה: seq=483 sha256=7f60a507c15394a8e2d5bd2ef2d08485461da10ca36605ae7c3e534f9aa273a7 payload=b99ff3d24d34 prev=af9f6e77f9bf2c6534e95643a02864855499ba5c2b68057b6a24f52b629e12b3
 
-## MP-0485 · medium · tsc-error
+## MP-0484 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/sonner.tsx**
 
@@ -6627,9 +6613,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=485 sha256=f86b40387119d0c0b33e7706580a3f3b4e02a734948a00b873de6176bcefa211 payload=bd86d4c460f6 prev=f0477b56a6232a76c7092411231734d9420edceceaf7e37c313c257e4d853613
+- קבלה: seq=484 sha256=c4f02f9e396008d207a3f1c875c51e306ffddaca8f85a94e20ec978d2378c03d payload=01458d2c8a0d prev=7f60a507c15394a8e2d5bd2ef2d08485461da10ca36605ae7c3e534f9aa273a7
 
-## MP-0486 · medium · tsc-error
+## MP-0485 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/switch.tsx**
 
@@ -6639,9 +6625,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=486 sha256=c756db530b761f5485add3c27762db2cb6e55f8511896298cfee4f5a5348dffa payload=17b6164234bd prev=f86b40387119d0c0b33e7706580a3f3b4e02a734948a00b873de6176bcefa211
+- קבלה: seq=485 sha256=81b1c30a5539a18153bd37227c232a71741aa5584e91cfe619dbb67455c1a39c payload=9e8add19f86e prev=c4f02f9e396008d207a3f1c875c51e306ffddaca8f85a94e20ec978d2378c03d
 
-## MP-0487 · medium · tsc-error
+## MP-0486 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/ui/table.tsx**
 
@@ -6650,9 +6636,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=487 sha256=0d635a9e29ae464c934606f7614c24fae5c529784dfb4ef5d5d55b6fa9126e00 payload=69c7c1eee95b prev=c756db530b761f5485add3c27762db2cb6e55f8511896298cfee4f5a5348dffa
+- קבלה: seq=486 sha256=42fed24e7de9f9a44523810cdb16e1adbaccc350f7e0307ec79da1b18b3b2bed payload=65191211056c prev=81b1c30a5539a18153bd37227c232a71741aa5584e91cfe619dbb67455c1a39c
 
-## MP-0488 · medium · tsc-error
+## MP-0487 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/tabs.tsx**
 
@@ -6662,9 +6648,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=488 sha256=766d615eb53860e508a3cf5bd8d7f41d58d1c3284f7a53e2046c18d1928beed4 payload=c8b0dba28dd1 prev=0d635a9e29ae464c934606f7614c24fae5c529784dfb4ef5d5d55b6fa9126e00
+- קבלה: seq=487 sha256=3700103e91d028321bd744d7a3a9e413a3706e203167cb41c49429ed4e136d14 payload=cfe3def46657 prev=42fed24e7de9f9a44523810cdb16e1adbaccc350f7e0307ec79da1b18b3b2bed
 
-## MP-0489 · medium · tsc-error
+## MP-0488 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/components/ui/textarea.tsx**
 
@@ -6673,9 +6659,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=489 sha256=5da4cef350ed33d20cc528174c3d52a6491e7603e9c5fdb0fd53f7b34b73471f payload=7a57ca5f4d43 prev=766d615eb53860e508a3cf5bd8d7f41d58d1c3284f7a53e2046c18d1928beed4
+- קבלה: seq=488 sha256=1069282c4a91b64afa9a405b42f577e0b68b17af22d6d75b475fb626044a43bd payload=29a393694de0 prev=3700103e91d028321bd744d7a3a9e413a3706e203167cb41c49429ed4e136d14
 
-## MP-0490 · medium · tsc-error
+## MP-0489 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 5 ב-src/components/ui/toast.tsx**
 
@@ -6687,9 +6673,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=490 sha256=da932bf988b2dc82a8e68bff7a2e7eb13fd6c6e49b9b98bd2109aaa553600984 payload=0ddcad495515 prev=5da4cef350ed33d20cc528174c3d52a6491e7603e9c5fdb0fd53f7b34b73471f
+- קבלה: seq=489 sha256=c16d79e218bdf08a17a52e61879beb58da0daeb418484e537e1c9235fcee450a payload=bacd75f08c45 prev=1069282c4a91b64afa9a405b42f577e0b68b17af22d6d75b475fb626044a43bd
 
-## MP-0491 · medium · tsc-error
+## MP-0490 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/components/ui/toaster.tsx**
 
@@ -6697,9 +6683,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=491 sha256=c7bfcc34e6eade50e95171c04c1ab9405cdb1404cdc99590d28ab078373737f3 payload=cd651b94ad5c prev=da932bf988b2dc82a8e68bff7a2e7eb13fd6c6e49b9b98bd2109aaa553600984
+- קבלה: seq=490 sha256=d4b304c413f39bf416cd33da566e9cf4986f32b1d96d23225a3bebe1968f4eae payload=439ef4382b47 prev=c16d79e218bdf08a17a52e61879beb58da0daeb418484e537e1c9235fcee450a
 
-## MP-0492 · medium · tsc-error
+## MP-0491 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/toggle-group.tsx**
 
@@ -6710,9 +6696,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=492 sha256=5bee1183354a5941616d3a344c5f064ae1ec6f414811b6f8a8fe488979dfc49a payload=8f1ba134e545 prev=c7bfcc34e6eade50e95171c04c1ab9405cdb1404cdc99590d28ab078373737f3
+- קבלה: seq=491 sha256=9b94941bed27bfc5ba935b24078c0e6295e3c76048f614f3986b9030d92d2685 payload=b21911867f48 prev=d4b304c413f39bf416cd33da566e9cf4986f32b1d96d23225a3bebe1968f4eae
 
-## MP-0493 · medium · tsc-error
+## MP-0492 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/components/ui/toggle.tsx**
 
@@ -6723,9 +6709,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=493 sha256=d46024edfc0f2a86014360db4e61e16245c8112b5beb7b4dc69efbcedc74a6a3 payload=3cf2f4e7bff6 prev=5bee1183354a5941616d3a344c5f064ae1ec6f414811b6f8a8fe488979dfc49a
+- קבלה: seq=492 sha256=f35ded509024fe13939c30f3d14f7bb4ab3e8e93856cef0e9995280b37554d04 payload=61ce53a78e25 prev=9b94941bed27bfc5ba935b24078c0e6295e3c76048f614f3986b9030d92d2685
 
-## MP-0494 · medium · tsc-error
+## MP-0493 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/components/ui/tooltip.tsx**
 
@@ -6735,9 +6721,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=494 sha256=ad78bc325f74c306b3cf2e8dfe8005015f0286923f0268b0ea31a2b3ea3758ba payload=aa8b461e2b8c prev=d46024edfc0f2a86014360db4e61e16245c8112b5beb7b4dc69efbcedc74a6a3
+- קבלה: seq=493 sha256=4e30bdc57c6c45810911016fa604dba9170afdb7f3139b5e561d7cfe6441c953 payload=d362802e2733 prev=f35ded509024fe13939c30f3d14f7bb4ab3e8e93856cef0e9995280b37554d04
 
-## MP-0495 · medium · tsc-error
+## MP-0494 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/hooks/use-mobile.ts**
 
@@ -6745,9 +6731,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=495 sha256=c7181ab8ca887b0bd01d5e784945e5fa5aea365110dfd2b507ab56d49b5d6fae payload=3449014e48af prev=ad78bc325f74c306b3cf2e8dfe8005015f0286923f0268b0ea31a2b3ea3758ba
+- קבלה: seq=494 sha256=cedab4157d0e39bf7c427548304339438499b5339e4fb51a6c24a45ac0f80f50 payload=0cfe7e5994ac prev=4e30bdc57c6c45810911016fa604dba9170afdb7f3139b5e561d7cfe6441c953
 
-## MP-0496 · medium · tsc-error
+## MP-0495 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/hooks/use-toast.ts**
 
@@ -6755,9 +6741,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=496 sha256=ac601207dca113a97f09ae1d9b56520fd885c402ea20447aa5fe06864bba3c6c payload=8b281390960d prev=c7181ab8ca887b0bd01d5e784945e5fa5aea365110dfd2b507ab56d49b5d6fae
+- קבלה: seq=495 sha256=d75926730a233a33938f0762a8f79cff0809520834a4346e57a0d13a7cb54264 payload=86cc9266481a prev=cedab4157d0e39bf7c427548304339438499b5339e4fb51a6c24a45ac0f80f50
 
-## MP-0497 · medium · tsc-error
+## MP-0496 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/instrumentation.ts**
 
@@ -6765,9 +6751,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=497 sha256=75c296ce6968df26d33155ce2d98d0b9a22ee6164ae622e0446bc4efdd178959 payload=a215aa0754a0 prev=ac601207dca113a97f09ae1d9b56520fd885c402ea20447aa5fe06864bba3c6c
+- קבלה: seq=496 sha256=a5617fa15452a2de46a8f7d4e68b331a02c56e79641cb3e9f6ef482824a60514 payload=1395ac27d97f prev=d75926730a233a33938f0762a8f79cff0809520834a4346e57a0d13a7cb54264
 
-## MP-0498 · medium · tsc-error
+## MP-0497 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/lib/anatomy/react/draw.tsx**
 
@@ -6776,9 +6762,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=498 sha256=b0b39b05335be25f53a0c56152fc6d151e48c1c1592f5b64f9876fe87dd453b8 payload=6c2fe4956daf prev=75c296ce6968df26d33155ce2d98d0b9a22ee6164ae622e0446bc4efdd178959
+- קבלה: seq=497 sha256=252d2e5c3a7bd4d4f4155449c1fed5139c9a0277a959083419ff76171ea95f6a payload=9606661912ec prev=a5617fa15452a2de46a8f7d4e68b331a02c56e79641cb3e9f6ef482824a60514
 
-## MP-0499 · medium · tsc-error
+## MP-0498 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/lib/anatomy/react/live.tsx**
 
@@ -6787,9 +6773,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=499 sha256=4fd32bf85b5c237c324e4fe85c81314a84633fdb19c30208b8ecc5294d25984d payload=dfee9e2f21ee prev=b0b39b05335be25f53a0c56152fc6d151e48c1c1592f5b64f9876fe87dd453b8
+- קבלה: seq=498 sha256=2fdb81920cbb567ea62b6cc8a524bb302e6985ccfa53d98fc4237cd39ae5944f payload=fb858c2533ad prev=252d2e5c3a7bd4d4f4155449c1fed5139c9a0277a959083419ff76171ea95f6a
 
-## MP-0500 · medium · tsc-error
+## MP-0499 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/lib/anchor.ts**
 
@@ -6800,9 +6786,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=500 sha256=e411a085be8061fea3927f06e2694c2182286cc3031affc1eb2fb4ae02cf42f7 payload=70d82abffda5 prev=4fd32bf85b5c237c324e4fe85c81314a84633fdb19c30208b8ecc5294d25984d
+- קבלה: seq=499 sha256=802a63880ca41760ce13350b2a675c8feaa38db9e12b58774adc9e1f9299d7d9 payload=530154cfe561 prev=2fdb81920cbb567ea62b6cc8a524bb302e6985ccfa53d98fc4237cd39ae5944f
 
-## MP-0501 · medium · tsc-error
+## MP-0500 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/lib/compute-wall.ts**
 
@@ -6810,9 +6796,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=501 sha256=b45dc07cf4243f6558f198afb2de6f314aac3ad6c204e2ff527d11a296e68edd payload=368646f9f72c prev=e411a085be8061fea3927f06e2694c2182286cc3031affc1eb2fb4ae02cf42f7
+- קבלה: seq=500 sha256=0f674f9312593a1ce32db57b12ef610bd68753f86da19fba3db6bef19ff18f8c payload=ae28593472d5 prev=802a63880ca41760ce13350b2a675c8feaa38db9e12b58774adc9e1f9299d7d9
 
-## MP-0502 · medium · tsc-error
+## MP-0501 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/lib/db.ts**
 
@@ -6820,9 +6806,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=502 sha256=5e23bc48a3e9c6beec5fb9dfd0fb875ba864b4abdb4efdf09ed47a7ecbd4d051 payload=949c2825e025 prev=b45dc07cf4243f6558f198afb2de6f314aac3ad6c204e2ff527d11a296e68edd
+- קבלה: seq=501 sha256=fd0a22d0f6521be7b3487397837d3ac4b05d45ca942ca2f155f723f385a7afa8 payload=6de23807c98e prev=0f674f9312593a1ce32db57b12ef610bd68753f86da19fba3db6bef19ff18f8c
 
-## MP-0503 · medium · tsc-error
+## MP-0502 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/lib/dex-engine.ts**
 
@@ -6832,9 +6818,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=503 sha256=f3e50c536a246539cbb4f9bf00acd2bd69bf8368d6fbeea6ef071ff582c489d9 payload=4abf1d335271 prev=5e23bc48a3e9c6beec5fb9dfd0fb875ba864b4abdb4efdf09ed47a7ecbd4d051
+- קבלה: seq=502 sha256=bc3f3f79ce197909e2df034cee0afd1086f30d4578577c9d9ec1ab03162fda92 payload=bf863838f234 prev=fd0a22d0f6521be7b3487397837d3ac4b05d45ca942ca2f155f723f385a7afa8
 
-## MP-0504 · medium · tsc-error
+## MP-0503 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 15 ב-src/lib/dex-server.ts**
 
@@ -6853,9 +6839,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=504 sha256=475d554cb371e1e5d7059c78641507bdd78c8e1d0e306b22425b0a772afb55c6 payload=a40036242925 prev=f3e50c536a246539cbb4f9bf00acd2bd69bf8368d6fbeea6ef071ff582c489d9
+- קבלה: seq=503 sha256=c67aa0af717d88483f02e59c1ccd815e856fde3397b5474c75511a161e26b380 payload=53c4216a9900 prev=bc3f3f79ce197909e2df034cee0afd1086f30d4578577c9d9ec1ab03162fda92
 
-## MP-0505 · medium · tsc-error
+## MP-0504 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/lib/dispatch/doors.test.ts**
 
@@ -6864,9 +6850,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=505 sha256=3047a64dcca745b38aac1a77a4de1bd0911008c7ddb9f0d5edaff18c8281e020 payload=03a2b356242b prev=475d554cb371e1e5d7059c78641507bdd78c8e1d0e306b22425b0a772afb55c6
+- קבלה: seq=504 sha256=67ec89b731feb9422cd18a1c3dbfe37673098f26df798ff748425c12ec25e3aa payload=58c7808fbe23 prev=c67aa0af717d88483f02e59c1ccd815e856fde3397b5474c75511a161e26b380
 
-## MP-0506 · medium · tsc-error
+## MP-0505 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/lib/dispatch/doors.ts**
 
@@ -6874,9 +6860,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=506 sha256=fd5c2529cf3fe42037341a1c58ef662e6ccc1a72a234e6132d34932fed010d8b payload=29b33a8a58e8 prev=3047a64dcca745b38aac1a77a4de1bd0911008c7ddb9f0d5edaff18c8281e020
+- קבלה: seq=505 sha256=4166b0278736d188025b9babff25db1e8e14c4bcc23538f7621f72e5db7014bd payload=271c1886f181 prev=67ec89b731feb9422cd18a1c3dbfe37673098f26df798ff748425c12ec25e3aa
 
-## MP-0507 · medium · tsc-error
+## MP-0506 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/lib/dispatch/receipts.test.ts**
 
@@ -6885,9 +6871,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=507 sha256=12297fc081ff25edfc8ec9fd0df86196b96fdb1638b7dc6612c8be1a93f405ad payload=5f0c78d32581 prev=fd5c2529cf3fe42037341a1c58ef662e6ccc1a72a234e6132d34932fed010d8b
+- קבלה: seq=506 sha256=4cbcd571162200f01ad77edd1d98d4075492ea01bc2484c74e6e5a2addaf59c8 payload=cdb6f4444371 prev=4166b0278736d188025b9babff25db1e8e14c4bcc23538f7621f72e5db7014bd
 
-## MP-0508 · medium · tsc-error
+## MP-0507 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/lib/dispatch/receipts.ts**
 
@@ -6895,9 +6881,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=508 sha256=0f99ee3f5b02f07dec4477bf864ec4c5a305d26b654e684497c86abc65ec007e payload=13d3136e0d41 prev=12297fc081ff25edfc8ec9fd0df86196b96fdb1638b7dc6612c8be1a93f405ad
+- קבלה: seq=507 sha256=3595264038a71ff61960b59e9e48929e8340516056c969bcbdc58cb0898ecd03 payload=b3365802156b prev=4cbcd571162200f01ad77edd1d98d4075492ea01bc2484c74e6e5a2addaf59c8
 
-## MP-0509 · medium · tsc-error
+## MP-0508 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 2 ב-src/lib/dispatch/redact.test.ts**
 
@@ -6906,9 +6892,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=509 sha256=5fcceb5c4abe3c0b49ad6ba07fca74d762a84512dcc5ce0ac64abe7c9500dc4c payload=d13b0ceec8f1 prev=0f99ee3f5b02f07dec4477bf864ec4c5a305d26b654e684497c86abc65ec007e
+- קבלה: seq=508 sha256=cbd597c3e4d364e0679213b685098b470b023a67515402639e4287015a486e63 payload=6bea183244fa prev=3595264038a71ff61960b59e9e48929e8340516056c969bcbdc58cb0898ecd03
 
-## MP-0510 · medium · tsc-error
+## MP-0509 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/lib/estate-discovery.ts**
 
@@ -6919,9 +6905,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=510 sha256=608f31539b632223a72ccb06fad93b85f20637943543770e5cc53a0a5ad25169 payload=107b97addfa0 prev=5fcceb5c4abe3c0b49ad6ba07fca74d762a84512dcc5ce0ac64abe7c9500dc4c
+- קבלה: seq=509 sha256=c63686cd6c79289a10ddeda82fefff18c36986925e7702ce13098baba402ae44 payload=d415e36917fc prev=cbd597c3e4d364e0679213b685098b470b023a67515402639e4287015a486e63
 
-## MP-0511 · medium · tsc-error
+## MP-0510 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/lib/fleet-auth.ts**
 
@@ -6931,9 +6917,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=511 sha256=f6bd9eb726011f50e2624c223e529ca7f9cc705488f986c79fc0ce0e566d97c6 payload=484908bc7477 prev=608f31539b632223a72ccb06fad93b85f20637943543770e5cc53a0a5ad25169
+- קבלה: seq=510 sha256=eac4445c014ef52fd16e5509071501f1edb9f7f37f064fbd36b20dfe1f87d0b4 payload=a28eb2a1464d prev=c63686cd6c79289a10ddeda82fefff18c36986925e7702ce13098baba402ae44
 
-## MP-0512 · medium · tsc-error
+## MP-0511 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 11 ב-src/lib/fleet-loop.ts**
 
@@ -6951,9 +6937,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=512 sha256=d835dafa7819c0c03b4373c2bf98c79340016fd6ee2bd233195d932a97f1ce0a payload=0f9de8133cd1 prev=f6bd9eb726011f50e2624c223e529ca7f9cc705488f986c79fc0ce0e566d97c6
+- קבלה: seq=511 sha256=1f1093b9b64eceb0afdc3d81b65e0e36f9c725a0af9ffafce2592829ec900645 payload=d9dfd56589ad prev=eac4445c014ef52fd16e5509071501f1edb9f7f37f064fbd36b20dfe1f87d0b4
 
-## MP-0513 · medium · tsc-error
+## MP-0512 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/lib/giant-git.ts**
 
@@ -6963,9 +6949,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=513 sha256=e555aaed05deb8b970298be5fb9eea67bc8c3422be66279924836e864366d54c payload=43f7002c0b4b prev=d835dafa7819c0c03b4373c2bf98c79340016fd6ee2bd233195d932a97f1ce0a
+- קבלה: seq=512 sha256=ed8313a0c376984634435040ec6e69adfc4b9d643d9f35dc793d7c08c0f2ded8 payload=f2655814a1ca prev=1f1093b9b64eceb0afdc3d81b65e0e36f9c725a0af9ffafce2592829ec900645
 
-## MP-0514 · medium · tsc-error
+## MP-0513 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 1 ב-src/lib/giant-integrity.ts**
 
@@ -6973,9 +6959,9 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=514 sha256=ed81d76b19405c911722c94b0b00bb3bc92bd8fc1388d1584aef94da6c278f46 payload=ff569316c5b3 prev=e555aaed05deb8b970298be5fb9eea67bc8c3422be66279924836e864366d54c
+- קבלה: seq=513 sha256=8312b5dfb487827a0aeb16978a8b1a5de5414dd0ce20d2626a859ec70ce071e2 payload=eedba91285f0 prev=ed8313a0c376984634435040ec6e69adfc4b9d643d9f35dc793d7c08c0f2ded8
 
-## MP-0515 · medium · tsc-error
+## MP-0514 · medium · tsc-error
 
 **שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 3 ב-src/lib/giant/capital.ts**
 
@@ -6985,7 +6971,20 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=515 sha256=0039199719ceba4e42b8ecb29611c76b2dcffb1e40857dc1d3dabf6d28364871 payload=af4c1c4a618a prev=ed81d76b19405c911722c94b0b00bb3bc92bd8fc1388d1584aef94da6c278f46
+- קבלה: seq=514 sha256=f0b34b146eaaf7739ee7698cdd3d50866774e98a695511f35db6322ad6bca005 payload=6d39fb746b1d prev=8312b5dfb487827a0aeb16978a8b1a5de5414dd0ce20d2626a859ec70ce071e2
+
+## MP-0515 · medium · tsc-error
+
+**שגיאת-קימפול tsc בגזע-הקנון (ראיה-מסורה מ-lane אחר / נמדדה-מקומית) — 4 ב-src/lib/giant/empire-registry.test.ts**
+
+- ראיה: `src/lib/giant/empire-registry.test.ts:9` — `TS2307: Cannot find module 'bun:test' or its corresponding type declarations.`
+- ראיה: `src/lib/giant/empire-registry.test.ts:10` — `TS2591: Cannot find name 'node:fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node…`
+- ראיה: `src/lib/giant/empire-registry.test.ts:11` — `TS2591: Cannot find name 'node:path'. Do you need to install type definitions for node? Try `npm i --save-dev @types/no…`
+- ראיה: `src/lib/giant/empire-registry.test.ts:24` — `TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node…`
+
+- אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
+- תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
+- קבלה: seq=515 sha256=7cf22a299acb72b4623f44d51b28e9992718f5a0ee5645f01020f2d03dfe74b1 payload=9c93eb408f38 prev=f0b34b146eaaf7739ee7698cdd3d50866774e98a695511f35db6322ad6bca005
 
 ## MP-0516 · medium · tsc-error
 
@@ -6996,7 +6995,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=516 sha256=d4c48958762b1edecea9617a3fc080de487fb41b7fae677c7ed7bf8f02625fd2 payload=b978684ec80c prev=0039199719ceba4e42b8ecb29611c76b2dcffb1e40857dc1d3dabf6d28364871
+- קבלה: seq=516 sha256=0b211764546cefe3059fe56d150714f1874dcfdbe5d810a192b8321d45f6f4d7 payload=b978684ec80c prev=7cf22a299acb72b4623f44d51b28e9992718f5a0ee5645f01020f2d03dfe74b1
 
 ## MP-0517 · medium · tsc-error
 
@@ -7009,7 +7008,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=517 sha256=a2014a8630e226984b371311589c484c641fb8125ba722e37fa408a1ad01cb35 payload=8b4ecf02fc9e prev=d4c48958762b1edecea9617a3fc080de487fb41b7fae677c7ed7bf8f02625fd2
+- קבלה: seq=517 sha256=411522ca375ff5c578ae39b2b91c30df2c34feb67d6a4159e715de8255b88bca payload=8b4ecf02fc9e prev=0b211764546cefe3059fe56d150714f1874dcfdbe5d810a192b8321d45f6f4d7
 
 ## MP-0518 · medium · tsc-error
 
@@ -7022,7 +7021,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=518 sha256=544d42ad3a3cc6aee663703b701aa124da117d3588698ae6a819dd76b08f5bc9 payload=79482b40e4de prev=a2014a8630e226984b371311589c484c641fb8125ba722e37fa408a1ad01cb35
+- קבלה: seq=518 sha256=5db605ce5c27839ddb8afe83682470a254146fb8f3ba6fd9f850a2c2217102b9 payload=79482b40e4de prev=411522ca375ff5c578ae39b2b91c30df2c34feb67d6a4159e715de8255b88bca
 
 ## MP-0519 · medium · tsc-error
 
@@ -7036,7 +7035,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=519 sha256=eeec0f5f0efd0c1f85f8d262574d7996db2d8a796754e0aa85ea2ef9c8693770 payload=74e8e544d6fe prev=544d42ad3a3cc6aee663703b701aa124da117d3588698ae6a819dd76b08f5bc9
+- קבלה: seq=519 sha256=be7f0f4aafd3f54f2104b2db165cfeaff410485686083c6f13ed685adff2886c payload=74e8e544d6fe prev=5db605ce5c27839ddb8afe83682470a254146fb8f3ba6fd9f850a2c2217102b9
 
 ## MP-0520 · medium · tsc-error
 
@@ -7047,7 +7046,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=520 sha256=de66f450244a08561bc13eb46160f62bfa4e0623a9f4831433d0acbc159c8abb payload=c5cbd3bc5bac prev=eeec0f5f0efd0c1f85f8d262574d7996db2d8a796754e0aa85ea2ef9c8693770
+- קבלה: seq=520 sha256=10d5cce89a2e57250ad7867e88b6d6e381c4143c5681c4921efcaa941ae344be payload=c5cbd3bc5bac prev=be7f0f4aafd3f54f2104b2db165cfeaff410485686083c6f13ed685adff2886c
 
 ## MP-0521 · medium · tsc-error
 
@@ -7057,7 +7056,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=521 sha256=800d9a2e9f77be50f98883bcb8c29aff4512a56af91b43b7f589c74636410adc payload=ad32958bd6a7 prev=de66f450244a08561bc13eb46160f62bfa4e0623a9f4831433d0acbc159c8abb
+- קבלה: seq=521 sha256=1a32a938f6bcd563bad69ccd5328d6c9a37f9f73d15e741dfcf2cee96c3d69d3 payload=ad32958bd6a7 prev=10d5cce89a2e57250ad7867e88b6d6e381c4143c5681c4921efcaa941ae344be
 
 ## MP-0522 · medium · tsc-error
 
@@ -7067,7 +7066,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=522 sha256=0f558c4b199d9f983e5bc3df7d7ac0383124c0bbdc4c181ac5dcef67607a5288 payload=e1af85174d70 prev=800d9a2e9f77be50f98883bcb8c29aff4512a56af91b43b7f589c74636410adc
+- קבלה: seq=522 sha256=6efeaeeb380eb081e21716038e6de97e23dd217008658108defde552188a9f90 payload=e1af85174d70 prev=1a32a938f6bcd563bad69ccd5328d6c9a37f9f73d15e741dfcf2cee96c3d69d3
 
 ## MP-0523 · medium · tsc-error
 
@@ -7077,7 +7076,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=523 sha256=ebf5371c9af61d15faecfdf6b5a0fd315fdbda17d2d9746c0227233a47b13db1 payload=06369116be1b prev=0f558c4b199d9f983e5bc3df7d7ac0383124c0bbdc4c181ac5dcef67607a5288
+- קבלה: seq=523 sha256=7ba19fa925dad7b395d68fbf0e1ecad3dca84a76b0c10ec4b9ab58f9b4e930d7 payload=06369116be1b prev=6efeaeeb380eb081e21716038e6de97e23dd217008658108defde552188a9f90
 
 ## MP-0524 · medium · tsc-error
 
@@ -7087,7 +7086,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=524 sha256=f4000af398a958167cf8c09ac2e33ae9c85cc7fab4d473bd2b7f6462642f48d1 payload=7186fb8bc4d3 prev=ebf5371c9af61d15faecfdf6b5a0fd315fdbda17d2d9746c0227233a47b13db1
+- קבלה: seq=524 sha256=069ff5cb187000c6820e4e293973d2fae616f9d70812b878862cc992cf35569d payload=7186fb8bc4d3 prev=7ba19fa925dad7b395d68fbf0e1ecad3dca84a76b0c10ec4b9ab58f9b4e930d7
 
 ## MP-0525 · medium · tsc-error
 
@@ -7097,7 +7096,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=525 sha256=c9a24ae08df0494825df454ce702f3f19361565dcda18b40dd84fee122fd250b payload=579c286a2e54 prev=f4000af398a958167cf8c09ac2e33ae9c85cc7fab4d473bd2b7f6462642f48d1
+- קבלה: seq=525 sha256=2634fe89300ec430ff8d9d45c9f06d180c66cf0f9b62463c19013846e35a372d payload=579c286a2e54 prev=069ff5cb187000c6820e4e293973d2fae616f9d70812b878862cc992cf35569d
 
 ## MP-0526 · medium · tsc-error
 
@@ -7107,7 +7106,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=526 sha256=ec973735dccd9bc3bd9e329617b302c55bd783eae1c0404ada0c440ba4e2a02c payload=0457a4c0924b prev=c9a24ae08df0494825df454ce702f3f19361565dcda18b40dd84fee122fd250b
+- קבלה: seq=526 sha256=d483337d16333e2b16a4325e01390ef9153f1506c4583c4fc623bf451c349b09 payload=0457a4c0924b prev=2634fe89300ec430ff8d9d45c9f06d180c66cf0f9b62463c19013846e35a372d
 
 ## MP-0527 · medium · tsc-error
 
@@ -7120,7 +7119,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=527 sha256=ef67afa68f3d59cce7253a513fe99a38c4f8ad3e97634306a85c0dde9d5daa7b payload=269fab1c68b1 prev=ec973735dccd9bc3bd9e329617b302c55bd783eae1c0404ada0c440ba4e2a02c
+- קבלה: seq=527 sha256=46e3a1f52c7c5f6ae325fa291358275223d9f6ee2bcb7ade4723012ea2f0fcd9 payload=269fab1c68b1 prev=d483337d16333e2b16a4325e01390ef9153f1506c4583c4fc623bf451c349b09
 
 ## MP-0528 · medium · tsc-error
 
@@ -7137,7 +7136,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=528 sha256=e4c491e93ba5239d3dae14dda4e8f3054c13c086500e9db11169252d26a425d8 payload=ca3f963ee6a5 prev=ef67afa68f3d59cce7253a513fe99a38c4f8ad3e97634306a85c0dde9d5daa7b
+- קבלה: seq=528 sha256=505dec22ebf04bf51bcaa49d8db9e2d12fc3371e3a835e701981c8014bce1f24 payload=ca3f963ee6a5 prev=46e3a1f52c7c5f6ae325fa291358275223d9f6ee2bcb7ade4723012ea2f0fcd9
 
 ## MP-0529 · medium · tsc-error
 
@@ -7157,7 +7156,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=529 sha256=9ec5f67dbee712fd7b0cffbfb319885cca7338505b0011562d36ee4928ce3c6f payload=d790f0dd3e6e prev=e4c491e93ba5239d3dae14dda4e8f3054c13c086500e9db11169252d26a425d8
+- קבלה: seq=529 sha256=f002f61775ebb6b26f92c61db215ffcbfd4d403d80157fd670d56af15e7b4161 payload=d790f0dd3e6e prev=505dec22ebf04bf51bcaa49d8db9e2d12fc3371e3a835e701981c8014bce1f24
 
 ## MP-0530 · medium · tsc-error
 
@@ -7171,7 +7170,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=530 sha256=dc0159d5c40d53b6d71d51a74fb1d4201e2a9b719c4193a0024e9329b2f4b146 payload=f39acba0d6f2 prev=9ec5f67dbee712fd7b0cffbfb319885cca7338505b0011562d36ee4928ce3c6f
+- קבלה: seq=530 sha256=2ed0f06fbc1827d3cf90471ea09a40a5513f280704c5063196abfbeb49beff50 payload=f39acba0d6f2 prev=f002f61775ebb6b26f92c61db215ffcbfd4d403d80157fd670d56af15e7b4161
 
 ## MP-0531 · medium · tsc-error
 
@@ -7191,7 +7190,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=531 sha256=b5e1fb2a6d811dc3ddcff3df00a88d05f5870739ca6c5e8bf76815d2be766ff8 payload=8f888dae28a4 prev=dc0159d5c40d53b6d71d51a74fb1d4201e2a9b719c4193a0024e9329b2f4b146
+- קבלה: seq=531 sha256=f0c7f4aa81f38573386ecce0a4508ec100c20f3fa8ca2c95867285230578291e payload=8f888dae28a4 prev=2ed0f06fbc1827d3cf90471ea09a40a5513f280704c5063196abfbeb49beff50
 
 ## MP-0532 · medium · tsc-error
 
@@ -7204,7 +7203,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=532 sha256=e5a686007f2f286ed1c5897c96c239fdd58117722132b95b436913036fe5e866 payload=456f8c99b4c8 prev=b5e1fb2a6d811dc3ddcff3df00a88d05f5870739ca6c5e8bf76815d2be766ff8
+- קבלה: seq=532 sha256=dcd3114845da54f38328ea05742b9fe32359fa0f79b07fd3ce4fad746dac9d4a payload=456f8c99b4c8 prev=f0c7f4aa81f38573386ecce0a4508ec100c20f3fa8ca2c95867285230578291e
 
 ## MP-0533 · medium · tsc-error
 
@@ -7215,7 +7214,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=533 sha256=ef6ecb052941ca4dacb75d3c4f7cda226c03f3ad6924362b4f62aeace8593685 payload=a3f9cdcca990 prev=e5a686007f2f286ed1c5897c96c239fdd58117722132b95b436913036fe5e866
+- קבלה: seq=533 sha256=080b45e3b50df985c46c6cf1a3e7b60890775f763603b69aabffd9312e9902dc payload=a3f9cdcca990 prev=dcd3114845da54f38328ea05742b9fe32359fa0f79b07fd3ce4fad746dac9d4a
 
 ## MP-0534 · medium · tsc-error
 
@@ -7231,7 +7230,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=534 sha256=b3a112b7b729bef9f3bf0a6abde3c1bed00866125e21ec787b310a890c920435 payload=dc62c711c475 prev=ef6ecb052941ca4dacb75d3c4f7cda226c03f3ad6924362b4f62aeace8593685
+- קבלה: seq=534 sha256=01d28f45825f7c9b288f8ace325fd97813f2e33d3fe1b4e5abbe1c906959f31d payload=dc62c711c475 prev=080b45e3b50df985c46c6cf1a3e7b60890775f763603b69aabffd9312e9902dc
 
 ## MP-0535 · medium · tsc-error
 
@@ -7242,7 +7241,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=535 sha256=8e52732b65ae34027c8b9760b77521dfc8af48ac7f231c72bb574e2ccaca95b4 payload=78355c93cbd1 prev=b3a112b7b729bef9f3bf0a6abde3c1bed00866125e21ec787b310a890c920435
+- קבלה: seq=535 sha256=2f81ac4eedd99b3868df82c3ffa3b1807c3a336784e48d260ba090f4020f0f0a payload=78355c93cbd1 prev=01d28f45825f7c9b288f8ace325fd97813f2e33d3fe1b4e5abbe1c906959f31d
 
 ## MP-0536 · medium · tsc-error
 
@@ -7260,7 +7259,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=536 sha256=b5a6cf1d46a2c2c2c185a1462b10fb1f2026bd2fe691bee0cf2546bfce8d38eb payload=dbbd00afd587 prev=8e52732b65ae34027c8b9760b77521dfc8af48ac7f231c72bb574e2ccaca95b4
+- קבלה: seq=536 sha256=bdb4435464868a89159e3c7003b22d1290f390b1366bbe14e50b49cecc702443 payload=dbbd00afd587 prev=2f81ac4eedd99b3868df82c3ffa3b1807c3a336784e48d260ba090f4020f0f0a
 
 ## MP-0537 · medium · tsc-error
 
@@ -7271,7 +7270,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=537 sha256=5dd8e902336acca7984b9743489fcbe8c3bd69d33b51095687bccb8ce98999ea payload=2fc3778aec50 prev=b5a6cf1d46a2c2c2c185a1462b10fb1f2026bd2fe691bee0cf2546bfce8d38eb
+- קבלה: seq=537 sha256=36710eca86eed9675017a2fbf889dbefab377e725f26365840d00dde959fbd1e payload=2fc3778aec50 prev=bdb4435464868a89159e3c7003b22d1290f390b1366bbe14e50b49cecc702443
 
 ## MP-0538 · medium · tsc-error
 
@@ -7283,7 +7282,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=538 sha256=d954e307e402af448019299bb8bc8d87d87f0e92f9242dc0300cf6c46cdc76f7 payload=3761e8b30297 prev=5dd8e902336acca7984b9743489fcbe8c3bd69d33b51095687bccb8ce98999ea
+- קבלה: seq=538 sha256=907ce3198ca1dfc373ba69590556ef1d5b4b0591176b061958c4c5fa677bbed4 payload=3761e8b30297 prev=36710eca86eed9675017a2fbf889dbefab377e725f26365840d00dde959fbd1e
 
 ## MP-0539 · medium · tsc-error
 
@@ -7293,7 +7292,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=539 sha256=d02209487c7a596f3ca7bdda7207914b9ffdf3f8ba38c7cda7fbe7d6f912a593 payload=ccfe0ba69fa5 prev=d954e307e402af448019299bb8bc8d87d87f0e92f9242dc0300cf6c46cdc76f7
+- קבלה: seq=539 sha256=b178db5d39ad0d9cbc1e7e269ac26892c88e0423e0cfc516be4c6eb3910e7bbb payload=ccfe0ba69fa5 prev=907ce3198ca1dfc373ba69590556ef1d5b4b0591176b061958c4c5fa677bbed4
 
 ## MP-0540 · medium · tsc-error
 
@@ -7304,7 +7303,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=540 sha256=63238c2069dba05b5d08f0086b067a3b63205fe25e82daae16817df50505ecf1 payload=ea0d3273efe7 prev=d02209487c7a596f3ca7bdda7207914b9ffdf3f8ba38c7cda7fbe7d6f912a593
+- קבלה: seq=540 sha256=909cb08fa17dcb4be50fc4446d06e445ccf7692543787955047bd5d7b6cc0ece payload=ea0d3273efe7 prev=b178db5d39ad0d9cbc1e7e269ac26892c88e0423e0cfc516be4c6eb3910e7bbb
 
 ## MP-0541 · medium · tsc-error
 
@@ -7315,7 +7314,7 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=541 sha256=07295730204e0ba7e94f1ae25e2103ffa49dd74e78505788374d1c59b8f0b26c payload=a65cfcdf920e prev=63238c2069dba05b5d08f0086b067a3b63205fe25e82daae16817df50505ecf1
+- קבלה: seq=541 sha256=204784d7c3b23a666e0839a84f877a702f221c0ca42c1035d0ca155e07f87f70 payload=a65cfcdf920e prev=909cb08fa17dcb4be50fc4446d06e445ccf7692543787955047bd5d7b6cc0ece
 
 ## MP-0542 · medium · tsc-error
 
@@ -7327,5 +7326,5 @@
 
 - אינווריאנטה: §12 Definition of Done — הגזע-הקנוני מתקמפל נקי; אף-שגיאת-tsc לא נשארת ב-giant.
 - תיקון-מוצע: תקן את שגיאת-הטיפוס בשורש (AST/type-level) והרץ tsc --noEmit עד-אפס; אין-דיכוי, אין-הימנעות.
-- קבלה: seq=542 sha256=646ea55484e21844529f39b6c92fd35caa815ea49326979e3ca275e7d231ccec payload=c81df18e4356 prev=07295730204e0ba7e94f1ae25e2103ffa49dd74e78505788374d1c59b8f0b26c
+- קבלה: seq=542 sha256=f1613d40e24cca9e24e4171d240ac0a89e945eb4a7711b50be2168b6f6a62b24 payload=c81df18e4356 prev=204784d7c3b23a666e0839a84f877a702f221c0ca42c1035d0ca155e07f87f70
 

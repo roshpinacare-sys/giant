@@ -32,6 +32,8 @@ export interface Evidence {
 export interface Receipt {
   seq: number;
   prevHash: string | null;
+  /** SHA-256 of the contract body — kernel-interop (dispatch/receipts.ts chain family) */
+  payloadHash: string;
   hash: string;
   algorithm: "sha256";
 }

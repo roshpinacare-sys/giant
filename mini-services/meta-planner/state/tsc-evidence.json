@@ -1,6 +1,6 @@
 {
   "schema": "meta-planner/evidence@1",
-  "source": "measured first-hand 2026-10-23 on giant (main+meta-planner-v2 tree), tsc -p . --noEmit --pretty false — handover from convergence-lane wave 19.79 honored with deeper measurement (their checkout: 576)",
+  "source": "measured first-hand 2026-10-23 post-fix tree (giant main + meta-planner v2), tsc -p . --noEmit --pretty false — handover from convergence-lane honored with deeper measurement; module meta-planner contains 0 non-ambient defects (repo-wide node/bun types class = trunk-level cure, claimable)",
   "items": [
     {
       "file": "examples/websocket/frontend.tsx",
@@ -7749,30 +7749,6 @@
       "kind": "tsc-error"
     },
     {
-      "file": "mini-services/meta-planner/lib/issues.ts",
-      "line": 80,
-      "message": "TS2353: Object literal may only specify known properties, and 'payloadHash' does not exist in type 'Receipt'.",
-      "kind": "tsc-error"
-    },
-    {
-      "file": "mini-services/meta-planner/lib/issues.ts",
-      "line": 92,
-      "message": "TS2353: Object literal may only specify known properties, and 'receipt' does not exist in type 'ContractBody'.",
-      "kind": "tsc-error"
-    },
-    {
-      "file": "mini-services/meta-planner/lib/issues.ts",
-      "line": 97,
-      "message": "TS2339: Property 'payloadHash' does not exist on type 'Receipt'.",
-      "kind": "tsc-error"
-    },
-    {
-      "file": "mini-services/meta-planner/lib/issues.ts",
-      "line": 228,
-      "message": "TS2339: Property 'payloadHash' does not exist on type 'Receipt'.",
-      "kind": "tsc-error"
-    },
-    {
       "file": "mini-services/meta-planner/lib/scan.ts",
       "line": 16,
       "message": "TS2591: Cannot find name 'fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.",
@@ -7782,12 +7758,6 @@
       "file": "mini-services/meta-planner/lib/scan.ts",
       "line": 17,
       "message": "TS2591: Cannot find name 'path'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.",
-      "kind": "tsc-error"
-    },
-    {
-      "file": "mini-services/meta-planner/tests/fixtures/typedebt/flagged.ts",
-      "line": 5,
-      "message": "TS2578: Unused '@ts-expect-error' directive.",
       "kind": "tsc-error"
     },
     {
@@ -11886,6 +11856,30 @@
       "file": "src/lib/giant/capital.ts",
       "line": 685,
       "message": "TS2322: Type '\"LOW\"' is not assignable to type '\"FULL\" | \"HIGH\" | \"LOCKED-7D\" | \"MEDIUM\" | \"NONE\"'.",
+      "kind": "tsc-error"
+    },
+    {
+      "file": "src/lib/giant/empire-registry.test.ts",
+      "line": 9,
+      "message": "TS2307: Cannot find module 'bun:test' or its corresponding type declarations.",
+      "kind": "tsc-error"
+    },
+    {
+      "file": "src/lib/giant/empire-registry.test.ts",
+      "line": 10,
+      "message": "TS2591: Cannot find name 'node:fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.",
+      "kind": "tsc-error"
+    },
+    {
+      "file": "src/lib/giant/empire-registry.test.ts",
+      "line": 11,
+      "message": "TS2591: Cannot find name 'node:path'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.",
+      "kind": "tsc-error"
+    },
+    {
+      "file": "src/lib/giant/empire-registry.test.ts",
+      "line": 24,
+      "message": "TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.",
       "kind": "tsc-error"
     },
     {

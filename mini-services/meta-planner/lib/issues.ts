@@ -89,7 +89,8 @@ export function verifyChain(contracts: IssueContract[]): string[] {
   let prev: string | null = null;
   contracts.forEach((c, i) => {
     const r = c.receipt;
-    const body: ContractBody = { ...c, receipt: undefined };
+    const { receipt: _dropped, ...body } = c; // type-clean body without the receipt key
+    void _dropped;
     const payloadHash = sha256(canonicalJson(body));
     const expected = sha256(canonicalJson({ seq: i + 1, prevHash: prev, payloadHash, contract: body }));
     if (r.seq !== i + 1) problems.push(`${c.id}: seq mismatch (${r.seq} != ${i + 1})`);

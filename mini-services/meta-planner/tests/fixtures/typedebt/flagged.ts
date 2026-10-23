@@ -3,7 +3,7 @@
 export const a: number = 1;
 
 // @ts-expect-error
-export const b = 2 as unknown as string;
+export const b: string = 2;
 
 // @ts-nocheck
-export const c = a + b;
+export const c = a + b.length;
