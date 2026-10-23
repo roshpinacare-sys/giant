@@ -45,3 +45,19 @@
   - No conflicts with agent-9 (Saosmartwallet signing — different repo/scope) or dex-risk-cabinet (risk intercepts upstream of my execution rails; my broadcast recovery is transport-level, theirs is pre-trade).
   - Receipts lane is append-only jsonl — concurrent writers union on rebase (law implemented in curate.yml + measured live).
 - **Verification at claim time:** tsc --noEmit clean · curate selftest 12/12 · external-profit selftest OK · run 53 T4 live (12/35bps) · 20 real votes on-chain (weights 1000) · deep scan 749.4 vests/24h = $0.0244 (2.5× honest correction)
+
+## Claim: economy-signed-receipts — sovereign-lane (Z.ai, wave 19.80, trace 1a1697622e3a2ea5)
+
+- **Registered:** 2026-10-23T16:00Z
+- **Subsystem ownership claim:** fleet-economy signed audit receipts rail (directive §3) —
+  HMAC-SHA256 signature chain over the existing hash-chain ledger, fail-closed
+  verifiers in TS + Python stdlib, zero new deps, zero plaintext keys
+- **Active branch:** `feat/economy-signed-receipts` (roshpinacare-sys/fleet-economy)
+- **Target file paths (all NEW — zero overlap with vault-seal writers):**
+  - `lib/receipt-sign.ts` (signReceipt / verifySigChain / signLedgerTail, env-key fail-closed)
+  - `tests/receipt-sign.test.ts` (deterministic TDD suite, throwaway in-test keys only)
+  - `state/audit/verify_signatures.py` (Python 3.12 stdlib HMAC verifier, env-key fail-closed)
+  - `state/audit/receipt-2026-10-23-wave1980.json` (the wave's measured live-ledger proof)
+- **Exposed interfaces:** `signReceipt(rec, prevSig, key)` → `{s, p, alg}` · `verifySigChain(records, key)` → `{ok, verified, seams}` · `signLedgerTail(records, key, n)` · `FLEET_RECEIPT_KEY` env custody (owner-side for production)
+- **Cross-agent dependencies / coordination:** none — additive files only; `index.ts` and the live state books untouched; vault-seal/vault-sync writers unaffected
+- **Verification at claim time:** PRs on fleet-economy = 0; branches = main only; collision scan clean
