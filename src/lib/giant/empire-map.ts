@@ -46,6 +46,7 @@ export const EMPIRE_MAP: Record<string, EmpireRole> = {
   "saos-owner-channel": { role: "ערוץ-הבעלים-הישיר: פרוטוקול-גיט-ילידי · אינטגריות sha256", group: "ליבה-מחוברת", module: "channel", evidence: "ChannelView רץ על הפרוטוקול · גל-53/T56" },
   Pulse: { role: "איבר-הדופק של הרשת: מפקד-אוכלוסין אוטונומי כל-30 דק על Actions", group: "ליבה-מחוברת", module: "pulse", evidence: "PulseView · גל-44" },
   Autonomy: { role: "המוח-הריבוני על דקות-ציבור: עורקי-החלטה/למידה/צמיחה — רץ 24/7 בלי-סנדבוקס", group: "ליבה-מחוברת", module: "pulse", evidence: "דחיפות-דקה נמדדו · גל-44" },
+  "fleet-economy": { role: "הכלכלה-הפנימית-הריבונית: ספר-hash-chain חי · auto-sealed — פנקס-הקבלות-המאובטח של-מוטציות-המצב", group: "ליבה-מחוברת", module: "ledger", evidence: "תיאור-מדוד · trust-cache 2026-10-23" },
 
   /* ── החוברו-בגל-9 (היו-ממתיני-חיווט): דלת-חיה-אחת — /api/giant/books → ההגשה ── */
   "saos-agents": { role: "ליבת-תזמון-סוכנים מדדה-עצמית: גרף-משימות שאי-אפשר-לשקר-לו · FLEET-COORDINATION/1", group: "ליבה-מחוברת", module: "submission", evidence: "/api/giant/books חי · CLAIMS.json נפרסר · פעיל-14.10 (גל-9)" },
@@ -57,6 +58,11 @@ export const EMPIRE_MAP: Record<string, EmpireRole> = {
   "sovereign-runner-kit": { role: "שכבת-הביצוע-במכשיר: המכשיר שלנו הוא המנוע, GitHub ספר-בלבד", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · חוק-שרדנות הבעלים" },
   GridWatch: { role: "בקרת-הצי: מודד בריאות כל-ריפו ו-workflow · מתקן-כשלים-אוטומטית", group: "תשתית-הפעלה", module: "trust", evidence: "תיאור-מדוד · trust-cache" },
   "ops-intake": { role: "צינור-הקליטה-התפעולי: מדידה · תור-עבודות מדודר · מפת-מרחב — כל-30 דק", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · trust-cache" },
+  "saos-coordination": { role: "תזמון-רב-סוכנים: מנעולים · תביעות · סדר-מיזוג — קריאה-לפני-כל-כתיבה", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · trust-cache 2026-10-23" },
+  "ops-control": { role: "תיאום-הצי: פנקס-תביעות · חלוקת-בעלות · אזורי-הקפאה · שערי-אימות (מבצע-9-סוכנים)", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · trust-cache 2026-10-23" },
+  "execution-fabric": { role: "רשת-הביצוע: dispatch → סולם-LLM → פנקס-hash-chain — git = קיום", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · trust-cache 2026-10-23" },
+  "sovereign-executor": { role: "מישור-המבצע-הריבוני: נשא-דקות-פומביות-חינם לנתיבי-הצי-הפרטיים (תוכן-פרטי · ביצוע-פומבי)", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · trust-cache 2026-10-23" },
+  "agent9-clock": { role: "שעון-שלישי-עצמאי: פעימה-מרפאת את אפיית-אמת-הצי ב-Domain (תור-מתזמן-נפרד-במכוון)", group: "תשתית-הפעלה", module: "pulse", evidence: "תיאור-מדוד · trust-cache 2026-10-23" },
   "ops-forge": { role: "סדנת-התפעול: כלי-עבודה ומסילות-הפעלה פנימיות", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · trust-cache" },
   "vault-home": { role: "כספת-המפתחות-החתומה של הצי (AES-256 · PBKDF2-200k) — מפתחות-לא-נוסעים-בקלות", group: "תשתית-הפעלה", module: null, evidence: "תיאור-מדוד · trust-cache" },
   "sovereign-lighthouse": { role: "זיכרון-חוץ-מכונה-עצמאי (RTL) — קפוא-לפי-מפת-הכפילויות סעיף-3: מתכנס-לזרם-הקנוני", group: "ארכיון-ושחזור", module: null, evidence: "מפנה-קפוא 0680f14 (גל-10) · Pulse/state/sovereign-channel" },
@@ -84,6 +90,8 @@ export const EMPIRE_MAP: Record<string, EmpireRole> = {
   Sdk: { role: "תמצית-SDK משוחזרת מבסיס anchor-5356dab", group: "ארכיון-ושחזור", module: null, evidence: "מועמד-מיזוג ל-anchor-baseline (מדוד)" },
   "anchor-baseline": { role: "שחזור-בסיס-העיגון האחרון (commit 5356dab)", group: "ארכיון-ושחזור", module: null, evidence: "תיאור-מדוד · trust-cache" },
   Sandbox: { role: "מראת-הענן-החיה של סביבת-הפיתוח (המופע-הזה עצמו)", group: "ארכיון-ושחזור", module: null, evidence: "תיאור-מדוד · גל-45" },
+  "saos-console-zai": { role: "קונסולת-SAOS (נתיב agent-2): מראת-הגנה-מפני-אובדן — הסנדבוקס-אפמרלי, הגיט-שכבת-ההישרדות", group: "ארכיון-ושחזור", module: null, evidence: "תיאור-מדוד · trust-cache 2026-10-23" },
+  "estate-agent-9": { role: "צילום-מצב-אחוזת-agent-9 (t50): אפליקציה + סקריפטים + worklog — סודות-מוחרגים-במכוון לפי-פקודת-הבעלים", group: "ארכיון-ושחזור", module: null, evidence: "תיאור-מדוד · trust-cache 2026-10-23" },
   SovereignConsole: { role: "הקונסולה-הריבונית-החיה: מראת-ענן-מלאה לשחזור-אוטונומי", group: "ארכיון-ושחזור", module: null, evidence: "תיאור-מדוד · trust-cache" },
   "sandbox-private": { role: "מראה-פרטית של סביבת-העבודה", group: "ארכיון-ושחזור", module: null, evidence: "תיאור-מדוד · trust-cache" },
 };
