@@ -157,3 +157,25 @@
 ## Issue-contracts discovered en route (dex-htlc-bridge lane · wave 19.82)
 
 6. `saos-dex` — invariant-fuzzer I5_engineAuditorClean=false (auditFails=72, fixture mode): PRE-EXISTING on HEAD — the committed artifact `audit-package/proof-pack/invariant-fuzz.json` @ 2026-10-10T06:46Z shows the identical FAIL class (violations=0 both runs — the hard invariants hold; the engine-audit lane flags stale-fixture identities). Owner: the engine-auditor lane. Also: the fuzzer's op-generator does not emit `htlc_create/claim/refund` yet — wiring them in (incl. adversarial pairs: claim-at-boundary, cross-asset composition, refund races) makes the iron-law suite live under the fuzzer too, not only deterministic tests. Claimable as one atomic slice after the auditor lane resolves I5.
+
+## Claim: saos-architect-daemon (Chief Sovereign Architect executive engine, §1+§4 MASTER DIRECTIVE) — Z.ai Code (wave 19.84, trace 1a16ecab0c7c5bad)
+
+- **Registered:** 2026-10-24T16:5xZ (BEFORE any code written, CAS law). The pieces exist (meta-planner = generation feed · issue-forge = audit/author/verify/cycle executor) — this claim is the UNIFIED DAEMON that makes them a single always-on executive: continuous audit → prioritized TDD issue selection → autonomous execute/verify/land → hash-chained receipts → HTTP status plane.
+- **Active branch:** direct additive landing on giant main (de-facto law). Collision scan at claim time: no architect-daemon paths anywhere in the estate; zero overlap — the daemon READS meta-planner/issue-forge as subprocesses and imports their modules; it does NOT edit them.
+- **Target file paths:** giant `mini-services/saos-architect-daemon/**` (NEW only: index.ts beat loop + HTTP :3049, executive.ts selection+execution policy, receipts.ts sha256 chain, tsconfig.json, package.json, tests/*.test.ts). Zero edits to any existing file.
+- **First live prey:** issue-contract #5 (src/lib/giant/capital.ts:685 TS2322 — "LOW" not in liquidity-band union, reserved by agent-9 for the capital-engine lane; this claim IS that lane's executor) — the daemon's first executive cycle cures it through the issue-forge verify/land pipeline, proving the loop end-to-end on a real trunk contract.
+- **Verification:** TDD red-first (selection determinism, receipt chain tamper-evidence, fail-closed malformed feed, single-flight); `bun test mini-services/saos-architect-daemon` green; standalone tsconfig (trunk-boundary law); tsc -p own unit → 0; live boot on :3049 with /health /status receipts; conventional commits; rebase-before-push ff-only.
+
+## Claim: hft-grid-soldiers (continuous high-frequency market-making, §2 MASTER DIRECTIVE) — Z.ai Code (wave 19.84, trace 1a16ecab0c7c5bad)
+
+- **Registered:** 2026-10-24T16:5xZ (BEFORE any code). Upgrades grid soldiers to a continuous high-frequency loop: deterministic Kelly-criterion position sizing, µ-unit micro-arbitrage between internal pools, every order payload through the existing submitOp funnel (pre-trade risk cabinet upstream — zero bypass), settled on the fleet-economy hash-chain.
+- **Active branch:** `feat/hft-grid-soldiers` (saos-dex), additive landing to main per house law. Collision scan: 0 hft/kelly files anywhere; dex-htlc-bridge lane owns chain.ts GAS_TABLE/Op hunks — THIS LANE TOUCHES NO EXISTING FILE.
+- **Target file paths:** saos-dex `src/lib/dex/hft.ts` (NEW: kelly sizing + hft loop core, deterministic, injected clock/rand) · `harness/hft-test.ts` (NEW: TDD vectors — kelly fractions, µ-dust invariants, risk-gate denial path, loop state machine) · `mini-services/hft-loop/` (NEW organ: beat runner + receipts, ports-free). Zero edits to existing files.
+- **Verification:** TDD red-first; `bunx tsc --noEmit -p .` zero NEW errors; `bun harness/hft-test.ts` green; risk-gate integration measured (allow+deny receipts); rebase-before-push.
+
+## Claim: steem-mesh-bridge (Hive/Steem local WS failover mesh, §3 MASTER DIRECTIVE) — Z.ai Code (wave 19.84, trace 1a16ecab0c7c5bad)
+
+- **Registered:** 2026-10-24T16:5xZ (BEFORE any code). Kills the external-RPC single-point: local WS+HTTP gateway fronting Steem/Hive public nodes with health-ranked failover pool, circuit breaker, idempotent-query cache, honest stale flags — internal consumers (engine, realmarket, hivemarket) stop suffering rate limits and detachments.
+- **Active branch:** direct additive landing on saos-steem main (saos-cockpit). Collision scan: no mesh-bridge paths; sovereign-local-rpc-gateway claim owns saos-control-center transport; agent-4 mesh lane owns membership/holepunch/PCP — THIS LANE owns the Steem/Hive RPC failover plane only.
+- **Target file paths:** saos-steem `mini-services/steem-mesh-bridge/**` (NEW only: index.ts :3050, nodes.ts pool+breaker, cache.ts, protocol passthrough, tests). Zero edits to existing files.
+- **Verification:** TDD red-first (failover determinism, breaker half-open, cache TTL, stale honesty — zero network in tests, injected fetch/clock); `bun test mini-services/steem-mesh-bridge` green; standalone tsconfig; live boot :3050 /health with real node probe; rebase-before-push.
