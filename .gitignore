@@ -108,3 +108,7 @@ mini-services/doc-truth-sync/state/
 # A stale lane merge re-added 35 state files after #298 — this re-kills the vector.
 mini-services/*/state/
 mini-services/*/state/*
+
+# single-canonical-trunk law (#42/#43): forge user-project archives live on
+# disk (gitignored), never in git history (§4 archive eviction, 2026-10-24).
+mini-services/forge/storage/
