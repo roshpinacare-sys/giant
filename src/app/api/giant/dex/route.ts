@@ -215,7 +215,7 @@ export async function loadDex(force = false): Promise<DexPayload> {
       try {
         const { steemMarketSnapshot } = await import("@/lib/steem-feed");
         const snap = await steemMarketSnapshot();
-        if (snap.oracle.sbdUsds !== null) sbdMark = snap.oracle.sbdUsds;
+        if (snap && snap.oracle.sbdUsds !== null) sbdMark = snap.oracle.sbdUsds;
       } catch {
         /* כנה — השורות ממשיכות בלי-סימון-דולרי */
       }

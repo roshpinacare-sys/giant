@@ -1,41 +1,50 @@
-# saos-architect-daemon — ראש-הארכיטקטורה-הקנוני (MASTER DIRECTIVE §1 · מחזור 31)
+# saos-architect-daemon — Chief Sovereign Architect (giant trunk executive)
 
-הדיימון-הילידי שמטמיע את סמכות-ראש-הארכיטקטורה **בתוך-הקוד** — כדי-שהצי ימשיך
-לבנות, לסחור ולמדוד גם-אחרי-יציאת-כל-הסוכנים-החיצוניים.
+The unified always-on executive demanded by the owner's MASTER DIRECTIVE (§1 + §4,
+trace 1a16ecab0c7c5bad): continuous AUDIT → deterministic SELECT → CURE → VERIFY →
+LAND → RECEIPT on the giant trunk, with zero human intervention.
 
-## הלולאה (כל-120ש׳ ברירת-מחדל · single-flight)
-```
-observe (עיניים)  →  decide (מוח, טהור-ודטרמיניסטי)  →  act (ידיים, תחומות)  →  receipt (SAOS-ARCHITECT/1)
-```
+## What it does (measured, wave 19.84)
 
-### observe — קריאה-בלבד
-- דפיקות: דקס :3010 · issue-forge :3046 · כלכלה :3016 · edge :3000 · gateway :3140
-- גילאי-קומיט אחרון ב-4 הריפואים הקנוניים · טריות-grid-beat ב-saos-dex
-- ריצות-וורקפלו-ענן אחרונות (dex-grid / external-profit-publish / curate)
-- **פסק-קלי** מ-`saos-dex/grids/state/kelly-sizing.json` (SAOS-KELLY/1)
+First session of live executive authority — 5 autonomous landed cycles, trunk tsc:
 
-### decide — מטריצה-דטרמיניסטית
-1. מנוע-דקס מת → הקמת-מפקח saos-dex-node (ריפוי-עצמי-מהגיט, מסרב-כפילות)
-2. issue-forge מת → הקמה; מחזור-ישן-מעל-15דק׳ → POST /cycle
-3. grid-beat ישן-מעל-40דק׳ → dispatch-ענן + **שומר-קלי**: NO-EDGE ⇒ הגדלת-נפח
-   נמנעת-מפורשות (עשיית-שוק-נמשכת-בקצב-מדיניות; אסור-להכפיל-שוליים-שליליים)
-4. מדידה-חוץ ישנה-מעל-6ש׳ / קיורציה-מעל-8ש׳ → dispatch
-5. נתיבים-של-אחרים (gateway/mesh/economy-resurrection) — **תצפית-בלבד, איסור-מגע**
+| cycle | cure | effect | commit |
+|---|---|---|---|
+| 1 | trunk-unit-boundary | tsc 594→4 (adopted tsconfig exclude restored) | 4d5b69be |
+| 2 | buntest-file-reference (empire-registry.test.ts) | 6→3 | 3f941764 |
+| 3 | capital-liquidity-band (COMPOUND: union + LIQ_HE label) | 3→2 — issue-contract #5 cured | aace9868 |
+| 4 | swallow-guard-cli-readonly | 2→1 | 122083f7 |
+| 5 | steem-feed-nullable-truth (COMPOUND adopted-truth restore ×4 files) | 1→**0** | 18b50727 |
 
-### act — ידיים-תחומות
-הפעלות-מנותקות (spawn detached) · POST /cycle · GitHub-REST-dispatch (טוקן-מ-vault-נתיב,
-לעולם-לא-בקוד/בלוג). כל-מחזור = קבלה אחת בשרשרת-חשיש `prev→hash` (חוק-הצי).
+Honest refusals recorded en route (the verify gate doing its job):
+- capital cure v1 aborted 3→3 (exposed downstream exhaustive Record) → cure upgraded to compound
+- steem-feed cure v1 aborted 2→11 (exposed 8 un-armed callers — the wipe class had rewound
+  the whole adopted set) → cure upgraded to compound per agent-9's adopted receipts
 
-## API (loopback)
-- `GET /health` — חיות, מחזורים, קבלות
-- `GET /state` — תצפית-אחרונה + פעולות
-- `POST /cycle[?dry=1]` — מחזור-תחום-אחד (dry = החלטות-בלי-ביצוע)
+## Laws encoded
 
-## הוכחות
-- `bun run selftest.mjs` — אופליין דטרמיניסטי: מטריצת-החלטות מלאה, שרשרת-קבלות
-  (prev-link + recompute), תוכניות-הפעלה, תחומים. אדום=exitCode 1.
-- פנקס-חי: `state/architect-ledger.jsonl` (append-only, gitignored-state)
+- **TDD red-first**: 18 tests / 45 expect() written before the modules they test.
+- **Fail-closed verify**: after every cure, full `tsc --noEmit -p .` must strictly
+  DECREASE error count; else byte-identical revert + receipt `aborted`.
+- **Anchored, idempotent cures**: every edit requires its anchor text; drift → refuse
+  (never blind edit). Already-cured → silent no-op.
+- **Adopted-truth antibody**: cures re-apply prior waves' landed receipts (agent-9
+  wave 19.82 signature truth, unit-boundary exclusion) — the antibody against the
+  ours-merge wipe class.
+- **Single-flight**: O_EXCL lock, stale (>30min) broken honestly and recorded.
+- **Hash-chained receipts**: state/receipts.jsonl {seq, prevHash, hash=sha256(prev+canonicalJSON)}
+  — tamper-evident, splice/reorder-detecting (verifyReceipts).
+- **Git discipline**: adds ONLY the cure's declared files (never `git add -A`),
+  conventional commit, fetch→rebase(autoStash)→push loop ≤3, ls-remote identity proof,
+  never force-push.
+- **Honest idle**: no curable contract → verdict `no-work` (0→0), never fabricated work.
 
-## גבולות-כנים
-- הדיימון אינו-סוחר-בעצמו — הוא מפקח ומעיר את-העורקים שכן (מנוע-הדקס, הגריד, issue-forge)
-- אכיפת-קלי בשלב-observe: המלצה-מתועדת; המעבר-ל-enforce דורש-דבר-בעלים (דוקטרינת-מעבר-מדורג)
+## Interfaces
+
+- `GET :3051/health` — liveness + last verdict
+- `GET :3051/status` — full receipts chain state (head hash, verified flag, last cycle)
+- `POST :3051/cycle` — one bounded executive cycle (single-flight, 409 if busy)
+- `bun index.ts --once` — single provable cycle, exit code = honesty
+- beat loop: `ARCHITECT_BEAT_MS` (default 30min, floor 30s)
+
+Runtime state lives in `state/` (git-ignored — never enters history).

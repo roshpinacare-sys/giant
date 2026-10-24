@@ -19,7 +19,10 @@
  */
 import { createHash } from "node:crypto";
 
-/** קבוצת-הקנון (v1) — הנתיבים-שהיעדרותם-בליעה-מוכחת. קפוא. */
+/** קבוצת-הקנון (v2) — הנתיבים-שהיעדרותם-בליעה-מוכחת. קפוא.
+ *  v2 (wave 19.85, §9.3): חמשת-קבצי-ה-runner (מנוע-הבנייה-העצמית) — נבלעו-
+ *  באותה-סערת-vault-sync ונותרו-בלועים; הגנת-נוכחות-בלבד, האבולוציה-
+ *  הלגיטימית-של-ה-runner נשארת-ריבונות-הסרגל-הבונה-אותו (דריפט-תוכן = התראה-בלבד). */
 export const CANONICAL_SET: readonly string[] = Object.freeze([
   "src/lib/giant/empire-registry.ts",
   "src/lib/giant/empire-registry.test.ts",
@@ -33,6 +36,11 @@ export const CANONICAL_SET: readonly string[] = Object.freeze([
   ".github/workflows/trust-heartbeat.yml",
   ".github/workflows/ext-audit.yml",
   "SWARM_STATE.md",
+  "mini-services/issue-to-pr/index.ts",
+  "mini-services/issue-to-pr/planner-feed.ts",
+  "mini-services/issue-to-pr/fixers.ts",
+  "mini-services/issue-to-pr/receipts.ts",
+  "mini-services/issue-to-pr/index.test.ts",
 ]);
 
 export interface Swallow {

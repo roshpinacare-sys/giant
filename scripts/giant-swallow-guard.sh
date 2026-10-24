@@ -69,12 +69,72 @@ PYEOF
 }
 
 CYCLE_N=0
+QUALITY_DIR="$STATE_DIR/quality"
+mkdir -p "$QUALITY_DIR"
 while true; do
   CYCLE_N=$((CYCLE_N+1))
   git fetch origin main --quiet 2>>"$LOG" || { say "fetch-failed (network) — honest skip"; sleep "$CYCLE"; continue; }
   TIP="$(git rev-parse origin/main)"
-  # הרשימה-נשאבת-מהליבה-עצמה (מקור-אמת-יחיד):
-  PATHS="$(bun -e "import {CANONICAL_SET} from '$REPO/src/lib/sovereign/swallow-guard.ts'; console.log(CANONICAL_SET.join(' '))")"
+
+  # ── §5 סריקת-אפס-זבל-לכל-נחיתה-חדשה (החוק-הדטרמיניסטי: הליבה-הנבדקת שופטת) ──
+  LAST_SCANNED="$(cat "$QUALITY_DIR/.last-tip" 2>/dev/null || true)"
+  if [ "$LAST_SCANNED" != "$TIP" ] && [ -n "$LAST_SCANNED" ]; then
+    # בניית-פס-השינוי: name-status + שורות-שנוספו (גבולות-דטרמיניסטיים: 80 קבצים · 400 שורות-לקובץ)
+    CHANGE_JSON="$(python3 - "$LAST_SCANNED" "$TIP" << 'PYEOF'
+import json, subprocess, sys
+src, dst = sys.argv[1], sys.argv[2]
+ns = subprocess.run(["git","diff","--name-status",src,dst], capture_output=True, text=True).stdout
+added, modified, deleted = [], [], []
+for row in ns.strip().splitlines():
+    parts = row.split("\t", 1)
+    if len(parts) != 2:
+        continue
+    st, path = parts[0][0], parts[1]
+    if st == "A":
+        added.append(path)
+    elif st == "M":
+        modified.append(path)
+    elif st == "D":
+        deleted.append(path)
+added_lines = []
+for path in (added + modified)[:80]:
+    d = subprocess.run(["git","diff","-U0",src,dst,"--",path], capture_output=True, text=True).stdout
+    out = [l[1:] for l in d.splitlines() if l.startswith("+") and not l.startswith("+++")][:400]
+    if out:
+        added_lines.append({"path": path, "lines": out})
+print(json.dumps({"pathsAdded":added,"pathsModified":modified,"pathsDeleted":deleted,"addedLines":added_lines}))
+PYEOF
+)" || CHANGE_JSON=""
+    if [ -n "$CHANGE_JSON" ]; then
+      SCAN_INPUT="$(printf '%s' "$CHANGE_JSON" | python3 -c 'import json,sys; d=json.load(sys.stdin); d["mode"]="scan"; print(json.dumps(d))')" || SCAN_INPUT=""
+      VERDICT="$(printf '%s' "$SCAN_INPUT" | bun "$REPO/scripts/quality-gate-cli.ts" 2>>"$LOG")" || VERDICT=""
+      if [ -n "$VERDICT" ] && ! printf '%s' "$VERDICT" | grep -q '"fatal"'; then
+        DEC="$(printf '%s' "$VERDICT" | python3 -c "import json,sys; print(json.load(sys.stdin)['decision'])")"
+        QPREV="$(tail -1 "$QUALITY_DIR/verdicts.jsonl" 2>/dev/null | python3 -c "import json,sys
+try: print(json.load(sys.stdin)['hash'])
+except Exception: print('null')" 2>/dev/null || echo null)"
+        QREC="$(printf '{"mode":"receipt","at":"%s","prevHash":%s,"payload":{"verdict":%s,"from":"%s","to":"%s"}}' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$QPREV" "$VERDICT" "$LAST_SCANNED" "$TIP" | bun "$REPO/scripts/quality-gate-cli.ts" 2>>"$LOG")" || QREC=""
+        [ -n "$QREC" ] && printf '%s\n' "$QREC" >> "$QUALITY_DIR/verdicts.jsonl"
+        say "quality-scan ${LAST_SCANNED:0:9}..${TIP:0:9} → §5 $DEC (receipt in quality/verdicts.jsonl)"
+      else
+        say "quality-scan-skip (CLI refused or failed — honest skip, fail-closed)"
+      fi
+    else
+      say "quality-scan-skip (diff-build failed — honest skip)"
+    fi
+    echo "$TIP" > "$QUALITY_DIR/.last-tip"
+  elif [ -z "$LAST_SCANNED" ]; then
+    echo "$TIP" > "$QUALITY_DIR/.last-tip"
+    say "quality-scan initialized at ${TIP:0:9} (landings from now on are scanned)"
+  fi
+
+  # ── חוק-הקשחה (חלון-הסמיות, נתפס-חי 17:07Z): קבוצת-קנון-ריקה אינה-שלמות —
+  # חילוץ-שם-הקבוצה-נכשל ⇒ יציאה-כנה-למחזור-הבא, לעולם-לא "intact" על-ריק. ──
+  PATHS="$(bun -e "import {CANONICAL_SET} from '$REPO/src/lib/sovereign/swallow-guard.ts'; console.log(CANONICAL_SET.join(' '))" 2>>"$LOG")" || PATHS=""
+  if [ -z "$PATHS" ]; then
+    say "PATHS-EXTRACTION-FAILED — refuse to measure on an empty canonical set (fail-closed, honest skip)"
+    sleep "$CYCLE"; continue
+  fi
   TREE="$(measure_tip $PATHS)"
   ADOPTED_MAP="$(python3 -c "import json; d=json.load(open('$ADOPTED')); d.pop('tip',None); d.pop('at',None); print(json.dumps(d))")"
   OUT="$(printf '{"mode":"measure","tree":%s,"baseline":%s,"adopted":%s}' "$TREE" "$ADOPTED_MAP" "$ADOPTED_MAP" | bun "$REPO/scripts/swallow-guard-cli.ts")" || { say "measure-cli-failed"; sleep "$CYCLE"; continue; }

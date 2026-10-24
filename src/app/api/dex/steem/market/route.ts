@@ -23,8 +23,8 @@ export async function GET() {
       orderBy: { sort: "asc" },
     });
     const targetBy = new Map<string, number | null>([
-      ["STEEM", snap.oracle.steemUsds],
-      ["SBD", snap.oracle.sbdUsds],
+      ["STEEM", snap?.oracle.steemUsds ?? null],
+      ["SBD", snap?.oracle.sbdUsds ?? null],
     ]);
     const pools = pairs.map((p) => {
       const target = targetBy.get(p.base) ?? null;
@@ -56,7 +56,7 @@ export async function GET() {
     return NextResponse.json(
       {
         ok: true,
-        snapshot: snap,
+        snapshot: snap ?? null,
         pools,
         health,
       },

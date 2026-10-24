@@ -1,66 +1,72 @@
-/* saos-architect-daemon · index.ts — ראש-הארכיטקטורה-הקנוני (MASTER DIRECTIVE §1, מחזור 31)
- * פורט 3047 · לולאה רציפה (ARCHITECT_INTERVAL_MS, ברירת-מחדל 120ש׳) · single-flight.
- * observe → decide → act → receipt. /cycle = מחזור-אחד-תחום (ל-CI/cron). */
-import { observe, type Observation } from "./observe";
-import { decide, type Action } from "./decide";
-import { executeActions, appendReceipt, countReceipts } from "./act";
+/* ═══ saos-architect-daemon · index.ts — the Chief Sovereign Architect ══════
+ * The always-on executive of the giant trunk (MASTER DIRECTIVE §1 + §4):
+ *   · beat loop: every ARCHITECT_BEAT_MS (default 30min, floor 30s) one
+ *     bounded cycle — AUDIT → SELECT → CURE → VERIFY → LAND → RECEIPT
+ *   · POST /cycle — one cycle on demand (same single-flight)
+ *   · GET /health — liveness + last verdict; GET /status — full receipts state
+ *   · CLI --once — a single provable cycle, exit code = verdict honesty
+ * EADDRINUSE → honest exit 1. Loopback only. Fail-honest everywhere.
+ */
+import { PORT, runCycle, statusReport, CycleVerdict } from "./cycle.ts";
 
-const PORT = Number(process.env.ARCHITECT_PORT ?? 3047);
-const INTERVAL = Math.max(30_000, Number(process.env.ARCHITECT_INTERVAL_MS ?? 120_000));
+const startedAt = Date.now();
+let lastCycle: CycleVerdict | null = null;
+let cycleRunning = false;
 
-let running = false;
-let lastObservation: Observation | null = null;
-let lastActions: Action[] = [];
-let lastCycleAt: string | null = null;
-let cycles = 0;
-
-export async function runCycle(opts: { dry?: boolean } = {}): Promise<{ ok: boolean; verdict: string; actions: Action[]; results?: unknown; acted?: number }> {
-  if (running && !opts.dry) return { ok: false, verdict: "already-running", actions: [] };
-  running = true;
+async function oneCycle(): Promise<CycleVerdict> {
+  if (cycleRunning) {
+    return { ok: false, verdict: "lock-held", beforeErrors: -1, afterErrors: -1, detail: "cycle already running in this process" };
+  }
+  cycleRunning = true;
   try {
-    const o = await observe();
-    lastObservation = o;
-    const actions = decide(o);
-    lastActions = actions;
-    if (opts.dry) {
-      const r = await executeActions(actions, { dry: true });
-      const wouldAct = actions.filter((a) => a.kind !== "note").length;
-      return { ok: true, verdict: `dry: would-act=${wouldAct} notes=${actions.filter((a) => a.kind === "note").length}`, actions, results: r.results };
-    }
-    const r = await executeActions(actions);
-    lastCycleAt = new Date().toISOString();
-    cycles++;
-    return { ok: true, verdict: `acted=${r.acted} notes=${actions.filter((a) => a.kind === "note").length}`, actions, results: r.results, acted: r.acted };
-  } catch (e) {
-    const err = String(e instanceof Error ? e.message : e).slice(0, 200);
-    if (!opts.dry) appendReceipt({ phase: "cycle-error", verdict: "fail-honest", detail: { err } });
-    return { ok: false, verdict: `error: ${err}`, actions: [] };
-  } finally { running = false; }
+    lastCycle = runCycle();
+    return lastCycle;
+  } finally {
+    cycleRunning = false;
+  }
+}
+
+function health() {
+  return {
+    ok: true,
+    service: "saos-architect-daemon",
+    role: "Chief Sovereign Architect — giant trunk executive",
+    uptimeSec: Math.floor((Date.now() - startedAt) / 1000),
+    lastCycle: lastCycle ? { verdict: lastCycle.verdict, ok: lastCycle.ok, cureId: lastCycle.cureId, errors: `${lastCycle.beforeErrors}→${lastCycle.afterErrors}`, pushed: lastCycle.pushed, at: new Date().toISOString() } : null,
+  };
 }
 
 const server = Bun.serve({
   port: PORT,
+  hostname: "127.0.0.1",
   async fetch(req) {
     const url = new URL(req.url);
-    if (url.pathname === "/health") {
-      return Response.json({
-        ok: true, daemon: "saos-architect/1", port: PORT, intervalMs: INTERVAL,
-        cycles, receipts: countReceipts(), lastCycleAt, running,
-      });
-    }
-    if (url.pathname === "/state") {
-      return Response.json({ observation: lastObservation, actions: lastActions, cycles, lastCycleAt });
-    }
+    if (url.pathname === "/health") return Response.json(health());
+    if (url.pathname === "/status") return Response.json({ ...health(), status: statusReport() });
     if (url.pathname === "/cycle" && req.method === "POST") {
-      const dry = url.searchParams.get("dry") === "1";
-      return Response.json(await runCycle({ dry }));
+      const v = await oneCycle();
+      return Response.json({ ...v }, { status: v.ok ? 200 : (v.verdict === "lock-held" ? 409 : 500) });
     }
-    return new Response("saos-architect-daemon: /health /state POST /cycle[?dry=1]\n", { status: 404 });
+    return new Response("not-found", { status: 404 });
+  },
+  error() {
+    return new Response("internal", { status: 500 });
   },
 });
 
-console.info(`[saos-architect] עלה על :${server.port} · לולאה כל ${INTERVAL / 1000}ש׳ · single-flight · receipts=SAOS-ARCHITECT/1`);
+console.log(`[saos-architect-daemon] executive live on :${PORT} (pid ${process.pid}) — audit→select→cure→verify→land→receipt`);
 
-/* הלולאה-הרציפה: מחזור-תחום כל-INTERVAL; single-flight נאכף ב-runCycle. */
-let timer: ReturnType<typeof setInterval> | null = setInterval(() => { void runCycle(); }, INTERVAL);
-process.on("SIGTERM", () => { if (timer) clearInterval(timer); process.exit(0); });
+if (process.argv.includes("--once")) {
+  const v = await oneCycle();
+  console.log(`[saos-architect-daemon] once: ${JSON.stringify(v)}`);
+  server.stop(true);
+  process.exit(v.ok ? 0 : 1);
+}
+
+const beatRaw = Number(process.env.ARCHITECT_BEAT_MS ?? 30 * 60 * 1000);
+const beat = Math.max(30_000, beatRaw);
+setInterval(() => {
+  oneCycle()
+    .then((v) => console.log(`[saos-architect-daemon] beat: ${v.verdict}${v.cureId ? ` (${v.cureId})` : ""}${v.beforeErrors >= 0 ? ` tsc ${v.beforeErrors}→${v.afterErrors}` : ""}${v.pushed === false ? ` push-unverified: ${v.detail ?? ""}` : ""}`))
+    .catch((e) => console.log(`[saos-architect-daemon] beat-error: ${String(e).slice(0, 200)}`));
+}, beat);

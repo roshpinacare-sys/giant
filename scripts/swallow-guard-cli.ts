@@ -62,7 +62,7 @@ if (input.mode === "receipt") {
 
 if (input.mode === "measure") {
   if (!input.tree) fail("measure-needs-tree");
-  const { swallows, alerts }: { swallows: Swallow[]; alerts: ContentAlert[] } = detectSwallows(
+  const { swallows, alerts }: { swallows: readonly Swallow[]; alerts: readonly ContentAlert[] } = detectSwallows(
     input.tree,
     input.baseline,
   );
