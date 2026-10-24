@@ -1,6 +1,7 @@
 // TDD suite — deterministic (injected clocks), zero mocks on money paths, fail-honest.
 import { describe, test, expect } from "bun:test";
 import { planRcRebalance, planCurationHarvest, accrue, verifyAccrual, cycle, state, type SoldierRc, type SoldierVp } from "./index.ts";
+import { censusFromBook, type BookRecord } from "./roster-from-book.ts";
 
 const T0 = Date.parse("2026-10-24T21:00:00.000Z");
 
@@ -110,5 +111,36 @@ describe("engine cycle (§2 all-soldier activation census)", () => {
     expect(s.cycles).toBe(before + 1);
     expect(s.activation.blockers).toContain("rc-roster-empty");
     expect(s.activation.blockers).toContain("vp-roster-empty");
+  });
+});
+
+describe("roster-from-book (§2 measured all-soldier census + §1 self-financing proof)", () => {
+  const T = Date.parse("2026-10-24T21:00:00.000Z");
+  const book: BookRecord[] = [
+    { seq: 1, kind: "service", from: "Console", to: "yarden", asset: "USDS", amount: 3.2, ts: T - 3600_000 },
+    { seq: 2, kind: "tax", from: "yarden", to: "treasury", asset: "USDS", amount: 0.08, ts: T - 3600_000 },
+    { seq: 3, kind: "swap", from: "gal", to: "tamar", asset: "USDS", amount: 1.0, ts: T - 5 * 3600_000 },
+    { seq: 4, kind: "tip", from: "FleetHQ", to: "treasury", asset: "USDS", amount: 0.5, ts: T - 48 * 3600_000 },
+  ];
+  test("census measures the real roster, pseudonymized, with window truth", () => {
+    const c = censusFromBook(book, T, 6);
+    expect(c.rosterSize).toBe(6); // Console, yarden, treasury, gal, tamar, FleetHQ
+    expect(c.activeCount).toBe(5); // within 6h: Console, yarden, treasury, gal, tamar (T-5h counts) — FleetHQ at 48h is out
+    expect(c.activationPct).toBe(Math.round(5 / 6 * 100));
+    expect(c.soldiers[0].pseudonym).toMatch(/^acct-h-[0-9a-f]{8}$/); // no raw handles in receipts
+    expect(c.treasuryTaxMicroUnits).toBe(80_000); // 0.08 USDS → 80,000 µ
+    expect(c.treasuryTaxAsset).toBe("USDS");
+    expect(c.blockers).toEqual([]);
+  });
+  test("empty book is loud, never a silent zero roster", () => {
+    const c = censusFromBook([], T, 6);
+    expect(c.rosterSize).toBe(0);
+    expect(c.blockers).toContain("book-empty");
+  });
+  test("stale-only book names the blocker honestly", () => {
+    const stale: BookRecord[] = [{ kind: "service", from: "a", to: "b", asset: "USDS", amount: 1, ts: T - 72 * 3600_000 }];
+    const c = censusFromBook(stale, T, 6);
+    expect(c.activeCount).toBe(0);
+    expect(c.blockers).toContain("no-recent-activity-in-window");
   });
 });
