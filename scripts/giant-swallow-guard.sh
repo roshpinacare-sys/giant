@@ -107,7 +107,7 @@ print(json.dumps({"pathsAdded":added,"pathsModified":modified,"pathsDeleted":del
 PYEOF
 )" || CHANGE_JSON=""
     if [ -n "$CHANGE_JSON" ]; then
-      SCAN_INPUT="$(printf '%s' "$CHANGE_JSON" | python3 -c 'import json,sys; d=json.load(sys.stdin); d["mode"]="scan"; print(json.dumps(d))')" || SCAN_INPUT=""
+      SCAN_INPUT="$(printf '%s' "$CHANGE_JSON" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(json.dumps({"mode":"scan","change":d}))')" || SCAN_INPUT=""
       VERDICT="$(printf '%s' "$SCAN_INPUT" | bun "$REPO/scripts/quality-gate-cli.ts" 2>>"$LOG")" || VERDICT=""
       if [ -n "$VERDICT" ] && ! printf '%s' "$VERDICT" | grep -q '"fatal"'; then
         DEC="$(printf '%s' "$VERDICT" | python3 -c "import json,sys; print(json.load(sys.stdin)['decision'])")"
@@ -116,14 +116,17 @@ try: print(json.load(sys.stdin)['hash'])
 except Exception: print('null')" 2>/dev/null || echo null)"
         QREC="$(printf '{"mode":"receipt","at":"%s","prevHash":%s,"payload":{"verdict":%s,"from":"%s","to":"%s"}}' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$QPREV" "$VERDICT" "$LAST_SCANNED" "$TIP" | bun "$REPO/scripts/quality-gate-cli.ts" 2>>"$LOG")" || QREC=""
         [ -n "$QREC" ] && printf '%s\n' "$QREC" >> "$QUALITY_DIR/verdicts.jsonl"
+        # ── חוק-זכרון-הסריקה (נתפס-חי 18:07Z): .last-tip מתקדם רק על דין-מוכח —
+        # נחיתה-שמעולם-לא-נשפטה (CLI-refused/diff-failed) תתמודד-שוב-מול-השער
+        # במחזור-הבא; אף-נחיתה-לא-עוברת-מאחורי-גבו-של §6. ──
+        echo "$TIP" > "$QUALITY_DIR/.last-tip"
         say "quality-scan ${LAST_SCANNED:0:9}..${TIP:0:9} → §5 $DEC (receipt in quality/verdicts.jsonl)"
       else
-        say "quality-scan-skip (CLI refused or failed — honest skip, fail-closed)"
+        say "quality-scan-skip (CLI refused or failed — landing stays UNJUDGED, gate re-fires next cycle)"
       fi
     else
-      say "quality-scan-skip (diff-build failed — honest skip)"
+      say "quality-scan-skip (diff-build failed — landing stays UNJUDGED, gate re-fires next cycle)"
     fi
-    echo "$TIP" > "$QUALITY_DIR/.last-tip"
   elif [ -z "$LAST_SCANNED" ]; then
     echo "$TIP" > "$QUALITY_DIR/.last-tip"
     say "quality-scan initialized at ${TIP:0:9} (landings from now on are scanned)"

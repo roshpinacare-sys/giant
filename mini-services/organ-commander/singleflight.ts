@@ -1,3 +1,5 @@
+import { readdirSync, readFileSync } from "node:fs";
+
 /**
  * singleflight.ts — /proc-scan authority (G62 lesson: disk locks are not
  * authority; the wipe deletes lock files but not live processes).
@@ -20,10 +22,10 @@ export function detectSiblings(io: {
 export function liveSiblings(selfPid: number): number[] {
   const cmdlines = new Map<number, string>();
   try {
-    for (const d of require("node:fs").readdirSync("/proc")) {
+    for (const d of readdirSync("/proc")) {
       if (!/^\d+$/.test(d)) continue;
       try {
-        cmdlines.set(Number(d), require("node:fs").readFileSync(`/proc/${d}/cmdline`, "utf8").replace(/\0/g, " "));
+        cmdlines.set(Number(d), readFileSync(`/proc/${d}/cmdline`, "utf8").replace(/\0/g, " "));
       } catch { /* vanished between calls — honest skip */ }
     }
   } catch { /* no /proc — honest empty */ }

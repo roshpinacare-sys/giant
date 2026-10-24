@@ -13,7 +13,8 @@
  *
  * Terminals (fail-honest, never throws): ok | probe-error
  */
-import { appendFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, openSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { ORGANS, probeTruth, type OrganSpec, type Truth } from "./truth";
 import { planNext, type Command } from "./command";
@@ -74,7 +75,6 @@ function readFeed(): number {
 }
 function gitBehind(): number {
   try {
-    const { execFileSync } = require("node:child_process") as typeof import("node:child_process");
     const out = execFileSync("git", ["-C", GIANT_ROOT, "rev-list", "--count", "HEAD..origin/main"], { encoding: "utf8" });
     return parseInt(out.trim(), 10) || 0;
   } catch { return 0; }
@@ -88,10 +88,10 @@ async function aliveCheck(port: number): Promise<boolean> {
 function procSiblingsFor(tag: string): number[] {
   const out: number[] = [];
   try {
-    for (const d of require("node:fs").readdirSync("/proc")) {
+    for (const d of readdirSync("/proc")) {
       if (!/^\d+$/.test(d)) continue;
       try {
-        const cmd = require("node:fs").readFileSync(`/proc/${d}/cmdline`, "utf8").replace(/\0/g, " ");
+        const cmd = readFileSync(`/proc/${d}/cmdline`, "utf8").replace(/\0/g, " ");
         if (cmd.includes(tag)) out.push(Number(d));
       } catch { /* vanished */ }
     }
@@ -102,7 +102,7 @@ function realSpawn(plan: SpawnPlan): number {
   // child output goes to the plan's OWN log (measured cure: "ignore" made the
   // bridge crash invisible — an organ that dies silently cannot be commanded)
   let out: number;
-  try { out = require("node:fs").openSync(plan.log, "a"); } catch { out = "ignore" as unknown as number; }
+  try { out = openSync(plan.log, "a"); } catch { out = "ignore" as unknown as number; }
   const p = Bun.spawn(plan.cmd, {
     cwd: plan.cwd,
     env: { ...process.env, ...plan.env },
@@ -203,7 +203,7 @@ function persist(receipts: Receipt[]): void {
     // FULL atomic rewrite (measured cure): partial appends broke the disk chain
     // (seq N persisted with prevHash of unpersisted N-1 → adopt refused on boot).
     // The chain is small (bytes per cycle) — writeFileSync keeps it consistent.
-    require("node:fs").writeFileSync(RECEIPTS_FILE, receipts.map((r) => JSON.stringify(r)).join("\n") + "\n");
+    writeFileSync(RECEIPTS_FILE, receipts.map((r) => JSON.stringify(r)).join("\n") + "\n");
   } catch { /* receipt write never kills the loop */ }
 }
 
@@ -240,7 +240,7 @@ function writeCooldowns(spawnedOrgans: string[]): void {
     for (const o of spawnedOrgans) cds[o] = now + (COOLDOWN_MS[o] ?? 60_000);
     mkdirSync(STATE_DIR, { recursive: true });
     appendFileSync(CD_FILE, ""); // ensure dir exists (touch)
-    require("node:fs").writeFileSync(CD_FILE, JSON.stringify(cds));
+    writeFileSync(CD_FILE, JSON.stringify(cds));
   } catch { /* cooldown persistence best-effort */ }
 }
 

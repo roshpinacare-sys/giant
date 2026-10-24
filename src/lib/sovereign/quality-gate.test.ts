@@ -26,6 +26,7 @@ import {
   type LandingChange,
   type GreenProof,
 } from "./quality-gate";
+import { runGateCli } from "../../../scripts/quality-gate-cli";
 import { CANONICAL_SET } from "./swallow-guard";
 
 function proof(suite = "src/lib", passed = 12, failed = 0): GreenProof {
@@ -212,5 +213,42 @@ describe("quality-gate — קבלות-דין hash-linked (שפת-הלהקה-הא
     const v = verifyReceiptChain(forged);
     expect(v.ok).toBe(false);
     expect(v.brokenAt).toBe(0);
+  });
+});
+
+describe("quality-gate-cli — תפר-הלולאה-החיה (החוזה-הכפול: flat ו-nested, נתפס-חי 18:07Z)", () => {
+  // המגן-החי שלח-היום צורה-שטוחה (change-בלבד-בלי-מפתח-עוטף) וה-CLI דרש-עוטף —
+  // התוצאה: quality-scan-skip בכל-מחזור, §6 מתה-במים-החיים. החוק-החדש: שתי-הצורות
+  // מניבות-את-אותו-פס-דין — התפר-מקורה-משני-הצדדים, ולעולם-אין-קלט-שקט-שנבלע.
+  test("flat-כמו-המגן-החי-שולח → פס-דין-אמיתי (לא fatal)", () => {
+    const flat = { mode: "scan", pathsAdded: ["a.ts"], pathsModified: [], pathsDeleted: [], addedLines: [{ path: "a.ts", lines: ["const x = 1;"] }] };
+    const out = JSON.parse(runGateCli(JSON.stringify(flat)));
+    expect(out.decision).toBe("CLEAN");
+    expect(out.reasons).toEqual([]);
+  });
+  test("flat-עם-זבל → KILL עם-ההפרה-המדויקת", () => {
+    const flat = { mode: "scan", pathsAdded: [], pathsModified: ["b.ts"], pathsDeleted: [], addedLines: [{ path: "b.ts", lines: ["// TODO fix later"] }] };
+    const out = JSON.parse(runGateCli(JSON.stringify(flat)));
+    expect(out.decision).toBe("KILL");
+    expect(out.slop[0].path).toBe("b.ts");
+    expect(out.slop[0].pattern).toBe("TODO");
+  });
+  test("nested {mode,change} — שקול-ביט ל-flat (חוזה-כפול)", () => {
+    const change = { pathsAdded: ["a.ts"], pathsModified: [], pathsDeleted: [], addedLines: [{ path: "a.ts", lines: ["// TODO x"] }] };
+    const nested = JSON.parse(runGateCli(JSON.stringify({ mode: "scan", change })));
+    const flat = JSON.parse(runGateCli(JSON.stringify({ mode: "scan", ...change })));
+    expect(nested).toEqual(flat);
+  });
+  test("receipt-mode: prevHash נחתם-לתוך-הקבלה-hash-linked", () => {
+    const out = JSON.parse(runGateCli(JSON.stringify({ mode: "receipt", at: "2026-10-24T18:40:00Z", prevHash: "abc123", payload: { decision: "CLEAN", tip: "41890b3" } })));
+    expect(out.prevHash).toBe("abc123");
+    expect(typeof out.hash).toBe("string");
+    expect(out.hash.length).toBeGreaterThan(0);
+  });
+  test("קלט-מקולקל → fatal-כנה (fail-closed, אף-חריגה-לא-נזרקת-מה-CLI)", () => {
+    expect(JSON.parse(runGateCli("not json")).fatal).toBe("stdin-not-json");
+    expect(JSON.parse(runGateCli(JSON.stringify({ mode: "scan" }))).fatal).toBe("scan-needs-change");
+    expect(JSON.parse(runGateCli(JSON.stringify({ mode: "scan", change: { addedLines: "nope" } }))).fatal).toBe("change-must-carry-pathsDeleted-and-addedLines");
+    expect(JSON.parse(runGateCli(JSON.stringify({ mode: "warp" }))).fatal).toBe("mode-must-be-scan-or-receipt");
   });
 });
