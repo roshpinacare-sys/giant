@@ -31,6 +31,8 @@ const GUARDED = [
   "mini-services/sovereign-voice/state/alert-status.jsonl",
   "mini-services/sovereign-voice/state/fuel-log.jsonl",
   "mini-services/sovereign-voice/state/seal-log.jsonl",
+  "mini-services/sovereign-voice/state/heal-log.jsonl",
+  "mini-services/sovereign-voice/state/disk-log.jsonl",
 ];
 
 function git(args) {
