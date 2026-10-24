@@ -95,3 +95,8 @@ mini-services/saos-architect-supervisor/state/
 =======
 mini-services/saos-architect-daemon/state/
 >>>>>>> 5127e8eacec7fb3ea23c75e72f43792b43cf20e7
+
+# fleet law: live runtime state is NEVER git-tracked (proven corruption vector —
+# git merges over a live ledger broke the hash-chain 7x today: seq 10140/18974/
+# 42777/58286/6099/7248/64256, all quarantined). State belongs to the engine only.
+mini-services/*/state/
