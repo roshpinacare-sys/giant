@@ -1,0 +1,62 @@
+name: fleet-rail-guardian
+# Storm-proof rail guardian — the fleet-economy receipts rail is under an active ours-merge erasure storm (survival <1 min measured, wave 19.91).
+# This guardian lives on the plane that survives (giant's scheduled infra) and re-arms the fleet-economy rail from canonical blobs
+# stored in giant/sovereign/rail-canonical/. Absent-or-divergent => re-PUT (contents API, lawful identity). Divergent-but-present => alert only.
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: fleet-rail-guardian
+  cancel-in-progress: false
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout canonical blobs
+        uses: actions/checkout@v4
+        with: { fetch-depth: 1 }
+      - name: Restore fleet-economy receipts rail from canonical blobs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RAIL_REPO: fleet-economy
+        run: |
+          set -uo pipefail
+          declare -A MAP=(
+            ["lib/receipt-sign.ts"]="sovereign/rail-canonical/lib_receipt-sign.ts.b64"
+            ["tests/receipt-sign.test.ts"]="sovereign/rail-canonical/tests_receipt-sign.test.ts.b64"
+            ["scripts/fleet-receipts-guard-core.py"]="sovereign/rail-canonical/scripts_fleet-receipts-guard-core.py.b64"
+            [".github/workflows/receipts-guard.yml"]="sovereign/rail-canonical/.github_workflows_receipts-guard.yml.b64"
+            ["state/audit/verify_signatures.py"]="sovereign/rail-canonical/state_audit_verify_signatures.py.b64"
+          )
+          RENAMED=0; ALERTS=""
+          for path in "${!MAP[@]}"; do
+            b64f="${MAP[$path]}"
+            [ -f "$b64f" ] || { echo "::error::canonical blob missing: $b64f"; exit 2; }
+            local_sha=$(base64 -d "$b64f" | sha256sum | cut -d' ' -f1)
+            http=$(curl -s -o /tmp/blob.json -w "%{http_code}" -H "Authorization: Bearer $GH_TOKEN" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY%/*}/$RAIL_REPO/contents/$path")
+            if [ "$http" = "404" ]; then
+              echo "::notice::rail path ABSENT on cloud: $path — re-PUT from canonical"
+              gh api --method PUT "repos/${GITHUB_REPOSITORY%/*}/$RAIL_REPO/contents/$path" \
+                -f message="guardian: rail re-PUT $path (absent — ours-merge storm erasure; canonical $RAIL_REPO lineage 1969771/a618f33)" \
+                -f content="$(base64 -w0 "$b64f")" >/dev/null && RENAMED=$((RENAMED+1)) || { echo "::error::re-PUT failed: $path"; exit 1; }
+            elif [ "$http" = "200" ]; then
+              remote_sha=$(python3 -c "import json,base64,hashlib;d=json.load(open('/tmp/blob.json'));print(hashlib.sha256(base64.b64decode(d['content'])).hexdigest())")
+              if [ "$remote_sha" != "$local_sha" ]; then
+                echo "::warning::rail path DIVERGENT on cloud: $path (remote $remote_sha != canonical $local_sha) — ALERT ONLY (rewrite class, never fight)"
+                ALERTS="$ALERTS $path"
+              else
+                echo "rail path INTACT: $path"
+              fi
+            else
+              echo "::error::unexpected API status $http for $path"; exit 2
+            fi
+            sleep 1
+          done
+          echo "guardian_receipt={\"rearmed\":$RENAMED,\"alerts\":\"${ALERTS:-none}\",\"canonical_set\":5}" >> "$GITHUB_OUTPUT" || true
+          echo "GUARDIAN RECEIPT: re-armed=$RENAMED alerts=[${ALERTS:-none}] canonical_set=5"
+          [ -n "$ALERTS" ] && echo "::warning::rewrite-class divergence detected — named loudly, never fought (house law)"
+          exit 0
