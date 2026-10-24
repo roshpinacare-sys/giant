@@ -9159,3 +9159,20 @@ Stage Summary:
 - 51/51 htlc tests green, 72/72 vault+crypto regression green (123 total), tsc strict clean
 - Commits: e99e5ce (feat), 9fde291 (test); branch feat/atomic-swap-htlc pushed; main merged + pushed @9663ed4
 - Honest scope boundary: deterministic HTLC core + SAOS-HTLC/1 codec + receipt hash-chain + dual-view session + vault sealing + SIMULATED adapter only — no real chain signing/broadcast anywhere (packages/htlc/README.md records the boundary; SimulatedChainAdapter is marked simulated:true and is for tests/dry-run only)
+---
+Task ID: task-26 (מחזור 31 — ראש-הארכיטקטורה, trace 1a16ecaa44313e5d)
+Agent: chief-sovereign-architect
+Task: MASTER DIRECTIVE — saos-architect-supervisor + נפח-מסחר Kelly-safe + HTLC + הלולאה-העצמית-מלאה
+
+Work Log:
+- **4-a saos-architect-supervisor (:3047)**: observe(דפיקות-צי·גילאי-קומיטים·טריות-וורקפלו·פסק-קלי)→decide(מטריצה-דטרמיניסטית-טהורה)→act(החיאות-מנותקות·POST-cycle·GitHub-dispatch)→receipts(SAOS-ARCHITECT/1, prev→hash) · selftest-29/29 · **חי-ומוכח: 11+ מחזורים אוטונומיים, 23+ קבלות, החיה-את-issue-forge-פעמיים**
+- **§9 הושלם-מקצה-לקצה-בפעם-הראשונה**: issue-forge שדורג-לייצור — ①worktree-מבודד (העץ-החי-לא-נוגע-עוד; תיקון-סיכון-reset--hard-על-עץ-חי) ②probe-חוצת-תהליכים (שני-תהליכים-טריים-חייבים-cases-זהים — אפס-מבחנים-שבריריים; שורש: buildContextPack-עם-מצב-מקומי-לתהליך) ③שער-lint-ממוקד-קבצים (חוב-lint-קיים-של-נתיבים-אחרים-לא-חוסם-PR) ④**תוצאה-חיה: Issues #218-220+230-232 נוצרו, #220 claimed→characterization→gate-ירוק-×2→PR #240 squash-merged — אפס-אדם**
+- **4-b Kelly-kernel (סוכן)**: מדידה-אמת על 191-fills-נקיים (94-wash-נשללו-על-פי-חוק): p=0.539, b=0.792, full-Kelly=-422bps → **NO-EDGE, fractionBps=0** — הגרעין מנע-הכפלת-שוליים-שליליים (58/58 selftest, saos-dex main @a1a32f21); ה-supervisor מכבד-את-פסק-הקלי (volume-amplification-withheld)
+- **4-c HTLC (סוכן)**: SAOS-HTLC/1 ב-Saosmartwallet — מכונת-מצבים+codec-קנוני+שרשרת-קבלות+אינטגרציית-vault (51/51, main @9663ed4, גבול-כן: simulated-adapter-בלבד)
+- **התנגשות-SWARM חיה נוספת**: נתיב-מקביל מיזג-ל-main את-saos-architect-daemon-שלו (:3051, registry/executive, 1,142-שורות) בזמן-שה-supervisor-שלי-רץ-על-:3047 → פתרון-§5-שקוף: **אפס-מחיקה — הפרדה-כנה** (supervisor=מפקח-עורקים, daemon=מנוע-ביצוע-רישות), SWARM_STATE-מאוחד-שוב, organ-commander-וempire-registry נלקחו-מ-origin (אמת-עליונה)
+- **fix(mesh)**: require()→import-בראש-הקובץ — חוק-lint-הוחזר-לירוק (23/23-tests)
+- מיזוגי-מירוץ-מרובים-מול-הנחיל-הדוחף (merge-retry-loop עד-PUSHED-OK @136f34d)
+
+Stage Summary:
+- **§1 מוטמע-בקוד**: הארכיטקט-רץ-עכשיו-כדיימון-ילידי-רציף (לא-תלוי-סוכנים-חיצוניים) · §2 שומר-קלי-חי (NO-EDGE-נאכף-בהחלטות) · §3 HTLC-interfaces-קנוניים · §4 לולאת-§9 מוכחת-בPR-ממוזג
+- פתוח-למחזור-32: הפעלת-ה-daemon-של-הנתיב-השני-על-:3051 (בידי-בעליו) · תיאום-supervisor↔daemon · N10-T5 אחרי-5-milui-chutz · מעקב-קלי-מול-התחדשות-הטייפ-הנקי
