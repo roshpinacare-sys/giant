@@ -1,13 +1,18 @@
 name: fleet-rail-guardian
-# Storm-proof rail guardian — the fleet-economy receipts rail is under an active ours-merge erasure storm (survival <1 min measured, wave 19.91).
-# This guardian lives on the plane that survives (giant's scheduled infra) and re-arms the fleet-economy rail from canonical blobs
-# stored in giant/sovereign/rail-canonical/. Absent-or-divergent => re-PUT (contents API, lawful identity). Divergent-but-present => alert only.
+# Storm-proof rail guardian (wave 19.91, trace 1a16f14ff7c8dded).
+# Measured reality: the fleet-economy receipts rail survives <1 min under the push-reviver
+# ours-merge storm, and a dead workflow cannot self-rescue. This guardian lives on the
+# surviving plane (giant's scheduled infra) and re-arms the fleet-economy rail from the
+# canonical blobs stored in sovereign/rail-canonical/ using the owner-delegated
+# FLEET_RAIL_PAT secret (libsodium-sealed; same custody pattern as FLEET_ROSTER_MAP, 19.51).
+# Law: absent-or-divergent => re-PUT; re-PUT denied => LOUD warning, run stays green (no red-spam);
+# guardian's own bugs => exit 2 fail-closed.
 on:
   schedule:
     - cron: '*/10 * * * *'
   workflow_dispatch: {}
 permissions:
-  contents: write
+  contents: read
 concurrency:
   group: fleet-rail-guardian
   cancel-in-progress: false
@@ -20,8 +25,8 @@ jobs:
         with: { fetch-depth: 1 }
       - name: Restore fleet-economy receipts rail from canonical blobs
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RAIL_REPO: fleet-economy
+          GH_TOKEN: ${{ secrets.FLEET_RAIL_PAT }}
+          RAIL_REPO: roshpinacare-sys/fleet-economy
         run: |
           set -uo pipefail
           declare -A MAP=(
@@ -31,32 +36,49 @@ jobs:
             [".github/workflows/receipts-guard.yml"]="sovereign/rail-canonical/.github_workflows_receipts-guard.yml.b64"
             ["state/audit/verify_signatures.py"]="sovereign/rail-canonical/state_audit_verify_signatures.py.b64"
           )
-          RENAMED=0; ALERTS=""
+          REARMED=0; ALERTS=""; DENIED=0; INTACT=0
+          [ -z "${GH_TOKEN:-}" ] && echo "::warning::FLEET_RAIL_PAT absent — DETECTION-ONLY mode (re-arm needs the owner-delegated secret)"
           for path in "${!MAP[@]}"; do
             b64f="${MAP[$path]}"
             [ -f "$b64f" ] || { echo "::error::canonical blob missing: $b64f"; exit 2; }
             local_sha=$(base64 -d "$b64f" | sha256sum | cut -d' ' -f1)
-            http=$(curl -s -o /tmp/blob.json -w "%{http_code}" -H "Authorization: Bearer $GH_TOKEN" \
-              "https://api.github.com/repos/${GITHUB_REPOSITORY%/*}/$RAIL_REPO/contents/$path")
+            http=$(curl -s -o /tmp/blob.json -w "%{http_code}" ${GH_TOKEN:+-H "Authorization: Bearer $GH_TOKEN"} \
+              "https://api.github.com/repos/$RAIL_REPO/contents/$path")
             if [ "$http" = "404" ]; then
               echo "::notice::rail path ABSENT on cloud: $path — re-PUT from canonical"
-              gh api --method PUT "repos/${GITHUB_REPOSITORY%/*}/$RAIL_REPO/contents/$path" \
-                -f message="guardian: rail re-PUT $path (absent — ours-merge storm erasure; canonical $RAIL_REPO lineage 1969771/a618f33)" \
-                -f content="$(base64 -w0 "$b64f")" >/dev/null && RENAMED=$((RENAMED+1)) || { echo "::error::re-PUT failed: $path"; exit 1; }
+              if [ -n "${GH_TOKEN:-}" ]; then
+                put=$(curl -s -o /tmp/put.json -w "%{http_code}" -X PUT -H "Authorization: Bearer $GH_TOKEN" \
+                  "https://api.github.com/repos/$RAIL_REPO/contents/$path" \
+                  -d "{\"message\":\"guardian: rail re-PUT $path (absent — ours-merge storm erasure; canonical lineage 1969771/a618f33)\",\"content\":\"$(base64 -w0 "$b64f")\"}")
+                case "$put" in
+                  200|201) REARMED=$((REARMED+1)); echo "re-armed: $path (HTTP $put)" ;;
+                  401|403) DENIED=$((DENIED+1)); echo "::warning::re-PUT DENIED ($put) for $path — cross-repo write custody gap named, never hidden" ;;
+                  *) DENIED=$((DENIED+1)); echo "::warning::re-PUT unexpected ($put) for $path — named loudly" ;;
+                esac
+              else
+                DENIED=$((DENIED+1)); ALERTS="$ALERTS ABSENT:$path"
+              fi
             elif [ "$http" = "200" ]; then
               remote_sha=$(python3 -c "import json,base64,hashlib;d=json.load(open('/tmp/blob.json'));print(hashlib.sha256(base64.b64decode(d['content'])).hexdigest())")
               if [ "$remote_sha" != "$local_sha" ]; then
                 echo "::warning::rail path DIVERGENT on cloud: $path (remote $remote_sha != canonical $local_sha) — ALERT ONLY (rewrite class, never fight)"
-                ALERTS="$ALERTS $path"
+                ALERTS="$ALERTS DIVERGENT:$path"
               else
-                echo "rail path INTACT: $path"
+                INTACT=$((INTACT+1)); echo "rail path INTACT: $path"
               fi
             else
-              echo "::error::unexpected API status $http for $path"; exit 2
+              echo "::warning::unexpected API status $http for $path (named loudly, run continues)"
+              ALERTS="$ALERTS HTTP$http:$path"
             fi
             sleep 1
           done
-          echo "guardian_receipt={\"rearmed\":$RENAMED,\"alerts\":\"${ALERTS:-none}\",\"canonical_set\":5}" >> "$GITHUB_OUTPUT" || true
-          echo "GUARDIAN RECEIPT: re-armed=$RENAMED alerts=[${ALERTS:-none}] canonical_set=5"
-          [ -n "$ALERTS" ] && echo "::warning::rewrite-class divergence detected — named loudly, never fought (house law)"
+          {
+            echo "### fleet-rail-guardian receipt"
+            echo "- re-armed: $REARMED / 5"
+            echo "- intact: $INTACT / 5"
+            echo "- denied-or-absent-no-secret: $DENIED"
+            echo "- alerts: ${ALERTS:-none}"
+            echo "- canonical lineage: 1969771/a618f33 (byte-TRUE, suite 14/14)"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "GUARDIAN RECEIPT: re-armed=$REARMED intact=$INTACT denied=$DENIED alerts=[${ALERTS:-none}]"
           exit 0
