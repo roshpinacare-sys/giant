@@ -40,9 +40,36 @@ export const SLOP_PATTERNS: readonly { readonly id: string; readonly re: RegExp;
     { id: "TO-BE-DONE", re: /\bto\s+be\s+(?:done|implemented|filled)\b/i, testExempt: false },
   ]);
 
-/** חוק-הפטור-המבני: תוכן-נוצר-מכונה/נעילה/מצב-ריצה אינו-כוונת-מפתח — חסין-סריקה. */
+/** חוק-מראת-החוק (נתפס-חי 18:38Z): הקובץ-שמוכיח-שהחוק-עובד חייב-לשאת-את-
+ *  הדפוסים-שהוא-מגלה — אחרת-החוק-אינו-יכול-להוכיח-את-עצמו. הפטור-צר-וקפוא:
+ *  קובץ-המבחן-של-השער-עצמו בלבד. זה-בט-ההוכחה-של-§6, לא-מעבר-מאחורי-גבו. */
+export const LAW_MIRROR_PATHS: readonly string[] = Object.freeze([
+  "src/lib/sovereign/quality-gate.test.ts",
+  "src/lib/sovereign/quality-gate.ts",
+]);
+
+/** חוק-קורפוס-הראיות (סריקת-צי-מלאה-ראשונה 18:45Z: 853-קבצים, 85-היטים,
+ *  אפס-זבל-אמיתי): פרוזה, יומני-להקה, ואיברי-גילוי שאוצר-המילים-עצמו הוא
+ *  המטען-שלהם — ראיה, לא-כוונת-עבודה-לא-גמורה. קפוא, מוכרז, נבדק. */
+export const EVIDENCE_CORPUS_PROSE_RE = /\.md$/i;
+export const EVIDENCE_CORPUS_ORGAN_PREFIXES: readonly string[] = Object.freeze([
+  "mini-services/issue-forge/",
+  "mini-services/forge/",
+  "mini-services/saos-architect-daemon/",
+]);
+export const EVIDENCE_CORPUS_ORGAN_FILES: readonly string[] = Object.freeze([
+  "src/lib/giant/trust-scan.ts",
+  "scripts/trust-heartbeat.mjs",
+  "src/components/giant/TrustView.tsx",
+]);
+
+/** חוק-הפטור-המבני: תוכן-נוצר-מכונה/נעילה/מצב-ריצה + קורפוס-ראיות — חסין-סריקה. */
 export function isSlopExemptPath(path: string): boolean {
   return (
+    (LAW_MIRROR_PATHS as readonly string[]).includes(path) ||
+    EVIDENCE_CORPUS_PROSE_RE.test(path) ||
+    EVIDENCE_CORPUS_ORGAN_PREFIXES.some((p) => path.startsWith(p)) ||
+    (EVIDENCE_CORPUS_ORGAN_FILES as readonly string[]).includes(path) ||
     /(?:^|\/)(?:bun\.lock|bun\.lockb|package-lock\.json|yarn\.lock|pnpm-lock\.yaml)$/.test(path) ||
     /(?:^|\/)(?:node_modules|dist|build|\.next|\.turbo|coverage)(?:\/|$)/.test(path) ||
     /^(?:state|db|\.git)\//.test(path) ||

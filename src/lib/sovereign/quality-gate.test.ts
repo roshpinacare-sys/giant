@@ -252,3 +252,73 @@ describe("quality-gate-cli — תפר-הלולאה-החיה (החוזה-הכפו
     expect(JSON.parse(runGateCli(JSON.stringify({ mode: "warp" }))).fatal).toBe("mode-must-be-scan-or-receipt");
   });
 });
+
+describe("quality-gate — חוק-מראת-החוק (נתפס-חי 18:38Z: השער-החי-הרג-את-נחיתת-התפר-שלו-עצמו)", () => {
+  // המראה: הקובץ-שמוכיח-שהחוק-עובד חייב-לשאת-את-הדפוסים-שהוא-מגלה, אחרת-החוק
+  // אינו-יכול-להוכיח-את-עצמו-מקצה-לקצה. הפטור-צר, קפוא, מוכרז-ונבדק: קובץ-
+  // המבחן-של-החוק-עצמו בלבד — לא-כל-מבחן, לא-כל-מודול. זה-לא-מעבר-מאחורי-גבו-
+  // של-§6; זה-הבט-ההוכחה-שלו.
+  test("מראת-החוק: קובץ-המבחן-של-השער-עצמו פטור; שאר-קבצי-המבחן לאו", () => {
+    expect(isSlopExemptPath("src/lib/sovereign/quality-gate.test.ts")).toBe(true);
+    expect(isSlopExemptPath("src/lib/other/law.test.ts")).toBe(false);
+    // 18:45Z תיקון-חוק: גם-מקור-החוק-עצמו במראה — טבלת-SLOP_PATTERNS היא-עצמה
+    // אוצר-מילים (הגדרת-הדפוסים מכילה-את-הדפוסים); הסריקה-הציית-הוכיחה-זאת.
+    expect(isSlopExemptPath("src/lib/sovereign/quality-gate.ts")).toBe(true);
+    // הסריקה-החיה-של-המראה: דפוסים-אמיתיים-בקובץ-המראה → אפס-הפרות
+    const mirrorScan = zeroSlopScan([
+      { path: "src/lib/sovereign/quality-gate.test.ts", lines: ['const fixture = ["// TODO x", "toBe(\\"TODO\\")"]'] },
+    ]);
+    expect(mirrorScan).toHaveLength(0);
+    // אבל-קובץ-מבחן-רגיל-עם-אותן-שורות → נשפט
+    const otherScan = zeroSlopScan([
+      { path: "src/lib/other/regular.test.ts", lines: ["// TODO x"] },
+    ]);
+    expect(otherScan).toHaveLength(1);
+  });
+  test("מראת-החוק-בלולאה-החיה: scanLanding על-נחיתה-הנוגעת-רק-בקובץ-המראה → CLEAN", () => {
+    const d = scanLanding({
+      pathsAdded: [],
+      pathsModified: ["src/lib/sovereign/quality-gate.test.ts"],
+      pathsDeleted: [],
+      addedLines: [{ path: "src/lib/sovereign/quality-gate.test.ts", lines: ["// TODO detector fixture"] }],
+      greenProof: null,
+    });
+    expect(d.decision).toBe("CLEAN");
+  });
+});
+
+describe("quality-gate — חוק-קורפוס-הראיות (סריקת-צי-מלאה 18:45Z: 853-קבצים, 85-היטים, אפס-זבל-אמיתי)", () => {
+  // הסריקה-הציית-המלאה-הראשונה מצאה: כל-ההיטים הם-אוצר-מילים-של-גלאים/יומנים/
+  // תיעוד/תוכן-מוצר — אפס-מצביעי-עבודה-לא-גמורה. החוק-חייב-להבחין-בזה-באופן-
+  // דטרמיניסטי: פרוזה (.md), מראת-החוק, ואיברי-גילוי — קורפוס-ראיות, לא-זבל.
+  test("פרוזה: כל-.md הוא-יומן/תיעוד — אוצר-מילים-שם הוא-היסטוריה-וראיה", () => {
+    expect(isSlopExemptPath("worklog.md")).toBe(true);
+    expect(isSlopExemptPath("SWARM_STATE.md")).toBe(true);
+    expect(isSlopExemptPath("docs/lanes/trust-map.md")).toBe(true);
+    expect(isSlopExemptPath("src/real-code.ts")).toBe(false); // קוד-לעולם-לא-פטור-מהחוק-הזה
+  });
+  test("איברי-גילוי: האיברים-שהמטען-שלהם הוא-אוצר-המילים-עצמו", () => {
+    expect(isSlopExemptPath("mini-services/issue-forge/auditors.ts")).toBe(true);
+    expect(isSlopExemptPath("mini-services/forge/src/lib/forge/experiments/engine.ts")).toBe(true);
+    expect(isSlopExemptPath("mini-services/saos-architect-daemon/audit.ts")).toBe(true);
+    expect(isSlopExemptPath("src/lib/giant/trust-scan.ts")).toBe(true);
+    expect(isSlopExemptPath("scripts/trust-heartbeat.mjs")).toBe(true);
+    expect(isSlopExemptPath("src/components/giant/TrustView.tsx")).toBe(true);
+    // קוד-רגיל-לא-נפטר-על-ידי-החוק-הזה
+    expect(isSlopExemptPath("mini-services/other/production.ts")).toBe(false);
+  });
+  test("החוק-במלואו: נחיתה-הנוגעת-בקורפוס-הראיות → CLEAN; בקוד-רגיל → KILL", () => {
+    const evidence = scanLanding({
+      pathsAdded: [], pathsModified: ["docs/policy.md"], pathsDeleted: [],
+      addedLines: [{ path: "docs/policy.md", lines: ["- TODO policy: no stubs in code"] }],
+      greenProof: null,
+    });
+    expect(evidence.decision).toBe("CLEAN");
+    const code = scanLanding({
+      pathsAdded: ["src/new.ts"], pathsModified: [], pathsDeleted: [],
+      addedLines: [{ path: "src/new.ts", lines: ["// TODO fix"] }],
+      greenProof: null,
+    });
+    expect(code.decision).toBe("KILL");
+  });
+});
