@@ -13,6 +13,9 @@
  */
 import fs, { appendFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
+// G73 (§2 · 19.93 prediction-1): the organ plane's FIRST PRODUCTION consumer of the
+// all-soldier census — the army beat reads the live book tail and measures activation.
+import { censusFromBook, type BookCensus, type BookRecord } from "../self-financing-engine/roster-from-book.ts";
 
 const DEX = "http://127.0.0.1:3010/saos-dex/api/dex";
 const PORT = 3018;
@@ -231,11 +234,29 @@ async function marketPulse(fillsNow: number, feeMeter: number): Promise<void> {
 }
 
 let cycles = 0, lastFair = 0, lastErr = "", bootedAt = Date.now();
+// G73 §2 census state (measured, honest — null until the first live book read lands)
+let census: BookCensus | null = null;
+let censusAt = 0;
+let censusErr = "";
+const ECONOMY_BOOK = "http://127.0.0.1:3016/ledger?limit=500";
+async function measureCensus(): Promise<void> {
+  try {
+    const r = await jget(ECONOMY_BOOK);
+    const tail: BookRecord[] = Array.isArray(r?.tail) ? r.tail : [];
+    const c = censusFromBook(tail, Date.now(), 6);
+    census = c; censusAt = Date.now(); censusErr = "";
+    if (cycles % 20 === 0) {
+      console.log(`[army] census: roster ${c.rosterSize} · active ${c.activeCount} (${c.activationPct}%) · window ${c.windowHours}h · records ${tail.length}`);
+    }
+  } catch (e) { censusErr = String(e).slice(0, 110); }
+}
 async function tick(): Promise<void> {
   try {
     const bals = await balances();
     await fundCycle(bals);
     await gridCycle();
+    // G73 §2: the all-soldier census — a live book read, never fatal to trading
+    try { await measureCensus(); } catch { /* census never kills the beat */ }
     // גל-16: מדידה-אחרי-מחזור — דופק-רק-כשהשוק קפוא-והמזרקה יבשה
     try {
       const st2 = await jget(`${DEX}/state`);
@@ -254,6 +275,8 @@ Bun.serve({
     soldiers: SOLDIERS.map((s) => ({ id: s, ...S[s] })),
     cycles, lastFair, bankUsdsMu: BANK_USDS_MU, gridBps: GRID_BPS,
     pulse: { pulses, pulseFeeMu, frozenCycles, dir: pulseDir, lastPulseAgoSec: lastPulseAt ? Math.round((Date.now() - lastPulseAt) / 1000) : null, err: pulseErr || null },
+    census: census ? { rosterSize: census.rosterSize, activeCount: census.activeCount, activationPct: census.activationPct, windowHours: census.windowHours, measuredAt: censusAt ? new Date(censusAt).toISOString() : null } : null,
+    censusErr: censusErr || null,
     lastErr: lastErr || null, upSec: Math.round((Date.now() - bootedAt) / 1000),
   }),
 });
