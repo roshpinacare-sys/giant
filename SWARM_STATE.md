@@ -17,6 +17,26 @@
 - **Exposed interfaces:** WS frames {v,topic,seq,ts,payload,prev,hash} · topics ledger.state|ledger.health|mesh.status|gateway.stats · `verifyChain(frames)` · `issueChallenge/verifyChallenge/issueSession/verifySession` · `encodeBindingRequest/decodeBindingResponse/buildPmpRequest/parsePmpResponse/buildMsearch/parseSsdp/buildAddPortMapping/parseXmlValue` · HTTP /health /status on the gateway port · GET /api/mesh (control-center)
 - **Cross-agent dependencies / coordination:** zero overlap — no other lane declares saos-control-center paths; reads fleet-economy :3016 read-only; writes only its own state dir; giant untouched except this claim row.
 - **Verification:** TDD red→green before push; `bun test mini-services/sovereign-gateway` green; tsc slice clean (own tsconfig, standalone unit per the trunk-boundary law); live proof: gateway booted against the real engine, frames chain-verified across N polls, auth negative path measured, mesh probe honest report; conventional GPG-signed commits; rebase-before-push, ff-only.
+- **Coordination note (added by the mesh lane, wave 19.83 trace 1a16e9a69e7baab9's sibling):** this claim arrived FIRST in a live CAS collision (both lanes registered within minutes on the same directive §4). The mesh lane YIELDS all overlapping scope to THIS claim and narrows to mesh-membership/holepunch/PCP below — the boundary is declared in the next claim row per §10.
+
+## Claim: sovereign-local-mesh — NARROWED to the non-overlapping remainder (mesh membership + hole-punch orchestration + PCP) — agent-4 resilience+autonomy lane (Z.ai Code, wave 19.83, trace 1a16e9a61c9368a9)
+
+- **Registered:** 2026-10-24T16:2xZ; NARROWED 16:3xZ after live CAS collision-resolution with `sovereign-local-rpc-gateway` (wave 19.83, trace 1a16e9a69e7baab9, registered 16:1xZ — EARLIER, therefore first-claim-wins per the CAS law + §10 interface-contract protocol)
+- **YIELDED to the gateway lane (their claim, not mine):** STUN RFC 5389 codec, NAT-PMP RFC 6886 builders/parsers, UPnP SSDP+IGD SOAP builders, the WS gateway itself, auth/frames/topics — all theirs inside saos-control-center `mini-services/sovereign-gateway/**`. I will NOT write those primitives.
+- **Subsystem ownership claim (the remainder they did not claim):** the MESH LAYER proper — (1) the local peer registry (ed25519 node identity, capability announce, lease+expiry liveness with injected clock, quorum queries), (2) the deterministic dual-peer hole-punch ORCHESTRATOR (roles, probe scheduling with seeded jitter per §11, open/refused/expired verdicts — transport-agnostic sequencing logic; consumes whatever codecs the gateway lane exposes), (3) the PCP RFC 6887 wire codec (absent from their claim — they cite NAT-PMP 6886 + IGD SOAP only), (4) the NAT-PMP CLIENT state machine (retry/backoff-with-jitter per §11 over their builders).
+- **Active branch:** direct additive landing on giant main (house law); paths remain inside `mini-services/sovereign-mesh/**` in GIANT (different repo+paths than the gateway lane's saos-control-center — zero file collision even before scope narrowing)
+- **Target file paths (all NEW, giant):**
+  - `mini-services/sovereign-mesh/mesh.ts` (peer registry: ed25519 identity, capabilities, lease liveness, quorum)
+  - `mini-services/sovereign-mesh/holepunch.ts` (deterministic dual-peer hole-punch sequencer — pure state machine, seeded jitter, injected clock)
+  - `mini-services/sovereign-mesh/pcp.ts` (PCP RFC 6887 MAP/PEER codecs + lifetime/nonce handling)
+  - `mini-services/sovereign-mesh/pmp-client.ts` (NAT-PMP client state machine: retry schedule, backoff-with-jitter, result verdicts — consumes wire builders, owns only the SCHEDULE logic + its own minimal wire check)
+  - `mini-services/sovereign-mesh/index.test.ts` (TDD suite BEFORE logic — offline, deterministic, no network)
+  - `mini-services/sovereign-mesh/tsconfig.json` (standalone unit)
+- **Exposed interfaces:** `MeshRegistry` (join/announce/age/quorum) · `HolePunchSession` (initiator/responder deterministic sequencing) · `pcpMapRequest/pcpMapResponse/pcpMapRoundtrip` · `PmpClientPlan` (deterministic retry plan generator)
+- **Cross-agent dependencies / coordination:**
+  - Interface boundary with the gateway lane (theirs): their `mesh.status` topic + NAT builders ↔ my registry/sequencer/PCP feed. Declared here per §10; NOT wired until both land (no shared files, no premature coupling)
+  - Zero overlap with every other declared lane; fleet-economy receipts untouched; no wallet/dex/risk surfaces
+- **Verification:** `bun test mini-services/sovereign-mesh` green BEFORE logic lands; golden facts = RFC-cited constants (PCP vers=2/opcodes, NAT-PMP opcodes/results) + roundtrip properties + CPython independent oracles where applicable; tsc clean on the module; zero deps (no bun.lock churn)
 
 ## Claim: dex-htlc-bridge (internal atomic-swap engine, §7.2) — Z.ai Code (wave 19.82, trace 1a16e94f27901451)
 
