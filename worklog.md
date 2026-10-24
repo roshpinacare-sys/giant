@@ -9121,3 +9121,20 @@ Stage Summary:
 - מילוי-חוץ מוכח-מתגלגל: $0.0096→$0.0321/24ש׳ (×3.34) — המגבר-עובד-על-השרשרת עם-קבלות-txid
 - הנחיל-ה-9-מופעים חי-ומתכנס: CAS-collision-נפתר-שקוף, אפס-claim-נמחק, עבודה-זרה-מוזגה (htlc/risk)
 - חובות-פתוחות-למחזור-31: N10 (T5) אחרי-5-milui-chutz · N11 מעקב-7-ימים · issue-forge בעל-פעימה-ראשונה-חיה (FORGE_INTERVAL_MS) · קבלה-חתומה: הקומיטים-לעיל-הם-הראיה (דוקטרינה-#14)
+---
+Task ID: 4-b (cycle 31)
+Agent: swarm-kelly-kernel
+Task: Deterministic Kelly-criterion sizing kernel in saos-dex (MASTER DIRECTIVE §2, observe mode)
+
+Work Log:
+- Branch feat/kelly-risk-kernel from origin/main; read policy.mjs (maxNotionalPerOpSbd=25 grid lane, ownerGate 100 SBD), external-profit.mjs (fill-evidence events carry profit field), position-sizing.mjs (SAOS-RISK-SIZE/1 observe/enforce precedent), pnl-audit.mjs LAW-P1 (self-cross fills never evidence), .gitignore (grids/state is tracked: `!grids/state/`)
+- Located the REAL fills ledger: db/grid-ledger.json → fills[] (git-tracked, grid-beat commits its counts: "285 fills counted" @40c5db66). Per-fill profit = recvUsd − paidUsd (USD, stamped at fill time via steemUsd/sbdUsd). Measured: 285 raw fills, 94 selfCross wash fills (excluded per LAW-P1/spread-tiers "wash never evidence"), 0 malformed, 0 missing-pnl → 191 determinate trades
+- TDD: wrote grids/kelly-selftest.mjs FIRST, watched it fail (ERR_MODULE_NOT_FOUND, exit 1), then implemented grids/kelly.mjs (ESM, node:fs/path/url only): readFillStats (JSON grid-ledger shape + JSONL tapes, honest malformed-line counting, INSUFFICIENT-DATA fail-honest), estimate (pure p/b), kellyFraction (classic f*=p−(1−p)/b, negative expectancy→0, edges fail-honest), fractionalKelly (quarter 0.25, clamped [0,1]), recommendSizing (SAOS-KELLY/1 verdicts OK/CLAMPED/NO-EDGE/INSUFFICIENT-DATA, fractionBps quarter-Kelly clamped [0, policyCapBps], fullKellyBps honest raw incl. negative), writeRecommendation (tmp+rename atomic)
+- Fixed 2 real bugs the selftest caught: spread-order bug (agg.verdict "OK" overrode INSUFFICIENT-DATA verdicts) and fullKellyBps clamp bug (negative expectancy must publish the honest negative measurement, not 0); CLI direct-run guard bug (pathToFileURL double-wrap of import.meta.url) found by real-run probe, fixed
+- package.json: appended `node grids/kelly-selftest.mjs` at END of selftest chain (additive, nothing reordered)
+- Real CLI run on live ledgers → grids/state/kelly-sizing.json committed (grids/state is git-tracked, verified with check-ignore)
+
+Stage Summary:
+- MEASURED (2026-10-24T16:55Z, db/grid-ledger.json, 191 real fills after 94 wash excluded): verdict=NO-EDGE · p=0.539267 (103W/88L) · b=0.792396 (avgWin $0.015889 / avgLoss $0.020052) · fullKelly=−422bps (negative expectancy, sum −$0.128) · quarter-Kelly fractionBps=0 — Kelly says size ZERO; honest: the clean grid tape has no positive edge yet
+- Selftest: 58/58 PASS (deterministic offline vectors: f*(0.6,1.5)=1/3 exact, negative-expectancy→0, p=1/b→0/zero-trades edges, fixture ledger 3W/2L p=0.6 b=20/9 f*=0.42, malformed-line counting, policyCapBps clamp 1050→500, INSUFFICIENT-DATA on empty/corrupt/missing, exact SAOS-KELLY/1 schema, atomic-write no-tmp, live-ledger consistency)
+- Commits: 249e1958 feat(kelly) [kelly.mjs + measured kelly-sizing.json] · 708d0484 test(kelly) [kelly-selftest.mjs + package.json chain] · merge a1a32f21; branch push + main push confirmed (origin/main = a1a32f21); observe-mode recorded in code comments and rec.observability.enforcement — enforcement transition needs owner word
