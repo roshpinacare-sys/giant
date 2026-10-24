@@ -18,14 +18,23 @@ mkdir -p "$STATE_DIR"
 
 say() { printf '{"t":"%s","loop":"giant-swallow-guard","msg":"%s"}\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$1" >> "$LOG"; }
 
-# ── UNITY-GUARD: טבעת-יחידות שלישית (מעבר-ל-flock — חוק-T-582) ──
-for pid in $(pgrep -f "bash .*giant-swallow-guard.sh" 2>/dev/null); do
-  [ "$pid" != "$$" ] && say "UNITY: another guard ($pid) alive — exiting" && exit 0
-done
+# ── שער-הסמכות: flock קודם (אטום-מירוצים) — המחזור-החי-מתוקן-חי: UNITY-לפני-flock
+# יצר-מירוץ-הדדי (שני-מופעים-ראו-אחד-את-השני-ושניהם-יצאו, 16:06:18Z).
+# הסדר-הנכון: flock-קודם = שער-סמכות; UNITY-אחריו = אבחון-בלבד (לעולם-לא-יציאה). ──
 exec 9>"$STATE_DIR/.guard.lock" || exit 1
-flock -n 9 || { say "LOCK: held — exiting"; exit 0; }
+if ! flock -n 9; then
+  say "LOCK: held — checking who holds it:"
+  for pid in $(pgrep -f "bash .*giant-swallow-guard.sh" 2>/dev/null); do
+    [ "$pid" != "$$" ] && say "  live guard found: pid $pid — exiting cleanly"
+  done
+  exit 0
+fi
+# אבחון-בלבד: אם-חיים-אחרים-בזמן-שאני-מחזיק-במנעול — הם-לא-מחזיקים-בו (רישום-כנה)
+for pid in $(pgrep -f "bash .*giant-swallow-guard.sh" 2>/dev/null); do
+  [ "$pid" != "$$" ] && say "UNITY-DIAG: foreign guard process $pid alive WITHOUT the lock (harmless, recorded)"
+done
 echo $$ > "$STATE_DIR/guard.pid"
-say "guard armed (pid $$, cycle ${CYCLE}s, canonical-set=12)"
+say "guard armed (pid $$, cycle ${CYCLE}s, canonical-set=12, flock-authority=yes)"
 
 # adopted.json — המקורות-המאומצים {path: blobSha, tip, at}
 if [ ! -f "$ADOPTED" ]; then
