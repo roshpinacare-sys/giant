@@ -15,6 +15,7 @@ import { parseEvidence, selectContract, TsContract } from "./executive.ts";
 import { CURE_REGISTRY, applyCure, revertToSnapshot, boundaryRewindSelection, Snapshot } from "./registry.ts";
 import { canonicalJSON, ReceiptChain, verifyReceipts, writeChainJsonl } from "./receipts.ts";
 import { acquireLock, releaseLock, LockHandle } from "./lock.ts";
+import { commitArgs, rebaseArgs } from "./git-law.ts";
 import type { Selection } from "./executive.ts";
 
 export const SERVICE_DIR = import.meta.dir;
@@ -115,7 +116,7 @@ export function runCycle(root: string = REPO_ROOT, pid: number = process.pid): C
     const planFiles = sel.cure.build(root, sel.contract).files.map((f) => path.join(root, f));
     for (const f of planFiles) sh(root, "git", ["add", "--", path.relative(root, f)]);
     const msg = `fix(architect): ${sel.cureId} — ${sel.contract.file}:${sel.contract.line} ${sel.contract.code} cured (architect-daemon cycle, tsc ${before.count}→${after.count})`;
-    const commitMsg = sh(root, "git", ["commit", "-m", msg]);
+    const commitMsg = sh(root, "git", commitArgs(msg));
     if (commitMsg.code !== 0) {
       revertToSnapshot(root, snap);
       const nothing = commitMsg.out.includes("nothing to commit");
@@ -128,7 +129,7 @@ export function runCycle(root: string = REPO_ROOT, pid: number = process.pid): C
     let lastErr = "";
     for (let attempt = 0; attempt < 3 && !pushed; attempt++) {
       sh(root, "git", ["fetch", "origin", "main"]);
-      const rebase = sh(root, "git", ["-c", "rebase.autoStash=true", "rebase", "origin/main"]);
+      const rebase = sh(root, "git", rebaseArgs());
       if (rebase.code !== 0) {
         // mid-rebase conflict: our tree = adopted truth; abort honestly (revert-by-abort), keep receipts
         sh(root, "git", ["rebase", "--abort"]);
