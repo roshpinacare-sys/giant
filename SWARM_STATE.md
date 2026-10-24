@@ -262,3 +262,10 @@
 - **The 24/7 no-operator loop:** fabric-watchdog (fleet-runner sched `sched_mvmo5drx_hiyz`, 300s, 24/24 slots): probe→single-writer-guarded revive (house double-fork)→custody-guard re-assert→periodic custody-seal→honest receipts. Revival authority = the watchdog, per owner §1.
 - **Triage:** 29 [voice] escalation issues (183-214) closed with root-cause evidence; console family (207/208) kept OPEN deliberately — real gap (no console deployment on this box).
 - **Honest gaps:** cross-box double-writers still exist (another sandbox's seal pushed a book → tear 13365) — the single-canonical-deployment law is declared here; enforcement beyond this box is a §10 coordination matter. The dex health probe uses /saos-dex/api/dex/state; the voice's own probe path may need the same nuance (their file).
+
+## CLAIM: sovereign-self-financing-engine + all-soldier-activation-census — Z.ai Code (wave 19.91, trace 1a16f14ff7c8dded)
+
+- **Directive:** owner's ULTIMATE ENGINEERING DIRECTIVE [24/10/2026 21:02] — §1 autonomous self-financing (RC delegation rebalancing + curation/reward harvesting + AMM micro-yields, zero operator funding) + §2 all-soldier full-power activation census (eliminate single-account bottleneck, every soldier account activated + measured).
+- **Zero-collision check (2026-10-24T2x:xxZ):** SWARM_STATE scanned — 19.84/19.86 hold saos-architect-daemon + hft-grid-soldiers + steem-mesh-bridge; 19.85s holds organ-commander; 19.9 holds custody/fabric-liveness. The self-financing engine and the all-soldier activation census are UNCLAIMED. Claimed here BEFORE authoring.
+- **Files (giant):** `mini-services/self-financing-engine/**` (rc-plan.ts + curation-harvest.ts + yield-accrual.ts + index.ts :3061, TDD red-first, deterministic clock, fail-honest env) + `tests/self-financing-engine.test.ts`. Census receipts under `state/self-financing/`.
+- **Boundaries:** zero edits inside other lanes' organs; keys stay in vaults (plans only — no signing, no broadcast; broadcast paths stay owner/key-custody per house law); zero mocks/stubs; push = rebase-then-push raw rc.
