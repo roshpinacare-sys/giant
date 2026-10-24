@@ -12,6 +12,10 @@ export async function GET() {
   try {
     await ensureEngine();
     const snap = await steemMarketSnapshot();
+    if (!snap) {
+      /* fail-closed כנה: אין-תמונת-שוק (כשל-רשת-קר) — 503, לא-המצאה. wave 19.81 */
+      return NextResponse.json({ error: "תמונת-שוק-סטים אינה זמינה כרגע — נסה שוב" }, { status: 503 });
+    }
 
     // מצב-הצמדה: בריכות-הגישור מול-האורקל (מדידה-חיה, לא-טענה)
     const pairs = await db.dexPair.findMany({
