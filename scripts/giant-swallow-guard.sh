@@ -111,8 +111,10 @@ PYEOF
       VERDICT="$(printf '%s' "$SCAN_INPUT" | bun "$REPO/scripts/quality-gate-cli.ts" 2>>"$LOG")" || VERDICT=""
       if [ -n "$VERDICT" ] && ! printf '%s' "$VERDICT" | grep -q '"fatal"'; then
         DEC="$(printf '%s' "$VERDICT" | python3 -c "import json,sys; print(json.load(sys.stdin)['decision'])")"
+        # תפר-הקבלה (נתפס-חי 18:38Z): ההשו של QPREV חייב-להיות-מצוטט (json.dumps)
+        # — הש-גולמי-בלי-מרכאות יצר-JSON-בלתי-חוקי והקבלה-נעלמה (KILL-בלי-ראיה).
         QPREV="$(tail -1 "$QUALITY_DIR/verdicts.jsonl" 2>/dev/null | python3 -c "import json,sys
-try: print(json.load(sys.stdin)['hash'])
+try: print(json.dumps(json.load(sys.stdin)['hash']))
 except Exception: print('null')" 2>/dev/null || echo null)"
         QREC="$(printf '{"mode":"receipt","at":"%s","prevHash":%s,"payload":{"verdict":%s,"from":"%s","to":"%s"}}' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$QPREV" "$VERDICT" "$LAST_SCANNED" "$TIP" | bun "$REPO/scripts/quality-gate-cli.ts" 2>>"$LOG")" || QREC=""
         [ -n "$QREC" ] && printf '%s\n' "$QREC" >> "$QUALITY_DIR/verdicts.jsonl"
