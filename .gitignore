@@ -103,3 +103,8 @@ mini-services/*/state/
 
 # doc-truth-sync runtime state (append-only receipts chain)
 mini-services/doc-truth-sync/state/
+
+# fleet law (re-landed 2026-10-24T22:4xZ): live runtime state is NEVER git-tracked.
+# A stale lane merge re-added 35 state files after #298 — this re-kills the vector.
+mini-services/*/state/
+mini-services/*/state/*
