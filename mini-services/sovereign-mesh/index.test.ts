@@ -3,6 +3,7 @@
 // Golden facts: RFC-cited constants (PCP RFC 6887, NAT-PMP RFC 6886) + roundtrip
 // properties + CPython zlib.crc32 as an independent oracle where hashing is tested.
 import { describe, test, expect } from "bun:test";
+import { createHash } from "node:crypto";
 import { createIdentity, MeshRegistry } from "./mesh";
 import { planProbes, createSession, verdict, type ProbeEvent } from "./holepunch";
 import { buildPcpMapRequest, parsePcpResponse, buildPcpMapResponse, PCP_OPCODE_MAP, PCP_RESULT_SUCCESS } from "./pcp";
@@ -24,7 +25,6 @@ describe("mesh identity", () => {
   test("nodeId is sha256 of the raw public key", () => {
     const id = createIdentity("seed-sha-check");
     // sha256(pubRaw32) — recomputed here via node:crypto as an independent check
-    const { createHash } = require("node:crypto");
     expect(id.nodeId).toBe(createHash("sha256").update(id.publicKeyRaw).digest("hex"));
   });
 });

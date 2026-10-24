@@ -237,30 +237,38 @@ async function cycleBody(cycle: number, repoRoot: string): Promise<CycleVerdict>
   await gh.addLabels(target.number, ["claimed"]);
   appendLedger({ cycle, phase: "claim", issue: target.number, verdict: "claimed", detail: `SAOS-FORGE-CLAIM/${cycle}/${iso}` });
 
-  /* ── temp branch from current main HEAD ─────────────────────────────────── */
-  const savedBranch = (await sh("git", ["rev-parse", "--abbrev-ref", "HEAD"], repoRoot, 15_000)).out.trim() || "main";
+  /* ── isolated worktree from current main HEAD ─────────────────────────────
+   * העץ-החי (/home/z/my-project) הוא עץ-הרצה של שרת-3000 + אטימות-כלכלה —
+   * checkout/reset שם היה סיכון-מצב-חי (תוקן מחזור-31): כל-עבודת-ה-forge רצה
+   * ב-worktree מבודד ב-/tmp, node_modules מקושר-מהעץ-החי, ה-main לא-נוגע. */
   const baseRef = await resolveMainHead(repoRoot);
   const branch = `forge/issue-${target.number}`;
-  const co = await sh("git", ["checkout", "-B", branch, baseRef], repoRoot, 60_000);
+  const workRoot0 = `/tmp/saos-forge-wt/issue-${target.number}-${cycle}`;
+  fs.rmSync(workRoot0, { recursive: true, force: true });
+  fs.mkdirSync(path.dirname(workRoot0), { recursive: true });
+  await sh("git", ["worktree", "prune"], repoRoot, 15_000);
+  const co = await sh("git", ["worktree", "add", "-B", branch, workRoot0, baseRef], repoRoot, 60_000);
   if (co.code !== 0) {
     appendLedger({ cycle, phase: "author", issue: target.number, verdict: "branch-failed", detail: redact(co.out.slice(-300)) });
-    await gh.addComment(target.number, `branch-failed (honest): could not create ${branch} from ${baseRef}\n\`\`\`\n${redact(co.out).slice(-500)}\n\`\`\``);
-    return { ...emptyVerdict(cycle, "branch-failed", `git checkout -B ${branch} failed`, audit), issuesCreated: created, claimed: target.number, findings: summarized };
+    await gh.addComment(target.number, `branch-failed (honest): could not create worktree ${branch} from ${baseRef}\n\`\`\`\n${redact(co.out).slice(-500)}\n\`\`\``);
+    return { ...emptyVerdict(cycle, "branch-failed", `git worktree add -B ${branch} failed`, audit), issuesCreated: created, claimed: target.number, findings: summarized };
   }
+  const workRoot = workRoot0;
+  try { fs.symlinkSync(path.join(repoRoot, "node_modules"), path.join(workRoot, "node_modules"), "dir"); } catch { /* exists — fine */ }
   try {
     /* ── 4 · AUTHOR ─────────────────────────────────────────────────────── */
     const issueBody = target.body ?? "";
     const author =
       kind === "testgap"
         ? await authorModeA({
-            repoRoot,
+            repoRoot: workRoot,
             cycle,
             issue: target.number,
             findingTitle: target.title,
             testgapFindings: findings.filter((f) => f.kind === "testgap"),
           })
         : await authorModeB({
-            repoRoot,
+            repoRoot: workRoot,
             cycle,
             issue: target.number,
             issueTitle: target.title,
@@ -279,7 +287,7 @@ async function cycleBody(cycle: number, repoRoot: string): Promise<CycleVerdict>
     }
     appendLedger({ cycle, phase: "author", issue: target.number, verdict: author.mode === "A" ? "mode-a" : "mode-b", detail: redact(author.summary ?? "") });
 
-    const add = await sh("git", ["add", ...author.files], repoRoot, 30_000);
+    const add = await sh("git", ["add", ...author.files], workRoot, 30_000);
     const commit = await sh(
       "git",
       [
@@ -287,7 +295,7 @@ async function cycleBody(cycle: number, repoRoot: string): Promise<CycleVerdict>
         "-c", "user.email=326012154+roshpinacare-sys@users.noreply.github.com",
         "commit", "-m", `forge(issue-${target.number}): ${kind} — ${slugify(author.files[0] ?? "target")}`,
       ],
-      repoRoot,
+      workRoot,
       60_000,
     );
     if (add.code !== 0 || commit.code !== 0) {
@@ -298,7 +306,7 @@ async function cycleBody(cycle: number, repoRoot: string): Promise<CycleVerdict>
     }
 
     /* ── 5 · VERIFY — the real gate ─────────────────────────────────────── */
-    const gate1 = await runGate(repoRoot);
+    const gate1 = await runGate(workRoot, author.files);
     if (!gate1.green) {
       const proof = redact(gateProof(gate1));
       appendLedger({ cycle, phase: "verify", issue: target.number, verdict: "gate-red", detail: proof.slice(-1200) });
@@ -308,7 +316,7 @@ async function cycleBody(cycle: number, repoRoot: string): Promise<CycleVerdict>
     appendLedger({ cycle, phase: "verify", issue: target.number, verdict: "gate-green", detail: redact(gateProof(gate1)).slice(-800) });
 
     /* ── 6 · SHIP — push → PR → fresh gate re-run → squash merge ────────── */
-    const push = await sh("git", ["push", pushUrl(token), `${branch}:${branch}`], repoRoot, 90_000);
+    const push = await sh("git", ["push", pushUrl(token), `${branch}:${branch}`], workRoot, 90_000);
     if (push.code !== 0) {
       const detail = redact(push.out).slice(-400);
       appendLedger({ cycle, phase: "ship", issue: target.number, verdict: "push-failed", detail });
@@ -330,7 +338,7 @@ async function cycleBody(cycle: number, repoRoot: string): Promise<CycleVerdict>
     appendLedger({ cycle, phase: "ship", issue: target.number, verdict: "pr-opened", detail: `PR #${pr} from ${branch} → main` });
 
     /* fresh local re-run of the gate — merge ONLY after it passes */
-    const gate2 = await runGate(repoRoot);
+    const gate2 = await runGate(workRoot, author.files);
     if (!gate2.green) {
       appendLedger({
         cycle,
@@ -362,10 +370,9 @@ async function cycleBody(cycle: number, repoRoot: string): Promise<CycleVerdict>
       detail: `${author.mode === "A" ? "Mode A characterization" : "Mode B patch"} → gate green ×2 → PR #${pr} squash-merged`,
     };
   } finally {
-    /* restore the worktree exactly as the loop found it; temp branch never lingers */
-    await sh("git", ["checkout", savedBranch], repoRoot, 60_000);
-    await sh("git", ["reset", "--hard"], repoRoot, 30_000);
-    await sh("git", ["clean", "-fd", "--", "tests"], repoRoot, 30_000);
+    /* worktree cleanup — the live main tree was NEVER touched; branch never lingers */
+    await sh("git", ["worktree", "remove", "--force", workRoot], repoRoot, 30_000);
+    await sh("git", ["worktree", "prune"], repoRoot, 15_000);
     await sh("git", ["branch", "-D", branch], repoRoot, 30_000);
   }
 }

@@ -34,14 +34,18 @@ async function runTests(repoRoot: string): Promise<GatePart> {
   return { exit: r.code, output: r.out.slice(-6000), pass: cls.pass, vacuous: cls.vacuous };
 }
 
-async function runLint(repoRoot: string): Promise<GatePart> {
-  const r = await sh("bun", ["run", "lint"], repoRoot, 420_000);
+async function runLint(repoRoot: string, files?: string[]): Promise<GatePart> {
+  /* מחזור 31 · שער-ממוקד: eslint על-הקבצים-שנגעו-בלבד — חוב-lint-קיים-בריפו
+   * (קבצים-זרים-של-נתיבים-אחרים) לא-יחסום-עוד-PR-תקין; היגיינת-הפאץ' עצמו
+   * נאכפת-במלואה. אפס-קבצים → ריצת-מלא (vacuous-guard כמו-בדיקות). */
+  const targets = files && files.length > 0 ? files : ["."];
+  const r = await sh("bunx", ["eslint", ...targets], repoRoot, 420_000);
   return { exit: r.code, output: r.out.slice(-6000), pass: r.code === 0 };
 }
 
-export async function runGate(repoRoot: string): Promise<GateResult> {
+export async function runGate(repoRoot: string, files?: string[]): Promise<GateResult> {
   const tests = await runTests(repoRoot);
-  const lint = await runLint(repoRoot);
+  const lint = await runLint(repoRoot, files);
   return { green: tests.pass && lint.pass, tests, lint };
 }
 
