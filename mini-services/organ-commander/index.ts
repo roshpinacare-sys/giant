@@ -202,7 +202,7 @@ async function cycle(): Promise<CycleResult> {
     receipts, now: () => Date.now(), postCycle, runnerOnce,
     cooldowns: readCooldowns(),
   });
-  persist(receipts.all().slice(-1));
+  persist(receipts.all()); // FULL chain — a truncated write breaks prevHash continuity on next load (measured)
   state.cycles++;
   state.lastVerdict = r.verdict;
   state.lastAt = new Date().toISOString();
