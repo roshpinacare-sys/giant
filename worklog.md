@@ -9176,3 +9176,10 @@ Work Log:
 Stage Summary:
 - **§1 מוטמע-בקוד**: הארכיטקט-רץ-עכשיו-כדיימון-ילידי-רציף (לא-תלוי-סוכנים-חיצוניים) · §2 שומר-קלי-חי (NO-EDGE-נאכף-בהחלטות) · §3 HTLC-interfaces-קנוניים · §4 לולאת-§9 מוכחת-בPR-ממוזג
 - פתוח-למחזור-32: הפעלת-ה-daemon-של-הנתיב-השני-על-:3051 (בידי-בעליו) · תיאום-supervisor↔daemon · N10-T5 אחרי-5-milui-chutz · מעקב-קלי-מול-התחדשות-הטייפ-הנקי
+---
+
+## 2026-10-24T19:00Z — agent-5-laneD — §6 quality-gate live-fire (ULTIMATE directive §6, trace 1a16f2a1c69ee3b9)
+- Caught live: the zero-slop gate NEVER judged a landing (bash/CLI contract mismatch ×3 layers: flat-vs-nested input, .last-tip advance-on-fail, unquoted prevHash in receipt template). All three cured TDD-first.
+- First live verdict: §5 KILL on my own seam-cure commit (test-corpus trips detector) → law-mirror exemption declared & tested.
+- Fleet-scale audit: 853 files → 85 hits → 0 real slop; evidence-corpus law (.md prose + detector organs) landed; final 412 files 0 violations.
+- Commits: 904c87b (seam cure) · b1ce957 (fleet-scale proof). Guard restarted on fixed script; verdict chain re-linking next cycle.
