@@ -182,7 +182,7 @@ for a in json.load(sys.stdin)['plan']: print(a['path']+'\t'+a['from'])")
   if [ "$OK_ALL" != "1" ] || [ -z "$RESCUED" ]; then
     say "rescue aborted (nothing restored or missing source) — honest skip"; git worktree remove --force "$WORKTREE" 2>>"$LOG"; sleep "$CYCLE"; continue
   fi
-  ( cd "$WORKTREE" && git add -A && git commit -q -m "fix(guard): rescue$RESCUED — byte-identical reland from adopted blobs (swallow-census cycle $CYCLE_N)
+  ( cd "$WORKTREE" && git add --sparse -A && git commit -q -m "fix(guard): rescue$RESCUED — byte-identical reland from adopted blobs (swallow-census cycle $CYCLE_N)
 
 - ours-merge wipe class measured again: canonical paths absent at tip
 - rescue plan emitted by the tested core (src/lib/sovereign/swallow-guard.ts)
