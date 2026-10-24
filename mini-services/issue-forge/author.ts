@@ -31,11 +31,7 @@ export interface ProbeResult {
 
 const PROBE_TIMEOUT_MS = 25_000;
 
-export async function probeFunction(
-  repoRoot: string,
-  relModule: string,
-  prefer?: string,
-): Promise<ProbeResult> {
+async function probeOnce(repoRoot: string, relModule: string, prefer?: string): Promise<ProbeResult> {
   const runner = path.join(SERVICE_DIR, "probe-runner.ts");
   const abs = path.join(repoRoot, relModule);
   try {
@@ -61,6 +57,26 @@ export async function probeFunction(
   } catch (e) {
     return { ok: false, reason: "probe-spawn-failed: " + (e instanceof Error ? e.message : String(e)) };
   }
+}
+
+export async function probeFunction(
+  repoRoot: string,
+  relModule: string,
+  prefer?: string,
+): Promise<ProbeResult> {
+  /* מחזור 31 · הוכחת-דטרמיניזם חוצת-תהליכים: שני-תהליכי-probe טריים-ונפרדים
+   * חייבים-ללכוד cases זהים-במדויק. הרצה-כפולה-בתוך-תהליך-אחד מאשרת-מצב-מקומי
+   * לתהליך (זמן-אתחול-מודול, seeds, מונים) שעובר-ב-probe ונופל-ב-gate. אי-התאמה
+   * = סירוב-כן — אף-מבחן-שברירי לא-נוצר-מעולם. */
+  const a = await probeOnce(repoRoot, relModule, prefer);
+  if (!a.ok) return a;
+  const b = await probeOnce(repoRoot, relModule, prefer);
+  if (!b.ok) return b;
+  const key = (r: ProbeResult) => JSON.stringify({ name: r.name, cases: r.cases });
+  if (key(a) !== key(b)) {
+    return { ok: false, reason: `cross-process-nondeterministic:${a.name ?? "?"}` };
+  }
+  return a;
 }
 
 export function buildModeATest(input: {
