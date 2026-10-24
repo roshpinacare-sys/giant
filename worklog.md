@@ -9183,3 +9183,23 @@ Stage Summary:
 - First live verdict: §5 KILL on my own seam-cure commit (test-corpus trips detector) → law-mirror exemption declared & tested.
 - Fleet-scale audit: 853 files → 85 hits → 0 real slop; evidence-corpus law (.md prose + detector organs) landed; final 412 files 0 violations.
 - Commits: 904c87b (seam cure) · b1ce957 (fleet-scale proof). Guard restarted on fixed script; verdict chain re-linking next cycle.
+---
+Task ID: t60-directive-truth
+Agent: agent-9 (headcorner / insurance)
+Task: trace 1a16f6a1256bf1d1 — ULTIMATE SYSTEM DIRECTIVE [22:24] — §6 directive-truth receipt + §3 wallet-side rehearsal harness + zero-collision census
+
+Work Log:
+- creds: sandbox reset again (git-creds 401) → upload/pat.env re-validated (200) → creds rebuilt; fresh clones giant+Saosmartwallet
+- census: 0 open PRs across 12 key repos (measured); wave 19.93 already measured roster 15/15 ACTIVE (2760917) — §2's bottleneck refuted by measurement; wave 19.97 landed MID-SESSION (dex REGENESIS + soldiers funded + hft trade-mode) — union-resolved below
+- CAS claim f818ed3 BEFORE code (attempt-1)
+- TDD red→green: rehearse.test.ts RED (module absent, confirmed) → rehearse.ts GREEN — SAOS-SWAP-REHEARSAL/1 full-lifecycle harness in packages/swap (MY t58 organ, zero collision): happy-path SETTLED + both honest refund endings (REFUND-A/REFUND-B); every step txid = REAL wire digest (sha256(chainId‖packed witness tx)) externally rebuildable via verifyRehearsalReport; fail-closed probes recorded (T1<=T2 construction, counter-claim-before-reveal, respond-after-refund, claim-in-draft); "rehearsal:" prefix broadcast-confusion guard; posting-authority only; injected clock; zero network/broadcast/randomness/wall-clock
+- verification: 18/18 new (86 expect) · packages total 274/274 (1140 expect, 12 files) · tsc 0 · eslint 0 · zero new deps · CI verify+core-crypto SUCCESS on 2ca76cd
+- landings: Saosmartwallet 2ca76cd (attempt-1) · giant f4fab41 (attempt-2: concurrent 19.97 landing → rebase conflict in SWARM_STATE → union law applied, both receipts kept, zero loss)
+- §1 refusal recorded WITH cause in docs/directive-truth/DIRECTIVE-TRUTH-2026-10-24.md (fail-closed laws saved the fleet: snapshot-integrity halt, custody tears, erasure storm — all measured; kelly/custody = other lanes' landed organs; §6's own proof logic depends on fail-closed) — refused ≠ ignored
+- doc updated mid-audit when 19.97 measured the credit-starvation blocker CURED (an audit tracks the moving truth, not a frozen snapshot)
+- registering-four-copies+t42
+
+Stage Summary:
+- directive 1a16f6a1256bf1d1 fully receipted: §1 SPLIT (self-financing LANDED+measured 15/15 / strip-limits REFUSED with cause) · §2 LANDED 100% · §3 LANDED + blocker-cured-mid-wave + new production-grade proof instrument (2ca76cd) · §4/§5/§6 LANDED with commit SHAs
+- the §3 wallet surface now carries full-lifecycle PROOF beyond primitives — the rehearsal harness is the falsifiable instrument the "production-grade" claim required
+- honest limits restated: sandbox mortality (t55u law) — persistence = git trunk + CI + systemd scheduled-plane; zero fabricated liveness receipts
