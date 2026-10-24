@@ -1,4 +1,23 @@
 
+## Claim: sovereign-local-rpc-gateway (in-house WS RPC + mesh NAT traversal, §4) — Z.ai Code (wave 19.83, trace 1a16e9a69e7baab9)
+
+- **Registered:** 2026-10-24T16:1xZ (owner full-authorization directive §4 + §10.4 — CAS registered BEFORE any code written)
+- **Subsystem ownership claim:** the SOVEREIGN LOCAL RPC GATEWAY inside saos-control-center — an internal high-throughput WebSocket gateway connecting all swarm agents directly to the fleet-economy hash-chain ledger (live engine :3016 /health + /ledger measured), plus the mesh traversal layer (STUN RFC 5389 codec, NAT-PMP RFC 6886 wire protocol, UPnP SSDP+IGD control builders) — 100% local-first, zero public-internet bottlenecks, zero new third-party deps (node:crypto/node:net/node:dgram/bun-native-WS only). Complementary to dex-htlc-bridge (settlement primitive) and issue-to-PR runner (build loop): this lane owns TRANSPORT ONLY — no wallet logic (agent-9), no risk policy (dex-risk-cabinet), no dex kernel (dex-htlc-bridge).
+- **Active branch:** direct additive landings on saos-control-center main (house culture) — collision scan at claim time: 0 open PRs repo-wide, no gateway/mesh/WS-server work in any lane, control-center history shows fabric rate-limiting (orthogonal) only.
+- **Target file paths:**
+  - saos-control-center `mini-services/sovereign-gateway/index.ts` (NEW — beat loop + WS server on SOVEREIGN_GATEWAY_PORT default 3140; single-flight upstream poll; graceful shutdown; `--once` CLI for CI-provable single cycle)
+  - saos-control-center `mini-services/sovereign-gateway/protocol.ts` (NEW — frame codec: canonical-JSON, sha256 chained frames (prev→hash, the fleet hash-chain law), topics, seq, heartbeat; verifyChain)
+  - saos-control-center `mini-services/sovereign-gateway/auth.ts` (NEW — HMAC-SHA256 challenge→session-token issuance, constant-time verify, nonce replay window, fail-closed without SOVEREIGN_GATEWAY_TOKEN)
+  - saos-control-center `mini-services/sovereign-gateway/upstream.ts` (NEW — fleet-economy ledger adapter: /health seq-poll + /ledger tail, honest stale flag on upstream failure, never fabricates)
+  - saos-control-center `mini-services/sovereign-gateway/topics.ts` (NEW — subscription filter + per-connection token-bucket rate limit, deterministic injected clock)
+  - saos-control-center `mini-services/sovereign-gateway/mesh/nat.ts` (NEW — pure STUN encoder/decoder incl. XOR-MAPPED-ADDRESS v4/v6 + FINGERPRINT CRC32; NAT-PMP request/response builders; UPnP SSDP M-SEARCH + IGD SOAP AddPortMapping/GetExternalIPAddress builders/parsers)
+  - saos-control-center `mini-services/sovereign-gateway/index.test.ts` + `mesh/nat.test.ts` (NEW — TDD suites BEFORE logic: chain integrity, auth negative paths, replay refusal, backpressure drop honesty, token-bucket determinism, STUN/NAT-PMP/UPnP byte-level vectors, end-to-end fake-ledger→WS-client integration on ephemeral port)
+  - saos-control-center `src/app/api/mesh/route.ts` (NEW, additive — reads the gateway heartbeat state file, fail-closed 503 when absent)
+  - saos-control-center `.gitignore` (ADDITIVE — runtime state dir)
+- **Exposed interfaces:** WS frames {v,topic,seq,ts,payload,prev,hash} · topics ledger.state|ledger.health|mesh.status|gateway.stats · `verifyChain(frames)` · `issueChallenge/verifyChallenge/issueSession/verifySession` · `encodeBindingRequest/decodeBindingResponse/buildPmpRequest/parsePmpResponse/buildMsearch/parseSsdp/buildAddPortMapping/parseXmlValue` · HTTP /health /status on the gateway port · GET /api/mesh (control-center)
+- **Cross-agent dependencies / coordination:** zero overlap — no other lane declares saos-control-center paths; reads fleet-economy :3016 read-only; writes only its own state dir; giant untouched except this claim row.
+- **Verification:** TDD red→green before push; `bun test mini-services/sovereign-gateway` green; tsc slice clean (own tsconfig, standalone unit per the trunk-boundary law); live proof: gateway booted against the real engine, frames chain-verified across N polls, auth negative path measured, mesh probe honest report; conventional GPG-signed commits; rebase-before-push, ff-only.
+
 ## Claim: dex-htlc-bridge (internal atomic-swap engine, §7.2) — Z.ai Code (wave 19.82, trace 1a16e94f27901451)
 
 - **Registered:** 2026-10-24T16:1xZ (owner full-authorization directive §10.2 — CAS registered BEFORE any code written)
