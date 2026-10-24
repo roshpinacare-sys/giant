@@ -127,7 +127,11 @@ async function gridCycle(): Promise<void> {
   const ask = Math.ceil(fair * (1 + GRID_BPS / 10_000));
   const bals = await balances();
   const STALE_BPS = 60; // פקודה שנטתה מעבר-לזה מהשוק-החי = זומבי — מתבטלת
-  for (const s of SOLDIERS) {
+  /* גל-HF (2026-10-24 · מנדט-#37 §2): חיילים במקביל — כל-חייל עצמאי לגמרי
+   * (פקודות-משלו, משמעת-בנק-משלו, escrow-משלו) → קיר-זמן של מחזור יורד ~6x,
+   * ועם הדופק 45ש׳ — עד ~12x תדירות-רענון-פקודות. allSettled: חייל-שנכשל
+   * לעולם לא מפיל את הסגל. */
+  const soldierWork = async (s: string): Promise<void> => {
     try {
       const mine = await jget(`${DEX}/my-orders?issuer=${s}`);
       const orders: any[] = mine?.orders ?? [];
@@ -155,7 +159,7 @@ async function gridCycle(): Promise<void> {
         }
       }
       const live = orders.filter((o) => Math.abs(Number(o.price ?? 0) - fair) * 10_000 <= STALE_BPS * fair);
-      if (live.length >= MAX_ORDERS) continue;
+      if (live.length >= MAX_ORDERS) return; // גל-HF: בתוך-פונקציית-חץ — return במקום continue
       const hasSide = (side: string, price: number) => live.some((o) => o.side === side && Math.abs(Number(o.price) - price) <= Math.max(2, fair * 0.001));
       const usds = Number(bals[s]?.bal?.USDS ?? 0), saos = Number(bals[s]?.bal?.SAOS ?? 0);
       if ((bals[s]?.credits ?? 0) < 400) {
@@ -179,7 +183,8 @@ async function gridCycle(): Promise<void> {
         act(s, "order", "SAOS/USDS", { side: "sell", price: ask, amount: ORDER_AMT_MU, postOnly: true }, r?.ok ? "ok" : "denied", 0, r?.error ?? "");
       }
     } catch (e) { S[s].lastErr = String(e).slice(0, 110); }
-  }
+  };
+  await Promise.allSettled(SOLDIERS.map((s) => soldierWork(s)));
   lastFair = fair; cycles++;
 }
 
@@ -255,4 +260,4 @@ Bun.serve({
 
 console.log(`[army] חי על :${PORT} · ${SOLDIERS.length} חיילים · בנק ${BANK_USDS_MU}µ USDS פר-חייל · דופק-שוק gal-16 חי`);
 void tick();
-setInterval(() => void tick(), 90_000);
+setInterval(() => void tick(), 45_000); // גל-HF (#37 §2): 90ש׳→45ש׳
