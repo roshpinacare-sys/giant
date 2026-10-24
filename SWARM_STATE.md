@@ -1,4 +1,21 @@
 
+## Claim: dex-htlc-bridge (internal atomic-swap engine, §7.2) — Z.ai Code (wave 19.82, trace 1a16e94f27901451)
+
+- **Registered:** 2026-10-24T16:1xZ (owner full-authorization directive §10.2 — CAS registered BEFORE any code written)
+- **Subsystem ownership claim:** the IN-HOUSE cross-asset atomic-swap bridge engine for saos-dex — hash-time-locked contracts (HTLC) operating 100% within the sovereign mesh, zero external RPC for settlement. The existing bridge.ts is the EXTERNAL far-network bridge (operator-trusted, manual release, SETTLE-12); this claim is the COMPLEMENTARY trustless internal primitive (counterparty-independent, deterministic, on-chain preimage witness).
+- **Active branch:** `feat/dex-htlc-bridge` (roshpinacare-sys/saos-dex; collision scan at claim time: 0 open PRs, only main head, 0 htlc-named branches — clean)
+- **Target file paths:**
+  - saos-dex `src/lib/dex/htlc.ts` (NEW — pure core: sha256 hashlock binding, block-height timelock, claim/refund state machine, conservation auditor; zero deps, zero Date.now in core — state-clock only)
+  - saos-dex `src/lib/dex/kernel.ts` (ADDITIVE hunks only: GAS_TABLE +3 opkinds (`htlc_create`/`htlc_claim`/`htlc_refund`), Op interface +5 optional fields (htlcId, hashlock, preimage, recipient, timeoutH), DexState +optional `htlcs` (old-snapshot-tolerant — the extBack?/bookFeesMu? pattern), applyOp +3 cases following the ve_lock escrow discipline)
+  - saos-dex `src/lib/dex/htlc.test.ts` (NEW — TDD suite BEFORE logic: full lifecycle, expiry-refund, double-claim refusal, preimage-mismatch refusal, refund-before-expiry refusal, Σ-conservation invariant, nonce replay, and the two-party atomic-swap composition proof — deterministic, offline)
+  - saos-dex `src/app/api/dex/htlc/route.ts` (NEW — GET list/quote + POST create/claim/refund via the single submitOp funnel — pre-trade risk cabinet intercepts upstream, already live since 2747ee7b)
+- **Exposed interfaces:** `createHtlc(st,op)` / `claimHtlc(st,op)` / `refundHtlc(st,op)` → `OpResult` · `htlcInvariant(st)` → `{ok, lockedTotal, activeTotal, seams}` · HTTP `/api/dex/htlc` (GET list · POST action)
+- **Cross-agent dependencies / coordination:**
+  - Zero overlap: agent-9 wallet surface untouched; dex-fabric (scanner/transport) untouched; risk-cabinet files untouched (my ops flow THROUGH their gate); fleet-economy receipts untouched; issue-to-PR runner (giant mini-services) untouched
+  - Adds 3 opkinds to the shared GAS_TABLE/Op/applyOp registry — additive-only hunks; merge-order safe (append-style cases), will AST-re-resolve + re-run full suite if a sister lands first (§6 law)
+  - Iron invariants honored: conservation of locked Σ, no double-claim, no claim-after-expiry, no refund-before-expiry, sha256(preimage)===hashlock exact, nonce dedupe via existing discipline, ops enter mempool→block→stateRoot→merkle sealing automatically via applyOp
+- **Verification:** TDD red→green before push; `bun run typecheck` clean on touched surface; battery-core + invariant-fuzzer exit 0 after landing (integration proof); cloud==local ff-only push
+
 ## Claim: native issue-to-PR runner (self-building loop, §9.3) — Z.ai Code (wave 19.82, trace 1a16e9871c9c9db1)
 
 - **Registered:** 2026-10-24T~16:00Z (owner full-authorization directive §10.3)
