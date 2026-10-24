@@ -102,7 +102,7 @@ export async function ensureSteemBridge(): Promise<void> {
 
   // האורקל חייב-להיות-חי-בגנזיס — בלי-מחיר-אמת לא-זורעים (מנסה-שוב-בקריאה-הבאה)
   const snap = await steemMarketSnapshot();
-  if (!snap.oracle.fresh || snap.oracle.steemUsds === null || snap.oracle.sbdUsds === null) {
+  if (!snap || !snap.oracle.fresh || snap.oracle.steemUsds === null || snap.oracle.sbdUsds === null) {
     await publishHealth({ lastError: "גנזיס-נדחה: אורקל-סטים-לא-זמין-כרגע (ניסיון-חוזר-בקריאה-הבאה)" });
     return;
   }
