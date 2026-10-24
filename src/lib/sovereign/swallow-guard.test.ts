@@ -42,6 +42,37 @@ describe("swallow-guard — חוקי-המגן (fail-closed)", () => {
     expect(r.swallows.every((s) => s.code === "SWALLOWED-PATH")).toBe(true);
   });
 
+  test("חוזה-המדידה-השקרן (נתפס-חי 16:32Z): measure_tip מזרים \"\" לנעדר — הליבה חייבת לסווג זאת כבליעה, לא-כדריפט-תוכן", () => {
+    // האמדן-החי: ב-tip 6dcdaae7c המגן רשם "9 content-drift ALERTS" במקום
+    // 9 SWALLOWED-PATH — כי measure_tip הזרים "" והליבה סיווגה "" כתוכן-שונה.
+    // התוצאה-החיה: אף-חילוץ-לא-ירד על-9 קבצי-קנון נעדרים-ממש. החוק-המתוקן:
+    // "" (והיעדר-מפתח) = היעדרות-מוכחת → SWALLOWED-PATH, לעולם-לא ALERT.
+    const t = fullTree();
+    t["src/lib/giant/empire-registry.ts"] = "";
+    t["src/lib/giant/empire-registry.test.ts"] = "";
+    t["src/lib/dispatch/doors.ts"] = "";
+    t["src/lib/dispatch/receipts.ts"] = "";
+    t["src/lib/dispatch/redact.ts"] = "";
+    t[".github/workflows/identity-guard.yml"] = "";
+    t[".github/workflows/swallow-watch.yml"] = "";
+    t[".github/workflows/trust-heartbeat.yml"] = "";
+    t[".github/workflows/ext-audit.yml"] = "";
+    const { swallows, alerts } = detectSwallows(t, fullTree());
+    expect(swallows.length).toBe(9);
+    for (const s of swallows) {
+      expect(s.code).toBe("SWALLOWED-PATH");
+      expect(s.path).not.toBe("src/lib/giant/empire-map.ts"); // הקיים-לא-נשפט-כנעדר
+      expect(s.path).not.toBe("SWARM_STATE.md");
+    }
+    expect(alerts).toHaveLength(0);
+    // התוכנית-חייבת-לרדת מהמקורות-המאומצים בלי-המצאה:
+    const adopted: Record<string, string> = {};
+    for (const s of swallows) adopted[s.path] = "adopted-blob-" + s.path.length;
+    const plan = rescuePlan(swallows, adopted);
+    expect(plan.length).toBe(9);
+    expect(plan.every((a) => a.action === "restore")).toBe(true);
+  });
+
   test("בליעה-חלקית: רק-הנעדרים מדווחים — אפס-שקרים-חיוביים על-הקיימים", () => {
     const t = fullTree();
     delete t["src/lib/giant/empire-registry.ts"];

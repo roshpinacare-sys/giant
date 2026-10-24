@@ -70,7 +70,10 @@ export function detectSwallows(
   const alerts: ContentAlert[] = [];
   for (const p of CANONICAL_SET) {
     const found = tree[p];
-    if (found === undefined) {
+    // חוזה-המדידה-המתוקן (נתפס-חי 16:32Z): "" הוא-היעדרות-מוכחת — measure_tip
+    // ההיסטורי הזרים "" לנעדר; הליבה-מקבלת-שתי-צורות-היעדרות (undefined או "")
+    // ומסווגת-שתיהן SWALLOWED-PATH — לעולם-לא-דריפט-תוכן.
+    if (found === undefined || found === "") {
       swallows.push({ path: p, code: "SWALLOWED-PATH" });
     } else if (baseline !== undefined) {
       const base = baseline[p];

@@ -63,7 +63,10 @@ tree = {}
 for p in paths:
     r = subprocess.run(["git", "rev-parse", "--verify", "-q", f"origin/main:{p}"],
                        capture_output=True, text=True)
-    tree[p] = r.stdout.strip() if r.returncode == 0 else ""
+    # חוזה-המדידה-המתוקן (נתפס-חי 16:32Z): נעדר = השמטת-מפתח (לא "") —
+    # "" עשוי-להתפרש-כתוכן-שונה; היעדר-מפתח = היעדרות-מוכחת-יחידה.
+    if r.returncode == 0:
+        tree[p] = r.stdout.strip()
 print(json.dumps(tree))
 PYEOF
 }
