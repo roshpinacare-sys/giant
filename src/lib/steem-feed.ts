@@ -186,7 +186,9 @@ async function htxSteemUsdt(): Promise<{ close: number; bid: number | null; ask:
 
 const SNAPSHOT_TTL_MS = 20_000; // השסתום קורא מכאן כל-10ש׳ — חצי-מהטריות
 
-export async function steemMarketSnapshot(): Promise<SteemMarketSnapshot> {
+export async function steemMarketSnapshot(): Promise<SteemMarketSnapshot | null> {
+  // חוק-האמת של הקובץ עצמו (ראה-ראש): "אם-הזנה-נופלת — null כנה" — מטמון-קר +
+  // כשל-רשת = null כנה, ולכן החתימה מצהירה זאת (tsc תפס את-השקר, t56).
   return cached("steem:snapshot", SNAPSHOT_TTL_MS, async () => {
     // --- השוק-הפנימי של סטים (שרשרת-אמת) ---
     const [ticker, book, median] = await Promise.all([

@@ -18,9 +18,10 @@ export async function GET() {
       where: { isNative: true, base: { in: ["STEEM", "SBD"] }, quote: "USDS" },
       orderBy: { sort: "asc" },
     });
+    // חוק-אמת: אין-תמונה (מטמון-קר + כשל-רשת) → אין-יעדי-אורקל — null כנה, לא-500
     const targetBy = new Map<string, number | null>([
-      ["STEEM", snap.oracle.steemUsds],
-      ["SBD", snap.oracle.sbdUsds],
+      ["STEEM", snap?.oracle.steemUsds ?? null],
+      ["SBD", snap?.oracle.sbdUsds ?? null],
     ]);
     const pools = pairs.map((p) => {
       const target = targetBy.get(p.base) ?? null;
@@ -52,7 +53,7 @@ export async function GET() {
     return NextResponse.json(
       {
         ok: true,
-        snapshot: snap,
+        snapshot: snap ?? null,
         pools,
         health,
       },
