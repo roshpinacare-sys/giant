@@ -16,7 +16,7 @@ export interface Command {
 
 /** Liquidity chain dependency order (P0): the exchange feeds everything. */
 const REVIVE_ORDER = ["dex-node", "soldier-army", "dex-economy-bridge"] as const;
-const P = { revive: 0, portConflict: 10, forgeCycle: 20, runnerOnce: 30, noop: 99 } as const;
+const P = { revive: 0, forgeRevive: 5, portConflict: 10, forgeCycle: 20, runnerOnce: 30, noop: 99 } as const;
 
 export function planNext(truth: Truth, cooldowns: Record<string, number>, now: number): Command[] {
   const cmds: Command[] = [];
@@ -35,10 +35,14 @@ export function planNext(truth: Truth, cooldowns: Record<string, number>, now: n
     });
   }
 
-  // P1 — forge occupied by the wrong owner: diagnose, never spawn-spam.
+  // P1 — the dev loop's forge: occupied → diagnose; dead → revive; alive → fire cycle.
   const forge = truth.organs.find((o) => o.organ === "issue-forge");
   if (forge && forge.alive && forge.wrongOwner) {
     cmds.push({ kind: "port-conflict", organ: "issue-forge", priority: P.portConflict, reason: "port 3046 held by local-gates-host — cure is the my-project port move (§8)" });
+  } else if (forge && !forge.alive) {
+    if ((cooldowns["issue-forge"] ?? 0) <= now) {
+      cmds.push({ kind: "revive", organ: "issue-forge", priority: P.forgeRevive, reason: forge.detail.slice(0, 80) || "forge port dead — the self-building loop needs its forge" });
+    }
   } else if (forge && forge.alive && !forge.wrongOwner) {
     const idle = truth.forgeIdleMs ?? 0;
     if (truth.feedClaimable > 0 || (truth.forgeIdleMs !== undefined && idle > 30 * 60_000)) {

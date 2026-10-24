@@ -257,3 +257,22 @@ describe("runCycle", () => {
     expect(receipts.all().some((x) => x.kind === "revive" && x.organ === "dex-node")).toBe(true);
   });
 });
+
+/* ── measured cure wave 19.85b: dead forge gets revived too ──────────── */
+describe("planNext (measured cure 19.85b)", () => {
+  test("dead issue-forge (port free) → revive command", () => {
+    const truth = {
+      organs: ORGANS.map((o) => ({ organ: o.organ, alive: o.organ === "issue-forge" ? false : true, wrongOwner: false, detail: o.organ === "issue-forge" ? "ECONNREFUSED" : "ok", latencyMs: 1 })) as any,
+      feedClaimable: 0, giantBehind: 0, at: new Date(now).toISOString(),
+    };
+    const cmds = planNext(truth, {}, now);
+    const r = cmds.find((c) => c.kind === "revive" && c.organ === "issue-forge");
+    expect(r).toBeTruthy();
+    expect(r!.priority).toBeGreaterThanOrEqual(0);
+  });
+  test("cooldown also applies to the forge revive", () => {
+    const mk = (): any => ({ organs: [{ organ: "issue-forge", alive: false, wrongOwner: false, detail: "down", latencyMs: 0 }], feedClaimable: 0, giantBehind: 0, at: new Date(now).toISOString() });
+    expect(planNext(mk(), { "issue-forge": now + 60_000 }, now).filter((c) => c.kind === "revive")).toEqual([]);
+    expect(planNext(mk(), { "issue-forge": now + 60_000 }, now + 61_000).some((c) => c.kind === "revive")).toBe(true);
+  });
+});
