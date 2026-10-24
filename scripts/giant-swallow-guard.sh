@@ -34,7 +34,8 @@ for pid in $(pgrep -f "bash .*giant-swallow-guard.sh" 2>/dev/null); do
   [ "$pid" != "$$" ] && say "UNITY-DIAG: foreign guard process $pid alive WITHOUT the lock (harmless, recorded)"
 done
 echo $$ > "$STATE_DIR/guard.pid"
-say "guard armed (pid $$, cycle ${CYCLE}s, canonical-set=12, flock-authority=yes)"
+CANON_N="$(bun -e "import {CANONICAL_SET} from '$REPO/src/lib/sovereign/swallow-guard.ts'; console.log(CANONICAL_SET.length)" 2>/dev/null || echo "?")"
+say "guard armed (pid $$, cycle ${CYCLE}s, canonical-set=${CANON_N}-dynamic, flock-authority=yes)"
 
 # adopted.json — המקורות-המאומצים {path: blobSha, tip, at}
 if [ ! -f "$ADOPTED" ]; then
