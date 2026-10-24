@@ -757,10 +757,14 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
         sealLog({ repo: name, action: "pull-fail", out: pull.out.slice(0, 220) });
         // גל-87 · החלמה-מהשורש (נמדד על Domain 15:35): קונפליקט modify/delete לא-נפתר
         // עם -X ours → הריבוז-נתקע-detached-HEAD → push משתבש → המאגר-נשאר-שבור.
-        // הפתרון: abort-מיידי + fallback למיזוג-אפס-תפרים (-s ours — הדוקטרינה-של-my-project):
-        // ההיסטוריה-מקושרת-כהורה-שני, המצב-המקומי-מנצח, אפס-ריבוז-תקוע.
+        // הפתרון: abort-מיידי + fallback מיזוג.
+        // גל-95 · תיקון-המחיקות-השקטות (חוק-19.50 "conflicts-ours, cloud-passes"):
+        // merge -s ours קידם-את-כל-העץ-המקומי-על-הענן ומחק-בשקט חוקים-ופסי-קבלה
+        // (receipts-rail, identity-guard, swallow-watch — נמדד: הישרדות < דקה, גל-19.91).
+        // merge -X ours: קונפליקטים-בלבד נפתרים-לטובת-הספר-החי; קבצים-חדשים-של-הענן
+        // (החוקים, הפסים) עוברים-בנקי. ההיסטוריה-מקושרת-כהורה-שני, אפס-ריבוז-תקוע.
         await git(dir, ["rebase", "--abort"]);
-        const mg2 = await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins (pull-conflict fallback)", "FETCH_HEAD"]);
+        const mg2 = await git(dir, ["-c", "merge.autoStash=false", "merge", "-X", "ours", "-m", "vault-sync [auto-economy]: link cloud history — conflicts-ours cloud-passes (rail-safe)", "FETCH_HEAD"]);
         if (!mg2.ok && !mg2.out.includes("up to date")) {
           sealLog({ repo: name, action: "merge-fallback-fail", out: mg2.out.slice(0, 160) });
         }
