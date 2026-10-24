@@ -181,7 +181,10 @@ function loadChain(): ReceiptChain {
 function persist(receipts: Receipt[]): void {
   try {
     mkdirSync(STATE_DIR, { recursive: true });
-    appendFileSync(RECEIPTS_FILE, receipts.slice(-1).map((r) => JSON.stringify(r)).join("\n") + "\n");
+    // FULL atomic rewrite (measured cure): partial appends broke the disk chain
+    // (seq N persisted with prevHash of unpersisted N-1 → adopt refused on boot).
+    // The chain is small (bytes per cycle) — writeFileSync keeps it consistent.
+    require("node:fs").writeFileSync(RECEIPTS_FILE, receipts.map((r) => JSON.stringify(r)).join("\n") + "\n");
   } catch { /* receipt write never kills the loop */ }
 }
 
