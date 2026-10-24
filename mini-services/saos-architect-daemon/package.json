@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "bun index.ts",
+    "dev": "flock -n /tmp/saos-architect-daemon.instance.lock bun index.ts",
     "once": "bun index.ts --once",
     "test": "bun test tests/"
   }
