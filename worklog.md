@@ -9138,3 +9138,24 @@ Stage Summary:
 - MEASURED (2026-10-24T16:55Z, db/grid-ledger.json, 191 real fills after 94 wash excluded): verdict=NO-EDGE · p=0.539267 (103W/88L) · b=0.792396 (avgWin $0.015889 / avgLoss $0.020052) · fullKelly=−422bps (negative expectancy, sum −$0.128) · quarter-Kelly fractionBps=0 — Kelly says size ZERO; honest: the clean grid tape has no positive edge yet
 - Selftest: 58/58 PASS (deterministic offline vectors: f*(0.6,1.5)=1/3 exact, negative-expectancy→0, p=1/b→0/zero-trades edges, fixture ledger 3W/2L p=0.6 b=20/9 f*=0.42, malformed-line counting, policyCapBps clamp 1050→500, INSUFFICIENT-DATA on empty/corrupt/missing, exact SAOS-KELLY/1 schema, atomic-write no-tmp, live-ledger consistency)
 - Commits: 249e1958 feat(kelly) [kelly.mjs + measured kelly-sizing.json] · 708d0484 test(kelly) [kelly-selftest.mjs + package.json chain] · merge a1a32f21; branch push + main push confirmed (origin/main = a1a32f21); observe-mode recorded in code comments and rec.observability.enforcement — enforcement transition needs owner word
+---
+Task ID: 4-c (cycle 31)
+Agent: swarm-htlc-interfaces
+Task: HTLC/atomic-swap state machine + codec core in Saosmartwallet (MASTER DIRECTIVE §3)
+
+Work Log:
+- Read worklog context (first 80 lines), packages/vault API (envelope, Vault.sealKey/unsealKey/signEd25519, VaultError taxonomy), packages/crypto surface, packages/chains/chain-adapter.ts seam, vault test style (bun:test, errorOf helper, redaction sentinels)
+- Branched feat/atomic-swap-htlc off main @30eca9c; bun install (985 pkgs, gitignored)
+- Baseline regression proof BEFORE changes: packages/vault 53 pass, packages/crypto 19 pass
+- TDD: wrote packages/htlc/test/htlc.test.ts FIRST (793 lines, 51 tests) — watched it fail (0 pass / module not found), then implemented packages/htlc/src: errors.ts (11-code HtlcError taxonomy), secret.ts (32B generateSecret, sha256 hashSecret, timingSafeEqual verifySecret), timelock.ts (createTimelocks with fail-closed genesis margin invariant MIN_SAFETY_MARGIN_MS=60s + 4-phase pure phase()), messages.ts (SAOS-HTLC/1 canonical codec: sorted-key recursive JSON refusing floats/NaN/undefined/functions/non-plain-objects; strict-schema Offer/Lock/Claim/Refund; sha256-chained receipts prev→hash with GENESIS_PREV, total verifyChain), state.ts (SwapMachine: Initiated→Locked→Redeemed/Refunded, deterministic guard order party→state→phase→secret, all refusals typed, secret never echoed), session.ts (SwapSession dual-view lockstep orchestration + divergence-poisoning law + sealSessionReceipt/openSessionReceipt via structural VaultLike + Ed25519-signable chainHash), chains.ts (ChainAdapter seam + SimulatedChainAdapter, honest simulated:true marker, deterministic tx ids), index.ts
+- bunx tsc --noEmit clean for packages/htlc (strict); fixed 2 test-file type errors (unused import, HtlcErrorCode typing)
+- Tests ALL GREEN: packages/htlc 51 pass / 0 fail (223 expects); no regression: vault+crypto 72 pass / 0 fail; combined run on main: 123 pass / 0 fail
+- README.md with honest scope boundary table (machine+codec+session+simulated adapter shipped; real per-chain signing/broadcast adapters, on-chain contracts, RPC, negotiation networking = future work), protocol diagram, refusal matrix, usage
+- Commits (conventional, split feat/test): e99e5ce feat(htlc) + 9fde291 test(htlc); pushed branch feat/atomic-swap-htlc to GitHub (new branch confirmed); merged to main and pushed (e5ba340..9663ed4)
+- rm -rf node_modules after all tests green + push complete (disk health; bun install re-provisions)
+- Zero new third-party dependencies (node:crypto only); vault integration is structural (VaultLike) — no package dependency edge; all test key material deterministic public vectors ("aa"×32, RFC 8032 TEST 1, "7a"×32 TEST vault master key), never real funds
+
+Stage Summary:
+- 51/51 htlc tests green, 72/72 vault+crypto regression green (123 total), tsc strict clean
+- Commits: e99e5ce (feat), 9fde291 (test); branch feat/atomic-swap-htlc pushed; main merged + pushed @9663ed4
+- Honest scope boundary: deterministic HTLC core + SAOS-HTLC/1 codec + receipt hash-chain + dual-view session + vault sealing + SIMULATED adapter only — no real chain signing/broadcast anywhere (packages/htlc/README.md records the boundary; SimulatedChainAdapter is marked simulated:true and is for tests/dry-run only)
