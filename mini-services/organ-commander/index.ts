@@ -281,7 +281,8 @@ async function main(): Promise<void> {
           return Response.json({ ok: true, lastTruth: state.lastTruth, receiptsTail: loadChain().tail(10) });
         }
         if (url.pathname === "/cycle" && req.method === "POST") {
-          return void cycle().then((r) => Response.json({ ok: r.ok, verdict: r.verdict })) as any;
+          const r = await cycle(); // measured cure: the void-then cast returned undefined → Bun's default "Welcome to Bun!" body
+          return Response.json({ ok: r.ok, verdict: r.verdict, commands: r.commands.map((c) => `${c.kind}:${c.organ}`) });
         }
         return new Response("not found", { status: 404 });
       },
