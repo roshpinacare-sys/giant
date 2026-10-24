@@ -99,10 +99,14 @@ function procSiblingsFor(tag: string): number[] {
   return out.filter((p) => p !== process.pid);
 }
 function realSpawn(plan: SpawnPlan): number {
+  // child output goes to the plan's OWN log (measured cure: "ignore" made the
+  // bridge crash invisible — an organ that dies silently cannot be commanded)
+  let out: number;
+  try { out = require("node:fs").openSync(plan.log, "a"); } catch { out = "ignore" as unknown as number; }
   const p = Bun.spawn(plan.cmd, {
     cwd: plan.cwd,
     env: { ...process.env, ...plan.env },
-    stdout: "ignore", stderr: "ignore",
+    stdout: out, stderr: out,
   });
   p.unref();
   return p.pid;
