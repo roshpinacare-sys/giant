@@ -34,3 +34,9 @@
 - `src/app/globals.css` — §"גל-6 · חוקי-העיצוב של הענקים" (keyframes + utilities + reduced-motion).
 - `src/app/page.tsx` — hero-הכניסה (supahero) · ניווט-מאויש (awwwards) · אמביינט (godly) · מעברי-תצוגה (60fps).
 - החלת-עתיד: כל-קומפוננטה-חדשה-ב-`src/components/giant/` חייבת לשאת את המחלקות האלה — לא-לשכפל-CSS.
+
+---
+
+## חותמת-רענון אמת-תיעוד (2026-10-24 · מפקד §4)
+
+נמדד: קובץ זה היה דומם מ-2026-10-15 — נתפס ע"י מפקד אמת-התיעוד. **חוקי-גל-6 נשארים מחייבים** (g-card · g-view-in · g-scroll · Recipe · prefers-reduced-motion). הפניה-חיה: docs/doc-truth/DOC-TRUTH-2026-10-24.md · המנוע: mini-services/doc-truth-sync (:3062).

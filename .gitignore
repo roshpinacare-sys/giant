@@ -100,3 +100,6 @@ mini-services/saos-architect-daemon/state/
 # git merges over a live ledger broke the hash-chain 7x today: seq 10140/18974/
 # 42777/58286/6099/7248/64256, all quarantined). State belongs to the engine only.
 mini-services/*/state/
+
+# doc-truth-sync runtime state (append-only receipts chain)
+mini-services/doc-truth-sync/state/
