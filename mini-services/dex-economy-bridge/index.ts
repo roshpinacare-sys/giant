@@ -14,7 +14,7 @@
 import { Database } from "bun:sqlite";
 import { createHash } from "crypto";
 
-const DEX_DB = process.env.BRIDGE_DEX_DB ?? "/home/z/review/saos-dex/db/dex.db";
+const DEX_DB = process.env.BRIDGE_DEX_DB ?? "/home/z/my-project/db/custom.db";
 const API = process.env.BRIDGE_DEX_API ?? "http://127.0.0.1:3010/saos-dex/api/dex/trades?pair=SAOS/USDS&limit=500";
 const POLL_MS = 20_000;
 const PORT = 3017;
@@ -29,13 +29,16 @@ try { db.exec("PRAGMA journal_mode=WAL"); } catch { /* כבר-WAL או נעול 
 try { db.exec("PRAGMA busy_timeout = 8000"); } catch { /* לא-אמור-ליפול */ }
 db.exec(`CREATE TABLE IF NOT EXISTS DexTrade (
   id TEXT PRIMARY KEY, pairId TEXT NOT NULL, side TEXT,
-  price REAL, amount REAL, source TEXT, sourceAgent TEXT, total REAL, t INTEGER)`);
-/* ריפוי-db-טרי (2026-10-24 · נמדד): תיקון-ה-17/10 עדכן-את-ה-INSERT אך-לא-את-ה-CREATE —
- * על-db-טרי הטבלה-נולדה-בצורה-הישנה-וה-prepare של price/amount קרס-תמידית
- * (SQLiteError: table DexTrade has no column named price · הגשר-מת-בכל-עלייה).
- * db-ישן-שומר-צורתו: ALTER אדיטיבי-עם-לכידה-כנה (העמודה-כבר-קיימת). */
-try { db.exec("ALTER TABLE DexTrade ADD COLUMN price REAL"); } catch { /* כבר-קיימת */ }
-try { db.exec("ALTER TABLE DexTrade ADD COLUMN amount REAL"); } catch { /* כבר-קיימת */ }
+  price REAL NOT NULL DEFAULT 0, amount REAL NOT NULL DEFAULT 0,
+  source TEXT, sourceAgent TEXT, total REAL, t INTEGER)`);
+/* תיקון-שורשי (2026-10-24): ה-CREATE הישן (7 עמודות) לא תאם את ה-INSERT (9 עמודות —
+ * price/amount) → על ספר-טרי ה-prepare היה מתרסק "no such column". הגירה אידמפוטנטית:
+ * ספרים-ישנים מקבלים את העמודות ב-ALTER, ספרים-טריים נולדים עם הסכימה המלאה.
+ * הקורא במנוע-הכלכלה (:3016 · pollDexFills) בוחר תת-קבוצה — עמודות-עודף בטוחות. */
+for (const col of ["price", "amount"]) {
+  const has = db.query("SELECT COUNT(*) AS n FROM pragma_table_info('DexTrade') WHERE name = ?").get(col) as { n: number } | null;
+  if (!has?.n) db.exec(`ALTER TABLE DexTrade ADD COLUMN ${col} REAL NOT NULL DEFAULT 0`);
+}
 // תיקון-שורשי (2026-10-17): ספר-הגיאנט דורש price/amount NOT NULL — ההחדרות
 // נדחו בשקט עד-היום (OR IGNORE בלע את השגיאה). הערכים נשמרים 1:1 מהדיווח
 // הגולמי של הדקס (price=µUSDS/SAOS · amount=µSAOS) — אפס-המרה, אפס-סינתזה.
