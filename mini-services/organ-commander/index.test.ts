@@ -248,6 +248,7 @@ describe("runCycle", () => {
       now: () => now,
       postCycle: async () => { order.push("forge-cycle"); return { ok: true, verdict: "ok" }; },
       runnerOnce: async () => { order.push("runner-once"); return { ok: true, status: "landed" }; },
+      procSiblings: () => [], // offline determinism: no real-world /proc pollution
     };
     const r = await runCycle(io);
     expect(r.ok).toBe(true);
@@ -274,5 +275,29 @@ describe("planNext (measured cure 19.85b)", () => {
     const mk = (): any => ({ organs: [{ organ: "issue-forge", alive: false, wrongOwner: false, detail: "down", latencyMs: 0 }], feedClaimable: 0, giantBehind: 0, at: new Date(now).toISOString() });
     expect(planNext(mk(), { "issue-forge": now + 60_000 }, now).filter((c) => c.kind === "revive")).toEqual([]);
     expect(planNext(mk(), { "issue-forge": now + 60_000 }, now + 61_000).some((c) => c.kind === "revive")).toBe(true);
+  });
+});
+
+/* ── measured cure 19.85c: proc-first authority (two wrappers raced the clone) ── */
+describe("revive proc-first authority (measured cure 19.85c)", () => {
+  test("organ process already running → never spawn, honest reason", async () => {
+    let spawns = 0;
+    const plan = revivePlan("dex-node");
+    const r = await executeRevive(plan, {
+      aliveCheck: async () => false, // port dead...
+      procSiblings: () => [24733, 26910], // ...but the organ process LIVES
+      spawn: () => { spawns++; return 1; },
+    });
+    expect(r.spawned).toBe(false);
+    expect(r.reason).toContain("process");
+    expect(spawns).toBe(0);
+  });
+  test("no process + dead port → spawn (existing law unchanged)", async () => {
+    const r = await executeRevive(revivePlan("dex-node"), {
+      aliveCheck: async () => false,
+      procSiblings: () => [],
+      spawn: () => 42,
+    });
+    expect(r.spawned).toBe(true);
   });
 });

@@ -46,6 +46,8 @@ export interface CycleIo {
   runnerOnce: () => Promise<{ ok: boolean; status: string }>;
   cooldowns?: Record<string, number>;
   maxCommands?: number;
+  /** injectable /proc scan (tests inject [] — the real one scans /proc) */
+  procSiblings?: (tag: string) => number[];
 }
 
 export interface CycleResult {
@@ -82,6 +84,19 @@ async function aliveCheck(port: number): Promise<boolean> {
     const r = await fetch(`http://127.0.0.1:${port}/`, { signal: AbortSignal.timeout(1500) });
     return true; // any HTTP response = port alive
   } catch { return false; }
+}
+function procSiblingsFor(tag: string): number[] {
+  const out: number[] = [];
+  try {
+    for (const d of require("node:fs").readdirSync("/proc")) {
+      if (!/^\d+$/.test(d)) continue;
+      try {
+        const cmd = require("node:fs").readFileSync(`/proc/${d}/cmdline`, "utf8").replace(/\0/g, " ");
+        if (cmd.includes(tag)) out.push(Number(d));
+      } catch { /* vanished */ }
+    }
+  } catch { /* no proc */ }
+  return out.filter((p) => p !== process.pid);
 }
 function realSpawn(plan: SpawnPlan): number {
   const p = Bun.spawn(plan.cmd, {
@@ -145,7 +160,7 @@ export async function runCycle(io: CycleIo): Promise<CycleResult> {
         }
       }
       const plan = revivePlan(c.organ);
-      const r = await executeRevive(plan, { aliveCheck: io.aliveCheck, spawn: io.spawn });
+      const r = await executeRevive(plan, { aliveCheck: io.aliveCheck, spawn: io.spawn, procSiblings: io.procSiblings ?? procSiblingsFor });
       io.receipts.append({ kind: "revive", organ: c.organ, verdict: r.spawned ? "spawned" : "skipped", detail: r.reason });
       if (r.spawned) executed.push(`revive:${c.organ}`);
     } else if (c.kind === "port-conflict") {
