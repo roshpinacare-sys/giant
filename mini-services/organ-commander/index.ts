@@ -272,7 +272,7 @@ async function main(): Promise<void> {
     // loopback status plane :3047
     Bun.serve({
       port: PORT, hostname: "127.0.0.1",
-      fetch(req) {
+      async fetch(req) {
         const url = new URL(req.url);
         if (url.pathname === "/health") {
           return Response.json({ ok: true, host: "saos-organ-commander", startedAt: state.startedAt, cycles: state.cycles, lastVerdict: state.lastVerdict, lastAt: state.lastAt, at: new Date().toISOString() });
