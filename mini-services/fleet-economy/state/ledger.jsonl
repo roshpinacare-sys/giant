@@ -9253,3 +9253,565 @@
 {"seq":9253,"ts":1792945786940,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.06,"reason":"מס-שירותים 2% → כספת","h":"eedf74d248e44c20a7e4785b6d921a1a"}
 {"seq":9254,"ts":1792945786940,"kind":"service","from":"shachar","to":"Console","asset":"USDS","amount":1.2,"reason":"אימות-קבלה · 2-חותמת","ref":"svc-1792945786940-2233","h":"e3cfa4da3471d8cca6e0d572455f9082"}
 {"seq":9255,"ts":1792945786940,"kind":"tax","from":"Console","to":"treasury","asset":"USDS","amount":0.024,"reason":"מס-שירותים 2% → כספת","h":"cb893c901f1e7eb0c9a67fe58f12e876"}
+{"seq":9256,"ts":1792945787739,"kind":"service","from":"gal","to":"yarden","asset":"USDS","amount":1.8,"reason":"אימות-קבלה · 3-חותמת","ref":"svc-1792945787739-4999","h":"492dbb69b21268d7cc9cf1ade3c11ae5"}
+{"seq":9257,"ts":1792945787740,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.036,"reason":"מס-שירותים 2% → כספת","h":"4fb6265917cc94b0a4d281cc1e0c7dbf"}
+{"seq":9258,"ts":1792945787740,"kind":"swap","from":"aluf","to":"pool","asset":"SAOS","amount":1,"fee":0.003,"price":63.378133,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":63.126046,"h":"104aefecfc8894ce37f5d9e8d5fa2f2e"}
+{"seq":9259,"ts":1792945787740,"kind":"service","from":"yarden","to":"shachar","asset":"USDS","amount":4.2,"reason":"אימות-קבלה · 7-חותמת","ref":"svc-1792945787740-9564","h":"77e85728779d7b3a939df005d2942d41"}
+{"seq":9260,"ts":1792945787740,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.084,"reason":"מס-שירותים 2% → כספת","h":"5186afa1b2a717a1edce8d9aec8c0e56"}
+{"seq":9261,"ts":1792945787740,"kind":"service","from":"yarden","to":"shachar","asset":"USDS","amount":4.5,"reason":"מידע-שוק · 5-פיד","ref":"svc-1792945787740-8997","h":"82dbec1b46388a4ae91f117c126ba116"}
+{"seq":9262,"ts":1792945787740,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.09,"reason":"מס-שירותים 2% → כספת","h":"a84cfda4e3050560e4f4dd61cbb2c8a2"}
+{"seq":9263,"ts":1792945787740,"kind":"service","from":"gal","to":"erez","asset":"USDS","amount":6.4,"reason":"תדלוק-RC · 2-מנה","ref":"svc-1792945787740-1358","h":"d24cee15b0fb5d2c468d6eef32c38b07"}
+{"seq":9264,"ts":1792945787740,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.128,"reason":"מס-שירותים 2% → כספת","h":"d671db28ffa0026b0bde761151dc5d19"}
+{"seq":9265,"ts":1792945787740,"kind":"salary","from":"treasury","to":"gal","asset":"SAOS","amount":0.35589,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"d21db3c3650af24fe9465834a15d5f4f"}
+{"seq":9266,"ts":1792945788539,"kind":"service","from":"aluf","to":"tamar","asset":"USDS","amount":8.4,"reason":"סריקת-גיט · 4-ריצה","ref":"svc-1792945788539-1444","h":"55a303fb1a97c68b8fcee7bce4448dd1"}
+{"seq":9267,"ts":1792945788540,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.168,"reason":"מס-שירותים 2% → כספת","h":"9af094b2fb7e2d8319f2def45099505d"}
+{"seq":9268,"ts":1792945788540,"kind":"service","from":"yarden","to":"shachar","asset":"USDS","amount":4.2,"reason":"חישוב-GPU · 3-דקות-חישוב","ref":"svc-1792945788540-6623","h":"85ab2dbf68d98b2b9603de45c86aee14"}
+{"seq":9269,"ts":1792945788540,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.084,"reason":"מס-שירותים 2% → כספת","h":"4dd6bf68b10a7cd08b27f0402a4d132d"}
+{"seq":9270,"ts":1792945788540,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":34.128153,"fee":0.102384,"price":63.253729,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.537641,"h":"aaabd554fb6f156a6d3810a086eec2c7"}
+{"seq":9271,"ts":1792945788540,"kind":"service","from":"erez","to":"Pulse","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792945788540-5856","h":"f90685e9aa311492eff8321fbfbbf794"}
+{"seq":9272,"ts":1792945788540,"kind":"tax","from":"Pulse","to":"treasury","asset":"USDS","amount":0.012,"reason":"מס-שירותים 2% → כספת","h":"366c35a75c5df34b3dbbc056ddc89340"}
+{"seq":9273,"ts":1792945788540,"kind":"service","from":"Pulse","to":"gal","asset":"USDS","amount":16.8,"reason":"סריקת-גיט · 8-ריצה","ref":"svc-1792945788540-5862","h":"10d1e0198ba3a561e772c6731391189a"}
+{"seq":9274,"ts":1792945788540,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.336,"reason":"מס-שירותים 2% → כספת","h":"dc028e1134ceca90a00d3460f1ccaeb5"}
+{"seq":9275,"ts":1792945788540,"kind":"service","from":"shachar","to":"aluf","asset":"USDS","amount":8.8,"reason":"תרגום-מסמך · 8-מסמך","ref":"svc-1792945788540-8483","h":"da30f618a7949f5cc36835d48184f241"}
+{"seq":9276,"ts":1792945788540,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.176,"reason":"מס-שירותים 2% → כספת","h":"a54117df3936b43b2ae93da1c4cc7d44"}
+{"seq":9277,"ts":1792945788540,"kind":"salary","from":"treasury","to":"yarden","asset":"SAOS","amount":0.93853,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"6a8a4ea0ed376c11c087d36d3e2a8a6a"}
+{"seq":9278,"ts":1792945788540,"kind":"service","from":"gal","to":"aluf","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792945788540-2359","h":"a9b6cfba1f2b9392735b448fa5aa8547"}
+{"seq":9279,"ts":1792945788540,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.096,"reason":"מס-שירותים 2% → כספת","h":"e9d3d9a892d40aa70ec6e58625376375"}
+{"seq":9280,"ts":1792945789339,"kind":"salary","from":"treasury","to":"yarden","asset":"SAOS","amount":0.480349,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"5739affe6f9c3205fda77140f1677735"}
+{"seq":9281,"ts":1792945789340,"kind":"service","from":"tamar","to":"Domain","asset":"USDS","amount":10.5,"reason":"סריקת-גיט · 5-ריצה","ref":"svc-1792945789340-5556","h":"45ae888f5f949d08586a573852f3c110"}
+{"seq":9282,"ts":1792945789340,"kind":"tax","from":"Domain","to":"treasury","asset":"USDS","amount":0.21,"reason":"מס-שירותים 2% → כספת","h":"2bf7eee3aa62fb2d6815ec914d5a2cde"}
+{"seq":9283,"ts":1792945789340,"kind":"infra","from":"Pulse","to":"saos-dex","asset":"USDS","amount":4.5,"reason":"תשתית: מידע-שוק","h":"21d3c822ef5a967e01f8386a21ace089"}
+{"seq":9284,"ts":1792945789340,"kind":"service","from":"tamar","to":"yarden","asset":"USDS","amount":4.5,"reason":"מידע-שוק · 5-פיד","ref":"svc-1792945789340-9259","h":"ef204773e9a6e123b599449cb48876d5"}
+{"seq":9285,"ts":1792945789340,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.09,"reason":"מס-שירותים 2% → כספת","h":"bad3f64180056bb59f0c624ba2792d07"}
+{"seq":9286,"ts":1792945789340,"kind":"tip","from":"tamar","to":"yarden","asset":"SAOS","amount":0.359842,"reason":"טיפ על עבודה-טובה בזרימה","h":"1dff6b94f60e9f278c7c0045387e83c9"}
+{"seq":9287,"ts":1792945789340,"kind":"service","from":"yarden","to":"yarden","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792945789340-915","h":"2409e3a90ea93a87f639bf89920ebe37"}
+{"seq":9288,"ts":1792945789340,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.018,"reason":"מס-שירותים 2% → כספת","h":"d05c8ef81735945b0ff0458a614e70bc"}
+{"seq":9289,"ts":1792945789340,"kind":"service","from":"Pulse","to":"tamar","asset":"USDS","amount":1.8,"reason":"אימות-קבלה · 3-חותמת","ref":"svc-1792945789340-9534","h":"fc0808b1da3b89e5d9149deb82c77761"}
+{"seq":9290,"ts":1792945789340,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.036,"reason":"מס-שירותים 2% → כספת","h":"bd2fcd78fa9a9adc8365bd6288ed7b16"}
+{"seq":9291,"ts":1792945790139,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"ec53db2301d6d356aec8255f9c5dec47"}
+{"seq":9292,"ts":1792945790140,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"2261748c04dbc8c5c2f28c3974c96367"}
+{"seq":9293,"ts":1792945790140,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"5d5e818a6311451851f4c408fff963f3"}
+{"seq":9294,"ts":1792945790140,"kind":"service","from":"shachar","to":"gal","asset":"USDS","amount":14.7,"reason":"סריקת-גיט · 7-ריצה","ref":"svc-1792945790140-6956","h":"22a418f4c24b38c42f9d6dc53a82cb4c"}
+{"seq":9295,"ts":1792945790140,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.294,"reason":"מס-שירותים 2% → כספת","h":"40ceac5a5f887db268fa64bcf64b8882"}
+{"seq":9296,"ts":1792945790140,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792945790140-4594","h":"988cd795ecf4d26ef3ae9067a59977e3"}
+{"seq":9297,"ts":1792945790140,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"46774226214e64e5685ab5760c122332"}
+{"seq":9298,"ts":1792945790140,"kind":"swap","from":"erez","to":"pool","asset":"SAOS","amount":1,"fee":0.003,"price":63.320769,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":63.068938,"h":"af24a97eb7724e27416580acbe989d55"}
+{"seq":9299,"ts":1792945790140,"kind":"service","from":"erez","to":"aluf","asset":"USDS","amount":11.2,"reason":"חישוב-GPU · 8-דקות-חישוב","ref":"svc-1792945790140-5020","h":"5d5bdeafee1a0ec34d31c146c4b9bf6e"}
+{"seq":9300,"ts":1792945790140,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.224,"reason":"מס-שירותים 2% → כספת","h":"66d5223b56183cd34c8e78988bd34c1f"}
+{"seq":9301,"ts":1792945790140,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":29.635739,"fee":0.088907,"price":63.196534,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.467324,"h":"0846b3086b3278f523509e018dd8b431"}
+{"seq":9302,"ts":1792945790140,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":10.727795,"fee":0.032183,"price":63.254721,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.16906,"h":"7b133e9c088133bd27a3e1c2478adc09"}
+{"seq":9303,"ts":1792945790140,"kind":"service","from":"erez","to":"TruthRail","asset":"USDS","amount":1.8,"reason":"מידע-שוק · 2-פיד","ref":"svc-1792945790140-6950","h":"54e6a22226d089e942b98e6601932b3e"}
+{"seq":9304,"ts":1792945790140,"kind":"tax","from":"TruthRail","to":"treasury","asset":"USDS","amount":0.036,"reason":"מס-שירותים 2% → כספת","h":"60539482b5a54f46ce13eca87020bc8a"}
+{"seq":9305,"ts":1792945790939,"kind":"service","from":"FleetHQ","to":"saos-dex","asset":"USDS","amount":3.6,"reason":"מידע-שוק · 4-פיד","ref":"svc-1792945790939-6957","h":"64827c309807f160c367dfed65bb2192"}
+{"seq":9306,"ts":1792945790940,"kind":"tax","from":"saos-dex","to":"treasury","asset":"USDS","amount":0.072,"reason":"מס-שירותים 2% → כספת","h":"eb95968533ee340febba8271dfeaf72b"}
+{"seq":9307,"ts":1792945790940,"kind":"service","from":"shachar","to":"aluf","asset":"USDS","amount":1.05,"reason":"אחסון-ארכיון · 3-GB-חודש","ref":"svc-1792945790940-1923","h":"5e3b2c911d9bcf732b487ff9ef4e464a"}
+{"seq":9308,"ts":1792945790940,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.021,"reason":"מס-שירותים 2% → כספת","h":"5bc30306d027ca552a2f2a7f17978278"}
+{"seq":9309,"ts":1792945790940,"kind":"service","from":"aluf","to":"aluf","asset":"USDS","amount":3.6,"reason":"מידע-שוק · 4-פיד","ref":"svc-1792945790940-7945","h":"6447bae32eefe5c99af039eb7dbd0b87"}
+{"seq":9310,"ts":1792945790940,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.072,"reason":"מס-שירותים 2% → כספת","h":"e6fb3952cc3b2050e30961471ec8adb0"}
+{"seq":9311,"ts":1792945790940,"kind":"infra","from":"erez","to":"saos-dex","asset":"USDS","amount":3,"reason":"תשתית: אימות-קבלה","h":"bd331a22d57ebab80fd1ccca91485372"}
+{"seq":9312,"ts":1792945790940,"kind":"service","from":"gal","to":"tamar","asset":"USDS","amount":2.8,"reason":"חישוב-GPU · 2-דקות-חישוב","ref":"svc-1792945790940-9563","h":"8daeaac5f2ee61842d36c3adc84cf0f7"}
+{"seq":9313,"ts":1792945790940,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.056,"reason":"מס-שירותים 2% → כספת","h":"377f8259655e0c17d2d473492efb09c1"}
+{"seq":9314,"ts":1792945790940,"kind":"service","from":"saos-dex","to":"yarden","asset":"USDS","amount":1.75,"reason":"אחסון-ארכיון · 5-GB-חודש","ref":"svc-1792945790940-9005","h":"fbf64f8e376e2b4684f87016afc3954e"}
+{"seq":9315,"ts":1792945790940,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.035,"reason":"מס-שירותים 2% → כספת","h":"f188c210011561f565afffc80ab99865"}
+{"seq":9316,"ts":1792945790940,"kind":"service","from":"gal","to":"gal","asset":"USDS","amount":3,"reason":"אימות-קבלה · 5-חותמת","ref":"svc-1792945790940-2257","h":"a59463d33775e5f96278b192ce5ec75d"}
+{"seq":9317,"ts":1792945790940,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.06,"reason":"מס-שירותים 2% → כספת","h":"773dec33a7d826d1860988dc660758c9"}
+{"seq":9318,"ts":1792945790940,"kind":"infra","from":"aluf","to":"Domain","asset":"USDS","amount":4.2,"reason":"תשתית: חישוב-GPU","h":"71e4a6f0bf52f53da1521e6e1b3483da"}
+{"seq":9319,"ts":1792945790940,"kind":"service","from":"shachar","to":"aluf","asset":"USDS","amount":4.5,"reason":"מידע-שוק · 5-פיד","ref":"svc-1792945790940-9433","h":"c620ca38264f9adf116d2e3d7a408154"}
+{"seq":9320,"ts":1792945790940,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.09,"reason":"מס-שירותים 2% → כספת","h":"6a26fa9f547158c304d6a2f79795c523"}
+{"seq":9321,"ts":1792945791739,"kind":"service","from":"shachar","to":"shachar","asset":"USDS","amount":12.6,"reason":"סריקת-גיט · 6-ריצה","ref":"svc-1792945791739-1376","h":"b26790194b7c62ea8eeb32107f9c976f"}
+{"seq":9322,"ts":1792945791740,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.252,"reason":"מס-שירותים 2% → כספת","h":"670753b0e650b7b2be3f64e70629e784"}
+{"seq":9323,"ts":1792945791740,"kind":"swap","from":"erez","to":"pool","asset":"SAOS","amount":1,"fee":0.003,"price":63.27579,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":63.02416,"h":"f2858a8fd1e8677656633bd4088ca4c2"}
+{"seq":9324,"ts":1792945791740,"kind":"salary","from":"treasury","to":"tamar","asset":"SAOS","amount":0.651778,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"b9ea814f95fbcabc9b2870166a9616d1"}
+{"seq":9325,"ts":1792945791740,"kind":"swap","from":"yarden","to":"pool","asset":"SAOS","amount":1,"fee":0.003,"price":63.151688,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":62.900612,"h":"709387a5c75751c14871734940d93f40"}
+{"seq":9326,"ts":1792945791740,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":27.486898,"fee":0.082461,"price":63.02795,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.434613,"h":"1c72e842a8fa10944c3e222a7b821cf4"}
+{"seq":9327,"ts":1792945791740,"kind":"service","from":"aluf","to":"gal","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792945791740-614","h":"146721f4ff04ea8270895c533440412a"}
+{"seq":9328,"ts":1792945791740,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"69225687b8aaec37b37c317d325e7145"}
+{"seq":9329,"ts":1792945791740,"kind":"service","from":"shachar","to":"TruthRail","asset":"USDS","amount":3.2,"reason":"תדלוק-RC · 1-מנה","ref":"svc-1792945791740-6866","h":"5b821ed0093c4053954de90d5ec2ad45"}
+{"seq":9330,"ts":1792945791740,"kind":"tax","from":"TruthRail","to":"treasury","asset":"USDS","amount":0.064,"reason":"מס-שירותים 2% → כספת","h":"306617162f463a1bce81994af921c5d3"}
+{"seq":9331,"ts":1792945791740,"kind":"service","from":"Domain","to":"erez","asset":"USDS","amount":2.8,"reason":"חישוב-GPU · 2-דקות-חישוב","ref":"svc-1792945791740-3545","h":"1660ef4e8c887db90dce717a0de6f4c9"}
+{"seq":9332,"ts":1792945791740,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.056,"reason":"מס-שירותים 2% → כספת","h":"f62c9ff0c02cc49a3bcb90b3b09b03c0"}
+{"seq":9333,"ts":1792945791740,"kind":"service","from":"yarden","to":"yarden","asset":"USDS","amount":8.4,"reason":"סריקת-גיט · 4-ריצה","ref":"svc-1792945791740-5956","h":"5ed64e375940e852abd5c4050c0ca909"}
+{"seq":9334,"ts":1792945791740,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.168,"reason":"מס-שירותים 2% → כספת","h":"0643a831d4a411634e478ac69454c735"}
+{"seq":9335,"ts":1792945792539,"kind":"service","from":"Domain","to":"shachar","asset":"USDS","amount":1.1,"reason":"תרגום-מסמך · 1-מסמך","ref":"svc-1792945792539-6518","h":"7ae090f6575e9710a7ddf7b5f7505044"}
+{"seq":9336,"ts":1792945792540,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.022,"reason":"מס-שירותים 2% → כספת","h":"85c54e38e36344a3ca411775649b624d"}
+{"seq":9337,"ts":1792945792540,"kind":"tip","from":"shachar","to":"erez","asset":"SAOS","amount":0.190562,"reason":"טיפ על עבודה-טובה בזרימה","h":"1d899864f23ea99d78613c046f7733aa"}
+{"seq":9338,"ts":1792945792540,"kind":"swap","from":"tamar","to":"pool","asset":"SAOS","amount":1,"fee":0.003,"price":63.081845,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":62.831081,"h":"5780723a8c0628a20aaa9c08774ba386"}
+{"seq":9339,"ts":1792945792540,"kind":"service","from":"FleetHQ","to":"erez","asset":"USDS","amount":2.8,"reason":"אחסון-ארכיון · 8-GB-חודש","ref":"svc-1792945792540-3153","h":"a4c336def30c86ab978192ccff1b6fd9"}
+{"seq":9340,"ts":1792945792540,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.056,"reason":"מס-שירותים 2% → כספת","h":"e7655dd87da85d434928e3331d52399c"}
+{"seq":9341,"ts":1792945792540,"kind":"tip","from":"gal","to":"yarden","asset":"SAOS","amount":0.135739,"reason":"טיפ על עבודה-טובה בזרימה","h":"de2f46a89f62cbb7e2a24e30ed374653"}
+{"seq":9342,"ts":1792945792540,"kind":"service","from":"yarden","to":"shachar","asset":"USDS","amount":9.6,"reason":"תדלוק-RC · 3-מנה","ref":"svc-1792945792540-4047","h":"9b4af35b18695f5cfa24a5cf79c4f016"}
+{"seq":9343,"ts":1792945792540,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.192,"reason":"מס-שירותים 2% → כספת","h":"952400bbdfdff9bec2a88922d03d39ba"}
+{"seq":9344,"ts":1792945792540,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":21.798255,"fee":0.065395,"price":62.958313,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.345078,"h":"c1a7f2c59e876081dd32aa2dcbb8693e"}
+{"seq":9345,"ts":1792945793339,"kind":"service","from":"Console","to":"gal","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792945793339-2815","h":"4cdf182f02ef75e3f2664d44265e1587"}
+{"seq":9346,"ts":1792945793340,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"d3778c0b4884def9731e2fba57e77a3a"}
+{"seq":9347,"ts":1792945793340,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":5.282624,"fee":0.015848,"price":63.001028,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.083591,"h":"896c99eb82cf2c3cc08f2d1d9af87a62"}
+{"seq":9348,"ts":1792945793340,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":17.518202,"fee":0.052555,"price":63.011382,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.277107,"h":"f2487fe314145035364f63780b152c17"}
+{"seq":9349,"ts":1792945793340,"kind":"service","from":"Pulse","to":"yarden","asset":"USDS","amount":6.3,"reason":"סריקת-גיט · 3-ריצה","ref":"svc-1792945793340-1604","h":"897a6f2908a43628dcf51f62958f209c"}
+{"seq":9350,"ts":1792945793340,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.126,"reason":"מס-שירותים 2% → כספת","h":"bfd7d06781002f2351c564d3184d03e8"}
+{"seq":9351,"ts":1792945793340,"kind":"salary","from":"treasury","to":"shachar","asset":"SAOS","amount":0.452432,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"4a7bb6e7753079da13967efe20fb5cb9"}
+{"seq":9352,"ts":1792945793340,"kind":"service","from":"shachar","to":"aluf","asset":"USDS","amount":12.8,"reason":"תדלוק-RC · 4-מנה","ref":"svc-1792945793340-9380","h":"01049c1ae44e0690b6b73b7826713f9b"}
+{"seq":9353,"ts":1792945793340,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.256,"reason":"מס-שירותים 2% → כספת","h":"ecbffd1fece81007e3b9acdcc69cab33"}
+{"seq":9354,"ts":1792945794139,"kind":"service","from":"aluf","to":"erez","asset":"USDS","amount":3.2,"reason":"תדלוק-RC · 1-מנה","ref":"svc-1792945794140-6665","h":"babffdc21a9914050035107d1de0d453"}
+{"seq":9355,"ts":1792945794140,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.064,"reason":"מס-שירותים 2% → כספת","h":"71ee395419fa201acb209cd99ee3ac2f"}
+{"seq":9356,"ts":1792945794140,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792945794140-2283","h":"cc333c0402f76621a5dd01f04e0ea03b"}
+{"seq":9357,"ts":1792945794140,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.018,"reason":"מס-שירותים 2% → כספת","h":"45ad8517584eb2f923e0911fb7d883da"}
+{"seq":9358,"ts":1792945794140,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":26.607733,"fee":0.079823,"price":63.045723,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.420599,"h":"6dd3becfafa119156c2f732a30f44a67"}
+{"seq":9359,"ts":1792945794140,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":7.412667,"fee":0.022238,"price":63.097901,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.117113,"h":"4b74e8973ce2d5b340f4e80a8a9dd8ad"}
+{"seq":9360,"ts":1792945794140,"kind":"service","from":"shachar","to":"gal","asset":"USDS","amount":6.6,"reason":"תרגום-מסמך · 6-מסמך","ref":"svc-1792945794140-3605","h":"bcf7eef9d52a5ed213baa080c69b6925"}
+{"seq":9361,"ts":1792945794140,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.132,"reason":"מס-שירותים 2% → כספת","h":"84eb9d87a65eca5a4c1b6c8917ee7470"}
+{"seq":9362,"ts":1792945794140,"kind":"service","from":"Domain","to":"gal","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792945794140-7544","h":"816e7b41583f7e39ddfe83fe7700e295"}
+{"seq":9363,"ts":1792945794140,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"24817286659973bd2a429e51de4f9d6e"}
+{"seq":9364,"ts":1792945794939,"kind":"service","from":"Pulse","to":"yarden","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792945794940-9011","h":"721eaf5d353694d54aa2932a6f09318a"}
+{"seq":9365,"ts":1792945794940,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.007,"reason":"מס-שירותים 2% → כספת","h":"23b9439287453ce4db7932ffe18a5785"}
+{"seq":9366,"ts":1792945794940,"kind":"service","from":"shachar","to":"yarden","asset":"USDS","amount":6.3,"reason":"מידע-שוק · 7-פיד","ref":"svc-1792945794940-4556","h":"ccc54313ecdabc7dbc9ed9a90bb5d8c9"}
+{"seq":9367,"ts":1792945794940,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.126,"reason":"מס-שירותים 2% → כספת","h":"0184dda96c9a7ac0885668b70a06abbb"}
+{"seq":9368,"ts":1792945794940,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":27.5117,"fee":0.082535,"price":63.112442,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.434422,"h":"d4df0370684671e8da71729a523dfbc7"}
+{"seq":9369,"ts":1792945794940,"kind":"infra","from":"Console","to":"Domain","asset":"USDS","amount":4.5,"reason":"תשתית: מידע-שוק","h":"92c01319e1cd9726a7231906905d1ec1"}
+{"seq":9370,"ts":1792945794940,"kind":"service","from":"shachar","to":"aluf","asset":"USDS","amount":3.6,"reason":"אימות-קבלה · 6-חותמת","ref":"svc-1792945794940-5477","h":"825260d5bafdc26bc17af3cc0b3a89a4"}
+{"seq":9371,"ts":1792945794940,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.072,"reason":"מס-שירותים 2% → כספת","h":"9c21f25c0b8ea6467f3e06a0974d657e"}
+{"seq":9372,"ts":1792945795740,"kind":"tip","from":"yarden","to":"erez","asset":"SAOS","amount":0.266615,"reason":"טיפ על עבודה-טובה בזרימה","h":"ce73defa749d7fca22b4b436f146d29b"}
+{"seq":9373,"ts":1792945795740,"kind":"infra","from":"gal","to":"Domain","asset":"USDS","amount":1.75,"reason":"תשתית: אחסון-ארכיון","h":"8a5144d604a89bcfbffde01135764076"}
+{"seq":9374,"ts":1792945795740,"kind":"service","from":"Pulse","to":"aluf","asset":"USDS","amount":6.3,"reason":"מידע-שוק · 7-פיד","ref":"svc-1792945795740-3832","h":"9b9d5be66d75357870f567f0ba4cfb56"}
+{"seq":9375,"ts":1792945795740,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.126,"reason":"מס-שירותים 2% → כספת","h":"3307dd84c454e514454ed2dc451a33e1"}
+{"seq":9376,"ts":1792945795740,"kind":"infra","from":"saos-dex","to":"FleetHQ","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"e033561dab633abec102682f1cc510eb"}
+{"seq":9377,"ts":1792945795740,"kind":"salary","from":"treasury","to":"yarden","asset":"SAOS","amount":0.665517,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"6dcc4ea9471df9d14717e781fae5dc48"}
+{"seq":9378,"ts":1792945795740,"kind":"service","from":"yarden","to":"Pulse","asset":"USDS","amount":6.4,"reason":"תדלוק-RC · 2-מנה","ref":"svc-1792945795740-5671","h":"e15cae9c55dc3b0885b483d2682cbc34"}
+{"seq":9379,"ts":1792945795740,"kind":"tax","from":"Pulse","to":"treasury","asset":"USDS","amount":0.128,"reason":"מס-שירותים 2% → כספת","h":"f239df808f745cbca9e60267bb1f5725"}
+{"seq":9380,"ts":1792945795776,"kind":"infra","from":"pool","to":"treasury","asset":"USDS","amount":314.950837,"reason":"מילוי-כספת אוטונומי · תורת-כותבים-רבים (חסום-רצפת-בריכה, מדוד)","h":"1443a6af84c53d53cbb0f29e773bd47b"}
+{"seq":9381,"ts":1792945796540,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":53.604001,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"503ce60aca45c7bff9ef7f616f040f75"}
+{"seq":9382,"ts":1792945796540,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"e3c0b5b9eb33e53389699f8b58767291"}
+{"seq":9383,"ts":1792945796540,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"5ea0e817bf0e14e9b502025886ed9327"}
+{"seq":9384,"ts":1792945796540,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"90d5e85694b22328cdf4027b20182e09"}
+{"seq":9385,"ts":1792945796540,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"eda2cf1d59377ea449bd0aee259e221e"}
+{"seq":9386,"ts":1792945796540,"kind":"tip","from":"yarden","to":"shachar","asset":"SAOS","amount":0.156594,"reason":"טיפ על עבודה-טובה בזרימה","h":"f5177124545bc74537a890dde790c4d0"}
+{"seq":9387,"ts":1792945796540,"kind":"service","from":"yarden","to":"yarden","asset":"USDS","amount":9.6,"reason":"תדלוק-RC · 3-מנה","ref":"svc-1792945796540-5400","h":"0244011b783ad2d3cd02c8db27248b0e"}
+{"seq":9388,"ts":1792945796540,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.192,"reason":"מס-שירותים 2% → כספת","h":"dc6f6b1b9eab53d92ee064a6af0fe69c"}
+{"seq":9389,"ts":1792945796540,"kind":"service","from":"aluf","to":"yarden","asset":"USDS","amount":8.4,"reason":"סריקת-גיט · 4-ריצה","ref":"svc-1792945796540-9025","h":"5c6cbf42a2c89fc12d0647ba9f301ef5"}
+{"seq":9390,"ts":1792945796541,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.168,"reason":"מס-שירותים 2% → כספת","h":"7efc239c83a06e880b6cde1517267791"}
+{"seq":9391,"ts":1792945796541,"kind":"service","from":"gal","to":"Console","asset":"USDS","amount":16.8,"reason":"סריקת-גיט · 8-ריצה","ref":"svc-1792945796541-9404","h":"062f84421d4c222f3b4b7214e37cce51"}
+{"seq":9392,"ts":1792945796541,"kind":"tax","from":"Console","to":"treasury","asset":"USDS","amount":0.336,"reason":"מס-שירותים 2% → כספת","h":"e3269fb3415ea19c54b3cd55e157ee53"}
+{"seq":9393,"ts":1792945796541,"kind":"service","from":"tamar","to":"aluf","asset":"USDS","amount":5.5,"reason":"תרגום-מסמך · 5-מסמך","ref":"svc-1792945796541-1003","h":"ff95e2abe15e442315e5ccc6d4a4cd98"}
+{"seq":9394,"ts":1792945796541,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.11,"reason":"מס-שירותים 2% → כספת","h":"460e9591349e01e10a6d87d7b3f558ed"}
+{"seq":9395,"ts":1792945796541,"kind":"tip","from":"gal","to":"shachar","asset":"SAOS","amount":0.122588,"reason":"טיפ על עבודה-טובה בזרימה","h":"1529454fbc61aefd088597d9003e06fc"}
+{"seq":9396,"ts":1792945796541,"kind":"service","from":"yarden","to":"gal","asset":"USDS","amount":7,"reason":"חישוב-GPU · 5-דקות-חישוב","ref":"svc-1792945796541-5575","h":"e9d32e51ec2bf45456d01af007202be6"}
+{"seq":9397,"ts":1792945796541,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.14,"reason":"מס-שירותים 2% → כספת","h":"0fa33af21ecbfe6824000c2ffb7ecdb8"}
+{"seq":9398,"ts":1792945796541,"kind":"infra","from":"tamar","to":"Console","asset":"USDS","amount":1.1,"reason":"תשתית: תרגום-מסמך","h":"e12d1bc3ab8b6ec7f96d42a9d80ba413"}
+{"seq":9399,"ts":1792945796541,"kind":"service","from":"aluf","to":"aluf","asset":"USDS","amount":2.4,"reason":"אימות-קבלה · 4-חותמת","ref":"svc-1792945796541-7573","h":"356cc9c530edc78f7498be560d311a53"}
+{"seq":9400,"ts":1792945796541,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.048,"reason":"מס-שירותים 2% → כספת","h":"24c9b7321a83789f145cdf057659db82"}
+{"seq":9401,"ts":1792945796541,"kind":"infra","from":"Console","to":"saos-dex","asset":"USDS","amount":4.2,"reason":"תשתית: סריקת-גיט","h":"f16296b40f607fa882ad7f6ec2a440f4"}
+{"seq":9402,"ts":1792945797340,"kind":"service","from":"TruthRail","to":"gal","asset":"USDS","amount":8.4,"reason":"חישוב-GPU · 6-דקות-חישוב","ref":"svc-1792945797340-9769","h":"ea686fb8d21fa0c2ea2aa98bfc0850b9"}
+{"seq":9403,"ts":1792945797340,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.168,"reason":"מס-שירותים 2% → כספת","h":"46f3dfba9a031431a3a0da8fe02aa0da"}
+{"seq":9404,"ts":1792945797340,"kind":"service","from":"erez","to":"Domain","asset":"USDS","amount":1.2,"reason":"אימות-קבלה · 2-חותמת","ref":"svc-1792945797340-3716","h":"af2ba7095e2f6b35603115c8fe79aff7"}
+{"seq":9405,"ts":1792945797341,"kind":"tax","from":"Domain","to":"treasury","asset":"USDS","amount":0.024,"reason":"מס-שירותים 2% → כספת","h":"9fd9badf590353f72199cfe668bf9c5c"}
+{"seq":9406,"ts":1792945797341,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":25.998613,"fee":0.077996,"price":63.166421,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.410189,"h":"38273b16460a8c2846a601d54e3393f9"}
+{"seq":9407,"ts":1792945797341,"kind":"service","from":"tamar","to":"shachar","asset":"USDS","amount":1.8,"reason":"אימות-קבלה · 3-חותמת","ref":"svc-1792945797341-2185","h":"9bd57fb6fe73c6b1a0dedab75be898ef"}
+{"seq":9408,"ts":1792945797341,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.036,"reason":"מס-שירותים 2% → כספת","h":"570240f8ec598a03e8d5022b0cd9b263"}
+{"seq":9409,"ts":1792945797341,"kind":"tip","from":"yarden","to":"tamar","asset":"SAOS","amount":0.156654,"reason":"טיפ על עבודה-טובה בזרימה","h":"24494bd6672f18cd44a1130996660497"}
+{"seq":9410,"ts":1792945797341,"kind":"tip","from":"erez","to":"aluf","asset":"SAOS","amount":0.214568,"reason":"טיפ על עבודה-טובה בזרימה","h":"e39556664eb326cc31ac74fe232252d5"}
+{"seq":9411,"ts":1792945797341,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":18.462353,"fee":0.055387,"price":63.217453,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.291086,"h":"631682ee44c94b54e9bc19ae66e4c646"}
+{"seq":9412,"ts":1792945797341,"kind":"service","from":"yarden","to":"shachar","asset":"USDS","amount":1.8,"reason":"מידע-שוק · 2-פיד","ref":"svc-1792945797341-308","h":"fd5904c5d4ef232f3540f21535a9a144"}
+{"seq":9413,"ts":1792945797341,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.036,"reason":"מס-שירותים 2% → כספת","h":"c10d1d93499ff92c37a8c482956b4cea"}
+{"seq":9414,"ts":1792945798140,"kind":"service","from":"erez","to":"yarden","asset":"USDS","amount":6.6,"reason":"תרגום-מסמך · 6-מסמך","ref":"svc-1792945798140-8219","h":"7cff24a0266a088e7cd00193fcb5c7fc"}
+{"seq":9415,"ts":1792945798140,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.132,"reason":"מס-שירותים 2% → כספת","h":"81a0f7921a0a5c62d35e00b542b62c75"}
+{"seq":9416,"ts":1792945798141,"kind":"service","from":"gal","to":"tamar","asset":"USDS","amount":4.2,"reason":"חישוב-GPU · 3-דקות-חישוב","ref":"svc-1792945798141-5813","h":"171c65fd1c0be9ce9733b6179d69baab"}
+{"seq":9417,"ts":1792945798141,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.084,"reason":"מס-שירותים 2% → כספת","h":"637a11e6235fb8450fe9ffad449fba5c"}
+{"seq":9418,"ts":1792945798141,"kind":"service","from":"gal","to":"tamar","asset":"USDS","amount":1.75,"reason":"אחסון-ארכיון · 5-GB-חודש","ref":"svc-1792945798141-6635","h":"62b5af8ae8bf15a5007db2e12fbf5aad"}
+{"seq":9419,"ts":1792945798141,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.035,"reason":"מס-שירותים 2% → כספת","h":"ce91f8eccc61639b6c0e20ee8277ab89"}
+{"seq":9420,"ts":1792945798141,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":9.398931,"fee":0.028197,"price":63.253705,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.148124,"h":"6b65c89c174db9c978b3705428954edc"}
+{"seq":9421,"ts":1792945798141,"kind":"infra","from":"FleetHQ","to":"Console","asset":"USDS","amount":2.7,"reason":"תשתית: מידע-שוק","h":"90d58ffa3cecc04863271a29f812b328"}
+{"seq":9422,"ts":1792945798141,"kind":"unstake","from":"yarden","to":"yarden","asset":"SAOS","amount":1.465438,"reason":"ביטול-סטייק לצורך-תפעול","h":"fef77e77c7f30e69bcf12f909d7c78fb"}
+{"seq":9423,"ts":1792945798141,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":4.509534,"fee":0.013529,"price":63.272164,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.071053,"h":"0d2bceddbc561d4aa46d5b6967be42bc"}
+{"seq":9424,"ts":1792945798141,"kind":"service","from":"erez","to":"gal","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792945798141-4186","h":"e945b0d33eb9203eaa0d07ae9451ae15"}
+{"seq":9425,"ts":1792945798141,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.007,"reason":"מס-שירותים 2% → כספת","h":"cb5009408e45bee4969cff17d2be9e87"}
+{"seq":9426,"ts":1792945798940,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":15.525224,"fee":0.046576,"price":63.281021,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.244543,"h":"66257690a5e1802bc58ed846aa30faeb"}
+{"seq":9427,"ts":1792945798940,"kind":"service","from":"Pulse","to":"Console","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792945798940-4389","h":"9c31fed61bb7976106e6530d4b95eedd"}
+{"seq":9428,"ts":1792945798940,"kind":"tax","from":"Console","to":"treasury","asset":"USDS","amount":0.007,"reason":"מס-שירותים 2% → כספת","h":"8b0fbfdfebc3d9f7fd20c88963ce9d32"}
+{"seq":9429,"ts":1792945798941,"kind":"service","from":"tamar","to":"gal","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792945798941-3261","h":"e14adfa2ff5adb52bf5d518b9f12aff2"}
+{"seq":9430,"ts":1792945798941,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.028,"reason":"מס-שירותים 2% → כספת","h":"2c329ccdf8d758d16550f28c8b636f11"}
+{"seq":9431,"ts":1792945798941,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":12.031046,"fee":0.036093,"price":63.311521,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.189424,"h":"0a07a706f942de212e193c630df74fc0"}
+{"seq":9432,"ts":1792945798941,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":29.174862,"fee":0.087525,"price":63.33516,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.459053,"h":"ec166cf12a30fa1fe1bb842dd4858b3b"}
+{"seq":9433,"ts":1792945799741,"kind":"service","from":"shachar","to":"Pulse","asset":"USDS","amount":3.6,"reason":"מידע-שוק · 4-פיד","ref":"svc-1792945799741-9609","h":"fd53e21160d2fe18359cd902b70c17f5"}
+{"seq":9434,"ts":1792945799741,"kind":"tax","from":"Pulse","to":"treasury","asset":"USDS","amount":0.072,"reason":"מס-שירותים 2% → כספת","h":"98e601bcbb121b0c2f2b84232528e1db"}
+{"seq":9435,"ts":1792945799741,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":37.485497,"fee":0.112456,"price":63.392505,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.589208,"h":"6e2e3a10f9583522bd59e680b5666c6e"}
+{"seq":9436,"ts":1792945799741,"kind":"unstake","from":"yarden","to":"yarden","asset":"SAOS","amount":1.815295,"reason":"ביטול-סטייק לצורך-תפעול","h":"33aca111dd926b4ade1fa2c239a74c7a"}
+{"seq":9437,"ts":1792945799741,"kind":"service","from":"yarden","to":"tamar","asset":"USDS","amount":1.75,"reason":"אחסון-ארכיון · 5-GB-חודש","ref":"svc-1792945799741-1221","h":"289021f7017eff85f5ea69f7f4ba99ae"}
+{"seq":9438,"ts":1792945799741,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.035,"reason":"מס-שירותים 2% → כספת","h":"6d1f52fda1bec028f66faca58d3efae8"}
+{"seq":9439,"ts":1792945799741,"kind":"tip","from":"aluf","to":"gal","asset":"SAOS","amount":0.433716,"reason":"טיפ על עבודה-טובה בזרימה","h":"1675591138ab0a8f4fed2c1dafdf4f06"}
+{"seq":9440,"ts":1792945800541,"kind":"salary","from":"treasury","to":"yarden","asset":"SAOS","amount":0.658984,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"4a4e014ac82ac8bc91d180416e51d3f9"}
+{"seq":9441,"ts":1792945800542,"kind":"infra","from":"yarden","to":"saos-dex","asset":"USDS","amount":1.1,"reason":"תשתית: תרגום-מסמך","h":"2281b580980b702bdbce9ed8d2701349"}
+{"seq":9442,"ts":1792945800542,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":25.193022,"fee":0.075579,"price":63.466222,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.395607,"h":"1bbe244b516e734321ee9fffcd881b6b"}
+{"seq":9443,"ts":1792945800542,"kind":"service","from":"gal","to":"tamar","asset":"USDS","amount":1.05,"reason":"אחסון-ארכיון · 3-GB-חודש","ref":"svc-1792945800542-8111","h":"25001c82302950bbca9587bae77aaad6"}
+{"seq":9444,"ts":1792945800542,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.021,"reason":"מס-שירותים 2% → כספת","h":"0c5bc21c5ee70fbac08be8295f6b8273"}
+{"seq":9445,"ts":1792945800542,"kind":"service","from":"Domain","to":"yarden","asset":"USDS","amount":4.2,"reason":"אימות-קבלה · 7-חותמת","ref":"svc-1792945800542-2991","h":"ac6282ffd1788a9118fc59b7462ca631"}
+{"seq":9446,"ts":1792945800542,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.084,"reason":"מס-שירותים 2% → כספת","h":"23ddf9700a409c238204655bcf07dd81"}
+{"seq":9447,"ts":1792945800542,"kind":"infra","from":"aluf","to":"Pulse","asset":"USDS","amount":0.7,"reason":"תשתית: אחסון-ארכיון","h":"90b60a16804f2826d765fba2d26ed675"}
+{"seq":9448,"ts":1792945801341,"kind":"infra","from":"saos-dex","to":"FleetHQ","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"5b9e217bc17357cc664e99d45f3bbde6"}
+{"seq":9449,"ts":1792945801342,"kind":"service","from":"yarden","to":"yarden","asset":"USDS","amount":9.6,"reason":"תדלוק-RC · 3-מנה","ref":"svc-1792945801342-4276","h":"4df42e52a91d592a4feaa1f943e2ab9c"}
+{"seq":9450,"ts":1792945801342,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.192,"reason":"מס-שירותים 2% → כספת","h":"167118721c2b5658f796f553638759d2"}
+{"seq":9451,"ts":1792945801342,"kind":"salary","from":"treasury","to":"gal","asset":"SAOS","amount":0.418052,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"2a37a54a64f7bba23921f13b8130a4db"}
+{"seq":9452,"ts":1792945801342,"kind":"swap","from":"yarden","to":"pool","asset":"SAOS","amount":1.975064,"fee":0.005925,"price":63.515789,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":124.829183,"h":"8028e4c2be6a250486ceed47110cf89e"}
+{"seq":9453,"ts":1792945801342,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":19.306577,"fee":0.05792,"price":63.26964,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.304141,"h":"d71c3a87235ec71c05c0fd455a132d6b"}
+{"seq":9454,"ts":1792945801342,"kind":"service","from":"erez","to":"tamar","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792945801342-963","h":"a4a30a0b3dfc917d01d76d40293cf4cf"}
+{"seq":9455,"ts":1792945801342,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.028,"reason":"מס-שירותים 2% → כספת","h":"3cdce557b5f61fa981de8befd95478ad"}
+{"seq":9456,"ts":1792945801342,"kind":"salary","from":"treasury","to":"erez","asset":"SAOS","amount":0.649024,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"8b56eed793a1d5e0eb17753484cc40a9"}
+{"seq":9457,"ts":1792945801342,"kind":"service","from":"yarden","to":"tamar","asset":"USDS","amount":16,"reason":"תדלוק-RC · 5-מנה","ref":"svc-1792945801342-8846","h":"e626cd31e4c10f4b453b1832bbb270d8"}
+{"seq":9458,"ts":1792945801342,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.32,"reason":"מס-שירותים 2% → כספת","h":"9d48812d6ee4c0435232ef77c2b70707"}
+{"seq":9459,"ts":1792945802141,"kind":"service","from":"gal","to":"yarden","asset":"USDS","amount":4.2,"reason":"חישוב-GPU · 3-דקות-חישוב","ref":"svc-1792945802142-5245","h":"d37680f0fae1ca87ebd31dea14f848fd"}
+{"seq":9460,"ts":1792945802142,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.084,"reason":"מס-שירותים 2% → כספת","h":"785bee3a2130310c8a9d0ee3f4507683"}
+{"seq":9461,"ts":1792945802142,"kind":"service","from":"shachar","to":"erez","asset":"USDS","amount":9.8,"reason":"חישוב-GPU · 7-דקות-חישוב","ref":"svc-1792945802142-1645","h":"58dc0d15c5a853e90f6e6291ce331c01"}
+{"seq":9462,"ts":1792945802142,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.196,"reason":"מס-שירותים 2% → כספת","h":"221da5318059640ce801e645be1c4b92"}
+{"seq":9463,"ts":1792945802142,"kind":"service","from":"gal","to":"TruthRail","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792945802142-2970","h":"76628ccf5018ecb578495841e11798aa"}
+{"seq":9464,"ts":1792945802142,"kind":"tax","from":"TruthRail","to":"treasury","asset":"USDS","amount":0.028,"reason":"מס-שירותים 2% → כספת","h":"edb7922f864a762c450a4d74048b7f3d"}
+{"seq":9465,"ts":1792945802142,"kind":"tip","from":"erez","to":"yarden","asset":"SAOS","amount":0.347291,"reason":"טיפ על עבודה-טובה בזרימה","h":"2a3f6cafba6a6409a5eba7531339840c"}
+{"seq":9466,"ts":1792945802142,"kind":"service","from":"shachar","to":"aluf","asset":"USDS","amount":2.2,"reason":"תרגום-מסמך · 2-מסמך","ref":"svc-1792945802142-3064","h":"7ead1c91a22f30b31b74e298549444d7"}
+{"seq":9467,"ts":1792945802142,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.044,"reason":"מס-שירותים 2% → כספת","h":"4f10cc81634b543d16c7ec8c9c583705"}
+{"seq":9468,"ts":1792945802942,"kind":"service","from":"erez","to":"tamar","asset":"USDS","amount":6.3,"reason":"סריקת-גיט · 3-ריצה","ref":"svc-1792945802942-8669","h":"e529ac373a5dff5cc7c917b53c72bfbc"}
+{"seq":9469,"ts":1792945802942,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.126,"reason":"מס-שירותים 2% → כספת","h":"e485e5e5bbd01f81d2c299f9b83dc40d"}
+{"seq":9470,"ts":1792945802942,"kind":"service","from":"Console","to":"gal","asset":"USDS","amount":9.6,"reason":"תדלוק-RC · 3-מנה","ref":"svc-1792945802942-5494","h":"9971cf03e6d7e3bc67159676006b5295"}
+{"seq":9471,"ts":1792945802942,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.192,"reason":"מס-שירותים 2% → כספת","h":"244cfa2c3142b5047599c548f480a616"}
+{"seq":9472,"ts":1792945802942,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":4.496747,"fee":0.01349,"price":63.307565,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.070812,"h":"04d211c7cbb86d35f4fa76ae845b8484"}
+{"seq":9473,"ts":1792945802942,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792945802942-5593","h":"4d064b2cc25cc6cd3038bb805ee1f9a0"}
+{"seq":9474,"ts":1792945802942,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.028,"reason":"מס-שירותים 2% → כספת","h":"b572066ed123ce3ecf688ad8941cafe3"}
+{"seq":9475,"ts":1792945802942,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":10.675711,"fee":0.032027,"price":63.3164,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.168075,"h":"33e0ad5f83ca4ff5a43c1ec83e62db3e"}
+{"seq":9476,"ts":1792945802942,"kind":"service","from":"tamar","to":"gal","asset":"USDS","amount":0.7,"reason":"אחסון-ארכיון · 2-GB-חודש","ref":"svc-1792945802942-1117","h":"ab9f7a3e52004501b3a4c09507c4dcfa"}
+{"seq":9477,"ts":1792945802942,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.014,"reason":"מס-שירותים 2% → כספת","h":"b53b9d0d0d060eec7133e22f8026857f"}
+{"seq":9478,"ts":1792945802942,"kind":"infra","from":"shachar","to":"TruthRail","asset":"USDS","amount":2.1,"reason":"תשתית: סריקת-גיט","h":"5196383c6c87395b5beb3376d8db15b9"}
+{"seq":9479,"ts":1792945802942,"kind":"service","from":"shachar","to":"yarden","asset":"USDS","amount":12.8,"reason":"תדלוק-RC · 4-מנה","ref":"svc-1792945802942-7961","h":"570983e364ef115e36503bedb1005bd7"}
+{"seq":9480,"ts":1792945802942,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.256,"reason":"מס-שירותים 2% → כספת","h":"1442fd12b39503cb4a9e389c1e28d851"}
+{"seq":9481,"ts":1792945803742,"kind":"service","from":"erez","to":"tamar","asset":"USDS","amount":1.05,"reason":"אחסון-ארכיון · 3-GB-חודש","ref":"svc-1792945803742-3441","h":"4b9e3ec524b020b2625bec073ba522e3"}
+{"seq":9482,"ts":1792945803742,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.021,"reason":"מס-שירותים 2% → כספת","h":"144e962969aa8f34baf778c39f5cab71"}
+{"seq":9483,"ts":1792945803742,"kind":"swap","from":"yarden","to":"pool","asset":"SAOS","amount":1.405343,"fee":0.004216,"price":63.337377,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":88.62152,"h":"c87efd752000f482a5e8a410fe7c0105"}
+{"seq":9484,"ts":1792945803742,"kind":"salary","from":"treasury","to":"gal","asset":"SAOS","amount":0.744276,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"90e7c6f83bed81204b8cfc8703bf635f"}
+{"seq":9485,"ts":1792945803742,"kind":"service","from":"erez","to":"saos-dex","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792945803742-3816","h":"bcdfed7ee580b82151338c9941ddeb27"}
+{"seq":9486,"ts":1792945803742,"kind":"tax","from":"saos-dex","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"9e38397cb91f8790c7860c93c623ce46"}
+{"seq":9487,"ts":1792945803742,"kind":"service","from":"erez","to":"erez","asset":"USDS","amount":3.6,"reason":"אימות-קבלה · 6-חותמת","ref":"svc-1792945803742-4441","h":"4777e304158f6ac6fbe97c91dc7daa34"}
+{"seq":9488,"ts":1792945803742,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.072,"reason":"מס-שירותים 2% → כספת","h":"8cb6217930605f5d90c8dbcb5047e50e"}
+{"seq":9489,"ts":1792945804542,"kind":"unstake","from":"gal","to":"gal","asset":"SAOS","amount":1.799467,"reason":"ביטול-סטייק לצורך-תפעול","h":"7ec9e5344b005253c63d7c0ece16a122"}
+{"seq":9490,"ts":1792945804542,"kind":"salary","from":"treasury","to":"aluf","asset":"SAOS","amount":0.807762,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"3a3f55e49a5ff1c9e983960dbbe233c4"}
+{"seq":9491,"ts":1792945804542,"kind":"service","from":"TruthRail","to":"aluf","asset":"USDS","amount":9.6,"reason":"תדלוק-RC · 3-מנה","ref":"svc-1792945804542-2238","h":"773f3516f74d6713b0d938e124c20d22"}
+{"seq":9492,"ts":1792945804542,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.192,"reason":"מס-שירותים 2% → כספת","h":"0f520e0512133186c6b5e58aaf97e562"}
+{"seq":9493,"ts":1792945804542,"kind":"service","from":"tamar","to":"tamar","asset":"USDS","amount":8.8,"reason":"תרגום-מסמך · 8-מסמך","ref":"svc-1792945804542-5315","h":"d6422f7ecfe48176ec5916d8c96dc86f"}
+{"seq":9494,"ts":1792945804542,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.176,"reason":"מס-שירותים 2% → כספת","h":"7842328c5c95d1cdf96318c81a0fa3df"}
+{"seq":9495,"ts":1792945804542,"kind":"infra","from":"FleetHQ","to":"saos-dex","asset":"USDS","amount":3,"reason":"תשתית: אימות-קבלה","h":"84807dbe0690482cad269481d17b09f8"}
+{"seq":9496,"ts":1792945805341,"kind":"swap","from":"gal","to":"pool","asset":"SAOS","amount":1.419546,"fee":0.004259,"price":63.162823,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":89.269392,"h":"1cc1974431b2704220955be0121b9e50"}
+{"seq":9497,"ts":1792945805342,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":18.615677,"fee":0.055847,"price":62.987236,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.294575,"h":"500e653ea86c25af814c6dad45be0dae"}
+{"seq":9498,"ts":1792945805342,"kind":"tip","from":"aluf","to":"shachar","asset":"SAOS","amount":0.064631,"reason":"טיפ על עבודה-טובה בזרימה","h":"e8524030fd361fd85078f42cdc7c1e2a"}
+{"seq":9499,"ts":1792945805342,"kind":"service","from":"tamar","to":"aluf","asset":"USDS","amount":5.6,"reason":"חישוב-GPU · 4-דקות-חישוב","ref":"svc-1792945805342-4773","h":"d84ba55276d3f1a269482ef2a15636fb"}
+{"seq":9500,"ts":1792945805342,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.112,"reason":"מס-שירותים 2% → כספת","h":"46e3f8ac4eab252ac8994d6f6d88e316"}
+{"seq":9501,"ts":1792945805342,"kind":"salary","from":"treasury","to":"erez","asset":"SAOS","amount":0.67649,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"f0e167be57660e0a5e249b272e5b4f22"}
+{"seq":9502,"ts":1792945805342,"kind":"unstake","from":"gal","to":"gal","asset":"SAOS","amount":0.996707,"reason":"ביטול-סטייק לצורך-תפעול","h":"47a90b16a2447120a89d39dff3714817"}
+{"seq":9503,"ts":1792945805342,"kind":"service","from":"erez","to":"gal","asset":"USDS","amount":25.6,"reason":"תדלוק-RC · 8-מנה","ref":"svc-1792945805342-9721","h":"972343ca52b6ee387b1d9e9bbb6270f0"}
+{"seq":9504,"ts":1792945805342,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.512,"reason":"מס-שירותים 2% → כספת","h":"d5cf95a1181f6d32129f9f3b31befec6"}
+{"seq":9505,"ts":1792945805776,"kind":"infra","from":"pool","to":"treasury","asset":"USDS","amount":302.720095,"reason":"מילוי-כספת אוטונומי · תורת-כותבים-רבים (חסום-רצפת-בריכה, מדוד)","h":"0656a5d92439aa5c13a87dff05c08554"}
+{"seq":9506,"ts":1792945806141,"kind":"salary","from":"treasury","to":"tamar","asset":"SAOS","amount":0.805291,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"6c4e89c307c239fbfa490682e4655b81"}
+{"seq":9507,"ts":1792945806142,"kind":"infra","from":"gal","to":"Pulse","asset":"USDS","amount":1.75,"reason":"תשתית: אחסון-ארכיון","h":"b45023a252a3a2a4443475d3910af065"}
+{"seq":9508,"ts":1792945806142,"kind":"swap","from":"gal","to":"pool","asset":"SAOS","amount":1.271552,"fee":0.003815,"price":63.023722,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":79.798225,"h":"dc91fa5708d464f1014441dd71f3197d"}
+{"seq":9509,"ts":1792945806142,"kind":"service","from":"TruthRail","to":"TruthRail","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792945806142-2417","h":"36bc95cc29134a87ac767e06d72d9d3e"}
+{"seq":9510,"ts":1792945806142,"kind":"tax","from":"TruthRail","to":"treasury","asset":"USDS","amount":0.028,"reason":"מס-שירותים 2% → כספת","h":"0d95617373eca8490c8c0d8aa2524372"}
+{"seq":9511,"ts":1792945806142,"kind":"swap","from":"shachar","to":"pool","asset":"SAOS","amount":1,"fee":0.003,"price":62.866926,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":62.617122,"h":"87eb5e4bdf6986e9d6a37a7be2e44049"}
+{"seq":9512,"ts":1792945806142,"kind":"infra","from":"aluf","to":"FleetHQ","asset":"USDS","amount":10.5,"reason":"תשתית: סריקת-גיט","h":"140f737b4d632c1f981114b4ca9b7f0e"}
+{"seq":9513,"ts":1792945806942,"kind":"tip","from":"aluf","to":"tamar","asset":"SAOS","amount":0.372686,"reason":"טיפ על עבודה-טובה בזרימה","h":"1ab39fa4b2375fc9f5ca956ee7cca679"}
+{"seq":9514,"ts":1792945806942,"kind":"swap","from":"tamar","to":"pool","asset":"SAOS","amount":1,"fee":0.003,"price":62.744026,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":62.49477,"h":"401c51d4ce1458400382389f0a2144c1"}
+{"seq":9515,"ts":1792945806942,"kind":"service","from":"shachar","to":"shachar","asset":"USDS","amount":14.7,"reason":"סריקת-גיט · 7-ריצה","ref":"svc-1792945806942-6449","h":"d3fb805b324cf3234c88aa212563540b"}
+{"seq":9516,"ts":1792945806942,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.294,"reason":"מס-שירותים 2% → כספת","h":"4ea8c0f99f0a49435d91847d6d52ca6a"}
+{"seq":9517,"ts":1792945806942,"kind":"service","from":"aluf","to":"yarden","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792945806942-2165","h":"0358bc7204f7f357bcfb9fe0b91efeb8"}
+{"seq":9518,"ts":1792945806942,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.096,"reason":"מס-שירותים 2% → כספת","h":"b1cf8d4c9841eab70126661b9b567431"}
+{"seq":9519,"ts":1792945806942,"kind":"infra","from":"TruthRail","to":"Pulse","asset":"USDS","amount":1.4,"reason":"תשתית: חישוב-GPU","h":"899f3e2a085bb8e5ad226a309d506d43"}
+{"seq":9520,"ts":1792945806942,"kind":"salary","from":"treasury","to":"gal","asset":"SAOS","amount":0.703065,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"d7082e746412a8d3187346b8eacab8a6"}
+{"seq":9521,"ts":1792945807742,"kind":"stake","from":"erez","to":"erez","asset":"SAOS","amount":1.354135,"reason":"סטייק-SAOS לאבטחת-הרשת הפנימית","h":"f4262d8266146ed0d2e800c64b53c000"}
+{"seq":9522,"ts":1792945807743,"kind":"service","from":"yarden","to":"erez","asset":"USDS","amount":9.6,"reason":"תדלוק-RC · 3-מנה","ref":"svc-1792945807743-3767","h":"29a18ba31862eca859a33bc9aff6b25b"}
+{"seq":9523,"ts":1792945807743,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.192,"reason":"מס-שירותים 2% → כספת","h":"1d1abcfce89f53121a534019cd12d291"}
+{"seq":9524,"ts":1792945807743,"kind":"service","from":"TruthRail","to":"TruthRail","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792945807743-9187","h":"e7d975e8dcd0bb8ed94d796e8f879d4b"}
+{"seq":9525,"ts":1792945807743,"kind":"tax","from":"TruthRail","to":"treasury","asset":"USDS","amount":0.012,"reason":"מס-שירותים 2% → כספת","h":"aa262033fe17fc0f6f8b8ab7920a8456"}
+{"seq":9526,"ts":1792945807743,"kind":"tip","from":"yarden","to":"shachar","asset":"SAOS","amount":0.222021,"reason":"טיפ על עבודה-טובה בזרימה","h":"56962ba46c9f5b29e1ee907041d64ed8"}
+{"seq":9527,"ts":1792945807743,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":7.565931,"fee":0.022698,"price":62.621487,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.120443,"h":"23e0579792704442ac88b24dc4afc601"}
+{"seq":9528,"ts":1792945807743,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":16.550305,"fee":0.049651,"price":62.636271,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.263368,"h":"1017d744097822b8cb9cf074b928e53c"}
+{"seq":9529,"ts":1792945807743,"kind":"tip","from":"aluf","to":"gal","asset":"SAOS","amount":0.144035,"reason":"טיפ על עבודה-טובה בזרימה","h":"305a8ec3475a02ca6320c55a21d24efb"}
+{"seq":9530,"ts":1792945807743,"kind":"service","from":"Domain","to":"gal","asset":"USDS","amount":3.2,"reason":"תדלוק-RC · 1-מנה","ref":"svc-1792945807743-2228","h":"ecdeea61a9aa4dec37eb3aa79b0988bc"}
+{"seq":9531,"ts":1792945807743,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.064,"reason":"מס-שירותים 2% → כספת","h":"60626e55a2d5828ef9c8f54e3ed9a8c6"}
+{"seq":9532,"ts":1792945808542,"kind":"tip","from":"gal","to":"yarden","asset":"SAOS","amount":0.173389,"reason":"טיפ על עבודה-טובה בזרימה","h":"85adb5c20200a6670a45cb2950607dba"}
+{"seq":9533,"ts":1792945808543,"kind":"infra","from":"saos-dex","to":"TruthRail","asset":"USDS","amount":5.6,"reason":"תשתית: חישוב-GPU","h":"1c5481a43bbca7c9aa26870de589b425"}
+{"seq":9534,"ts":1792945808543,"kind":"service","from":"gal","to":"aluf","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792945808543-3583","h":"b023811795ed198afd0fb7f32c8153d7"}
+{"seq":9535,"ts":1792945808543,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"b301e25e51288b5fda700b79941a7d2d"}
+{"seq":9536,"ts":1792945808543,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":6.647364,"fee":0.019942,"price":62.668618,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.105742,"h":"fa29419d13202bfad8e4d74efdf08a11"}
+{"seq":9537,"ts":1792945808543,"kind":"salary","from":"treasury","to":"erez","asset":"SAOS","amount":0.281316,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"0fe784039ae137b12c07f62d0086e9f7"}
+{"seq":9538,"ts":1792945808543,"kind":"infra","from":"Domain","to":"Domain","asset":"USDS","amount":3,"reason":"תשתית: אימות-קבלה","h":"d7881ba4cab045f1d24d2db4dc0eba9a"}
+{"seq":9539,"ts":1792945808543,"kind":"service","from":"Pulse","to":"Pulse","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792945808543-5900","h":"9aa1acd8c1a2fc5ac0e0a11aba930263"}
+{"seq":9540,"ts":1792945808543,"kind":"tax","from":"Pulse","to":"treasury","asset":"USDS","amount":0.012,"reason":"מס-שירותים 2% → כספת","h":"315668abcc03c75874da4532e79bc51d"}
+{"seq":9541,"ts":1792945808543,"kind":"service","from":"tamar","to":"gal","asset":"USDS","amount":7.7,"reason":"תרגום-מסמך · 7-מסמך","ref":"svc-1792945808543-4878","h":"159afa9d8b73660b8549ad90a3441d10"}
+{"seq":9542,"ts":1792945808543,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.154,"reason":"מס-שירותים 2% → כספת","h":"62f139357fa80cc872d26bdf34cb19c7"}
+{"seq":9543,"ts":1792945809342,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"ce77a55d7b5e5810dce2a50ce7653f8b"}
+{"seq":9544,"ts":1792945809343,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"5fcfa7e8a5f271631d6558a4a708c624"}
+{"seq":9545,"ts":1792945809343,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"3b2086ccdde585bf4080cfb3d957ef00"}
+{"seq":9546,"ts":1792945809343,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"8a47d12a2022df22d21931d09b133a25"}
+{"seq":9547,"ts":1792945809343,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"cacf8c8891c491c53d5d5281f6cd6f95"}
+{"seq":9548,"ts":1792945809343,"kind":"infra","from":"aluf","to":"Domain","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"68c3fda8a7081080694b49f160e94e20"}
+{"seq":9549,"ts":1792945809343,"kind":"salary","from":"treasury","to":"yarden","asset":"SAOS","amount":0.905879,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"31434fe205d117441c64446231b9ed9b"}
+{"seq":9550,"ts":1792945809343,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":24.262383,"fee":0.072787,"price":62.681612,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.385766,"h":"fe892ab195748deca2d1d2dce1e073da"}
+{"seq":9551,"ts":1792945809343,"kind":"service","from":"Pulse","to":"gal","asset":"USDS","amount":12.8,"reason":"תדלוק-RC · 4-מנה","ref":"svc-1792945809343-5687","h":"c5ea472b24c36e26627eeb52d18e902c"}
+{"seq":9552,"ts":1792945809343,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.256,"reason":"מס-שירותים 2% → כספת","h":"164b43e118346298fa073bf8af7893e4"}
+{"seq":9553,"ts":1792945809343,"kind":"service","from":"aluf","to":"yarden","asset":"USDS","amount":2.2,"reason":"תרגום-מסמך · 2-מסמך","ref":"svc-1792945809343-703","h":"c349a674a8186ca2f7e2e9aefbc8eef3"}
+{"seq":9554,"ts":1792945809343,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.044,"reason":"מס-שירותים 2% → כספת","h":"f3c5612235f6b6b3a6ae1070b66933ac"}
+{"seq":9555,"ts":1792945810143,"kind":"tip","from":"tamar","to":"gal","asset":"SAOS","amount":0.268335,"reason":"טיפ על עבודה-טובה בזרימה","h":"eaa0d4901e25b5da66d51f798e04b956"}
+{"seq":9556,"ts":1792945810143,"kind":"tip","from":"gal","to":"yarden","asset":"SAOS","amount":0.120959,"reason":"טיפ על עבודה-טובה בזרימה","h":"bfc11b5a208e8ec0a09b289fd5e3c98d"}
+{"seq":9557,"ts":1792945810143,"kind":"service","from":"aluf","to":"erez","asset":"USDS","amount":7.7,"reason":"תרגום-מסמך · 7-מסמך","ref":"svc-1792945810143-2796","h":"903e5bfa9bdbe683f78346618c097940"}
+{"seq":9558,"ts":1792945810143,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.154,"reason":"מס-שירותים 2% → כספת","h":"0c7ac8e22f5b3274194e1498d82242c1"}
+{"seq":9559,"ts":1792945810143,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":22.19746,"fee":0.066592,"price":62.729051,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.352679,"h":"fa071ccb9b89df7a344e28cb7353a225"}
+{"seq":9560,"ts":1792945810143,"kind":"salary","from":"treasury","to":"erez","asset":"SAOS","amount":0.816295,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"94c72de8369f807c7316fa970a6be59c"}
+{"seq":9561,"ts":1792945810143,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":7.192337,"fee":0.021577,"price":62.772469,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.114221,"h":"eb460f6eff1f168bdc3c84b9feb6d847"}
+{"seq":9562,"ts":1792945810143,"kind":"service","from":"Pulse","to":"erez","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792945810143-2430","h":"dc6af7dce5c6d6039c00950dcaa6f195"}
+{"seq":9563,"ts":1792945810143,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.096,"reason":"מס-שירותים 2% → כספת","h":"1fd915fce4b1fb6246a10ae5cbb727f1"}
+{"seq":9564,"ts":1792945810942,"kind":"service","from":"erez","to":"Domain","asset":"USDS","amount":14.7,"reason":"סריקת-גיט · 7-ריצה","ref":"svc-1792945810943-9253","h":"82cb3f7df4194db0a27f72e8f054ccc4"}
+{"seq":9565,"ts":1792945810943,"kind":"tax","from":"Domain","to":"treasury","asset":"USDS","amount":0.294,"reason":"מס-שירותים 2% → כספת","h":"a7744fe422438ca09f8df1184e2c77e4"}
+{"seq":9566,"ts":1792945810943,"kind":"service","from":"tamar","to":"shachar","asset":"USDS","amount":6.3,"reason":"סריקת-גיט · 3-ריצה","ref":"svc-1792945810943-3721","h":"a6cd02e1f52b3a1941dceb5b3462535b"}
+{"seq":9567,"ts":1792945810943,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.126,"reason":"מס-שירותים 2% → כספת","h":"3e42412cc6502eff4ec8553db5328047"}
+{"seq":9568,"ts":1792945810943,"kind":"service","from":"tamar","to":"shachar","asset":"USDS","amount":7.7,"reason":"תרגום-מסמך · 7-מסמך","ref":"svc-1792945810943-8893","h":"ea1dcd43b4937ef1f5587477b82e4058"}
+{"seq":9569,"ts":1792945810943,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.154,"reason":"מס-שירותים 2% → כספת","h":"59084fff41b36517ff2592fe8348ac7a"}
+{"seq":9570,"ts":1792945810943,"kind":"service","from":"shachar","to":"TruthRail","asset":"USDS","amount":7.2,"reason":"מידע-שוק · 8-פיד","ref":"svc-1792945810943-6155","h":"a821862f54db78064533f778cc2d2d64"}
+{"seq":9571,"ts":1792945810943,"kind":"tax","from":"TruthRail","to":"treasury","asset":"USDS","amount":0.144,"reason":"מס-שירותים 2% → כספת","h":"4808f15e4e8bd6c50b92e5fc008790cd"}
+{"seq":9572,"ts":1792945810943,"kind":"service","from":"Console","to":"aluf","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792945810943-6688","h":"ba5496e6336f862eee7c55ee17f019e8"}
+{"seq":9573,"ts":1792945810943,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.096,"reason":"מס-שירותים 2% → כספת","h":"2264cb70c87c6827e653515f49006785"}
+{"seq":9574,"ts":1792945810943,"kind":"swap","from":"gal","to":"pool","asset":"SAOS","amount":1.113889,"fee":0.003342,"price":62.78654,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":69.651641,"h":"0d45d10ae8fd632a54d8c3694bf4cb11"}
+{"seq":9575,"ts":1792945810943,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":29.906249,"fee":0.089719,"price":62.649929,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.475701,"h":"7f20cecbd5ad6a48099341b6e9150dfc"}
+{"seq":9576,"ts":1792945811742,"kind":"infra","from":"gal","to":"Domain","asset":"USDS","amount":4.4,"reason":"תשתית: תרגום-מסמך","h":"5471fd2cace6d6b72c8f94f313ac9e1c"}
+{"seq":9577,"ts":1792945811743,"kind":"swap","from":"erez","to":"pool","asset":"SAOS","amount":1,"fee":0.003,"price":62.708391,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":62.459295,"h":"1bd9985ead5c417958792c593da35551"}
+{"seq":9578,"ts":1792945811743,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":30.762816,"fee":0.092288,"price":62.585957,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.48982,"h":"83e855d5e9dcec813ec5e6c000cc3c0b"}
+{"seq":9579,"ts":1792945811743,"kind":"service","from":"yarden","to":"yarden","asset":"USDS","amount":4.2,"reason":"סריקת-גיט · 2-ריצה","ref":"svc-1792945811743-2586","h":"c70c9f08ae3f89f897a304b022aea7e4"}
+{"seq":9580,"ts":1792945811743,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.084,"reason":"מס-שירותים 2% → כספת","h":"a72e4325054d6ec0aefb38d009dee49f"}
+{"seq":9581,"ts":1792945811743,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":35.836306,"fee":0.107509,"price":62.646063,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.57001,"h":"7c403492b0a23096550fc0a476753b1b"}
+{"seq":9582,"ts":1792945811743,"kind":"infra","from":"TruthRail","to":"TruthRail","asset":"USDS","amount":3.3,"reason":"תשתית: תרגום-מסמך","h":"dce79998b5e415289b23422a8c218f5d"}
+{"seq":9583,"ts":1792945811743,"kind":"service","from":"shachar","to":"shachar","asset":"USDS","amount":4.2,"reason":"סריקת-גיט · 2-ריצה","ref":"svc-1792945811743-4766","h":"5e6eaa40aa27c33f82c5665a69d696db"}
+{"seq":9584,"ts":1792945811743,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.084,"reason":"מס-שירותים 2% → כספת","h":"d91c3f58d471cf1b569f8a18d67144c4"}
+{"seq":9585,"ts":1792945811743,"kind":"service","from":"tamar","to":"gal","asset":"USDS","amount":3,"reason":"אימות-קבלה · 5-חותמת","ref":"svc-1792945811743-3858","h":"6e9fc3e2eccc0ae8e0fbe51276ac7267"}
+{"seq":9586,"ts":1792945811743,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.06,"reason":"מס-שירותים 2% → כספת","h":"09da56b99dd98103b993148fbc8eba0e"}
+{"seq":9587,"ts":1792945811743,"kind":"service","from":"FleetHQ","to":"erez","asset":"USDS","amount":10.5,"reason":"סריקת-גיט · 5-ריצה","ref":"svc-1792945811743-5655","h":"29bd8d346863b8c9494831487fa97a55"}
+{"seq":9588,"ts":1792945811743,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.21,"reason":"מס-שירותים 2% → כספת","h":"bbc859e9666b3d05d453280f28734cbe"}
+{"seq":9589,"ts":1792945812543,"kind":"service","from":"TruthRail","to":"yarden","asset":"USDS","amount":11.2,"reason":"חישוב-GPU · 8-דקות-חישוב","ref":"svc-1792945812543-9560","h":"ddc69b097a3bcc2f27153aa01f3f3d38"}
+{"seq":9590,"ts":1792945812543,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.224,"reason":"מס-שירותים 2% → כספת","h":"51e54167bf672f196af33cde12dcba86"}
+{"seq":9591,"ts":1792945812543,"kind":"service","from":"aluf","to":"Domain","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792945812543-3370","h":"a746c3dbea75bb1a02276e399c3d23f2"}
+{"seq":9592,"ts":1792945812543,"kind":"tax","from":"Domain","to":"treasury","asset":"USDS","amount":0.012,"reason":"מס-שירותים 2% → כספת","h":"ea7c7dae29690e1898a243ea8066c6b7"}
+{"seq":9593,"ts":1792945812543,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":18.214385,"fee":0.054643,"price":62.716119,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.289473,"h":"c02fe7759fff58814aada306f382894c"}
+{"seq":9594,"ts":1792945812543,"kind":"service","from":"tamar","to":"tamar","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792945812543-5212","h":"14dabf607bd13300c64645ee87812825"}
+{"seq":9595,"ts":1792945812543,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.007,"reason":"מס-שירותים 2% → כספת","h":"618986f22f55ed2cab27912a571be151"}
+{"seq":9596,"ts":1792945812543,"kind":"service","from":"gal","to":"shachar","asset":"USDS","amount":7.2,"reason":"מידע-שוק · 8-פיד","ref":"svc-1792945812543-8011","h":"5803ce9d495e54a23b74a305f7d50f48"}
+{"seq":9597,"ts":1792945812543,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.144,"reason":"מס-שירותים 2% → כספת","h":"7c34675d5bbc8d026bb18196fece8dda"}
+{"seq":9598,"ts":1792945813342,"kind":"service","from":"gal","to":"Domain","asset":"USDS","amount":2.7,"reason":"מידע-שוק · 3-פיד","ref":"svc-1792945813343-8648","h":"be5716ed5a878d30bf71d2b5fed92c17"}
+{"seq":9599,"ts":1792945813343,"kind":"tax","from":"Domain","to":"treasury","asset":"USDS","amount":0.054,"reason":"מס-שירותים 2% → כספת","h":"a3bdfd3a97d6a26ff740ef6d1c42f213"}
+{"seq":9600,"ts":1792945813343,"kind":"service","from":"gal","to":"gal","asset":"USDS","amount":6.3,"reason":"מידע-שוק · 7-פיד","ref":"svc-1792945813343-1868","h":"d9648476156fb11ae4e165a0750b1de9"}
+{"seq":9601,"ts":1792945813343,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.126,"reason":"מס-שירותים 2% → כספת","h":"23be0a73e903654df14575b8d399ce2d"}
+{"seq":9602,"ts":1792945813343,"kind":"infra","from":"aluf","to":"FleetHQ","asset":"USDS","amount":0.35,"reason":"תשתית: אחסון-ארכיון","h":"9601c96d3910cec75e45ea5f0d941395"}
+{"seq":9603,"ts":1792945813343,"kind":"service","from":"aluf","to":"TruthRail","asset":"USDS","amount":25.6,"reason":"תדלוק-RC · 8-מנה","ref":"svc-1792945813343-6393","h":"2c98c254801d94b592a3f7ef0efaf9c2"}
+{"seq":9604,"ts":1792945813343,"kind":"tax","from":"TruthRail","to":"treasury","asset":"USDS","amount":0.512,"reason":"מס-שירותים 2% → כספת","h":"b9a12062653285b725a47ecca3ccc306"}
+{"seq":9605,"ts":1792945813343,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":8.330251,"fee":0.024991,"price":62.751741,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.132334,"h":"7ac81ddcd6df84a1c316b18f892a36e8"}
+{"seq":9606,"ts":1792945813343,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792945813343-6847","h":"c9119f4e10fed7d216dacdd24a16561a"}
+{"seq":9607,"ts":1792945813343,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.018,"reason":"מס-שירותים 2% → כספת","h":"eb4a2a89a840f2e2bac8b942729bd392"}
+{"seq":9608,"ts":1792945814143,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":36.394223,"fee":0.109183,"price":62.768035,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.577754,"h":"a4e2c1d8e7c2ac51fe48288c3b47f71e"}
+{"seq":9609,"ts":1792945814143,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":1.75,"reason":"אחסון-ארכיון · 5-GB-חודש","ref":"svc-1792945814143-974","h":"de42913a28728ca5f2f8b588417d86ee"}
+{"seq":9610,"ts":1792945814143,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.035,"reason":"מס-שירותים 2% → כספת","h":"59fa70a3fa2bcc93f40d58d59cf41367"}
+{"seq":9611,"ts":1792945814143,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":18.696065,"fee":0.056088,"price":62.839251,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.296543,"h":"222b0829dee8d9d59e540ce47374a4de"}
+{"seq":9612,"ts":1792945814143,"kind":"infra","from":"Domain","to":"Console","asset":"USDS","amount":4.2,"reason":"תשתית: חישוב-GPU","h":"349c5db94e2448b4fccbd6b964b933d2"}
+{"seq":9613,"ts":1792945814943,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":5.414663,"fee":0.016244,"price":62.875851,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.085851,"h":"6ae4692eedc03b6c55b7e5afe5e36542"}
+{"seq":9614,"ts":1792945814944,"kind":"service","from":"shachar","to":"erez","asset":"USDS","amount":12.6,"reason":"סריקת-גיט · 6-ריצה","ref":"svc-1792945814944-9370","h":"4597663729dc7ef9cb15ed6e5f71bf03"}
+{"seq":9615,"ts":1792945814944,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.252,"reason":"מס-שירותים 2% → כספת","h":"45215d1f9e9fdad3daab8f6ef67d5b75"}
+{"seq":9616,"ts":1792945814944,"kind":"service","from":"aluf","to":"gal","asset":"USDS","amount":1.4,"reason":"אחסון-ארכיון · 4-GB-חודש","ref":"svc-1792945814944-2942","h":"7d2fc1263a08249234bf94b7327ab297"}
+{"seq":9617,"ts":1792945814944,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.028,"reason":"מס-שירותים 2% → כספת","h":"0de36c96a05190c8b0f8d0a85bbd0244"}
+{"seq":9618,"ts":1792945814944,"kind":"service","from":"TruthRail","to":"erez","asset":"USDS","amount":2.8,"reason":"אחסון-ארכיון · 8-GB-חודש","ref":"svc-1792945814944-1296","h":"3cb6f939ef9bbb0d608e4971c5f320ed"}
+{"seq":9619,"ts":1792945814944,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.056,"reason":"מס-שירותים 2% → כספת","h":"e5ceff38101b7f6488ea5cea23f3987b"}
+{"seq":9620,"ts":1792945814944,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":1.05,"reason":"אחסון-ארכיון · 3-GB-חודש","ref":"svc-1792945814944-8816","h":"d02c670fe6078aecff2a305acd7f3c12"}
+{"seq":9621,"ts":1792945814944,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.021,"reason":"מס-שירותים 2% → כספת","h":"342d63efc09f10bc240ea85c461e2417"}
+{"seq":9622,"ts":1792945815743,"kind":"service","from":"yarden","to":"yarden","asset":"USDS","amount":1.8,"reason":"אימות-קבלה · 3-חותמת","ref":"svc-1792945815743-548","h":"1d49f6f6667468dd9788bbdc9db5a1e3"}
+{"seq":9623,"ts":1792945815744,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.036,"reason":"מס-שירותים 2% → כספת","h":"2b8534910a919cf3501dffd563215947"}
+{"seq":9624,"ts":1792945815744,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":19.677372,"fee":0.059032,"price":62.886453,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.311869,"h":"143b42ec320c29445ab5c0eef47049cd"}
+{"seq":9625,"ts":1792945815744,"kind":"swap","from":"gal","to":"pool","asset":"SAOS","amount":1,"fee":0.003,"price":62.924988,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":62.674926,"h":"813260482fc73b4790789d53b919b167"}
+{"seq":9626,"ts":1792945815744,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":35.243918,"fee":0.105732,"price":62.80192,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.559202,"h":"46c408544b579d3c83ed3b6d0c3db427"}
+{"seq":9627,"ts":1792945815744,"kind":"service","from":"TruthRail","to":"yarden","asset":"USDS","amount":5.5,"reason":"תרגום-מסמך · 5-מסמך","ref":"svc-1792945815744-8886","h":"b37b3771a79d955834612cffffc29bc4"}
+{"seq":9628,"ts":1792945815744,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.11,"reason":"מס-שירותים 2% → כספת","h":"6d476b7fd828a617af6839b5d8af33b7"}
+{"seq":9629,"ts":1792945815744,"kind":"service","from":"yarden","to":"tamar","asset":"USDS","amount":7.7,"reason":"תרגום-מסמך · 7-מסמך","ref":"svc-1792945815744-699","h":"377965fe30ec52172c9362cd79d51752"}
+{"seq":9630,"ts":1792945815744,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.154,"reason":"מס-שירותים 2% → כספת","h":"f2bc1fff0b6d0c126006a4afde3d208b"}
+{"seq":9631,"ts":1792945815778,"kind":"infra","from":"pool","to":"treasury","asset":"USDS","amount":399.695979,"reason":"מילוי-כספת אוטונומי · תורת-כותבים-רבים (חסום-רצפת-בריכה, מדוד)","h":"08edac22a7487c556a73b66508143bb1"}
+{"seq":9632,"ts":1792945816544,"kind":"service","from":"FleetHQ","to":"erez","asset":"USDS","amount":2.7,"reason":"מידע-שוק · 3-פיד","ref":"svc-1792945816544-7804","h":"937e82f2d9c53c52d80ae1c099b72783"}
+{"seq":9633,"ts":1792945816544,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.054,"reason":"מס-שירותים 2% → כספת","h":"b06cd0486aa61bfc6d33542c52ccaa02"}
+{"seq":9634,"ts":1792945816544,"kind":"service","from":"gal","to":"tamar","asset":"USDS","amount":5.6,"reason":"חישוב-GPU · 4-דקות-חישוב","ref":"svc-1792945816544-4250","h":"d46b1bfa938c9b013f72b494b21987ff"}
+{"seq":9635,"ts":1792945816544,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.112,"reason":"מס-שירותים 2% → כספת","h":"551d7de910ae293301b81767de73daa2"}
+{"seq":9636,"ts":1792945816544,"kind":"service","from":"Pulse","to":"yarden","asset":"USDS","amount":8.4,"reason":"סריקת-גיט · 4-ריצה","ref":"svc-1792945816544-6206","h":"7adac3dbaae5d2cde1b2fa7991e84b5c"}
+{"seq":9637,"ts":1792945816544,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.168,"reason":"מס-שירותים 2% → כספת","h":"a7246192f00baf03068dc52bc36c33f6"}
+{"seq":9638,"ts":1792945816544,"kind":"salary","from":"treasury","to":"yarden","asset":"SAOS","amount":0.568656,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"1ebdc542fb85d402f466f3c8248e8c0e"}
+{"seq":9639,"ts":1792945816544,"kind":"swap","from":"shachar","to":"pool","asset":"USDS","amount":21.965584,"fee":0.065897,"price":62.870902,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.348209,"h":"eaf46145db03421cb8b5c17cc67ae35c"}
+{"seq":9640,"ts":1792945817344,"kind":"tip","from":"gal","to":"shachar","asset":"SAOS","amount":0.159605,"reason":"טיפ על עבודה-טובה בזרימה","h":"cc3929472e51e5652ef29340eb11a702"}
+{"seq":9641,"ts":1792945817344,"kind":"service","from":"shachar","to":"tamar","asset":"USDS","amount":3.2,"reason":"תדלוק-RC · 1-מנה","ref":"svc-1792945817344-9980","h":"680664db20cd23d84bfdceb4af42d63c"}
+{"seq":9642,"ts":1792945817344,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.064,"reason":"מס-שירותים 2% → כספת","h":"b8d016d0c978d96fe7cf8077507d59ce"}
+{"seq":9643,"ts":1792945817344,"kind":"service","from":"Console","to":"aluf","asset":"USDS","amount":5.4,"reason":"מידע-שוק · 6-פיד","ref":"svc-1792945817344-9925","h":"2ed92d8bd44ca71731cdcf92e70985e8"}
+{"seq":9644,"ts":1792945817344,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.108,"reason":"מס-שירותים 2% → כספת","h":"0081d2c80689cd6c610b0b3e5c76741b"}
+{"seq":9645,"ts":1792945817344,"kind":"service","from":"tamar","to":"erez","asset":"USDS","amount":4.2,"reason":"סריקת-גיט · 2-ריצה","ref":"svc-1792945817344-1453","h":"8af38fed401fbe66f933dfbbd543be66"}
+{"seq":9646,"ts":1792945817344,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.084,"reason":"מס-שירותים 2% → כספת","h":"9308b3d1d2993e2e6ecc8981aade2131"}
+{"seq":9647,"ts":1792945817344,"kind":"service","from":"aluf","to":"gal","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792945817344-5030","h":"2fa9611023fa4fc5a13693404037b0c2"}
+{"seq":9648,"ts":1792945817344,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"56778deafd558bc1dd937b937430aade"}
+{"seq":9649,"ts":1792945818144,"kind":"service","from":"yarden","to":"Pulse","asset":"USDS","amount":8.4,"reason":"סריקת-גיט · 4-ריצה","ref":"svc-1792945818144-2132","h":"8b1afa331b78ec8e90e24bc3267ff791"}
+{"seq":9650,"ts":1792945818144,"kind":"tax","from":"Pulse","to":"treasury","asset":"USDS","amount":0.168,"reason":"מס-שירותים 2% → כספת","h":"ac2e8b57c6304354cd588ea1267a811c"}
+{"seq":9651,"ts":1792945818144,"kind":"salary","from":"treasury","to":"yarden","asset":"SAOS","amount":0.374163,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"bb81ec65bb5a456e223448c55e60a0fd"}
+{"seq":9652,"ts":1792945818144,"kind":"tip","from":"yarden","to":"erez","asset":"SAOS","amount":0.290129,"reason":"טיפ על עבודה-טובה בזרימה","h":"c2f41f327300ac0752d4f577ed07d130"}
+{"seq":9653,"ts":1792945818144,"kind":"service","from":"Domain","to":"shachar","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792945818144-2993","h":"c506506607ac1e8dc3c218a7e72874fd"}
+{"seq":9654,"ts":1792945818144,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"d592f6646c197535be0cccf699b4a5fe"}
+{"seq":9655,"ts":1792945818144,"kind":"infra","from":"erez","to":"TruthRail","asset":"USDS","amount":2.8,"reason":"תשתית: חישוב-GPU","h":"fdc3c82c482f875b090086f7fccf307f"}
+{"seq":9656,"ts":1792945818144,"kind":"tip","from":"gal","to":"erez","asset":"SAOS","amount":0.358848,"reason":"טיפ על עבודה-טובה בזרימה","h":"3a048f8ab85e293bdca542309d6e41f3"}
+{"seq":9657,"ts":1792945818944,"kind":"infra","from":"pool","to":"treasury","asset":"USDS","amount":6.919952,"reason":"איסוף-עמלות-בריכה → כספת","h":"2539474b71dd32266c97d39edcdde605"}
+{"seq":9658,"ts":1792945818945,"kind":"service","from":"yarden","to":"saos-dex","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792945818945-5200","h":"442989f4ae651cb8af4d742848f4e8dd"}
+{"seq":9659,"ts":1792945818945,"kind":"tax","from":"saos-dex","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"55ee308481ae2162f8c5a756a3b012f2"}
+{"seq":9660,"ts":1792945818945,"kind":"infra","from":"erez","to":"TruthRail","asset":"USDS","amount":2.8,"reason":"תשתית: חישוב-GPU","h":"cad389e95f7bf21d493717104193f551"}
+{"seq":9661,"ts":1792945818945,"kind":"service","from":"aluf","to":"erez","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792945818945-6698","h":"91243cb242f4f634faf1aff18067ee6a"}
+{"seq":9662,"ts":1792945818945,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.007,"reason":"מס-שירותים 2% → כספת","h":"c64ce63fecd85a3c9808eda79a01e3eb"}
+{"seq":9663,"ts":1792945818945,"kind":"service","from":"erez","to":"FleetHQ","asset":"USDS","amount":0.6,"reason":"אימות-קבלה · 1-חותמת","ref":"svc-1792945818945-8017","h":"0d5b6084eccf1255a5920b661e94b880"}
+{"seq":9664,"ts":1792945818945,"kind":"tax","from":"FleetHQ","to":"treasury","asset":"USDS","amount":0.012,"reason":"מס-שירותים 2% → כספת","h":"5364145f730de49204bf07a9b5a61726"}
+{"seq":9665,"ts":1792945818945,"kind":"service","from":"FleetHQ","to":"aluf","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792945818945-6998","h":"6adc59fc662ef139bc874a3d5dfa35c4"}
+{"seq":9666,"ts":1792945818945,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.028,"reason":"מס-שירותים 2% → כספת","h":"50ee1c634ac1466488945e8f951328d3"}
+{"seq":9667,"ts":1792945818945,"kind":"infra","from":"gal","to":"TruthRail","asset":"USDS","amount":3,"reason":"תשתית: אימות-קבלה","h":"1ab8da9a3c4791e460b1a220389fa569"}
+{"seq":9668,"ts":1792945819744,"kind":"service","from":"gal","to":"gal","asset":"USDS","amount":2.8,"reason":"חישוב-GPU · 2-דקות-חישוב","ref":"svc-1792945819744-928","h":"1a0fe6b6801d70bd928d53bba49e7760"}
+{"seq":9669,"ts":1792945819745,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.056,"reason":"מס-שירותים 2% → כספת","h":"8601b7de5574ecd3d8af0b4a14391c1c"}
+{"seq":9670,"ts":1792945819745,"kind":"swap","from":"gal","to":"pool","asset":"USDS","amount":1.690431,"fee":0.005071,"price":62.913914,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.026788,"h":"419f4264adaa7fc40501a165eeb9a6f0"}
+{"seq":9671,"ts":1792945819745,"kind":"service","from":"shachar","to":"yarden","asset":"USDS","amount":2.2,"reason":"תרגום-מסמך · 2-מסמך","ref":"svc-1792945819745-7426","h":"f0290cbd162aa625b246810f300d4ace"}
+{"seq":9672,"ts":1792945819745,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.044,"reason":"מס-שירותים 2% → כספת","h":"63a729f154397ade8b3fdf776192cfc9"}
+{"seq":9673,"ts":1792945819745,"kind":"service","from":"shachar","to":"tamar","asset":"USDS","amount":19.2,"reason":"תדלוק-RC · 6-מנה","ref":"svc-1792945819745-7407","h":"4f9996d10088176a2eeac00f07e06991"}
+{"seq":9674,"ts":1792945819745,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.384,"reason":"מס-שירותים 2% → כספת","h":"f954fe6802d742bff5537a5af6531e99"}
+{"seq":9675,"ts":1792945819745,"kind":"service","from":"aluf","to":"yarden","asset":"USDS","amount":16.8,"reason":"סריקת-גיט · 8-ריצה","ref":"svc-1792945819745-7795","h":"795ba60d9178f4911d6fe1a8480098e2"}
+{"seq":9676,"ts":1792945819745,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.336,"reason":"מס-שירותים 2% → כספת","h":"78ec3f25e1dd756b1304bbd4f5b4e476"}
+{"seq":9677,"ts":1792945819745,"kind":"service","from":"aluf","to":"aluf","asset":"USDS","amount":6.6,"reason":"תרגום-מסמך · 6-מסמך","ref":"svc-1792945819745-5066","h":"88a3b442445aa14f8b6fce5987791917"}
+{"seq":9678,"ts":1792945819745,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.132,"reason":"מס-שירותים 2% → כספת","h":"cfb2d7905260a7e8c606fd196ed12c6b"}
+{"seq":9679,"ts":1792945819745,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":23.850885,"fee":0.071553,"price":62.917225,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.377806,"h":"ffe6a33ed92c31797f0ea1e356a026c1"}
+{"seq":9680,"ts":1792945820544,"kind":"infra","from":"erez","to":"Pulse","asset":"USDS","amount":1.05,"reason":"תשתית: אחסון-ארכיון","h":"255a0218a9c5eb35cdfc14fb2d914b60"}
+{"seq":9681,"ts":1792945820545,"kind":"tip","from":"yarden","to":"erez","asset":"SAOS","amount":0.063469,"reason":"טיפ על עבודה-טובה בזרימה","h":"3a54786443a4c160a3cb77e6750b0432"}
+{"seq":9682,"ts":1792945820545,"kind":"service","from":"erez","to":"erez","asset":"USDS","amount":4.5,"reason":"מידע-שוק · 5-פיד","ref":"svc-1792945820545-3368","h":"da76970e9de4f0e2a230167bf5d0e65b"}
+{"seq":9683,"ts":1792945820545,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.09,"reason":"מס-שירותים 2% → כספת","h":"a0875058621e7279f6bcf93093c208a9"}
+{"seq":9684,"ts":1792945820545,"kind":"infra","from":"Console","to":"saos-dex","asset":"USDS","amount":1.75,"reason":"תשתית: אחסון-ארכיון","h":"7859ac329515e7d10a6148b0384b6ebc"}
+{"seq":9685,"ts":1792945820545,"kind":"service","from":"Console","to":"erez","asset":"USDS","amount":1.1,"reason":"תרגום-מסמך · 1-מסמך","ref":"svc-1792945820545-1410","h":"3ce54263893acd238cc72d545e3c5573"}
+{"seq":9686,"ts":1792945820545,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.022,"reason":"מס-שירותים 2% → כספת","h":"72c21098b3fbfa66e42dc9a9d2692ac3"}
+{"seq":9687,"ts":1792945820545,"kind":"infra","from":"erez","to":"FleetHQ","asset":"USDS","amount":6.3,"reason":"תשתית: סריקת-גיט","h":"397145b261526d354f3beb37ada997d4"}
+{"seq":9688,"ts":1792945821344,"kind":"service","from":"tamar","to":"yarden","asset":"USDS","amount":16,"reason":"תדלוק-RC · 5-מנה","ref":"svc-1792945821344-4405","h":"6873bfe3a6efd94731fd43b16f913fc3"}
+{"seq":9689,"ts":1792945821345,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.32,"reason":"מס-שירותים 2% → כספת","h":"962670a9710ea1b8dec7590e2526c5bf"}
+{"seq":9690,"ts":1792945821345,"kind":"infra","from":"TruthRail","to":"Domain","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"b89f205482a5340e8d28f5dfa2c46f8f"}
+{"seq":9691,"ts":1792945821345,"kind":"service","from":"tamar","to":"yarden","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792945821345-2667","h":"36db8b0e05be9f581ed41d5238036328"}
+{"seq":9692,"ts":1792945821345,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"318920ebd10fbc8b20fe10619a49c00c"}
+{"seq":9693,"ts":1792945821345,"kind":"service","from":"shachar","to":"gal","asset":"USDS","amount":2.45,"reason":"אחסון-ארכיון · 7-GB-חודש","ref":"svc-1792945821345-6742","h":"6092ef17bd85dcd7eea86a7e5a7aa955"}
+{"seq":9694,"ts":1792945821345,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.049,"reason":"מס-שירותים 2% → כספת","h":"4ec0b0161764fedd66d8045966dc2480"}
+{"seq":9695,"ts":1792945822144,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"44b1147ed27edad5762daa61396dfc69"}
+{"seq":9696,"ts":1792945822145,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"5fa499e99ecb099d0b70dfc72f5f2843"}
+{"seq":9697,"ts":1792945822145,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"af4cd4aaf8c331f0bedecc99e6ab4090"}
+{"seq":9698,"ts":1792945822145,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"fb530beb5aefd0fd13e4d62fca158eff"}
+{"seq":9699,"ts":1792945822145,"kind":"salary","from":"treasury","to":"erez","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"932ec6627e0c5dcfc3543b53d518fe51"}
+{"seq":9700,"ts":1792945822145,"kind":"salary","from":"treasury","to":"gal","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"18b8a91d0f5a6c566d409efcdf513190"}
+{"seq":9701,"ts":1792945822145,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":42.53252,"fee":0.127598,"price":62.963947,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.673035,"h":"42161c843a7a5668dfda728f44e48dcc"}
+{"seq":9702,"ts":1792945822145,"kind":"service","from":"tamar","to":"Pulse","asset":"USDS","amount":1.2,"reason":"אימות-קבלה · 2-חותמת","ref":"svc-1792945822145-6238","h":"5983b67e6b38cedc8a8f1123b4822b70"}
+{"seq":9703,"ts":1792945822145,"kind":"tax","from":"Pulse","to":"treasury","asset":"USDS","amount":0.024,"reason":"מס-שירותים 2% → כספת","h":"6be3c5565b2995d08431e522f5c84a5d"}
+{"seq":9704,"ts":1792945822145,"kind":"tip","from":"yarden","to":"erez","asset":"SAOS","amount":0.345688,"reason":"טיפ על עבודה-טובה בזרימה","h":"87b1798652b6d03cc570fa7cfaea45ff"}
+{"seq":9705,"ts":1792945822145,"kind":"swap","from":"erez","to":"pool","asset":"SAOS","amount":1,"fee":0.003,"price":63.047307,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":62.796699,"h":"8bf98cef1b757c3e1cf09298b460b451"}
+{"seq":9706,"ts":1792945822145,"kind":"tip","from":"gal","to":"erez","asset":"SAOS","amount":0.171411,"reason":"טיפ על עבודה-טובה בזרימה","h":"05f5271336e6eae002b43b355f52adf6"}
+{"seq":9707,"ts":1792945822145,"kind":"service","from":"Pulse","to":"erez","asset":"USDS","amount":1.4,"reason":"חישוב-GPU · 1-דקות-חישוב","ref":"svc-1792945822145-7434","h":"f177e15c98e19dd0a47bcc57ea2d0e30"}
+{"seq":9708,"ts":1792945822145,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.028,"reason":"מס-שירותים 2% → כספת","h":"641bb57db8fac2f3f137564c0011ed90"}
+{"seq":9709,"ts":1792945822145,"kind":"service","from":"gal","to":"shachar","asset":"USDS","amount":9.8,"reason":"חישוב-GPU · 7-דקות-חישוב","ref":"svc-1792945822145-2308","h":"cc9e0f8c79a11d028a8db3f6c807d31c"}
+{"seq":9710,"ts":1792945822145,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.196,"reason":"מס-שירותים 2% → כספת","h":"4c05d53b67b024f16f3737ef0f7d3a0e"}
+{"seq":9711,"ts":1792945822145,"kind":"infra","from":"erez","to":"Pulse","asset":"USDS","amount":1.8,"reason":"תשתית: מידע-שוק","h":"d2dafa344a9705098a46b17e4bea33a6"}
+{"seq":9712,"ts":1792945822145,"kind":"service","from":"gal","to":"shachar","asset":"USDS","amount":11.2,"reason":"חישוב-GPU · 8-דקות-חישוב","ref":"svc-1792945822145-4345","h":"60fee342a087f6d02c95baa400b4b8b7"}
+{"seq":9713,"ts":1792945822145,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.224,"reason":"מס-שירותים 2% → כספת","h":"24d20c3bcb7c32704dcfcb3063dc45a4"}
+{"seq":9714,"ts":1792945822145,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":20.262117,"fee":0.060786,"price":62.92388,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.320943,"h":"44751db38fe91d1effbc274717dfa251"}
+{"seq":9715,"ts":1792945822945,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":17.028259,"fee":0.051085,"price":62.963573,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.269564,"h":"b1c428af711916b2eb3009081a0fb4a0"}
+{"seq":9716,"ts":1792945822946,"kind":"service","from":"gal","to":"erez","asset":"USDS","amount":7.2,"reason":"מידע-שוק · 8-פיד","ref":"svc-1792945822946-3336","h":"583d6d8a6c72c54eaab7d36d72ae97a9"}
+{"seq":9717,"ts":1792945822946,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.144,"reason":"מס-שירותים 2% → כספת","h":"2c86e02a9299304fc60f2519eb6c1b86"}
+{"seq":9718,"ts":1792945822946,"kind":"infra","from":"saos-dex","to":"Domain","asset":"USDS","amount":0.6,"reason":"תשתית: אימות-קבלה","h":"f214e37d9b5513a180dbf2aff699e911"}
+{"seq":9719,"ts":1792945822946,"kind":"unstake","from":"yarden","to":"yarden","asset":"SAOS","amount":0.472953,"reason":"ביטול-סטייק לצורך-תפעול","h":"1b9b98ac9c7cd851341cea2e2d75da0f"}
+{"seq":9720,"ts":1792945822946,"kind":"tip","from":"aluf","to":"gal","asset":"SAOS","amount":0.054222,"reason":"טיפ על עבודה-טובה בזרימה","h":"29e20eb15a610e93f9f4b90335a11a82"}
+{"seq":9721,"ts":1792945823746,"kind":"infra","from":"Domain","to":"FleetHQ","asset":"USDS","amount":5.5,"reason":"תשתית: תרגום-מסמך","h":"f20e17d3210189b848a2b2068bf3947a"}
+{"seq":9722,"ts":1792945823747,"kind":"salary","from":"treasury","to":"shachar","asset":"SAOS","amount":0.669181,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"c379053594d93dbbff61f853f02e4786"}
+{"seq":9723,"ts":1792945823747,"kind":"service","from":"TruthRail","to":"tamar","asset":"USDS","amount":6.3,"reason":"סריקת-גיט · 3-ריצה","ref":"svc-1792945823747-1775","h":"b0c1a92e93b12c096b9016c7ab633ccc"}
+{"seq":9724,"ts":1792945823747,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.126,"reason":"מס-שירותים 2% → כספת","h":"5b08d3c27b8ac9b59f34845be7c1f7f0"}
+{"seq":9725,"ts":1792945823747,"kind":"service","from":"gal","to":"yarden","asset":"USDS","amount":3.6,"reason":"מידע-שוק · 4-פיד","ref":"svc-1792945823747-5141","h":"be91a1fc589a9152946796a74168bd97"}
+{"seq":9726,"ts":1792945823747,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.072,"reason":"מס-שירותים 2% → כספת","h":"d7f3b690db2866a8909f590c3815ab17"}
+{"seq":9727,"ts":1792945823747,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":34.970589,"fee":0.104912,"price":62.99694,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.55315,"h":"4bd62f3d82f1a09e584694fcc5371c53"}
+{"seq":9728,"ts":1792945824546,"kind":"service","from":"TruthRail","to":"aluf","asset":"USDS","amount":1.8,"reason":"אימות-קבלה · 3-חותמת","ref":"svc-1792945824547-3475","h":"9c7e49c7c4b09fbf57b3464d30f4176b"}
+{"seq":9729,"ts":1792945824547,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.036,"reason":"מס-שירותים 2% → כספת","h":"e29dc014f0efeb26b6b944a79b708e15"}
+{"seq":9730,"ts":1792945824547,"kind":"tip","from":"aluf","to":"yarden","asset":"SAOS","amount":0.387394,"reason":"טיפ על עבודה-טובה בזרימה","h":"86d1cfccb9ef3a0d920c1b0c3f929cae"}
+{"seq":9731,"ts":1792945824547,"kind":"stake","from":"yarden","to":"yarden","asset":"SAOS","amount":0.928391,"reason":"סטייק-SAOS לאבטחת-הרשת הפנימית","h":"9d361b548030d44fa204229bcf406200"}
+{"seq":9732,"ts":1792945824547,"kind":"service","from":"aluf","to":"aluf","asset":"USDS","amount":2.2,"reason":"תרגום-מסמך · 2-מסמך","ref":"svc-1792945824547-5179","h":"1237cb400658284440a6f0f84328f236"}
+{"seq":9733,"ts":1792945824547,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.044,"reason":"מס-שירותים 2% → כספת","h":"3a86bc2a8b669f4b19e1f45f0b3394f7"}
+{"seq":9734,"ts":1792945824547,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":26.880254,"fee":0.080641,"price":63.065493,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.424772,"h":"9a1fbf1a55315a3f26a0796c693f85f5"}
+{"seq":9735,"ts":1792945824547,"kind":"salary","from":"treasury","to":"erez","asset":"SAOS","amount":0.552106,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"21e67c5084c3878d86778b26e97fd57a"}
+{"seq":9736,"ts":1792945824547,"kind":"tip","from":"shachar","to":"gal","asset":"SAOS","amount":0.185311,"reason":"טיפ על עבודה-טובה בזרימה","h":"5d22ff8682b69684788ccfaa24b77374"}
+{"seq":9737,"ts":1792945824547,"kind":"swap","from":"yarden","to":"pool","asset":"SAOS","amount":1.317267,"fee":0.003952,"price":63.118212,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":82.787305,"h":"c58bd61e2c048747247d3210ebccb3a4"}
+{"seq":9738,"ts":1792945824547,"kind":"tip","from":"yarden","to":"erez","asset":"SAOS","amount":0.05896,"reason":"טיפ על עבודה-טובה בזרימה","h":"1138e709d4278b254d14164ce8b5a4df"}
+{"seq":9739,"ts":1792945825346,"kind":"infra","from":"Domain","to":"Domain","asset":"USDS","amount":1.8,"reason":"תשתית: אימות-קבלה","h":"b258d79d4e04dcbabfe1596820543c83"}
+{"seq":9740,"ts":1792945825347,"kind":"service","from":"gal","to":"yarden","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792945825347-3225","h":"fa9d4f1dfd807f9fe908678e3ae746af"}
+{"seq":9741,"ts":1792945825347,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.096,"reason":"מס-שירותים 2% → כספת","h":"a185fbe529f159b19fa0a183a2649f16"}
+{"seq":9742,"ts":1792945825347,"kind":"service","from":"gal","to":"yarden","asset":"USDS","amount":14.7,"reason":"סריקת-גיט · 7-ריצה","ref":"svc-1792945825347-1314","h":"0373ed65ec34841741c6b8f2eb59c1d6"}
+{"seq":9743,"ts":1792945825347,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.294,"reason":"מס-שירותים 2% → כספת","h":"5651864ba524073593ba0a54fc5f73ea"}
+{"seq":9744,"ts":1792945825347,"kind":"service","from":"Domain","to":"FleetHQ","asset":"USDS","amount":3.3,"reason":"תרגום-מסמך · 3-מסמך","ref":"svc-1792945825347-4128","h":"1796e32ef2eebf6d05885a2f847740c3"}
+{"seq":9745,"ts":1792945825347,"kind":"tax","from":"FleetHQ","to":"treasury","asset":"USDS","amount":0.066,"reason":"מס-שירותים 2% → כספת","h":"12dcf19fab44b0645165c9b014b83541"}
+{"seq":9746,"ts":1792945825347,"kind":"swap","from":"erez","to":"pool","asset":"USDS","amount":8.251293,"fee":0.024754,"price":62.955428,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.130656,"h":"33848a57524a2f9ebf84ecb4c35040f8"}
+{"seq":9747,"ts":1792945825347,"kind":"infra","from":"saos-dex","to":"saos-dex","asset":"USDS","amount":0.9,"reason":"תשתית: מידע-שוק","h":"1e4c74db859678adb0f86fb8af68b8d5"}
+{"seq":9748,"ts":1792945825347,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":17.555427,"fee":0.052666,"price":62.971594,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.277871,"h":"e6b4cf55eaf8b6b0248619878ebd852b"}
+{"seq":9749,"ts":1792945825347,"kind":"infra","from":"Pulse","to":"FleetHQ","asset":"USDS","amount":2.2,"reason":"תשתית: תרגום-מסמך","h":"f8e6564d6a8ba83b0b619e7c6279d035"}
+{"seq":9750,"ts":1792945825778,"kind":"infra","from":"pool","to":"treasury","asset":"USDS","amount":138.664052,"reason":"מילוי-כספת אוטונומי · תורת-כותבים-רבים (חסום-רצפת-בריכה, מדוד)","h":"8943c26d451f9fd94b552c72963bb3ce"}
+{"seq":9751,"ts":1792945826147,"kind":"service","from":"gal","to":"Console","asset":"USDS","amount":4.5,"reason":"מידע-שוק · 5-פיד","ref":"svc-1792945826147-6433","h":"4a2ce4b4a4df4d38154a20b663c54279"}
+{"seq":9752,"ts":1792945826147,"kind":"tax","from":"Console","to":"treasury","asset":"USDS","amount":0.09,"reason":"מס-שירותים 2% → כספת","h":"ab79fed19e57f8a5463f37c22169d958"}
+{"seq":9753,"ts":1792945826147,"kind":"salary","from":"treasury","to":"shachar","asset":"SAOS","amount":0.758496,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"3315ed46ca8ec747672edc72d4bcf26c"}
+{"seq":9754,"ts":1792945826147,"kind":"service","from":"gal","to":"gal","asset":"USDS","amount":3.2,"reason":"תדלוק-RC · 1-מנה","ref":"svc-1792945826147-6186","h":"68e1b493b16cc95bf816f792225ea903"}
+{"seq":9755,"ts":1792945826147,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.064,"reason":"מס-שירותים 2% → כספת","h":"e6fb5cd4bc356b2541c8fb6bb6cabe0a"}
+{"seq":9756,"ts":1792945826147,"kind":"service","from":"tamar","to":"Console","asset":"USDS","amount":6.4,"reason":"תדלוק-RC · 2-מנה","ref":"svc-1792945826147-7667","h":"6b7b2faf73f0d898a2dc270e499e310a"}
+{"seq":9757,"ts":1792945826147,"kind":"tax","from":"Console","to":"treasury","asset":"USDS","amount":0.128,"reason":"מס-שירותים 2% → כספת","h":"531d00de88f552e64fcf1b99d8ee42e8"}
+{"seq":9758,"ts":1792945826147,"kind":"salary","from":"treasury","to":"shachar","asset":"SAOS","amount":0.739667,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"376962a26c7e8f53bad40d5db0309380"}
+{"seq":9759,"ts":1792945826947,"kind":"service","from":"tamar","to":"gal","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792945826947-9326","h":"c0fe7e6f753c7bfb28d90fe87a268611"}
+{"seq":9760,"ts":1792945826947,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"49642b5adf4b9f4171138d419f1119c3"}
+{"seq":9761,"ts":1792945826947,"kind":"swap","from":"tamar","to":"pool","asset":"USDS","amount":27.062905,"fee":0.081189,"price":63.005997,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.428061,"h":"e98abae00cadda0978b2cfafe0cbbe48"}
+{"seq":9762,"ts":1792945826947,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":5.4,"reason":"מידע-שוק · 6-פיד","ref":"svc-1792945826947-9320","h":"328e9a8c865b6817de593ebd39c895f4"}
+{"seq":9763,"ts":1792945826947,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.108,"reason":"מס-שירותים 2% → כספת","h":"af9b74a0ed1b29b022d8c0a8d6304521"}
+{"seq":9764,"ts":1792945826947,"kind":"service","from":"aluf","to":"tamar","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792945826947-4209","h":"68afc6db9a97b3192f1bd12814d61534"}
+{"seq":9765,"ts":1792945826947,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"0367b1215f418ab1698bc5b70ca4f948"}
+{"seq":9766,"ts":1792945826947,"kind":"service","from":"yarden","to":"shachar","asset":"USDS","amount":8.4,"reason":"חישוב-GPU · 6-דקות-חישוב","ref":"svc-1792945826947-5382","h":"bf0d66c628a8ede07ab8342751cc3787"}
+{"seq":9767,"ts":1792945826947,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.168,"reason":"מס-שירותים 2% → כספת","h":"106a728cd87f7696f3360fd512b40dce"}
+{"seq":9768,"ts":1792945826947,"kind":"service","from":"TruthRail","to":"aluf","asset":"USDS","amount":6.6,"reason":"תרגום-מסמך · 6-מסמך","ref":"svc-1792945826947-3281","h":"50bf7da6af14f239b7732efff525fbeb"}
+{"seq":9769,"ts":1792945826947,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.132,"reason":"מס-שירותים 2% → כספת","h":"211de2c9a7b6c831f8ba94418a893787"}
+{"seq":9770,"ts":1792945826947,"kind":"service","from":"Domain","to":"shachar","asset":"USDS","amount":1.8,"reason":"אימות-קבלה · 3-חותמת","ref":"svc-1792945826947-7401","h":"ddc5e511f06b654380588057fdf163ed"}
+{"seq":9771,"ts":1792945826947,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.036,"reason":"מס-שירותים 2% → כספת","h":"3a758942a2b131612ba965f0c04862f6"}
+{"seq":9772,"ts":1792945827746,"kind":"service","from":"shachar","to":"Pulse","asset":"USDS","amount":10.5,"reason":"סריקת-גיט · 5-ריצה","ref":"svc-1792945827747-232","h":"a4f414e29e44e33892c75e28e45baf25"}
+{"seq":9773,"ts":1792945827747,"kind":"tax","from":"Pulse","to":"treasury","asset":"USDS","amount":0.21,"reason":"מס-שירותים 2% → כספת","h":"30571a93e860238173a7bdb6f60d7bd4"}
+{"seq":9774,"ts":1792945827747,"kind":"service","from":"Pulse","to":"aluf","asset":"USDS","amount":2.8,"reason":"אחסון-ארכיון · 8-GB-חודש","ref":"svc-1792945827747-8733","h":"1297c263b8d6f802c14719a9513b08d2"}
+{"seq":9775,"ts":1792945827747,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.056,"reason":"מס-שירותים 2% → כספת","h":"89e65bbeb6703e505835231e8bf191b6"}
+{"seq":9776,"ts":1792945827747,"kind":"tip","from":"tamar","to":"erez","asset":"SAOS","amount":0.066373,"reason":"טיפ על עבודה-טובה בזרימה","h":"76d78b571cc55a252345dd0665b95952"}
+{"seq":9777,"ts":1792945827747,"kind":"stake","from":"erez","to":"erez","asset":"SAOS","amount":1.004595,"reason":"סטייק-SAOS לאבטחת-הרשת הפנימית","h":"44daf5268caa14cb47049050ff380486"}
+{"seq":9778,"ts":1792945827747,"kind":"infra","from":"yarden","to":"Domain","asset":"USDS","amount":3,"reason":"תשתית: אימות-קבלה","h":"acdb4ec56965698d2ca0c2132bc540de"}
+{"seq":9779,"ts":1792945827747,"kind":"service","from":"aluf","to":"erez","asset":"USDS","amount":1.75,"reason":"אחסון-ארכיון · 5-GB-חודש","ref":"svc-1792945827747-4330","h":"00494fed67cbdaa6fb8aea2845e9fa2f"}
+{"seq":9780,"ts":1792945827747,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.035,"reason":"מס-שירותים 2% → כספת","h":"0719f07586eb80f1432bb3af4071a783"}
+{"seq":9781,"ts":1792945828547,"kind":"salary","from":"treasury","to":"yarden","asset":"USDS","amount":42.463739,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"4a539df8aedc644aa028181d82b6c844"}
+{"seq":9782,"ts":1792945828547,"kind":"salary","from":"treasury","to":"tamar","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"af99134b2d552cfe306f90848133ea21"}
+{"seq":9783,"ts":1792945828547,"kind":"salary","from":"treasury","to":"shachar","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"ba6683167567685c51af22c1b195cb75"}
+{"seq":9784,"ts":1792945828547,"kind":"salary","from":"treasury","to":"aluf","asset":"USDS","amount":60,"reason":"חוק-שכר-מצע: השלמה-עד-רצפה (רצפת 350)","h":"41a8ff50088ec7314857e8770c537d82"}
+{"seq":9785,"ts":1792945828547,"kind":"service","from":"shachar","to":"erez","asset":"USDS","amount":2.1,"reason":"סריקת-גיט · 1-ריצה","ref":"svc-1792945828547-6091","h":"b09559dcc74b023c723bcc161337b360"}
+{"seq":9786,"ts":1792945828547,"kind":"tax","from":"erez","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"aeb95ca8ac4e01eb4d0993fba3925bf1"}
+{"seq":9787,"ts":1792945828547,"kind":"swap","from":"yarden","to":"pool","asset":"SAOS","amount":1,"fee":0.003,"price":63.059049,"reason":"מימוש SAOS ל-USDS תפעולי","outUsds":62.808389,"h":"b3e1e6792ae86f823bfb00744a2e622c"}
+{"seq":9788,"ts":1792945828547,"kind":"tip","from":"yarden","to":"erez","asset":"SAOS","amount":0.374872,"reason":"טיפ על עבודה-טובה בזרימה","h":"9ab3a52bec23a3bee18eb3bb20c708a5"}
+{"seq":9789,"ts":1792945828547,"kind":"salary","from":"treasury","to":"yarden","asset":"SAOS","amount":0.283672,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"09c195d0d136ef03817a08c50f39ca04"}
+{"seq":9790,"ts":1792945828547,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":7.732839,"fee":0.023199,"price":62.935589,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.122486,"h":"161641c0bd55e1f6eda99e5c4b7efbd2"}
+{"seq":9791,"ts":1792945828547,"kind":"infra","from":"gal","to":"Pulse","asset":"USDS","amount":1.8,"reason":"תשתית: אימות-קבלה","h":"0443e30981c947376622a77ae8fefc96"}
+{"seq":9792,"ts":1792945828547,"kind":"service","from":"erez","to":"TruthRail","asset":"USDS","amount":1.75,"reason":"אחסון-ארכיון · 5-GB-חודש","ref":"svc-1792945828547-2252","h":"1139eaf2e6dc92c4c7b6c4d619fe82d2"}
+{"seq":9793,"ts":1792945828547,"kind":"tax","from":"TruthRail","to":"treasury","asset":"USDS","amount":0.035,"reason":"מס-שירותים 2% → כספת","h":"68e9b07fe1ef5d6ef7d30197c1c40451"}
+{"seq":9794,"ts":1792945828547,"kind":"salary","from":"treasury","to":"yarden","asset":"SAOS","amount":0.435178,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"66e2f5d500da0d3204b639b57f36b202"}
+{"seq":9795,"ts":1792945828547,"kind":"swap","from":"aluf","to":"pool","asset":"USDS","amount":20.732194,"fee":0.062197,"price":62.950737,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.328246,"h":"c774682422d94cf0a847a2f75c7500a2"}
+{"seq":9796,"ts":1792945829347,"kind":"service","from":"yarden","to":"shachar","asset":"USDS","amount":2.4,"reason":"אימות-קבלה · 4-חותמת","ref":"svc-1792945829347-8425","h":"3b6c20ea5752d8f50a7ea6e5705171a4"}
+{"seq":9797,"ts":1792945829347,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.048,"reason":"מס-שירותים 2% → כספת","h":"c28bae4cbb64b5bdfcf2de345966a07c"}
+{"seq":9798,"ts":1792945829347,"kind":"service","from":"saos-dex","to":"gal","asset":"USDS","amount":2.1,"reason":"אחסון-ארכיון · 6-GB-חודש","ref":"svc-1792945829347-3344","h":"40c8af5814ae9d25cac62173d163fb47"}
+{"seq":9799,"ts":1792945829347,"kind":"tax","from":"gal","to":"treasury","asset":"USDS","amount":0.042,"reason":"מס-שירותים 2% → כספת","h":"ea7a3f01de9b54df536a5337366cd265"}
+{"seq":9800,"ts":1792945829347,"kind":"salary","from":"treasury","to":"shachar","asset":"SAOS","amount":0.951276,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"bcf9ca8e73325b74094c67542743fece"}
+{"seq":9801,"ts":1792945829347,"kind":"tip","from":"erez","to":"tamar","asset":"SAOS","amount":0.107538,"reason":"טיפ על עבודה-טובה בזרימה","h":"1ac444ff405afc014387c0a00eeb528f"}
+{"seq":9802,"ts":1792945829347,"kind":"salary","from":"treasury","to":"erez","asset":"SAOS","amount":0.519607,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"fa9f0250ad97fdb5b90da4c12995c818"}
+{"seq":9803,"ts":1792945829347,"kind":"service","from":"FleetHQ","to":"yarden","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792945829347-1859","h":"5bc8ab595f1cd0525267b36f94926b22"}
+{"seq":9804,"ts":1792945829347,"kind":"tax","from":"yarden","to":"treasury","asset":"USDS","amount":0.096,"reason":"מס-שירותים 2% → כספת","h":"e7319218a12eb4cb188ec0b4d61d0f4c"}
+{"seq":9805,"ts":1792945829347,"kind":"salary","from":"treasury","to":"yarden","asset":"SAOS","amount":0.473416,"reason":"משכורת-SAOS על עבודת-שורה חיה · מיחזור-מחסן-הכספת","h":"a13b8764d92b90ee06b99e8aadb3968f"}
+{"seq":9806,"ts":1792945830147,"kind":"infra","from":"Domain","to":"saos-dex","asset":"USDS","amount":0.35,"reason":"תשתית: אחסון-ארכיון","h":"2365be96c4ab43f9f4a84a145fce2758"}
+{"seq":9807,"ts":1792945830147,"kind":"service","from":"tamar","to":"aluf","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792945830147-8230","h":"d3571602a8da25861d46a7581ac2f914"}
+{"seq":9808,"ts":1792945830147,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.096,"reason":"מס-שירותים 2% → כספת","h":"5e95aa0537b21b1f6648c527bfe8c707"}
+{"seq":9809,"ts":1792945830147,"kind":"swap","from":"yarden","to":"pool","asset":"USDS","amount":33.255561,"fee":0.099767,"price":62.991358,"reason":"רכישת SAOS לתשלומי-סטייק","outSaos":0.526083,"h":"27c2251c4cb8f49c4368edd52a881a7e"}
+{"seq":9810,"ts":1792945830147,"kind":"service","from":"yarden","to":"tamar","asset":"USDS","amount":0.35,"reason":"אחסון-ארכיון · 1-GB-חודש","ref":"svc-1792945830147-2776","h":"ccc277d30c995e4e5e23ed4b40057169"}
+{"seq":9811,"ts":1792945830147,"kind":"tax","from":"tamar","to":"treasury","asset":"USDS","amount":0.007,"reason":"מס-שירותים 2% → כספת","h":"0ba41d6417b89657fae9b5fe472b0fa7"}
+{"seq":9812,"ts":1792945830147,"kind":"service","from":"yarden","to":"aluf","asset":"USDS","amount":4.8,"reason":"אימות-קבלה · 8-חותמת","ref":"svc-1792945830147-3680","h":"094ba52e41cfbf2c7b32b42828e89ab0"}
+{"seq":9813,"ts":1792945830147,"kind":"tax","from":"aluf","to":"treasury","asset":"USDS","amount":0.096,"reason":"מס-שירותים 2% → כספת","h":"a30e3dbce7d2ace2e159e42725e6d3dc"}
+{"seq":9814,"ts":1792945830147,"kind":"service","from":"aluf","to":"shachar","asset":"USDS","amount":25.6,"reason":"תדלוק-RC · 8-מנה","ref":"svc-1792945830147-735","h":"1de9913c53c884ee406f8566fc49a534"}
+{"seq":9815,"ts":1792945830147,"kind":"tax","from":"shachar","to":"treasury","asset":"USDS","amount":0.512,"reason":"מס-שירותים 2% → כספת","h":"805727bada6b95d3872c4ea2d21586d1"}
+{"seq":9816,"ts":1792945830147,"kind":"service","from":"gal","to":"Pulse","asset":"USDS","amount":0.9,"reason":"מידע-שוק · 1-פיד","ref":"svc-1792945830147-8092","h":"a47190d3dadeebed90a176b84fde8ff1"}
+{"seq":9817,"ts":1792945830147,"kind":"tax","from":"Pulse","to":"treasury","asset":"USDS","amount":0.018,"reason":"מס-שירותים 2% → כספת","h":"378a84202d24dbbea274a2ed6d48ef62"}
