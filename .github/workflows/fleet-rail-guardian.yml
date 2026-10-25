@@ -47,9 +47,13 @@ jobs:
             if [ "$http" = "404" ]; then
               echo "::notice::rail path ABSENT on cloud: $path — re-PUT from canonical"
               if [ -n "${GH_TOKEN:-}" ]; then
+                # גל-80 ריפוי (trace 1a173c3929f5d23d §2): ה-blob הקנוני הוא כבר base64(קובץ-אמת) —
+                # נשלח כמו-שהוא. היה base64 -w0 של-ה-blob (קידוד-כפול) ⇒ בענן נחת base64-טקסט
+                # במקום הקובץ-האמת (נמדד: lib/receipt-sign.ts 'Lyog…' 10776B = 4/3 × 8081B) —
+                # הרכבת-הקבלות מעולם לא הייתה ריצה-אמיתית בענן. מעתה: בתים-אמיתיים בדיוק.
                 put=$(curl -s -o /tmp/put.json -w "%{http_code}" -X PUT -H "Authorization: Bearer $GH_TOKEN" \
                   "https://api.github.com/repos/$RAIL_REPO/contents/$path" \
-                  -d "{\"message\":\"guardian: rail re-PUT $path (absent — ours-merge storm erasure; canonical lineage 1969771/a618f33)\",\"content\":\"$(base64 -w0 "$b64f")\"}")
+                  -d "{\"message\":\"guardian: rail re-PUT $path (absent — ours-merge storm erasure; canonical lineage 1969771/a618f33 + wave-80 encoding cure)\",\"content\":\"$(tr -d '\n' < "$b64f")\"}")
                 case "$put" in
                   200|201) REARMED=$((REARMED+1)); echo "re-armed: $path (HTTP $put)" ;;
                   401|403) DENIED=$((DENIED+1)); echo "::warning::re-PUT DENIED ($put) for $path — cross-repo write custody gap named, never hidden" ;;
@@ -78,7 +82,7 @@ jobs:
             echo "- intact: $INTACT / 5"
             echo "- denied-or-absent-no-secret: $DENIED"
             echo "- alerts: ${ALERTS:-none}"
-            echo "- canonical lineage: 1969771/a618f33 (byte-TRUE, suite 14/14)"
+            echo "- canonical lineage: 1969771/a618f33 + wave-80 (byte-TRUE, suite 14/14, encoding-cured, dotfile blob restored)"
           } >> "$GITHUB_STEP_SUMMARY"
           echo "GUARDIAN RECEIPT: re-armed=$REARMED intact=$INTACT denied=$DENIED alerts=[${ALERTS:-none}]"
           exit 0
