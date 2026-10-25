@@ -23,6 +23,7 @@
 import { createHash } from "node:crypto";
 import { readFile, writeFile, mkdir, stat } from "node:fs/promises";
 import { join } from "node:path";
+import { isGatewayBorne, verifyVaultToken } from "../lib/vault-auth.ts"; // גל-80 · חוק-הסף-הריבוני (§1 lockdown)
 
 const PORT = 3042;
 /* מיזוג-ענק: המקור מ-FleetHQ (roshpinacare-sys/FleetHQ) — מותאם-חי לערימה-הריבונית-של-giant:
@@ -248,7 +249,13 @@ Bun.serve({
     if (url.pathname === "/health") {
       return Response.json({ ok: latest !== null, service: "boot-verifier", port: PORT, at: latest?.at ?? null, economyTx: verifierTx });
     }
-    if (url.pathname === "/scan") await tick();
+    if (url.pathname === "/scan") {
+      /* גל-80 · /scan מפעיל-עבודה אמיתית — דרך-השער-הציבורי רק עם טוקן-כספת (fail-closed). */
+      if (isGatewayBorne(req) && !verifyVaultToken(req)) {
+        return Response.json({ ok: false, error: "vault-token-required", organ: "boot-verifier", law: "deny-by-default/1" }, { status: 403 });
+      }
+      await tick();
+    }
     if (url.pathname === "/latest" && latest) {
       return new Response(JSON.stringify(latest, null, 2), {
         headers: { "content-type": "application/json; charset=utf-8" },

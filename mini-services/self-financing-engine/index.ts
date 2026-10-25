@@ -5,6 +5,7 @@
 import { planRcRebalance, type SoldierRc, type SoldierVp, type YieldSource } from "./rc-plan.ts";
 import { planCurationHarvest } from "./curation-harvest.ts";
 import { accrue, verifyAccrual, type AccrualState } from "./yield-accrual.ts";
+import { denyIfPublic } from "../lib/vault-auth.ts"; // גל-80 · חוק-הסף-הריבוני (§1 lockdown, trace 1a173c3929f5d23d)
 export { planRcRebalance, planCurationHarvest, accrue, verifyAccrual };
 export type { AccrualState, SoldierRc, SoldierVp, YieldSource };
 const PORT = Number(process.env.PORT ?? 3061);
@@ -44,6 +45,8 @@ if (import.meta.main) {
         return Response.json({ ...state, yieldsHeadValid: verifyAccrual(state.yields).ok });
       }
       if (url.pathname === "/cycle" && req.method === "POST") {
+        const deny = denyIfPublic(req, "self-financing-engine"); // גל-80 · מוטציה-ציבורית בלי-טוקן → 403
+        if (deny) return deny;
         let body: any = {};
         try { body = await req.json(); } catch { body = {}; }
         cycle(body.rcRoster ?? [], body.vpRoster ?? [], body.yields ?? []);

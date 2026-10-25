@@ -17,6 +17,7 @@ import { appendFileSync, existsSync, mkdirSync, openSync, readFileSync, readdirS
 import { execFileSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { ORGANS, probeTruth, type OrganSpec, type Truth } from "./truth";
+import { denyIfPublic } from "../lib/vault-auth.ts"; // גל-80 · חוק-הסף-הריבוני (§1 lockdown, trace 1a173c3929f5d23d)
 import { planNext, type Command } from "./command";
 import { ReceiptChain, verifyChain, type Receipt } from "./receipts";
 import { executeRevive, revivePlan, GIANT_ROOT, type SpawnPlan } from "./revive";
@@ -285,6 +286,8 @@ async function main(): Promise<void> {
           return Response.json({ ok: true, lastTruth: state.lastTruth, receiptsTail: loadChain().tail(10) });
         }
         if (url.pathname === "/cycle" && req.method === "POST") {
+          const deny = denyIfPublic(req, "organ-commander"); // גל-80 · מוטציה-ציבורית בלי-טוקן-כספת → 403
+          if (deny) return deny;
           const r = await cycle(); // measured cure: the void-then cast returned undefined → Bun's default "Welcome to Bun!" body
           return Response.json({ ok: r.ok, verdict: r.verdict, commands: r.commands.map((c) => `${c.kind}:${c.organ}`) });
         }

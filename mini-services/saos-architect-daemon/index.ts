@@ -8,6 +8,7 @@
  * EADDRINUSE → honest exit 1. Loopback only. Fail-honest everywhere.
  */
 import { PORT, runCycle, statusReport, CycleVerdict } from "./cycle.ts";
+import { denyIfPublic } from "../lib/vault-auth.ts"; // גל-80 · חוק-הסף-הריבוני (§1 lockdown, trace 1a173c3929f5d23d)
 
 const startedAt = Date.now();
 let lastCycle: CycleVerdict | null = null;
@@ -44,6 +45,8 @@ const server = Bun.serve({
     if (url.pathname === "/health") return Response.json(health());
     if (url.pathname === "/status") return Response.json({ ...health(), status: statusReport() });
     if (url.pathname === "/cycle" && req.method === "POST") {
+      const deny = denyIfPublic(req, "saos-architect-daemon"); // גל-80 · מוטציה-ציבורית בלי-טוקן → 403
+      if (deny) return deny;
       const v = await oneCycle();
       return Response.json({ ...v }, { status: v.ok ? 200 : (v.verdict === "lock-held" ? 409 : 500) });
     }

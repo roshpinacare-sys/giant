@@ -33,6 +33,8 @@
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
+import { createHash, timingSafeEqual } from 'node:crypto';
+import { vaultToken } from '../lib/vault-auth.ts'; // גל-80 · חוק-הסף-הריבוני (§1 lockdown, trace 1a173c3929f5d23d)
 
 const PORT = Number(process.env.GATEWAY_PORT || 3011);
 const HERE = dirname(new URL(import.meta.url).pathname);
@@ -696,6 +698,23 @@ async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> 
   }
 
   if (req.method === 'POST' && (url === '/v1/chat/completions' || url === '/chat/completions')) {
+    /* גל-80 · חוק-הסף-הריבוני: זו מוטציה-יקרה (צריכת-קרדיטים-חוץ דרך-הרליי).
+     * מאחורי-השער-הציבורי (Caddy X-Real-IP) מותרת רק-עם טוקן-כספת תקף —
+     * לולאות-הלופבק-הפנימיות של-הצי ממשיכות-לעבוד בלי-שינוי. */
+    {
+      const viaGateway = !!(req.headers['x-real-ip'] || req.headers['x-forwarded-for']);
+      if (viaGateway) {
+        const expected = vaultToken();
+        const given = String(req.headers['x-vault-token'] || String(req.headers['authorization'] || '').replace(/^Bearer\s+/i, '') || '').trim();
+        const ok = !!expected && !!given && (() => { try { return timingSafeEqual(createHash('sha256').update(given).digest(), createHash('sha256').update(expected).digest()); } catch { return false; } })();
+        if (!ok) {
+          console.warn(`[vault-auth] DENY sovereign-gateway ${req.method} ${url} from ${String(req.headers['x-real-ip'] || '?').slice(0, 45)} — unauthenticated credit-burning mutation (fail-closed)`);
+          res.writeHead(403, { 'content-type': 'application/json' });
+          res.end(JSON.stringify({ ok: false, error: 'vault-token-required', organ: 'sovereign-gateway', law: 'deny-by-default/1' }));
+          return;
+        }
+      }
+    }
     stats.requests++;
     let body: {
       model?: unknown;
