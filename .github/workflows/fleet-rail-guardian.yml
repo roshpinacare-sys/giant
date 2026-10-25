@@ -35,6 +35,7 @@ jobs:
             ["scripts/fleet-receipts-guard-core.py"]="sovereign/rail-canonical/scripts_fleet-receipts-guard-core.py.b64"
             [".github/workflows/receipts-guard.yml"]="sovereign/rail-canonical/.github_workflows_receipts-guard.yml.b64"
             ["state/audit/verify_signatures.py"]="sovereign/rail-canonical/state_audit_verify_signatures.py.b64"
+            [".github/workflows/receipts-proof.yml"]="sovereign/rail-canonical/.github_workflows_receipts-proof.yml.b64"
           )
           REARMED=0; ALERTS=""; DENIED=0; INTACT=0
           [ -z "${GH_TOKEN:-}" ] && echo "::warning::FLEET_RAIL_PAT absent — DETECTION-ONLY mode (re-arm needs the owner-delegated secret)"
@@ -78,8 +79,8 @@ jobs:
           done
           {
             echo "### fleet-rail-guardian receipt"
-            echo "- re-armed: $REARMED / 5"
-            echo "- intact: $INTACT / 5"
+            echo "- re-armed: $REARMED / 6"
+            echo "- intact: $INTACT / 6"
             echo "- denied-or-absent-no-secret: $DENIED"
             echo "- alerts: ${ALERTS:-none}"
             echo "- canonical lineage: 1969771/a618f33 + wave-80 (byte-TRUE, suite 14/14, encoding-cured, dotfile blob restored)"
