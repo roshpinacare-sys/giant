@@ -48,6 +48,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Install the real environment (root cure, wave 80 — measured 645→0)
+        run: |
+          # נמדד (גל-80): tsc בסביבה-רעבה מציג 645 "שגיאות" — כולן רעש-היעדר-תלויות
+          # (react 94 · next/server 75 · lucide 40 · bun:test 8 …). לאחר
+          # bun install --frozen-lockfile (6.88s): 0 שגיאות. הביקורת-העצמית
+          # חייבת למדוד את-הגזע-האמיתי, לא-את-רעב-התלויות.
+          bun install --frozen-lockfile
+
       - name: One bounded architect cycle (AUDIT→SELECT→CURE→VERIFY→LAND→RECEIPT)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
