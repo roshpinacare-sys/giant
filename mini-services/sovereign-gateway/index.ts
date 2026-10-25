@@ -791,8 +791,8 @@ const server = createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`[sovereign-gateway] listening on :${PORT} — OPENAI_API_BASE=http://127.0.0.1:${PORT}/v1 (any string as key)`);
+server.listen(PORT, "127.0.0.1", () => {
+  console.log(`[sovereign-gateway] listening on 127.0.0.1:${PORT} — OPENAI_API_BASE=http://127.0.0.1:${PORT}/v1 (any string as key) — loopback-only (directive 1a173c6ac120ccb1 §1)`);
   console.log(`[sovereign-gateway] brains: ${brains().map((b) => b.name).join('→') || 'NONE (keyless honest mode)'}`);
   if (process.env.DUCKAI_URL) console.log(`[sovereign-gateway] duckai bridge armed at ${process.env.DUCKAI_URL}`);
 });

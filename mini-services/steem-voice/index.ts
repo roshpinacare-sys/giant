@@ -6,11 +6,14 @@
  * המשמורת הוכחה חיה: 4/4 MATCH מול-סמכויות-השרשרת (state/custody/steem-custody.jsonl)
  *
  * POST /broadcast {title, body, tags?} → פרסום-אמת על-השרשרת (comment op)
+ *        — מאובטח: כותרת x-saos-operator (טוקן STEEM_VOICE_OPS_TOKEN או מפתח-האב), fail-closed (directive 1a173c6ac120ccb1 §1)
  * GET  /state   → מצב-הערוץ (בלי-סודות)
  * כלל-אמת: אפס-ערכי-מפתחות בלוגים/תשובות. fail-closed בלי-כספת.
+ * רשת: השירות נקשר 127.0.0.1 בלבד — אין-חשיפה-חוץ-אל-משטח-החתימה.
  */
 import fs from "fs";
 import dhive from "@hiveio/dhive";
+import { opsGate } from "../_fleet/ops-gate.ts";
 
 const PORT = Number(process.env.STEEM_VOICE_PORT ?? 3023);
 const ENV_FILE = "/home/z/.secrets/.env.local";
@@ -69,6 +72,7 @@ async function broadcast(title, body, tags) {
 
 const srv = Bun.serve({
   port: PORT,
+  hostname: "127.0.0.1",
   async fetch(req) {
     const u = new URL(req.url);
     if (u.pathname === "/health") {
@@ -83,6 +87,8 @@ const srv = Bun.serve({
       return Response.json({ ok: true, account: E.account || null, rpc: RPC, ...stats });
     }
     if (u.pathname === "/broadcast" && req.method === "POST") {
+      const deny = opsGate(req, "STEEM_VOICE_OPS_TOKEN");
+      if (deny) return deny;
       try {
         const b = await req.json().catch(() => ({}));
         const title = String(b.title ?? "").trim();

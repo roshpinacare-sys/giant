@@ -269,6 +269,7 @@ async function tick(): Promise<void> {
 
 Bun.serve({
   port: PORT,
+  hostname: "127.0.0.1", // directive 1a173c6ac120ccb1 §1 — מצב-החיילים בלופבק-בלבד
   fetch: () => Response.json({
     ok: true, service: "soldier-army", port: PORT,
     mandate: "בנק-יציב 300µ·יח' פר-חייל · מילוי-מתמשך · ניתוב-רווחים (msg-8 + פקודת-בעלים 2026-10-17)",

@@ -166,6 +166,6 @@ function shutdown() {
 process.on('SIGTERM', shutdown);
 process.on('SIGINT', shutdown);
 
-httpServer.listen(PORT, () => {
-  log(`broadcasting on :${PORT} — world t=${new Date(world.t).toISOString()}, agents=${world.agents.length}`);
+httpServer.listen(PORT, "127.0.0.1", () => {
+  log(`broadcasting on 127.0.0.1:${PORT} (loopback-only, directive 1a173c6ac120ccb1 §1) — world t=${new Date(world.t).toISOString()}, agents=${world.agents.length}`);
 });

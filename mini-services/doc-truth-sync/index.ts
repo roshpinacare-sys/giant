@@ -25,6 +25,7 @@ import { buildCensus, payloadHashOfCensus, type CensusRow, type FileFact } from 
 import { buildIsolationManifest, type LegacyArtifact } from "./convergence.ts";
 import { collectFileFacts } from "./collect.ts";
 import { appendReceipt, genesisReceipt, verifyChain, type DocTruthReceipt } from "./receipts.ts";
+import { denyIfPublic } from "../lib/vault-auth.ts"; // wave-80 house gate union (directive 1a173c6ac120ccb1 §1) — gap fill
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_ROOT = join(HERE, "..", "..");
@@ -196,6 +197,8 @@ async function handle(req: Request): Promise<Response> {
     }
   }
   if (url.pathname === "/receipt" && req.method === "POST") {
+    const deny = denyIfPublic(req, "doc-truth-sync"); // גל-80 חוק-הסף + איחוד-גל-20.00
+    if (deny) return deny;
     try {
       const body = (await req.json()) as { kind?: string; payload?: unknown };
       const kind = typeof body.kind === "string" && body.kind.length > 0 ? body.kind : null;
@@ -247,6 +250,7 @@ if (isDirectRun && process.argv.includes("--once")) {
 } else if (isDirectRun) {
   Bun.serve({
     port: PORT,
+    hostname: "127.0.0.1", // directive 1a173c6ac120ccb1 §1 — loopback-only
     fetch: (req) => handle(req),
   });
   console.log("doc-truth-sync listening on :" + PORT + " (root=" + ROOT + ", dormant>" + DORMANT_DAYS + "d)");

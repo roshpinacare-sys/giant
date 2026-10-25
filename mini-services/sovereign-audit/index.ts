@@ -11,6 +11,7 @@
 import { spawnSync } from "node:child_process";
 import { appendFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { denyIfPublic } from "../lib/vault-auth.ts"; // גל-80 חוק-הסף (§1 lockdown, trace 1a173c3929f5d23d) + איחוד-גל-20.00
 
 const PORT = 3022;
 const HERE = import.meta.dir;
@@ -63,6 +64,8 @@ Bun.serve({
   fetch: (req) => {
     const u = new URL(req.url);
     if (u.pathname === "/run" && req.method === "POST") {
+      const deny = denyIfPublic(req, "sovereign-audit");
+      if (deny) return deny;
       const windowS = Number(u.searchParams.get("window_s") ?? 0) || 24 * 3600;
       const r = runAudit(windowS);
       return Response.json({ ok: true, ran: true, ...r });

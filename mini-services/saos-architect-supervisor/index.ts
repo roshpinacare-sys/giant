@@ -4,6 +4,7 @@
 import { observe, type Observation } from "./observe";
 import { decide, type Action } from "./decide";
 import { executeActions, appendReceipt, countReceipts } from "./act";
+import { denyIfPublic } from "../lib/vault-auth.ts"; // גל-80 חוק-הסף (§1 lockdown, trace 1a173c3929f5d23d) + איחוד-גל-20.00
 
 const PORT = Number(process.env.ARCHITECT_PORT ?? 3047);
 const INTERVAL = Math.max(30_000, Number(process.env.ARCHITECT_INTERVAL_MS ?? 120_000));
@@ -52,6 +53,8 @@ const server = Bun.serve({
       return Response.json({ observation: lastObservation, actions: lastActions, cycles, lastCycleAt });
     }
     if (url.pathname === "/cycle" && req.method === "POST") {
+      const deny = denyIfPublic(req, "saos-architect-supervisor");
+      if (deny) return deny;
       const dry = url.searchParams.get("dry") === "1";
       return Response.json(await runCycle({ dry }));
     }

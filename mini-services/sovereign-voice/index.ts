@@ -475,6 +475,7 @@ async function tick(): Promise<void> {
 
 Bun.serve({
   port: PORT,
+  hostname: "127.0.0.1", // directive 1a173c6ac120ccb1 §1 — loopback-only (x-voice-ops gate already enforced on /ops/*)
   fetch: async (req) => {
     const url = new URL(req.url);
     if (url.pathname.startsWith("/ops/") && url.pathname !== "/ops/status") {

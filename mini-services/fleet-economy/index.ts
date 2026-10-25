@@ -585,6 +585,7 @@ process.on("SIGINT", () => process.exit(0));
 
 const server = Bun.serve({
   port: PORT,
+  hostname: "127.0.0.1", // directive 1a173c6ac120ccb1 §1 — ספר-הכלכלה בלופבק-בלבד
   async fetch(req, srv) {
     const url = new URL(req.url);
     try {

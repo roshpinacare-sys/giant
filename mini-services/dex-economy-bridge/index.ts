@@ -85,6 +85,7 @@ setTimeout(poll, 3_000);
 
 Bun.serve({
   port: PORT,
+  hostname: "127.0.0.1", // directive 1a173c6ac120ccb1 §1 — loopback-only
   fetch: () => Response.json({ ok: true, bridge: "dex-economy-bridge", polls, inserted, errors, lastAt, lastErr: lastErr || null, db: DEX_DB, wal: true }),
 });
 console.log(`[bridge] חי על :${PORT} · db=${DEX_DB} · api=${API} · WAL+busy_timeout=8s (גל-16)`);
