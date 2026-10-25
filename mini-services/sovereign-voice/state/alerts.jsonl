@@ -138,3 +138,6 @@
 {"ts":1792947645022,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 105 שגיאות (היה 104)","status":"ledger"}
 {"ts":1792947671516,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (15 כשלים) → respawn=true → verified=false","status":"ledger"}
 {"ts":1792947931829,"key":"disk-full","sev":"critical","text":"הדיסק ב-90% (סף-85) — מעקב-הדוק","status":"ledger"}
+{"ts":1792948246367,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1792948713666,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 96%→91% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792948714763,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 83 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
