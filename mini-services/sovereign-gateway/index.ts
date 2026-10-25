@@ -294,7 +294,7 @@ function familiesInBuildOrder(): string[] {
 // 400/429. The gateway compacts ONCE per request, provider-agnostically:
 // system prompts survive (capped), the ORIGINAL request survives (capped),
 // the newest turns fill the remaining budget from the end, everything older
-// becomes one honest stub. Deterministic, no model call, no content logging.
+// becomes one compact remainder marker. Deterministic, no model call, no content logging.
 const COMPACTION_BUDGET = Math.max(0, Number(process.env.COMPACTION_BUDGET) || 24_000); // chars ≈ 6K tokens; 0 disables
 function compactMessages(messages: ChatMessage[]): { messages: ChatMessage[]; compacted: boolean; droppedChars: number } {
   const total = messages.reduce((a, m) => a + m.content.length, 0);

@@ -13,6 +13,9 @@
  */
 import fs, { appendFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
+// G73 (§2 · 19.93 prediction-1): the organ plane's FIRST PRODUCTION consumer of the
+// all-soldier census — the army beat reads the live book tail and measures activation.
+import { censusFromBook, type BookCensus, type BookRecord } from "../self-financing-engine/roster-from-book.ts";
 
 const DEX = "http://127.0.0.1:3010/saos-dex/api/dex";
 const PORT = 3018;
@@ -127,7 +130,11 @@ async function gridCycle(): Promise<void> {
   const ask = Math.ceil(fair * (1 + GRID_BPS / 10_000));
   const bals = await balances();
   const STALE_BPS = 60; // פקודה שנטתה מעבר-לזה מהשוק-החי = זומבי — מתבטלת
-  for (const s of SOLDIERS) {
+  /* גל-HF (2026-10-24 · מנדט-#37 §2): חיילים במקביל — כל-חייל עצמאי לגמרי
+   * (פקודות-משלו, משמעת-בנק-משלו, escrow-משלו) → קיר-זמן של מחזור יורד ~6x,
+   * ועם הדופק 45ש׳ — עד ~12x תדירות-רענון-פקודות. allSettled: חייל-שנכשל
+   * לעולם לא מפיל את הסגל. */
+  const soldierWork = async (s: string): Promise<void> => {
     try {
       const mine = await jget(`${DEX}/my-orders?issuer=${s}`);
       const orders: any[] = mine?.orders ?? [];
@@ -155,7 +162,7 @@ async function gridCycle(): Promise<void> {
         }
       }
       const live = orders.filter((o) => Math.abs(Number(o.price ?? 0) - fair) * 10_000 <= STALE_BPS * fair);
-      if (live.length >= MAX_ORDERS) continue;
+      if (live.length >= MAX_ORDERS) return; // גל-HF: בתוך-פונקציית-חץ — return במקום continue
       const hasSide = (side: string, price: number) => live.some((o) => o.side === side && Math.abs(Number(o.price) - price) <= Math.max(2, fair * 0.001));
       const usds = Number(bals[s]?.bal?.USDS ?? 0), saos = Number(bals[s]?.bal?.SAOS ?? 0);
       if ((bals[s]?.credits ?? 0) < 400) {
@@ -179,7 +186,8 @@ async function gridCycle(): Promise<void> {
         act(s, "order", "SAOS/USDS", { side: "sell", price: ask, amount: ORDER_AMT_MU, postOnly: true }, r?.ok ? "ok" : "denied", 0, r?.error ?? "");
       }
     } catch (e) { S[s].lastErr = String(e).slice(0, 110); }
-  }
+  };
+  await Promise.allSettled(SOLDIERS.map((s) => soldierWork(s)));
   lastFair = fair; cycles++;
 }
 
@@ -226,11 +234,29 @@ async function marketPulse(fillsNow: number, feeMeter: number): Promise<void> {
 }
 
 let cycles = 0, lastFair = 0, lastErr = "", bootedAt = Date.now();
+// G73 §2 census state (measured, honest — null until the first live book read lands)
+let census: BookCensus | null = null;
+let censusAt = 0;
+let censusErr = "";
+const ECONOMY_BOOK = "http://127.0.0.1:3016/ledger?limit=500";
+async function measureCensus(): Promise<void> {
+  try {
+    const r = await jget(ECONOMY_BOOK);
+    const tail: BookRecord[] = Array.isArray(r?.tail) ? r.tail : [];
+    const c = censusFromBook(tail, Date.now(), 6);
+    census = c; censusAt = Date.now(); censusErr = "";
+    if (cycles % 20 === 0) {
+      console.log(`[army] census: roster ${c.rosterSize} · active ${c.activeCount} (${c.activationPct}%) · window ${c.windowHours}h · records ${tail.length}`);
+    }
+  } catch (e) { censusErr = String(e).slice(0, 110); }
+}
 async function tick(): Promise<void> {
   try {
     const bals = await balances();
     await fundCycle(bals);
     await gridCycle();
+    // G73 §2: the all-soldier census — a live book read, never fatal to trading
+    try { await measureCensus(); } catch { /* census never kills the beat */ }
     // גל-16: מדידה-אחרי-מחזור — דופק-רק-כשהשוק קפוא-והמזרקה יבשה
     try {
       const st2 = await jget(`${DEX}/state`);
@@ -249,10 +275,12 @@ Bun.serve({
     soldiers: SOLDIERS.map((s) => ({ id: s, ...S[s] })),
     cycles, lastFair, bankUsdsMu: BANK_USDS_MU, gridBps: GRID_BPS,
     pulse: { pulses, pulseFeeMu, frozenCycles, dir: pulseDir, lastPulseAgoSec: lastPulseAt ? Math.round((Date.now() - lastPulseAt) / 1000) : null, err: pulseErr || null },
+    census: census ? { rosterSize: census.rosterSize, activeCount: census.activeCount, activationPct: census.activationPct, windowHours: census.windowHours, measuredAt: censusAt ? new Date(censusAt).toISOString() : null } : null,
+    censusErr: censusErr || null,
     lastErr: lastErr || null, upSec: Math.round((Date.now() - bootedAt) / 1000),
   }),
 });
 
 console.log(`[army] חי על :${PORT} · ${SOLDIERS.length} חיילים · בנק ${BANK_USDS_MU}µ USDS פר-חייל · דופק-שוק gal-16 חי`);
 void tick();
-setInterval(() => void tick(), 90_000);
+setInterval(() => void tick(), 45_000); // גל-HF (#37 §2): 90ש׳→45ש׳

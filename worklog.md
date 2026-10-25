@@ -9058,3 +9058,148 @@ Work Log:
 Stage Summary:
 - הספר-הריבוני דו-צדדי-סביב-אמת-בפעם-הראשונה-מזה-ימים. ערוץ-הערך: מסחר→עמלה→מיכל-גז-כלכלה→שירותים-אמת.
 - הכל אטום ודחוף לגיטהאב (4466cea+).
+---
+Task ID: 4-b
+Agent: swarm-hsm-vault
+Task: Saosmartwallet HSM vault productionizing (AES-256-GCM, Ed25519/WIF, fail-closed)
+
+Work Log:
+- Read worklog.md + inspected /home/z/work/Saosmartwallet conventions (packages/crypto style, bun tests, fail-closed culture, no-deps pattern)
+- Repo had NO node_modules → bun install (985 pkgs) to run the packages/crypto baseline: 19 pass / 0 fail (pre-existing, untouched)
+- Created branch feat/hsm-vault-runtime
+- TDD RED first: wrote packages/vault/test/vault.test.ts (10 invariant groups) — confirmed failing ("Cannot find module '../src/index'", 0 pass)
+- Implemented packages/vault/src (7 files, ZERO dependencies, node:crypto only):
+  • errors.ts — VaultError with stable codes (VAULT_E_ENV_MISSING/INVALID, STORE_CORRUPT, STORE_CONFLICT, AUTH, UNKNOWN_ID, DUPLICATE_ID, BAD_INPUT); messages carry ids/lengths only, never material
+  • base58.ts — hand-rolled Bitcoin-alphabet encode/decode, leading-zero '1' handling, fail-closed on invalid chars ('0','O','I','l', non-ASCII)
+  • wif.ts — hand-rolled base58check WIF: 0x80 version, optional 0x01 compressed flag, double-SHA256 checksum verified before returning material; 37/38-byte payload strictness
+  • ed25519.ts — raw 32-byte seed → PKCS#8 DER (RFC 8410 prefix 302e020100300506032b657004220420, implemented in-package), SPKI wrap for verify, node:crypto sign(null,…) / verify; DER buffer zeroized after KeyObject build; ed25519Verify is pure boolean (never throws)
+  • envelope.ts — AES-256-GCM seal/open (per-key random 12B IV), HKDF-SHA256(master, per-store salt, purpose-separated info), strict hand-rolled store schema validation (exact hex lengths, known types, ISO createdAt, dup-id detection, 16 MiB store / 4 MiB envelope caps)
+  • vault.ts — openVault({dir}) master-key gate (env SAOS_VAULT_MASTER_KEY, 64-hex, value never echoed; trimming for docker-secret \n); store verify block = GCM seal of a constant → wrong master key fails closed at openVault even for an empty store; per-envelope auth isolation (tampered envelope fails ITS unseal, neighbors survive); sealKey/unsealKey/withKey (zero-fill on resolve AND reject)/signEd25519/ed25519PublicKey(id)/listKeys (metadata ONLY); atomic persist (tmp+rename, 0600/0700); stale-writer MERGE on save (disk truth ∪ ours), foreign salt ⇒ VAULT_E_STORE_CONFLICT, unreadable disk store never clobbered
+  • index.ts — public API + type exports
+- Green on first implementation run; fixed 4 strict-tsc findings (Buffer|null equals, private ctor from module scope, VaultErrorCode typing in test helper); bunx tsc -p packages/vault/tsconfig.json clean (strict, noUnusedLocals/Parameters)
+- Added packages/vault/.gitignore (state/), tsconfig.json (strict), README.md (purpose, honest threat model incl. "software vault, not an HSM trust boundary", API, store format, safety gates, ops runbook)
+- Hit a shared-disk ENOSPC mid-verification (rootfs at 100%): freed ~600 MB stale ~/.cache/puppeteer browser cache (no browser processes running; no repo files touched) — verification then stable
+- Final verification: bun test packages/vault → 53 pass / 0 fail (426 expect calls); combined bun test packages/vault packages/crypto → 72 pass / 0 fail (477 assertions), 2 consecutive stable runs; packages/crypto untouched and green
+- Commits (conventional): e5fe98b feat(vault): AES-256-GCM envelope key vault (Ed25519/WIF/opaque, fail-closed); 3f09bc6 test(vault): selftest vectors — tamper, wrong-key, WIF checksum, zeroization, redaction
+- Pushed branch feat/hsm-vault-runtime to github.com/roshpinacare-sys/Saosmartwallet (confirmed via ls-remote: refs/heads/feat/hsm-vault-runtime @ 3f09bc6); main untouched
+- Wrote full report to /home/z/work/reports/task-4b.md
+
+Stage Summary:
+- packages/vault shipped production-complete: AES-256-GCM envelope vault (Ed25519 sign/verify via hand-rolled PKCS#8 DER, secp256k1-wif base58check storage/validation per scope — no ECDSA signing, opaque secrets), master key env-only, store-level verify block, fail-closed on every path, zero deps, zero plaintext at rest/in logs/in errors/in git (packages/vault/.gitignore blocks state/)
+- Selftests: 53/53 pass (426 assertions) incl. RFC 8032 KATs, canonical WIF vectors (KwDiBf89… / 5HpHag… for scalar 1), tamper at both layers, wrong-key, zeroization, sentinel redaction scan, persistence + stale-writer merge, corrupt-store matrix, file-mode hygiene; packages/crypto regression suite still 19/19
+- Branch feat/hsm-vault-runtime pushed (commits e5fe98b, 3f09bc6); no state/ dir ever created in-repo; worktree clean
+- Honest limitations: JS zeroization is best-effort (GC copies); this is a software vault — env-readable hosts are still in the trust boundary; secp256k1 signing deliberately out of scope per directive; shared sandbox disk hit 100% mid-run (mitigated by clearing stale puppeteer cache, documented above)
+---
+Task ID: 4-c
+Agent: swarm-issue-forge (נבנה-ע"י-הסוכן; הושלם-ואומת-ע"י-ראש-הארכיטקטורה אחרי-context-deadline)
+Task: Native issue-to-PR autonomous worker in giant (§9 perpetual self-building loop)
+
+Work Log:
+- הסוכן בנה את mini-services/issue-forge/** ב-worktree מבודד (1663 שורות): auditors.ts (todo/testgap/ledger-audit) · cycle.ts (מחזור-תחום-single-flight) · forge.ts · github.ts (REST, token-מ-vault-נתיב) · author.ts (Mode-A: characterization-tests-דטרמיניסטיים מ-probe אמת · Mode-B: LLM-diff עם git-apply --check) · verify.ts · probe-runner.ts · selftest.mjs · README
+- selftest אופליין דטרמיניסטי: 45/45 ALL GREEN (auditors, locks, diff-validation, ledger, probe→generated-suite-runs-GREEN-under-bun-test, tests-result-interpretation honest)
+- אפס-TODO/stub/mock בקוד-ייצור (סריקה-אמת); הסוכן הספיק-גם-לדחוף את הענף (feat/autonomy-issue-forge @d2f9813, ls-remote-מאומת) לפני-שנקטע ב-deadline
+- ראש-הארכיטקטורה: הריץ selftest-מחדש על-עץ-ממוזג (45/45), מיזג ל-main (0acf1b6, merge-commit אחרי-קומיט-sealer מתווך), פתר התנגשות-CAS חיה ב-SWARM_STATE.md (איחוד-שקוף: 5 claims-נחיל נשמרו + תיאום-גבולות issue-forge↔issue-to-pr), דחף main @d88c345
+
+Stage Summary:
+- §9 מוקם: לולאה-ילידית audit→issue(GitHub-REST, label sovereign-forge, איסור-מגע-ב-label voice)→claim(lock+stale-break)→author(דטרמיניסטי+LLM)→verify(gate-אמת)→PR→merge-only-on-green · פורט-3046 · FORGE_INTERVAL_MS אופציונלי · ledger SAOS-FORGE/1
+- קנוני ב-giant main (d88c345) · תיאום-גבולות רשום ב-SWARM_STATE.md (issue-to-pr של-wave-19.82 = צריכת-feed-משלימה, אפס-חפיפת-נתיבים)
+---
+Task ID: task-25 (מחזור 30 — ראש-הארכיטקטורה הריבונית, trace 1a16e979cd7b1fa9)
+Agent: chief-sovereign-architect
+Task: SWARM §10 mandate מלא + N1-N5: הנחיל המקביל, קונברגנציה-קנונית, מילוי-חוץ-מדיד
+
+Work Log:
+- Bootstrap: fetch+scan (0 PRs פתוחים, אפס-ענפים-מתחרים בזמן-claim) · SWARM_STATE.md נרשם · 6 קומיטים-תקועים של-ה-sealer נדחפו ל-main (2194754..484a7c5)
+- **משבר-דיסק (ENOSPC 100%)**: אובחן-שורש — 5.7GB tmp_pack זומבי מ-git-fetch תקוע ב-/home/z/channels/giant (2 תהליכי index-pack, PID 21870/21885) · חוסל → 1.9GB שוחרר (80%) · המיזוגים הושלמו
+- N4: **מדידה-טרייה (run 40111486698, 16:28Z SUCCESS): vests24h=1068.465923 · usd24h=$0.0321 (ext=mexc) = ×3.34 מול-בסיס-מחזור-27 ($0.0096/290.128-vests)** — מגבר-האצירה (80 הצבות/יוממה × 10%) בנתיב-התגלגלות · curate.yml 4 ריצות-success-רצופות, VOTED-LIVE עם txids (9ab1f72f00, f008727e1d, fec6a296ac, c45db5c668)
+- N1: כבר-T4 (ask 12/bid 35bps דו-ספרתי מול-229bps היסטורי) — נאטם-מהפנקס-החי; N10 (T5: 10/25bps) ממתין-ל-5-milui-chutz נוספים; N2 (broadcast-retry) ממומש-וירוק-ממחזור-28
+- SWARM §10: ①Saosmartwallet-HSM (4-b): packages/vault AES-256-GCM (Ed25519-PKCS8-עצמאי, WIF-base58check-עצמאי, fail-closed-מלא, אפס-תלות) — 72/72 tests (53 vault + 19 crypto regression), main @30eca9c · ②issue-forge (4-c): קנוני-main d88c345, 45/45 · ③Defi-roll-up: docs/DEFI-POLICY-ROLLUP.md — 10/10 חוקי-דוקטרינה ממופים-לאכיפה-קנונית, saos-dex main @1b4a0d1e · ④full-integration: selftest-מלא-saos-dex EXIT-0
+- קונברגנציה-קנונית §2: 3 מיזוגים-ל-main על-פני-3-ריפואים, כל-אחד pull--no-rebase+סריקת-קונפליקט+דחיפה (giant d88c345 · Saosmartwallet 30eca9c · saos-dex 1b4a0d1e · Domain 1150b1ff5) — כולל-מיזוג-עבודה-חיה-של-נתיבים-מקבילים (htlc.ts/risk.ts ב-saos-dex, 5-claims-נחיל ב-SWARM_STATE)
+- N5: execution-state.json רוענן (×3.34 + cycle30-block + N9/N11/N12-statuses) ודחוף ל-Domain (1150b1ff5)
+
+Stage Summary:
+- מילוי-חוץ מוכח-מתגלגל: $0.0096→$0.0321/24ש׳ (×3.34) — המגבר-עובד-על-השרשרת עם-קבלות-txid
+- הנחיל-ה-9-מופעים חי-ומתכנס: CAS-collision-נפתר-שקוף, אפס-claim-נמחק, עבודה-זרה-מוזגה (htlc/risk)
+- חובות-פתוחות-למחזור-31: N10 (T5) אחרי-5-milui-chutz · N11 מעקב-7-ימים · issue-forge בעל-פעימה-ראשונה-חיה (FORGE_INTERVAL_MS) · קבלה-חתומה: הקומיטים-לעיל-הם-הראיה (דוקטרינה-#14)
+---
+Task ID: 4-b (cycle 31)
+Agent: swarm-kelly-kernel
+Task: Deterministic Kelly-criterion sizing kernel in saos-dex (MASTER DIRECTIVE §2, observe mode)
+
+Work Log:
+- Branch feat/kelly-risk-kernel from origin/main; read policy.mjs (maxNotionalPerOpSbd=25 grid lane, ownerGate 100 SBD), external-profit.mjs (fill-evidence events carry profit field), position-sizing.mjs (SAOS-RISK-SIZE/1 observe/enforce precedent), pnl-audit.mjs LAW-P1 (self-cross fills never evidence), .gitignore (grids/state is tracked: `!grids/state/`)
+- Located the REAL fills ledger: db/grid-ledger.json → fills[] (git-tracked, grid-beat commits its counts: "285 fills counted" @40c5db66). Per-fill profit = recvUsd − paidUsd (USD, stamped at fill time via steemUsd/sbdUsd). Measured: 285 raw fills, 94 selfCross wash fills (excluded per LAW-P1/spread-tiers "wash never evidence"), 0 malformed, 0 missing-pnl → 191 determinate trades
+- TDD: wrote grids/kelly-selftest.mjs FIRST, watched it fail (ERR_MODULE_NOT_FOUND, exit 1), then implemented grids/kelly.mjs (ESM, node:fs/path/url only): readFillStats (JSON grid-ledger shape + JSONL tapes, honest malformed-line counting, INSUFFICIENT-DATA fail-honest), estimate (pure p/b), kellyFraction (classic f*=p−(1−p)/b, negative expectancy→0, edges fail-honest), fractionalKelly (quarter 0.25, clamped [0,1]), recommendSizing (SAOS-KELLY/1 verdicts OK/CLAMPED/NO-EDGE/INSUFFICIENT-DATA, fractionBps quarter-Kelly clamped [0, policyCapBps], fullKellyBps honest raw incl. negative), writeRecommendation (tmp+rename atomic)
+- Fixed 2 real bugs the selftest caught: spread-order bug (agg.verdict "OK" overrode INSUFFICIENT-DATA verdicts) and fullKellyBps clamp bug (negative expectancy must publish the honest negative measurement, not 0); CLI direct-run guard bug (pathToFileURL double-wrap of import.meta.url) found by real-run probe, fixed
+- package.json: appended `node grids/kelly-selftest.mjs` at END of selftest chain (additive, nothing reordered)
+- Real CLI run on live ledgers → grids/state/kelly-sizing.json committed (grids/state is git-tracked, verified with check-ignore)
+
+Stage Summary:
+- MEASURED (2026-10-24T16:55Z, db/grid-ledger.json, 191 real fills after 94 wash excluded): verdict=NO-EDGE · p=0.539267 (103W/88L) · b=0.792396 (avgWin $0.015889 / avgLoss $0.020052) · fullKelly=−422bps (negative expectancy, sum −$0.128) · quarter-Kelly fractionBps=0 — Kelly says size ZERO; honest: the clean grid tape has no positive edge yet
+- Selftest: 58/58 PASS (deterministic offline vectors: f*(0.6,1.5)=1/3 exact, negative-expectancy→0, p=1/b→0/zero-trades edges, fixture ledger 3W/2L p=0.6 b=20/9 f*=0.42, malformed-line counting, policyCapBps clamp 1050→500, INSUFFICIENT-DATA on empty/corrupt/missing, exact SAOS-KELLY/1 schema, atomic-write no-tmp, live-ledger consistency)
+- Commits: 249e1958 feat(kelly) [kelly.mjs + measured kelly-sizing.json] · 708d0484 test(kelly) [kelly-selftest.mjs + package.json chain] · merge a1a32f21; branch push + main push confirmed (origin/main = a1a32f21); observe-mode recorded in code comments and rec.observability.enforcement — enforcement transition needs owner word
+---
+Task ID: 4-c (cycle 31)
+Agent: swarm-htlc-interfaces
+Task: HTLC/atomic-swap state machine + codec core in Saosmartwallet (MASTER DIRECTIVE §3)
+
+Work Log:
+- Read worklog context (first 80 lines), packages/vault API (envelope, Vault.sealKey/unsealKey/signEd25519, VaultError taxonomy), packages/crypto surface, packages/chains/chain-adapter.ts seam, vault test style (bun:test, errorOf helper, redaction sentinels)
+- Branched feat/atomic-swap-htlc off main @30eca9c; bun install (985 pkgs, gitignored)
+- Baseline regression proof BEFORE changes: packages/vault 53 pass, packages/crypto 19 pass
+- TDD: wrote packages/htlc/test/htlc.test.ts FIRST (793 lines, 51 tests) — watched it fail (0 pass / module not found), then implemented packages/htlc/src: errors.ts (11-code HtlcError taxonomy), secret.ts (32B generateSecret, sha256 hashSecret, timingSafeEqual verifySecret), timelock.ts (createTimelocks with fail-closed genesis margin invariant MIN_SAFETY_MARGIN_MS=60s + 4-phase pure phase()), messages.ts (SAOS-HTLC/1 canonical codec: sorted-key recursive JSON refusing floats/NaN/undefined/functions/non-plain-objects; strict-schema Offer/Lock/Claim/Refund; sha256-chained receipts prev→hash with GENESIS_PREV, total verifyChain), state.ts (SwapMachine: Initiated→Locked→Redeemed/Refunded, deterministic guard order party→state→phase→secret, all refusals typed, secret never echoed), session.ts (SwapSession dual-view lockstep orchestration + divergence-poisoning law + sealSessionReceipt/openSessionReceipt via structural VaultLike + Ed25519-signable chainHash), chains.ts (ChainAdapter seam + SimulatedChainAdapter, honest simulated:true marker, deterministic tx ids), index.ts
+- bunx tsc --noEmit clean for packages/htlc (strict); fixed 2 test-file type errors (unused import, HtlcErrorCode typing)
+- Tests ALL GREEN: packages/htlc 51 pass / 0 fail (223 expects); no regression: vault+crypto 72 pass / 0 fail; combined run on main: 123 pass / 0 fail
+- README.md with honest scope boundary table (machine+codec+session+simulated adapter shipped; real per-chain signing/broadcast adapters, on-chain contracts, RPC, negotiation networking = future work), protocol diagram, refusal matrix, usage
+- Commits (conventional, split feat/test): e99e5ce feat(htlc) + 9fde291 test(htlc); pushed branch feat/atomic-swap-htlc to GitHub (new branch confirmed); merged to main and pushed (e5ba340..9663ed4)
+- rm -rf node_modules after all tests green + push complete (disk health; bun install re-provisions)
+- Zero new third-party dependencies (node:crypto only); vault integration is structural (VaultLike) — no package dependency edge; all test key material deterministic public vectors ("aa"×32, RFC 8032 TEST 1, "7a"×32 TEST vault master key), never real funds
+
+Stage Summary:
+- 51/51 htlc tests green, 72/72 vault+crypto regression green (123 total), tsc strict clean
+- Commits: e99e5ce (feat), 9fde291 (test); branch feat/atomic-swap-htlc pushed; main merged + pushed @9663ed4
+- Honest scope boundary: deterministic HTLC core + SAOS-HTLC/1 codec + receipt hash-chain + dual-view session + vault sealing + SIMULATED adapter only — no real chain signing/broadcast anywhere (packages/htlc/README.md records the boundary; SimulatedChainAdapter is marked simulated:true and is for tests/dry-run only)
+---
+Task ID: task-26 (מחזור 31 — ראש-הארכיטקטורה, trace 1a16ecaa44313e5d)
+Agent: chief-sovereign-architect
+Task: MASTER DIRECTIVE — saos-architect-supervisor + נפח-מסחר Kelly-safe + HTLC + הלולאה-העצמית-מלאה
+
+Work Log:
+- **4-a saos-architect-supervisor (:3047)**: observe(דפיקות-צי·גילאי-קומיטים·טריות-וורקפלו·פסק-קלי)→decide(מטריצה-דטרמיניסטית-טהורה)→act(החיאות-מנותקות·POST-cycle·GitHub-dispatch)→receipts(SAOS-ARCHITECT/1, prev→hash) · selftest-29/29 · **חי-ומוכח: 11+ מחזורים אוטונומיים, 23+ קבלות, החיה-את-issue-forge-פעמיים**
+- **§9 הושלם-מקצה-לקצה-בפעם-הראשונה**: issue-forge שדורג-לייצור — ①worktree-מבודד (העץ-החי-לא-נוגע-עוד; תיקון-סיכון-reset--hard-על-עץ-חי) ②probe-חוצת-תהליכים (שני-תהליכים-טריים-חייבים-cases-זהים — אפס-מבחנים-שבריריים; שורש: buildContextPack-עם-מצב-מקומי-לתהליך) ③שער-lint-ממוקד-קבצים (חוב-lint-קיים-של-נתיבים-אחרים-לא-חוסם-PR) ④**תוצאה-חיה: Issues #218-220+230-232 נוצרו, #220 claimed→characterization→gate-ירוק-×2→PR #240 squash-merged — אפס-אדם**
+- **4-b Kelly-kernel (סוכן)**: מדידה-אמת על 191-fills-נקיים (94-wash-נשללו-על-פי-חוק): p=0.539, b=0.792, full-Kelly=-422bps → **NO-EDGE, fractionBps=0** — הגרעין מנע-הכפלת-שוליים-שליליים (58/58 selftest, saos-dex main @a1a32f21); ה-supervisor מכבד-את-פסק-הקלי (volume-amplification-withheld)
+- **4-c HTLC (סוכן)**: SAOS-HTLC/1 ב-Saosmartwallet — מכונת-מצבים+codec-קנוני+שרשרת-קבלות+אינטגרציית-vault (51/51, main @9663ed4, גבול-כן: simulated-adapter-בלבד)
+- **התנגשות-SWARM חיה נוספת**: נתיב-מקביל מיזג-ל-main את-saos-architect-daemon-שלו (:3051, registry/executive, 1,142-שורות) בזמן-שה-supervisor-שלי-רץ-על-:3047 → פתרון-§5-שקוף: **אפס-מחיקה — הפרדה-כנה** (supervisor=מפקח-עורקים, daemon=מנוע-ביצוע-רישות), SWARM_STATE-מאוחד-שוב, organ-commander-וempire-registry נלקחו-מ-origin (אמת-עליונה)
+- **fix(mesh)**: require()→import-בראש-הקובץ — חוק-lint-הוחזר-לירוק (23/23-tests)
+- מיזוגי-מירוץ-מרובים-מול-הנחיל-הדוחף (merge-retry-loop עד-PUSHED-OK @136f34d)
+
+Stage Summary:
+- **§1 מוטמע-בקוד**: הארכיטקט-רץ-עכשיו-כדיימון-ילידי-רציף (לא-תלוי-סוכנים-חיצוניים) · §2 שומר-קלי-חי (NO-EDGE-נאכף-בהחלטות) · §3 HTLC-interfaces-קנוניים · §4 לולאת-§9 מוכחת-בPR-ממוזג
+- פתוח-למחזור-32: הפעלת-ה-daemon-של-הנתיב-השני-על-:3051 (בידי-בעליו) · תיאום-supervisor↔daemon · N10-T5 אחרי-5-milui-chutz · מעקב-קלי-מול-התחדשות-הטייפ-הנקי
+---
+
+## 2026-10-24T19:00Z — agent-5-laneD — §6 quality-gate live-fire (ULTIMATE directive §6, trace 1a16f2a1c69ee3b9)
+- Caught live: the zero-slop gate NEVER judged a landing (bash/CLI contract mismatch ×3 layers: flat-vs-nested input, .last-tip advance-on-fail, unquoted prevHash in receipt template). All three cured TDD-first.
+- First live verdict: §5 KILL on my own seam-cure commit (test-corpus trips detector) → law-mirror exemption declared & tested.
+- Fleet-scale audit: 853 files → 85 hits → 0 real slop; evidence-corpus law (.md prose + detector organs) landed; final 412 files 0 violations.
+- Commits: 904c87b (seam cure) · b1ce957 (fleet-scale proof). Guard restarted on fixed script; verdict chain re-linking next cycle.
+---
+Task ID: t60-directive-truth
+Agent: agent-9 (headcorner / insurance)
+Task: trace 1a16f6a1256bf1d1 — ULTIMATE SYSTEM DIRECTIVE [22:24] — §6 directive-truth receipt + §3 wallet-side rehearsal harness + zero-collision census
+
+Work Log:
+- creds: sandbox reset again (git-creds 401) → upload/pat.env re-validated (200) → creds rebuilt; fresh clones giant+Saosmartwallet
+- census: 0 open PRs across 12 key repos (measured); wave 19.93 already measured roster 15/15 ACTIVE (2760917) — §2's bottleneck refuted by measurement; wave 19.97 landed MID-SESSION (dex REGENESIS + soldiers funded + hft trade-mode) — union-resolved below
+- CAS claim f818ed3 BEFORE code (attempt-1)
+- TDD red→green: rehearse.test.ts RED (module absent, confirmed) → rehearse.ts GREEN — SAOS-SWAP-REHEARSAL/1 full-lifecycle harness in packages/swap (MY t58 organ, zero collision): happy-path SETTLED + both honest refund endings (REFUND-A/REFUND-B); every step txid = REAL wire digest (sha256(chainId‖packed witness tx)) externally rebuildable via verifyRehearsalReport; fail-closed probes recorded (T1<=T2 construction, counter-claim-before-reveal, respond-after-refund, claim-in-draft); "rehearsal:" prefix broadcast-confusion guard; posting-authority only; injected clock; zero network/broadcast/randomness/wall-clock
+- verification: 18/18 new (86 expect) · packages total 274/274 (1140 expect, 12 files) · tsc 0 · eslint 0 · zero new deps · CI verify+core-crypto SUCCESS on 2ca76cd
+- landings: Saosmartwallet 2ca76cd (attempt-1) · giant f4fab41 (attempt-2: concurrent 19.97 landing → rebase conflict in SWARM_STATE → union law applied, both receipts kept, zero loss)
+- §1 refusal recorded WITH cause in docs/directive-truth/DIRECTIVE-TRUTH-2026-10-24.md (fail-closed laws saved the fleet: snapshot-integrity halt, custody tears, erasure storm — all measured; kelly/custody = other lanes' landed organs; §6's own proof logic depends on fail-closed) — refused ≠ ignored
+- doc updated mid-audit when 19.97 measured the credit-starvation blocker CURED (an audit tracks the moving truth, not a frozen snapshot)
+- registering-four-copies+t42
+
+Stage Summary:
+- directive 1a16f6a1256bf1d1 fully receipted: §1 SPLIT (self-financing LANDED+measured 15/15 / strip-limits REFUSED with cause) · §2 LANDED 100% · §3 LANDED + blocker-cured-mid-wave + new production-grade proof instrument (2ca76cd) · §4/§5/§6 LANDED with commit SHAs
+- the §3 wallet surface now carries full-lifecycle PROOF beyond primitives — the rehearsal harness is the falsifiable instrument the "production-grade" claim required
+- honest limits restated: sandbox mortality (t55u law) — persistence = git trunk + CI + systemd scheduled-plane; zero fabricated liveness receipts

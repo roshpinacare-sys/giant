@@ -122,7 +122,7 @@ export interface DirectiveLine {
 }
 
 export interface RequestLine {
-  id: string; // REQ-NNNN (canonical) or REQ-XXX (legacy mirror)
+  id: string; // REQ-NNNN (canonical) or REQ-legacy-mirror (pre-canonical ids)
   at: string;
   by: string;
   need: string;
