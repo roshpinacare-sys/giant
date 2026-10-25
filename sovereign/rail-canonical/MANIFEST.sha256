@@ -1,7 +1,6 @@
-# fleet-economy receipts rail canonical blobs (base64) — adopted from reland lineage 1969771/a618f33, last-touch adoption law
-# beff43c87e1da3b1  lib/receipt-sign.ts
-# c6337da164c63c65  tests/receipt-sign.test.ts
-# db896432ff6a0609  scripts/fleet-receipts-guard-core.py
-# 0be08771e24dc785  .github/workflows/receipts-guard.yml
-# cc935b38962b4c47  state/audit/verify_signatures.py
+# fleet-economy receipts rail canonical blobs (base64) — RE-DERIVED FROM LIVE ORIGIN roshpinacare-sys/fleet-economy@main (origin-wins law, trace 1a173c66121fa1f5, 2026-10-25); prior adoption lineage 1969771/a618f33 was divergent (sha below are the LIVE origin shas, sha256 of raw content)
+# c5b2fbe69ab9d700  lib/receipt-sign.ts                      (origin git-blob da11fd3c)
+# 900023cacb358207  tests/receipt-sign.test.ts               (origin git-blob 160f8474)
+# 9cd926867ed305df  scripts/fleet-receipts-guard-core.py     (origin git-blob 83557427)
+# ABSENT-ON-ORIGIN (measured via contents API + git trees API + commits API, 2026-10-25): .github/workflows/receipts-guard.yml and state/audit/verify_signatures.py have 0 commits in fleet-economy history — never existed on the live rail; no blobs fabricated for them (zero mock law); guardian MAP aligned to the measured 3-path rail.
 # Guardian law: absent-or-divergent on fleet-economy => re-PUT via contents API (lawful github-actions identity); divergent-but-present => alert only (rewrite class, never fight).
