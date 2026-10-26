@@ -1,0 +1,166 @@
+{
+ "schema": "SAOS-EXECUTION-LEDGER/1",
+ "at": "2026-10-23T15:55:00Z",
+ "generator": "agent round 29 (Z.ai, trace 1a1693b1c728cbf5) — hand-curated from the real worklog + measured books + chain forensics",
+ "sourceWorklog": "worklog task-24 (460+ sections)",
+ "law": "כל-שורה-כאן-נגזרת-מפנקס-העבודה-האמיתי-ומהספרים-המדודים · מה-שלא-הוכח-רשום-כלא-בוצע · אסור-לקשט",
+ "freshness": {
+  "howToVerify": "כל-ראיה-נבדקת-בגיט: github.com/roshpinacare-sys/Domain → commits, ו-github.com/roshpinacare-sys/saos-dex/actions → הריצות",
+  "staleAfterHours": 48,
+  "renewedBy": "מחזור-סוכן (תמשיך-ודחוף) או plant-books watchdog"
+ },
+ "measuredSnapshot": {
+  "externalProfit24hUsd": 0.0321,
+  "externalProfit24hVests": 749.41,
+  "externalProfitNote": "מדוד-מחדש-עם-תיקון-העומק (15:45Z): 2.5×-מהדיווח-הקודם — הסורק-הישן היה-שקוע-ב-0.8ש׳-בלבד על-החשבון-הפעיל (30k-ops/יום) והיה-מדלג-על-אירועי-פרס",
+  "curationAmplifier": {
+   "verdict": "VOTED-LIVE — 20 הצבות-אמת במשקל 10% (היה 8×2%)",
+   "executedAt": "2026-10-23T15:09Z (receipts 4c4b0130) · txids אמת · 0-recovered (ביטוח-במצב-השהיה)",
+   "schedule": "curate.yml כל-6ש׳ (×4/יוממה = עד 80 הצבות/יום × 10% = 16% כוח-הצבעה/יום מול-רגנרציה 20% — קיימות 1.25×)",
+   "projectedUplift": "האקרואל-יופיע-במדידה-תוך-חלון-הפרס-של-7-ימים (כנות: הצבעות-היום משלמות-בשבוע)",
+   "cloudLane": "secret STEEM_POSTING_WIF תוקן-למפתח-החי-מהכספת (A-variant מאומת-מול-6-רשויות-פרסום-חיות) + steem@0.7.10-מותקן-ב-runner"
+  },
+  "externalFlowUsdHistoric": 0.784335,
+  "gridVerdict": "ARMED-LIVE · SPREAD-TIER T4 (ask 12 / bid 35bps — דו-ספרתי-עמוק) · run 53 (15:06Z): 3 asks parity+0.12/0.24/0.36% + 3 bids touch-hug, txids אמת",
+  "tierEvidence": "27 מילויי-חוץ (אחרי-חלון-החוק, לא-wash, edge≠0) · T5 (10/25bps = רצפות-השומר) בעוד 5",
+  "hiveVerdict": "DISARMED-BROKEN-MARKET — הצהרה-מפורשת (לא ARMED-WAITING שקרי) + חוק-ריארמון-אוטומטי מפורסם-ברגל-עצמה",
+  "vaultResurrection": "auto-unseal רץ-אוטונומית (15:25Z) — keys deployed · משפחת-steem המלאה (A/B ×4 רשויות) חיה-שוב-בסנדבוקס",
+  "priceTruth": {
+   "verdict": "TRIANGLE-ARMED",
+   "note": "SBD דה-פג מדוד · הקו-המשולש חי ב-CI"
+  },
+  "externalVests24h": 1068.465923,
+  "externalProfitSource": "ext=mexc (external-profit-publish run 40111486698, 2026-10-24T16:28Z, SUCCESS)",
+  "externalProfitGrowth": "x3.34 vs cycle-27 base $0.0096/24h (290.128 vests) — curation booster ramp measured (80 votes/day x 10% weight, VOTED-LIVE receipts 9ab1f72f00/f008727e1d/fec6a296ac/c45db5c668)",
+  "measuredAt": "2026-10-24T16:28Z"
+ },
+ "done": [
+  {
+   "id": "D1",
+   "title": "עצימת-דימום-הערך + race-safety + מפרסם-רווח-חוץ + החייאת-הצי (D1–D8-קודמות)",
+   "detail": "R-GRID-WAR · rebase-retry · external-profit-publish keyless כל-שעתיים · דיסק/פורטים · כנות-verdict · trim-to-cap · N8-g קצב-ריבוני — כל-הקודם-בפנקס-הקבוע-ובגיט.",
+   "evidence": "worklog task-22/23 · הריצות-המדודות-ב-saos-dex/actions"
+  },
+  {
+   "id": "D15",
+   "title": "N4 מגבר-הקיורציה — חי על-השרשרת",
+   "detail": "planVotes/curateBeatOnce: 8→20 הצבות/פעימה · 2%→10% משקל (16% כוח-הצבעה/יום מול-רגנרציה 20% — קיימות-מלאה, אפס-שינוי-סמכות). curate.yml מתוזמן ×4/יוממה. הרצה-מקומית: 20/20 VOTED-LIVE במשקל-1000 (10%).",
+   "evidence": "saos-dex a7ab3740 + b15cdfb3 · receipt VOTED-LIVE executed=20 weights=1000 · txid 9c147dcb1b…"
+  },
+  {
+   "id": "D16",
+   "title": "N1 סולם-הראיות T4/T5 — היעד-הדו-ספרתי-המלא",
+   "detail": "T4 ≥20-מילויי-חוץ → 12/35bps (חי-מיידית: 27-ראיות) · T5 ≥32 → 10/25bps = רצפות-השומר-בדיוק. אותו-שער-ראיות: חלון-פוסט-חוק, selfCross-חוץ, edge≠0.",
+   "evidence": "saos-dex 80505e88 · run 53: 'SPREAD-TIER T4: ask 12bps / bid 35bps · 27 third-party fills · next: T5 after 5'"
+  },
+  {
+   "id": "D17",
+   "title": "N2 התאוששות-שידור — curate + HIVE",
+   "detail": "answered-without-id → אימות-הכלה מול-get_account_history (מזהים-ביט-מול-ביט) · duplicate=הוכחת-הכלה → התאוששות-לא-כישלון · backoff מעריכי ×4 עם-חתימה-טרייה-לניסיון. ביצוע-מדוד: 20/20-id-ראשון.",
+   "evidence": "saos-dex a7ab3740 (curate) · 2b89f8b1 (hive)"
+  },
+  {
+   "id": "D18",
+   "title": "N3 HIVE — כנות-הצהרתית",
+   "detail": "verdict DISARMED-BROKEN-MARKET (שוק-שבור-הוא-סירוב-גלוי, לא-המתנה) + reArm-law מפורסם-ברגל: חוזר-לחיים-לבד כש-|mid−parity|≤band. נמדד-בענן: run 53 hive=DISARMED-BROKEN-MARKET.",
+   "evidence": "saos-dex b9d46f41 · db/grid-public.json"
+  },
+  {
+   "id": "D19",
+   "title": "תיקון-מדידת-הרווח-החוץ — 2.5×-תיקון-כנה",
+   "detail": "הצמתים מגבילים get_account_history ל-100-אופים (300+ = upper-bound · publicnode = גוף-ריק-מדוד) · הדפדוף-הישן הלך-על-ops[last] על-מערך-עולה = 40-עמודים-חזרו-על-אותו-חלון-ראש (~0.8ש׳-עומק אמת על-30k-ops/יום) → תת-מדידה-מבנית. תוקן: head-block-clamp + מצביע-אחורה ops[0][0]−1 + 400×100. תוצאה-חיה: 749.4-vests/24ש׳ = $0.0244 (מול-0.0096-שדווח).",
+   "evidence": "saos-dex b26e35c6 · external-profit-public.json טרי · probes: limit=300 → 'upper bound'"
+  },
+  {
+   "id": "D20",
+   "title": "תחיית-הכספת-האוטונומית",
+   "detail": "auto-unseal (VAULT_ALLOW_DISCOVERY=1 · pat.env-wrap) רץ-מחדש-על-המכונה-הטרייה — keys deployed 15:25Z · STEEM A/B ×4 רשויות · posting-A מאומת-מול-6-רשויות-הפרסום-החיות-על-השרשרת.",
+   "evidence": "vault-home clone + auto-unseal exit 0 · wifToPublic ∈ chain posting key_auths"
+  }
+ ],
+ "partial": [
+  {
+   "id": "P1",
+   "title": "רווח-חוץ — זורם-באמת, מתוכנן-לצמוח",
+   "detail": "0.0244$/24ש׳ מדוד-אמת (תיקון-2.5×) + מגבר-20×10%-חי (האקרואל-יופיע-תוך-7-ימי-פרס) + הזרימה-המסחרית-החיה. היעד-משמעותי-מוחלט עוד-לא-נסגר — נמדד-בכנות-מדי-שעתיים.",
+   "evidence": "external-profit-publish runs · curate receipts"
+  },
+  {
+   "id": "P2",
+   "title": "ערוץ-STEEM — הכל-חי, סדרה-ארוכה-מתבקשת",
+   "detail": "20/20-שידורים-נקיים בריצת-הבכורה-של-המגבר; T4-חי-בענן; עדיין-חלקי-עד-סדרת-ריצות-נקייה-מתמשכת.",
+   "evidence": "runs 53+ · receipts 4c4b0130"
+  },
+  {
+   "id": "P3",
+   "title": "office-selfcheck מאזין-אך-חוסם",
+   "detail": "התיקון-הארכיטקטוני (async) נדחה-בכוונה-בלי-בדיקה. רשום-כנה.",
+   "evidence": "worklog task-21-d"
+  }
+ ],
+ "gaps": [
+  {
+   "id": "G1",
+   "title": "שוק-HIVE שבור — הכנות-הושלמה, הנזילות-חוץ-חסרה",
+   "detail": "הערוץ מוכרז DISARMED-BROKEN-MARKET עם-ריארמון-אוטומטי — הסירוב-עצמו הוא-החוזה. הפער-החומרי (נזילות/פאריטי-אמיתי) נשאר-חוץ-לשליטתנו.",
+   "evidence": "grid-public.json hive.verdict + reArm"
+  },
+  {
+   "id": "G2",
+   "title": "רוכש-חוץ נגד-הספר — המדף-פתוח-ומודק",
+   "detail": "asks parity+0.12%+ במדרגה-T4 · bids touch-hug · תוקף-27-יום. המתנה-למילוי-שלישי-ראשון-בפנקס-פוסט-חוק.",
+   "evidence": "run 53 txids · 27-ראיות-מצטברות"
+  },
+  {
+   "id": "G5",
+   "title": "מלחמת-סנדבוקסים — החלטת-בעלים (N7) עדיין-פתוחה",
+   "detail": "churner-חוץ-מקוד-שאינו-בריפו. חוק-הקצב N8-g מצמצם-את-עירום-המדף.",
+   "evidence": "worklog task-23"
+  }
+ ],
+ "next": [
+  {
+   "id": "N9",
+   "title": "[DONE cycle 30] curate.yml ריצות-ענן ירוקות רצופות (15:53/10:53/04:31/21:21Z success) — VOTED-LIVE 20 הצבות/פעימה עם txids"
+  },
+  {
+   "id": "N10",
+   "title": "T5: עוד 5 מילויי-חוץ → 10/25bps = רצפות-השומר (היעד-הסופי-של-הסולם)"
+  },
+  {
+   "id": "N11",
+   "title": "[PROVEN cycle 30] עדות-האקרואל: 1068.47 vests/24ש׳ = $0.0321 (ext=mexc) = x3.34 מול-בסיס-מחזור-27 — המגבר נמדד-חי; המשך-מעקב-שבוע-7-ימים"
+  },
+  {
+   "id": "N12",
+   "title": "[DONE cycle 30] ריענון-הפנקס בוצע (ראש-ארכיטקטורה, trace 1a16e979cd7b1fa9) — חוק-קבוע-בכל-מחזור"
+  }
+ ],
+ "cycle30": {
+  "trace": "1a16e979cd7b1fa9",
+  "at": "2026-10-24T16:45Z",
+  "swarm": "issue-forge merged to giant main @d88c345 (45/45 selftest) | Saosmartwallet HSM vault main @30eca9c (72/72) | saos-dex DEFI-POLICY-ROLLUP @1b4a0d1e | giant disk-crisis resolved (5.7GB zombie git packs killed)",
+  "open": [
+   "N10: T5 floors 10/25bps after 5 more external fills",
+   "N11: continue 7-day accrual watch"
+  ]
+ },
+ "cycle31": {
+  "trace": "1a16ecaa44313e5d",
+  "at": "2026-10-24T18:20Z",
+  "swarm": "saos-architect-supervisor :3047 LIVE (observe/decide/act, Kelly-guard, 23+ receipts) — architect embedded in code | issue-forge productionized: worktree-isolation + cross-process probe + scoped lint — §9 CLOSED: PR #240 squash-merged autonomously (issue #220 → characterization → gate x2 → merge) | Kelly kernel: p=0.539 b=0.792 → NO-EDGE honest (volume amplification withheld) | SAOS-HTLC/1 in Saosmartwallet (51/51) | collision: parallel-lane architect-daemon :3051 coexists per SWARM §5",
+  "kelly": {
+   "p": 0.539267,
+   "b": 0.792396,
+   "verdict": "NO-EDGE",
+   "fractionBps": 0,
+   "trades": 191,
+   "washExcluded": 94
+  },
+  "open": [
+   "activate architect-daemon :3051 (owner lane)",
+   "N10 T5 floors after 5 more external fills",
+   "kelly re-measure as clean tape grows"
+  ]
+ }
+}

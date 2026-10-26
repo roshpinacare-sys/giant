@@ -1,0 +1,43 @@
+{
+ "schema": "G76H-EXECUTION-STATE-ACCESS-RECEIPT/1",
+ "at": "2026-10-26T14:24:58Z",
+ "worker": "G76-h (giant feat/defi-convergence)",
+ "measured": {
+  "verify": {
+   "schema": "execution-accessor-report/1",
+   "at": "2026-10-26T14:24:49.559Z",
+   "status": "stale",
+   "path": "/home/z/audit/repos/Domain/execution-state.json",
+   "reason": "ledger.at 2026-10-23T15:55:00Z is older than 48h freshness window",
+   "candidates": [
+    "/home/z/audit/repos/Domain/execution-state.json",
+    "/home/z/audit/repos/giant/state/execution/execution-state.json"
+   ]
+  },
+  "recover": {
+   "schema": "execution-accessor-report/1",
+   "at": "2026-10-26T14:24:49.586Z",
+   "status": "stale",
+   "path": "/home/z/audit/repos/Domain/execution-state.json",
+   "reason": "ledger.at 2026-10-23T15:55:00Z is older than 48h freshness window",
+   "candidates": [
+    "/home/z/audit/repos/Domain/execution-state.json",
+    "/home/z/audit/repos/giant/state/execution/execution-state.json"
+   ],
+   "action": "none",
+   "wroteTo": null,
+   "quarantinedTo": null
+  },
+  "mirror": {
+   "schema": "execution-mirror-receipt/1",
+   "at": "2026-10-26T14:24:49.610Z",
+   "source": "/home/z/audit/repos/Domain/execution-state.json",
+   "mirror": "/home/z/audit/repos/giant/state/execution/execution-state.json",
+   "byteIdentical": true,
+   "sha256Source": "95e932ea1a12c9e71dd1c412939c77e2eea1d41d0bf3eab64fa0b97ead33ca64",
+   "sha256Mirror": "95e932ea1a12c9e71dd1c412939c77e2eea1d41d0bf3eab64fa0b97ead33ca64"
+  }
+ },
+ "verdict": "MEASURED-STALE — ledger valid but >48h freshness window (at=2026-10-23T15:55:00Z); accessor wired, mirror established byte-true; renewal remains agent-round duty",
+ "tests": "bun test mini-services/defi-convergence/ → 28 pass / 0 fail"
+}
