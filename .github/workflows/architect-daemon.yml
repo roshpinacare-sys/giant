@@ -48,6 +48,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Install the real environment (root cure, wave 80/81 — measured 645→0)
+        run: |
+          # נמדד (גל-80): tsc בסביבה-רעבה מציג 645 "שגיאות" — כולן רעש-היעדר-תלויות.
+          # גל-81: השלב-נמחק-בידי-כותב-עץ-ישן (e60f5d6f) → 6-ריצות-אדומות-רצופות.
+          # ההחזרה-כאן-היא-הדיימון-מרפא-את-מארחו-בעצמו (self-healing, C5).
+          bun install --frozen-lockfile
       - name: One bounded architect cycle (AUDIT→SELECT→CURE→VERIFY→LAND→RECEIPT)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
