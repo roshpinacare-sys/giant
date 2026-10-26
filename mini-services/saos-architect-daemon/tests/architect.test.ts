@@ -325,3 +325,107 @@ describe("lock", () => {
     releaseLock(l);
   });
 });
+
+/* ── 6. גל-81 · host-integrity — the daemon heals its own CI host ──────────
+ * Measured root: erase-commit e60f5d6f (merge -s ours stale-tree promotion)
+ * removed the bun-install step → 6 honest-RED runs of starved-env noise.
+ * The cure is anchor-based (never byte-parity), self-verified, idempotent. */
+import {
+  hostIntegritySelection,
+  hostWorkflowIntegrity,
+  verifyHostWorkflow,
+  CANONICAL_HOST_WORKFLOW,
+  HOST_WORKFLOW,
+  HOST_INV_INSTALL,
+  HOST_INV_INVOCATION,
+} from "../registry.ts";
+import type { Selection } from "../executive.ts";
+
+describe("host-integrity (wave-81 self-healing)", () => {
+  const ERASED = CANONICAL_HOST_WORKFLOW
+    .split("\n")
+    .filter((l) => !l.includes(HOST_INV_INSTALL))
+    .join("\n"); // the e60f5d6f class: invocation intact, install gone
+
+  test("canonical floor itself carries both host invariants + lawful identity", () => {
+    expect(CANONICAL_HOST_WORKFLOW.includes(HOST_INV_INSTALL)).toBe(true);
+    expect(CANONICAL_HOST_WORKFLOW.includes(HOST_INV_INVOCATION)).toBe(true);
+    expect(CANONICAL_HOST_WORKFLOW).toContain("name: architect-daemon");
+    expect(CANONICAL_HOST_WORKFLOW).toContain("contents: write");
+    expect(CANONICAL_HOST_WORKFLOW).toContain("github-actions[bot]");
+  });
+
+  test("healthy host → null selection (no work, never fabricated)", () => {
+    const root = tmpTree();
+    fs.mkdirSync(path.join(root, ".github", "workflows"), { recursive: true });
+    fs.writeFileSync(path.join(root, HOST_WORKFLOW), CANONICAL_HOST_WORKFLOW);
+    expect(hostIntegritySelection(root)).toBeNull();
+    expect(verifyHostWorkflow(root).ok).toBe(true);
+  });
+
+  test("erase-commit class (install gone, invocation intact) → anchored insert cure", () => {
+    const root = tmpTree();
+    fs.mkdirSync(path.join(root, ".github", "workflows"), { recursive: true });
+    fs.writeFileSync(path.join(root, HOST_WORKFLOW), ERASED);
+    const st = hostWorkflowIntegrity(root);
+    expect(st.hasInvocation).toBe(true);
+    expect(st.hasInstall).toBe(false);
+    const sel: Selection | null = hostIntegritySelection(root);
+    expect(sel).not.toBeNull();
+    expect(sel!.cureId).toBe("architect-host-integrity");
+    expect(sel!.selfVerify).toBeDefined();
+    const snap = applyCure(root, sel!);
+    const probe = sel!.selfVerify!(root);
+    expect(probe.ok).toBe(true);
+    const cured = fs.readFileSync(path.join(root, HOST_WORKFLOW), "utf8");
+    expect(cured.includes(HOST_INV_INSTALL)).toBe(true);
+    expect(cured.includes(HOST_INV_INVOCATION)).toBe(true);
+    // install step sits BEFORE the cycle step (lawful YAML order preserved)
+    expect(cured.indexOf("Install the real environment")).toBeLessThan(cured.indexOf("One bounded architect cycle"));
+    // idempotent: a second selection sees a healthy host, a second apply is a no-op
+    expect(hostIntegritySelection(root)).toBeNull();
+    const before = cured;
+    applyCure(root, sel!);
+    expect(fs.readFileSync(path.join(root, HOST_WORKFLOW), "utf8")).toBe(before);
+    void snap;
+  });
+
+  test("missing file / mangled invocation → full canonical floor restore", () => {
+    const root = tmpTree();
+    fs.mkdirSync(path.join(root, ".github", "workflows"), { recursive: true });
+    // (a) file entirely missing
+    let sel = hostIntegritySelection(root);
+    expect(sel).not.toBeNull();
+    expect(sel!.contract.message).toContain("missing entirely");
+    applyCure(root, sel!);
+    expect(sel!.selfVerify!(root).ok).toBe(true);
+    expect(fs.readFileSync(path.join(root, HOST_WORKFLOW), "utf8")).toBe(CANONICAL_HOST_WORKFLOW);
+    // (b) mangled: invocation lost while install survives
+    const mangled = CANONICAL_HOST_WORKFLOW.replace(HOST_INV_INVOCATION, "bun REPLACED-INVOCATION --never");
+    fs.writeFileSync(path.join(root, HOST_WORKFLOW), mangled);
+    sel = hostIntegritySelection(root);
+    expect(sel).not.toBeNull();
+    expect(sel!.contract.message).toContain("mangled");
+    applyCure(root, sel!);
+    expect(fs.readFileSync(path.join(root, HOST_WORKFLOW), "utf8")).toBe(CANONICAL_HOST_WORKFLOW);
+    expect(sel!.selfVerify!(root).ok).toBe(true);
+  });
+
+  test("fail-closed: probe refuses a file with install but no invocation", () => {
+    const root = tmpTree();
+    fs.mkdirSync(path.join(root, ".github", "workflows"), { recursive: true });
+    fs.writeFileSync(path.join(root, HOST_WORKFLOW), ERASED.replace(HOST_INV_INVOCATION, "gone"));
+    expect(verifyHostWorkflow(root).ok).toBe(false);
+  });
+
+  test("anchor-drift + install-missing refuses blind edit → restores floor, not garbage", () => {
+    const root = tmpTree();
+    fs.mkdirSync(path.join(root, ".github", "workflows"), { recursive: true });
+    const drifted = ERASED.replace("One bounded architect cycle", "Renamed step by a lawful future edit");
+    fs.writeFileSync(path.join(root, HOST_WORKFLOW), drifted);
+    const sel = hostIntegritySelection(root)!;
+    applyCure(root, sel);
+    expect(sel.selfVerify!(root).ok).toBe(true);
+    expect(fs.readFileSync(path.join(root, HOST_WORKFLOW), "utf8")).toBe(CANONICAL_HOST_WORKFLOW);
+  });
+});

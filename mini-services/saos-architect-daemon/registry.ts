@@ -196,6 +196,168 @@ export function bunTestReferenceCure(root: string, c: TsContract): CurePlan {
   };
 }
 
+/* ── C5: architect-host-integrity — the daemon heals its own CI host ────────
+ * גל-81 · trace 1a1787f32fee7401 §5/§6 (measured root: erase-commit e60f5d6f,
+ * 2026-10-25T16:40:32Z — the vault-seal writer's `merge -s ours` fallback
+ * promoted a stale local tree and erased the wave-80 `bun install` step from
+ * this workflow → 6 consecutive honest-RED daemon runs auditing starved-env
+ * noise (beforeErrors=644, TS2307 bun:test), not real rot).
+ * The cure is ANCHOR-BASED, never byte-parity: lawful future edits to the
+ * workflow are respected; only the two host invariants are enforced:
+ *   INV1  `bun install --frozen-lockfile`  (the environment must exist)
+ *   INV2  `bun mini-services/saos-architect-daemon/index.ts --once` (the host must invoke the daemon)
+ * Missing file / lost invocation → full restore from the CANONICAL floor
+ * below. Present-but-uninstalled → anchored insert of the dedicated step.
+ * Verified by its own invariant probe (Selection.selfVerify), not tsc.
+ */
+export const HOST_WORKFLOW = ".github/workflows/architect-daemon.yml";
+export const HOST_INV_INSTALL = "bun install --frozen-lockfile";
+export const HOST_INV_INVOCATION = "bun mini-services/saos-architect-daemon/index.ts --once";
+
+const HOST_INSTALL_STEP_BLOCK = [
+  "      - name: Install the real environment (root cure, wave 80/81 — measured 645→0)",
+  "        run: |",
+  "          # נמדד (גל-80): tsc בסביבה-רעבה מציג 645 \"שגיאות\" — כולן רעש-היעדר-תלויות.",
+  "          # גל-81: השלב-נמחק-בידי-כותב-עץ-ישן (e60f5d6f) → 6-ריצות-אדומות-רצופות.",
+  "          # ההחזרה-כאן-היא-הדיימון-מרפא-את-מארחו-בעצמו (self-healing, C5).",
+  "          bun install --frozen-lockfile",
+  "",
+].join("\n");
+
+const HOST_CYCLE_STEP_ANCHOR = "      - name: One bounded architect cycle (AUDIT→SELECT→CURE→VERIFY→LAND→RECEIPT)";
+
+export const CANONICAL_HOST_WORKFLOW = `# saos-architect-daemon · CI HOST — the 24/7 Chief Sovereign Architect on the
+# ONLY true always-on plane of the fleet (GitHub Actions scheduled runs).
+# גל-81 · רצפה-קנונית (floor snapshot): מוחזר-רק-כשהקובץ-חסר-או-משוסע; עריכות
+# חוקיות-עתידיות-מכובדות (הבדיקה-מבוססת-עוגנים, לא-שוויון-בייטים).
+name: architect-daemon
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: architect-daemon
+  cancel-in-progress: false
+
+jobs:
+  cycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout full history (the daemon needs the trunk, not a snapshot)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Lawful identity (identity law v3)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Install the real environment (root cure, wave 80/81 — measured 645→0)
+        run: |
+          bun install --frozen-lockfile
+
+      - name: One bounded architect cycle (AUDIT→SELECT→CURE→VERIFY→LAND→RECEIPT)
+        env:
+          GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          ARCHITECT_ALLOW_PUSH: "1"
+        run: |
+          set -o pipefail
+          bun install --frozen-lockfile
+          bun mini-services/saos-architect-daemon/index.ts --once 2>&1 | tee /tmp/daemon-once.log
+          rc=\${PIPESTATUS[0]}
+          echo "ARCHITECT-DAEMON-ONCE rc=\$rc (raw, un-piped truth)"
+          exit "\$rc"
+
+      - name: Receipt
+        if: always()
+        run: |
+          {
+            echo "### saos-architect-daemon cycle receipt"
+            echo '\`\`\`'
+            tail -5 /tmp/daemon-once.log 2>/dev/null || echo "(no log)"
+            echo '\`\`\`'
+            echo "- verdict classes: landed=pushed cure · no-work=honest null · aborted/verify-fail=RED"
+            echo "- plane: scheduled CI (session-independent, 24/7 per W48 survival law)"
+          } >> "$GITHUB_STEP_SUMMARY"
+`;
+
+export function hostWorkflowIntegrity(root: string): { exists: boolean; hasInstall: boolean; hasInvocation: boolean } {
+  try {
+    const src = fs.readFileSync(path.join(root, HOST_WORKFLOW), "utf8");
+    return {
+      exists: true,
+      hasInstall: src.includes(HOST_INV_INSTALL),
+      hasInvocation: src.includes(HOST_INV_INVOCATION),
+    };
+  } catch {
+    return { exists: false, hasInstall: false, hasInvocation: false };
+  }
+}
+
+/** The invariant probe used as the cure's selfVerify (fail-closed). */
+export function verifyHostWorkflow(root: string): { ok: boolean; detail: string } {
+  const st = hostWorkflowIntegrity(root);
+  if (!st.exists) return { ok: false, detail: "host workflow missing after cure" };
+  if (!st.hasInstall || !st.hasInvocation) {
+    return { ok: false, detail: `invariants missing after cure (install=${st.hasInstall} invocation=${st.hasInvocation})` };
+  }
+  return { ok: true, detail: "host invariants present (install + --once invocation)" };
+}
+
+export function hostIntegritySelection(root: string): Selection | null {
+  const st = hostWorkflowIntegrity(root);
+  if (st.exists && st.hasInstall && st.hasInvocation) return null; // healthy — no work
+  const detail = !st.exists
+    ? "host workflow missing entirely — full canonical restore"
+    : !st.hasInvocation
+      ? "host invocation invariant lost (file mangled) — full canonical restore"
+      : "host install invariant lost (erase-commit class e60f5d6f) — anchored step insert";
+  return {
+    contract: { file: HOST_WORKFLOW, line: 0, col: 0, code: "TS0000", message: `architect-host-integrity: ${detail}` },
+    cureId: "architect-host-integrity",
+    cure: { id: "architect-host-integrity", matches: () => true, build: architectHostIntegrityCure },
+    selfVerify: verifyHostWorkflow,
+  };
+}
+
+export function architectHostIntegrityCure(root: string, c: TsContract): CurePlan {
+  return {
+    files: [HOST_WORKFLOW],
+    describe: `${HOST_WORKFLOW} host-integrity restored by the daemon itself (${c.message}) — erase-commit class countered; invariants: install + --once invocation`,
+    apply(root: string) {
+      const st = hostWorkflowIntegrity(root);
+      const p = path.join(root, HOST_WORKFLOW);
+      if (!st.exists || !st.hasInvocation) {
+        // full canonical restore (floor snapshot) — file gone or mangled
+        fs.mkdirSync(path.dirname(p), { recursive: true });
+        fs.writeFileSync(p, CANONICAL_HOST_WORKFLOW);
+        return;
+      }
+      if (st.hasInstall) return; // already cured — idempotent no-op
+      const src = fs.readFileSync(p, "utf8");
+      if (!src.includes(HOST_CYCLE_STEP_ANCHOR)) {
+        // anchor drifted and install missing → refuse blind edit, restore floor
+        fs.writeFileSync(p, CANONICAL_HOST_WORKFLOW);
+        return;
+      }
+      fs.writeFileSync(p, src.replace(HOST_CYCLE_STEP_ANCHOR, `${HOST_INSTALL_STEP_BLOCK}${HOST_CYCLE_STEP_ANCHOR}`));
+    },
+  };
+}
+
 /* ── the registry ─────────────────────────────────────────────────────────── */
 function isCapitalLowLiquidity(c: TsContract): boolean {
   return (

@@ -12,7 +12,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { parseEvidence, selectContract, TsContract } from "./executive.ts";
-import { CURE_REGISTRY, applyCure, revertToSnapshot, boundaryRewindSelection, Snapshot } from "./registry.ts";
+import { CURE_REGISTRY, applyCure, revertToSnapshot, boundaryRewindSelection, hostIntegritySelection, Snapshot } from "./registry.ts";
 import { canonicalJSON, ReceiptChain, verifyReceipts, writeChainJsonl } from "./receipts.ts";
 import { acquireLock, releaseLock, LockHandle } from "./lock.ts";
 import { commitArgs, rebaseArgs } from "./git-law.ts";
@@ -86,9 +86,12 @@ export function runCycle(root: string = REPO_ROOT, pid: number = process.pid): C
     const before = runTsc(root);
     chain.append({ kind: "audit", at: new Date().toISOString(), errors: before.count });
 
-    /* 2. SELECT — deterministic, curable-first; boundary-rewind pre-flight guards the evidence plane */
+    /* 2. SELECT — deterministic, curable-first; boundary-rewind pre-flight guards
+     * the evidence plane; גל-81: host-integrity pre-flight guards the daemon's
+     * OWN CI host first (erase-commit class e60f5d6f starved the audit — a
+     * starved audit is noise, so the host must heal before real selection). */
     const contracts = parseEvidence(before.evidence);
-    const sel: Selection | null = boundaryRewindSelection(root) ?? selectContract(contracts, CURE_REGISTRY);
+    const sel: Selection | null = hostIntegritySelection(root) ?? boundaryRewindSelection(root) ?? selectContract(contracts, CURE_REGISTRY);
     if (!sel) {
       return finish({ ok: true, verdict: "no-work", beforeErrors: before.count, afterErrors: before.count, detail: `${contracts.length} contracts, none curable by registry` });
     }
@@ -103,25 +106,40 @@ export function runCycle(root: string = REPO_ROOT, pid: number = process.pid): C
       return finish({ ok: false, verdict: "aborted", beforeErrors: before.count, afterErrors: before.count, contract: sel.contract, cureId: sel.cureId, detail: `cure-refused: ${e}` });
     }
 
-    /* 4. VERIFY — errors must strictly decrease, never increase */
-    const after = runTsc(root);
-    if (after.count >= before.count) {
-      revertToSnapshot(root, snap);
-      chain.append({ kind: "aborted", at: new Date().toISOString(), cureId: sel.cureId, reason: `verify-fail ${before.count}→${after.count}`, reverted: true });
-      return finish({ ok: false, verdict: "aborted", beforeErrors: before.count, afterErrors: after.count, contract: sel.contract, cureId: sel.cureId, detail: "verify-fail — byte-identical revert applied" });
+    /* 4. VERIFY — errors must strictly decrease, never increase; גל-81:
+     * self-verifying cures (host-integrity class) verify by their own invariant
+     * probe instead — a workflow restore cannot move tsc, and demanding a
+     * strict decrease would force a lie or a permanent verify-fail. */
+    let afterCount = before.count;
+    if (sel.selfVerify) {
+      const sv = sel.selfVerify(root);
+      if (!sv.ok) {
+        revertToSnapshot(root, snap);
+        chain.append({ kind: "aborted", at: new Date().toISOString(), cureId: sel.cureId, reason: `self-verify-fail: ${sv.detail}`, reverted: true });
+        return finish({ ok: false, verdict: "aborted", beforeErrors: before.count, afterErrors: before.count, contract: sel.contract, cureId: sel.cureId, detail: `self-verify-fail — byte-identical revert applied (${sv.detail})` });
+      }
+      chain.append({ kind: "verified", at: new Date().toISOString(), cureId: sel.cureId, mode: "self-verify", detail: sv.detail });
+    } else {
+      const after = runTsc(root);
+      afterCount = after.count;
+      if (after.count >= before.count) {
+        revertToSnapshot(root, snap);
+        chain.append({ kind: "aborted", at: new Date().toISOString(), cureId: sel.cureId, reason: `verify-fail ${before.count}→${after.count}`, reverted: true });
+        return finish({ ok: false, verdict: "aborted", beforeErrors: before.count, afterErrors: after.count, contract: sel.contract, cureId: sel.cureId, detail: "verify-fail — byte-identical revert applied" });
+      }
+      chain.append({ kind: "verified", at: new Date().toISOString(), cureId: sel.cureId, errors: `${before.count}→${after.count}` });
     }
-    chain.append({ kind: "verified", at: new Date().toISOString(), cureId: sel.cureId, errors: `${before.count}→${after.count}` });
 
     /* 5. LAND — add declared files only, commit, rebase loop, push, ls-remote prove */
     const planFiles = sel.cure.build(root, sel.contract).files.map((f) => path.join(root, f));
     for (const f of planFiles) sh(root, "git", ["add", "--", path.relative(root, f)]);
-    const msg = `fix(architect): ${sel.cureId} — ${sel.contract.file}:${sel.contract.line} ${sel.contract.code} cured (architect-daemon cycle, tsc ${before.count}→${after.count})`;
+    const msg = `fix(architect): ${sel.cureId} — ${sel.contract.file}:${sel.contract.line} ${sel.contract.code} cured (architect-daemon cycle, tsc ${before.count}→${afterCount})`;
     const commitMsg = sh(root, "git", commitArgs(msg));
     if (commitMsg.code !== 0) {
       revertToSnapshot(root, snap);
       const nothing = commitMsg.out.includes("nothing to commit");
       chain.append({ kind: "aborted", at: new Date().toISOString(), reason: nothing ? "idempotent-no-op" : `commit-fail: ${commitMsg.out.slice(0, 200)}`, reverted: !nothing });
-      return finish({ ok: nothing, verdict: nothing ? "no-work" : "aborted", beforeErrors: before.count, afterErrors: after.count, contract: sel.contract, cureId: sel.cureId, detail: nothing ? "cure already present upstream" : "commit failed — reverted" });
+      return finish({ ok: nothing, verdict: nothing ? "no-work" : "aborted", beforeErrors: before.count, afterErrors: afterCount, contract: sel.contract, cureId: sel.cureId, detail: nothing ? "cure already present upstream" : "commit failed — reverted" });
     }
     const sha = sh(root, "git", ["rev-parse", "HEAD"]).out.trim();
 
@@ -146,8 +164,8 @@ export function runCycle(root: string = REPO_ROOT, pid: number = process.pid): C
       }
     }
 
-    chain.append({ kind: "landed", at: new Date().toISOString(), cureId: sel.cureId, sha, pushed, errors: `${before.count}→${after.count}`, detail: pushed ? undefined : lastErr });
-    return finish({ ok: true, verdict: "landed", contract: sel.contract, cureId: sel.cureId, beforeErrors: before.count, afterErrors: after.count, commit: sha, pushed, detail: pushed ? undefined : lastErr });
+    chain.append({ kind: "landed", at: new Date().toISOString(), cureId: sel.cureId, sha, pushed, errors: `${before.count}→${afterCount}`, detail: pushed ? undefined : lastErr });
+    return finish({ ok: true, verdict: "landed", contract: sel.contract, cureId: sel.cureId, beforeErrors: before.count, afterErrors: afterCount, commit: sha, pushed, detail: pushed ? undefined : lastErr });
   } catch (e) {
     chain.append({ kind: "feed-error", at: new Date().toISOString(), reason: String(e).slice(0, 300) });
     return finish({ ok: false, verdict: "feed-error", beforeErrors: -1, afterErrors: -1, detail: String(e) });

@@ -62,6 +62,11 @@ export interface Selection {
   contract: TsContract;
   cureId: string;
   cure: Cure;
+  /** גל-81 · self-verifying cure class (host-integrity): the edit is verified
+   * by its own invariant probe instead of the tsc-decrease gate. A workflow
+   * restore cannot move tsc — demanding a strict decrease would force either
+   * a lie or a permanent verify-fail. fail-closed: probe false → revert. */
+  selfVerify?: (root: string) => { ok: boolean; detail: string };
 }
 
 /** Deterministic ranking: curable-first, then severity, then file/line/col/code. */
