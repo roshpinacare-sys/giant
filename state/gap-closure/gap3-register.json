@@ -1,0 +1,260 @@
+{
+ "schema": "SAOS-GAP3-DORMANT-AWAKENING-REGISTER/1",
+ "at": "2026-10-26T15:35:00Z",
+ "wave": "G77-f",
+ "authority": "owner MASTER DIRECTIVE §4 GAP-3: re-evaluate and awaken dormant fleet assets via verifiable quality gates",
+ "law": [
+  "a dormant verdict is a PLANNED state, never a silenced one (Pulse dormant-decisions law carries over)",
+  "an asset wakes ONLY when its named gate produces green, measured proof — never from a prompt, never from an arm file",
+  "every row cites measured evidence; no evidence = status unmeasured, never guessed",
+  "cross-repo awakening is a handoff, never a unilateral flip from this lane",
+  "re-review horizon: 2026-11-13 (inherited from the dormant census reviewBy)"
+ ],
+ "gateCatalog": {
+  "G-ROLE": "role re-declared in the asset's HEAD README with an owner-briefed, live purpose (why-silence documented)",
+  "G-LANE": "one measured green lane receipt since review — a successful workflow run id OR a commit carrying tests (run/commit id cited)",
+  "G-KEYS": "key-gated assets: owner key custody proof — vault census slot FILLED + adoption-pub match (public keys only, never key material)",
+  "G-CONSUMER": "reference/archive shells: a named custody consumer demands a change (issue or DECISIONS row)",
+  "G-CENSUS": "verdict flipped in Pulse state/dormant-decisions.json with evidence pointer + reviewBy stamp"
+ },
+ "classes": {
+  "fleet-dormant-census": "repos with a standing verdict in Pulse state/dormant-decisions.json (16, decidedAt 2026-10-14T07:15:00Z)",
+  "stale-undecided": "stale24h repos with NO verdict (Pulse census totals.staleUndecided=5) — the re-review alarm population",
+  "giant-internal": "assets inside the giant repo itself"
+ },
+ "assets": [
+  {
+   "asset": "Saosmartwallet",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (key-gated wallet custody shell)",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json + G77-d claim", "value": "prototype label; G77-d lane (feat/hsm-production) is the in-flight production-HSM lane" },
+   "gate": ["G-KEYS", "G-ROLE", "G-LANE", "G-CENSUS"],
+   "greenProofRequired": "owner key re-entry over wallet keys + G77-d HSM suite green + README production capability + census verdict flip",
+   "action": "HANDOFF: G77-d lane (Saosmartwallet repo) — not awakenable from giant"
+  },
+  {
+   "asset": "Defi",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (role-declared why-silenced shell)",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json", "value": "lastCommit 2026-10-11T19:28:27Z role declaration; no live lane" },
+   "gate": ["G-ROLE", "G-LANE", "G-CENSUS"],
+   "greenProofRequired": "owner brief naming a live DeFi lane + one green workflow/tests receipt + census flip",
+   "action": "KEEP-DORMANT (owner-gated) — handoff row to owner"
+  },
+  {
+   "asset": "saos-sovereign-foundry",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (AGENT OPS CONSOLE v1 shell; Actions quota-gated)",
+   "measuredStatus": { "source": "Pulse census fleet", "value": "lastCommit 2026-10-13T00:45:51Z (identity-law sweep); repo now public (census private=0) — the quota-gate excuse has expired; only the owner brief is missing" },
+   "gate": ["G-ROLE", "G-LANE", "G-CENSUS"],
+   "greenProofRequired": "owner brief + one green CI run since review + census flip",
+   "action": "KEEP-DORMANT (owner-gated; quota excuse measured expired 2026-10-26 — census is stale, re-review queued)"
+  },
+  {
+   "asset": "SovereignConsole",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (OFFICE MIRROR keyless shell)",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json", "value": "lastCommit 2026-10-13T00:45:39Z; no workflow lane measured" },
+   "gate": ["G-ROLE", "G-LANE", "G-CENSUS"],
+   "greenProofRequired": "owner brief + one green lane + census flip",
+   "action": "KEEP-DORMANT (owner-gated)"
+  },
+  {
+   "asset": "anchor-baseline",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (custody-protocol pinned reference)",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json", "value": "baseline-integrity workflow exists; pinned reference — dormant by design" },
+   "gate": ["G-CONSUMER"],
+   "greenProofRequired": "a named custody consumer demands a protocol change (issue/DECISIONS row) → then G-LANE",
+   "action": "KEEP-DORMANT (reference by design)"
+  },
+  {
+   "asset": "saos-sovereign-platform",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (LOCAL-MACHINE CONSOLE v2 shell)",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json", "value": "lastCommit 2026-10-13T00:45:55Z; foundry-tests lane quota-gated (excuse expired with public visibility)" },
+   "gate": ["G-ROLE", "G-LANE", "G-CENSUS"],
+   "greenProofRequired": "owner brief + green foundry-tests run + census flip",
+   "action": "KEEP-DORMANT (owner-gated)"
+  },
+  {
+   "asset": "saos-control-center",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (build shell)",
+   "measuredStatus": { "source": "Pulse census fleet actions", "value": "control-center-build workflow_dispatch run 40109614383 = success @ 2026-10-24T16:01:14Z — the shell builds green while dormant; G77-a lane (feat/saos0004-vault-verify) is its live work branch this wave" },
+   "gate": ["G-ROLE", "G-LANE", "G-CENSUS"],
+   "greenProofRequired": "G77-a branch merge + census flip (G-LANE already satisfiable: green build measured)",
+   "action": "HANDOFF: G77-a lane — closest-to-awake dormant asset (green build measured 2026-10-24)"
+  },
+  {
+   "asset": "sandbox-private",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (operator HQ server shell — REALITY: host sandbox wiped)",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json + G76 wipe recovery", "value": "lastCommit 2026-10-13T00:45:48Z; the host it described was destroyed in the sandbox wipe" },
+   "gate": ["G-ROLE", "G-LANE", "G-CENSUS"],
+   "greenProofRequired": "operator HQ re-booted on a live host + scrypt-door green + git-pusher receipt + census flip",
+   "action": "KEEP-DORMANT (host-gated; owner decision)"
+  },
+  {
+   "asset": "Adsmarket",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (static marketing estate, no keys)",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json", "value": "lastCommit 2026-10-13T00:45:11Z identity sweep; content shell by design" },
+   "gate": ["G-ROLE", "G-LANE", "G-CENSUS"],
+   "greenProofRequired": "owner campaign brief + content commit + census flip",
+   "action": "KEEP-DORMANT (owner-gated)"
+  },
+  {
+   "asset": "saos-jummper",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (cross-chain notary & read-only Hive intel, 5 declared lanes)",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json", "value": "lastCommit 2026-10-13T00:46:23Z; declared lanes unmeasured since" },
+   "gate": ["G-ROLE", "G-LANE", "G-CENSUS"],
+   "greenProofRequired": "one of the 5 declared lanes producing a green receipt + census flip",
+   "action": "KEEP-DORMANT (lane-gated)"
+  },
+  {
+   "asset": "Sdk",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (broadcast-archive twin of anchor-baseline)",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json", "value": "lastCommit 2026-10-13T00:45:34Z; name honestly wrong per its own docs" },
+   "gate": ["G-CONSUMER"],
+   "greenProofRequired": "custody consumer demand → then G-LANE",
+   "action": "KEEP-DORMANT (archive by design)"
+  },
+  {
+   "asset": "TruthRail",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (self-declared why-silence: cron removed from dead lanes)",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json", "value": "lastCommit 2026-10-12T19:54:11Z self-declared silence" },
+   "gate": ["G-ROLE", "G-LANE", "G-CENSUS"],
+   "greenProofRequired": "owner brief + one green lane + census flip",
+   "action": "KEEP-DORMANT (self-declared)"
+  },
+  {
+   "asset": "negen",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (owner-signed instrument seed, AUTONOMY.md MAYBE)",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json", "value": "lastCommit 2026-10-12T16:12:22Z" },
+   "gate": ["G-ROLE", "G-KEYS", "G-CENSUS"],
+   "greenProofRequired": "owner executes the MAYBE or withdraws it",
+   "action": "KEEP-DORMANT (owner-instrument)"
+  },
+  {
+   "asset": "sovereign-runner-kit",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (design-law shell: owner device = engine, GitHub = ledger)",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json", "value": "lastCommit 2026-10-12T16:05:14Z; kit referenced by G77-i giant mini-services lane as local-only" },
+   "gate": ["G-ROLE", "G-LANE", "G-CENSUS"],
+   "greenProofRequired": "an owner device boots the kit + one runner receipt lands",
+   "action": "KEEP-DORMANT (device-gated)"
+  },
+  {
+   "asset": "roshpinacare-sys.github.io",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "keep-dormant-on-purpose (org front-door, deploy-on-content-commit)",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json + local clone presence", "value": "dormant-by-design; content-driven" },
+   "gate": ["G-ROLE", "G-LANE"],
+   "greenProofRequired": "content change commit (owner brief) — Pages deploy is automatic",
+   "action": "KEEP-DORMANT (content-gated)"
+  },
+  {
+   "asset": "Project-files",
+   "class": "fleet-dormant-census",
+   "standingVerdict": "revived (2026-10-14) — keeper receipts flowing",
+   "measuredStatus": { "source": "Pulse dormant-decisions.json", "value": "alive automated lane (keeper receipts from public minutes)" },
+   "gate": [],
+   "greenProofRequired": "n/a — already awake by measured receipts",
+   "action": "AWAKE (measured 2026-10-14; no action)"
+  },
+  {
+   "asset": "saos-agents",
+   "class": "stale-undecided",
+   "standingVerdict": "undecided (Pulse census stale24hAnnotated)",
+   "measuredStatus": { "source": "Pulse census fleet", "value": "pushedAt 2026-10-24T19:10:58Z — most recently pushed of the undecided set; needs a verdict row, not silence" },
+   "gate": ["G-ROLE", "G-LANE", "G-CENSUS"],
+   "greenProofRequired": "verdict row with evidence (either revived proof or role-declared why-silence)",
+   "action": "HANDOFF: Pulse census lane — decide within reviewBy 2026-11-13"
+  },
+  {
+   "asset": "agent9-clock",
+   "class": "stale-undecided",
+   "standingVerdict": "undecided",
+   "measuredStatus": { "source": "Pulse census fleet", "value": "pushedAt 2026-10-22T12:45:32Z; agent9 identity archive family" },
+   "gate": ["G-ROLE", "G-CENSUS"],
+   "greenProofRequired": "verdict row (archive-on-purpose vs live clock lane)",
+   "action": "HANDOFF: Pulse census lane"
+  },
+  {
+   "asset": "oss-scanner",
+   "class": "stale-undecided",
+   "standingVerdict": "undecided",
+   "measuredStatus": { "source": "Pulse census fleet", "value": "pushedAt 2026-10-22T09:12:40Z" },
+   "gate": ["G-ROLE", "G-LANE", "G-CENSUS"],
+   "greenProofRequired": "verdict row with evidence",
+   "action": "HANDOFF: Pulse census lane"
+  },
+  {
+   "asset": "saos-owner-channel",
+   "class": "stale-undecided",
+   "standingVerdict": "undecided",
+   "measuredStatus": { "source": "Pulse census fleet", "value": "pushedAt 2026-10-19T06:28:01Z; owner-channel surface — overlaps R344 sovereign-channel which now lives in Pulse state/sovereign-channel" },
+   "gate": ["G-ROLE", "G-CENSUS"],
+   "greenProofRequired": "verdict row (consolidate into Pulse sovereign-channel vs revive its own lane)",
+   "action": "HANDOFF: Pulse census lane + owner"
+  },
+  {
+   "asset": "saos-markets",
+   "class": "stale-undecided",
+   "standingVerdict": "undecided",
+   "measuredStatus": { "source": "Pulse census fleet", "value": "pushedAt 2026-10-18T05:21:09Z; market surface duplicated by Domain dex-beat twins (canonical compute lives there per Autonomy ledger)" },
+   "gate": ["G-ROLE", "G-CENSUS"],
+   "greenProofRequired": "verdict row (retire-as-duplicate vs revive) citing the Domain twins as the measured canonical",
+   "action": "HANDOFF: Pulse census lane + Domain lane"
+  },
+  {
+   "asset": "giant:estate/work/t3*-fresh + t35/ + t36/ + .zscripts/dev.pid + download/README (29 gitlinks)",
+   "class": "giant-internal",
+   "standingVerdict": "RETIRED — DEG9 eviction executed G76-0 (commit 7fc8053, reversible tag legacy/pre-DEG9-eviction)",
+   "measuredStatus": { "source": "giant git history 7fc8053", "value": "29 unresolvable gitlinks + stale pid + template README evicted; tree resolves clean" },
+   "gate": ["G-LANE"],
+   "greenProofRequired": "any restoration attempt must resolve REAL clones (fetch-verified HEAD per repo, zero gitlinks) and carry tests",
+   "action": "AWAKE-BY-REMOVAL (measured: tree resolves clean post-eviction; nothing further awakenable here)"
+  },
+  {
+   "asset": "giant:state/keys vault",
+   "class": "giant-internal",
+   "standingVerdict": "AWAKE (measured)",
+   "measuredStatus": { "source": "state/keys/VAULT-CENSUS.json", "value": "25/25 slots FILLED (llm-brain 3, research 5, cloud-infra 4, steem-custody 8, owner-anchor 2, infra-pat 1, shards 1, + core 1)" },
+   "gate": [],
+   "greenProofRequired": "n/a",
+   "action": "AWAKE (no action)"
+  },
+  {
+   "asset": "giant:state/execution ledger",
+   "class": "giant-internal",
+   "standingVerdict": "AWAKE (refreshed G76-h wave-81; G77-c accessibility lane in flight on Domain)",
+   "measuredStatus": { "source": "state/execution/execution-state.json + ACCESS-RECEIPT-G76H.json", "value": "refreshed wave-81; SITE render accessibility = Domain lane (G77-c), not the ledger itself" },
+   "gate": [],
+   "greenProofRequired": "n/a",
+   "action": "AWAKE (accessibility handoff already registered to G77-c)"
+  },
+  {
+   "asset": "giant:Pulse/state/network.json (gap-records surface)",
+   "class": "giant-internal",
+   "standingVerdict": "WAS-ABSENT → AWAKENED BY THIS BRANCH",
+   "measuredStatus": { "source": "SWARM_STATE.md line 472 referenced 'GAP-1/2/3 open in Pulse/state/network.json' — the giant-side surface carried no such file (measured: no Pulse/** in giant at 0e09257)", "value": "created this branch: Pulse/state/network.json gap-truth record with dated verdicts + evidence pointers" },
+   "gate": ["G-LANE"],
+   "greenProofRequired": "this branch's tests green + the record itself in git",
+   "action": "AWAKED-GIANT-SIDE (this branch)"
+  }
+ ],
+ "handoffs": [
+  { "id": "H-3a", "to": "Pulse census lane", "what": "decide the 5 staleUndecided rows (saos-agents, agent9-clock, oss-scanner, saos-owner-channel, saos-markets) before reviewBy 2026-11-13" },
+  { "id": "H-3b", "to": "G77-d (Saosmartwallet)", "what": "production-HSM gate = the wallet's awakening gate (G-KEYS + G-LANE)" },
+  { "id": "H-3c", "to": "G77-a (saos-control-center)", "what": "closest-to-awake: green build measured 2026-10-24; merge + census flip wakes it" },
+  { "id": "H-3d", "to": "owner", "what": "owner-brief gates on Defi/Adsmarket/TruthRail/SovereignConsole/saos-sovereign-foundry/saos-sovereign-platform/negen/sandbox-private" }
+ ],
+ "awakenedGiantSide": ["giant:Pulse/state/network.json (gap-truth surface)", "giant gap registers under state/gap-closure/ (this branch)"],
+ "reReviewBy": "2026-11-13T00:00:00Z"
+}

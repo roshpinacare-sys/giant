@@ -1,0 +1,286 @@
+{
+ "schema": "SAOS-GAP2-GEAR-GATE-RUN/1",
+ "at": "2026-10-26T15:41:28.378Z",
+ "law": "SAOS-GEAR-GATE/1 — independent giant-side replay of the R329/R330 gearbox law",
+ "authority": "owner MASTER DIRECTIVE §4 GAP-2 (G77-f, wave G77): gear shift ONLY on green test receipts; hold with exact missing evidence is lawful",
+ "inputs": {
+  "gearTable": {
+   "path": "saos-dex:grids/state/policy-gears.json",
+   "protocol": "SAOS-POLICY-GEARS/1",
+   "at": "2026-10-26T14:50:57.615Z",
+   "gearsCount": 3
+  },
+  "receipts": {
+   "army": {
+    "path": "saos-dex:grids/state/army-receipts.jsonl",
+    "stats": {
+     "total": 405,
+     "green": 296,
+     "red": 62,
+     "neutral": 47
+    }
+   },
+   "treasury": {
+    "path": "saos-dex:grids/state/treasury-receipts.jsonl",
+    "stats": {
+     "total": 50,
+     "green": 32,
+     "red": 0,
+     "neutral": 18
+    }
+   },
+   "combined": {
+    "stats": {
+     "total": 455,
+     "green": 328,
+     "red": 62,
+     "neutral": 65
+    }
+   }
+  },
+  "kellyMeasured": {
+   "mode": "kelly",
+   "cap": 3,
+   "gearCap": 25,
+   "informative": 392,
+   "minBeats": 10,
+   "at": "2026-10-26T14:50:57.615Z"
+  }
+ },
+ "measured": {
+  "gitState": {
+   "gear": 1,
+   "greenStreak": 1,
+   "lastVerdict": "ARMY-ACTED",
+   "at": "2026-10-26T14:50:57.615Z"
+  },
+  "historyTailGreenStreak": 1,
+  "lastRedReset": {
+   "at": "2026-10-26T14:20:38.411Z",
+   "kind": "army",
+   "verdict": "ARMY-ACTS-FAILED",
+   "gear": 1,
+   "greenStreak": 0
+  }
+ },
+ "runs": {
+  "primary_ledgers": {
+   "verdict": "HELD",
+   "gear": 1,
+   "greenStreak": 1,
+   "topEarnedGear": 1,
+   "perGear": [
+    {
+     "gear": 1,
+     "earned": true,
+     "requireGreenStreak": 0,
+     "caps": {
+      "maxNotionalPerOpSbd": 3,
+      "maxCycleNotionalSbd": 14,
+      "kellyTightened": true
+     },
+     "missingEvidence": []
+    },
+    {
+     "gear": 2,
+     "earned": false,
+     "requireGreenStreak": 6,
+     "caps": {
+      "maxNotionalPerOpSbd": 3,
+      "maxCycleNotionalSbd": 14,
+      "kellyTightened": true
+     },
+     "missingEvidence": [
+      "greenStreak 1/6 — 5 more consecutive green verdicts required (e.g. ARMY-ACTED/LADDER-ACTED)",
+      "replay sits in gear 1; row 2 unlocks only after the streak requirement above is met on the live road"
+     ]
+    },
+    {
+     "gear": 3,
+     "earned": false,
+     "requireGreenStreak": 12,
+     "caps": {
+      "maxNotionalPerOpSbd": 3,
+      "maxCycleNotionalSbd": 14,
+      "kellyTightened": true
+     },
+     "missingEvidence": [
+      "greenStreak 1/12 — 11 more consecutive green verdicts required (e.g. ARMY-ACTED/LADDER-ACTED)",
+      "replay sits in gear 1; row 3 unlocks only after the streak requirement above is met on the live road"
+     ]
+    }
+   ],
+   "why": [
+    "R330 kelly governor present (cap 3 SBD) — effective per-op cap = min(gear row, kelly); kelly tightens only"
+   ],
+   "failClosed": false,
+   "replaySteps": 455
+  },
+  "army_ledger": {
+   "verdict": "HELD",
+   "gear": 1,
+   "greenStreak": 1,
+   "topEarnedGear": 1,
+   "perGear": [
+    {
+     "gear": 1,
+     "earned": true,
+     "requireGreenStreak": 0,
+     "caps": {
+      "maxNotionalPerOpSbd": 3,
+      "maxCycleNotionalSbd": 14,
+      "kellyTightened": true
+     },
+     "missingEvidence": []
+    },
+    {
+     "gear": 2,
+     "earned": false,
+     "requireGreenStreak": 6,
+     "caps": {
+      "maxNotionalPerOpSbd": 3,
+      "maxCycleNotionalSbd": 14,
+      "kellyTightened": true
+     },
+     "missingEvidence": [
+      "greenStreak 1/6 — 5 more consecutive green verdicts required (e.g. ARMY-ACTED/LADDER-ACTED)",
+      "replay sits in gear 1; row 2 unlocks only after the streak requirement above is met on the live road"
+     ]
+    },
+    {
+     "gear": 3,
+     "earned": false,
+     "requireGreenStreak": 12,
+     "caps": {
+      "maxNotionalPerOpSbd": 3,
+      "maxCycleNotionalSbd": 14,
+      "kellyTightened": true
+     },
+     "missingEvidence": [
+      "greenStreak 1/12 — 11 more consecutive green verdicts required (e.g. ARMY-ACTED/LADDER-ACTED)",
+      "replay sits in gear 1; row 3 unlocks only after the streak requirement above is met on the live road"
+     ]
+    }
+   ],
+   "why": [
+    "R330 kelly governor present (cap 3 SBD) — effective per-op cap = min(gear row, kelly); kelly tightens only"
+   ],
+   "failClosed": false,
+   "replaySteps": 405
+  },
+  "treasury_ledger": {
+   "verdict": "PROMOTED",
+   "gear": 3,
+   "greenStreak": 32,
+   "topEarnedGear": 3,
+   "perGear": [
+    {
+     "gear": 1,
+     "earned": true,
+     "requireGreenStreak": 0,
+     "caps": {
+      "maxNotionalPerOpSbd": 3,
+      "maxCycleNotionalSbd": 14,
+      "kellyTightened": true
+     },
+     "missingEvidence": []
+    },
+    {
+     "gear": 2,
+     "earned": true,
+     "requireGreenStreak": 6,
+     "caps": {
+      "maxNotionalPerOpSbd": 3,
+      "maxCycleNotionalSbd": 14,
+      "kellyTightened": true
+     },
+     "missingEvidence": []
+    },
+    {
+     "gear": 3,
+     "earned": true,
+     "requireGreenStreak": 12,
+     "caps": {
+      "maxNotionalPerOpSbd": 3,
+      "maxCycleNotionalSbd": 14,
+      "kellyTightened": true
+     },
+     "missingEvidence": []
+    }
+   ],
+   "why": [
+    "cross-check: replayed gear 3 != git state gear 1 (the road is the saos-dex writer; this evaluator is read-only)",
+    "cross-check: replayed greenStreak 32 != git state greenStreak 1 — the receipt stream measured here is not the exact stream the road recorded",
+    "cross-check: history-tail green streak 1 != replayed streak 32 (history window is 20 entries; receipts may reach further back)",
+    "R330 kelly governor present (cap 3 SBD) — effective per-op cap = min(gear row, kelly); kelly tightens only"
+   ],
+   "failClosed": false,
+   "replaySteps": 50
+  },
+  "gear_history": {
+   "verdict": "HELD",
+   "gear": 1,
+   "greenStreak": 1,
+   "topEarnedGear": 1,
+   "perGear": [
+    {
+     "gear": 1,
+     "earned": true,
+     "requireGreenStreak": 0,
+     "caps": {
+      "maxNotionalPerOpSbd": 3,
+      "maxCycleNotionalSbd": 14,
+      "kellyTightened": true
+     },
+     "missingEvidence": []
+    },
+    {
+     "gear": 2,
+     "earned": false,
+     "requireGreenStreak": 6,
+     "caps": {
+      "maxNotionalPerOpSbd": 3,
+      "maxCycleNotionalSbd": 14,
+      "kellyTightened": true
+     },
+     "missingEvidence": [
+      "greenStreak 1/6 — 5 more consecutive green verdicts required (e.g. ARMY-ACTED/LADDER-ACTED)",
+      "replay sits in gear 1; row 2 unlocks only after the streak requirement above is met on the live road"
+     ]
+    },
+    {
+     "gear": 3,
+     "earned": false,
+     "requireGreenStreak": 12,
+     "caps": {
+      "maxNotionalPerOpSbd": 3,
+      "maxCycleNotionalSbd": 14,
+      "kellyTightened": true
+     },
+     "missingEvidence": [
+      "greenStreak 1/12 — 11 more consecutive green verdicts required (e.g. ARMY-ACTED/LADDER-ACTED)",
+      "replay sits in gear 1; row 3 unlocks only after the streak requirement above is met on the live road"
+     ]
+    }
+   ],
+   "why": [
+    "R330 kelly governor present (cap 3 SBD) — effective per-op cap = min(gear row, kelly); kelly tightens only"
+   ],
+   "failClosed": false,
+   "replaySteps": 20
+  }
+ },
+ "structuralFindings": [
+  {
+   "finding": "red-verdict driver",
+   "measured": "62/405 army-ladder receipts are ARMY-ACTS-FAILED — each one instantly resets greenStreak to 0 and gear to 1 (R329 downshift law).",
+   "lastRedAt": "2026-10-26T14:20:28.655Z",
+   "measuredElsewhere": "the executed-action states inside failed beats (saos-dex army-receipts.jsonl) are dominated by PARITY-FLOOR-SKIP ('sell <price> < parity-floor <price>' — float-epsilon floor comparison on the parity-floored price turns a legal parity order into a skip; an all-skip beat = ARMY-ACTS-FAILED). Fix belongs to saos-dex (cross-repo handoff)."
+  },
+  {
+   "finding": "kelly expectancy governor tightens the road regardless of gear",
+   "measured": "kelly snapshot mode=kelly cap=3 SBD vs gearCap=25 SBD (informative fills 392 ≥ minBeats 10) — effective per-op cap is kelly 3 SBD even at higher gears; kelly-sizing.json measured NO-EDGE (fullKellyBps −422, Σprofit −0.1279946218682384 USD over 191 informative fills)."
+  }
+ ],
+ "verdictNote": "HELD at gear 1 (streak 1): missing evidence listed per gear in runs.primary_ledgers.perGear — that is the lawful outcome until the live road records the missing green verdicts."
+}

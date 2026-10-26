@@ -1,0 +1,78 @@
+{
+ "schema": "pulse-gap-truth/1",
+ "note": "giant-side gap-truth record — the gap records surface referenced by SWARM_STATE.md line 472 ('GAP-1/2/3 open in Pulse/state/network.json') did not exist in the giant repo (measured at base 0e09257: no Pulse/** path); the LIVE bot census file remains roshpinacare-sys/Pulse state/network.json (bot-written every 30min). This file carries the G77-f measured verdicts where this lane owns paths (giant: Pulse/**, state/**, docs/**). Machine ledgers: state/gap-closure/*.json · docs: docs/gap1-compute-coverage.md, docs/gap2-gear-gate-verdict.md, docs/gap3-dormant-awakening-register.md",
+ "generatedAt": "2026-10-26T15:40:00Z",
+ "wave": "G77-f",
+ "branch": "feat/gap-closure-123",
+ "worker": "G77-f (giant lane: Pulse/**, state/**, docs/**)",
+ "gaps": [
+  {
+   "id": "GAP-1",
+   "name": "COMPUTE WALL",
+   "directive": "internal yield capture must cover private-repository compute overhead",
+   "status": "VERDICT-RECORDED",
+   "verdict": "COVERED-BY-STRUCTURE for the named overhead — measured private repos = 0 of 40 (Pulse census 2026-10-26T14:31:07.280Z), GitHub bills Actions minutes for private repos only ⇒ zero billable private minutes; the historical wall (parkedAt 2026-10-13, 18 repos parked) is retired by visibility, canary green ×6 daily events since 2026-10-20 (Autonomy journal, armed-healthy run 40227856443 @ 2026-10-25T19:51:04Z). Beyond the named overhead the sovereign self-financing census stays OPEN by its own books (gap-to-target $999.9974 of $1000; measured external income $0.0281/24h chain-curation, 88 txid-evidenced ops; trading expectancy NO-EDGE −422bps full-Kelly). No fabricated coverage: un-metered local compute (2 vCPU) is recorded, never priced.",
+   "decidedAt": "2026-10-26T15:40:00Z",
+   "reviewBy": "2026-11-13T00:00:00Z",
+   "evidence": [
+    "state/gap-closure/gap1-coverage-ledger.json (machine ledger, zero unmeasured rows)",
+    "docs/gap1-compute-coverage.md (per-source citations)",
+    "Pulse/scripts/gap1-coverage.mjs (reproducible zero-dep measurement job)",
+    "Pulse:state/network.json totals (repos 40 · private 0 · public 40)",
+    "Autonomy:agents/compute-park-ledger.json + compute-journal.jsonl (public raw fetch)",
+    "saos-dex:grids/state/external-profit-public.json @ 2026-10-26T14:14:33.151Z",
+    "saos-dex:grids/state/kelly-sizing.json @ 2026-10-24T16:55:10.554Z (NO-EDGE)",
+    "saos-dex:grids/state/self-deposit-receipts.jsonl tail (gap $999.9974)",
+    "saos-dex dex-beat f74a4b6a (Σ14250 credits, claimed0)"
+   ],
+   "handoffs": ["H1 giant .github/workflows registration of the coverage beat (outside lane paths)", "H2 saos-dex credits-claiming flow", "H3 owner decision on the $1000 self-financing income path"]
+  },
+  {
+   "id": "GAP-2",
+   "name": "CANARY VOLUME GEAR",
+   "directive": "shift trade volume limits from Canary Gear 1 to Gears 2 & 3 based STRICTLY on green test receipts",
+   "status": "HELD-WITH-MISSING-EVIDENCE (lawful outcome)",
+   "verdict": "Gear 1→2 HELD: greenStreak 1/6 — 5 more consecutive green verdicts required. Gear 2→3 HELD: 11 more required. Gate executed against measured receipts (army 405 + treasury 50 + git-written history): three independent measurements agree with the git state (gear 1, streak 1) — auditor/road zero drift. The road DID reach gear 2 today (streak 6 @ 13:53:29Z, first promotion measured) before the 14:20:38Z ARMY-ACTS-FAILED instant reset. Red driver measured: PARITY-FLOOR-SKIP epsilon ('sell 0.10736 < parity-floor 0.107360', 119 skips / 62 failed beats) — saos-dex fix (handoff H-2a). Treasury ledger alone: 32 green / 0 red (would sit at gear 3 if it fed the road alone). R330 kelly governor: mode=kelly cap=3 SBD vs gearCap 25 (NO-EDGE −422bps) — effective caps stay 3 SBD even at higher gears until expectancy improves. No caps changed; owner gate untouched; the gate is a read-only auditor by law.",
+   "decidedAt": "2026-10-26T15:40:00Z",
+   "reviewBy": "2026-11-13T00:00:00Z",
+   "evidence": [
+    "state/gap-closure/gap2-gate-run.json (executed SAOS-GEAR-GATE/1 run receipt)",
+    "src/lib/gear-gate.ts (independent evaluator) + tests/gear-gate.test.ts (24 deterministic tests green)",
+    "Pulse/scripts/gap2-gate-run.mjs (runner)",
+    "docs/gap2-gear-gate-verdict.md",
+    "saos-dex:grids/state/policy-gears.json @ 2026-10-26T14:50:57.615Z (SAOS-POLICY-GEARS/1 table + state)",
+    "saos-dex:grids/state/army-receipts.jsonl (296 green/62 red/47 neutral)",
+    "saos-dex:grids/state/treasury-receipts.jsonl (32 green/0 red/18 neutral)"
+   ],
+   "handoffs": ["H-2a saos-dex parity-floor epsilon cure (converts instant resets into green beats)", "H-2b treasury-grade verdict discipline as the measured template", "H-2c owner/expectancy: NO-EDGE keeps kelly caps at 3 SBD"]
+  },
+  {
+   "id": "GAP-3",
+   "name": "DORMANT ASSETS",
+   "directive": "re-evaluate and awaken dormant fleet assets via verifiable quality gates",
+   "status": "VERDICT-RECORDED · 1 GIANT-SIDE ASSET AWAKENED · REST GATED/HANDED-OFF",
+   "verdict": "Re-evaluated the full dormant population against verifiable gates (G-ROLE/G-LANE/G-KEYS/G-CONSUMER/G-CENSUS): 14 keep-dormant rows stand (owner/keys/device/content-gated — zero fabricated awakenings), 1 census revival stands (Project-files, keeper receipts), 5 staleUndecided rows (saos-agents, agent9-clock, oss-scanner, saos-owner-channel, saos-markets) require census verdicts before reviewBy 2026-11-13 (measured push dates recorded). Giant-internal: the Pulse/state/network.json gap-records surface measured ABSENT at base and was AWAKENED BY THIS BRANCH; state/keys vault measured AWAKE (25/25 slots FILLED); state/execution ledger AWAKE (wave-81 refresh); DEG9-evicted slots AWAKE-BY-REMOVAL (restoration gate: real clones only). Two measured stalenesses found in the census itself: saos-control-center's build is green (run 40109614383 @ 2026-10-24) while still labeled dormant; the saos-sovereign-foundry/platform 'quota-gated' excuse expired with public visibility.",
+   "decidedAt": "2026-10-26T15:40:00Z",
+   "reviewBy": "2026-11-13T00:00:00Z",
+   "evidence": [
+    "state/gap-closure/gap3-register.json (24-row register, schema-pinned by tests/gap-register.test.ts)",
+    "docs/gap3-dormant-awakening-register.md",
+    "Pulse:state/dormant-decisions.json (16 rows, decidedAt 2026-10-14T07:15:00Z, reviewBy 2026-11-13)",
+    "Pulse:state/network.json census (stale24h 11 · staleUndecided 5 · fleet push dates)",
+    "giant 7fc8053 (DEG9 eviction, tag legacy/pre-DEG9-eviction)",
+    "state/keys/VAULT-CENSUS.json (25/25 FILLED)",
+    "Pulse census fleet: saos-control-center actions run 40109614383 success"
+   ],
+   "handoffs": ["H-3a Pulse census lane: decide the 5 staleUndecided rows", "H-3b G77-d: HSM gate = Saosmartwallet awakening gate", "H-3c G77-a: merge + census flip wakes saos-control-center", "H-3d owner briefs for the 8 owner-gated shells"]
+  }
+ ],
+ "crossGapMeasuredFacts": {
+  "fleetVisibility": "40 repos · 0 private (Pulse census 2026-10-26T14:31:07.280Z)",
+  "computeWall": "canary armed-healthy ×6 since 2026-10-20; last attempt 2026-10-25T19:49:32.099Z",
+  "gearbox": "gear 1 · greenStreak 1 · last ARMY-ACTED @ 2026-10-26T14:50:57.615Z",
+  "kelly": "NO-EDGE · fullKellyBps −422 · kelly cap 3 SBD vs gearCap 25",
+  "externalIncome24hUsd": 0.0281,
+  "selfFinancingGapUsd": 999.9974
+ },
+ "tokenHygiene": "no token used; public raw fetches + local git clones of record only"
+}
