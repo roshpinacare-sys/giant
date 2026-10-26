@@ -392,3 +392,10 @@ Owner directive: PARALLEL EXECUTION, ALL-SOLDIER ACTIVATION, PRODUCTION DEPLOYME
 
 ## Wave law
 Every worker: fail-honest verdicts (LANDED/REFUSED-WITH-CAUSE/BLOCKED), receipts with SHAs, secrets vault-only 0600, no cross-path writes, no waiting on owner.
+
+
+## Claim — cycle-35 (wave 19.93, trace 1a178850450f2e55) — main-instance lane
+- **feat/fx-fixedfloat**: FixedFloat FX rail :3055 — signed ff.io client, method-per-path contract measured live (HMAC-SHA1 sorted canonical), TDD 5/5, fail-closed, hash-chained receipts. Owner key ACCEPTED at signature layer; account-side API permission pending (code:501 measured on all methods). Isolation: mini-services/fx-fixedfloat (new dir, zero overlap with parallel lanes).
+- **boot-heal.sh + heal-pass.sh** (committed cycle-33/34): anti-wipe-class guardian — 3rd round executed this cycle (170 files restored from origin/main 2d4c84e after sandbox restart; pushed cfa91f8).
+- Estate resurrection executed (FleetHQ recloned, boot-services.sh ran, 8 fleet services UP); vault-home unsealed (27 keys, autonomous OK, 2nd time proven).
+- Boundaries: no touch on voice/, soldier-army, issue-forge internals, FleetHQ app code.
