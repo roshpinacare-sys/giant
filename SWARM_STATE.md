@@ -483,3 +483,9 @@ Owner findings absorbed: saos-0004 exists on-chain (created 2026-10-25T17:50:54,
 - **G77-g** saos-runtime — branch `feat/beat-recovery-153` — diagnose sovereign-runtime 14:33Z failure + heartbeat recovery proof + watchdog continuity. Paths: workflows, `scripts/**`, `state/**`.
 - **G77-h** steem — branch `feat/curation-allsoldiers` — all-soldier parallel curation loops (10 valid keys), saos-0004 vault-presence check (honest wound if absent). Paths: `mini-services/**`, `scripts/**`.
 - **G77-i** giant mini-services/saos-architect-daemon + runner-kit — branch `feat/daemon-perpetual` — 24/7 hardening: supervisor auto-restart, receipts cadence, continuous TDD proof. Paths: `mini-services/saos-architect-daemon/**`, runner-kit local only.
+---
+## 2026-10-26 P1 continuation verification — pipeline-recovery agent (faster/narrower re-run)
+- **Verified (read-only, ~15:1xZ):** prior P1 work fully landed + pushed. Domain `status.json` facts block carries 2026-10-26 measured facts (engine :3010 → HTTP 200, height 1747367, 24 wallets, 6/6 HFT mesh alive mode=trade, operator gate enabled, multiSoldierRootCause FIXED) at Domain commit `754dbe7bf`; `quality/report.json` 2026-10-26T15:12:30Z PASS 8/WARN 3/FAIL 0. giant tree clean except other agent's in-flight mini-services/** (untouched).
+- **Live re-checks this session (14:0x–14:41Z):** dex engine revived on 3010 (PID 2856, correct env, flock lock held, log clean, first 200 in ~50s); 6 hft-loop instances re-verified ticking (last tick 14:41:57Z, phase=running, no-edge).
+- **GitHub Actions (giant): not checked this run** (skipped per narrower brief; prior row's API-blocked census verdict stands).
+- **Boundaries:** giant touched = SWARM_STATE.md (this row, append-only) only · zero edits to giant/mini-services/** · Domain untouched (no churn — facts already current, no re-land).
