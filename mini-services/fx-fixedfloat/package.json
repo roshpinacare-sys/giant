@@ -1,0 +1,10 @@
+{
+  "name": "fx-fixedfloat",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FixedFloat FX rail (:3055, loopback) — real signed API, fail-closed, hash-chained receipts. Cycle-35 §4 cross-chain routing head.",
+  "scripts": {
+    "dev": "bun index.ts",
+    "test": "bun test fx.test.ts"
+  }
+}
