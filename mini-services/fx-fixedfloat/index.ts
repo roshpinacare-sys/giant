@@ -1,10 +1,11 @@
-/* fx-fixedfloat · index.ts — FX rail :3055 (loopback) · cycle-35
+/* fx-fixedfloat · index.ts — FX rail :3055 (loopback) · cycle-35 → W130 cure
  * Directive §4 (trace 1a178850450f2e55): cross-chain routing head.
- * Measured live (2026-10-26): ff.io contract = method-per-path, HMAC-SHA1
- * sorted-canonical body, owner key accepted (signature format valid) but
- * returns code:501 "Not have permission" on every method → key pending
- * account-side API enablement. Fail-honest: the rail serves the exact
- * measured state, never fabricates rates. */
+ * MEASURED LIVE (W130 · 2026-10-26): new owner key + HMAC-SHA256(exact body)
+ * signing + curl/browser-UA transport → code:0 · 71 currencies (BTC, USDT,
+ * LTC, TRX, SOL, ETH, XMR, XLM...). STEEM/HIVE are NOT listed on ff.io — the
+ * rail is the BTC/USDT-class treasury conversion head; chain-native harvests
+ * keep flowing via the Steem/Hive internal markets. Fail-honest: the rail
+ * serves the exact measured state, never fabricates rates. */
 import { makeClient, credsFromVault, chainReceipts, verifyChain, type Receipt } from "./fx";
 
 const PORT = Number(process.env.FX_FF_PORT ?? 3055);
@@ -52,7 +53,7 @@ Bun.serve({
         creds: creds.apiKey ? "vault-present" : "absent",
         receipts: chain.length,
         chainValid: verifyChain(chain),
-        note: "measured 2026-10-26: ff.io key accepted (signature valid) · code:501 Not-have-permission → key pending account-side API enablement",
+        note: "measured W130 (2026-10-26): new owner key LIVE — HMAC-SHA256(exact body) → code:0 · 71 currencies · STEEM/HIVE not listed (rail = BTC/USDT-class conversion head)",
       });
     }
     if (url.pathname === "/price") {
@@ -64,6 +65,19 @@ Bun.serve({
       }
       const r = await livePrice(from, to, amount);
       return Response.json(r.body, { status: r.ok ? 200 : r.status });
+    }
+    if (url.pathname === "/ccies") {
+      // MEASURED W130: ccies is the one method that returns code:0 on the live key —
+      // the rail map for the treasury (71 currencies; STEEM/HIVE absent, honest).
+      try {
+        const r = (await client.call("ccies", {})) as FfEnvelope;
+        const list = (r.data as { currencies?: unknown[] })?.currencies ?? (r.data as unknown[]);
+        chain = [...chain, chainReceipts(chain, { kind: "ccies", pair: "universe", rate: String(Array.isArray(list) ? list.length : "?"), ok: r.code === 0 })];
+        return Response.json({ ok: r.code === 0, code: r.code, msg: r.msg ?? null, currencies: list ?? null });
+      } catch (e) {
+        chain = [...chain, chainReceipts(chain, { kind: "ccies", pair: "universe", ok: false })];
+        return Response.json({ ok: false, error: String(e).slice(0, 120) }, { status: 502 });
+      }
     }
     if (url.pathname === "/receipts") {
       return Response.json({ chain, valid: verifyChain(chain) });

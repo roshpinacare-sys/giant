@@ -1,6 +1,6 @@
 /* fx-fixedfloat · fx.test.ts — TDD red-first (cycle-35, no mocks of logic) */
 import { describe, test, expect } from "bun:test";
-import { canonical, sign, makeClient, chainReceipts, verifyChain, type Receipt } from "./fx";
+import { canonical, sign, signBody, makeClient, chainReceipts, verifyChain, type Receipt } from "./fx";
 
 describe("canonical signing law", () => {
   test("sorts keys alphabetically and stringifies deterministically", () => {
@@ -12,22 +12,21 @@ describe("canonical signing law", () => {
   });
 });
 
-describe("HMAC-SHA1 signature (RFC 2202 pinned vector)", () => {
-  test("known vector key/data → de7c9b85b8b78aa6bc8a7a36f70a90701c9db4d9", () => {
-    // RFC 2202 T3: key="key", data="The quick brown fox jumps over the lazy dog"
-    const body = { m: "The quick brown fox jumps over the lazy dog" };
-    const canonicalBody = canonical(body);
-    // sign() hashes canonical(body); assert through the same primitive:
-    const { canonical: c } = { canonical };
-    expect(c({ m: "The quick brown fox jumps over the lazy dog" })).toBe("mThe quick brown fox jumps over the lazy dog");
-    const h = sign({ x: "The quick brown fox jumps over the lazy dog" }, "key");
-    // canonical is "x<data>"; HMAC-SHA1(key="key") over exactly the data string:
-    // derive via node crypto to double-check the primitive itself:
+describe("HMAC-SHA256 signature — MEASURED WIRE LAW (W130)", () => {
+  test("known vector key/data → f7bc83f430538424b13298e6aa6fb143ef4d59a14946175997479dbc2d1a3cd8", () => {
+    // RFC 4231 T2: key="key", data="The quick brown fox jumps over the lazy dog"
     const crypto = require("crypto");
-    const direct = crypto.createHmac("sha1", "key").update("The quick brown fox jumps over the lazy dog").digest("hex");
-    expect(direct).toBe("de7c9b85b8b78aa6bc8a7a36f70a90701c9db4d9");
-    expect(h).toBe(
-      crypto.createHmac("sha1", "key").update(canonicalBody.replace("m", "x")).digest("hex"),
+    const data = "The quick brown fox jumps over the lazy dog";
+    const direct = crypto.createHmac("sha256", "key").update(data).digest("hex");
+    expect(direct).toBe("f7bc83f430538424b13298e6aa6fb143ef4d59a14946175997479dbc2d1a3cd8");
+    // signBody hashes the exact JSON body string — the measured wire law:
+    const bodyString = JSON.stringify({ m: data });
+    expect(signBody(bodyString, "key")).toBe(
+      crypto.createHmac("sha256", "key").update(bodyString).digest("hex"),
+    );
+    // the legacy sha1-canonical primitive remains pinned (audits reference it):
+    expect(sign({ m: data }, "key")).toBe(
+      crypto.createHmac("sha1", "key").update(canonical({ m: data })).digest("hex"),
     );
   });
 });
