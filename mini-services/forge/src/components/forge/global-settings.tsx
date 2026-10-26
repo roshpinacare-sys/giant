@@ -121,7 +121,7 @@ export function GlobalSettings() {
 
   const clearCachesMutation = useMutation({
     mutationFn: async () => {
-      // Endpoint is not implemented server-side yet — we still attempt the
+      // No server-side route for this endpoint yet — we still attempt the
       // DELETE so the moment it lands, this button starts working. Errors
       // are surfaced via toast.
       const r = await fetch("/api/forge/projects", { method: "DELETE" });

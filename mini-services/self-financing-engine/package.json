@@ -1,0 +1,1 @@
+{"name":"self-financing-engine","version":"1.0.0","type":"module","scripts":{"dev":"flock -n /tmp/self-financing-engine.instance.lock bun index.ts","start":"flock -n /tmp/self-financing-engine.instance.lock bun index.ts"}}

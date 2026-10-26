@@ -1,0 +1,72 @@
+# saos-architect-daemon · CI HOST — the 24/7 Chief Sovereign Architect on the
+# ONLY true always-on plane of the fleet (GitHub Actions scheduled runs).
+#
+# Measured law (W48/R216-b, re-proven wave 80): every agent-Bash-spawned local
+# process dies at sandbox session teardown — local daemon boots are session-bounded.
+# The scheduled plane survives sessions, wipes, and operator absence. This workflow
+# runs the daemon's own --once cycle (AUDIT → SELECT → CURE → VERIFY → LAND →
+# RECEIPT) against the giant trunk every 30 minutes:
+#   · audits tsc evidence on the trunk
+#   · cures a registered contract (declared files only), verifies, lands via
+#     FF-only push with ls-remote proof, receipts hash-chained
+#   · no-work → honest green null (never fabricated); aborted/verify-fail → RED
+#     (loud, never silent) — the daemon's own exit-code honesty is the gate.
+# Identity: github-actions[bot] — lawful per identity law v3.
+# Wave 80 · trace 1a173c3929f5d23d §4.
+name: architect-daemon
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: architect-daemon
+  cancel-in-progress: false
+
+jobs:
+  cycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout full history (the daemon needs the trunk, not a snapshot)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Lawful identity (identity law v3)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: One bounded architect cycle (AUDIT→SELECT→CURE→VERIFY→LAND→RECEIPT)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARCHITECT_ALLOW_PUSH: "1"
+        run: |
+          set -o pipefail
+          bun mini-services/saos-architect-daemon/index.ts --once 2>&1 | tee /tmp/daemon-once.log
+          rc=${PIPESTATUS[0]}
+          echo "ARCHITECT-DAEMON-ONCE rc=$rc (raw, un-piped truth)"
+          exit "$rc"
+
+      - name: Receipt
+        if: always()
+        run: |
+          {
+            echo "### saos-architect-daemon cycle receipt"
+            echo '```'
+            tail -5 /tmp/daemon-once.log 2>/dev/null || echo "(no log)"
+            echo '```'
+            echo "- verdict classes: landed=pushed cure · no-work=honest null · aborted/verify-fail=RED"
+            echo "- plane: scheduled CI (session-independent, 24/7 per W48 survival law)"
+          } >> "$GITHUB_STEP_SUMMARY"

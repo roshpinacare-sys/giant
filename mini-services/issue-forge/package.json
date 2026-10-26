@@ -1,0 +1,10 @@
+{
+  "name": "issue-forge",
+  "version": "1.0.0",
+  "private": true,
+  "description": "giant §9 perpetual autonomous engine — native issue-to-PR developer loop: AUDIT (deterministic auditors) → ISSUES (sovereign-forge namespace) → CLAIM (single-flight lockfile) → AUTHOR (Mode-A real characterization tests / Mode-B LLM patch) → VERIFY (bun test + eslint gate) → SHIP (branch, PR, squash merge) → LEDGER. Port 3046, loopback only.",
+  "scripts": {
+    "dev": "bun --hot index.ts",
+    "selftest": "bun run selftest.mjs"
+  }
+}

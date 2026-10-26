@@ -12,6 +12,10 @@ export async function GET() {
   try {
     await ensureEngine();
     const snap = await steemMarketSnapshot();
+    if (!snap) {
+      /* fail-closed כנה: אין-תמונת-שוק (כשל-רשת-קר) — 503, לא-המצאה. wave 19.81 */
+      return NextResponse.json({ error: "תמונת-שוק-סטים אינה זמינה כרגע — נסה שוב" }, { status: 503 });
+    }
 
     // מצב-הצמדה: בריכות-הגישור מול-האורקל (מדידה-חיה, לא-טענה)
     const pairs = await db.dexPair.findMany({
@@ -19,8 +23,8 @@ export async function GET() {
       orderBy: { sort: "asc" },
     });
     const targetBy = new Map<string, number | null>([
-      ["STEEM", snap.oracle.steemUsds],
-      ["SBD", snap.oracle.sbdUsds],
+      ["STEEM", snap?.oracle.steemUsds ?? null],
+      ["SBD", snap?.oracle.sbdUsds ?? null],
     ]);
     const pools = pairs.map((p) => {
       const target = targetBy.get(p.base) ?? null;
@@ -52,7 +56,7 @@ export async function GET() {
     return NextResponse.json(
       {
         ok: true,
-        snapshot: snap,
+        snapshot: snap ?? null,
         pools,
         health,
       },

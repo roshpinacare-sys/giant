@@ -37,3 +37,9 @@ SAOS_ESTATE_DIR=/path/to/estate bun run dev
 3. **חוקי-עיצוב גל-6** — `g-card` · `g-view-in` · `g-scroll` · `Recipe` לכל-פאנל-חדש (docs/design/design-laws.md).
 4. **מפת-החיבור** — `src/lib/giant/empire-map.ts` היא הקנון: כל-ספר-חדש-באימפריה נרשם בה עם-ראיה.
 5. **הערוץ-האחד** — הוראות-הבעלים בפרוטוקול saos-owner-channel (roots sha256) בלבד.
+
+---
+
+## חותמת-רענון אמת-תיעוד (2026-10-24 · מפקד §4)
+
+נמדד: קובץ זה היה דומם מ-2026-10-15 — נתפס ע"י מפקד אמת-התיעוד (`mini-services/doc-truth-sync`, חוק-השלמות: ls-files ∪ הליכת-log). התוכן-שמעלה נבדק ועדיין קנון (חוקי-האמת, מקורות-החיים, נתיבי-האמת). האינדקס-החי של כל-התיעוד: **docs/doc-truth/DOC-TRUTH-2026-10-24.md** · המנוע: `bun mini-services/doc-truth-sync/index.ts --once` (:3062).

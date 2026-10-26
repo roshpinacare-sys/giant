@@ -22,6 +22,7 @@
 import { createHash } from "crypto";
 import fs from "fs";
 import path from "path";
+import { denyIfPublic } from "../lib/vault-auth.ts"; // גל-80 · חוק-הסף-הריבוני (§1 lockdown, trace 1a173c3929f5d23d)
 
 const PORT = 3016;
 const STATE_DIR = path.join(import.meta.dir, "state");
@@ -641,6 +642,10 @@ const server = Bun.serve({
        * dedup לפי-ref: פקודה-כפולה-של-מפיק לא נספרת פעמיים. fire-and-forget ידידותי:
        * תשובה מהירה, מונים-כנים. */
       if (url.pathname === "/tx/ingest" && req.method === "POST") {
+        // גל-80 · חוק-הסף-הריבוני: שער-ציבורי (Caddy X-Real-IP) עם-מוטציה-בלי-טוקן-כספת → 403.
+        // שומר-הלופבק-הישן לבדו אינו-מספיק: מאחורי-reverse_proxy ה-peer הוא-תמיד 127.0.0.1.
+        const deny = denyIfPublic(req, "fleet-economy");
+        if (deny) return deny;
         const ip = srv.requestIP(req);
         const raw = ip ? String(ip.address) : "";
         // גל-83 · תיקון-שומר-לופבק: Bun מחזיר IPv4-ממופה (::ffff:127.0.0.1) —
