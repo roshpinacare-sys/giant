@@ -489,3 +489,13 @@ Owner findings absorbed: saos-0004 exists on-chain (created 2026-10-25T17:50:54,
 - **Live re-checks this session (14:0x–14:41Z):** dex engine revived on 3010 (PID 2856, correct env, flock lock held, log clean, first 200 in ~50s); 6 hft-loop instances re-verified ticking (last tick 14:41:57Z, phase=running, no-edge).
 - **GitHub Actions (giant): not checked this run** (skipped per narrower brief; prior row's API-blocked census verdict stands).
 - **Boundaries:** giant touched = SWARM_STATE.md (this row, append-only) only · zero edits to giant/mini-services/** · Domain untouched (no churn — facts already current, no re-land).
+
+## CLAIM+VERDICT: t62-insurance (agent-9, trace 1a178c6d097fd5e9, 2026-10-26 ~17:4xZ) — independent verification pass, ZERO overlap with G77-a…i paths
+
+- **Paths owned**: agent9-clock (verdict organ) · SWARM_STATE rows · worklog four-copies · local /home/z/.secrets custody only. NO feature-lane writes.
+- **§1 MEASURED**: saos-0004 on-chain VERIFIED via public condenser RPC (id 1979531, created 2026-10-25T17:50:54, four DISTINCT authorities STM59yWn/STM6nZUC/STM5Xgjc/STM7fGYi, 0.600 STEEM + 0.150 SBD — matches owner). Vault deep-derive = G77-a lane (untouched). NEW custody: owner NVIDIA NIM key (ביקורת.txt upload) → /home/z/.secrets/nvidia.env 0600, validity PROVEN (GET /v1/models → 200).
+- **§2 MEASURED CURED**: roshpinacare-sys.github.io/Domain/execution.html 200 + /Domain/execution-state.json 200 (application/json, at=2026-10-26T14:32:00Z wave-81, 7 done/3 partial/3 gaps). Owner's "המקור לא נגיש" = pre-deploy window; page fetch logic defect-free.
+- **§3 MEASURED**: FixedFloat re-probe (owner keys, read-only): ccies+price → 501 "Not have permission" — STILL-BLOCKED, owner account-side API enablement is the one pending lever (signature+key accepted since t61). AMM pools: SAOS/USDS ACTIVE (66,064 swaps, 98.8M/100.5M) + USDS/WSTEEM ACTIVE (57 swaps) — USDS sides exist in the live book; USDS/WSBD reseed stays treasury-locked (G76-a blocker). Public "· · ·" renders = stale view, not pool truth.
+- **§4 MEASURED**: Pulse economy reader 401-blind (FLEET_TOKEN) → gapsOpen:null is reader-blindness, not measured gap-open. Gearbox SAOS-POLICY-GEARS/1 (14:50:57Z): gear2=streak6/gear3=streak12, kelly on, book-law-driven; policy-ledger tail 15:01Z ALLOW×3 — the "shift only on green receipts" law is ALREADY enforced mechanically.
+- **§5 MEASURED**: giant f4d763c S1 deny-by-default gate on daemon+self-financing landed; local :3051 = instance-0 organ (mortality law).
+- Verdict organ (full evidence tables): agent9-clock `t62-verdict-g77-directive.md` (c01883b).
