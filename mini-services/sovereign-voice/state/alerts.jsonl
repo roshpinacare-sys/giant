@@ -154,3 +154,6 @@
 {"ts":1793025033638,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 25 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
 {"ts":1793025327855,"key":"disk-full","sev":"critical","text":"הדיסק ב-91% (סף-85) — מעקב-הדוק","status":"ledger"}
 {"ts":1793025328498,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1793025663395,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (9 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1793025987939,"key":"disk-healed","sev":"warn","text":"שומר-הדיסק: 97%→83% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1793025989040,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
