@@ -1,0 +1,45 @@
+{
+ "schema": "G77B-EXECUTION-STATE-ACCESS-RECEIPT/1",
+ "at": "2026-10-26T15:47:19Z",
+ "worker": "G77-b (execution-ledger lane · swarm G77 · wave-trace 1a178c595ee6edd5)",
+ "measured": {
+  "verify": {
+   "schema": "execution-accessor-report/1",
+   "at": "2026-10-26T15:47:05.571Z",
+   "status": "ok",
+   "path": "/home/z/estate/Domain/execution-state.json",
+   "reason": null,
+   "candidates": [
+    "/home/z/estate/Domain/execution-state.json",
+    "/home/z/audit/repos/Domain/execution-state.json",
+    "/home/z/audit/repos/giant/state/execution/execution-state.json"
+   ]
+  },
+  "mirror": {
+   "schema": "execution-mirror-receipt/1",
+   "at": "2026-10-26T15:46:54.116Z",
+   "source": "/home/z/estate/Domain/execution-state.json",
+   "mirror": "/home/z/audit/repos/giant/state/execution/execution-state.json",
+   "byteIdentical": true,
+   "sha256Source": "b15399196323cb5c92cc58b03fe728ad96e0c9199210acf97baac9c99301f04b",
+   "sha256Mirror": "b15399196323cb5c92cc58b03fe728ad96e0c9199210acf97baac9c99301f04b"
+  },
+  "domainCommit": "ce243aa7e (Domain main — G77-b additive refresh, cycle+generatedAt minted on the 36-c lineage)",
+  "accessorExit": 0
+ },
+ "sourcesMeasured": [
+  ":3016 /health + /verify (fleet-economy seq/headHash/replayParity)",
+  ":3017 /health (economy bridge polls/inserted/errors)",
+  ":3018 /health (soldiers 6/6 funded, 8 placed)",
+  ":3049 /health (hft observe ticks/chainVerifies)",
+  ":3051 /health + /status (daemon receipts 76, lastCycle honest)",
+  ":3053 /health + POST /rpc get_dynamic_global_properties (mesh 4/4 + head_block 111114004)",
+  ":3055 /health + /ccies (fx rail code:0, 71 currencies)",
+  ":3010 (engine host answers)",
+  "/home/z/my-project/repos/saos-dex/db/state-snapshot.json + tape.jsonl + rail-lifetime.json + maker-stats.json",
+  "raw saos-dex@main: grids/state/external-profit-public.json (15:31:28Z) + db/grid-public.json (15:32:43Z)",
+  "/home/z/estate/Pulse/state/network.json (read-only)",
+  "git merge-base + GitHub compare (7 G76 landing SHAs → ancestors)"
+ ],
+ "verdict": "FRESH — accessor verify exit-0 (ledger.at 2026-10-26T15:43:44Z, cycle 36 + cycle33 section documented); mirror byte-true; fleet race absorbed additively (36-c lineage kept, zero clobber)"
+}

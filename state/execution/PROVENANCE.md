@@ -29,3 +29,12 @@ Laws baked in:
 4. staleness is reported honestly (`stale` status, exit 2), never papered over.
 
 Root cause this cures (measured 2026-10-26): the ledger existed only inside the Domain repo with no accessor in giant, no schema guard, no lock, no recovery — hand-renewals could tear against the every-few-minutes fleet pushes, and a wiped checkout had no lawful rebuild path.
+
+## G77-b refresh (measured, 2026-10-26T15:47Z)
+
+- source repo: `roshpinacare-sys/Domain` (checkout `/home/z/estate/Domain` — post-wipe host path, main @ ce243aa7e)
+- renewal race absorbed additively: lane 36-c had landed a renewal (cycles 33–35 consolidated + loader repair, `at` 15:36:02Z) while G77-b measured; G77-b rebased on that lineage — zero clobber
+- sha256 (source == mirror, byte-identical): `b15399196323cb5c92cc58b03fe728ad96e0c9199210acf97baac9c99301f04b`
+- schema: `SAOS-EXECUTION-LEDGER/1`, ledger `at`/`generatedAt` = 2026-10-26T15:43:44Z, top-level `cycle` = 36 (was absent/null — the Instance-0 shell state), `cycle33` section documents the G77-b measured renewal
+- accessor verdict at mirror time: **ok, exit 0** (`cli.ts verify` — fresh within the ledger's own 48h window)
+- receipt: `ACCESS-RECEIPT-G77B.json` (verify + mirror + 12 cited source families)

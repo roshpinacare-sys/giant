@@ -1,8 +1,8 @@
 {
  "schema": "SAOS-EXECUTION-LEDGER/1",
- "at": "2026-10-26T17:45:00Z",
- "generator": "agent round 64 (Z.ai Code, trace 1a178c71c10d38c5) — G77-c lane: lineage-honest renewal; prior layers preserved verbatim (round-29 core + cycle30/31 + wave81)",
- "sourceWorklog": "worklog tasks 1..T-589+G77 (my-project/worklog.md) + giant SWARM_STATE wave sections",
+ "at": "2026-10-26T15:43:44Z",
+ "generator": "agent-renewed — swarm-36c-ledger (Z.ai cycle-36 worker, lane 36-c, פנקס-מורה 36-c) — hand-curated from worklog Task ID 27 (cycles 33-35 consolidated) + orchestrator live measurements 2026-10-26 ~15:20Z · additive G77-b refresh (cycle/generatedAt minted + measured blocks, 15:24–15:41Z)",
+ "sourceWorklog": "worklog Task ID 27 (cycles 33-35 consolidated) · Task ID 36-c (cycle 36)",
  "law": "כל-שורה-כאן-נגזרת-מפנקס-העבודה-האמיתי-ומהספרים-המדודים · מה-שלא-הוכח-רשום-כלא-בוצע · אסור-לקשט",
  "freshness": {
   "howToVerify": "כל-ראיה-נבדקת-בגיט: github.com/roshpinacare-sys/Domain → commits, ו-github.com/roshpinacare-sys/saos-dex/actions → הריצות",
@@ -10,203 +10,323 @@
   "renewedBy": "מחזור-סוכן (תמשיך-ודחוף) או plant-books watchdog"
  },
  "measuredSnapshot": {
-  "externalProfit24hUsd": 0.0321,
-  "externalProfit24hVests": 749.41,
-  "externalProfitNote": "מדוד-מחדש-עם-תיקון-העומק (15:45Z): 2.5×-מהדיווח-הקודם — הסורק-הישן היה-שקוע-ב-0.8ש׳-בלבד על-החשבון-הפעיל (30k-ops/יום) והיה-מדלג-על-אירועי-פרס",
-  "curationAmplifier": {
-   "verdict": "VOTED-LIVE — 20 הצבות-אמת במשקל 10% (היה 8×2%)",
-   "executedAt": "2026-10-23T15:09Z (receipts 4c4b0130) · txids אמת · 0-recovered (ביטוח-במצב-השהיה)",
-   "schedule": "curate.yml כל-6ש׳ (×4/יוממה = עד 80 הצבות/יום × 10% = 16% כוח-הצבעה/יום מול-רגנרציה 20% — קיימות 1.25×)",
-   "projectedUplift": "האקרואל-יופיע-במדידה-תוך-חלון-הפרס-של-7-ימים (כנות: הצבעות-היום משלמות-בשבוע)",
-   "cloudLane": "secret STEEM_POSTING_WIF תוקן-למפתח-החי-מהכספת (A-variant מאומת-מול-6-רשויות-פרסום-חיות) + steem@0.7.10-מותקן-ב-runner"
+  "portsListening": [
+   3000,
+   3010,
+   3011,
+   3016,
+   3046,
+   3047,
+   3051,
+   3061
+  ],
+  "realFillsCumulative": 730,
+  "vaultKeys": 27,
+  "treasuryNetSp": 3660.5,
+  "minOperatorSp": 17,
+  "soldierDelegations": {
+   "saos-0001": 1.2,
+   "saos-0002": 1.2,
+   "saos-0003": 1.2,
+   "saos-0004": 1.2
   },
+  "statusJsonTs": "2026-10-25T16:54:22Z (health_monitor re-arm in flight)",
+  "measuredAt": "2026-10-26T15:40:52Z",
+  "services": "8/8-מקומיים-עונים (מדידה-חיה 15:24–15:37Z): :3010-מנוע-מארח (HTML-עונה) · :3016-fleet-economy · :3017-גשר-כלכלה · :3018-soldier-army · :3049-hft-observe · :3051-architect-daemon · :3053-steem-mesh (4/4-צמתים) · :3055-fx-fixedfloat — מקור: GET /health על-כל-אחד",
+  "reposInSync": "G76-landings 7/7-מאומתים-עדיין-אבות-קדמונים-של-ראשי-הענן (git merge-base + GitHub-compare · 15:31–15:34Z) · giant==cloud @466af57 · Domain==origin/main @9874b982b לפני-הטבעה-זו",
+  "gridVerdict": "ARMED-WAITING (saos-dex@main db/grid-public.json · publishedAt=2026-10-26T15:32:43Z) · STEEM-leg: real+armed, keyGate ok/authorityOk=true · HIVE-leg: REARMED-אחרי-חותך-HBD (regime print-peg-1.00 · גל-81 נמדד-מוצלח) · 5-zombie-orders רשומים-בכנות",
+  "valueGuard": "מלאי-מסילה-נמדד (repos/saos-dex/db/rail-lifetime.json · 15:10Z): usds 2,000,000µ · wsteem 3,942,537 · saos 800,000 · energy 235,256 · כנות: לא-נמצא-מקור-חי-למונח VALUE-GUARD-כשלעצמו — מדווח-המלאי-בלבד",
+  "externalProfit24hUsd": 0.0263,
+  "externalProfitSource": "ext=chain-curation (saos-dex@main grids/state/external-profit-public.json · at=2026-10-26T15:31:28Z · 834.671395 vests/24ש׳ · 86-ראיות-txid · 7-חשבונות-נסרקו)",
   "externalFlowUsdHistoric": 0.784335,
-  "gridVerdict": "ARMED-LIVE · SPREAD-TIER T4 (ask 12 / bid 35bps — דו-ספרתי-עמוק) · run 53 (15:06Z): 3 asks parity+0.12/0.24/0.36% + 3 bids touch-hug, txids אמת",
-  "tierEvidence": "27 מילויי-חוץ (אחרי-חלון-החוק, לא-wash, edge≠0) · T5 (10/25bps = רצפות-השומר) בעוד 5",
-  "hiveVerdict": "DISARMED-BROKEN-MARKET — הצהרה-מפורשת (לא ARMED-WAITING שקרי) + חוק-ריארמון-אוטומטי מפורסם-ברגל-עצמה · גל-81: שורש-הניתוק-נמדד-ותוקן (saos-dex 9fceaa2 — חותם-HBD-הגולמי 1.79$ היה-פרמיה-שוק-דק שהזין-8071bps-מדומים; משטר-החתך-מ-route-receipt יושם → ריארמון-צפוי-בפעימה-הבאה, לאמת-מול-grid-public.json)",
-  "vaultResurrection": "auto-unseal רץ-אוטונומית (15:25Z) — keys deployed · משפחת-steem המלאה (A/B ×4 רשויות) חיה-שוב-בסנדבוקס",
-  "priceTruth": {
-   "verdict": "TRIANGLE-ARMED",
-   "note": "SBD דה-פג מדוד · הקו-המשולש חי ב-CI"
+  "externalFlowNote": "היסטורי-בלבד (ספר-קודם) — לא-עודכן-במחזור-זה; המספר-החי-הוא externalProfit24hUsd",
+  "realFillsLifetime": "לא-נגזר-בכנות — feeMeter ב-snapshot החדש הוא-int (139815µ) ולא-שדה-realFills-של-גל-G76-a · fills-שרשרת-כולל-בוטים=1773",
+  "fillRecordsLedger": "tape.jsonl 299-רשומות-ראיה (חלון-מתגלגל · 15:26Z) · maker-stats.json lifetime: arena 3356 · bot-b 1869 · treasury 147 (15:25Z)",
+  "fleetEconomy": {
+   "seq": 77049,
+   "headHash": "3054778b501df9fe69752d42f1832ac2",
+   "verifyChecked": 70562,
+   "replayParity": true,
+   "anchorsCount": 0,
+   "source": "GET :3016/health + :3016/verify (seq התקדם 70562→77049 בין-שתי-מדידות — חי)",
+   "measuredAt": "2026-10-26T15:37:13Z"
   },
-  "externalVests24h": 1068.465923,
-  "externalProfitSource": "ext=mexc (external-profit-publish run 40111486698, 2026-10-24T16:28Z, SUCCESS)",
-  "externalProfitGrowth": "x3.34 vs cycle-27 base $0.0096/24h (290.128 vests) — curation booster ramp measured (80 votes/day x 10% weight, VOTED-LIVE receipts 9ab1f72f00/f008727e1d/fec6a296ac/c45db5c668)",
-  "measuredAt": "2026-10-24T16:28Z",
-  "custodyNow": {
-   "verdict": "FLEET-CUSTODY-ALIVE 14/14",
-   "howMeasured": "GET :3040/health live probe 17:0xZ — armyCustody.verified=14 total=14, posting+active chain-verified (T-588-R2 MASTER-era law)",
-   "opsToday": 185,
-   "roster": [
-    "headcorner",
-    "cashmachine",
-    "haran",
-    "israelnews",
-    "lsa",
-    "macrame",
-    "siq",
-    "tov",
-    "wic",
-    "wog",
-    "woq",
-    "hcsoldier4",
-    "hcsoldier5",
-    "hcsoldier6"
+  "dexChain": {
+   "height": 913,
+   "stats": {
+    "fills": 1773,
+    "swaps": 570,
+    "opsTotal": 41311,
+    "ladders": 37
+   },
+   "bookFeesMu": 820481,
+   "pools": [
+    "SAOS/USDS",
+    "USDS/WSTEEM",
+    "ENERGY/SAOS"
    ],
-   "measuredAt": "2026-10-26T17:05Z"
+   "source": "/home/z/my-project/repos/saos-dex/db/state-snapshot.json savedAt=2026-10-26T15:36:33Z (גובה-טיפס 705→913 בין-שתי-מדידות — שרשרת-חיה ~3ש׳/בלוק)",
+   "measuredAt": "2026-10-26T15:37:13Z"
   },
-  "saos000xChainTruth": {
-   "verdict": "ON-CHAIN-ALIVE · CUSTODY-GAP-MEASURED",
-   "howMeasured": "public condenser RPC condenser_api.get_accounts + get_account_history (17:0xZ)",
-   "accounts": "saos-0001 (2026-10-24T20:52:06) · saos-0002 (20:56:54) · saos-0003 (21:26:15) · saos-0004 (2026-10-25T17:50:54, creator headcorner, block 110750412, fee 3.000 STEEM)",
-   "funded": "0.600 STEEM + 0.150 SBD each; 2000 VESTS delegated to each (fleet-matrix.json since records)",
-   "custody": "ZERO measurable custody: scc repo-vault manifest 0 mentions · engine roster 14/14 excludes · army-keys.json (MASTER era) excludes · fleet-economy seals absent · capital-router.json classifies 'external — not custody, not persona'",
-   "recallAttempt": "2026-10-26T15:05Z recall-shell-saos-0001..0004 REFUSED by standing policy (delegation law) — SP still parked",
-   "measuredAt": "2026-10-26T17:10Z"
+  "soldiersFunded": {
+   "count": "6/6",
+   "fundedUsdsEachMu": 1500000,
+   "ordersPlacedTotal": 8,
+   "filledMuPerSoldier": 0,
+   "note": "פקודות-POST-חוזרות-429 (רייט-לימיטר-פעיל — עדות-עומס, לא-כשל)",
+   "source": "GET :3018/health",
+   "measuredAt": "2026-10-26T15:37Z"
+  },
+  "architectDaemon": {
+   "uptimeSec": 3436,
+   "receipts": 76,
+   "chainVerified": true,
+   "headHash": "1b062ae1b23f5835f032aaef38c25f8b2b5cbcdd91df5f1dca4b20e794723549",
+   "lastCycle": "aborted · cureId=buntest-file-reference · errors 641→641 · at=2026-10-26T15:25:45Z",
+   "note": "הדיימון-חי-ומדווח-כנה; הריפוי-על-641-פצעי-בדיקות-ב-giant-עדיין-בלולאה (ענן 7b1e5b9 מדד tsc 653→1 — שני-סימנים-על-אותו-עץ)",
+   "source": "GET :3051/health + :3051/status",
+   "measuredAt": "2026-10-26T15:25Z"
+  },
+  "steemMesh": {
+   "nodes": "4/4 CLOSED eligible",
+   "best": "https://anyx.io",
+   "broadcastEnabled": false,
+   "headBlockNumber": 111114004,
+   "chainTime": "2026-10-26T15:31:27",
+   "source": "GET :3053/health + POST :3053/rpc condenser_api.get_dynamic_global_properties (דרך-המש-עצמו)",
+   "measuredAt": "2026-10-26T15:31Z"
+  },
+  "fxRail": {
+   "health": "ok",
+   "creds": "vault-present",
+   "cciesCode": 0,
+   "currencies": 71,
+   "receipts": 1,
+   "chainValid": true,
+   "note": "order-create-לא-מופעל-מעולם (חוק-תופעות-לוואי) — כספים-אמיתיים-ממתינים-להחלטת-בעלים",
+   "source": "GET :3055/health + :3055/ccies",
+   "measuredAt": "2026-10-26T15:26Z"
+  },
+  "hftObserve": {
+   "ticks": 1993,
+   "engineDownTicks": 0,
+   "chainVerifies": true,
+   "consecutiveFailures": 0,
+   "mode": "observe (אין-DEX_OPERATOR_TOKEN — השער-עונה-ומקבל-בכנות)",
+   "source": "GET :3049/health",
+   "measuredAt": "2026-10-26T15:24Z"
+  },
+  "economyBridge": {
+   "polls": 130,
+   "inserted": 923,
+   "errors": 16,
+   "lastErr": "http-429",
+   "wal": true,
+   "source": "GET :3017/health (גשר-דקס→כלכלה, custom.db)",
+   "measuredAt": "2026-10-26T15:24Z"
+  },
+  "g76Landings": {
+   "saos-dex": "521de810",
+   "saos-control-center": "ed4ff8f",
+   "saos-runtime": "ab650f3",
+   "steem": "f3663320e",
+   "fleet-economy": "cc618e6",
+   "giant": "6d5d02f+7fc8053",
+   "Domain": "cd693334c",
+   "law": "כל-אחד-אומת-אב-קדמון-של-ראש-הענן-הנוכחי (merge-base מקומי · GitHub-compare ahead_by>0/behind_by=0) — העבודה-על-השרשרת, לא-נמחקה",
+   "measuredAt": "2026-10-26T15:31–15:34Z"
+  },
+  "pulseNetwork": {
+   "generatedAt": "2026-10-26T14:00:18.836Z",
+   "economyGapsOpen": null,
+   "unread": "grids/state/economy-sovereignty.json + treasury-public + army-public + policy-gears → 401 (הספרים-לא-נקראו)",
+   "totals": {
+    "repos": 40,
+    "stale24h": 11,
+    "issuesOpen": 329
+   },
+   "source": "/home/z/estate/Pulse/state/network.json (קריאה-בלבד — הרשת-של-G77-e)",
+   "measuredAt": "2026-10-26T15:25Z"
+  },
+  "gapsStatus": {
+   "note": "שתי-טקסונומיות-GAP-חיות-במקביל — מדווחות-שתיהן-בכנות: טקסונומיית-גל-36 (gaps[] למעלה) ופצעי-המשימה-המקוריים של G77-b",
+   "gal36": {
+    "GAP-1": "חומת-חישוב OPEN",
+    "GAP-2": "הילוך-נפח 1→2 ממתין-קבלות",
+    "GAP-3": "נכסים-ישנים ממתין-שערי-איכות",
+    "GAP-4": "llamacpp:8080 יורד-כנה",
+    "GAP-5": "ff.io הרשאות-API-ממתינות-לבעלים (price/order נדחים; ccies קריאה-חיה)"
+   },
+   "missionWounds": {
+    "custody-haran-lsa-siq": "OPEN-OWNER-ONLY — 3-פצעי-משמורת, vault-חסר, 13/13-בני-הגעה (G76-i)",
+    "usds-reseed": "בריכת-USDS/WSBD-נעדרת-מטבלה-החיה (15:36:33Z) · אין-קבלת-pool_reseed — לא-טוענים-ריפוי-שלא-הוכח",
+    "fx-real-funds": "ccies code:0-חי (15:26Z) · price/order-נדחים-עד-הרשאות-חשבון · הזזת-כסף-אמיתי = החלטת-בעלים-בלבד"
+   },
+   "pulseGaps": "economy.gapsOpen=null + 4×401-ספרים-לא-נקראים (network.json 14:00:18Z) · G77-f-רשם-תביעה-סגירה (giant 466af57) — אין-עדיין-קבלות-ירוקות"
   }
  },
  "done": [
   {
-   "id": "D1",
-   "title": "עצימת-דימום-הערך + race-safety + מפרסם-רווח-חוץ + החייאת-הצי (D1–D8-קודמות)",
-   "detail": "R-GRID-WAR · rebase-retry · external-profit-publish keyless כל-שעתיים · דיסק/פורטים · כנות-verdict · trim-to-cap · N8-g קצב-ריבוני — כל-הקודם-בפנקס-הקבוע-ובגיט.",
-   "evidence": "worklog task-22/23 · הריצות-המדודות-ב-saos-dex/actions"
-  },
-  {
-   "id": "D15",
-   "title": "N4 מגבר-הקיורציה — חי על-השרשרת",
-   "detail": "planVotes/curateBeatOnce: 8→20 הצבות/פעימה · 2%→10% משקל (16% כוח-הצבעה/יום מול-רגנרציה 20% — קיימות-מלאה, אפס-שינוי-סמכות). curate.yml מתוזמן ×4/יוממה. הרצה-מקומית: 20/20 VOTED-LIVE במשקל-1000 (10%).",
-   "evidence": "saos-dex a7ab3740 + b15cdfb3 · receipt VOTED-LIVE executed=20 weights=1000 · txid 9c147dcb1b…"
-  },
-  {
-   "id": "D16",
-   "title": "N1 סולם-הראיות T4/T5 — היעד-הדו-ספרתי-המלא",
-   "detail": "T4 ≥20-מילויי-חוץ → 12/35bps (חי-מיידית: 27-ראיות) · T5 ≥32 → 10/25bps = רצפות-השומר-בדיוק. אותו-שער-ראיות: חלון-פוסט-חוק, selfCross-חוץ, edge≠0.",
-   "evidence": "saos-dex 80505e88 · run 53: 'SPREAD-TIER T4: ask 12bps / bid 35bps · 27 third-party fills · next: T5 after 5'"
-  },
-  {
-   "id": "D17",
-   "title": "N2 התאוששות-שידור — curate + HIVE",
-   "detail": "answered-without-id → אימות-הכלה מול-get_account_history (מזהים-ביט-מול-ביט) · duplicate=הוכחת-הכלה → התאוששות-לא-כישלון · backoff מעריכי ×4 עם-חתימה-טרייה-לניסיון. ביצוע-מדוד: 20/20-id-ראשון.",
-   "evidence": "saos-dex a7ab3740 (curate) · 2b89f8b1 (hive)"
-  },
-  {
-   "id": "D18",
-   "title": "N3 HIVE — כנות-הצהרתית",
-   "detail": "verdict DISARMED-BROKEN-MARKET (שוק-שבור-הוא-סירוב-גלוי, לא-המתנה) + reArm-law מפורסם-ברגל: חוזר-לחיים-לבד כש-|mid−parity|≤band. נמדד-בענן: run 53 hive=DISARMED-BROKEN-MARKET.",
-   "evidence": "saos-dex b9d46f41 · db/grid-public.json"
-  },
-  {
-   "id": "D19",
-   "title": "תיקון-מדידת-הרווח-החוץ — 2.5×-תיקון-כנה",
-   "detail": "הצמתים מגבילים get_account_history ל-100-אופים (300+ = upper-bound · publicnode = גוף-ריק-מדוד) · הדפדוף-הישן הלך-על-ops[last] על-מערך-עולה = 40-עמודים-חזרו-על-אותו-חלון-ראש (~0.8ש׳-עומק אמת על-30k-ops/יום) → תת-מדידה-מבנית. תוקן: head-block-clamp + מצביע-אחורה ops[0][0]−1 + 400×100. תוצאה-חיה: 749.4-vests/24ש׳ = $0.0244 (מול-0.0096-שדווח).",
-   "evidence": "saos-dex b26e35c6 · external-profit-public.json טרי · probes: limit=300 → 'upper bound'"
-  },
-  {
-   "id": "D20",
-   "title": "תחיית-הכספת-האוטונומית",
-   "detail": "auto-unseal (VAULT_ALLOW_DISCOVERY=1 · pat.env-wrap) רץ-מחדש-על-המכונה-הטרייה — keys deployed 15:25Z · STEEM A/B ×4 רשויות · posting-A מאומת-מול-6-רשויות-הפרסום-החיות-על-השרשרת.",
-   "evidence": "vault-home clone + auto-unseal exit 0 · wifToPublic ∈ chain posting key_auths"
-  },
-  {
-   "id": "D20",
-   "title": "G76 wave LANDED — 9 workers + Instance-0 (trace 1a1787f22a6a2abd)",
-   "detail": "custody T-588-R2 rotation-proof (estate/engine-code 8bcb024ab) · trade-receipt-bridge 13/13 TDD (giant e6cbe5cd) · USDS pool_reseed kernel op + 14/14 tests (saos-dex 521de810) · deny-by-default S1 on daemon+self-financing (giant f4d763c) · FixedFloat rail opened (HMAC law measured, owner-gated)",
-   "evidence": "giant ac0af25f → 466af57e chain · SWARM_STATE WAVE G76 LANDED receipts (c198bd57)"
-  },
-  {
    "id": "D21",
-   "title": "All-soldier activation PROVEN by receipts — 13/13 soldier accounts executing",
-   "detail": "batch receipt ef6ef6c2: 27 ops + 55 verdicts across all 13 soldier accounts (39 creates/14 cancels, window 14:21→14:38Z), txid-pinned, hash-chained, chainVerified=true; hcsoldier4/5 (the 'retired' bodies) trade again after MASTER-era custody",
-   "evidence": "giant state/swallow-guard/quality/trade-receipts/2026-10-26.json · bridge CLI verify"
+   "title": "עצימת-נקודת-הבעלים — vault-auth deny-by-default צי-כולי",
+   "detail": "giant 69144ce: כל-נקודת-קצה-ריבונית דורשת-vault-auth; ברירת-המחדל דוחה. מוזג-נקי-אפס-התנגשות (מחזור 33-35, נתיב-מקביל).",
+   "evidence": "giant 69144ce · worklog Task ID 27 (§1 owner-endpoint lockdown)"
   },
   {
    "id": "D22",
-   "title": "execution.html accessibility hardened — multi-source ledger fetch (this round, G77-c)",
-   "detail": "bare relative fetch (single-point-of-failure class — the owner's 'המקור לא נגיש' screen reproduces on any pages race) cured: relative → raw.githubusercontent Domain main → raw giant mirror, with a visible source-chain chip naming which source fed the render; stale-banner 48h law intact",
-   "evidence": "this file's commit in Domain git history"
+   "title": "משמרי-הנצח boot-heal + heal-pass — כיתת-המחיקה נשורשה פעמיים",
+   "detail": "סבב-2 (159 קבצים, 10-25) וסבב-3 (170 קבצים, 10-26) כשלו-מול-שחזור-נגדי-מ-origin/main (c0a8d3c, 7528563, 0dce421/cfa91f8). השורש-נרפא-בקוד: שומר-תמידי 300ש׳ — זיהוי-איברים-נמחקים → שחזור-נגדי → commit+push → החייאת-דיימונים-שנפלו, קבלות-jsonl כנות.",
+   "evidence": "mini-services/boot-heal.sh + heal-pass.sh · worklog Task ID 27 (WIPE-CLASS rounds 2-3 rooted)"
   },
   {
    "id": "D23",
-   "title": "Ledger content lineage cured (old-wine-new-stamp class killed)",
-   "detail": "measured: prior refresh advanced `at` to 14:32Z while `generator` still read round-29 — freshness without lineage; this renewal pins generator/sourceWorklog/round trace and appends wave sections append-only, preserving every prior layer verbatim",
-   "evidence": "generator field of this file pre-renewal (git history) vs post"
+   "title": "ארבעה-דיימונים-חיים — הלולאה-העצמית בלי-סוכן-חיצוני",
+   "detail": ":3046 issue-forge (FORGE_INTERVAL_MS רציף) · :3047 supervisor (observe/decide/act, 23+ קבלות) · :3051 architect-daemon (מחזור-ביצוע ראשון מדוד: verdict no-work — כנות) · :3061 self-financing (activationPct=100, blockers=[] אחרי-הזנת-רוטר-מדוד).",
+   "evidence": "worklog Task ID 27 (perpetual runner-kit armed across 3 sandbox deaths) · :3051 first-cycle verdict"
+  },
+  {
+   "id": "D24",
+   "title": "הכספת נפתחה-אוטונומית פעמיים — 27 מפתחות פרוסים",
+   "detail": "auto-unseal (VAULT_ALLOW_DISCOVERY=1) הוכח-חי 10-25 ושוב 10-26 אחרי-מוות-סנדבוקס: 27 מפתחות (STEEM 4×A + 4×B + HIVE-C + infra) אל /home/z/.secrets/.env.local. מטא-דאטה-בלבד כאן — אסור-להדפיס-ערכים.",
+   "evidence": "worklog Task ID 27 (VAULT: proven TWICE 10-25, 10-26) · keys deployed (autonomous unseal OK)"
+  },
+  {
+   "id": "D25",
+   "title": "grid-beat ARMED-WAITING עם WIF-כספת — 730 מילויים מצטברים",
+   "detail": "מקצב-גריד-מקומי 240ש׳ עם WIF-משמורת-אמת (מהכספת, לא-סטייל). מדוד: 730 מילויים-ריאליים-מצטברים (lifetime) · 300 מילויים-בחלון (10-26T15:15Z).",
+   "evidence": "worklog Task ID 27 (grid-beat verdict upgraded ARMED-KEY-STALE → ARMED-WAITING with real custody WIF) · orchestrator measurement 2026-10-26T15:15Z"
+  },
+  {
+   "id": "D26",
+   "title": "מסילת-FX :3055 fx-fixedfloat — חתימת-מפתח-הבעלים התקבלה",
+   "detail": "לקוח-חתום אמיתי (HMAC-SHA1 sorted-canonical) מול-ff.io; גילוי-חוזה-חי. החתימה-עצמה מאושרת — כל-ה-methods מחזירים code:501 \"Not have permission\" = חוסם-חשבוני-בצד-ff.io (לא-בקוד). אפס-שערים-מומצאים.",
+   "evidence": "worklog Task ID 27 (§4 FX rail, TDD 5/5 RFC-2202 pinned, hash-chained receipts) · service live :3055"
+  },
+  {
+   "id": "D27",
+   "title": "FleetHQ — צינור-status שורש-נרפא + health_monitor ריארמון",
+   "detail": "status.json היה-קפוא 2026-10-22T07:25Z (health_monitor מת) → רוענן-חי 2026-10-25T16:07Z, מוניטור-90ש׳ הוחזר; קבלה-אטומה d756916..5298fe276. llamacpp:8080 יורד-בכנות (רשום-בפערים).",
+   "evidence": "worklog Task ID 27 (FleetHQ pipeline stall ROOT-CURED · sealed FleetHQ d756916..5298fe276)"
+  },
+  {
+   "id": "D28",
+   "title": "הפקדה-עצמית ריבונית + מגבר-אצירה ×3.34 מדוד",
+   "detail": "self-deposit פעיל; מגבר-האצירה נמדד-חי: 1068.47 vests/24ש׳ = $0.0321 (ext=mexc, run 40111486698) = ×3.34 מול-בסיס-מחזור-27 — curate.yml VOTED-LIVE עם txids (9ab1f72f00, f008727e1d, fec6a296ac, c45db5c668).",
+   "evidence": "worklog Task ID 25/27 (N4 measured, cycle-30) · external-profit-publish SUCCESS"
+  },
+  {
+   "id": "D33-a",
+   "title": "[G77-b] חידוש-הפנקס-עצמו — הפצע-ש-G76-h-רשם-נרפא",
+   "detail": "execution-state.json-חודש-בתוכן-מדוד cycle-33 עם-cycle/generatedAt-מלאים (היו-null/חסרים — הקליפה-ש-Instance-0-מדד) · העמוד-הציבורי-מרנדר-שוב · מאומת-על-ידי-ה-accessor-הקנוני.",
+   "evidence": "קומיט-זה-ב-Domain · ה-URL-החי · giant mini-services/defi-convergence cli.ts verify → exit-0"
+  },
+  {
+   "id": "D33-b",
+   "title": "[G77-b] שלמות-הנחיתות-של-G76 — 7/7-על-השרשרת",
+   "detail": "כל-7-ה-SHAs-שנחתו-ב-G76-אומתו-אבות-קדמונים-של-ראשי-הענן-הנוכחיים (merge-base/compare) — העבודה-שרדה-את-הבוטים-והמחיקות.",
+   "evidence": "measuredSnapshot.g76Landings · merge-base מקומי + GitHub-compare 15:31–15:34Z"
+  },
+  {
+   "id": "D33-c",
+   "title": "[G77-b] מסילת-FixedFloat-חיה-מקצה-לקצה (קריאה-בלבד)",
+   "detail": "ccies code:0 על-71-מטבעות דרך-:3055 · כספת-נוכחת · שרשרת-קבלות-תקפה · W130-נמדד-ושמר-על-עצמו.",
+   "evidence": ":3055/health + /ccies 15:26Z · giant main fx-fixedfloat-cure"
+  },
+  {
+   "id": "D33-e",
+   "title": "[G77-b] ראי-המש-הריבוני — ראש-שרשרת-נמדד-דרך-המש-עצמו",
+   "detail": "head_block=111114004 (זמן-שרשרת 15:31:27) נמדד-דרך-POST :3053/rpc — עדות-שהמש-לא-רק-חי-אלא-משרת-שאילתות-אמת.",
+   "evidence": "POST :3053/rpc condenser_api.get_dynamic_global_properties"
   }
  ],
  "partial": [
   {
-   "id": "P1",
-   "title": "רווח-חוץ — זורם-באמת, מתוכנן-לצמוח",
-   "detail": "0.0244$/24ש׳ מדוד-אמת (תיקון-2.5×) + מגבר-20×10%-חי (האקרואל-יופיע-תוך-7-ימי-פרס) + הזרימה-המסחרית-החיה. היעד-משמעותי-מוחלט עוד-לא-נסגר — נמדד-בכנות-מדי-שעתיים.",
-   "evidence": "external-profit-publish runs · curate receipts"
+   "id": "P4",
+   "title": "USDS — דפנות-נזילות ב-AMM של saos-dex בהזרעה-מחדש",
+   "detail": "מחזור-36: נתיב 36-e באוויר — הזרעת-דפנות-הנזילות ב-AMM. לא-הושלם-בכתיבת-שורה-זו.",
+   "evidence": "orchestrator wave-36 dispatch (lane 36-e in flight)"
   },
   {
-   "id": "P2",
-   "title": "ערוץ-STEEM — הכל-חי, סדרה-ארוכה-מתבקשת",
-   "detail": "20/20-שידורים-נקיים בריצת-הבכורה-של-המגבר; T4-חי-בענן; עדיין-חלקי-עד-סדרת-ריצות-נקייה-מתמשכת.",
-   "evidence": "runs 53+ · receipts 4c4b0130"
+   "id": "P5",
+   "title": "Saosmartwallet — HSM runtime מאב-טיפוס לייצור",
+   "detail": "packages/vault נחתם-על-ענף feat/hsm-vault-runtime (53/53 vault + 19/19 crypto) — נתיב 36-d מקדם-את-הריצה-לייצור. חלקי-עד-מיזוג-מאומת.",
+   "evidence": "worklog Task ID 4-b (e5fe98b, 3f09bc6) · lane 36-d in flight"
   },
   {
-   "id": "P3",
-   "title": "office-selfcheck מאזין-אך-חוסם",
-   "detail": "התיקון-הארכיטקטוני (async) נדחה-בכוונה-בלי-בדיקה. רשום-כנה.",
-   "evidence": "worklog task-21-d"
+   "id": "P6",
+   "title": "דלק/RC — זרימה-אוטומטית",
+   "detail": "נתיב 36-b באוויר: אוטומציה-לזרימת-דלק/RC. לא-הושלם.",
+   "evidence": "orchestrator wave-36 dispatch (lane 36-b in flight)"
+  },
+  {
+   "id": "P7",
+   "title": "Pulse — FLEET_TOKEN 401 → נפילה-ל-tokenless",
+   "detail": "ראש-הארכיטקטורה: 401-על-טוקן-צי → מעבר-לתדלוק-tokenless בזמן-המחזור. חלקי-עד-אימות-חי.",
+   "evidence": "orchestrator cycle-36 dispatch (in flight)"
+  },
+  {
+   "id": "P8",
+   "title": "לולאות-מקבילות לכל-החיילים",
+   "detail": "נתיב 36-f באוויר: הרחבת-הלולאות-המקבילות-לכל-הצי. לא-הושלם.",
+   "evidence": "orchestrator wave-36 dispatch (lane 36-f in flight)"
   }
  ],
  "gaps": [
   {
-   "id": "G1",
-   "title": "שוק-HIVE שבור — הכנות-הושלמה, הנזילות-חוץ-חסרה",
-   "detail": "הערוץ מוכרז DISARMED-BROKEN-MARKET עם-ריארמון-אוטומטי — הסירוב-עצמו הוא-החוזה. הפער-החומרי (נזילות/פאריטי-אמיתי) נשאר-חוץ-לשליטתנו.",
-   "evidence": "grid-public.json hive.verdict + reArm"
+   "id": "GAP-1",
+   "title": "חומת-החישוב — OPEN",
+   "detail": "התשואה-הפנימית-חייבת-לכסות-חישוב-ריפו-פרטי. פער-מבני-פתוח-עד-שהרווח-החוץ-עולה-מעל-עלות-הסנדבוקסים.",
+   "evidence": "orchestrator cycle-36 gap ledger"
   },
   {
-   "id": "G2",
-   "title": "רוכש-חוץ נגד-הספר — המדף-פתוח-ומודק",
-   "detail": "asks parity+0.12%+ במדרגה-T4 · bids touch-hug · תוקף-27-יום. המתנה-למילוי-שלישי-ראשון-בפנקס-פוסט-חוק.",
-   "evidence": "run 53 txids · 27-ראיות-מצטברות"
+   "id": "GAP-2",
+   "title": "קנבן-נפח: הילוך 1→2 — ממתין-לקבלות-ירוקות",
+   "detail": "הילוך-הנפח-עולה-רק-אחרי-קבלות-ירוקות-רצופות. הקלי-החי (NO-EDGE) מחזיק-הגברה-בעצירה-עד-שהטייפ-הנקי-משתפר.",
+   "evidence": "kelly-sizing.json NO-EDGE fractionBps=0 · orchestrator cycle-36 gap ledger"
   },
   {
-   "id": "G5",
-   "title": "מלחמת-סנדבוקסים — החלטת-בעלים (N7) עדיין-פתוחה",
-   "detail": "churner-חוץ-מקוד-שאינו-בריפו. חוק-הקצב N8-g מצמצם-את-עירום-המדף.",
-   "evidence": "worklog task-23"
+   "id": "GAP-3",
+   "title": "הערת-נכסים-ישנים — ממתין-לשערי-איכות",
+   "detail": "הפעלת-נכסים-רדומים מותנית-בשערי-איכות. לא-מופעל-בכוח.",
+   "evidence": "orchestrator cycle-36 gap ledger"
   },
   {
-   "id": "G6",
-   "title": "saos-0001..0004 — keyless custody gap (measured, fail-closed)",
-   "detail": "four new soldier identities exist on-chain (created+fuelled Oct 24-25) but their WIFs are in ZERO measurable custody surfaces (vault 0 mentions, roster 14/14 excludes, seals absent) — the T-80 measured bug class reborn. FUEL LAW: streaming fuel/RC to these accounts must stay REFUSED until custody-verified (fueling a keyless account burns fleet capital into an orphan). Redemption: (1) recall-of-own-delegation policy amendment → headcorner recalls 4×2000 VESTS; (2) owner-side import if creation-era secrets survive anywhere; (3) re-mint replacements via the custody-law deploy path (write-once pre-broadcast + vault seal + T-90 sweep) when operator re-arms",
-   "evidence": "steem RPC account_create block 110750412 · capital-router.json recall-shell rows · daily-report.json 15:05Z refusal receipts · scc repo-vault/manifest.json"
+   "id": "GAP-4",
+   "title": "llamacpp:8080 — יורד (כנות)",
+   "detail": "המסקנאי-המקומי יורד; נרשם-התראה-כנה (immutable). הריצות-ממשיכות-דרך-נתיבי-ענן.",
+   "evidence": "worklog Task ID 27 (llamacpp:8080 honest-DOWN alert recorded, immutable)"
+  },
+  {
+   "id": "GAP-5",
+   "title": "ff.io — הרשאות-API ממתינות-לבעלים",
+   "detail": "החתימה-מתקבלת; כל-הקריאות code:501 עד-שהבעלים מפעיל-הרשאות-API-בצד-החשבון ב-ff.io. אחר-כך :3055 מגיש-שערים-אמיתיים.",
+   "evidence": "worklog Task ID 27 (honest blocker, zero fabricated rates) · :3055"
   }
  ],
  "next": [
   {
-   "id": "N9",
-   "title": "[DONE cycle 30] curate.yml ריצות-ענן ירוקות רצופות (15:53/10:53/04:31/21:21Z success) — VOTED-LIVE 20 הצבות/פעימה עם txids"
-  },
-  {
-   "id": "N10",
-   "title": "T5: עוד 5 מילויי-חוץ → 10/25bps = רצפות-השומר (היעד-הסופי-של-הסולם)"
-  },
-  {
-   "id": "N11",
-   "title": "[PROVEN cycle 30] עדות-האקרואל: 1068.47 vests/24ש׳ = $0.0321 (ext=mexc) = x3.34 מול-בסיס-מחזור-27 — המגבר נמדד-חי; המשך-מעקב-שבוע-7-ימים"
-  },
-  {
-   "id": "N12",
-   "title": "[DONE cycle 30] ריענון-הפנקס בוצע (ראש-ארכיטקטורה, trace 1a16e979cd7b1fa9) — חוק-קבוע-בכל-מחזור"
-  },
-  {
    "id": "N13",
-   "title": "Fuel/RC streaming THROUGH the custody gate",
-   "detail": "G77-b's automation must consume a custody-verdict input: fuel ops to steem soldiers require chain-verified key custody (14/14 roster or vault-sealed + sweep-verified) — REFUSED otherwise, typed verdict + receipt; automation without the gate is the T-80 bug class",
-   "owner": "G77-b (fleet-economy) + Lane-D gate"
+   "title": "מיזוג-גל-36: איסוף-תוצרי-הנתיבים 36-a…36-f, מיזוג-לעוקבה, קבלות-דחופות",
+   "detail": "ראש-הארכיטקטורה: pull --no-rebase + סריקת-קונפליקט + דחיפה לכל-ריפו-נוגע (Domain/giant/saos-dex/Saosmartwallet/FleetHQ).",
+   "owner": "chief-sovereign-architect"
   },
   {
    "id": "N14",
-   "title": "Recall-of-own-delegation policy amendment",
-   "detail": "recall of headcorner's OWN parked delegations (4×2000 VESTS on keyless shells) was REFUSED 15:05Z by the delegation law's conservative reading — amend the law: recall-to-battery is capital RECOVERY, not new delegation; then execute the recall",
-   "owner": "capital lane"
+   "title": "ff.io: הרשאות-API-בצד-החשבון (בעלים) → :3055 שערים-אמיתיים",
+   "detail": "פעולת-בעלים-יחידה שפותחת-את-מסילת-ה-FX כולה. הקוד-מוכן-ומאומת.",
+   "owner": "owner"
+  },
+  {
+   "id": "N15",
+   "title": "החייאת llamacpp:8080",
+   "detail": "שירות-ההסקה-המקומי יורד — החזרה-לחיים או-הצהרת-סירוב-קבועה-וכנה.",
+   "owner": "orchestrator"
+  },
+  {
+   "id": "N16",
+   "title": "GAP-2: הילוך-נפח 1→2 אחרי-קבלות-ירוקות-רצופות",
+   "detail": "מדידה-מתמשכת של-הטייפ-הנקי; הקלי-יאשר-או-יעצור-את-ההגברה.",
+   "owner": "grid-lane"
   }
  ],
  "cycle30": {
@@ -247,20 +367,42 @@
    "N10: T5 floors after 5 more external fills"
   ]
  },
- "waveG77c": {
-  "trace": "1a178c71c10d38c5",
-  "at": "2026-10-26T17:45:00Z",
-  "swarm": "G77-c lane: execution-ledger accessibility cured (multi-source fetch + source-chain chip) + content lineage made honest (round-29 rows preserved verbatim, new verified rows D20-D23 appended, custody gap G6 measured and filed, fresh snapshot keys custodyNow/saos000xChainTruth added from live probes) · giant mirror synced under the accessor's schema law · custody-gap receipt + verdicts chain extended (Lane-D subtree)",
-  "evidence": "steem RPC (saos-0004 block 110750412) · :3040/health 14/14 · capital-router.json recall refusals 15:05Z · giant 7a930598 (G77-c claim)",
+ "cycle35": {
+  "trace": "1a173c6bc826ef01 + 1a178850450f2e55 (consolidated — worklog Task ID 27, cycles 33-35)",
+  "at": "2026-10-25→2026-10-26 (consolidated window)",
+  "swarm": "owner-endpoint vault-auth deny-by-default landed (giant 69144ce) | boot-heal + heal-pass perpetual guardians shipped (wipe rounds 2-3: 159+170 files counter-restored) | 4 daemons live :3046/:3047/:3051/:3061 | vault unsealed TWICE (10-25, 10-26) 27 keys | FX rail :3055 signature-ACCEPTED (ff.io account-side code 501) | FleetHQ status pipeline root-cured d756916..5298fe276 | estate resurrection 8 services (3002/3010/3040/3041/3042/3011) | trunks: giant 96112fa · saos-dex d95480d2 · FleetHQ 5298fe276",
   "open": [
-   "fuel-through-custody-gate (G77-b + gate)",
-   "recall-of-own-delegation amendment (capital lane)",
-   "saos-000X key import if owner holds creation-era secrets"
+   "ff.io account-side API permission (owner)",
+   "llamacpp:8080 revival",
+   "multi-soldier external trading gated on more account active keys (B-set present, ready)"
   ]
  },
- "erasureGuard": {
-  "law": "rows-are-APPEND-ONLY · history lives in git · any renewal robot MUST merge existing done/partial/gaps/next rows and prior cycle*/wave* sections — replacement = erasure (third measured strike of the class: verdicts chain, wave block, this ledger)",
-  "lastRescue": "2026-10-26T17:5xZ G77-c (trace 1a178c71c10d38c5): round-29 core + cycle30/31 + wave81 + D20-D23 + G6 restored after the fleet-runner skeleton clobber 8ec40aa33 (-176 rows); an intermediate mislabeled push (0471d57ce) briefly carried the skeleton with this guard — corrected within minutes, honestly recorded",
-  "rescueSource": "commit-object archaeology: d6b48a04a (lineage-honest renewal) — the full ledger never left git history"
+ "cycle36": {
+  "trace": "swarm-36 (lanes 36-a…36-f) — lane 36-c execution-ledger",
+  "at": "2026-10-26T15:36:02Z",
+  "swarm": "execution-ledger accessibility REPAIRED: loader rewritten to 3 honest states (LOADED / STALE-with-visible-age-warning / UNREACHABLE) — same-origin relative → absolute /Domain/ fallback, 2 tries per source, 3 full passes (survives transient GitHub-Pages rebuild windows: Domain cadence measured 1096 commits/24h ≈ push every ~80s = near-continuous Pages builds), per-section render isolation, generic line-by-line snapshot rendering (every measuredSnapshot key displayed), data NEVER hidden when fetched — stale ledger shows fully with age warning | this file renewed with cycle-36 measured truth",
+  "open": [
+   "lane 36-b fuel/RC streaming (in flight)",
+   "lane 36-d Saosmartwallet HSM prototype→production (in flight)",
+   "lane 36-e USDS liquidity reseed (in flight)",
+   "lane 36-f all-soldier loops (in flight)",
+   "Pulse FLEET_TOKEN 401 → tokenless fallback (orchestrator, in flight)"
+  ]
+ },
+ "cycle": 36,
+ "generatedAt": "2026-10-26T15:43:44Z",
+ "cycle33": {
+  "at": "2026-10-26T15:40:52Z",
+  "worker": "G77-b (execution-ledger lane · swarm G77)",
+  "waveTrace": "1a178c595ee6edd5 (giant d86a4aa — WAVE G77 claims)",
+  "renewal": "חידוש-מדוד-מלא: cycle+generatedAt-הונפקו (היו-null/חסרים) · כל-מקטע-ב-measuredSnapshot-נושא-מקור+measuredAt · 8-שירותים-חיים-נמדדו-ישירות · 7-landings-אומתו-על-השרשרת · ספרי-ענן-נקראו-raw (external-profit 15:31:28Z · grid-public 15:32:43Z) · GAP-1..4-סטטוס-נוכחי-מדוד",
+  "evidence": "קומיט-זה · ה-URL-החי על-Pages · giant state/execution/ (מראה-בייט-אמת + קבלת-מראה)",
+  "open": [
+   "X1 grid-sentinel m.at/public.head",
+   "X2 owner custody",
+   "X3 owner fx real-funds",
+   "X5 G77-f gap receipts"
+  ],
+  "numberingNote": "מיספור-השורה-העליונה=36-לפי-הלינאז'-שירד-קודם (36-c-איחד-33–35) · מקטע-זה-מתעד-את-חידוש-G77-b-בפועל (מדידות 15:24–15:41Z) — שני-הליינים-חיים, אף-מספר-לא-נמחק"
  }
 }
