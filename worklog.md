@@ -9300,3 +9300,23 @@ Stage Summary:
 - tsc: 653→1→**0**. Tests: 13/13. push sha: fix = **4303d8a** (rebased onto 24a79cd after a second upstream move), worklog = **2e6ad16**; origin/main after push = 2e6ad16f2dfef2dc67b3f0ceb7b938b116378cd0 (ls-remote-proved).
 - cycle verdict (:3051): HTTP 200 `{"ok":true,"verdict":"no-work","beforeErrors":0,"afterErrors":0,"detail":"0 contracts, none curable by registry"}` — daemon audits GREEN trunk (0 errors), honest idle. The 653→1→0 arc is closed.
 - Next actions: (1) the vault-sync "ours-tree wins" merger must stop clobbering code lanes — it deleted landed modules (bridge, defi-convergence) and worklog history without any declared deletion; needs a path allowlist (state/** only) or a deletion-detection guard; (2) restore defi-convergence + docs + state/execution from 7b1e5b9 (next cure wave, E6-b class); (3) re-land scripts/trade-receipt-bridge-cli.ts if the §7 CLI is still wanted.
+
+## E8 — nothing-erased: vault-sync clobber mechanism located, constrained; clobbered modules restored (2026-10-26)
+
+Task ID: E8. Owner: guardian agent (agent-zai, sandbox). Measured, minimal, no processes killed.
+
+Work Log:
+- **MECHANISM LOCATED (exact)**: no `.gitattributes` `merge=ours` driver exists (file absent/empty — checked `cat .gitattributes`, `git config -l | grep -i merge` → nothing). The clobberer is **organ merge code**: `/home/z/giant/mini-services/fleet-economy/index.ts`, the vault-seal loop (`sealRepo`), strategy lines quoted verbatim:
+  - `await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins, zero-seam", "FETCH_HEAD"]);` (was line 760)
+  - `const pull = await git(dir, ["-c", "rebase.autoStash=true", "pull", "--rebase", "-X", "ours", remote, "main"]);` (was line 766)
+  - same `merge -s ours` again as pull-conflict fallback (`(pull-conflict fallback)` message).
+  `merge -s ours` keeps the whole local tree — every FETCH_HEAD change under src/**/docs/**/mini-services/** is silently erased. Proof: `git log --full-history 7b1e5b9..HEAD` shows all 9 remaining erasures were deleted by exactly one commit — `d5f3894 "vault-sync [auto-economy]: link cloud history — ours-tree wins, zero-seam"`; no other (intentional) commits touched those paths.
+- **RESTORED (byte-identical from 7b1e5b9, verified `git diff 7b1e5b9 -- <paths>` = empty)**: `mini-services/defi-convergence/{README.md,cli.ts,execution-accessor.ts,execution-accessor.test.ts}`, `docs/DEFI-POLICY-ROLLUP.md`, `docs/decisions/DEG9-legacy-eviction.md`, `docs/status/execution-fabric-2026-10-26.md`, `scripts/trade-receipt-bridge-cli.ts`, `state/execution/ACCESS-RECEIPT-G76H.json`. Skipped-with-check: `git diff --name-status 7b1e5b9 HEAD` full D-list screened; every path either restored here (deleted only by d5f3894) or already restored by legitimate newer work (1eaee3b erasure-rescue: state/execution verdicts + bridge). No intentional newer-agent work reverted.
+- **GUARD APPLIED (minimal, in-organ)**: `protectedPathsClash(dir)` helper — `git diff --name-status HEAD...FETCH_HEAD -- src docs` before BOTH `-s ours` merge sites; if the cloud side touches src/** or docs/** → ours-merge skipped for the round with honest `clobber-guard` seal-log entry (nothing-erased beats zero-seam). `-X ours` rebase left as-is (conflict-resolver only, not a tree eraser).
+- **ORGAN STATE (measured)**: fleet-economy NOT currently running (full /proc cwd+cmdline scan — only saos-architect-daemon + self-financing-engine alive under giant; last seal-log entry 15:21Z). `/tmp/fleet-economy.instance.lock` is a stale lock file (flock releases on death). No restart needed — the guard is picked up at next organ boot; nothing was killed.
+- **VERIFY**: `bunx tsc --noEmit -p .` → **0 errors** (exit 0).
+
+Stage Summary:
+- Code change: 1 helper + 2 guarded merge sites in mini-services/fleet-economy/index.ts; 9 files restored byte-identical from 7b1e5b9.
+- tsc: 0. push sha: see commit "nothing-erased: restore vault-sync-clobbered modules, constrain merge strategy to state/* (E8)" (ls-remote-verified in the commit log below).
+- Next actions: (1) if the guard's clobber-guard log fires often on my-project, evolve from skip to a real merge for protected lanes (human-approved); (2) extend protection set (mini-services/**, scripts/**) once skip-fallback is observed stable; (3) keep giant-swallow-guard.sh as the second line of defense (detect+restore from adopted blobs).

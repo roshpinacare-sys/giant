@@ -720,6 +720,15 @@ function git(dir: string, args: string[]): Promise<{ ok: boolean; out: string }>
     });
   });
 }
+// E8 · מגן-אין-מחיקה (nothing-erased): merge -s ours מנצח את כל-העץ — כל-שינוי
+// ב-FETCH_HEAD תחת src/** או docs/** נמחק בשקט (נמדד: d5f3894 "ours-tree wins"
+// בלע את mini-services/defi-convergence + 3 דוקים + state/execution מהענן).
+// השער: אם-צד-הענן נוגע ב-paths המוגנים — המיזוג-שלנו-מנצח מדולג הסבב הזה
+// (רישום clobber-guard כנה; אין-מחיקה לפני אפס-תפרים).
+async function protectedPathsClash(dir: string): Promise<string> {
+  const c = await git(dir, ["diff", "--name-status", "HEAD...FETCH_HEAD", "--", "src", "docs"]);
+  return c.out.trim();
+}
 async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opts?: { strategyOurs?: boolean }): Promise<boolean> {
   // גל-83 · תיקון-תפר-מיזוג: הפרמטר afterPull נמחק-מהחתימה-במיזוג-אך-הקריאה-ב-sealMyProject
   // המשיכה-להעביר-אותו + הגוף-התייחס-אליו → ReferenceError שהרג-את-כל-סבב-האטימה
@@ -754,12 +763,19 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
       // (no-op-כנה-אם-אין-שינויים).
       await git(dir, ["add", "-A"]);
       await git(dir, ["commit", "-q", "-m", "vault-seal [auto-economy]: tail-records-before-link"]);
-      // גל-87 · חיסול-מירוץ-ה-stash: merge.autoStash=false-מפורש. נמדד-פעמיים
-      // (14:36/15:00): stash-על-עץ-חי-של-ספר-שכתיבתו-אינה-פוסקת = "unstable object
-      // source data" → merge-fail. merge -s ours לא-נוגע-בעץ → אין-שום-סיבה-ל-stash.
-      const mg = await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins, zero-seam", "FETCH_HEAD"]);
-      if (!mg.ok && !mg.out.includes("Already up to date") && !mg.out.includes("up to date")) {
-        sealLog({ repo: name, action: "merge-fail", out: mg.out.slice(0, 200) });
+      // E8 · שער-אין-מחיקה: FETCH_HEAD נוגע ב-src/**/docs/** → דילוג-כנה במקום
+      // ours-merge שהיה מוחק אותם מהעץ. FETCH_HEAD כבר-fetched-למעלה.
+      const clash = await protectedPathsClash(dir);
+      if (clash) {
+        sealLog({ repo: name, action: "clobber-guard", out: clash.slice(0, 200) });
+      } else {
+        // גל-87 · חיסול-מירוץ-ה-stash: merge.autoStash=false-מפורש. נמדד-פעמיים
+        // (14:36/15:00): stash-על-עץ-חי-של-ספר-שכתיבתו-אינה-פוסקת = "unstable object
+        // source data" → merge-fail. merge -s ours לא-נוגע-בעץ → אין-שום-סיבה-ל-stash.
+        const mg = await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins, zero-seam", "FETCH_HEAD"]);
+        if (!mg.ok && !mg.out.includes("Already up to date") && !mg.out.includes("up to date")) {
+          sealLog({ repo: name, action: "merge-fail", out: mg.out.slice(0, 200) });
+        }
       }
     } else {
       // גל-83 · autoStash-חובה + refspec-מפורש (נמדד: pull-בלי-branch נכשל-בלי-upstream).
@@ -771,9 +787,15 @@ async function sealRepo(dir: string, afterPull?: () => void | Promise<void>, opt
         // הפתרון: abort-מיידי + fallback למיזוג-אפס-תפרים (-s ours — הדוקטרינה-של-my-project):
         // ההיסטוריה-מקושרת-כהורה-שני, המצב-המקומי-מנצח, אפס-ריבוז-תקוע.
         await git(dir, ["rebase", "--abort"]);
-        const mg2 = await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins (pull-conflict fallback)", "FETCH_HEAD"]);
-        if (!mg2.ok && !mg2.out.includes("up to date")) {
-          sealLog({ repo: name, action: "merge-fallback-fail", out: mg2.out.slice(0, 160) });
+        // E8 · אותו-שער-גם-בנפילה-ל-fallback: ours-merge לא מוחק src/**/docs/**.
+        const clash2 = await protectedPathsClash(dir);
+        if (clash2) {
+          sealLog({ repo: name, action: "clobber-guard", out: clash2.slice(0, 200) });
+        } else {
+          const mg2 = await git(dir, ["-c", "merge.autoStash=false", "merge", "-s", "ours", "-m", "vault-sync [auto-economy]: link cloud history — ours-tree wins (pull-conflict fallback)", "FETCH_HEAD"]);
+          if (!mg2.ok && !mg2.out.includes("up to date")) {
+            sealLog({ repo: name, action: "merge-fallback-fail", out: mg2.out.slice(0, 160) });
+          }
         }
       }
     }
