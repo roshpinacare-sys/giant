@@ -6,6 +6,25 @@ import { planRcRebalance, type SoldierRc, type SoldierVp, type YieldSource } fro
 import { planCurationHarvest } from "./curation-harvest.ts";
 import { accrue, verifyAccrual, type AccrualState } from "./yield-accrual.ts";
 import { denyIfPublic } from "../lib/vault-auth.ts"; // גל-80 · חוק-הסף-הריבוני (§1 lockdown, trace 1a173c3929f5d23d)
+import { createHash, timingSafeEqual } from "crypto";
+import { readFileSync } from "node:fs";
+
+/* token custody (Task S1): env SAOS_ADMIN_TOKEN first, then the owner-scoped
+ * 0600 secrets file — file-based custody per mesh.sh law (the office dev
+ * supervisor respawns organ slots with its own env, which carries no token;
+ * the secret file survives every respawn). Token material is never logged. */
+const ADMIN_TOKEN_FILE = "/home/z/.secrets-sovereign/admin.env";
+function adminToken(): string {
+  const env = (process.env.SAOS_ADMIN_TOKEN ?? "").trim();
+  if (env) return env;
+  try {
+    for (const line of readFileSync(ADMIN_TOKEN_FILE, "utf8").split("\n")) {
+      const m = line.match(/^SAOS_ADMIN_TOKEN=(.+)$/);
+      if (m) return m[1].trim();
+    }
+  } catch { /* absent — fail-closed */ }
+  return "";
+}
 export { planRcRebalance, planCurationHarvest, accrue, verifyAccrual };
 export type { AccrualState, SoldierRc, SoldierVp, YieldSource };
 const PORT = Number(process.env.PORT ?? 3061);
@@ -37,6 +56,21 @@ export function cycle(rcRoster: SoldierRc[], vpRoster: SoldierVp[], sources: Yie
 }
 if (import.meta.main) {
   const v = verifyAccrual(state.yields);
+  /* ═══ Task S1 · operator gate (deny-by-default §1) ═══════════════════
+   * POST /cycle runs the harvest/fund planning cycle — an owner mutation.
+   * Mirror of the dex engine operator gate (saos-dex src/lib/operator-auth.ts):
+   * header x-saos-operator must equal env SAOS_ADMIN_TOKEN (sha256 digests,
+   * timing-safe). FAIL-CLOSED: token unset/empty → every HTTP mutation 403.
+   * This organ binds all interfaces, so the loopback-only vault-auth plane is
+   * NOT sufficient here — the token gate is the actual seal. */
+  const operatorOk = (req: Request): boolean => {
+    const expected = adminToken();
+    if (!expected) return false; // fail-closed — gate stays shut without a token
+    const given = (req.headers.get("x-saos-operator") ?? "").trim();
+    const a = createHash("sha256").update(given).digest();
+    const b = createHash("sha256").update(expected).digest();
+    try { return timingSafeEqual(a, b); } catch { return false; }
+  };
   Bun.serve({
     port: PORT,
     async fetch(req) {
@@ -45,7 +79,12 @@ if (import.meta.main) {
         return Response.json({ ...state, yieldsHeadValid: verifyAccrual(state.yields).ok });
       }
       if (url.pathname === "/cycle" && req.method === "POST") {
-        const deny = denyIfPublic(req, "self-financing-engine"); // גל-80 · מוטציה-ציבורית בלי-טוקן → 403
+        // Task S1 deny-by-default §1: owner mutation requires the operator token (403, fail-closed)
+        if (!operatorOk(req)) {
+          console.warn(`[self-financing-engine] DENY ${req.method} ${url.pathname} — unauthenticated mutation (Task S1, x-saos-operator required)`);
+          return new Response(JSON.stringify({ ok: false, error: "forbidden", law: "deny-by-default/1", note: "send header x-saos-operator matching SAOS_ADMIN_TOKEN" }), { status: 403, headers: { "content-type": "application/json" } });
+        }
+        const deny = denyIfPublic(req, "self-financing-engine"); // גל-80 · מוטציה-ציבורית בלי-טוקן → 403 (defense-in-depth under S1 gate)
         if (deny) return deny;
         let body: any = {};
         try { body = await req.json(); } catch { body = {}; }
