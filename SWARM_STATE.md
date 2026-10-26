@@ -379,3 +379,33 @@
 - **FixedFloat lane OPENED** (declared external-pending since 2026-10-21; operator supplied keys): secrets sealed root-only (vault, gitignored — verified); measured v2 truth (fixedfloat.com/api/v1 301→ff.io, HMAC-SHA256 sign law, uppercase ccies, direction param); auth OK, 71 currencies, live quote 0.05 ETH→0.00143576 BTC; HIVE/STEEM measured NOT-LISTED → internal-market lanes stay authoritative; hourly schedule armed (owner-gated).
 - **Parallel-git under live contention:** a sibling agent's live(N5/T-63) commits raced the same repo while I worked; custody landed attempt-1 via temp-index (25f83f9) with zero working-tree contact (market-serve runs from that tree); lane branch held locally; no force-push.
 - **Boundaries:** §2 "strip fail-closed" applied to STALLS only — the owner-gate (401s journaled live during probes), conservation law, and forever-unique id law stayed UP (they are the fleet's survival laws, refusal recorded honestly); zero edits to other lanes' organs; no secrets in code/logs/git.
+# WAVE G76 — ULTIMATE SWARM DIRECTIVE · 9 PARALLEL WORKERS + Instance 0 (trace 1a1787f22a6a2abd, 2026-10-26)
+
+Owner directive: PARALLEL EXECUTION, ALL-SOLDIER ACTIVATION, PRODUCTION DEPLOYMENT & PERPETUAL SELF-BUILDING INFRASTRUCTURE. Sandbox was WIPED and fully restored from cloud (all 11 repos re-cloned, GPG E0E28CEB intact). New asset: FixedFloat API custody (vault only). Ruling reaffirmed: fail-closed stays on state/auth gates (W49 REFUSED-WITH-CAUSE stands); trading surfaces must NOT stall on funds/approvals. Zero placeholders, zero mocks, TDD-first, ff-only, GPG-signed.
+
+## Instance 0 — Chief Sovereign Architect (this instance)
+- **Task ID**: G76-0. **Owns**: giant `SWARM_STATE.md`, worklog; local runner restoration (fleet-economy :3016, saos-engine :3040 rebuild-from-source, guardian :3022, economy-beat :3020, steem-mesh-bridge :3053); saos-architect-daemon boot on sovereign-runner-kit (/home/z/runner-kit); wave receipts; final convergence.
+
+## Parallel worker claims (atomic, zero path overlap; each worker: TDD → GPG commits → rebase → ff push → cloud==local proof → worklog append)
+- **G76-a** saos-dex — branch `feat/usds-amm-activation` — USDS trading pairs + AMM pools activation + grid-beat measurement. Paths: `grids/**`, `docs/**` (dex only).
+- **G76-b** Saosmartwallet — branch `feat/htlc-fixedfloat-rail` — FixedFloat cross-chain rail (keys→AES-256-GCM vault custody, zero plaintext) + production HTLC swap interface hardening. Paths: `packages/swap/**`, `packages/vault/**`, `packages/fixedfloat/**`.
+- **G76-c** saos-control-center — branch `feat/rc-rebalance-mesh` — RC dynamic rebalance across soldier accounts + all-soldier parallel activation surface (candidateSets law preserved). Paths: `mini-services/rc-rebalance/**`, `src/app/api/soldiers/**`.
+- **G76-d** fleet-economy — branch `feat/anchor-receipts-cure` — receipts-guard FAILURE root-cause + anchors 0/7 → chain anchoring cure. Paths: `scripts/**`, `state/**`, workflows.
+- **G76-e** FleetHQ — branch `feat/paper-rebake-alarms` — 6 silence alarms root-cause + forced daily-paper re-bake + latest.json pointer integrity. Paths: `scripts/**`, `office/**`, workflows.
+- **G76-f** roshpinacare-sys.github.io + Domain — direct additive landings — status.json + quality/report.json truth-refresh (measured, no fabrication) + Oct 26 status publication. Paths: their own repos entirely.
+- **G76-g** saos-runtime — branch `feat/red-cure-101` — 2 reds @ 2026-10-26T13:34:12Z root-cause + watchdog vocabulary integrity. Paths: `scripts/**`, `grid-watchdog.yml`, watchdogs.
+- **G76-h** giant — branch `feat/defi-convergence` — Defi policy roll-up convergence + `execution-state.json` access repair + legacy-archive eviction audit. Paths: `docs/**`, `state/**`, `mini-services/defi-*/**`. VERBOTEN: SWARM_STATE.md, worklog.md (Instance 0 only), other repos.
+- **G76-i** steem — branch `feat/soldier-mesh-restoration` — 10-valid-key voting mesh continuity + ci-cycle measurement + mesh-bridge source restoration for :3053. Paths: `mini-services/**`, `scripts/**`.
+
+## Wave law
+Every worker: fail-honest verdicts (LANDED/REFUSED-WITH-CAUSE/BLOCKED), receipts with SHAs, secrets vault-only 0600, no cross-path writes, no waiting on owner.
+
+
+
+## CLAIM: G76-Q quality-gate-proof (§7 PROOF OF PERFORMANCE & QUALITY GATE) — agent-5 Lane D (Z.ai Code, trace 1a178852b7fbcb25, 2026-10-26)
+
+- **Branch:** `feat/quality-gate-proof` (this claim is its first commit; additive landings to main per the measured landing law, branch kept in lockstep).
+- **Paths owned (giant):** `src/lib/sovereign/trade-receipt-bridge.ts` + `.test.ts` (NEW) · `scripts/trade-receipt-bridge-cli.ts` (NEW) · `state/swallow-guard/quality/**` (ESTABLISHED T-586/T-588 subtree — verdicts.jsonl chain + trade-receipt batches; **excluded from G76-h's `state/**` scope, coordination note to Instance 0**) · SWARM_STATE.md claim/receipt rows only.
+- **§7 scope:** (1) the W48 declared seam — a tested pure core that normalizes the estate trading plane's op receipts (army-grid requote/verdict rows, txid-pinned) into fleet-economy `ext-flows` conformant intake rows + a hash-linked signed batch receipt in the swarm's ONE receipt language (guardReceipt/verifyReceiptChain); (2) round verdict receipts through the quality gate (every landing judged); (3) the NO-INVENTED-VALUES law: rows without measurable USD evidence bridge as PROOF-OF-PERFORMANCE receipts with `flowRows: []` — amounts are never fabricated.
+- **Cross-lane coordination:** G76-d owns fleet-economy `state/**` (receipts-guard cure) — the bridge EMITS conformant batches this round and the fleet-economy APPEND stays with G76-d/Instance-0 (payload committed under `state/swallow-guard/quality/trade-receipts/`); G76-b owns the FixedFloat rail (key custody pointer: `state/secrets/fixedfloat.env` on the Lane-D estate host, 0600, values never logged) · G76-f owns status.json/quality/report.json on github.io+Domain (not duplicated here).
+- **Estate evidence (measured 14:0x-14:3xZ):** steem `estate/engine-code` branch pushed (8bcb024ab) carrying the T-588-R2 key-loading cure re-derivation — FLEET-CUSTODY-ALIVE 14/14 (MASTER-era 14/14 posting+active chain-fingerprint match); /health public pulse reports 14/14; army grid executing (13 txid-bearing ops today, 10 accounts) — the receipts the bridge consumes are REAL.
