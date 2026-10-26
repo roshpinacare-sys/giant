@@ -12,7 +12,15 @@
 #   · no-work → honest green null (never fabricated); aborted/verify-fail → RED
 #     (loud, never silent) — the daemon's own exit-code honesty is the gate.
 # Identity: github-actions[bot] — lawful per identity law v3.
-# Wave 80 · trace 1a173c3929f5d23d §4.
+# Wave 80 · trace 1a173c3929f5d23d §4. Wave 81 · trace 1a1787f32fee7401 §5/§6.
+#
+# גל-81 · חוק-שלמות-המארח (measured: erase-commit e60f5d6f, 16:40:32Z — כותב-החותמות
+# קידם-עץ-מקומי-ישן דרך merge -s ours fallback ומחק-את-שלב-ההתקנה → 6-ריצות-אדומות
+# רצופות של רעש-רעב-תלויות, לא רקחות אמיתיות). הגנה-כפולה:
+#   1. שלב-התקנה-ייעודי (שוחזר).
+#   2. קו-התקנה-גם-בתוך-שלב-המחזור-עצמו (הגנה-לעומק — אם-השלב-יימחק-שוב, המחזור
+#      עדיין רץ על הגזע האמיתי). והדיימון עצמו מחזיק חוזה-שלמות-מארח שמשחזר
+#      את הקובץ הזה תוך-מחזור-אחד (self-healing, registry C5).
 name: architect-daemon
 
 on:
@@ -48,12 +56,24 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Install the real environment (root cure, wave 80/81 — measured 645→0)
+        run: |
+          # נמדד (גל-80): tsc בסביבה-רעבה מציג 645 "שגיאות" — כולן רעש-היעדר-תלויות
+          # (react 94 · next/server 75 · lucide 40 · bun:test 8 …). לאחר
+          # bun install --frozen-lockfile (6.88s): 0 שגיאות. הביקורת-העצמית
+          # חייבת למדוד את-הגזע-האמיתי, לא-את-רעב-התלויות.
+          bun install --frozen-lockfile
+
       - name: One bounded architect cycle (AUDIT→SELECT→CURE→VERIFY→LAND→RECEIPT)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARCHITECT_ALLOW_PUSH: "1"
         run: |
           set -o pipefail
+          # גל-81 · הגנה-לעומק: התקנה-גם-בתוך-המחזור. אם-שלב-ההתקנה-הייעודי-נמחק
+          # שוב-בידי-כותב-עץ-ישן — המחזור-עדיין-מבוקר-על-הגזע-האמיתי. כישלון-התקנה
+          # = הצעד-נופל-בקול-רם (אין-בליעה; רעש-רעב אסור-שיתחפה-לביקורת).
+          bun install --frozen-lockfile
           bun mini-services/saos-architect-daemon/index.ts --once 2>&1 | tee /tmp/daemon-once.log
           rc=${PIPESTATUS[0]}
           echo "ARCHITECT-DAEMON-ONCE rc=$rc (raw, un-piped truth)"
