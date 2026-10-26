@@ -369,3 +369,26 @@
 - **Saosmartwallet `2ca76cd` (attempt-1):** `packages/swap/src/rehearse.ts` + `test/rehearse.test.ts` — the §3 "production-grade" proof instrument: full-lifecycle rehearsal harness (SAOS-SWAP-REHEARSAL/1) driving the REAL session/witness/packer through happy-path settle AND both honest refund endings; every step's txid is a REAL wire digest (sha256(chainId ‖ serialized witness tx)) externally rebuildable via `verifyRehearsalReport`; fail-closed probes recorded (T1<=T2 construction, counter-claim before reveal, respond after refund, claim in draft); `rehearsal:` prefix broadcast-confusion guard; posting-authority only; injected clock; zero network/broadcast/randomness. **18/18 new tests (TDD red confirmed first), packages total 274/274 · 1140 expects · tsc 0 · eslint 0 · zero new deps.**
 - **giant `docs/directive-truth/DIRECTIVE-TRUTH-2026-10-24.md`:** the §6 directive-truth receipt for trace 1a16f6a1256bf1d1 — per-section verdicts with commit SHAs: §1 self-financing LANDED+measured (roster 15/15 ACTIVE, 2760917) while "strip fail-closed/risk limits" **REFUSED WITH CAUSE** (measured incident history: snapshot-integrity halt, custody tears, erasure storm — the laws that saved the fleet are not the debt); §2 LANDED 100%; §3 LANDED + honest BLOCKED item (credit-starvation seam, W48's own declared next wave); §4/§5/§6 LANDED with receipts. Fail-honest by construction — REFUSED and BLOCKED stated where true.
 - **Boundaries honored:** read-only on all other lanes' organs (self-financing/hft/kelly/custody untouched); zero port surface (audit = docs artifact, no new organ); zero secrets; append-only SWARM_STATE rows; all pushes attempt-1.
+
+---
+
+# WAVE G76 — ULTIMATE SWARM DIRECTIVE · 9 PARALLEL WORKERS + Instance 0 (trace 1a1787f22a6a2abd, 2026-10-26)
+
+Owner directive: PARALLEL EXECUTION, ALL-SOLDIER ACTIVATION, PRODUCTION DEPLOYMENT & PERPETUAL SELF-BUILDING INFRASTRUCTURE. Sandbox was WIPED and fully restored from cloud (all 11 repos re-cloned, GPG E0E28CEB intact). New asset: FixedFloat API custody (vault only). Ruling reaffirmed: fail-closed stays on state/auth gates (W49 REFUSED-WITH-CAUSE stands); trading surfaces must NOT stall on funds/approvals. Zero placeholders, zero mocks, TDD-first, ff-only, GPG-signed.
+
+## Instance 0 — Chief Sovereign Architect (this instance)
+- **Task ID**: G76-0. **Owns**: giant `SWARM_STATE.md`, worklog; local runner restoration (fleet-economy :3016, saos-engine :3040 rebuild-from-source, guardian :3022, economy-beat :3020, steem-mesh-bridge :3053); saos-architect-daemon boot on sovereign-runner-kit (/home/z/runner-kit); wave receipts; final convergence.
+
+## Parallel worker claims (atomic, zero path overlap; each worker: TDD → GPG commits → rebase → ff push → cloud==local proof → worklog append)
+- **G76-a** saos-dex — branch `feat/usds-amm-activation` — USDS trading pairs + AMM pools activation + grid-beat measurement. Paths: `grids/**`, `docs/**` (dex only).
+- **G76-b** Saosmartwallet — branch `feat/htlc-fixedfloat-rail` — FixedFloat cross-chain rail (keys→AES-256-GCM vault custody, zero plaintext) + production HTLC swap interface hardening. Paths: `packages/swap/**`, `packages/vault/**`, `packages/fixedfloat/**`.
+- **G76-c** saos-control-center — branch `feat/rc-rebalance-mesh` — RC dynamic rebalance across soldier accounts + all-soldier parallel activation surface (candidateSets law preserved). Paths: `mini-services/rc-rebalance/**`, `src/app/api/soldiers/**`.
+- **G76-d** fleet-economy — branch `feat/anchor-receipts-cure` — receipts-guard FAILURE root-cause + anchors 0/7 → chain anchoring cure. Paths: `scripts/**`, `state/**`, workflows.
+- **G76-e** FleetHQ — branch `feat/paper-rebake-alarms` — 6 silence alarms root-cause + forced daily-paper re-bake + latest.json pointer integrity. Paths: `scripts/**`, `office/**`, workflows.
+- **G76-f** roshpinacare-sys.github.io + Domain — direct additive landings — status.json + quality/report.json truth-refresh (measured, no fabrication) + Oct 26 status publication. Paths: their own repos entirely.
+- **G76-g** saos-runtime — branch `feat/red-cure-101` — 2 reds @ 2026-10-26T13:34:12Z root-cause + watchdog vocabulary integrity. Paths: `scripts/**`, `grid-watchdog.yml`, watchdogs.
+- **G76-h** giant — branch `feat/defi-convergence` — Defi policy roll-up convergence + `execution-state.json` access repair + legacy-archive eviction audit. Paths: `docs/**`, `state/**`, `mini-services/defi-*/**`. VERBOTEN: SWARM_STATE.md, worklog.md (Instance 0 only), other repos.
+- **G76-i** steem — branch `feat/soldier-mesh-restoration` — 10-valid-key voting mesh continuity + ci-cycle measurement + mesh-bridge source restoration for :3053. Paths: `mini-services/**`, `scripts/**`.
+
+## Wave law
+Every worker: fail-honest verdicts (LANDED/REFUSED-WITH-CAUSE/BLOCKED), receipts with SHAs, secrets vault-only 0600, no cross-path writes, no waiting on owner.
