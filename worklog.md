@@ -9244,3 +9244,22 @@ Stage Summary:
 - HFT mesh: receipts healthy (hash-chained, per-run intact, restart seams only) but economically silent — 0 emitted orders across ~6.7k ticks, all no-edge; nothing for fleet-economy to ingest yet.
 - fleet-economy: broken partial clone (455MB tmp pack, .invalid HEAD) — needs re-clone from origin (246c0bf2) BEFORE any receipt-schema mapping is possible.
 - Next actions: (1) `bun install` in /home/z/giant (or extend hostIntegritySelection to enforce local node_modules/bun-types, not just the CI workflow text) to un-wedge :3051; (2) re-feed :3061 custody roster; (3) re-clone fleet-economy then map its ingestion format to hft receipts (separate task — no wiring done here).
+
+---
+Task ID: E4
+Agent: infra-unwedge
+Task: Un-wedge architect daemon :3051 — restore node_modules after sandbox wipe, re-run tsc, fire owner-cycle
+
+Work Log:
+- **bun install restored the starved env**: /home/z/giant had NO node_modules (sandbox wipe); `bun install` → 910 packages installed in 8.02s, zero conflicts. Verified `node_modules/bun-types` and `node_modules/typescript` both present — the reference `/// <reference types="bun-types" />` (E3's root-cause ③) can now resolve.
+- **git post-install: CLEAN** — bun.lock unchanged (bun install happy with committed lockfile), no bun.lockb, no stray files; nothing to commit for the install itself. Trunk stayed @0e09257 through install + cycle.
+- **tsc re-run**: `bunx tsc --noEmit -p .` → **653 errors → 1 error**. The entire TS2307 bun:test starved-env class is GONE. Sole survivor: `src/lib/sovereign/trade-receipt-bridge.test.ts(158,18): error TS2698: Spread types may only be created from object types.` — a real code-level defect, not environment starvation.
+- **:3051 owner-cycle (one POST, S1 header honored)**: HTTP 200 `{"ok":true,"verdict":"no-work","beforeErrors":1,"afterErrors":1,"detail":"1 contracts, none curable by registry"}` — WEDGE GONE: daemon audits the true trunk state (1 error), finds 1 contract, honestly reports no registry cure matches TS2698, lands nothing, reverts nothing, exits ok. This is the honest-terminal behavior the strict-decrease verify law wants (vs E3's 653→653 abort loop). No push from daemon (no cure landed → nothing to push).
+- **Un-wedge confirmed by construction**: E3's causal chain (starved node_modules → TS2307×8 → 653 errors → dead contract picked every cycle → abort-revert loop) is severed at its root. The daemon now sees a 1-error trunk and is idle-by-honesty until the TS2698 contract is either cured by hand or added to the registry.
+
+Stage Summary:
+- node_modules restored y/n: **y** (910 pkgs; bun-types + typescript verified).
+- tsc errors before→after: **653 → 1** (sole: TS2698 trade-receipt-bridge.test.ts:158 — hand-fix or registry-extension class).
+- cycle verdict (:3051): **no-work** — `{"ok":true,"verdict":"no-work","beforeErrors":1,"afterErrors":1,"detail":"1 contracts, none curable by registry"}` — honest idle, not wedged.
+- push sha: none from daemon (no-work); lockfile commit not needed (tree clean); worklog commit for E4 = this commit.
+- Next actions: (1) hand-cure TS2698 in trade-receipt-bridge.test.ts (spread of possibly-non-object at line 158 col 18) or teach :3051's registry a `spread-unknown` cure; once trunk hits 0 errors the daemon should audit-clean green permanently; (2) re-feed :3061 custody roster (still rc/vp-roster-empty from E3); (3) fleet-economy re-clone still pending (E3 item).
