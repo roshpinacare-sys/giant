@@ -1,0 +1,124 @@
+{
+ "schema": "SAOS-GAP1-COMPUTE-COVERAGE/1",
+ "at": "2026-10-26T15:41:28.434Z",
+ "law": "owner MASTER DIRECTIVE §4 GAP-1: internal yield capture must cover private-repository compute overhead — every number cites its source; unreadable = named unmeasured, never zero",
+ "compute": {
+  "wall": {
+   "source": "Autonomy:agents/compute-park-ledger.json (public raw, fetched)",
+   "parkedAt": "2026-10-13T22:40:00Z",
+   "reason": "private-repo Actions minutes exhausted — ~95 blocked-run emails in one day (measured: 0-step startup failures on every scheduled job in private repos); parked via Actions permissions API to stop the owner's email flood",
+   "parkedRepos": 18,
+   "armed": true,
+   "lastCanaryAttempt": "2026-10-25T19:49:32.099Z",
+   "excludedAlive": [
+    "steem"
+   ]
+  },
+  "canaryJournal": {
+   "source": "Autonomy:agents/compute-journal.jsonl (public raw, fetched)",
+   "totalEvents": 46,
+   "tail": {
+    "ts": "2026-10-25T19:51:04.202Z",
+    "event": "armed-healthy",
+    "canary": {
+     "dispatched": true,
+     "conclusion": "success",
+     "runId": 40227856443
+    }
+   },
+   "consecutiveGreenDailyEvents": 6,
+   "greenSince": "2026-10-20T13:40:25.181Z"
+  },
+  "fleetVisibility": {
+   "source": "Pulse:state/network.json totals (census 2026-10-26T14:31:07.280Z)",
+   "repos": 40,
+   "private": 0,
+   "public": 40,
+   "privateMinutesBillable": "zero private repos — zero billable private Actions minutes"
+  },
+  "localEstate": {
+   "source": "os.cpus()/os.totalmem() of the sovereign estate sandbox (measured at run)",
+   "vcpus": 2,
+   "model": "Intel(R) Xeon(R) Processor",
+   "totalMemMB": 4042,
+   "metering": "un-metered — the estate pays no per-minute API for its own sandbox; a $ price here would be invention, so none is printed"
+  }
+ },
+ "yield": {
+  "externalProfit24h": {
+   "source": "saos-dex:grids/state/external-profit-public.json",
+   "at": "2026-10-26T14:14:33.151Z",
+   "usd24h": 0.0281,
+   "vests24h": 899.126534,
+   "evidenceCount": 88,
+   "accountsScanned": 7,
+   "parts": [
+    {
+     "id": "chain-curation",
+     "usd": 0.028133,
+     "vests": 899.126534
+    }
+   ]
+  },
+  "gridRealPnl": {
+   "source": "saos-dex:grids/state/pnl.json",
+   "asof": "2026-10-21T05:24:37.278Z",
+   "realFills": 730,
+   "realSbdDelta": -354.186,
+   "realizedSbd": -2.473686,
+   "positionSteem": 4594.924,
+   "unbasedSbd": 137.323862
+  },
+  "internalDex": {
+   "source": "saos-dex:grids/state/internal-pnl.json",
+   "at": "2026-10-19T14:20:36.991Z",
+   "treasuryProfitEverMu": 18395468,
+   "treasuryProfitMu": 9887,
+   "creditsTreasuryMu": 435532,
+   "feeMeterMu": 33,
+   "muPerUsds": 1000
+  },
+  "dexVolume": {
+   "source": "saos-dex:db/dex-metrics.json (daily Σ)",
+   "updatedAt": "2026-10-26T14:56:33.833Z",
+   "daysMeasured": 14,
+   "window": {
+    "from": "2026-10-13",
+    "to": "2026-10-26"
+   },
+   "quoteVolumeMuTotal": 73270925,
+   "tradesTotal": 81245
+  },
+  "kellyExpectancy": {
+   "source": "saos-dex:grids/state/kelly-sizing.json",
+   "at": "2026-10-24T16:55:10.554Z",
+   "verdict": "NO-EDGE",
+   "fullKellyBps": -422,
+   "trades": null,
+   "sumProfitUsd": -0.1279946218682384
+  },
+  "selfFinancingCensus": {
+   "source": "saos-dex:grids/state/self-deposit-receipts.jsonl (tail)",
+   "receipts": 14,
+   "last": {
+    "at": "2026-10-21T12:27:38.628Z",
+    "verdict": "PLAN-READY (census-only — no keys injected, honest)",
+    "targetUsd": null,
+    "gapToTargetUsd": 999.9974,
+    "profitUsd24h": 0.0026
+   }
+  }
+ },
+ "coverage": {
+  "privateRepoComputeOverheadUsd": 0,
+  "privateRepoComputeOverheadBasis": "Pulse census measured private=0 of 40 repos — GitHub bills Actions minutes for private repos only; zero private repos = zero private-minute overhead to cover. The historical wall (parkedAt 2026-10-13, 18 repos) is retired by visibility, not by income.",
+  "externalIncomeUsd24h": 0.0281,
+  "wallState": "canary armed-healthy (2026-10-25T19:51:04.202Z); 6 consecutive green daily canary events since 2026-10-20T13:40:25.181Z",
+  "verdict": "COVERED-BY-STRUCTURE for the named overhead (zero private minutes to pay); sovereign self-financing beyond that remains OPEN by its own census — no fabricated coverage",
+  "verdictBasis": [
+   "GAP-1's named overhead (private-repository compute) measures ZERO today: 0 private repos × billable minutes. Coverage of $0 requires $0 of yield — structurally covered.",
+   "honest remainder: the sovereign self-financing CENSUS (target $?, gap $999.9974) and the local sandbox compute (un-metered, 2 vCPU) remain income-gated — measured external income 0.0281 USD/24h is the only metered yield and it is NOT claimed against un-metered compute."
+  ]
+ },
+ "unmeasured": []
+}
