@@ -1,8 +1,8 @@
 {
  "schema": "SAOS-EXECUTION-LEDGER/1",
- "at": "2026-10-23T15:55:00Z",
- "generator": "agent round 29 (Z.ai, trace 1a1693b1c728cbf5) — hand-curated from the real worklog + measured books + chain forensics",
- "sourceWorklog": "worklog task-24 (460+ sections)",
+ "at": "2026-10-26T17:45:00Z",
+ "generator": "agent round 64 (Z.ai Code, trace 1a178c71c10d38c5) — G77-c lane: lineage-honest renewal; prior layers preserved verbatim (round-29 core + cycle30/31 + wave81)",
+ "sourceWorklog": "worklog tasks 1..T-589+G77 (my-project/worklog.md) + giant SWARM_STATE wave sections",
  "law": "כל-שורה-כאן-נגזרת-מפנקס-העבודה-האמיתי-ומהספרים-המדודים · מה-שלא-הוכח-רשום-כלא-בוצע · אסור-לקשט",
  "freshness": {
   "howToVerify": "כל-ראיה-נבדקת-בגיט: github.com/roshpinacare-sys/Domain → commits, ו-github.com/roshpinacare-sys/saos-dex/actions → הריצות",
@@ -23,7 +23,7 @@
   "externalFlowUsdHistoric": 0.784335,
   "gridVerdict": "ARMED-LIVE · SPREAD-TIER T4 (ask 12 / bid 35bps — דו-ספרתי-עמוק) · run 53 (15:06Z): 3 asks parity+0.12/0.24/0.36% + 3 bids touch-hug, txids אמת",
   "tierEvidence": "27 מילויי-חוץ (אחרי-חלון-החוק, לא-wash, edge≠0) · T5 (10/25bps = רצפות-השומר) בעוד 5",
-  "hiveVerdict": "DISARMED-BROKEN-MARKET — הצהרה-מפורשת (לא ARMED-WAITING שקרי) + חוק-ריארמון-אוטומטי מפורסם-ברגל-עצמה",
+  "hiveVerdict": "DISARMED-BROKEN-MARKET — הצהרה-מפורשת (לא ARMED-WAITING שקרי) + חוק-ריארמון-אוטומטי מפורסם-ברגל-עצמה · גל-81: שורש-הניתוק-נמדד-ותוקן (saos-dex 9fceaa2 — חותם-HBD-הגולמי 1.79$ היה-פרמיה-שוק-דק שהזין-8071bps-מדומים; משטר-החתך-מ-route-receipt יושם → ריארמון-צפוי-בפעימה-הבאה, לאמת-מול-grid-public.json)",
   "vaultResurrection": "auto-unseal רץ-אוטונומית (15:25Z) — keys deployed · משפחת-steem המלאה (A/B ×4 רשויות) חיה-שוב-בסנדבוקס",
   "priceTruth": {
    "verdict": "TRIANGLE-ARMED",
@@ -32,7 +32,38 @@
   "externalVests24h": 1068.465923,
   "externalProfitSource": "ext=mexc (external-profit-publish run 40111486698, 2026-10-24T16:28Z, SUCCESS)",
   "externalProfitGrowth": "x3.34 vs cycle-27 base $0.0096/24h (290.128 vests) — curation booster ramp measured (80 votes/day x 10% weight, VOTED-LIVE receipts 9ab1f72f00/f008727e1d/fec6a296ac/c45db5c668)",
-  "measuredAt": "2026-10-24T16:28Z"
+  "measuredAt": "2026-10-24T16:28Z",
+  "custodyNow": {
+   "verdict": "FLEET-CUSTODY-ALIVE 14/14",
+   "howMeasured": "GET :3040/health live probe 17:0xZ — armyCustody.verified=14 total=14, posting+active chain-verified (T-588-R2 MASTER-era law)",
+   "opsToday": 185,
+   "roster": [
+    "headcorner",
+    "cashmachine",
+    "haran",
+    "israelnews",
+    "lsa",
+    "macrame",
+    "siq",
+    "tov",
+    "wic",
+    "wog",
+    "woq",
+    "hcsoldier4",
+    "hcsoldier5",
+    "hcsoldier6"
+   ],
+   "measuredAt": "2026-10-26T17:05Z"
+  },
+  "saos000xChainTruth": {
+   "verdict": "ON-CHAIN-ALIVE · CUSTODY-GAP-MEASURED",
+   "howMeasured": "public condenser RPC condenser_api.get_accounts + get_account_history (17:0xZ)",
+   "accounts": "saos-0001 (2026-10-24T20:52:06) · saos-0002 (20:56:54) · saos-0003 (21:26:15) · saos-0004 (2026-10-25T17:50:54, creator headcorner, block 110750412, fee 3.000 STEEM)",
+   "funded": "0.600 STEEM + 0.150 SBD each; 2000 VESTS delegated to each (fleet-matrix.json since records)",
+   "custody": "ZERO measurable custody: scc repo-vault manifest 0 mentions · engine roster 14/14 excludes · army-keys.json (MASTER era) excludes · fleet-economy seals absent · capital-router.json classifies 'external — not custody, not persona'",
+   "recallAttempt": "2026-10-26T15:05Z recall-shell-saos-0001..0004 REFUSED by standing policy (delegation law) — SP still parked",
+   "measuredAt": "2026-10-26T17:10Z"
+  }
  },
  "done": [
   {
@@ -76,6 +107,30 @@
    "title": "תחיית-הכספת-האוטונומית",
    "detail": "auto-unseal (VAULT_ALLOW_DISCOVERY=1 · pat.env-wrap) רץ-מחדש-על-המכונה-הטרייה — keys deployed 15:25Z · STEEM A/B ×4 רשויות · posting-A מאומת-מול-6-רשויות-הפרסום-החיות-על-השרשרת.",
    "evidence": "vault-home clone + auto-unseal exit 0 · wifToPublic ∈ chain posting key_auths"
+  },
+  {
+   "id": "D20",
+   "title": "G76 wave LANDED — 9 workers + Instance-0 (trace 1a1787f22a6a2abd)",
+   "detail": "custody T-588-R2 rotation-proof (estate/engine-code 8bcb024ab) · trade-receipt-bridge 13/13 TDD (giant e6cbe5cd) · USDS pool_reseed kernel op + 14/14 tests (saos-dex 521de810) · deny-by-default S1 on daemon+self-financing (giant f4d763c) · FixedFloat rail opened (HMAC law measured, owner-gated)",
+   "evidence": "giant ac0af25f → 466af57e chain · SWARM_STATE WAVE G76 LANDED receipts (c198bd57)"
+  },
+  {
+   "id": "D21",
+   "title": "All-soldier activation PROVEN by receipts — 13/13 soldier accounts executing",
+   "detail": "batch receipt ef6ef6c2: 27 ops + 55 verdicts across all 13 soldier accounts (39 creates/14 cancels, window 14:21→14:38Z), txid-pinned, hash-chained, chainVerified=true; hcsoldier4/5 (the 'retired' bodies) trade again after MASTER-era custody",
+   "evidence": "giant state/swallow-guard/quality/trade-receipts/2026-10-26.json · bridge CLI verify"
+  },
+  {
+   "id": "D22",
+   "title": "execution.html accessibility hardened — multi-source ledger fetch (this round, G77-c)",
+   "detail": "bare relative fetch (single-point-of-failure class — the owner's 'המקור לא נגיש' screen reproduces on any pages race) cured: relative → raw.githubusercontent Domain main → raw giant mirror, with a visible source-chain chip naming which source fed the render; stale-banner 48h law intact",
+   "evidence": "this file's commit in Domain git history"
+  },
+  {
+   "id": "D23",
+   "title": "Ledger content lineage cured (old-wine-new-stamp class killed)",
+   "detail": "measured: prior refresh advanced `at` to 14:32Z while `generator` still read round-29 — freshness without lineage; this renewal pins generator/sourceWorklog/round trace and appends wave sections append-only, preserving every prior layer verbatim",
+   "evidence": "generator field of this file pre-renewal (git history) vs post"
   }
  ],
  "partial": [
@@ -116,6 +171,12 @@
    "title": "מלחמת-סנדבוקסים — החלטת-בעלים (N7) עדיין-פתוחה",
    "detail": "churner-חוץ-מקוד-שאינו-בריפו. חוק-הקצב N8-g מצמצם-את-עירום-המדף.",
    "evidence": "worklog task-23"
+  },
+  {
+   "id": "G6",
+   "title": "saos-0001..0004 — keyless custody gap (measured, fail-closed)",
+   "detail": "four new soldier identities exist on-chain (created+fuelled Oct 24-25) but their WIFs are in ZERO measurable custody surfaces (vault 0 mentions, roster 14/14 excludes, seals absent) — the T-80 measured bug class reborn. FUEL LAW: streaming fuel/RC to these accounts must stay REFUSED until custody-verified (fueling a keyless account burns fleet capital into an orphan). Redemption: (1) recall-of-own-delegation policy amendment → headcorner recalls 4×2000 VESTS; (2) owner-side import if creation-era secrets survive anywhere; (3) re-mint replacements via the custody-law deploy path (write-once pre-broadcast + vault seal + T-90 sweep) when operator re-arms",
+   "evidence": "steem RPC account_create block 110750412 · capital-router.json recall-shell rows · daily-report.json 15:05Z refusal receipts · scc repo-vault/manifest.json"
   }
  ],
  "next": [
@@ -134,6 +195,18 @@
   {
    "id": "N12",
    "title": "[DONE cycle 30] ריענון-הפנקס בוצע (ראש-ארכיטקטורה, trace 1a16e979cd7b1fa9) — חוק-קבוע-בכל-מחזור"
+  },
+  {
+   "id": "N13",
+   "title": "Fuel/RC streaming THROUGH the custody gate",
+   "detail": "G77-b's automation must consume a custody-verdict input: fuel ops to steem soldiers require chain-verified key custody (14/14 roster or vault-sealed + sweep-verified) — REFUSED otherwise, typed verdict + receipt; automation without the gate is the T-80 bug class",
+   "owner": "G77-b (fleet-economy) + Lane-D gate"
+  },
+  {
+   "id": "N14",
+   "title": "Recall-of-own-delegation policy amendment",
+   "detail": "recall of headcorner's OWN parked delegations (4×2000 VESTS on keyless shells) was REFUSED 15:05Z by the delegation law's conservative reading — amend the law: recall-to-battery is capital RECOVERY, not new delegation; then execute the recall",
+   "owner": "capital lane"
   }
  ],
  "cycle30": {
@@ -162,5 +235,32 @@
    "N10 T5 floors after 5 more external fills",
    "kelly re-measure as clean tape grows"
   ]
+ },
+ "wave81": {
+  "trace": "1a1787f32fee7401",
+  "at": "2026-10-26T14:32Z",
+  "swarm": "architect-daemon CI host SELF-HEALED: erase-commit e60f5d6f (vault-seal merge -s ours stale-tree promotion, 16:40:32Z Oct 25) had deleted the wave-80 bun-install step → 6 honest-RED runs of starved-env noise (644 errors = dependency noise, not rot); giant 2c46e2ca landed C5 host-integrity (anchor-based invariants + canonical floor restore + selfVerify probe class + defense-in-depth inline install) → run 40338697310 SUCCESS no-work 0→0 raw rc=0 | HIVE-leg HBD haircut regime landed saos-dex 9fceaa2 (selftest 13/13, compile rc=0) — false DISARMED-BROKEN-MARKET cured at its mark root | this file refreshed (was stale since Oct 23, 48h-freshness law violated — now lawful)",
+  "evidence": "github.com/roshpinacare-sys/giant/actions/runs/40338697310 · saos-dex 9fceaa2 · giant 2c46e2ca",
+  "open": [
+   "STEEM leg: broadcast 'answered without id' 6/6 with keyGate authorityOk=true — stale-WIF-vs-authority or RPC fault; OWNER-CUSTODY vector (plans-only); 5 zombie orders on-chain unmanaged until broadcast heals",
+   "fx-fixedfloat key rotation = sibling cycle-35 lane (CLAIM 96112fa3, trace 1a178850450f2e55) — first-claim-wins",
+   "N10: T5 floors after 5 more external fills"
+  ]
+ },
+ "waveG77c": {
+  "trace": "1a178c71c10d38c5",
+  "at": "2026-10-26T17:45:00Z",
+  "swarm": "G77-c lane: execution-ledger accessibility cured (multi-source fetch + source-chain chip) + content lineage made honest (round-29 rows preserved verbatim, new verified rows D20-D23 appended, custody gap G6 measured and filed, fresh snapshot keys custodyNow/saos000xChainTruth added from live probes) · giant mirror synced under the accessor's schema law · custody-gap receipt + verdicts chain extended (Lane-D subtree)",
+  "evidence": "steem RPC (saos-0004 block 110750412) · :3040/health 14/14 · capital-router.json recall refusals 15:05Z · giant 7a930598 (G77-c claim)",
+  "open": [
+   "fuel-through-custody-gate (G77-b + gate)",
+   "recall-of-own-delegation amendment (capital lane)",
+   "saos-000X key import if owner holds creation-era secrets"
+  ]
+ },
+ "erasureGuard": {
+  "law": "rows-are-APPEND-ONLY · history lives in git · any renewal robot MUST merge existing done/partial/gaps/next rows and prior cycle*/wave* sections — replacement = erasure (third measured strike of the class: verdicts chain, wave block, this ledger)",
+  "lastRescue": "2026-10-26T17:5xZ G77-c (trace 1a178c71c10d38c5): round-29 core + cycle30/31 + wave81 + D20-D23 + G6 restored after the fleet-runner skeleton clobber 8ec40aa33 (-176 rows); an intermediate mislabeled push (0471d57ce) briefly carried the skeleton with this guard — corrected within minutes, honestly recorded",
+  "rescueSource": "commit-object archaeology: d6b48a04a (lineage-honest renewal) — the full ledger never left git history"
  }
 }
