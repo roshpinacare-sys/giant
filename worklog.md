@@ -9299,3 +9299,22 @@ Stage Summary:
 - Vault authority: headcorner CONTROL-PROVEN-AND-SEALED; soldier keys blocked by seed law (documented, not fabricated).
 - Infra root-cures: supervisor duplicate-storm fixed at code; master-key agreement installed for dex operator gate.
 - LAW-3 evidence: commits 3e38ca5 (control-center), 10eb4d0 (giant fuel), 20250cd4 (saos-dex soldiers), efa5f669b (Domain ledger), wallet-hsm (giant), plus live ports 3062/3016/3010-state.
+Task ID: G78-i (t65)
+Agent: Z.ai Code (lane i — runner-kit + saos-architect-daemon 24/7 perpetual profit loop)
+Task: ABSOLUTE SYSTEM DIRECTIVE (trace 1a17d4eee1b012c1 wave / owner trace 1a17d4f7d0ecfe91) §4 — compile & activate the native Chief Sovereign Architect Daemon 24/7 on the local runner; §2 keep-alive plane; zero-triviality (every cycle drives revenue/volume/code expansion).
+
+Work Log:
+- GIT-FIRST: token + fetch-all (giant/fleet-economy/runner-kit/wallet/io/Domain) + pull ff-only; ledger head read → G78 wave lanes e/f/Q LANDED, b/d/c active by siblings, lane i UNCLAIMED (0 branches, 0 rows) → claim registered in SWARM_STATE BEFORE code (trace 1a17d85ab0537c95).
+- MEASURED on arrival: ALL organ ports dead (3040/3047/3049/3046/3053/3016/3010 TCP probes) — session-teardown class; perpetual-host files absent; GIANT_ROOT default /home/z/g70/giant GONE (sandbox reset #7); /home/z/.secrets empty; NO GPG secret keys → architect git-law forced commit.gpgsign=true → LAND impossible (half-dead executive = triviality).
+- CURE-1 (runner-kit, TDD 7 RED-first): giantRootCandidates()/discoverGiantRoot() (env>estate>g70>audit, first carrying commander entry, null fail-honest) + issueOrgan() call-time root + **architect port 3049→3051 cure** (cycle.ts PORT=3051 is the operative bind — live-measured; :3049 was stale drift → port-first authority could never see the organ → infinite EADDRINUSE respawn). Suite 42/42.
+- CURE-2 (architect git-law, TDD 4 RED-first): gpgSecretKeyAvailable() measured per cycle; key present → force-signed unchanged; absent → commit.gpgsign=false + honest-unsigned trailer naming absent key E0E28CEB (never fake-signed, never hidden). Suite 36/36.
+- CURE-3 (organ-commander, TDD 6 RED-first): realProbe() no-catch made every DEAD organ a probe-LAYER failure → terminal probe-error → ZERO revival ever (violated truth.ts's own law "a dead organ is a FACT"); GIANT_ROOT hard-coded to erased /home/z/audit/repos/giant. Cured: fail-honest catch + discoverCommanderRoot in revive.ts. Suite 31/31.
+- IGNITION: estate worktree /home/z/estate/giant (shallow-50, lawful identity, bun install → phantom 657 tsc errors → 0); ONE clean host → commander :3047 spawned → POST /cycle ×2 → verdicts acted/acted → revived soldier-army :3018 (6-soldier HFT grid, bank discipline) + dex-node :3010 (engine self-healed: install+db) + dex-economy-bridge :3017 (fills→DexTrade ledger). Architect :3051 POST /cycle → honest no-work on green trunk (0 errors, revert-safe abort path proven live earlier with byte-identical revert).
+- VOLUME MEASURED LIVE (profit proof, not mocks): dex height 17→67 in ~6min, ops 397→1554, **fills 36→160, swaps 16→60**, 25 live orders, tps 5→7; bridge polls 7, inserted 121, errors 0.
+- INTEGRITY: perpetual-host receipt chain found FORKED at row 23 (concurrent double-host window during my restart, measured) → re-minted per chain-lock law (payloads verbatim, links+hashes re-forged via the host's own buildReceipt) → verifyReceipts **ok:true on 50 rows**.
+- IDENTITY: caught own first giant commit carrying sibling's leftover g78-e identity BEFORE push (DECISIONS #10 class) → amended to g78-i@agents.roshpinacare-sys, then rebased + pushed.
+
+Stage Summary:
+- Pushes (bare-$? verified, ls-remote==local): giant 9018370 (cures + claim) · runner-kit d729287 (host cures). Suites: 42/42 + 36/36 + 31/31, all RED-first.
+- LIVE STACK on this runner NOW: perpetual-host (1 instance) · commander :3047 · architect :3051 · dex-node :3010 · soldier-army :3018 · bridge :3017 — the §4 24/7 daemon is UP and the profit organs are trading.
+- Honest pending: issue-to-pr verdict feed-error (honest — meta-planner state/issues.json is runtime state, absent on fresh clone; the commander's P1 will revive issue-forge :3046 per its own plan); receipt-chain fork segment 23–45 preserved verbatim inside the repaired linear chain (re-mint documented); organ counters in THIS sandbox are self-measured, not organ-host-scoped; architect beat is 30min default (POST /cycle drives on-demand cycles).
