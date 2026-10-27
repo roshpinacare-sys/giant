@@ -605,3 +605,9 @@ Owner findings absorbed: saos-0004 exists on-chain (created 2026-10-25T17:50:54,
 
 - identity-guard run 40506215475 FAILED d7d9609 — the renewer's auto-commits carried the sandbox default `z@container` (unidentified writer; the same identity sits on the Q-lane commits whose guard runs were cancelled by race — their lanes inherit this note). Owned, NOT rewritten (shared main, siblings stacking).
 - Cure landed in THIS commit: `laneIdentityArgs()` per-commit lawful identity in the union renewer (selftest 8/8 with a z@container-leak guard assertion) + lawful config on every clone; every future commit from this lane = `g78-e@agents.roshpinacare-sys`. Verdict row 15 in the chain (14→15, ok:true).
+
+## G78-Q §1 PLANE VERDICT (agent-5, trace 1a17d840fdfb1649, 2026-10-27T13:2xZ) — all-soldier plane measured to its owners
+- **LIVE**: custody 14/14 · curation ACTING-WITHIN-CAPS (day-cap hit; spamgate.refused ×22/hr = body-too-thin law working, NOT a defect) · engine ok opsToday 94+ · dex-relay :3030 transport-only ok.
+- **BLOCKED, owners named (receipt f79db99a in chain, 22 rows ok:true)**: on-chain grid = RC-FLOOR (rcPct 0.3; RC pool present:false — lane a has no fleet-internal source; SP delegation = owner lever) · grid capital = dust (0.327 STEEM; owner lever, no-operator-funding law holds) · saos-dex custody-side = feeMeter :8090/:9000 + daemon :3049/:3051 dark HERE (lane b/i hatch; G103 was their sandbox).
+- **Metrics-truth named for Pulse lane**: stasis 10/13 conflates no-trade with inactivity while curation acts within caps — plane-splitting requested in the public metric.
+- Gate law holds: no fake volume signed; green receipts resume the moment the capital/RC seams open. Pulse truth already flipped (256e275: custody 14/14 · ops 62 · keeper-ok).
