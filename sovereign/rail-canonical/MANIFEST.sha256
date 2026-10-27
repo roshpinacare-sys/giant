@@ -1,0 +1,7 @@
+# fleet-economy receipts rail canonical blobs (base64) — adopted from reland lineage 1969771/a618f33, last-touch adoption law
+# beff43c87e1da3b1  lib/receipt-sign.ts
+# c6337da164c63c65  tests/receipt-sign.test.ts
+# db896432ff6a0609  scripts/fleet-receipts-guard-core.py
+# 0be08771e24dc785  .github/workflows/receipts-guard.yml
+# cc935b38962b4c47  state/audit/verify_signatures.py
+# Guardian law: absent-or-divergent on fleet-economy => re-PUT via contents API (lawful github-actions identity); divergent-but-present => alert only (rewrite class, never fight).

@@ -22,6 +22,7 @@
 import { createHash } from "crypto";
 import fs from "fs";
 import path from "path";
+import { denyIfPublic } from "../lib/vault-auth.ts"; // גל-80 · חוק-הסף-הריבוני (§1 lockdown, trace 1a173c3929f5d23d)
 
 const PORT = 3016;
 const STATE_DIR = path.join(import.meta.dir, "state");
@@ -641,6 +642,10 @@ const server = Bun.serve({
        * dedup לפי-ref: פקודה-כפולה-של-מפיק לא נספרת פעמיים. fire-and-forget ידידותי:
        * תשובה מהירה, מונים-כנים. */
       if (url.pathname === "/tx/ingest" && req.method === "POST") {
+        // גל-80 · חוק-הסף-הריבוני: שער-ציבורי (Caddy X-Real-IP) עם-מוטציה-בלי-טוקן-כספת → 403.
+        // שומר-הלופבק-הישן לבדו אינו-מספיק: מאחורי-reverse_proxy ה-peer הוא-תמיד 127.0.0.1.
+        const deny = denyIfPublic(req, "fleet-economy");
+        if (deny) return deny;
         const ip = srv.requestIP(req);
         const raw = ip ? String(ip.address) : "";
         // גל-83 · תיקון-שומר-לופבק: Bun מחזיר IPv4-ממופה (::ffff:127.0.0.1) —
@@ -662,6 +667,12 @@ const server = Bun.serve({
         });
         if (!r.ok) return Response.json({ ok: false, error: r.why, counters: { ingestOk, ingestFailed, ingestBad } }, { status: 422 });
         return Response.json({ ok: true, dedup: r.dedup ?? false, seq: r.tx?.seq ?? null, h: r.tx?.h ?? null });
+      }
+      if (url.pathname === "/fuel/status") {
+        // 36-b · SAOS-FUEL-STREAM/1 — תדלוק-SP/RC אוטומטי לחיילים: תוכנית-אחרונה
+        // + זנב-קבלות hash-chained (חסום-גודל). קריאה-בלבד, אפס-סודות.
+        const st = fuelStatus();
+        return Response.json({ ...st, cycles: fuelCycles, errors: fuelErrors, lastBeatAt: fuelLastBeatAt, intervalMs: FUEL_INTERVAL_MS, restartRequired: false });
       }
       return new Response("not found", { status: 404 });
     } catch (e) {
@@ -953,6 +964,30 @@ setInterval(() => { if (autonomousRefill()) drainRetryQueue(); }, 5_000); // ג�
 setInterval(tick, TICK_MS);
 setInterval(snapshotSave, SNAP_MS);
 // (גל-85 · מטפל-exit-מאוחד-למעלה: flush→snapshot→שחרור-מנעול, פעם-אחת)
+
+/* ── 36-b · fuel-stream (SAOS-FUEL-STREAM/1): תדלוק-SP אוטומטי לחיילים ───────
+ * כל-מחזור (FUEL_INTERVAL_MS, ברירת-מחדל 6 שעות): תוכנית-האצלות delegate_
+ * vesting_shares אל headcorner+saos-0001..0004 מתחת-לחוק-האוצר (minOperatorSp
+ * 17.0 fail-closed) + קבלות hash-chained state/fuel-receipts.jsonl.
+ * DRY_RUN ברירת-מחדל (FUEL_DRY_RUN≠"false" → אפס-שידור). חוק-אטימה: סבב-דלוק
+ * בזמן-vault-seal מדולג (ה-gate פנימי גם כן). נדרש-ריסטרט של-השירות כדי-לחיות. */
+import { runFuelCycle, fuelStatus, resolveFuelIntervalMs } from "./fuel-stream.ts";
+const FUEL_INTERVAL_MS = resolveFuelIntervalMs(process.env);
+let fuelCycles = 0, fuelErrors = 0, fuelLastBeatAt: number | null = null;
+async function fuelBeat(): Promise<void> {
+  try {
+    const r = await runFuelCycle({ gate: () => !sealing });
+    if (r.skipped) return; // כנה — אף-קבלה, אף-כתיבה בזמן-אטימה
+    fuelCycles++;
+    fuelLastBeatAt = Date.now();
+    console.log(`[fuel-stream] סבב=${r.plan.ok ? "תוכנית" : "חוסם"} · dryRun=${r.plan.dryRun} · מתוכנן=${r.plan.totalPlannedSp}SP · אוצר-אחרי=${r.plan.treasuryAfterSp}SP · קבלות=${r.receipts.length}${r.broadcastError ? ` · שידור-שגיאה=${r.broadcastError.slice(0, 120)}` : ""}`);
+  } catch (e) {
+    fuelErrors++;
+    console.log(`[fuel-stream] שגיאת-סבב (כנה): ${String((e as any)?.message ?? e).slice(0, 160)}`);
+  }
+}
+setInterval(fuelBeat, FUEL_INTERVAL_MS);
+setTimeout(fuelBeat, 20_000); // סבב-ראשון 20 שניות אחרי-עלייה (dry-run כברירת-מחדל)
 
 /* ── רשת-ביטחון למילויי-דקס (poller): כל-עסקה שנרשמה בפועל במנוע-הדקס (DexTrade —
  *   כולל-מילויי-מנוע-התדירות-של-הצי) נרשמת כדמי-שירות בספר — בלי-תלות במפיק-HTTP

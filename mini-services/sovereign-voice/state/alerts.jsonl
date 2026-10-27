@@ -106,3 +106,91 @@
 {"ts":1792337477854,"key":"army-errors","sev":"warn","text":"חיילים עם שגיאה: tamar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · shachar:Error: POST http://127.0.0.1:3010/saos-dex/api/dex · aluf:Error: POST http://127.0.0.1:3010/saos-dex/api/dex","status":"ledger"}
 {"ts":1792337802890,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (2 כשלים) → respawn=true → verified=false","status":"ledger"}
 {"ts":1792338977691,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 20 דק' (fills=98479) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792864163325,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1792864163325,"key":"bridge-unreachable","sev":"warn","text":"הגשר :3017 לא מגיב — המפעיל-הפנימי ינסה-ריפוי","status":"ledger"}
+{"ts":1792864163327,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792864176592,"key":"fuel-tend-error","sev":"warn","text":"מטפל-הדלק: שגיאת-רשת Error: Unable to connect. Is the computer able to access the url?","status":"ledger"}
+{"ts":1792864503972,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (2 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792865367382,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792865659392,"key":"disk-full","sev":"critical","text":"הדיסק ב-85% (סף-85) — מעקב-הדוק","status":"ledger"}
+{"ts":1792865968126,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 25 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792865968129,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792866307295,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (8 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792866566111,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1792944031676,"key":"disk-full","sev":"critical","text":"הדיסק ב-87% (סף-85) — מעקב-הדוק","status":"ledger"}
+{"ts":1792944038133,"key":"ledger-verify","sev":"critical","text":"אימות-שרשרת נכשל: {\"ok\":false,\"checked\":85278,\"brokenAt\":44373}","status":"ledger"}
+{"ts":1792944038175,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
+{"ts":1792944038176,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 2 שגיאות (היה 0)","status":"ledger"}
+{"ts":1792945098425,"key":"disk-healed","sev":"warn","text":"שומר-הדיסק: 98%→69% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792945098650,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 23 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792945241159,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792945839727,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792945841665,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
+{"ts":1792945841667,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 69 שגיאות (היה 58)","status":"ledger"}
+{"ts":1792945867195,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (9 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792946131739,"key":"disk-full","sev":"critical","text":"הדיסק ב-89% (סף-85) — מעקב-הדוק","status":"ledger"}
+{"ts":1792946445958,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1792946903224,"key":"disk-healed","sev":"warn","text":"שומר-הדיסק: 95%→71% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792946903437,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 53 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792947045854,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792947639791,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792947644990,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
+{"ts":1792947645022,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 105 שגיאות (היה 104)","status":"ledger"}
+{"ts":1792947671516,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (15 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792947931829,"key":"disk-full","sev":"critical","text":"הדיסק ב-90% (סף-85) — מעקב-הדוק","status":"ledger"}
+{"ts":1792948246367,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1792948713666,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 96%→91% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1792948714763,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 83 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792949133053,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1792949439905,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1792949445647,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
+{"ts":1792949731932,"key":"disk-full","sev":"critical","text":"הדיסק ב-91% (סף-85) — מעקב-הדוק","status":"ledger"}
+{"ts":1792949759222,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (22 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1792950046371,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1792950644953,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 115 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1792950933388,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1793023838303,"key":"ledger-verify","sev":"critical","text":"אימות-שרשרת נכשל: {\"ok\":false,\"checked\":72599,\"brokenAt\":44837}","status":"ledger"}
+{"ts":1793023842855,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
+{"ts":1793025033638,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 25 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1793025327855,"key":"disk-full","sev":"critical","text":"הדיסק ב-91% (סף-85) — מעקב-הדוק","status":"ledger"}
+{"ts":1793025328498,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1793025663395,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (9 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1793025987939,"key":"disk-healed","sev":"warn","text":"שומר-הדיסק: 97%→83% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1793025989040,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
+{"ts":1793026527909,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1793026833869,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 55 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1793027129848,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1793027434460,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1793027468684,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (15 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1793027727969,"key":"disk-full","sev":"critical","text":"הדיסק ב-89% (סף-85) — מעקב-הדוק","status":"ledger"}
+{"ts":1793028035431,"key":"dex-db","sev":"critical","text":"dbOk=false — מסד-השרשרת פגום","status":"ledger"}
+{"ts":1793028336004,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1793028634460,"key":"fills-stall","sev":"warn","text":"אין מילויים חדשים 85 דק' (fills=98459) — השוק קפוא; מטפל-הדלק יקרא במחזור הקרוב","status":"ledger"}
+{"ts":1793028974496,"key":"disk-heal-weak","sev":"critical","text":"שומר-הדיסק: 92%→87% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:true","status":"ledger"}
+{"ts":1793028977273,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1793029528087,"key":"disk-full","sev":"critical","text":"הדיסק ב-100% (סף-85) — טיפול-עצמי מופעל","status":"ledger"}
+{"ts":1793029529844,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 1 שגיאות (היה 0)","status":"ledger"}
+{"ts":1793029556408,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (22 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1793030140694,"key":"disk-healed","sev":"warn","text":"שומר-הדיסק: 96%→83% · bun-cache:true · tmp-pack-corpses:true · fleethq-gc-transplant:failed","status":"ledger"}
+{"ts":1793030148696,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1793030149648,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1793031043089,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1793031122144,"key":"fuel-tend-error","sev":"warn","text":"מטפל-הדלק: שגיאת-רשת TimeoutError: The operation timed out.","status":"ledger"}
+{"ts":1793031343070,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 68 שגיאות (היה 53)","status":"ledger"}
+{"ts":1793031384082,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (28 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1793032236211,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1793032242346,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1793033136383,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1793033185390,"key":"fuel-tend-error","sev":"warn","text":"מטפל-הדלק: שגיאת-רשת Error: Unable to connect. Is the computer able to access the url?","status":"ledger"}
+{"ts":1793033436392,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 173 שגיאות (היה 158)","status":"ledger"}
+{"ts":1793033477395,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (35 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1793034036269,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1793034336426,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1793034936431,"key":"audit-not-clear","sev":"critical","text":"המבקר-הבלתי-תלוי פסק: \"AUDIT-ERROR\"","status":"ledger"}
+{"ts":1793034985437,"key":"fuel-tend-error","sev":"warn","text":"מטפל-הדלק: שגיאת-רשת Error: Unable to connect. Is the computer able to access the url?","status":"ledger"}
+{"ts":1793035236432,"key":"bridge-errors","sev":"warn","text":"גשר-דקס→כלכלה: 263 שגיאות (היה 248)","status":"ledger"}
+{"ts":1793035277437,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (41 כשלים) → respawn=true → verified=false","status":"ledger"}
+{"ts":1793035836291,"key":"console-unreachable","sev":"critical","text":"הקונסולה :3000 לא מגיבה — המפעיל-הפנימי יקים (חוק-סדר-עלייה: ראשונה)","status":"ledger"}
+{"ts":1793036136293,"key":"economy-unreachable","sev":"critical","text":"נוד-הכלכלה :3016 לא מגיב — המפעיל-הפנימי יקים (המנעול-מגן-מפני-כותב-כפול)","status":"ledger"}
+{"ts":1793036436294,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
+{"ts":1793036487300,"key":"healed-economy","sev":"warn","text":"מפעיל-פנימי: economy:3016 נפל (0 כשלים) → respawn=true → verified=true","status":"ledger"}

@@ -1,0 +1,13 @@
+{
+  "name": "wallet-hsm",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Saosmartwallet production HSM signing runtime (:3062, 127.0.0.1 ONLY) — vault-auth deny-by-default, AES-256-GCM envelope vault (@saos/vault via file:), withKey zeroize, zero-dep vector-pinned secp256k1. Task 36-d.",
+  "scripts": {
+    "dev": "bun index.ts",
+    "test": "bun test index.test.ts"
+  },
+  "dependencies": {
+    "@saos/vault": "file:/home/z/work/Saosmartwallet/packages/vault"
+  }
+}
