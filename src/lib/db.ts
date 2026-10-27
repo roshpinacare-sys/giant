@@ -25,6 +25,16 @@ if (!globalForPrisma.prisma) globalForPrisma.prisma = current
 
 const FATAL_DB = /not yet connected|Engine is not yet|SQLITE_BUSY|SQLITE_READONLY|readonly|read-only|locked/i
 
+// גל-80-fix-b: תת-מחלקה-Promise-אמיתית-עם-brand-PrismaPromise — $transaction מאמת
+// Symbol.toStringTag==="PrismaPromise" על-כל-רכיב-מערך (library.js _transactionWithArray);
+// Symbol.toStringTag על-Promise-רגיל read-only, ו-Object.create שובר-סלוטים-פנימיים
+// (נמדד: "incompatible receiver"). מחלקה-אמיתית = then/catch/await חיים + brand תקין.
+const BrandedPromise = class extends Promise<unknown> {}
+Object.defineProperty(BrandedPromise.prototype, Symbol.toStringTag, {
+  value: "PrismaPromise",
+  configurable: true,
+})
+
 /** ריפוי-כנה: ניתוק-הלקוח-המת-והחלפתו-בחדש. כל-הקוראים-דרך-db-עוברים-אוטומטית-לחדש. */
 export async function healDb(reason: string): Promise<void> {
   const old = current
@@ -59,7 +69,8 @@ function wrapMethod(path: string, fn: (...a: unknown[]) => unknown, args: unknow
     typeof (res as Promise<unknown>).then === 'function' &&
     typeof (res as Promise<unknown>).catch === 'function'
   ) {
-    return (res as Promise<unknown>).catch((err: unknown) => healAndRetry(path, args, err))
+    const wrapped = BrandedPromise.resolve(res as Promise<unknown>).catch((err: unknown) => healAndRetry(path, args, err))
+    return wrapped
   }
   return res
 }
@@ -69,7 +80,9 @@ export const db = new Proxy({} as PrismaClient, {
     const client = current as unknown as Record<string | symbol, unknown>
     const v = client[prop]
     if (typeof v === 'function') {
-      return (...args: unknown[]) => wrapMethod(String(prop), v as (...a: unknown[]) => unknown, args)
+      // גל-80-fix: מתודות-רמת-לקוח ($transaction · $queryRaw · $disconnect) חייבות-this-קשור —
+      // נמדד: $transaction ללא-bind זורק TypeError "_tracingHelper" (route dex/transfer 500)
+      return (...args: unknown[]) => wrapMethod(String(prop), (v as (...a: unknown[]) => unknown).bind(client), args)
     }
     if (v && typeof v === 'object') {
       // model delegate (fleetAgent · dexTrade · $transaction וכד') — עוטפים-גם-את-מתודותיו

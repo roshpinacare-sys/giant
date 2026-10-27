@@ -1,0 +1,9 @@
+{
+  "name": "soldier-mesh",
+  "version": "1.0.0",
+  "private": true,
+  "description": "8 parallel soldier trading loops on the internal dex (API-key accounts, zero-mint law, re-peg 40bps) — trace 1a17d806eb807211 §2",
+  "scripts": {
+    "dev": "flock -n /tmp/soldier-mesh.instance.lock bun index.ts"
+  }
+}
