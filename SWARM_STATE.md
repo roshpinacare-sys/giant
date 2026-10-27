@@ -600,3 +600,8 @@ Owner findings absorbed: saos-0004 exists on-chain (created 2026-10-25T17:50:54,
 - **Chain**: verdicts 12→14, `verifyChain ok:true`, tail `773d07d3212e` (wallet-cure verdict + giant-landing verdict).
 - **Honest pending**: organ counters (market/ledger/runner) are organ-host-scoped — G7 gap row carries the truth; Pulse network.json staleness is organ-cadence-owned (f/life-pulse), observed not touched (edit-war class avoided); FixedFloat 501 = owner lever unchanged; pages CDN lag at verification time — post-deploy re-curl recorded in the worklog.
 - **Boundaries**: zero edits outside the owned paths above; no secrets; plans-only everywhere (no broadcast, no key material).
+
+## ADDENDUM (honesty law): G78-e — DECISIONS #10 identity violation NAMED and CURED (trace 1a17d4f7d0ecfe91, 2026-10-27T13:0xZ)
+
+- identity-guard run 40506215475 FAILED d7d9609 — the renewer's auto-commits carried the sandbox default `z@container` (unidentified writer; the same identity sits on the Q-lane commits whose guard runs were cancelled by race — their lanes inherit this note). Owned, NOT rewritten (shared main, siblings stacking).
+- Cure landed in THIS commit: `laneIdentityArgs()` per-commit lawful identity in the union renewer (selftest 8/8 with a z@container-leak guard assertion) + lawful config on every clone; every future commit from this lane = `g78-e@agents.roshpinacare-sys`. Verdict row 15 in the chain (14→15, ok:true).

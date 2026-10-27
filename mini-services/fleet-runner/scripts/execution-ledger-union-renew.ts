@@ -207,6 +207,19 @@ function git(args: string[], cwd: string): { out: string; code: number } {
   return { out: (p.stdout.toString() + p.stderr.toString()).trim(), code: p.exitCode ?? 1 };
 }
 
+/**
+ * DECISIONS #10 identity law v3 (deny-by-default): every commit this renewer
+ * creates MUST carry a lawful lane identity — a sandbox default like
+ * `z@container` is an unidentified writer and the giant identity-guard will
+ * (correctly) fail the push. LANE_NAME/LANE_EMAIL env-overridable, lawful
+ * default, injected per-commit via -c so the host config is never mutated.
+ */
+export function laneIdentityArgs(env: Record<string, string | undefined> = process.env): string[] {
+  const name = env.LANE_NAME ?? "G78-e lane (execution-ledger renewer)";
+  const email = env.LANE_EMAIL ?? "g78-e@agents.roshpinacare-sys";
+  return ["-c", `user.name=${name}`, "-c", `user.email=${email}`];
+}
+
 function publish(repo: string, file: string, body: string, stamp: string): string {
   const target = join(repo, file);
   const prev = existsSync(target) ? readFileSync(target, "utf8") : "";
@@ -216,7 +229,7 @@ function publish(repo: string, file: string, body: string, stamp: string): strin
   const idem = `execution-ledger-union-renew ${stamp}`;
   const log = git(["log", "--format=%s", "-1"], repo);
   if (log.out === idem) return "already-committed";
-  if (git(["commit", "-m", idem], repo).code !== 0) return "commit-failed";
+  if (git([...laneIdentityArgs(), "commit", "-m", idem], repo).code !== 0) return "commit-failed";
   for (let attempt = 1; attempt <= 3; attempt++) {
     const pull = git(["pull", "--rebase", "-q", "origin", "HEAD"], repo);
     const push = git(["push", "-q", "origin", "HEAD"], repo);

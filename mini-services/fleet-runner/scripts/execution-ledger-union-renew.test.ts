@@ -5,7 +5,7 @@
  */
 import { describe, expect, test } from "bun:test";
 
-import { renewLedger, rowKey, unionLedgers, type LedgerDoc } from "./execution-ledger-union-renew";
+import { laneIdentityArgs, renewLedger, rowKey, unionLedgers, type LedgerDoc } from "./execution-ledger-union-renew";
 
 const GUARD = { law: "rows-are-APPEND-ONLY · history lives in git" };
 
@@ -161,5 +161,17 @@ describe("renewLedger — the lineage law", () => {
       measuredSnapshot: {},
     });
     expect(out.erasureGuard).toEqual(GUARD);
+  });
+});
+
+describe("laneIdentityArgs — DECISIONS #10 identity law", () => {
+  test("lawful default lane identity, env-overridable, per-commit -c injection", () => {
+    const args = laneIdentityArgs({});
+    expect(args).toContain("user.name=G78-e lane (execution-ledger renewer)");
+    expect(args).toContain("user.email=g78-e@agents.roshpinacare-sys");
+    const custom = laneIdentityArgs({ LANE_NAME: "X", LANE_EMAIL: "x@fleet.local" });
+    expect(custom).toEqual(["-c", "user.name=X", "-c", "user.email=x@fleet.local"]);
+    // the sandbox default class must never leak through
+    expect(args.join(" ")).not.toContain("z@container");
   });
 });
