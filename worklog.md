@@ -9320,3 +9320,21 @@ Stage Summary:
 - Code change: 1 helper + 2 guarded merge sites in mini-services/fleet-economy/index.ts; 9 files restored byte-identical from 7b1e5b9.
 - tsc: 0. push sha: see commit "nothing-erased: restore vault-sync-clobbered modules, constrain merge strategy to state/* (E8)" (ls-remote-verified in the commit log below).
 - Next actions: (1) if the guard's clobber-guard log fires often on my-project, evolve from skip to a real merge for protected lanes (human-approved); (2) extend protection set (mini-services/**, scripts/**) once skip-fallback is observed stable; (3) keep giant-swallow-guard.sh as the second line of defense (detect+restore from adopted blobs).
+
+---
+Task ID: G78-e (t64)
+Agent: Z.ai Code (execution-ledger + DECISIONS #43 lane)
+Task: ABSOLUTE SYSTEM DIRECTIVE (trace 1a17d4f7d0ecfe91) §3 — execution-state.json accessibility/live-truth, stale-pipeline repair, canonical convergence (DECISIONS #42/#43); measured-unclaimed wallet main-RED cure.
+
+Work Log:
+- GIT-FIRST: token + fresh clones (giant/fleet-economy/sovereign-runner-kit/user-site/Domain/Saosmartwallet); ledger head read → t63 LANDED; wave number resolved #83/G78 via worklog + Instance 0's G78 claim (trace 1a17d4eee1b012c1, lane e).
+- MEASURED (evidence before lines): three law surfaces 200/200/200 but DIVERGENT (root 13/6 · Domain 24/10 · mirror 12/5) and ~21h stale — union class named; Saosmartwallet main RED (run 40499124392, afterAll hook timeout 5000ms, ZERO code delta 68b23bb→64827b7 = flake class); vault open/seal costs 1ms (ruled out); bun close() probes (idle/active/fetch-sequence) all 0ms → class = unbounded close wait + default hook budget under runner load.
+- CURE-1 (TDD): execution-ledger-union-renew.{ts,test.ts} — pure union/renew core, selftest 7/7 first (two honest reds: `cycle*/` inside block comments; fixture row-count math), then green; CLI measured live facts (surfaces, CI run-IDs, Steem RPC saos-0001/0004, organ-host liveness via Domain pushes) and published byte-true: giant d7d9609 · Domain aa55f26 · root-site 16050e8 (done 27/gaps 11/D64-a..c/G7, erasureGuard + all history sections preserved, base=domain superset 0-missing).
+- CURE-2 (TDD, wallet): spec test first (red: missing export), then closeHsmServer bounded graceful shutdown in src/server.ts + explicit 20s hook budgets + regression test (idle+active connections, bound <2500ms). 85/85×3 · packages 427/427 · tsc 0. Push 1e8570a → **CI verified: wallet-core-tests 40505382231 SUCCESS · wallet-verify 40505382304 · gitleaks 40505382380** (first green after run-#48 red).
+- CONVERGENCE: DECISIONS #43 EXECUTED per DEG9 verdict table — git rm --cached ×31 (29 gitlinks incl. Zip + dev.pid + download/README.md), 0 gitlinks remain, consumers = host-paths only, recovery = pinned SHAs + history; DEG9 §3 execution receipt; DEG10-active-execution-registry.md registered (11 canonical surfaces); verdicts chain 12→14 ok:true tail 773d07d3212e; SWARM_STATE G78-e claim + LANDED receipt.
+- Green gate: full giant suite 341/341 (1382 expects); GPG honest-unsigned (rotated sandbox, no key — same as Q lane note).
+
+Stage Summary:
+- Commits: giant lane commit (this) with mirror+verdicts+docs+state; Saosmartwallet 1e8570a (origin-verified); organ-repo renewals d7d9609/aa55f26/16050e8.
+- The owner's §3 asks are answered with run-ID evidence: ledger surfaces 200×3 AND converged to one lineage; stale-pipeline (wallet CI red) cured and CI-green; #43 eviction executed with 0 data loss; the registry makes "aggregate all active execution logic into giant" a checkable table.
+- Honest pending: organ-scoped counters absent from this sandbox (G7 row, last organ measurement t63 11:30:08Z); Pulse network.json owned by organ cadence (observed stale 15:47:33Z, NOT touched — edit-war class avoided); FixedFloat 501 owner lever; pages CDN lag — post-deploy re-curl follows in the report.

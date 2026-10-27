@@ -65,3 +65,26 @@ host clones remain at the canonical org repos (`roshpinacare-sys/*`).
   record DORMANT.
 - Audit instant is pre-eviction; re-run `git ls-files -s | awk '$1==160000'` after Instance 0's
   eviction to confirm **0 gitlinks** remain (expected end-state).
+
+---
+
+## 3. EXECUTION receipt — the eviction is DONE (G78-e, trace 1a17d4f7d0ecfe91, 2026-10-27T12:5xZ)
+
+> Authority: Instance 0's WAVE G78 lane law assigns **e = giant (execution-ledger live receipts + DECISIONS #43)**
+> (SWARM_STATE line 579, trace 1a17d4eee1b012c1) — this supersedes the G76-h record-only scope for the
+> execution act itself; the audit above remains the recovery ledger.
+
+- **Executed**: `git rm --cached` ×31 — all 29 legacy gitlinks exactly per the verdict table
+  (t30×3 · t31×3 · t33×4 · t34×7 incl. the literal **Zip** · t35×6 · t36×6) + `.zscripts/dev.pid` (stale PID) +
+  `download/README.md` (template placeholder). `--cached` eviction: **zero bytes of history lost**; recovery =
+  the pinned SHAs in §2 + full git history.
+- **Verified**: `git ls-files -s | awk '$1=="160000"' | wc -l` → **0** (census matched §2 exactly, nothing else
+  was mode-160000); staged deletions = 31.
+- **Consumer re-scan (zero tracked-path readers)**: 4 files reference these names and all are HOST-scoped —
+  `src/lib/sectors.ts:11` reads the wiped host dir `/home/z/my-project/estate/work/t30-fresh/roshpina`;
+  `src/lib/giant-git.ts:10` reads `/home/z/my-project/t36/Sandbox` (host);
+  `src/lib/material-engine.ts` MATERIAL_SCAN_ROOTS scans DISK dirs that exist independently of gitlinks
+  (untracked empty dirs on hosts are unchanged by eviction — the engine's scan surface is byte-identical);
+  `src/app/api/material/read/route.ts` is a host-path doc reader. Zero code path reads the tracked gitlinks.
+- **Green gate**: full suite **341/341** (incl. 7 new t64 selftests), src/lib 66/66.
+- **Disk law**: nothing on any host disk was deleted — only the tracked dead topology left the tree.
