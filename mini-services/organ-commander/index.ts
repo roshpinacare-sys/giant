@@ -20,8 +20,12 @@ import { ORGANS, probeTruth, type OrganSpec, type Truth } from "./truth";
 import { denyIfPublic } from "../lib/vault-auth.ts"; // גל-80 · חוק-הסף-הריבוני (§1 lockdown, trace 1a173c3929f5d23d)
 import { planNext, type Command } from "./command";
 import { ReceiptChain, verifyChain, type Receipt } from "./receipts";
-import { executeRevive, revivePlan, GIANT_ROOT, type SpawnPlan } from "./revive";
+import { executeRevive, revivePlan, GIANT_ROOT, giantRootCandidates, discoverCommanderRoot, type SpawnPlan } from "./revive";
 import { liveSiblings } from "./singleflight";
+
+// G78-i: discovery lives in revive.ts (spawn-plan owner); re-exported here for
+// the suite + consumers. GIANT_ROOT is now DISCOVERED, never a dead constant.
+export { giantRootCandidates, discoverCommanderRoot };
 
 export const PORT = 3047;
 export const STATE_DIR = join(import.meta.dir, "state");
@@ -62,11 +66,19 @@ export interface CycleResult {
 }
 
 /* ── runtime io (real world) ──────────────────────────────────────────── */
-async function realProbe(spec: OrganSpec): Promise<{ alive: boolean; detail: string; body?: unknown }> {
-  const r = await fetch(`http://127.0.0.1:${spec.port}${spec.path}`, { signal: AbortSignal.timeout(2000) });
-  let body: unknown = undefined;
-  try { body = await r.json(); } catch { /* non-JSON alive organ — honest */ }
-  return { alive: true, detail: `HTTP ${r.status}`, body };
+/* G78-i: exported for the suite (the keep-alive probe is a law, tested). */
+export async function realProbe(spec: OrganSpec): Promise<{ alive: boolean; detail: string; body?: unknown }> {
+  /* G78-i cure: a refused/dead connection is a FACT (alive:false), never an
+   * exception — the old no-catch version made every dead organ a probe-LAYER
+   * failure → terminal probe-error → the keep-alive plane never revived anything. */
+  try {
+    const r = await fetch(`http://127.0.0.1:${spec.port}${spec.path}`, { signal: AbortSignal.timeout(2000) });
+    let body: unknown = undefined;
+    try { body = await r.json(); } catch { /* non-JSON alive organ — honest */ }
+    return { alive: true, detail: `HTTP ${r.status}`, body };
+  } catch (e) {
+    return { alive: false, detail: (e instanceof Error ? e.message : String(e)).slice(0, 120) };
+  }
 }
 function readFeed(): number {
   try {
