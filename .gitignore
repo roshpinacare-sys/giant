@@ -112,3 +112,9 @@ mini-services/*/state/*
 # single-canonical-trunk law (#42/#43): forge user-project archives live on
 # disk (gitignored), never in git history (§4 archive eviction, 2026-10-24).
 mini-services/forge/storage/
+
+# swallow-guard runtime state (local-only; canonical = quality/verdicts.jsonl + custody-gaps + trade-receipts)
+state/swallow-guard/guard.jsonl
+state/swallow-guard/guard.pid
+state/swallow-guard/.guard.lock
+state/swallow-guard/adopted.json
