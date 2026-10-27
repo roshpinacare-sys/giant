@@ -194,3 +194,6 @@
 {"ts":1793036136293,"key":"economy-unreachable","sev":"critical","text":"נוד-הכלכלה :3016 לא מגיב — המפעיל-הפנימי יקים (המנעול-מגן-מפני-כותב-כפול)","status":"ledger"}
 {"ts":1793036436294,"key":"dex-unreachable","sev":"critical","text":"הבורסה :3010 לא מגיבה — המשגיח יקים (רק-אחרי-קונסולה-חיה)","status":"ledger"}
 {"ts":1793036487300,"key":"healed-economy","sev":"warn","text":"מפעיל-פנימי: economy:3016 נפל (0 כשלים) → respawn=true → verified=true","status":"ledger"}
+{"ts":1793101176046,"key":"ledger-verify","sev":"critical","text":"אימות-שרשרת נכשל: {\"ok\":false,\"checked\":10076,\"brokenAt\":38182}","status":"ledger"}
+{"ts":1793101176063,"key":"dex-halted","sev":"critical","text":"הבורסה עצורה: snapshot-integrity-failed: load refused, evidence preserved (operator reset is the explicit recovery path)","status":"ledger"}
+{"ts":1793101202350,"key":"heal-failed-console","sev":"critical","text":"מפעיל-פנימי: console:3000 נפל (2 כשלים) → respawn=true → verified=false","status":"ledger"}
