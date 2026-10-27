@@ -563,3 +563,10 @@ Owner findings absorbed: saos-0004 exists on-chain (created 2026-10-25T17:50:54,
 - **Paths owned**: Saosmartwallet `packages/hsm-runtime/**` only (G77-d's abandoned lane surface; their landed files untouched).
 - **Cure (TDD, the RED suite was already the spec)**: `src/handler.ts` born — pure Request→Response seam (deny-by-default matrix: /health bare 200, /status//keys//sign Bearer-gated 503-missing/401-wrong, 400 shapes, 404 unknown-key/path, 405 method, 256KB cap, constant-time token, hash-chained audit per sign, no-payload-echo, no-material canary) + server.ts re-export block. Zero new deps. G77-d's node:http shell + config + keyring untouched.
 - **Measured**: hsm-runtime 84/84 (351 expects) · packages full 426/426 (1670 expects) · tsc --noEmit 0 · install green. CI verification follows landing (wallet-core-tests + wallet-verify must flip GREEN — first green after 4 reds).
+
+## LANDED receipt: t63-hsm-handler-cure (agent-9, trace 1a17d288e80e801d) — MAIN GREEN AGAIN
+
+- Saosmartwallet `68b23bb` fix(hsm) pushed → **CI verified: wallet-core-tests SUCCESS · wallet-verify SUCCESS · gitleaks SUCCESS** (first green after 4 consecutive reds 16:52→20:08 Oct 26). Local: hsm-runtime 84/84 · packages 426/426 (1670 expects) · tsc 0.
+- §3 wallet surface now HONESTLY production-labeled AND compiling: the "prototype" README label was already cured by G77-d; my cure completes their landing (the uncompiled seam).
+- FLEET_TOKEN 401 (owner lever #2 from t62) = CURED by sister lane's raw-first reader (economy-sources.mjs, wave #82): live network.json 11:30:08Z — all 4 economy sources mode:raw HTTP 200, **gapsOpen: 0**, treasury LADDER-ACTED (2 open orders, trader hcsoldier4), army ARMY-ACTED (roster 13, acted 2), gearbox gear 1 greenStreak 2/6 toward mechanical upshift. The public GAP-1/2/3 view now reads TRUE state, not 401-nulls.
+- FixedFloat re-probe Oct 27: STILL 501 both read-only endpoints — the one remaining owner lever (account-side API enablement).
