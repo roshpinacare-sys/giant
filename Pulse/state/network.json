@@ -1,10 +1,10 @@
 {
  "schema": "pulse-gap-truth/1",
  "note": "giant-side gap-truth record — the gap records surface referenced by SWARM_STATE.md line 472 ('GAP-1/2/3 open in Pulse/state/network.json') did not exist in the giant repo (measured at base 0e09257: no Pulse/** path); the LIVE bot census file remains roshpinacare-sys/Pulse state/network.json (bot-written every 30min). This file carries the G77-f measured verdicts where this lane owns paths (giant: Pulse/**, state/**, docs/**). Machine ledgers: state/gap-closure/*.json · docs: docs/gap1-compute-coverage.md, docs/gap2-gear-gate-verdict.md, docs/gap3-dormant-awakening-register.md",
- "generatedAt": "2026-10-26T15:40:00Z",
- "wave": "G77-f",
- "branch": "feat/gap-closure-123",
- "worker": "G77-f (giant lane: Pulse/**, state/**, docs/**)",
+ "generatedAt": "2026-10-27T12:55:10Z",
+ "wave": "G103",
+ "branch": "main",
+ "worker": "wave-G103 single-worker (trace 1a17d5314095aa65)",
  "gaps": [
   {
    "id": "GAP-1",
@@ -25,7 +25,11 @@
     "saos-dex:grids/state/self-deposit-receipts.jsonl tail (gap $999.9974)",
     "saos-dex dex-beat f74a4b6a (Σ14250 credits, claimed0)"
    ],
-   "handoffs": ["H1 giant .github/workflows registration of the coverage beat (outside lane paths)", "H2 saos-dex credits-claiming flow", "H3 owner decision on the $1000 self-financing income path"]
+   "handoffs": [
+    "H1 giant .github/workflows registration of the coverage beat (outside lane paths)",
+    "H2 saos-dex credits-claiming flow",
+    "H3 owner decision on the $1000 self-financing income path"
+   ]
   },
   {
    "id": "GAP-2",
@@ -44,7 +48,11 @@
     "saos-dex:grids/state/army-receipts.jsonl (296 green/62 red/47 neutral)",
     "saos-dex:grids/state/treasury-receipts.jsonl (32 green/0 red/18 neutral)"
    ],
-   "handoffs": ["H-2a saos-dex parity-floor epsilon cure (converts instant resets into green beats)", "H-2b treasury-grade verdict discipline as the measured template", "H-2c owner/expectancy: NO-EDGE keeps kelly caps at 3 SBD"]
+   "handoffs": [
+    "H-2a saos-dex parity-floor epsilon cure (converts instant resets into green beats)",
+    "H-2b treasury-grade verdict discipline as the measured template",
+    "H-2c owner/expectancy: NO-EDGE keeps kelly caps at 3 SBD"
+   ]
   },
   {
    "id": "GAP-3",
@@ -63,7 +71,28 @@
     "state/keys/VAULT-CENSUS.json (25/25 FILLED)",
     "Pulse census fleet: saos-control-center actions run 40109614383 success"
    ],
-   "handoffs": ["H-3a Pulse census lane: decide the 5 staleUndecided rows", "H-3b G77-d: HSM gate = Saosmartwallet awakening gate", "H-3c G77-a: merge + census flip wakes saos-control-center", "H-3d owner briefs for the 8 owner-gated shells"]
+   "handoffs": [
+    "H-3a Pulse census lane: decide the 5 staleUndecided rows",
+    "H-3b G77-d: HSM gate = Saosmartwallet awakening gate",
+    "H-3c G77-a: merge + census flip wakes saos-control-center",
+    "H-3d owner briefs for the 8 owner-gated shells"
+   ]
+  },
+  {
+   "id": "GAP-2",
+   "name": "TRANSACTION VOLUME",
+   "directive": "Canary Gear 1 → Gear 2/3 on green receipts",
+   "status": "RAILS-REVIVED",
+   "verdict": "measured 2026-10-27T12:55Z: entire trading stack was DEAD post-wipe (engine :3040 boot-crash, chain :3010 halted, fleet organs dead) — all revived: chain h1860199 halted:false · 22 live orders · 255,721 fills heritage · HFT :3049 TRADE mode · 6/6 soldiers placing · 5 USDS pairs live · feeMeter 8090/9000. Gear-lift still gated on 5 green receipts (honest).",
+   "evidence": "Pulse measured via /api/dex/state + ports probe"
+  },
+  {
+   "id": "GAP-3",
+   "name": "DORMANT ASSETS",
+   "directive": "re-evaluate dormant assets via quality gate",
+   "status": "MEASURED-THIS-WAVE",
+   "verdict": "armyCustody 0/14 verified (VAULT-ABSENT honest) — soldier chain keys remain owner-derivable wound; adoption rails armed; no fabricated custody.",
+   "evidence": "/api/dex engine :3040 /health armyCustody"
   }
  ],
  "crossGapMeasuredFacts": {
@@ -74,5 +103,14 @@
   "externalIncome24hUsd": 0.0281,
   "selfFinancingGapUsd": 999.9974
  },
- "tokenHygiene": "no token used; public raw fetches + local git clones of record only"
+ "tokenHygiene": "no token used; public raw fetches + local git clones of record only",
+ "g103Recovery": {
+  "at": "2026-10-27T12:55:10Z",
+  "trace": "1a17d5314095aa65",
+  "items": [
+   "scripts/sovereign-selfcustody.mjs restored (never in any branch — wipe class); git identity + clearsign probe OK",
+   "giant repo wiped → re-cloned from origin/main; node_modules restored → tsc 654→0",
+   "dex chain: Task-115 stale-DB-birth adopted git-canonical snapshot h1860088; derivative headers purged openly; forensic backup kept; birth-flush + restart-safety proven"
+  ]
+ }
 }
