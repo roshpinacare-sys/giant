@@ -69,4 +69,50 @@ describe("vault-auth · חוק-הסף-הריבוני", () => {
     delete process.env.SOVEREIGN_VAULT_TOKEN;
     expect(M.verifyVaultToken(gw("POST", M.vaultToken()))).toBe(true);     // חזרה לקובץ
   });
+
+  test("T10 vaultTokenFile(): פתרון-פר-קריאה — env חי-תמיד (אין-קפאה-בייבוא)", () => {
+    const perCall = path.join(TMP, "per-call", "token");
+    process.env.VAULT_TOKEN_FILE = perCall;
+    expect(M.vaultTokenFile()).toBe(perCall);
+    delete process.env.VAULT_TOKEN_FILE;
+    expect(M.vaultTokenFile()).toBe("/home/z/coord-work/vault/operator-token");
+    process.env.VAULT_TOKEN_FILE = TOKEN_FILE; // משחזרים-לשאר-המבחנים
+  });
+
+  test("T9 חוק-הטבעה-tmp-בלבד: ייבוא-לפני-env לא מסיט הטבעה אל-נתיב-הראנטיים (מדוד 2/8↔8/8)", async () => {
+    const DEFAULT = "/home/z/coord-work/vault/operator-token";
+    const TMP_TARGET = path.join(TMP, "tmp-only-law", "minted-token");
+    const probe = `
+      const M = await import(${JSON.stringify(path.resolve("mini-services/lib/vault-auth.ts"))});
+      const fs = await import("fs");
+      const before = fs.existsSync(${JSON.stringify(DEFAULT)}) ? fs.readFileSync(${JSON.stringify(DEFAULT)}, "utf8") : null;
+      process.env.VAULT_TOKEN_FILE = ${JSON.stringify(TMP_TARGET)};
+      const t = M.vaultToken();
+      const after = fs.existsSync(${JSON.stringify(DEFAULT)}) ? fs.readFileSync(${JSON.stringify(DEFAULT)}, "utf8") : null;
+      console.log(JSON.stringify({ tokenHex64: /^[0-9a-f]{64}$/.test(t), tmpMinted: fs.existsSync(${JSON.stringify(TMP_TARGET)}), defaultUntouched: before === after }));
+    `;
+    const cleanEnv: Record<string, string> = {};
+    for (const [k, v] of Object.entries(process.env)) if (v !== undefined) cleanEnv[k] = v;
+    delete cleanEnv.VAULT_TOKEN_FILE;
+    delete cleanEnv.SOVEREIGN_VAULT_TOKEN;
+    const hadDefault = fs.existsSync(DEFAULT);
+    const backup = hadDefault ? fs.readFileSync(DEFAULT) : null;
+    let out = { tokenHex64: false, tmpMinted: false, defaultUntouched: false };
+    try {
+      const p = Bun.spawn(["bun", "-e", probe], { env: cleanEnv, stdout: "pipe", stderr: "pipe" });
+      const raw = await new Response(p.stdout).text();
+      const lines = raw.trim().split("\n");
+      out = JSON.parse(lines[lines.length - 1]); // המימוש-רשאי ללוג-לstdout — החוזה: שורת-הJSON האחרונה
+      await p.exited;
+    } finally {
+      // מעיל-בלימה: המבחן-אף-פעם לא כותב/משאיר-טביעה בנתיב-הראנטיים —
+      // אם-מימוש-פר-החוק טבע שם (המדידה-החיה של-הפגם), משחזרים-בייטים-אמת ומנקים.
+      if (hadDefault && backup) fs.writeFileSync(DEFAULT, backup);
+      else if (!hadDefault && fs.existsSync(DEFAULT)) { fs.rmSync(DEFAULT); console.warn("[vault-auth-test] containment: law-violating mint at runtime path removed (was absent before probe)"); }
+      fs.rmSync(path.dirname(TMP_TARGET), { recursive: true, force: true });
+    }
+    expect(out.tmpMinted).toBe(true);
+    expect(out.defaultUntouched).toBe(true);
+    expect(out.tokenHex64).toBe(true);
+  });
 });

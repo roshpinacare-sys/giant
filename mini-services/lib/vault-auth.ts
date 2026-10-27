@@ -21,7 +21,16 @@ import { createHash, randomBytes, timingSafeEqual } from "crypto";
 import fs from "fs";
 import path from "path";
 
-export const VAULT_TOKEN_FILE = process.env.VAULT_TOKEN_FILE || "/home/z/coord-work/vault/operator-token";
+export const VAULT_TOKEN_FILE_DEFAULT = "/home/z/coord-work/vault/operator-token";
+
+/** נתיב-קובץ-הטוקן נקרא בכל-קריאה — env חי-תמיד. פגם-חי-שנמדד (2026-10-27T12:34Z,
+ * suite-vs-isolated 2/8↔8/8): הקבוע-הישן נתפס בזמן-הייבוא, ומבחן-שירות-קודם
+ * (quality-gate/organ-commander/audit) מייבא את-המודול בטרם היערכות הסביבה —
+ * החוזה "env שולט בנתיב" שיקר תחת מטמון-מודול. קריאה-דינמית = החוזה מחזיק
+ * בכל-סדר-ייבוא; אפס-שינוי-התנהגות בראנטיים (ברירת-המחדל זהה). */
+export function vaultTokenFile(): string {
+  return (process.env.VAULT_TOKEN_FILE || "").trim() || VAULT_TOKEN_FILE_DEFAULT;
+}
 
 const MUTATION_METHODS = new Set(["POST", "PUT", "DELETE", "PATCH"]);
 
@@ -38,16 +47,17 @@ export function isMutation(req: Request): boolean {
 export function vaultToken(): string {
   const env = (process.env.SOVEREIGN_VAULT_TOKEN || "").trim();
   if (env) return env;
+  const TOKEN_FILE = vaultTokenFile();
   try {
-    const t = fs.readFileSync(VAULT_TOKEN_FILE, "utf8").trim();
+    const t = fs.readFileSync(TOKEN_FILE, "utf8").trim();
     if (t) return t;
   } catch { /* אין-קובץ — מטביעים-עכשיו */ }
   try {
-    fs.mkdirSync(path.dirname(VAULT_TOKEN_FILE), { recursive: true });
+    fs.mkdirSync(path.dirname(TOKEN_FILE), { recursive: true });
     const token = randomBytes(32).toString("hex");
-    fs.writeFileSync(VAULT_TOKEN_FILE, token + "\n", { mode: 0o600 });
-    fs.chmodSync(VAULT_TOKEN_FILE, 0o600);
-    console.info(`[vault-auth] טוקן-כספת הומצא-עצמית (${VAULT_TOKEN_FILE} · chmod 600) — הסף-הריבוני חי ללא-מפעיל`);
+    fs.writeFileSync(TOKEN_FILE, token + "\n", { mode: 0o600 });
+    fs.chmodSync(TOKEN_FILE, 0o600);
+    console.info(`[vault-auth] טוקן-כספת הומצא-עצמית (${TOKEN_FILE} · chmod 600) — הסף-הריבוני חי ללא-מפעיל`);
     return token;
   } catch (e) {
     console.error(`[vault-auth] הטבעה-נכשלה: ${e instanceof Error ? e.message : String(e)} — fail-closed (המוטציות-הציבוריות יידחו)`);

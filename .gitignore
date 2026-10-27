@@ -90,11 +90,9 @@ tool-results/
 estate/quarantine-bundles/
 Domain/
 mini-services/saos-dex-node/operator.env
-<<<<<<< HEAD
+# (G79-Q cure: conflict markers resolved as UNION of both sides — 57373bce landed raw markers)
 mini-services/saos-architect-supervisor/state/
-=======
 mini-services/saos-architect-daemon/state/
->>>>>>> 5127e8eacec7fb3ea23c75e72f43792b43cf20e7
 
 # fleet law: live runtime state is NEVER git-tracked (proven corruption vector —
 # git merges over a live ledger broke the hash-chain 7x today: seq 10140/18974/
@@ -112,3 +110,7 @@ mini-services/*/state/*
 # single-canonical-trunk law (#42/#43): forge user-project archives live on
 # disk (gitignored), never in git history (§4 archive eviction, 2026-10-24).
 mini-services/forge/storage/
+
+# G79-Q (sovereign-quality-gate): guard's own runtime receipts are local-only
+# (fleet law: live runtime state is NEVER git-tracked; chain verifies on disk).
+state/swallow-guard/
