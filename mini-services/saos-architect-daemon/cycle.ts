@@ -15,7 +15,7 @@ import { parseEvidence, selectContract, TsContract } from "./executive.ts";
 import { CURE_REGISTRY, applyCure, revertToSnapshot, boundaryRewindSelection, Snapshot } from "./registry.ts";
 import { canonicalJSON, ReceiptChain, verifyReceipts, writeChainJsonl } from "./receipts.ts";
 import { acquireLock, releaseLock, LockHandle } from "./lock.ts";
-import { commitArgs, rebaseArgs } from "./git-law.ts";
+import { commitArgs, rebaseArgs, gpgSecretKeyAvailable } from "./git-law.ts";
 import type { Selection } from "./executive.ts";
 
 export const SERVICE_DIR = import.meta.dir;
@@ -112,11 +112,14 @@ export function runCycle(root: string = REPO_ROOT, pid: number = process.pid): C
     }
     chain.append({ kind: "verified", at: new Date().toISOString(), cureId: sel.cureId, errors: `${before.count}→${after.count}` });
 
-    /* 5. LAND — add declared files only, commit, rebase loop, push, ls-remote prove */
+    /* 5. LAND — add declared files only, commit, rebase loop, push, ls-remote prove
+     *    G78-i: the signing law is MEASURED per cycle, never trusted to the env:
+     *    sovereign key present → force-signed; absent → honest-unsigned trailer. */
+    const gpgKeyPresent = gpgSecretKeyAvailable((cmd, args) => sh(root, cmd, args));
     const planFiles = sel.cure.build(root, sel.contract).files.map((f) => path.join(root, f));
     for (const f of planFiles) sh(root, "git", ["add", "--", path.relative(root, f)]);
-    const msg = `fix(architect): ${sel.cureId} — ${sel.contract.file}:${sel.contract.line} ${sel.contract.code} cured (architect-daemon cycle, tsc ${before.count}→${after.count})`;
-    const commitMsg = sh(root, "git", commitArgs(msg));
+    const msg = `fix(architect): ${sel.cureId} — ${sel.contract.file}:${sel.contract.line} ${sel.contract.code} cured (architect-daemon cycle, tsc ${before.count}→${after.count}${gpgKeyPresent ? ", gpg-signed" : ", honest-unsigned"})`;
+    const commitMsg = sh(root, "git", commitArgs(msg, { gpg: gpgKeyPresent }));
     if (commitMsg.code !== 0) {
       revertToSnapshot(root, snap);
       const nothing = commitMsg.out.includes("nothing to commit");

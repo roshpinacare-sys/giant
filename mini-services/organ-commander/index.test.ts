@@ -301,3 +301,71 @@ describe("revive proc-first authority (measured cure 19.85c)", () => {
     expect(r.spawned).toBe(true);
   });
 });
+
+/* ── G78-i (trace 1a17d85ab0537c95): the keep-alive plane must keep alive ──
+ * Measured live (13:31–13:33Z, sandbox reset #7): ALL organ ports dead and
+ * the commander returned terminal probe-error with ZERO revival commands:
+ *   bug-1 realProbe: a refused connection THREW out of the probe (no catch)
+ *   → every dead organ counted as a probe-LAYER failure → "probe layer
+ *   failure on all organs" → no revive, ever. Violates truth.ts's own law
+ *   ("a dead organ is a FACT, never an exception").
+ *   bug-2 revive.ts GIANT_ROOT: hard-coded /home/z/audit/repos/giant — erased
+ *   by the sandbox reset → every revive spawn died with "cannot change to".
+ * Laws added: realProbe fail-honest catch; root discovery (env → estate →
+ * g70 → audit, first carrying the commander entry). */
+import { realProbe, discoverCommanderRoot, giantRootCandidates } from "./index";
+
+describe("G78-i realProbe — dead organ is a FACT, never an exception", () => {
+  const spec: OrganSpec = { organ: "dex-node", port: 3010, path: "/saos-dex/api/dex/state" };
+
+  test("connection-refused → alive:false (honest fact), never throws", async () => {
+    const orig = globalThis.fetch;
+    globalThis.fetch = (async () => { throw new Error("Unable to connect"); }) as typeof fetch;
+    try {
+      const r = await realProbe(spec);
+      expect(r.alive).toBe(false);
+      expect(typeof r.detail).toBe("string");
+      expect(r.detail.length).toBeGreaterThan(0);
+    } finally {
+      globalThis.fetch = orig;
+    }
+  });
+
+  test("HTTP 200 JSON → alive:true with parsed body", async () => {
+    const orig = globalThis.fetch;
+    globalThis.fetch = (async () => new Response(JSON.stringify({ ok: true }), { status: 200 })) as typeof fetch;
+    try {
+      const r = await realProbe(spec);
+      expect(r.alive).toBe(true);
+      expect((r.body as { ok: boolean }).ok).toBe(true);
+    } finally {
+      globalThis.fetch = orig;
+    }
+  });
+});
+
+describe("G78-i commander root discovery — no dead hard-coded paths", () => {
+  test("candidates: env first, then estate/g70/audit conventions, deduped", () => {
+    const cands = giantRootCandidates({ GIANT_ROOT: "/x/one" });
+    expect(cands[0]).toBe("/x/one");
+    expect(cands).toContain("/home/z/estate/giant");
+    expect(new Set(cands).size).toBe(cands.length);
+  });
+
+  test("no env → estate convention first", () => {
+    expect(giantRootCandidates({})[0]).toBe("/home/z/estate/giant");
+  });
+
+  test("discovery: first candidate carrying the commander entry wins; null fail-honest", () => {
+    const hit = discoverCommanderRoot(
+      (p) => p === "/home/z/estate/giant/mini-services/organ-commander/index.ts",
+      {}
+    );
+    expect(hit).toBe("/home/z/estate/giant");
+    expect(discoverCommanderRoot(() => false, { GIANT_ROOT: "" })).toBe(null);
+  });
+
+  test("env override wins over conventions", () => {
+    expect(discoverCommanderRoot(() => true, { GIANT_ROOT: "/custom" })).toBe("/custom");
+  });
+});

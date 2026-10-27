@@ -3,7 +3,7 @@
  * the port probe is the authority (measured law from saos-dex-node G92).
  * Spawns are detached (unref) — the commander may die, organs survive.
  */
-import { mkdirSync } from "node:fs";
+import { existsSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 
 export interface SpawnPlan {
@@ -19,7 +19,28 @@ export interface SpawnPlan {
   mkDirs?: string[];
 }
 
-export const GIANT_ROOT = "/home/z/audit/repos/giant";
+/* G78-i (trace 1a17d85ab0537c95): root DISCOVERY replaces the dead hard-coded
+ * /home/z/audit/repos/giant (erased by sandbox reset #7 — every revive spawn
+ * died with "cannot change to"). Law: env GIANT_ROOT first, then the estate
+ * convention, then g70 legacy, then the audit clone — the first candidate
+ * carrying THIS commander's entry is lawful; null = fail-honest fallback to
+ * the estate convention (spawn plans record their cwd; nothing spawns from a
+ * ghost path without the entry existing — executeRevive port-probes first). */
+export function giantRootCandidates(env: Record<string, string | undefined> = process.env): string[] {
+  const cands = [env.GIANT_ROOT || null, "/home/z/estate/giant", "/home/z/g70/giant", "/home/z/audit/giant"].filter(Boolean) as string[];
+  return [...new Set(cands)];
+}
+export function discoverCommanderRoot(
+  exists: (p: string) => boolean,
+  env: Record<string, string | undefined> = process.env,
+): string | null {
+  for (const root of giantRootCandidates(env)) {
+    if (exists(`${root}/mini-services/organ-commander/index.ts`)) return root;
+  }
+  return null;
+}
+const _discovered = discoverCommanderRoot((p) => existsSync(p));
+export const GIANT_ROOT = _discovered ?? "/home/z/estate/giant";
 const BUN = "/usr/local/bin/bun";
 const LOG_ROOT = "/home/z/audit/architect";
 
