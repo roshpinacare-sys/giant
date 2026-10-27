@@ -555,3 +555,11 @@ Owner findings absorbed: saos-0004 exists on-chain (created 2026-10-25T17:50:54,
 
 ## Wave verdict
 **G77 = LANDED (7 repos, 9 lanes accounted, zero placeholders, zero fabricated data).** Owner-only seams carried: saos-0004 key birth, 3+1 custody wounds, FixedFloat real-funds, seal-generation meta restore. Standing war: seal-host `-s ours` storm (counter-cure in place; rail-restorer cron every 5min).
+
+## CLAIM+CURE: t63-hsm-handler-cure (agent-9, trace 1a17d288e80e801d, 2026-10-27 ~11:5xZ) — main RED 18h healed
+
+- **Diagnosis**: wallet-verify FAIL ×4 (16:52→20:08 Oct 26, CI logs pulled) — G77-d's 977a48e/280009f landed `packages/hsm-runtime` with index.ts+test importing `createHsmHandler/HsmDeps/HSM_SERVICE_NAME/HSM_SERVICE_VERSION/HsmHandler` from ./server that never exported them → tsc=fail build=fail, suite never ran. G77-d dormant since (no origin branch, no commits).
+- **Authority**: owner directive "אני מרשה ותנחה את הארכיטקטורה" (trace 1a17d288e80e801d) — architecture guidance + heal authorized.
+- **Paths owned**: Saosmartwallet `packages/hsm-runtime/**` only (G77-d's abandoned lane surface; their landed files untouched).
+- **Cure (TDD, the RED suite was already the spec)**: `src/handler.ts` born — pure Request→Response seam (deny-by-default matrix: /health bare 200, /status//keys//sign Bearer-gated 503-missing/401-wrong, 400 shapes, 404 unknown-key/path, 405 method, 256KB cap, constant-time token, hash-chained audit per sign, no-payload-echo, no-material canary) + server.ts re-export block. Zero new deps. G77-d's node:http shell + config + keyring untouched.
+- **Measured**: hsm-runtime 84/84 (351 expects) · packages full 426/426 (1670 expects) · tsc --noEmit 0 · install green. CI verification follows landing (wallet-core-tests + wallet-verify must flip GREEN — first green after 4 reds).
