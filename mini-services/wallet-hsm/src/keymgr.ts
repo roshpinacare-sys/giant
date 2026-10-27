@@ -5,7 +5,7 @@
  * computes PUBLIC fingerprints only, and signs via vault.withKey (zeroize law).
  * Every failure is reported as a CODE, never as content.
  */
-import type { Vault, VaultError } from "@saos/vault";
+import type { Vault, VaultError } from "./vault";
 
 import { pubFingerprint, derivePublicKey } from "./secp256k1";
 import type { RosterEntry } from "./config";

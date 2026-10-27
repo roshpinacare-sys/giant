@@ -26,7 +26,7 @@ import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
-import { openVault } from "@saos/vault";
+import { openVault } from "./src/vault";
 
 import {
   HEX64,

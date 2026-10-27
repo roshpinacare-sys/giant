@@ -9,7 +9,7 @@ import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { openVault, wifDecode } from "@saos/vault";
+import { openVault, wifDecode } from "./src/vault";
 import { randomScalar, scalarToWif, derivePublicKey, verifyCompact } from "./src/secp256k1";
 import { startApp, type AppHandle } from "./index";
 
