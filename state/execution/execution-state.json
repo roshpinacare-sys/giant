@@ -1,481 +1,1326 @@
 {
-  "schema": "SAOS-EXECUTION-LEDGER/1",
-  "at": "2026-10-27T12:44:44Z",
-  "generator": "fleet-runner/execution-ledger-union-renew.ts (t64, trace 1a17d4f7d0ecfe91, lineage-preserving union)",
-  "sourceWorklog": "giant worklog t64 (trace 1a17d4f7d0ecfe91)",
-  "law": "אין-ראיה = לא-קרה · כל-מספר נמדד-מהקרקע בזמן-החידוש · מורשת-מאומתת-לעולם-לא-נמחקת",
-  "freshness": {
-    "staleAfterHours": 48,
-    "renewedBy": "fleet-runner/execution-ledger-union-renew.ts (t64, trace 1a17d4f7d0ecfe91, lineage-preserving union)",
-    "howToVerify": "compare .at against the runner job journal; history rows append-only",
-    "renewedAt": "2026-10-27T12:44:44Z"
+ "schema": "SAOS-EXECUTION-LEDGER/1",
+ "at": "2026-10-27T13:00:02.281Z",
+ "generator": "G78-e (wave G78 worker 5/9, lane giant-execution-ledger-receipts) — live-receipts + DECISIONS-43 registry landing, lineage-preserving merge (prev rows intact: done 27→29)",
+ "sourceWorklog": "giant worklog t64 (trace 1a17d4f7d0ecfe91)",
+ "law": "אין-ראיה = לא-קרה · כל-מספר נמדד-מהקרקע בזמן-החידוש · מורשת-מאומתת-לעולם-לא-נמחקת",
+ "freshness": {
+  "staleAfterHours": 48,
+  "renewedBy": "G78-e lane (measure-and-push) · execution-ledger-renew (12h, lineage-preserving) · defi-convergence recovery accessor",
+  "howToVerify": "compare .at against the runner job journal; history rows append-only",
+  "renewedAt": "2026-10-27T12:44:44Z"
+ },
+ "measuredSnapshot": {
+  "refreshedAt": "2026-10-27T12:44:44Z",
+  "renewScope": "sandbox lane t64 — organ services (market:3033/ledger:3032/runner:3031) are network-scoped away from this host; those counters are honestly absent here (last organ-host measurement: t63 receipt 2026-10-27T11:30:08Z)",
+  "ledgerSurfaces": {
+   "rootsite": {
+    "http": 200,
+    "bytes": 16801,
+    "at": "2026-10-26T15:47:28Z",
+    "done": 13,
+    "gaps": 6
+   },
+   "domain": {
+    "http": 200,
+    "bytes": 35711,
+    "at": "2026-10-26T15:51:47Z",
+    "done": 24,
+    "gaps": 10
+   },
+   "giantMirror": {
+    "http": 200,
+    "bytes": 20748,
+    "at": "2026-10-26T15:43:44Z",
+    "done": 12,
+    "gaps": 5
+   }
   },
-  "measuredSnapshot": {
-    "refreshedAt": "2026-10-27T12:44:44Z",
-    "renewScope": "sandbox lane t64 — organ services (market:3033/ledger:3032/runner:3031) are network-scoped away from this host; those counters are honestly absent here (last organ-host measurement: t63 receipt 2026-10-27T11:30:08Z)",
-    "ledgerSurfaces": {
-      "rootsite": {
-        "http": 200,
-        "bytes": 16801,
-        "at": "2026-10-26T15:47:28Z",
-        "done": 13,
-        "gaps": 6
-      },
-      "domain": {
-        "http": 200,
-        "bytes": 35711,
-        "at": "2026-10-26T15:51:47Z",
-        "done": 24,
-        "gaps": 10
-      },
-      "giantMirror": {
-        "http": 200,
-        "bytes": 20748,
-        "at": "2026-10-26T15:43:44Z",
-        "done": 12,
-        "gaps": 5
-      }
-    },
-    "walletCiCure": {
-      "redRun": "40499124392 (head 64827b7, afterAll hook timeout 5000ms, zero code delta vs green 68b23bb)",
-      "cureCommit": "1e8570a fix(hsm): bounded graceful shutdown — closeHsmServer + explicit hook budgets",
-      "ci": "unmeasured-at-renew-time"
-    },
-    "chainTruth": {
-      "saos0001": "unmeasured",
-      "saos0004": "unmeasured",
-      "source": "public condenser rpc, read-only"
-    },
-    "organHost": {
-      "evidence": "fatal: unrecognized argument: --iso",
-      "note": "organ host alive and pushing (Domain repo); services not reachable from this sandbox"
-    }
+  "walletCiCure": {
+   "redRun": "40499124392 (head 64827b7, afterAll hook timeout 5000ms, zero code delta vs green 68b23bb)",
+   "cureCommit": "1e8570a fix(hsm): bounded graceful shutdown — closeHsmServer + explicit hook budgets",
+   "ci": "unmeasured-at-renew-time"
   },
-  "done": [
-    {
-      "id": "D23-c",
-      "title": "Ledger content lineage cured (old-wine-new-stamp class killed)",
-      "detail": "measured: prior refresh advanced `at` to 14:32Z while `generator` still read round-29 — freshness without lineage; this renewal pins generator/sourceWorklog/round trace and appends wave sections append-only, preserving every prior layer verbatim",
-      "evidence": "generator field of this file pre-renewal (git history) vs post"
-    },
-    {
-      "id": "D22-c",
-      "title": "execution.html accessibility hardened — multi-source ledger fetch (this round, G77-c)",
-      "detail": "bare relative fetch (single-point-of-failure class — the owner's 'המקור לא נגיש' screen reproduces on any pages race) cured: relative → raw.githubusercontent Domain main → raw giant mirror, with a visible source-chain chip naming which source fed the render; stale-banner 48h law intact",
-      "evidence": "this file's commit in Domain git history"
-    },
-    {
-      "id": "D21-c",
-      "title": "All-soldier activation PROVEN by receipts — 13/13 soldier accounts executing",
-      "detail": "batch receipt ef6ef6c2: 27 ops + 55 verdicts across all 13 soldier accounts (39 creates/14 cancels, window 14:21→14:38Z), txid-pinned, hash-chained, chainVerified=true; hcsoldier4/5 (the 'retired' bodies) trade again after MASTER-era custody",
-      "evidence": "giant state/swallow-guard/quality/trade-receipts/2026-10-26.json · bridge CLI verify"
-    },
-    {
-      "id": "D20",
-      "title": "G76 wave LANDED — 9 workers + Instance-0 (trace 1a1787f22a6a2abd)",
-      "detail": "custody T-588-R2 rotation-proof (estate/engine-code 8bcb024ab) · trade-receipt-bridge 13/13 TDD (giant e6cbe5cd) · USDS pool_reseed kernel op + 14/14 tests (saos-dex 521de810) · deny-by-default S1 on daemon+self-financing (giant f4d763c) · FixedFloat rail opened (HMAC law measured, owner-gated)",
-      "evidence": "giant ac0af25f → 466af57e chain · SWARM_STATE WAVE G76 LANDED receipts (c198bd57)"
-    },
-    {
-      "id": "D20",
-      "title": "תחיית-הכספת-האוטונומית",
-      "detail": "auto-unseal (VAULT_ALLOW_DISCOVERY=1 · pat.env-wrap) רץ-מחדש-על-המכונה-הטרייה — keys deployed 15:25Z · STEEM A/B ×4 רשויות · posting-A מאומת-מול-6-רשויות-הפרסום-החיות-על-השרשרת.",
-      "evidence": "vault-home clone + auto-unseal exit 0 · wifToPublic ∈ chain posting key_auths"
-    },
-    {
-      "id": "D19",
-      "title": "תיקון-מדידת-הרווח-החוץ — 2.5×-תיקון-כנה",
-      "detail": "הצמתים מגבילים get_account_history ל-100-אופים (300+ = upper-bound · publicnode = גוף-ריק-מדוד) · הדפדוף-הישן הלך-על-ops[last] על-מערך-עולה = 40-עמודים-חזרו-על-אותו-חלון-ראש (~0.8ש׳-עומק אמת על-30k-ops/יום) → תת-מדידה-מבנית. תוקן: head-block-clamp + מצביע-אחורה ops[0][0]−1 + 400×100. תוצאה-חיה: 749.4-vests/24ש׳ = $0.0244 (מול-0.0096-שדווח).",
-      "evidence": "saos-dex b26e35c6 · external-profit-public.json טרי · probes: limit=300 → 'upper bound'"
-    },
-    {
-      "id": "D18",
-      "title": "N3 HIVE — כנות-הצהרתית",
-      "detail": "verdict DISARMED-BROKEN-MARKET (שוק-שבור-הוא-סירוב-גלוי, לא-המתנה) + reArm-law מפורסם-ברגל: חוזר-לחיים-לבד כש-|mid−parity|≤band. נמדד-בענן: run 53 hive=DISARMED-BROKEN-MARKET.",
-      "evidence": "saos-dex b9d46f41 · db/grid-public.json"
-    },
-    {
-      "id": "D17",
-      "title": "N2 התאוששות-שידור — curate + HIVE",
-      "detail": "answered-without-id → אימות-הכלה מול-get_account_history (מזהים-ביט-מול-ביט) · duplicate=הוכחת-הכלה → התאוששות-לא-כישלון · backoff מעריכי ×4 עם-חתימה-טרייה-לניסיון. ביצוע-מדוד: 20/20-id-ראשון.",
-      "evidence": "saos-dex a7ab3740 (curate) · 2b89f8b1 (hive)"
-    },
-    {
-      "id": "D16",
-      "title": "N1 סולם-הראיות T4/T5 — היעד-הדו-ספרתי-המלא",
-      "detail": "T4 ≥20-מילויי-חוץ → 12/35bps (חי-מיידית: 27-ראיות) · T5 ≥32 → 10/25bps = רצפות-השומר-בדיוק. אותו-שער-ראיות: חלון-פוסט-חוק, selfCross-חוץ, edge≠0.",
-      "evidence": "saos-dex 80505e88 · run 53: 'SPREAD-TIER T4: ask 12bps / bid 35bps · 27 third-party fills · next: T5 after 5'"
-    },
-    {
-      "id": "D15",
-      "title": "N4 מגבר-הקיורציה — חי על-השרשרת",
-      "detail": "planVotes/curateBeatOnce: 8→20 הצבות/פעימה · 2%→10% משקל (16% כוח-הצבעה/יום מול-רגנרציה 20% — קיימות-מלאה, אפס-שינוי-סמכות). curate.yml מתוזמן ×4/יוממה. הרצה-מקומית: 20/20 VOTED-LIVE במשקל-1000 (10%).",
-      "evidence": "saos-dex a7ab3740 + b15cdfb3 · receipt VOTED-LIVE executed=20 weights=1000 · txid 9c147dcb1b…"
-    },
-    {
-      "id": "D1",
-      "title": "עצימת-דימום-הערך + race-safety + מפרסם-רווח-חוץ + החייאת-הצי (D1–D8-קודמות)",
-      "detail": "R-GRID-WAR · rebase-retry · external-profit-publish keyless כל-שעתיים · דיסק/פורטים · כנות-verdict · trim-to-cap · N8-g קצב-ריבוני — כל-הקודם-בפנקס-הקבוע-ובגיט.",
-      "evidence": "worklog task-22/23 · הריצות-המדודות-ב-saos-dex/actions"
-    },
-    {
-      "id": "D21",
-      "title": "עצימת-נקודת-הבעלים — vault-auth deny-by-default צי-כולי",
-      "detail": "giant 69144ce: כל-נקודת-קצה-ריבונית דורשת-vault-auth; ברירת-המחדל דוחה. מוזג-נקי-אפס-התנגשות (מחזור 33-35, נתיב-מקביל).",
-      "evidence": "giant 69144ce · worklog Task ID 27 (§1 owner-endpoint lockdown)"
-    },
-    {
-      "id": "D22",
-      "title": "משמרי-הנצח boot-heal + heal-pass — כיתת-המחיקה נשורשה פעמיים",
-      "detail": "סבב-2 (159 קבצים, 10-25) וסבב-3 (170 קבצים, 10-26) כשלו-מול-שחזור-נגדי-מ-origin/main (c0a8d3c, 7528563, 0dce421/cfa91f8). השורש-נרפא-בקוד: שומר-תמידי 300ש׳ — זיהוי-איברים-נמחקים → שחזור-נגדי → commit+push → החייאת-דיימונים-שנפלו, קבלות-jsonl כנות.",
-      "evidence": "mini-services/boot-heal.sh + heal-pass.sh · worklog Task ID 27 (WIPE-CLASS rounds 2-3 rooted)"
-    },
-    {
-      "id": "D23",
-      "title": "ארבעה-דיימונים-חיים — הלולאה-העצמית בלי-סוכן-חיצוני",
-      "detail": ":3046 issue-forge (FORGE_INTERVAL_MS רציף) · :3047 supervisor (observe/decide/act, 23+ קבלות) · :3051 architect-daemon (מחזור-ביצוע ראשון מדוד: verdict no-work — כנות) · :3061 self-financing (activationPct=100, blockers=[] אחרי-הזנת-רוטר-מדוד).",
-      "evidence": "worklog Task ID 27 (perpetual runner-kit armed across 3 sandbox deaths) · :3051 first-cycle verdict"
-    },
-    {
-      "id": "D24",
-      "title": "הכספת נפתחה-אוטונומית פעמיים — 27 מפתחות פרוסים",
-      "detail": "auto-unseal (VAULT_ALLOW_DISCOVERY=1) הוכח-חי 10-25 ושוב 10-26 אחרי-מוות-סנדבוקס: 27 מפתחות (STEEM 4×A + 4×B + HIVE-C + infra) אל /home/z/.secrets/.env.local. מטא-דאטה-בלבד כאן — אסור-להדפיס-ערכים.",
-      "evidence": "worklog Task ID 27 (VAULT: proven TWICE 10-25, 10-26) · keys deployed (autonomous unseal OK)"
-    },
-    {
-      "id": "D25",
-      "title": "grid-beat ARMED-WAITING עם WIF-כספת — 730 מילויים מצטברים",
-      "detail": "מקצב-גריד-מקומי 240ש׳ עם WIF-משמורת-אמת (מהכספת, לא-סטייל). מדוד: 730 מילויים-ריאליים-מצטברים (lifetime) · 300 מילויים-בחלון (10-26T15:15Z).",
-      "evidence": "worklog Task ID 27 (grid-beat verdict upgraded ARMED-KEY-STALE → ARMED-WAITING with real custody WIF) · orchestrator measurement 2026-10-26T15:15Z"
-    },
-    {
-      "id": "D26",
-      "title": "מסילת-FX :3055 fx-fixedfloat — חתימת-מפתח-הבעלים התקבלה",
-      "detail": "לקוח-חתום אמיתי (HMAC-SHA1 sorted-canonical) מול-ff.io; גילוי-חוזה-חי. החתימה-עצמה מאושרת — כל-ה-methods מחזירים code:501 \"Not have permission\" = חוסם-חשבוני-בצד-ff.io (לא-בקוד). אפס-שערים-מומצאים.",
-      "evidence": "worklog Task ID 27 (§4 FX rail, TDD 5/5 RFC-2202 pinned, hash-chained receipts) · service live :3055"
-    },
-    {
-      "id": "D27",
-      "title": "FleetHQ — צינור-status שורש-נרפא + health_monitor ריארמון",
-      "detail": "status.json היה-קפוא 2026-10-22T07:25Z (health_monitor מת) → רוענן-חי 2026-10-25T16:07Z, מוניטור-90ש׳ הוחזר; קבלה-אטומה d756916..5298fe276. llamacpp:8080 יורד-בכנות (רשום-בפערים).",
-      "evidence": "worklog Task ID 27 (FleetHQ pipeline stall ROOT-CURED · sealed FleetHQ d756916..5298fe276)"
-    },
-    {
-      "id": "D28",
-      "title": "הפקדה-עצמית ריבונית + מגבר-אצירה ×3.34 מדוד",
-      "detail": "self-deposit פעיל; מגבר-האצירה נמדד-חי: 1068.47 vests/24ש׳ = $0.0321 (ext=mexc, run 40111486698) = ×3.34 מול-בסיס-מחזור-27 — curate.yml VOTED-LIVE עם txids (9ab1f72f00, f008727e1d, fec6a296ac, c45db5c668).",
-      "evidence": "worklog Task ID 25/27 (N4 measured, cycle-30) · external-profit-publish SUCCESS"
-    },
-    {
-      "id": "D33-a",
-      "title": "[G77-b] חידוש-הפנקס-עצמו — הפצע-ש-G76-h-רשם-נרפא",
-      "detail": "execution-state.json-חודש-בתוכן-מדוד cycle-33 עם-cycle/generatedAt-מלאים (היו-null/חסרים — הקליפה-ש-Instance-0-מדד) · העמוד-הציבורי-מרנדר-שוב · מאומת-על-ידי-ה-accessor-הקנוני.",
-      "evidence": "קומיט-זה-ב-Domain · ה-URL-החי · giant mini-services/defi-convergence cli.ts verify → exit-0"
-    },
-    {
-      "id": "D33-b",
-      "title": "[G77-b] שלמות-הנחיתות-של-G76 — 7/7-על-השרשרת",
-      "detail": "כל-7-ה-SHAs-שנחתו-ב-G76-אומתו-אבות-קדמונים-של-ראשי-הענן-הנוכחיים (merge-base/compare) — העבודה-שרדה-את-הבוטים-והמחיקות.",
-      "evidence": "measuredSnapshot.g76Landings · merge-base מקומי + GitHub-compare 15:31–15:34Z"
-    },
-    {
-      "id": "D33-c",
-      "title": "[G77-b] מסילת-FixedFloat-חיה-מקצה-לקצה (קריאה-בלבד)",
-      "detail": "ccies code:0 על-71-מטבעות דרך-:3055 · כספת-נוכחת · שרשרת-קבלות-תקפה · W130-נמדד-ושמר-על-עצמו.",
-      "evidence": ":3055/health + /ccies 15:26Z · giant main fx-fixedfloat-cure"
-    },
-    {
-      "id": "D33-e",
-      "title": "[G77-b] ראי-המש-הריבוני — ראש-שרשרת-נמדד-דרך-המש-עצמו",
-      "detail": "head_block=111114004 (זמן-שרשרת 15:31:27) נמדד-דרך-POST :3053/rpc — עדות-שהמש-לא-רק-חי-אלא-משרת-שאילתות-אמת.",
-      "evidence": "POST :3053/rpc condenser_api.get_dynamic_global_properties"
-    },
-    {
-      "title": "חידוש-נמדד 2026-10-26T15:47:28Z (צו 42 §2) — מורשת נשמרה (12 שורות-קודמות)",
-      "detail": "market:3033-UP ledger:3032-UP runner:3031-UP; מסחר ריבוני 440 עסקאות-מאושרות; שימור מלא",
-      "evidence": "http://127.0.0.1:3033/economy/report + /health measured at renew time"
-    },
-    {
-      "id": "D64-a",
-      "title": "חידוש-איחוד t64 2026-10-27T12:44:44Z — שלושת-המשטחים נמדדו 200/200/200 והמורשת אוחדה",
-      "detail": "surfaces={\"rootsite\":{\"http\":200,\"bytes\":16801,\"at\":\"2026-10-26T15:47:28Z\",\"done\":13,\"gaps\":6},\"domain\":{\"http\":200,\"bytes\":35711,\"at\":\"2026-10-26T15:51:47Z\",\"done\":24,\"gaps\":10},\"giantMirror\":{\"http\":200,\"bytes\":20748,\"at\":\"2026-10-26T15:43:44Z\",\"done\":12,\"gaps\":5}}; the divergence class (three different done/gaps counts on three law surfaces) is collapsed by this union renewal — one lineage, byte-true, on root+Domain+giant mirror",
-      "evidence": "curl at renew time + execution-ledger-union-renew.ts (union law, erasureGuard preserved)"
-    },
-    {
-      "id": "D64-b",
-      "title": "Saosmartwallet main-RED (run 40499124392) — root-caused and cured with run-ID proof",
-      "detail": "class = unbounded server.close() wait + default 5s hook budget under a loaded runner (zero code delta between green 68b23bb and red 64827b7); cure = closeHsmServer bounded shutdown + explicit 20s hook budgets + regression spec test; local 85/85×3 · packages 427/427 · tsc 0; CI: unmeasured-at-renew-time",
-      "evidence": "https://api.github.com/repos/roshpinacare-sys/Saosmartwallet/actions/runs/40505382231 (wallet-core-tests SUCCESS on 1e8570a)"
-    },
-    {
-      "id": "D64-c",
-      "title": "אמת-שרשרת saos-000X נמדדה-מחדש דרך RPC ציבורי (קריאה-בלבד)",
-      "detail": "saos-0001 created=? · saos-0004 created=? · ? / ? each · 0 VESTS (SP-parked recall refusal stands)",
-      "evidence": "https://api.steemit.com condenser_api.get_accounts at renew time"
-    }
-  ],
-  "partial": [
-    {
-      "id": "P3",
-      "title": "office-selfcheck מאזין-אך-חוסם",
-      "detail": "התיקון-הארכיטקטוני (async) נדחה-בכוונה-בלי-בדיקה. רשום-כנה.",
-      "evidence": "worklog task-21-d"
-    },
-    {
-      "id": "P2",
-      "title": "ערוץ-STEEM — הכל-חי, סדרה-ארוכה-מתבקשת",
-      "detail": "20/20-שידורים-נקיים בריצת-הבכורה-של-המגבר; T4-חי-בענן; עדיין-חלקי-עד-סדרת-ריצות-נקייה-מתמשכת.",
-      "evidence": "runs 53+ · receipts 4c4b0130"
-    },
-    {
-      "id": "P1",
-      "title": "רווח-חוץ — זורם-באמת, מתוכנן-לצמוח",
-      "detail": "0.0244$/24ש׳ מדוד-אמת (תיקון-2.5×) + מגבר-20×10%-חי (האקרואל-יופיע-תוך-7-ימי-פרס) + הזרימה-המסחרית-החיה. היעד-משמעותי-מוחלט עוד-לא-נסגר — נמדד-בכנות-מדי-שעתיים.",
-      "evidence": "external-profit-publish runs · curate receipts"
-    },
-    {
-      "id": "P4",
-      "title": "USDS — דפנות-נזילות ב-AMM של saos-dex בהזרעה-מחדש",
-      "detail": "מחזור-36: נתיב 36-e באוויר — הזרעת-דפנות-הנזילות ב-AMM. לא-הושלם-בכתיבת-שורה-זו.",
-      "evidence": "orchestrator wave-36 dispatch (lane 36-e in flight)"
-    },
-    {
-      "id": "P5",
-      "title": "Saosmartwallet — HSM runtime מאב-טיפוס לייצור",
-      "detail": "packages/vault נחתם-על-ענף feat/hsm-vault-runtime (53/53 vault + 19/19 crypto) — נתיב 36-d מקדם-את-הריצה-לייצור. חלקי-עד-מיזוג-מאומת.",
-      "evidence": "worklog Task ID 4-b (e5fe98b, 3f09bc6) · lane 36-d in flight"
-    },
-    {
-      "id": "P6",
-      "title": "דלק/RC — זרימה-אוטומטית",
-      "detail": "נתיב 36-b באוויר: אוטומציה-לזרימת-דלק/RC. לא-הושלם.",
-      "evidence": "orchestrator wave-36 dispatch (lane 36-b in flight)"
-    },
-    {
-      "id": "P7",
-      "title": "Pulse — FLEET_TOKEN 401 → נפילה-ל-tokenless",
-      "detail": "ראש-הארכיטקטורה: 401-על-טוקן-צי → מעבר-לתדלוק-tokenless בזמן-המחזור. חלקי-עד-אימות-חי.",
-      "evidence": "orchestrator cycle-36 dispatch (in flight)"
-    },
-    {
-      "id": "P8",
-      "title": "לולאות-מקבילות לכל-החיילים",
-      "detail": "נתיב 36-f באוויר: הרחבת-הלולאות-המקבילות-לכל-הצי. לא-הושלם.",
-      "evidence": "orchestrator wave-36 dispatch (lane 36-f in flight)"
-    }
-  ],
-  "gaps": [
-    {
-      "id": "G6",
-      "title": "saos-0001..0004 — keyless custody gap (measured, fail-closed)",
-      "detail": "four new soldier identities exist on-chain (created+fuelled Oct 24-25) but their WIFs are in ZERO measurable custody surfaces (vault 0 mentions, roster 14/14 excludes, seals absent) — the T-80 measured bug class reborn. FUEL LAW: streaming fuel/RC to these accounts must stay REFUSED until custody-verified (fueling a keyless account burns fleet capital into an orphan). Redemption: (1) recall-of-own-delegation policy amendment → acct-h-849e9df7 recalls 4×2000 VESTS; (2) owner-side import if creation-era secrets survive anywhere; (3) re-mint replacements via the custody-law deploy path (write-once pre-broadcast + vault seal + T-90 sweep) when operator re-arms",
-      "evidence": "steem RPC account_create block 110750412 · capital-router.json recall-shell rows · daily-report.json 15:05Z refusal receipts · scc repo-vault/manifest.json"
-    },
-    {
-      "id": "G5",
-      "title": "מלחמת-סנדבוקסים — החלטת-בעלים (N7) עדיין-פתוחה",
-      "detail": "churner-חוץ-מקוד-שאינו-בריפו. חוק-הקצב N8-g מצמצם-את-עירום-המדף.",
-      "evidence": "worklog task-23"
-    },
-    {
-      "id": "G2",
-      "title": "רוכש-חוץ נגד-הספר — המדף-פתוח-ומודק",
-      "detail": "asks parity+0.12%+ במדרגה-T4 · bids touch-hug · תוקף-27-יום. המתנה-למילוי-שלישי-ראשון-בפנקס-פוסט-חוק.",
-      "evidence": "run 53 txids · 27-ראיות-מצטברות"
-    },
-    {
-      "id": "G1",
-      "title": "שוק-HIVE שבור — הכנות-הושלמה, הנזילות-חוץ-חסרה",
-      "detail": "הערוץ מוכרז DISARMED-BROKEN-MARKET עם-ריארמון-אוטומטי — הסירוב-עצמו הוא-החוזה. הפער-החומרי (נזילות/פאריטי-אמיתי) נשאר-חוץ-לשליטתנו.",
-      "evidence": "grid-public.json hive.verdict + reArm"
-    },
-    {
-      "id": "GAP-1",
-      "title": "חומת-החישוב — OPEN",
-      "detail": "התשואה-הפנימית-חייבת-לכסות-חישוב-ריפו-פרטי. פער-מבני-פתוח-עד-שהרווח-החוץ-עולה-מעל-עלות-הסנדבוקסים.",
-      "evidence": "orchestrator cycle-36 gap ledger"
-    },
-    {
-      "id": "GAP-2",
-      "title": "קנבן-נפח: הילוך 1→2 — ממתין-לקבלות-ירוקות",
-      "detail": "הילוך-הנפח-עולה-רק-אחרי-קבלות-ירוקות-רצופות. הקלי-החי (NO-EDGE) מחזיק-הגברה-בעצירה-עד-שהטייפ-הנקי-משתפר.",
-      "evidence": "kelly-sizing.json NO-EDGE fractionBps=0 · orchestrator cycle-36 gap ledger"
-    },
-    {
-      "id": "GAP-3",
-      "title": "הערת-נכסים-ישנים — ממתין-לשערי-איכות",
-      "detail": "הפעלת-נכסים-רדומים מותנית-בשערי-איכות. לא-מופעל-בכוח.",
-      "evidence": "orchestrator cycle-36 gap ledger"
-    },
-    {
-      "id": "GAP-4",
-      "title": "llamacpp:8080 — יורד (כנות)",
-      "detail": "המסקנאי-המקומי יורד; נרשם-התראה-כנה (immutable). הריצות-ממשיכות-דרך-נתיבי-ענן.",
-      "evidence": "worklog Task ID 27 (llamacpp:8080 honest-DOWN alert recorded, immutable)"
-    },
-    {
-      "id": "GAP-5",
-      "title": "ff.io — הרשאות-API ממתינות-לבעלים",
-      "detail": "החתימה-מתקבלת; כל-הקריאות code:501 עד-שהבעלים מפעיל-הרשאות-API-בצד-החשבון ב-ff.io. אחר-כך :3055 מגיש-שערים-אמיתיים.",
-      "evidence": "worklog Task ID 27 (honest blocker, zero fabricated rates) · :3055"
-    },
-    {
-      "id": "GAP-6",
-      "title": "saos-0001..0004 — keyless custody gap (measured, fail-closed) — G77-c gate audit",
-      "detail": "four new soldier identities exist on-chain (creator acct-h-849e9df7: saos-0001 2026-10-24T20:52:06 · saos-0002 20:56:54 · saos-0003 21:26:15 · saos-0004 2026-10-25T17:50:54 block 110750412; 0.600 STEEM + 0.150 SBD + 1.2-2.0k VESTS each) but their WIFs are in ZERO measurable custody: scc repo-vault manifest 0 mentions · engine roster 14/14 excludes · army-keys.json MASTER-era excludes · fleet-economy seals absent · capital-router: 'external — not custody'. FUEL LAW: streaming fuel/RC to them stays REFUSED until custody-verified (T-80 bug class). Redemption: recall-of-own-delegation amendment → acct-h-849e9df7 recalls the parked VESTS; owner-side import if creation-era secrets survive; re-mint via the custody-law path when operator re-arms",
-      "evidence": "steem RPC account_create block 110750412 · :3040/health 17:05Z · capital-router.json recall refusals 15:05Z · scc repo-vault/manifest.json · giant verdict c2d963ef8c66 (custody-gap-verdict, chain-verified 8/8)"
-    },
-    {
-      "id": "G7",
-      "title": "מקורות-איבר-בלתי-נגישים-מהסנדבוקס (t64 2026-10-27T12:44:44Z)",
-      "detail": "market:3033/ledger:3032/runner:3031 counters are organ-host-scoped and absent from THIS renewal by honesty law (never invented); organ host itself is ALIVE (Domain repo pushes at renew time); last organ-host live measurement: t63 receipt 11:30:08Z (gapsOpen:0, gear1 2/6)",
-      "evidence": "t63 LANDED receipt (giant SWARM_STATE) + Domain organ commits measured in this renew"
-    }
-  ],
-  "next": [
-    {
-      "id": "N14-c",
-      "title": "Recall-of-own-delegation policy amendment",
-      "detail": "recall of acct-h-849e9df7's OWN parked delegations (4×2000 VESTS on keyless shells) was REFUSED 15:05Z by the delegation law's conservative reading — amend the law: recall-to-battery is capital RECOVERY, not new delegation; then execute the recall",
-      "owner": "capital lane"
-    },
-    {
-      "id": "N13-c",
-      "title": "Fuel/RC streaming THROUGH the custody gate",
-      "detail": "G77-b's automation must consume a custody-verdict input: fuel ops to steem soldiers require chain-verified key custody (14/14 roster or vault-sealed + sweep-verified) — REFUSED otherwise, typed verdict + receipt; automation without the gate is the T-80 bug class",
-      "owner": "G77-b (fleet-economy) + Lane-D gate"
-    },
-    {
-      "id": "N12",
-      "title": "[DONE cycle 30] ריענון-הפנקס בוצע (ראש-ארכיטקטורה, trace 1a16e979cd7b1fa9) — חוק-קבוע-בכל-מחזור"
-    },
-    {
-      "id": "N11",
-      "title": "[PROVEN cycle 30] עדות-האקרואל: 1068.47 vests/24ש׳ = $0.0321 (ext=mexc) = x3.34 מול-בסיס-מחזור-27 — המגבר נמדד-חי; המשך-מעקב-שבוע-7-ימים"
-    },
-    {
-      "id": "N10",
-      "title": "T5: עוד 5 מילויי-חוץ → 10/25bps = רצפות-השומר (היעד-הסופי-של-הסולם)"
-    },
-    {
-      "id": "N9",
-      "title": "[DONE cycle 30] curate.yml ריצות-ענן ירוקות רצופות (15:53/10:53/04:31/21:21Z success) — VOTED-LIVE 20 הצבות/פעימה עם txids"
-    },
-    {
-      "id": "N13",
-      "title": "מיזוג-גל-36: איסוף-תוצרי-הנתיבים 36-a…36-f, מיזוג-לעוקבה, קבלות-דחופות",
-      "detail": "ראש-הארכיטקטורה: pull --no-rebase + סריקת-קונפליקט + דחיפה לכל-ריפו-נוגע (Domain/giant/saos-dex/Saosmartwallet/FleetHQ).",
-      "owner": "chief-sovereign-architect"
-    },
-    {
-      "id": "N14",
-      "title": "ff.io: הרשאות-API-בצד-החשבון (בעלים) → :3055 שערים-אמיתיים",
-      "detail": "פעולת-בעלים-יחידה שפותחת-את-מסילת-ה-FX כולה. הקוד-מוכן-ומאומת.",
-      "owner": "owner"
-    },
-    {
-      "id": "N15",
-      "title": "החייאת llamacpp:8080",
-      "detail": "שירות-ההסקה-המקומי יורד — החזרה-לחיים או-הצהרת-סירוב-קבועה-וכנה.",
-      "owner": "orchestrator"
-    },
-    {
-      "id": "N16",
-      "title": "GAP-2: הילוך-נפח 1→2 אחרי-קבלות-ירוקות-רצופות",
-      "detail": "מדידה-מתמשכת של-הטייפ-הנקי; הקלי-יאשר-או-יעצור-את-ההגברה.",
-      "owner": "grid-lane"
-    }
-  ],
-  "cycle30": {
-    "trace": "1a16e979cd7b1fa9",
-    "at": "2026-10-24T16:45Z",
-    "swarm": "issue-forge merged to giant main @d88c345 (45/45 selftest) | Saosmartwallet HSM vault main @30eca9c (72/72) | saos-dex DEFI-POLICY-ROLLUP @1b4a0d1e | giant disk-crisis resolved (5.7GB zombie git packs killed)",
-    "open": [
-      "N10: T5 floors 10/25bps after 5 more external fills",
-      "N11: continue 7-day accrual watch"
-    ]
+  "chainTruth": {
+   "saos0001": "unmeasured",
+   "saos0004": "unmeasured",
+   "source": "public condenser rpc, read-only"
   },
-  "cycle31": {
-    "trace": "1a16ecaa44313e5d",
-    "at": "2026-10-24T18:20Z",
-    "swarm": "saos-architect-supervisor :3047 LIVE (observe/decide/act, Kelly-guard, 23+ receipts) — architect embedded in code | issue-forge productionized: worktree-isolation + cross-process probe + scoped lint — §9 CLOSED: PR #240 squash-merged autonomously (issue #220 → characterization → gate x2 → merge) | Kelly kernel: p=0.539 b=0.792 → NO-EDGE honest (volume amplification withheld) | SAOS-HTLC/1 in Saosmartwallet (51/51) | collision: parallel-lane architect-daemon :3051 coexists per SWARM §5",
-    "kelly": {
-      "p": 0.539267,
-      "b": 0.792396,
-      "verdict": "NO-EDGE",
-      "fractionBps": 0,
-      "trades": 191,
-      "washExcluded": 94
-    },
-    "open": [
-      "activate architect-daemon :3051 (owner lane)",
-      "N10 T5 floors after 5 more external fills",
-      "kelly re-measure as clean tape grows"
-    ]
-  },
-  "wave81": {
-    "trace": "1a1787f32fee7401",
-    "at": "2026-10-26T14:32Z",
-    "swarm": "architect-daemon CI host SELF-HEALED: erase-commit e60f5d6f (vault-seal merge -s ours stale-tree promotion, 16:40:32Z Oct 25) had deleted the wave-80 bun-install step → 6 honest-RED runs of starved-env noise (644 errors = dependency noise, not rot); giant 2c46e2ca landed C5 host-integrity (anchor-based invariants + canonical floor restore + selfVerify probe class + defense-in-depth inline install) → run 40338697310 SUCCESS no-work 0→0 raw rc=0 | HIVE-leg HBD haircut regime landed saos-dex 9fceaa2 (selftest 13/13, compile rc=0) — false DISARMED-BROKEN-MARKET cured at its mark root | this file refreshed (was stale since Oct 23, 48h-freshness law violated — now lawful)",
-    "evidence": "github.com/roshpinacare-sys/giant/actions/runs/40338697310 · saos-dex 9fceaa2 · giant 2c46e2ca",
-    "open": [
-      "STEEM leg: broadcast 'answered without id' 6/6 with keyGate authorityOk=true — stale-WIF-vs-authority or RPC fault; OWNER-CUSTODY vector (plans-only); 5 zombie orders on-chain unmanaged until broadcast heals",
-      "fx-fixedfloat key rotation = sibling cycle-35 lane (CLAIM 96112fa3, trace 1a178850450f2e55) — first-claim-wins",
-      "N10: T5 floors after 5 more external fills"
-    ]
-  },
-  "cycle35": {
-    "trace": "1a173c6bc826ef01 + 1a178850450f2e55 (consolidated — worklog Task ID 27, cycles 33-35)",
-    "at": "2026-10-25→2026-10-26 (consolidated window)",
-    "swarm": "owner-endpoint vault-auth deny-by-default landed (giant 69144ce) | boot-heal + heal-pass perpetual guardians shipped (wipe rounds 2-3: 159+170 files counter-restored) | 4 daemons live :3046/:3047/:3051/:3061 | vault unsealed TWICE (10-25, 10-26) 27 keys | FX rail :3055 signature-ACCEPTED (ff.io account-side code 501) | FleetHQ status pipeline root-cured d756916..5298fe276 | estate resurrection 8 services (3002/3010/3040/3041/3042/3011) | trunks: giant 96112fa · saos-dex d95480d2 · FleetHQ 5298fe276",
-    "open": [
-      "ff.io account-side API permission (owner)",
-      "llamacpp:8080 revival",
-      "multi-soldier external trading gated on more account active keys (B-set present, ready)"
-    ]
-  },
-  "cycle36": {
-    "trace": "swarm-36 (lanes 36-a…36-f) — lane 36-c execution-ledger",
-    "at": "2026-10-26T15:36:02Z",
-    "swarm": "execution-ledger accessibility REPAIRED: loader rewritten to 3 honest states (LOADED / STALE-with-visible-age-warning / UNREACHABLE) — same-origin relative → absolute /Domain/ fallback, 2 tries per source, 3 full passes (survives transient GitHub-Pages rebuild windows: Domain cadence measured 1096 commits/24h ≈ push every ~80s = near-continuous Pages builds), per-section render isolation, generic line-by-line snapshot rendering (every measuredSnapshot key displayed), data NEVER hidden when fetched — stale ledger shows fully with age warning | this file renewed with cycle-36 measured truth",
-    "open": [
-      "lane 36-b fuel/RC streaming (in flight)",
-      "lane 36-d Saosmartwallet HSM prototype→production (in flight)",
-      "lane 36-e USDS liquidity reseed (in flight)",
-      "lane 36-f all-soldier loops (in flight)",
-      "Pulse FLEET_TOKEN 401 → tokenless fallback (orchestrator, in flight)"
-    ]
-  },
-  "cycle": 36,
-  "generatedAt": "2026-10-27T12:44:44Z",
-  "cycle33": {
-    "at": "2026-10-26T15:40:52Z",
-    "worker": "G77-b (execution-ledger lane · swarm G77)",
-    "waveTrace": "1a178c595ee6edd5 (giant d86a4aa — WAVE G77 claims)",
-    "renewal": "חידוש-מדוד-מלא: cycle+generatedAt-הונפקו (היו-null/חסרים) · כל-מקטע-ב-measuredSnapshot-נושא-מקור+measuredAt · 8-שירותים-חיים-נמדדו-ישירות · 7-landings-אומתו-על-השרשרת · ספרי-ענן-נקראו-raw (external-profit 15:31:28Z · grid-public 15:32:43Z) · GAP-1..4-סטטוס-נוכחי-מדוד",
-    "evidence": "קומיט-זה · ה-URL-החי על-Pages · giant state/execution/ (מראה-בייט-אמת + קבלת-מראה)",
-    "open": [
-      "X1 grid-sentinel m.at/public.head",
-      "X2 owner custody",
-      "X3 owner fx real-funds",
-      "X5 G77-f gap receipts"
-    ],
-    "numberingNote": "מיספור-השורה-העליונה=36-לפי-הלינאז'-שירד-קודם (36-c-איחד-33–35) · מקטע-זה-מתעד-את-חידוש-G77-b-בפועל (מדידות 15:24–15:41Z) — שני-הליינים-חיים, אף-מספר-לא-נמחק"
-  },
-  "erasureGuard": {
-    "law": "rows-are-APPEND-ONLY · history lives in git · any renewal MUST merge existing rows and cycle*/wave* sections — replacement = erasure (three measured strikes: verdicts chain, wave block, this ledger; rescued at 493ac99d2 from commit-object d6b48a04a)",
-    "note": "additive key — renewals may keep, never drop, this block",
-    "unionNote": "2026-10-26 ~15:53Z lane 36-c final union: (1) pre-clobber round-29 rows + G77-c D21-D23/N13-N14 restored from 493ac99d2 (G77-c IDs suffixed -c to coexist with the canonical line — zero content change), (2) the -X theirs rebase erasure accident + my own stash-pop-corrupted commit 9e9602a38 (never reached origin, discarded) are recorded here as the honest incident trail, (3) fleet-runner books preserved attributed under measuredSnapshot.runnerBooks (440 fills @ 15:47:28Z) beside the orchestrator measurement realFillsCumulative=730 @ ~15:15Z — two attributed sources, no silent overwrite, (4) G77-c probe timestamps carry ~2h clock skew — preserved verbatim, (5) giant raw mirror URL measured HTTP 404 — excluded from the loader source chain."
-  },
-  "waveG77c": {
-    "trace": "1a178c71c10d38c5",
-    "at": "2026-10-26T17:45:00Z",
-    "swarm": "G77-c lane: execution-ledger accessibility cured (multi-source fetch + source-chain chip) + content lineage made honest (round-29 rows preserved verbatim, new verified rows D20-D23 appended, custody gap G6 measured and filed, fresh snapshot keys custodyNow/saos000xChainTruth added from live probes) · giant mirror synced under the accessor's schema law · custody-gap receipt + verdicts chain extended (Lane-D subtree)",
-    "evidence": "steem RPC (saos-0004 block 110750412) · :3040/health 14/14 · capital-router.json recall refusals 15:05Z · giant 7a930598 (G77-c claim)",
-    "open": [
-      "fuel-through-custody-gate (G77-b + gate)",
-      "recall-of-own-delegation amendment (capital lane)",
-      "saos-000X key import if owner holds creation-era secrets"
-    ]
+  "organHost": {
+   "evidence": "fatal: unrecognized argument: --iso",
+   "note": "organ host alive and pushing (Domain repo); services not reachable from this sandbox"
   }
+ },
+ "done": [
+  {
+   "id": "D23-c",
+   "title": "Ledger content lineage cured (old-wine-new-stamp class killed)",
+   "detail": "measured: prior refresh advanced `at` to 14:32Z while `generator` still read round-29 — freshness without lineage; this renewal pins generator/sourceWorklog/round trace and appends wave sections append-only, preserving every prior layer verbatim",
+   "evidence": "generator field of this file pre-renewal (git history) vs post"
+  },
+  {
+   "id": "D22-c",
+   "title": "execution.html accessibility hardened — multi-source ledger fetch (this round, G77-c)",
+   "detail": "bare relative fetch (single-point-of-failure class — the owner's 'המקור לא נגיש' screen reproduces on any pages race) cured: relative → raw.githubusercontent Domain main → raw giant mirror, with a visible source-chain chip naming which source fed the render; stale-banner 48h law intact",
+   "evidence": "this file's commit in Domain git history"
+  },
+  {
+   "id": "D21-c",
+   "title": "All-soldier activation PROVEN by receipts — 13/13 soldier accounts executing",
+   "detail": "batch receipt ef6ef6c2: 27 ops + 55 verdicts across all 13 soldier accounts (39 creates/14 cancels, window 14:21→14:38Z), txid-pinned, hash-chained, chainVerified=true; hcsoldier4/5 (the 'retired' bodies) trade again after MASTER-era custody",
+   "evidence": "giant state/swallow-guard/quality/trade-receipts/2026-10-26.json · bridge CLI verify"
+  },
+  {
+   "id": "D20",
+   "title": "G76 wave LANDED — 9 workers + Instance-0 (trace 1a1787f22a6a2abd)",
+   "detail": "custody T-588-R2 rotation-proof (estate/engine-code 8bcb024ab) · trade-receipt-bridge 13/13 TDD (giant e6cbe5cd) · USDS pool_reseed kernel op + 14/14 tests (saos-dex 521de810) · deny-by-default S1 on daemon+self-financing (giant f4d763c) · FixedFloat rail opened (HMAC law measured, owner-gated)",
+   "evidence": "giant ac0af25f → 466af57e chain · SWARM_STATE WAVE G76 LANDED receipts (c198bd57)"
+  },
+  {
+   "id": "D20",
+   "title": "תחיית-הכספת-האוטונומית",
+   "detail": "auto-unseal (VAULT_ALLOW_DISCOVERY=1 · pat.env-wrap) רץ-מחדש-על-המכונה-הטרייה — keys deployed 15:25Z · STEEM A/B ×4 רשויות · posting-A מאומת-מול-6-רשויות-הפרסום-החיות-על-השרשרת.",
+   "evidence": "vault-home clone + auto-unseal exit 0 · wifToPublic ∈ chain posting key_auths"
+  },
+  {
+   "id": "D19",
+   "title": "תיקון-מדידת-הרווח-החוץ — 2.5×-תיקון-כנה",
+   "detail": "הצמתים מגבילים get_account_history ל-100-אופים (300+ = upper-bound · publicnode = גוף-ריק-מדוד) · הדפדוף-הישן הלך-על-ops[last] על-מערך-עולה = 40-עמודים-חזרו-על-אותו-חלון-ראש (~0.8ש׳-עומק אמת על-30k-ops/יום) → תת-מדידה-מבנית. תוקן: head-block-clamp + מצביע-אחורה ops[0][0]−1 + 400×100. תוצאה-חיה: 749.4-vests/24ש׳ = $0.0244 (מול-0.0096-שדווח).",
+   "evidence": "saos-dex b26e35c6 · external-profit-public.json טרי · probes: limit=300 → 'upper bound'"
+  },
+  {
+   "id": "D18",
+   "title": "N3 HIVE — כנות-הצהרתית",
+   "detail": "verdict DISARMED-BROKEN-MARKET (שוק-שבור-הוא-סירוב-גלוי, לא-המתנה) + reArm-law מפורסם-ברגל: חוזר-לחיים-לבד כש-|mid−parity|≤band. נמדד-בענן: run 53 hive=DISARMED-BROKEN-MARKET.",
+   "evidence": "saos-dex b9d46f41 · db/grid-public.json"
+  },
+  {
+   "id": "D17",
+   "title": "N2 התאוששות-שידור — curate + HIVE",
+   "detail": "answered-without-id → אימות-הכלה מול-get_account_history (מזהים-ביט-מול-ביט) · duplicate=הוכחת-הכלה → התאוששות-לא-כישלון · backoff מעריכי ×4 עם-חתימה-טרייה-לניסיון. ביצוע-מדוד: 20/20-id-ראשון.",
+   "evidence": "saos-dex a7ab3740 (curate) · 2b89f8b1 (hive)"
+  },
+  {
+   "id": "D16",
+   "title": "N1 סולם-הראיות T4/T5 — היעד-הדו-ספרתי-המלא",
+   "detail": "T4 ≥20-מילויי-חוץ → 12/35bps (חי-מיידית: 27-ראיות) · T5 ≥32 → 10/25bps = רצפות-השומר-בדיוק. אותו-שער-ראיות: חלון-פוסט-חוק, selfCross-חוץ, edge≠0.",
+   "evidence": "saos-dex 80505e88 · run 53: 'SPREAD-TIER T4: ask 12bps / bid 35bps · 27 third-party fills · next: T5 after 5'"
+  },
+  {
+   "id": "D15",
+   "title": "N4 מגבר-הקיורציה — חי על-השרשרת",
+   "detail": "planVotes/curateBeatOnce: 8→20 הצבות/פעימה · 2%→10% משקל (16% כוח-הצבעה/יום מול-רגנרציה 20% — קיימות-מלאה, אפס-שינוי-סמכות). curate.yml מתוזמן ×4/יוממה. הרצה-מקומית: 20/20 VOTED-LIVE במשקל-1000 (10%).",
+   "evidence": "saos-dex a7ab3740 + b15cdfb3 · receipt VOTED-LIVE executed=20 weights=1000 · txid 9c147dcb1b…"
+  },
+  {
+   "id": "D1",
+   "title": "עצימת-דימום-הערך + race-safety + מפרסם-רווח-חוץ + החייאת-הצי (D1–D8-קודמות)",
+   "detail": "R-GRID-WAR · rebase-retry · external-profit-publish keyless כל-שעתיים · דיסק/פורטים · כנות-verdict · trim-to-cap · N8-g קצב-ריבוני — כל-הקודם-בפנקס-הקבוע-ובגיט.",
+   "evidence": "worklog task-22/23 · הריצות-המדודות-ב-saos-dex/actions"
+  },
+  {
+   "id": "D21",
+   "title": "עצימת-נקודת-הבעלים — vault-auth deny-by-default צי-כולי",
+   "detail": "giant 69144ce: כל-נקודת-קצה-ריבונית דורשת-vault-auth; ברירת-המחדל דוחה. מוזג-נקי-אפס-התנגשות (מחזור 33-35, נתיב-מקביל).",
+   "evidence": "giant 69144ce · worklog Task ID 27 (§1 owner-endpoint lockdown)"
+  },
+  {
+   "id": "D22",
+   "title": "משמרי-הנצח boot-heal + heal-pass — כיתת-המחיקה נשורשה פעמיים",
+   "detail": "סבב-2 (159 קבצים, 10-25) וסבב-3 (170 קבצים, 10-26) כשלו-מול-שחזור-נגדי-מ-origin/main (c0a8d3c, 7528563, 0dce421/cfa91f8). השורש-נרפא-בקוד: שומר-תמידי 300ש׳ — זיהוי-איברים-נמחקים → שחזור-נגדי → commit+push → החייאת-דיימונים-שנפלו, קבלות-jsonl כנות.",
+   "evidence": "mini-services/boot-heal.sh + heal-pass.sh · worklog Task ID 27 (WIPE-CLASS rounds 2-3 rooted)"
+  },
+  {
+   "id": "D23",
+   "title": "ארבעה-דיימונים-חיים — הלולאה-העצמית בלי-סוכן-חיצוני",
+   "detail": ":3046 issue-forge (FORGE_INTERVAL_MS רציף) · :3047 supervisor (observe/decide/act, 23+ קבלות) · :3051 architect-daemon (מחזור-ביצוע ראשון מדוד: verdict no-work — כנות) · :3061 self-financing (activationPct=100, blockers=[] אחרי-הזנת-רוטר-מדוד).",
+   "evidence": "worklog Task ID 27 (perpetual runner-kit armed across 3 sandbox deaths) · :3051 first-cycle verdict"
+  },
+  {
+   "id": "D24",
+   "title": "הכספת נפתחה-אוטונומית פעמיים — 27 מפתחות פרוסים",
+   "detail": "auto-unseal (VAULT_ALLOW_DISCOVERY=1) הוכח-חי 10-25 ושוב 10-26 אחרי-מוות-סנדבוקס: 27 מפתחות (STEEM 4×A + 4×B + HIVE-C + infra) אל /home/z/.secrets/.env.local. מטא-דאטה-בלבד כאן — אסור-להדפיס-ערכים.",
+   "evidence": "worklog Task ID 27 (VAULT: proven TWICE 10-25, 10-26) · keys deployed (autonomous unseal OK)"
+  },
+  {
+   "id": "D25",
+   "title": "grid-beat ARMED-WAITING עם WIF-כספת — 730 מילויים מצטברים",
+   "detail": "מקצב-גריד-מקומי 240ש׳ עם WIF-משמורת-אמת (מהכספת, לא-סטייל). מדוד: 730 מילויים-ריאליים-מצטברים (lifetime) · 300 מילויים-בחלון (10-26T15:15Z).",
+   "evidence": "worklog Task ID 27 (grid-beat verdict upgraded ARMED-KEY-STALE → ARMED-WAITING with real custody WIF) · orchestrator measurement 2026-10-26T15:15Z"
+  },
+  {
+   "id": "D26",
+   "title": "מסילת-FX :3055 fx-fixedfloat — חתימת-מפתח-הבעלים התקבלה",
+   "detail": "לקוח-חתום אמיתי (HMAC-SHA1 sorted-canonical) מול-ff.io; גילוי-חוזה-חי. החתימה-עצמה מאושרת — כל-ה-methods מחזירים code:501 \"Not have permission\" = חוסם-חשבוני-בצד-ff.io (לא-בקוד). אפס-שערים-מומצאים.",
+   "evidence": "worklog Task ID 27 (§4 FX rail, TDD 5/5 RFC-2202 pinned, hash-chained receipts) · service live :3055"
+  },
+  {
+   "id": "D27",
+   "title": "FleetHQ — צינור-status שורש-נרפא + health_monitor ריארמון",
+   "detail": "status.json היה-קפוא 2026-10-22T07:25Z (health_monitor מת) → רוענן-חי 2026-10-25T16:07Z, מוניטור-90ש׳ הוחזר; קבלה-אטומה d756916..5298fe276. llamacpp:8080 יורד-בכנות (רשום-בפערים).",
+   "evidence": "worklog Task ID 27 (FleetHQ pipeline stall ROOT-CURED · sealed FleetHQ d756916..5298fe276)"
+  },
+  {
+   "id": "D28",
+   "title": "הפקדה-עצמית ריבונית + מגבר-אצירה ×3.34 מדוד",
+   "detail": "self-deposit פעיל; מגבר-האצירה נמדד-חי: 1068.47 vests/24ש׳ = $0.0321 (ext=mexc, run 40111486698) = ×3.34 מול-בסיס-מחזור-27 — curate.yml VOTED-LIVE עם txids (9ab1f72f00, f008727e1d, fec6a296ac, c45db5c668).",
+   "evidence": "worklog Task ID 25/27 (N4 measured, cycle-30) · external-profit-publish SUCCESS"
+  },
+  {
+   "id": "D33-a",
+   "title": "[G77-b] חידוש-הפנקס-עצמו — הפצע-ש-G76-h-רשם-נרפא",
+   "detail": "execution-state.json-חודש-בתוכן-מדוד cycle-33 עם-cycle/generatedAt-מלאים (היו-null/חסרים — הקליפה-ש-Instance-0-מדד) · העמוד-הציבורי-מרנדר-שוב · מאומת-על-ידי-ה-accessor-הקנוני.",
+   "evidence": "קומיט-זה-ב-Domain · ה-URL-החי · giant mini-services/defi-convergence cli.ts verify → exit-0"
+  },
+  {
+   "id": "D33-b",
+   "title": "[G77-b] שלמות-הנחיתות-של-G76 — 7/7-על-השרשרת",
+   "detail": "כל-7-ה-SHAs-שנחתו-ב-G76-אומתו-אבות-קדמונים-של-ראשי-הענן-הנוכחיים (merge-base/compare) — העבודה-שרדה-את-הבוטים-והמחיקות.",
+   "evidence": "measuredSnapshot.g76Landings · merge-base מקומי + GitHub-compare 15:31–15:34Z"
+  },
+  {
+   "id": "D33-c",
+   "title": "[G77-b] מסילת-FixedFloat-חיה-מקצה-לקצה (קריאה-בלבד)",
+   "detail": "ccies code:0 על-71-מטבעות דרך-:3055 · כספת-נוכחת · שרשרת-קבלות-תקפה · W130-נמדד-ושמר-על-עצמו.",
+   "evidence": ":3055/health + /ccies 15:26Z · giant main fx-fixedfloat-cure"
+  },
+  {
+   "id": "D33-e",
+   "title": "[G77-b] ראי-המש-הריבוני — ראש-שרשרת-נמדד-דרך-המש-עצמו",
+   "detail": "head_block=111114004 (זמן-שרשרת 15:31:27) נמדד-דרך-POST :3053/rpc — עדות-שהמש-לא-רק-חי-אלא-משרת-שאילתות-אמת.",
+   "evidence": "POST :3053/rpc condenser_api.get_dynamic_global_properties"
+  },
+  {
+   "title": "חידוש-נמדד 2026-10-26T15:47:28Z (צו 42 §2) — מורשת נשמרה (12 שורות-קודמות)",
+   "detail": "market:3033-UP ledger:3032-UP runner:3031-UP; מסחר ריבוני 440 עסקאות-מאושרות; שימור מלא",
+   "evidence": "http://127.0.0.1:3033/economy/report + /health measured at renew time"
+  },
+  {
+   "id": "D64-a",
+   "title": "חידוש-איחוד t64 2026-10-27T12:44:44Z — שלושת-המשטחים נמדדו 200/200/200 והמורשת אוחדה",
+   "detail": "surfaces={\"rootsite\":{\"http\":200,\"bytes\":16801,\"at\":\"2026-10-26T15:47:28Z\",\"done\":13,\"gaps\":6},\"domain\":{\"http\":200,\"bytes\":35711,\"at\":\"2026-10-26T15:51:47Z\",\"done\":24,\"gaps\":10},\"giantMirror\":{\"http\":200,\"bytes\":20748,\"at\":\"2026-10-26T15:43:44Z\",\"done\":12,\"gaps\":5}}; the divergence class (three different done/gaps counts on three law surfaces) is collapsed by this union renewal — one lineage, byte-true, on root+Domain+giant mirror",
+   "evidence": "curl at renew time + execution-ledger-union-renew.ts (union law, erasureGuard preserved)"
+  },
+  {
+   "id": "D64-b",
+   "title": "Saosmartwallet main-RED (run 40499124392) — root-caused and cured with run-ID proof",
+   "detail": "class = unbounded server.close() wait + default 5s hook budget under a loaded runner (zero code delta between green 68b23bb and red 64827b7); cure = closeHsmServer bounded shutdown + explicit 20s hook budgets + regression spec test; local 85/85×3 · packages 427/427 · tsc 0; CI: unmeasured-at-renew-time",
+   "evidence": "https://api.github.com/repos/roshpinacare-sys/Saosmartwallet/actions/runs/40505382231 (wallet-core-tests SUCCESS on 1e8570a)"
+  },
+  {
+   "id": "D64-c",
+   "title": "אמת-שרשרת saos-000X נמדדה-מחדש דרך RPC ציבורי (קריאה-בלבד)",
+   "detail": "saos-0001 created=? · saos-0004 created=? · ? / ? each · 0 VESTS (SP-parked recall refusal stands)",
+   "evidence": "https://api.steemit.com condenser_api.get_accounts at renew time"
+  },
+  {
+   "id": "D43",
+   "title": "[G78-e] LIVE-קבלות שורה-שורה בפנקס-הביצוע — מדידה-חיה, אפס-שורות-מומצאות",
+   "detail": "liveReceipts section landed: 38 receipt rows (soldier-army engine log line+sha256-proofed, saos-dex grid/curate/gearbox/treasury/army/credits/chain, fleet-economy treasury ledger seq rows with h-hashes, host service probes) · 4-source chain re-verified raw-main:HTTP-200 pages-same-origin:HTTP-200 pages-abs-root:HTTP-200 jsdelivr-main:HTTP-200 giant-mirror-raw-main:HTTP-200 · rows fresh <48h · validator + tests landed (live-receipts.ts)",
+   "evidence": "giant state/execution/execution-state.json .liveReceipts · mini-services/defi-convergence/live-receipts.ts + test · harvest 2026-10-27T13:00:02.281Z"
+  },
+  {
+   "id": "D44",
+   "title": "[G78-e] DECISIONS #43 — רישום-מדוד של-לולאות-הביצוע-הפעילות בענק",
+   "detail": "36 loops inventoried (30 giant-internal + 6 external measured refs): 17 measured LIVE now, 2 no-answer-honest, 17 registered-not-probed · each with entrypoint + state path + owner · #42 defi-policy status EVIDENCE-PRESENT (saos-dex@main policy-gears.json measured, saos-dex untouched)",
+   "evidence": "docs/decisions/DECISIONS-43-EXECUTION-CONVERGENCE.json + this ledger .decisionRegistry43"
+  }
+ ],
+ "partial": [
+  {
+   "id": "P3",
+   "title": "office-selfcheck מאזין-אך-חוסם",
+   "detail": "התיקון-הארכיטקטוני (async) נדחה-בכוונה-בלי-בדיקה. רשום-כנה.",
+   "evidence": "worklog task-21-d"
+  },
+  {
+   "id": "P2",
+   "title": "ערוץ-STEEM — הכל-חי, סדרה-ארוכה-מתבקשת",
+   "detail": "20/20-שידורים-נקיים בריצת-הבכורה-של-המגבר; T4-חי-בענן; עדיין-חלקי-עד-סדרת-ריצות-נקייה-מתמשכת.",
+   "evidence": "runs 53+ · receipts 4c4b0130"
+  },
+  {
+   "id": "P1",
+   "title": "רווח-חוץ — זורם-באמת, מתוכנן-לצמוח",
+   "detail": "0.0244$/24ש׳ מדוד-אמת (תיקון-2.5×) + מגבר-20×10%-חי (האקרואל-יופיע-תוך-7-ימי-פרס) + הזרימה-המסחרית-החיה. היעד-משמעותי-מוחלט עוד-לא-נסגר — נמדד-בכנות-מדי-שעתיים.",
+   "evidence": "external-profit-publish runs · curate receipts"
+  },
+  {
+   "id": "P4",
+   "title": "USDS — דפנות-נזילות ב-AMM של saos-dex בהזרעה-מחדש",
+   "detail": "מחזור-36: נתיב 36-e באוויר — הזרעת-דפנות-הנזילות ב-AMM. לא-הושלם-בכתיבת-שורה-זו.",
+   "evidence": "orchestrator wave-36 dispatch (lane 36-e in flight)"
+  },
+  {
+   "id": "P5",
+   "title": "Saosmartwallet — HSM runtime מאב-טיפוס לייצור",
+   "detail": "packages/vault נחתם-על-ענף feat/hsm-vault-runtime (53/53 vault + 19/19 crypto) — נתיב 36-d מקדם-את-הריצה-לייצור. חלקי-עד-מיזוג-מאומת.",
+   "evidence": "worklog Task ID 4-b (e5fe98b, 3f09bc6) · lane 36-d in flight"
+  },
+  {
+   "id": "P6",
+   "title": "דלק/RC — זרימה-אוטומטית",
+   "detail": "נתיב 36-b באוויר: אוטומציה-לזרימת-דלק/RC. לא-הושלם.",
+   "evidence": "orchestrator wave-36 dispatch (lane 36-b in flight)"
+  },
+  {
+   "id": "P7",
+   "title": "Pulse — FLEET_TOKEN 401 → נפילה-ל-tokenless",
+   "detail": "ראש-הארכיטקטורה: 401-על-טוקן-צי → מעבר-לתדלוק-tokenless בזמן-המחזור. חלקי-עד-אימות-חי.",
+   "evidence": "orchestrator cycle-36 dispatch (in flight)"
+  },
+  {
+   "id": "P8",
+   "title": "לולאות-מקבילות לכל-החיילים",
+   "detail": "נתיב 36-f באוויר: הרחבת-הלולאות-המקבילות-לכל-הצי. לא-הושלם.",
+   "evidence": "orchestrator wave-36 dispatch (lane 36-f in flight)"
+  }
+ ],
+ "gaps": [
+  {
+   "id": "G6",
+   "title": "saos-0001..0004 — keyless custody gap (measured, fail-closed)",
+   "detail": "four new soldier identities exist on-chain (created+fuelled Oct 24-25) but their WIFs are in ZERO measurable custody surfaces (vault 0 mentions, roster 14/14 excludes, seals absent) — the T-80 measured bug class reborn. FUEL LAW: streaming fuel/RC to these accounts must stay REFUSED until custody-verified (fueling a keyless account burns fleet capital into an orphan). Redemption: (1) recall-of-own-delegation policy amendment → acct-h-849e9df7 recalls 4×2000 VESTS; (2) owner-side import if creation-era secrets survive anywhere; (3) re-mint replacements via the custody-law deploy path (write-once pre-broadcast + vault seal + T-90 sweep) when operator re-arms",
+   "evidence": "steem RPC account_create block 110750412 · capital-router.json recall-shell rows · daily-report.json 15:05Z refusal receipts · scc repo-vault/manifest.json"
+  },
+  {
+   "id": "G5",
+   "title": "מלחמת-סנדבוקסים — החלטת-בעלים (N7) עדיין-פתוחה",
+   "detail": "churner-חוץ-מקוד-שאינו-בריפו. חוק-הקצב N8-g מצמצם-את-עירום-המדף.",
+   "evidence": "worklog task-23"
+  },
+  {
+   "id": "G2",
+   "title": "רוכש-חוץ נגד-הספר — המדף-פתוח-ומודק",
+   "detail": "asks parity+0.12%+ במדרגה-T4 · bids touch-hug · תוקף-27-יום. המתנה-למילוי-שלישי-ראשון-בפנקס-פוסט-חוק.",
+   "evidence": "run 53 txids · 27-ראיות-מצטברות"
+  },
+  {
+   "id": "G1",
+   "title": "שוק-HIVE שבור — הכנות-הושלמה, הנזילות-חוץ-חסרה",
+   "detail": "הערוץ מוכרז DISARMED-BROKEN-MARKET עם-ריארמון-אוטומטי — הסירוב-עצמו הוא-החוזה. הפער-החומרי (נזילות/פאריטי-אמיתי) נשאר-חוץ-לשליטתנו.",
+   "evidence": "grid-public.json hive.verdict + reArm"
+  },
+  {
+   "id": "GAP-1",
+   "title": "חומת-החישוב — OPEN",
+   "detail": "התשואה-הפנימית-חייבת-לכסות-חישוב-ריפו-פרטי. פער-מבני-פתוח-עד-שהרווח-החוץ-עולה-מעל-עלות-הסנדבוקסים.",
+   "evidence": "orchestrator cycle-36 gap ledger"
+  },
+  {
+   "id": "GAP-2",
+   "title": "קנבן-נפח: הילוך 1→2 — ממתין-לקבלות-ירוקות",
+   "detail": "הילוך-הנפח-עולה-רק-אחרי-קבלות-ירוקות-רצופות. הקלי-החי (NO-EDGE) מחזיק-הגברה-בעצירה-עד-שהטייפ-הנקי-משתפר.",
+   "evidence": "kelly-sizing.json NO-EDGE fractionBps=0 · orchestrator cycle-36 gap ledger"
+  },
+  {
+   "id": "GAP-3",
+   "title": "הערת-נכסים-ישנים — ממתין-לשערי-איכות",
+   "detail": "הפעלת-נכסים-רדומים מותנית-בשערי-איכות. לא-מופעל-בכוח.",
+   "evidence": "orchestrator cycle-36 gap ledger"
+  },
+  {
+   "id": "GAP-4",
+   "title": "llamacpp:8080 — יורד (כנות)",
+   "detail": "המסקנאי-המקומי יורד; נרשם-התראה-כנה (immutable). הריצות-ממשיכות-דרך-נתיבי-ענן.",
+   "evidence": "worklog Task ID 27 (llamacpp:8080 honest-DOWN alert recorded, immutable)"
+  },
+  {
+   "id": "GAP-5",
+   "title": "ff.io — הרשאות-API ממתינות-לבעלים",
+   "detail": "החתימה-מתקבלת; כל-הקריאות code:501 עד-שהבעלים מפעיל-הרשאות-API-בצד-החשבון ב-ff.io. אחר-כך :3055 מגיש-שערים-אמיתיים.",
+   "evidence": "worklog Task ID 27 (honest blocker, zero fabricated rates) · :3055"
+  },
+  {
+   "id": "GAP-6",
+   "title": "saos-0001..0004 — keyless custody gap (measured, fail-closed) — G77-c gate audit",
+   "detail": "four new soldier identities exist on-chain (creator acct-h-849e9df7: saos-0001 2026-10-24T20:52:06 · saos-0002 20:56:54 · saos-0003 21:26:15 · saos-0004 2026-10-25T17:50:54 block 110750412; 0.600 STEEM + 0.150 SBD + 1.2-2.0k VESTS each) but their WIFs are in ZERO measurable custody: scc repo-vault manifest 0 mentions · engine roster 14/14 excludes · army-keys.json MASTER-era excludes · fleet-economy seals absent · capital-router: 'external — not custody'. FUEL LAW: streaming fuel/RC to them stays REFUSED until custody-verified (T-80 bug class). Redemption: recall-of-own-delegation amendment → acct-h-849e9df7 recalls the parked VESTS; owner-side import if creation-era secrets survive; re-mint via the custody-law path when operator re-arms",
+   "evidence": "steem RPC account_create block 110750412 · :3040/health 17:05Z · capital-router.json recall refusals 15:05Z · scc repo-vault/manifest.json · giant verdict c2d963ef8c66 (custody-gap-verdict, chain-verified 8/8)"
+  },
+  {
+   "id": "G7",
+   "title": "מקורות-איבר-בלתי-נגישים-מהסנדבוקס (t64 2026-10-27T12:44:44Z)",
+   "detail": "market:3033/ledger:3032/runner:3031 counters are organ-host-scoped and absent from THIS renewal by honesty law (never invented); organ host itself is ALIVE (Domain repo pushes at renew time); last organ-host live measurement: t63 receipt 11:30:08Z (gapsOpen:0, gear1 2/6)",
+   "evidence": "t63 LANDED receipt (giant SWARM_STATE) + Domain organ commits measured in this renew"
+  }
+ ],
+ "next": [
+  {
+   "id": "N14-c",
+   "title": "Recall-of-own-delegation policy amendment",
+   "detail": "recall of acct-h-849e9df7's OWN parked delegations (4×2000 VESTS on keyless shells) was REFUSED 15:05Z by the delegation law's conservative reading — amend the law: recall-to-battery is capital RECOVERY, not new delegation; then execute the recall",
+   "owner": "capital lane"
+  },
+  {
+   "id": "N13-c",
+   "title": "Fuel/RC streaming THROUGH the custody gate",
+   "detail": "G77-b's automation must consume a custody-verdict input: fuel ops to steem soldiers require chain-verified key custody (14/14 roster or vault-sealed + sweep-verified) — REFUSED otherwise, typed verdict + receipt; automation without the gate is the T-80 bug class",
+   "owner": "G77-b (fleet-economy) + Lane-D gate"
+  },
+  {
+   "id": "N12",
+   "title": "[DONE cycle 30] ריענון-הפנקס בוצע (ראש-ארכיטקטורה, trace 1a16e979cd7b1fa9) — חוק-קבוע-בכל-מחזור"
+  },
+  {
+   "id": "N11",
+   "title": "[PROVEN cycle 30] עדות-האקרואל: 1068.47 vests/24ש׳ = $0.0321 (ext=mexc) = x3.34 מול-בסיס-מחזור-27 — המגבר נמדד-חי; המשך-מעקב-שבוע-7-ימים"
+  },
+  {
+   "id": "N10",
+   "title": "T5: עוד 5 מילויי-חוץ → 10/25bps = רצפות-השומר (היעד-הסופי-של-הסולם)"
+  },
+  {
+   "id": "N9",
+   "title": "[DONE cycle 30] curate.yml ריצות-ענן ירוקות רצופות (15:53/10:53/04:31/21:21Z success) — VOTED-LIVE 20 הצבות/פעימה עם txids"
+  },
+  {
+   "id": "N13",
+   "title": "מיזוג-גל-36: איסוף-תוצרי-הנתיבים 36-a…36-f, מיזוג-לעוקבה, קבלות-דחופות",
+   "detail": "ראש-הארכיטקטורה: pull --no-rebase + סריקת-קונפליקט + דחיפה לכל-ריפו-נוגע (Domain/giant/saos-dex/Saosmartwallet/FleetHQ).",
+   "owner": "chief-sovereign-architect"
+  },
+  {
+   "id": "N14",
+   "title": "ff.io: הרשאות-API-בצד-החשבון (בעלים) → :3055 שערים-אמיתיים",
+   "detail": "פעולת-בעלים-יחידה שפותחת-את-מסילת-ה-FX כולה. הקוד-מוכן-ומאומת.",
+   "owner": "owner"
+  },
+  {
+   "id": "N15",
+   "title": "החייאת llamacpp:8080",
+   "detail": "שירות-ההסקה-המקומי יורד — החזרה-לחיים או-הצהרת-סירוב-קבועה-וכנה.",
+   "owner": "orchestrator"
+  },
+  {
+   "id": "N16",
+   "title": "GAP-2: הילוך-נפח 1→2 אחרי-קבלות-ירוקות-רצופות",
+   "detail": "מדידה-מתמשכת של-הטייפ-הנקי; הקלי-יאשר-או-יעצור-את-ההגברה.",
+   "owner": "grid-lane"
+  }
+ ],
+ "cycle30": {
+  "trace": "1a16e979cd7b1fa9",
+  "at": "2026-10-24T16:45Z",
+  "swarm": "issue-forge merged to giant main @d88c345 (45/45 selftest) | Saosmartwallet HSM vault main @30eca9c (72/72) | saos-dex DEFI-POLICY-ROLLUP @1b4a0d1e | giant disk-crisis resolved (5.7GB zombie git packs killed)",
+  "open": [
+   "N10: T5 floors 10/25bps after 5 more external fills",
+   "N11: continue 7-day accrual watch"
+  ]
+ },
+ "cycle31": {
+  "trace": "1a16ecaa44313e5d",
+  "at": "2026-10-24T18:20Z",
+  "swarm": "saos-architect-supervisor :3047 LIVE (observe/decide/act, Kelly-guard, 23+ receipts) — architect embedded in code | issue-forge productionized: worktree-isolation + cross-process probe + scoped lint — §9 CLOSED: PR #240 squash-merged autonomously (issue #220 → characterization → gate x2 → merge) | Kelly kernel: p=0.539 b=0.792 → NO-EDGE honest (volume amplification withheld) | SAOS-HTLC/1 in Saosmartwallet (51/51) | collision: parallel-lane architect-daemon :3051 coexists per SWARM §5",
+  "kelly": {
+   "p": 0.539267,
+   "b": 0.792396,
+   "verdict": "NO-EDGE",
+   "fractionBps": 0,
+   "trades": 191,
+   "washExcluded": 94
+  },
+  "open": [
+   "activate architect-daemon :3051 (owner lane)",
+   "N10 T5 floors after 5 more external fills",
+   "kelly re-measure as clean tape grows"
+  ]
+ },
+ "wave81": {
+  "trace": "1a1787f32fee7401",
+  "at": "2026-10-26T14:32Z",
+  "swarm": "architect-daemon CI host SELF-HEALED: erase-commit e60f5d6f (vault-seal merge -s ours stale-tree promotion, 16:40:32Z Oct 25) had deleted the wave-80 bun-install step → 6 honest-RED runs of starved-env noise (644 errors = dependency noise, not rot); giant 2c46e2ca landed C5 host-integrity (anchor-based invariants + canonical floor restore + selfVerify probe class + defense-in-depth inline install) → run 40338697310 SUCCESS no-work 0→0 raw rc=0 | HIVE-leg HBD haircut regime landed saos-dex 9fceaa2 (selftest 13/13, compile rc=0) — false DISARMED-BROKEN-MARKET cured at its mark root | this file refreshed (was stale since Oct 23, 48h-freshness law violated — now lawful)",
+  "evidence": "github.com/roshpinacare-sys/giant/actions/runs/40338697310 · saos-dex 9fceaa2 · giant 2c46e2ca",
+  "open": [
+   "STEEM leg: broadcast 'answered without id' 6/6 with keyGate authorityOk=true — stale-WIF-vs-authority or RPC fault; OWNER-CUSTODY vector (plans-only); 5 zombie orders on-chain unmanaged until broadcast heals",
+   "fx-fixedfloat key rotation = sibling cycle-35 lane (CLAIM 96112fa3, trace 1a178850450f2e55) — first-claim-wins",
+   "N10: T5 floors after 5 more external fills"
+  ]
+ },
+ "cycle35": {
+  "trace": "1a173c6bc826ef01 + 1a178850450f2e55 (consolidated — worklog Task ID 27, cycles 33-35)",
+  "at": "2026-10-25→2026-10-26 (consolidated window)",
+  "swarm": "owner-endpoint vault-auth deny-by-default landed (giant 69144ce) | boot-heal + heal-pass perpetual guardians shipped (wipe rounds 2-3: 159+170 files counter-restored) | 4 daemons live :3046/:3047/:3051/:3061 | vault unsealed TWICE (10-25, 10-26) 27 keys | FX rail :3055 signature-ACCEPTED (ff.io account-side code 501) | FleetHQ status pipeline root-cured d756916..5298fe276 | estate resurrection 8 services (3002/3010/3040/3041/3042/3011) | trunks: giant 96112fa · saos-dex d95480d2 · FleetHQ 5298fe276",
+  "open": [
+   "ff.io account-side API permission (owner)",
+   "llamacpp:8080 revival",
+   "multi-soldier external trading gated on more account active keys (B-set present, ready)"
+  ]
+ },
+ "cycle36": {
+  "trace": "swarm-36 (lanes 36-a…36-f) — lane 36-c execution-ledger",
+  "at": "2026-10-26T15:36:02Z",
+  "swarm": "execution-ledger accessibility REPAIRED: loader rewritten to 3 honest states (LOADED / STALE-with-visible-age-warning / UNREACHABLE) — same-origin relative → absolute /Domain/ fallback, 2 tries per source, 3 full passes (survives transient GitHub-Pages rebuild windows: Domain cadence measured 1096 commits/24h ≈ push every ~80s = near-continuous Pages builds), per-section render isolation, generic line-by-line snapshot rendering (every measuredSnapshot key displayed), data NEVER hidden when fetched — stale ledger shows fully with age warning | this file renewed with cycle-36 measured truth",
+  "open": [
+   "lane 36-b fuel/RC streaming (in flight)",
+   "lane 36-d Saosmartwallet HSM prototype→production (in flight)",
+   "lane 36-e USDS liquidity reseed (in flight)",
+   "lane 36-f all-soldier loops (in flight)",
+   "Pulse FLEET_TOKEN 401 → tokenless fallback (orchestrator, in flight)"
+  ]
+ },
+ "cycle": 38,
+ "generatedAt": "2026-10-27T13:00:02.281Z",
+ "cycle33": {
+  "at": "2026-10-26T15:40:52Z",
+  "worker": "G77-b (execution-ledger lane · swarm G77)",
+  "waveTrace": "1a178c595ee6edd5 (giant d86a4aa — WAVE G77 claims)",
+  "renewal": "חידוש-מדוד-מלא: cycle+generatedAt-הונפקו (היו-null/חסרים) · כל-מקטע-ב-measuredSnapshot-נושא-מקור+measuredAt · 8-שירותים-חיים-נמדדו-ישירות · 7-landings-אומתו-על-השרשרת · ספרי-ענן-נקראו-raw (external-profit 15:31:28Z · grid-public 15:32:43Z) · GAP-1..4-סטטוס-נוכחי-מדוד",
+  "evidence": "קומיט-זה · ה-URL-החי על-Pages · giant state/execution/ (מראה-בייט-אמת + קבלת-מראה)",
+  "open": [
+   "X1 grid-sentinel m.at/public.head",
+   "X2 owner custody",
+   "X3 owner fx real-funds",
+   "X5 G77-f gap receipts"
+  ],
+  "numberingNote": "מיספור-השורה-העליונה=36-לפי-הלינאז'-שירד-קודם (36-c-איחד-33–35) · מקטע-זה-מתעד-את-חידוש-G77-b-בפועל (מדידות 15:24–15:41Z) — שני-הליינים-חיים, אף-מספר-לא-נמחק"
+ },
+ "erasureGuard": {
+  "law": "rows-are-APPEND-ONLY · history lives in git · any renewal MUST merge existing rows and cycle*/wave* sections — replacement = erasure (three measured strikes: verdicts chain, wave block, this ledger; rescued at 493ac99d2 from commit-object d6b48a04a)",
+  "note": "additive key — renewals may keep, never drop, this block",
+  "unionNote": "2026-10-26 ~15:53Z lane 36-c final union: (1) pre-clobber round-29 rows + G77-c D21-D23/N13-N14 restored from 493ac99d2 (G77-c IDs suffixed -c to coexist with the canonical line — zero content change), (2) the -X theirs rebase erasure accident + my own stash-pop-corrupted commit 9e9602a38 (never reached origin, discarded) are recorded here as the honest incident trail, (3) fleet-runner books preserved attributed under measuredSnapshot.runnerBooks (440 fills @ 15:47:28Z) beside the orchestrator measurement realFillsCumulative=730 @ ~15:15Z — two attributed sources, no silent overwrite, (4) G77-c probe timestamps carry ~2h clock skew — preserved verbatim, (5) giant raw mirror URL measured HTTP 404 — excluded from the loader source chain."
+ },
+ "waveG77c": {
+  "trace": "1a178c71c10d38c5",
+  "at": "2026-10-26T17:45:00Z",
+  "swarm": "G77-c lane: execution-ledger accessibility cured (multi-source fetch + source-chain chip) + content lineage made honest (round-29 rows preserved verbatim, new verified rows D20-D23 appended, custody gap G6 measured and filed, fresh snapshot keys custodyNow/saos000xChainTruth added from live probes) · giant mirror synced under the accessor's schema law · custody-gap receipt + verdicts chain extended (Lane-D subtree)",
+  "evidence": "steem RPC (saos-0004 block 110750412) · :3040/health 14/14 · capital-router.json recall refusals 15:05Z · giant 7a930598 (G77-c claim)",
+  "open": [
+   "fuel-through-custody-gate (G77-b + gate)",
+   "recall-of-own-delegation amendment (capital lane)",
+   "saos-000X key import if owner holds creation-era secrets"
+  ]
+ },
+ "liveReceipts": {
+  "schema": "SAOS-EXECUTION-LEDGER-LIVE-RECEIPTS/1",
+  "at": "2026-10-27T13:00:02.281Z",
+  "generator": "G78-e (wave G78, worker 5/9, lane giant-execution-ledger-receipts) — line-by-line receipts harvested from measured live sources; zero fabricated rows",
+  "law": "every row cites at/kind/actor/resource/amount/proofRef/outcome/source · proofRef is a txid, orderid, seq+hash, or sha256-of-exact-line · what could not be read is recorded as a gap, never invented",
+  "staleness": {
+   "staleAfterHours": 48,
+   "renewedBy": "G78-e harvester (/home/z/coord-work/tmp/G78e/gen-receipts.mjs) or the next execution-ledger renewal lane",
+   "note": "renewal beat (fleet-runner/execution-ledger-renew.ts) spreads prev keys, so this section survives renewals"
+  },
+  "probes": {
+   "purpose": "deliverable-1 re-verify — 4-source chain (G77-c loader order raw-main → Pages-same-origin → Pages-abs → jsDelivr-LAST) + giant mirror",
+   "chain": "Domain canonical copy: raw.githubusercontent.com/roshpinacare-sys/Domain/main/execution-state.json → roshpinacare-sys.github.io/Domain/execution-state.json → roshpinacare-sys.github.io/execution-state.json → cdn.jsdelivr.net/gh/roshpinacare-sys/Domain@main/execution-state.json",
+   "measuredAt": "2026-10-27T13:00:02.281Z",
+   "results": [
+    {
+     "url": "https://raw.githubusercontent.com/roshpinacare-sys/Domain/main/execution-state.json",
+     "http": 200,
+     "bytes": 31034,
+     "ms": 172,
+     "rows": {
+      "done": 30,
+      "partial": 8,
+      "gaps": 11,
+      "next": 4,
+      "total": 53
+     },
+     "generatedAt": "2026-10-27T12:54:50Z",
+     "ageHours": 0.09,
+     "source": "raw-main"
+    },
+    {
+     "url": "https://roshpinacare-sys.github.io/Domain/execution-state.json",
+     "http": 200,
+     "bytes": 31034,
+     "ms": 400,
+     "rows": {
+      "done": 30,
+      "partial": 8,
+      "gaps": 11,
+      "next": 4,
+      "total": 53
+     },
+     "generatedAt": "2026-10-27T12:54:50Z",
+     "ageHours": 0.09,
+     "source": "pages-same-origin"
+    },
+    {
+     "url": "https://roshpinacare-sys.github.io/execution-state.json",
+     "http": 200,
+     "bytes": 30411,
+     "ms": 300,
+     "rows": {
+      "done": 27,
+      "partial": 8,
+      "gaps": 11,
+      "next": 10,
+      "total": 56
+     },
+     "generatedAt": "2026-10-27T12:44:44Z",
+     "ageHours": 0.26,
+     "source": "pages-abs-root"
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/gh/roshpinacare-sys/Domain@main/execution-state.json",
+     "http": 200,
+     "bytes": 31034,
+     "ms": 156,
+     "rows": {
+      "done": 30,
+      "partial": 8,
+      "gaps": 11,
+      "next": 4,
+      "total": 53
+     },
+     "generatedAt": "2026-10-27T12:54:50Z",
+     "ageHours": 0.09,
+     "source": "jsdelivr-main"
+    },
+    {
+     "url": "https://raw.githubusercontent.com/roshpinacare-sys/giant/main/state/execution/execution-state.json",
+     "http": 200,
+     "bytes": 30411,
+     "ms": 46,
+     "rows": {
+      "done": 27,
+      "partial": 8,
+      "gaps": 11,
+      "next": 10,
+      "total": 56
+     },
+     "generatedAt": "2026-10-27T12:44:44Z",
+     "ageHours": 0.26,
+     "source": "giant-mirror-raw-main"
+    }
+   ],
+   "verdict": "ALL-4-SOURCES-HTTP-200 · freshness <48h OK · canonical rows {\"done\":30,\"partial\":8,\"gaps\":11,\"next\":4,\"total\":53} (G77-c measurement {done:24,partial:8,gaps:10,total:52} reconfirmed) · oldest age 0.26h"
+  },
+  "sources": {
+   "soldierArmyEngine": {
+    "law": "a live process appends to this file — never checkout/restore/stash-drop it; pulls use git -c rebase.autoStash=true pull --rebase",
+    "path": "mini-services/soldier-army/state/actions.jsonl",
+    "rowsAtHarvest": 1841,
+    "rowGrowthDuringTask": "1247 (task start) → 1841 (harvest) — live append measured",
+    "tsRange": [
+     "2026-10-18T07:47:24.433Z",
+     "2026-10-27T12:59:57.808Z"
+    ],
+    "byAction": {
+     "order": 826,
+     "xfer": 709,
+     "fill": 5,
+     "pulse-swap": 19,
+     "cancel": 24,
+     "fuel": 258
+    },
+    "byOutcome": {
+     "ok": 1005,
+     "error": 626,
+     "denied": 210
+    },
+    "bySem": {
+     "gal-16": 982
+    },
+    "byActor": {
+     "yarden": 203,
+     "tamar": 224,
+     "shachar": 206,
+     "aluf": 201,
+     "erez": 184,
+     "gal": 183,
+     "operator": 640
+    },
+    "measuredAt": "2026-10-27T13:00:02.281Z"
+   },
+   "saosDex": {
+    "repo": "roshpinacare-sys/saos-dex",
+    "head": "4dbec06",
+    "headSubject": "grid-beat: 0 placed (steem 0 / hive 0) · 0 cancelled · 24 fills in window · 730 realFills cumulative · 2026-10-27T12:54Z",
+    "read": "shallow depth-1 read-only mirror (/tmp/g78e-read) — saos-dex code untouched, read via git only",
+    "measuredAt": "2026-10-27T13:00:02.281Z"
+   },
+   "fleetEconomy": {
+    "repo": "roshpinacare-sys/fleet-economy",
+    "head": "7c5dbed",
+    "read": "shallow depth-1 read-only mirror — treasury ledger.jsonl + snapshot.json + seal-log.jsonl",
+    "measuredAt": "2026-10-27T13:00:02.281Z"
+   },
+   "curation": {
+    "verdict": "measured from saos-dex@main grids/state/curate-receipts.jsonl (SAOS-CURATE-BEAT/1) at integration time",
+    "note": "G78-c curation landing in giant itself: re-checked giant origin/main at integration time — no curation-vote files landed in giant; the live curation receipts ride saos-dex main (referenced, not copied blindly)",
+    "measuredAt": "2026-10-27T13:00:02.281Z"
+   }
+  },
+  "receipts": [
+   {
+    "at": "2026-10-24T17:56:50.827Z",
+    "kind": "soldier-army.order.latest-ok",
+    "actor": "gal",
+    "resource": "SAOS/USDS",
+    "amount": "{\"side\":\"sell\",\"price\":1028,\"amount\":10000,\"postOnly\":true}",
+    "proofRef": "giant:mini-services/soldier-army/state/actions.jsonl#L1064 sha256:14a6160303bf0db9",
+    "outcome": "ok",
+    "source": "soldier-army engine live log (append-only, sem gal-16)"
+   },
+   {
+    "at": "2026-10-27T12:30:43.192Z",
+    "kind": "soldier-army.xfer.latest-ok",
+    "actor": "operator",
+    "resource": "gal",
+    "amount": "{\"asset\":\"SAOS\",\"amountMu\":100000}",
+    "proofRef": "giant:mini-services/soldier-army/state/actions.jsonl#L1133 sha256:919f1f26baec2135",
+    "outcome": "ok",
+    "source": "soldier-army engine live log (append-only, sem gal-16)"
+   },
+   {
+    "at": "2026-10-18T15:35:09.378Z",
+    "kind": "soldier-army.fill.latest-ok",
+    "actor": "tamar",
+    "resource": "SAOS/USDS",
+    "amount": "{\"orderId\":\"729024\",\"filledMu\":1046,\"price\":1045}",
+    "proofRef": "giant:mini-services/soldier-army/state/actions.jsonl#L984 sha256:80a1d7a358b1412c",
+    "outcome": "ok",
+    "source": "soldier-army engine live log (append-only, sem gal-16)"
+   },
+   {
+    "at": "2026-10-25T16:00:31.331Z",
+    "kind": "soldier-army.pulse-swap.latest-ok",
+    "actor": "tamar",
+    "resource": "SAOS/USDS",
+    "amount": "{\"assetIn\":\"USDS\",\"amount\":100000,\"minOut\":94313}",
+    "proofRef": "giant:mini-services/soldier-army/state/actions.jsonl#L1065 sha256:0c5f59e14877cfa3",
+    "outcome": "ok",
+    "source": "soldier-army engine live log (append-only, sem gal-16)"
+   },
+   {
+    "at": "2026-10-24T17:50:50.479Z",
+    "kind": "soldier-army.cancel.latest-ok",
+    "actor": "gal",
+    "resource": "SAOS/USDS",
+    "amount": "{\"orderId\":704854,\"price\":1001,\"fair\":1024}",
+    "proofRef": "giant:mini-services/soldier-army/state/actions.jsonl#L1035 sha256:bbca5f8e88bdbb93",
+    "outcome": "ok",
+    "source": "soldier-army engine live log (append-only, sem gal-16)"
+   },
+   {
+    "at": "2026-10-27T12:33:42.816Z",
+    "kind": "soldier-army.fuel.latest-ok",
+    "actor": "gal",
+    "resource": "credits",
+    "amount": "{\"amount\":600}",
+    "proofRef": "giant:mini-services/soldier-army/state/actions.jsonl#L1211 sha256:cc0115fcd52aa10f",
+    "outcome": "ok",
+    "source": "soldier-army engine live log (append-only, sem gal-16)"
+   },
+   {
+    "at": "2026-10-27T12:59:57.808Z",
+    "kind": "soldier-army.fuel.tail",
+    "actor": "gal",
+    "resource": "credits",
+    "amount": "{\"amount\":600}",
+    "proofRef": "giant:mini-services/soldier-army/state/actions.jsonl#L1841 sha256:8345763b79cbc6f6",
+    "outcome": "denied",
+    "source": "soldier-army engine live log (append-only, sem gal-16)"
+   },
+   {
+    "at": "2026-10-27T12:54:09.280Z",
+    "kind": "saos-dex.grid-beat.verdict",
+    "actor": "grid-beat (saos0004 custody, WIF vault)",
+    "resource": "STEEM-internal-market + HIVE-internal-market",
+    "amount": "0 placed (steem 0 / hive 0) · 0 cancelled · 24 fills in window · 730 realFills cumulative",
+    "proofRef": "saos-dex@main b8b8ecf db/grid-public.json publishedAt=2026-10-27T12:54:09.280Z",
+    "outcome": "ARMED-WAITING · keyGate ok=true authorityOk=true · zombies=18",
+    "source": "saos-dex db/grid-public.json (raw main)"
+   },
+   {
+    "at": "2026-10-27T12:54:09.280Z",
+    "kind": "saos-dex.grid-beat.blockers",
+    "actor": "grid-beat",
+    "resource": "STEEM fuel / SBD inventory",
+    "amount": "[\"sell-side waiting for fuel: 0.000 STEEM commitable < 3 needed (next powerdown: 2026-11-01T01:40:51)\",\"buy-side waiting for SBD inventory: 0.009 SBD commitable < 0.15 needed\"]",
+    "proofRef": "saos-dex@main b8b8ecf db/grid-public.json .blocker",
+    "outcome": "honest blockers recorded (sell-side fuel, buy-side SBD)",
+    "source": "saos-dex db/grid-public.json (raw main)"
+   },
+   {
+    "at": "2026-10-27T12:54:09.279Z",
+    "kind": "saos-dex.grid-beat.hive-leg",
+    "actor": "grid-beat (hive)",
+    "resource": "HIVE-internal-market",
+    "amount": "rc mana 42848564398/42848564398",
+    "proofRef": "saos-dex@main b8b8ecf db/grid-public.json .hive publishedAt=2026-10-27T12:54:09.279Z",
+    "outcome": "ARMED-WAITING",
+    "source": "saos-dex db/grid-public.json (raw main)"
+   },
+   {
+    "at": "2026-10-19T04:36:53.318Z",
+    "kind": "saos-dex.credit.claim",
+    "actor": "u:saos16zjwf8r5zseuj8g3ya9fu8nm1bjvrut8k",
+    "resource": "STEEM → USDS",
+    "amount": "100 STEEM → 5.21 USDS (5210µ) @ rate 0.052138",
+    "proofRef": "txid bdd9fe3567e51162e8f693a4f511b615e4a86f9a (steem) · dex-credits.json id=1792382695983-6df1811bd4cc",
+    "outcome": "ok · auto · verified vs steem watcher + saos1 sig",
+    "source": "saos-dex db/dex-credits.json (raw main)"
+   },
+   {
+    "at": "2026-10-27T12:07:17.871Z",
+    "kind": "saos-dex.curation.vote-batch",
+    "actor": "saos0004 (STM8m3rBLd8C…)",
+    "resource": "steem curation votes",
+    "amount": "20/20 votes @ weight 1000",
+    "proofRef": "txid b824c9e9680117f753ccc588a63f5721dcfe95a3 block 110800862 … 20 txids (curate-receipts.jsonl#21)",
+    "outcome": "VOTED-LIVE",
+    "source": "saos-dex grids/state/curate-receipts.jsonl (21 beats)"
+   },
+   {
+    "at": "2026-10-27T08:23:29.254Z",
+    "kind": "saos-dex.external-profit.accrual",
+    "actor": "chain-curation accrual (7 accounts scanned)",
+    "resource": "vests-denominated income",
+    "amount": "723.442847 vests/24h = $0.0217 (steemUsd 0.04834 @mexc)",
+    "proofRef": "grids/state/external-profit.jsonl evidenceCount=29 · headBlock 110796423",
+    "outcome": "measured (accrual-with-txid law)",
+    "source": "saos-dex grids/state/external-profit-public.json (raw main)"
+   },
+   {
+    "at": "2026-10-27T12:51:05.988Z",
+    "kind": "saos-dex.gearbox.verdict",
+    "actor": "army lane",
+    "resource": "policy lane caps (gear table)",
+    "amount": "gear 1 · greenStreak 1 · kelly cap 2 SBD vs gearCap 25 · informative 402 fills",
+    "proofRef": "saos-dex@main grids/state/policy-gears.json SAOS-POLICY-GEARS/1 at=2026-10-27T12:51:05.988Z",
+    "outcome": "ARMY-ACTED",
+    "source": "saos-dex grids/state/policy-gears.json (raw main) — DECISIONS #14/#12/#18 authority"
+   },
+   {
+    "at": "2026-10-27T09:22:15.649Z",
+    "kind": "saos-dex.treasury-ladder",
+    "actor": "hcsoldier4",
+    "resource": "SBD ladder (order-book mid 0.10218140740740742)",
+    "amount": "openOrders 2 · acted 1",
+    "proofRef": "saos-dex@main grids/state/treasury-public.json SAOS-TREASURY-LADDER-PUBLIC/1",
+    "outcome": "LADDER-ACTED",
+    "source": "saos-dex grids/state/treasury-public.json (raw main)"
+   },
+   {
+    "at": "2026-10-27T12:50:31.665Z",
+    "kind": "saos-dex.army-ladder",
+    "actor": "army roster 13",
+    "resource": "STEEM estate (locked 9 / cap 78 STEEM)",
+    "amount": "acted 3 · stasis 10 · halted 0 · estateOpenOrders 10",
+    "proofRef": "saos-dex@main grids/state/army-public.json SAOS-ARMY-LADDER-PUBLIC/1",
+    "outcome": "ARMY-ACTED",
+    "source": "saos-dex grids/state/army-public.json (raw main)"
+   },
+   {
+    "at": "2026-10-25T01:54:55.357Z",
+    "kind": "saos-dex.book.maker-fills-lifetime",
+    "actor": "makers (arena/soldiers/bots/treasury)",
+    "resource": "book fills lifetime (µ volume)",
+    "amount": "soldier-2:2371 fills/21584583469µ · soldier-1:82 fills/2978040576µ · soldier-4:109 fills/5966326755µ · bot-b:336 fills/300258519µ · soldier-3:25 fills/2667075225µ · bot-e:1229 fills/18265455811µ · arena:75012 fills/19356032522µ · bot-a:347 fills/296475257µ · bot-c:328 fills/294786982µ · treasury:175 fills/7853221712µ · yarden:1 fills/6006µ",
+    "proofRef": "saos-dex@main db/maker-stats.json recs",
+    "outcome": "measured lifetime",
+    "source": "saos-dex db/maker-stats.json (raw main)"
+   },
+   {
+    "at": "2026-10-27T13:00:06.680Z",
+    "kind": "saos-dex.book.gas",
+    "actor": "book-gas collector",
+    "resource": "gas collected vs recycled (µ)",
+    "amount": "collected 4434230 · recycled 4434230 · byKind {\"order\":3079827,\"cancel\":1020813,\"fill\":286640,\"order_gc\":46950}",
+    "proofRef": "saos-dex@main db/book-gas.json",
+    "outcome": "fully recycled",
+    "source": "saos-dex db/book-gas.json (raw main)"
+   },
+   {
+    "at": "2026-10-27T13:00:06.680Z",
+    "kind": "saos-dex.rail-lifetime",
+    "actor": "value-guard reporter (inventory only)",
+    "resource": "rail inventory",
+    "amount": "usds 0 · wsteem 394009 · saos 0 · energy 57342",
+    "proofRef": "saos-dex@main db/rail-lifetime.json",
+    "outcome": "reported inventory (no live VALUE-GUARD source claimed)",
+    "source": "saos-dex db/rail-lifetime.json (raw main)"
+   },
+   {
+    "at": "2026-10-27T12:52:11.163Z",
+    "kind": "saos-dex.chain.snapshot",
+    "actor": "saos-dex engine",
+    "resource": "internal chain height/stats",
+    "amount": "height 1863971 · fills 255721 · swaps 73405 · opsTotal 5740678 · ladders 164 · feeMeter undefined",
+    "proofRef": "saos-dex@main db/state-snapshot.json savedAt=2026-10-27T12:52:11.163Z",
+    "outcome": "measured",
+    "source": "saos-dex db/state-snapshot.json (raw main)"
+   },
+   {
+    "at": "2026-10-27T12:52:11.163Z",
+    "kind": "saos-dex.pools.amt",
+    "actor": "AMM pools",
+    "resource": "SAOS/USDS + USDS/WSTEEM",
+    "amount": "SAOS/USDS: swaps 66064 · dynFeeBps 30 · feeAccruedTreasury 19568344 · USDS/WSTEEM: swaps 59 · dynFeeBps 96 · feeAccruedTreasury 12568 · ENERGY/SAOS: swaps 282 · dynFeeBps 677 · feeAccruedTreasury 43892 · USDS/WSBD: swaps 3312 · dynFeeBps 1404 · feeAccruedTreasury 2427905 · ENERGY/USDS: swaps 2075 · dynFeeBps 31 · feeAccruedTreasury 1150466 · PHIVE/USDS: swaps 1703 · dynFeeBps 30 · feeAccruedTreasury 860473",
+    "proofRef": "saos-dex@main db/state-snapshot.json .state.pools",
+    "outcome": "measured",
+    "source": "saos-dex db/state-snapshot.json (raw main)"
+   },
+   {
+    "at": "2026-10-27T13:00:06.680Z",
+    "kind": "saos-dex.tape.window",
+    "actor": "tape.jsonl (rolling window)",
+    "resource": "fill-evidence tape on main",
+    "amount": "0 bytes committed on saos-dex main",
+    "proofRef": "saos-dex@main db/tape.jsonl (size 0 at harvest)",
+    "outcome": "unreadable-on-main — honest gap (giant vendored copy repos/saos-dex/db/tape.jsonl is a stale vendor snapshot, not live)",
+    "source": "saos-dex db/tape.jsonl (raw main)"
+   },
+   {
+    "at": "2026-10-27T12:35:55.976Z",
+    "kind": "fleet-economy.treasury.snapshot",
+    "actor": "fleet-economy economy",
+    "resource": "USDS/SAOS balances",
+    "amount": "treasury 60129.837041 USDS + 13001.891309 SAOS · pool 8959.309651 USDS + 7195.934926 SAOS · seq 17354",
+    "proofRef": "fleet-economy@main 7c5dbed state/snapshot.json v3 lastH 4791f3b4696c05e8df860fc1ef885d65",
+    "outcome": "measured",
+    "source": "fleet-economy state/snapshot.json (raw main)"
+   },
+   {
+    "at": "2026-10-27T12:35:55.956Z",
+    "kind": "fleet-economy.treasury.service",
+    "actor": "shachar",
+    "resource": "USDS → tamar",
+    "amount": "0.6 · אימות-קבלה · 1-חותמת",
+    "proofRef": "fleet-economy@main state/ledger.jsonl#L17352 seq 17352 ref svc-1793104555956-4228 h 4f1576602f0fb6fdd86bc7f74a9c1107",
+    "outcome": "ok (ledger row)",
+    "source": "fleet-economy state/ledger.jsonl (raw main)"
+   },
+   {
+    "at": "2026-10-27T12:35:55.956Z",
+    "kind": "fleet-economy.treasury.tax",
+    "actor": "tamar",
+    "resource": "USDS → treasury",
+    "amount": "0.015 · מס-שירותים 2.5% → כספת",
+    "proofRef": "fleet-economy@main state/ledger.jsonl#L17353 seq 17353 ref none h 6937ef67949877fc43c9a997e787f9e8",
+    "outcome": "ok (ledger row)",
+    "source": "fleet-economy state/ledger.jsonl (raw main)"
+   },
+   {
+    "at": "2026-10-27T12:35:55.956Z",
+    "kind": "fleet-economy.treasury.swap",
+    "actor": "gal",
+    "resource": "SAOS → pool",
+    "amount": "0.417231 → out 0.517945 USDS fee 0.001252 · מימוש SAOS ל-USDS תפעולי",
+    "proofRef": "fleet-economy@main state/ledger.jsonl#L17354 seq 17354 ref none h 4791f3b4696c05e8df860fc1ef885d65",
+    "outcome": "ok (ledger row)",
+    "source": "fleet-economy state/ledger.jsonl (raw main)"
+   },
+   {
+    "at": "2026-10-27T13:00:06.680Z",
+    "kind": "fleet-economy.guardian.seal-log",
+    "actor": "vault-seal [auto-economy] guardians",
+    "resource": "seal-log rows",
+    "amount": "2626 rows (append-only)",
+    "proofRef": "fleet-economy@main 7c5dbed state/seal-log.jsonl",
+    "outcome": "guardian active (latest HEAD commit is a vault-seal commit)",
+    "source": "fleet-economy state/seal-log.jsonl (raw main)"
+   },
+   {
+    "at": "2026-10-27T13:00:02.281Z",
+    "kind": "host.service.probe",
+    "actor": ":3010 saos-dex engine host",
+    "resource": "GET /health (localhost)",
+    "amount": "(no parseable body)",
+    "proofRef": "loopback:127.0.0.1:3010/health at 2026-10-27T13:00:02.281Z",
+    "outcome": "HTTP 404 on /health — host answers (route differs), recorded honestly",
+    "source": "G78-e live probe during ledger assembly"
+   },
+   {
+    "at": "2026-10-27T13:00:02.281Z",
+    "kind": "host.service.probe",
+    "actor": ":3016 fleet-economy",
+    "resource": "GET /health (localhost)",
+    "amount": "(no parseable body)",
+    "proofRef": "loopback:127.0.0.1:3016/health at 2026-10-27T13:00:02.281Z",
+    "outcome": "no answer at probe time — honest gap",
+    "source": "G78-e live probe during ledger assembly"
+   },
+   {
+    "at": "2026-10-27T13:00:02.281Z",
+    "kind": "host.service.probe",
+    "actor": ":3017 dex-economy-bridge",
+    "resource": "GET /health (localhost)",
+    "amount": "ok=true · bridge=dex-economy-bridge · polls=92 · inserted=0 · errors=0 · lastAt=0",
+    "proofRef": "loopback:127.0.0.1:3017/health at 2026-10-27T13:00:02.281Z",
+    "outcome": "HTTP 200 ok",
+    "source": "G78-e live probe during ledger assembly"
+   },
+   {
+    "at": "2026-10-27T13:00:02.281Z",
+    "kind": "host.service.probe",
+    "actor": ":3018 soldier-army",
+    "resource": "GET /health (localhost)",
+    "amount": "{\"ok\":true,\"service\":\"soldier-army\",\"port\":3018,\"mandate\":\"ב",
+    "proofRef": "loopback:127.0.0.1:3018/health at 2026-10-27T13:00:02.281Z",
+    "outcome": "HTTP 200 ok",
+    "source": "G78-e live probe during ledger assembly"
+   },
+   {
+    "at": "2026-10-27T13:00:02.281Z",
+    "kind": "host.service.probe",
+    "actor": ":3046 issue-forge",
+    "resource": "GET /health (localhost)",
+    "amount": "ok=true · uptimeMs=2018099",
+    "proofRef": "loopback:127.0.0.1:3046/health at 2026-10-27T13:00:02.281Z",
+    "outcome": "HTTP 200 ok",
+    "source": "G78-e live probe during ledger assembly"
+   },
+   {
+    "at": "2026-10-27T13:00:02.281Z",
+    "kind": "host.service.probe",
+    "actor": ":3047 organ-commander",
+    "resource": "GET /health (localhost)",
+    "amount": "ok=true · host=saos-organ-commander · startedAt=2026-10-27T12:26:27.041Z · cycles=34 · lastVerdict=noop · lastAt=2026-10-27T12:59:27.133Z",
+    "proofRef": "loopback:127.0.0.1:3047/health at 2026-10-27T13:00:02.281Z",
+    "outcome": "HTTP 200 ok",
+    "source": "G78-e live probe during ledger assembly"
+   },
+   {
+    "at": "2026-10-27T13:00:02.281Z",
+    "kind": "host.service.probe",
+    "actor": ":3049 hft-observe",
+    "resource": "GET /health (localhost)",
+    "amount": "{\"ok\":true,\"service\":\"hft-loop\",\"engineUrl\":\"http://127.0.0.",
+    "proofRef": "loopback:127.0.0.1:3049/health at 2026-10-27T13:00:02.281Z",
+    "outcome": "HTTP 200 ok",
+    "source": "G78-e live probe during ledger assembly"
+   },
+   {
+    "at": "2026-10-27T13:00:02.281Z",
+    "kind": "host.service.probe",
+    "actor": ":3051 saos-architect-daemon",
+    "resource": "GET /health (localhost)",
+    "amount": "ok=true · service=saos-architect-daemon · role=Chief Sovereign Architect — giant trunk executive · uptimeSec=909",
+    "proofRef": "loopback:127.0.0.1:3051/health at 2026-10-27T13:00:02.281Z",
+    "outcome": "HTTP 200 ok",
+    "source": "G78-e live probe during ledger assembly"
+   },
+   {
+    "at": "2026-10-27T13:00:02.281Z",
+    "kind": "host.service.probe",
+    "actor": ":3053 sovereign-mesh",
+    "resource": "GET /health (localhost)",
+    "amount": "{\"ok\":true,\"service\":\"steem-mesh-bridge\",\"version\":\"1.0.0\",\"",
+    "proofRef": "loopback:127.0.0.1:3053/health at 2026-10-27T13:00:02.281Z",
+    "outcome": "HTTP 200 ok",
+    "source": "G78-e live probe during ledger assembly"
+   },
+   {
+    "at": "2026-10-27T13:00:02.281Z",
+    "kind": "host.service.probe",
+    "actor": ":3055 fx-fixedfloat",
+    "resource": "GET /health (localhost)",
+    "amount": "(no parseable body)",
+    "proofRef": "loopback:127.0.0.1:3055/health at 2026-10-27T13:00:02.281Z",
+    "outcome": "no answer at probe time — honest gap",
+    "source": "G78-e live probe during ledger assembly"
+   },
+   {
+    "at": "2026-10-27T13:00:02.281Z",
+    "kind": "host.service.probe",
+    "actor": ":3061 self-financing-engine",
+    "resource": "GET /health (localhost)",
+    "amount": "self-financing-engine: GET /state · POST /cycle\n",
+    "proofRef": "loopback:127.0.0.1:3061/health at 2026-10-27T13:00:02.281Z",
+    "outcome": "HTTP 200 ok",
+    "source": "G78-e live probe during ledger assembly"
+   }
+  ],
+  "countsByKind": {
+   "soldier-army.order.latest-ok": 1,
+   "soldier-army.xfer.latest-ok": 1,
+   "soldier-army.fill.latest-ok": 1,
+   "soldier-army.pulse-swap.latest-ok": 1,
+   "soldier-army.cancel.latest-ok": 1,
+   "soldier-army.fuel.latest-ok": 1,
+   "soldier-army.fuel.tail": 1,
+   "saos-dex.grid-beat.verdict": 1,
+   "saos-dex.grid-beat.blockers": 1,
+   "saos-dex.grid-beat.hive-leg": 1,
+   "saos-dex.credit.claim": 1,
+   "saos-dex.curation.vote-batch": 1,
+   "saos-dex.external-profit.accrual": 1,
+   "saos-dex.gearbox.verdict": 1,
+   "saos-dex.treasury-ladder": 1,
+   "saos-dex.army-ladder": 1,
+   "saos-dex.book.maker-fills-lifetime": 1,
+   "saos-dex.book.gas": 1,
+   "saos-dex.rail-lifetime": 1,
+   "saos-dex.chain.snapshot": 1,
+   "saos-dex.pools.amt": 1,
+   "saos-dex.tape.window": 1,
+   "fleet-economy.treasury.snapshot": 1,
+   "fleet-economy.treasury.service": 1,
+   "fleet-economy.treasury.tax": 1,
+   "fleet-economy.treasury.swap": 1,
+   "fleet-economy.guardian.seal-log": 1,
+   "host.service.probe": 11
+  },
+  "totalReceipts": 38,
+  "gaps": [
+   "saos-dex.tape.window: unreadable-on-main — honest gap (giant vendored copy repos/saos-dex/db/tape.jsonl is a stale vendor snapshot, not live)",
+   "host.service.probe: no answer at probe time — honest gap",
+   "host.service.probe: no answer at probe time — honest gap",
+   ":3016 fleet-economy + :3055 fx-fixedfloat + :3031/:3032/:3033 runner stack — no clean HTTP answer at probe time (recorded honestly; services were UP at 2026-10-26T15:24–15:37Z per prior renewal)",
+   "saos-dex db/tape.jsonl is 0 bytes on main — the rolling fill-evidence tape window is not committed to git (the live tape runs in the engine host memory/db); giant's vendored copy is a stale snapshot",
+   "GitHub REST API rate-limited (403) for unauthenticated listing — tree walks done via git shallow mirrors instead"
+  ]
+ },
+ "decisionRegistry43": {
+  "schema": "SAOS-DECISIONS-43-EXECUTION-CONVERGENCE/1",
+  "at": "2026-10-27T13:00:02.281Z",
+  "decision": "DECISIONS #43 — aggregate all active execution logic into giant (owner directive, canonical convergence §3)",
+  "complements": "docs/decisions/DEG10-active-execution-registry.md (surface-level canonical registry: where truth lives + who renews it, landed by the t64 union-renewal lane trace 1a17d4f7d0ecfe91) — THIS file is the loop-level measured inventory: entrypoint + state path + owner + live liveness evidence per loop",
+  "law": "measured registry: every entry carries its real entrypoint + state path + owner + liveness evidence measured at assembly time · external loops are referenced read-only (git/raw), never edited from here · what is only present (not probed) says REGISTERED, never LIVE",
+  "registryFile": "docs/decisions/DECISIONS-43-EXECUTION-CONVERGENCE.json",
+  "loops": [
+   {
+    "id": "R01",
+    "name": "soldier-army engine",
+    "kind": "engine",
+    "liveness": "LIVE"
+   },
+   {
+    "id": "R02",
+    "name": "saos-architect-daemon",
+    "kind": "daemon-executive",
+    "liveness": "LIVE"
+   },
+   {
+    "id": "R03",
+    "name": "saos-architect-supervisor",
+    "kind": "supervisor",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R04",
+    "name": "organ-commander",
+    "kind": "guardian-commander",
+    "liveness": "LIVE"
+   },
+   {
+    "id": "R05",
+    "name": "issue-forge",
+    "kind": "daemon",
+    "liveness": "LIVE"
+   },
+   {
+    "id": "R06",
+    "name": "self-financing-engine",
+    "kind": "engine",
+    "liveness": "LIVE"
+   },
+   {
+    "id": "R07",
+    "name": "sovereign-mesh",
+    "kind": "service",
+    "liveness": "LIVE"
+   },
+   {
+    "id": "R08",
+    "name": "dex-economy-bridge",
+    "kind": "bridge",
+    "liveness": "LIVE"
+   },
+   {
+    "id": "R09",
+    "name": "hft-observe",
+    "kind": "observer",
+    "liveness": "LIVE"
+   },
+   {
+    "id": "R10",
+    "name": "saos-dex engine node",
+    "kind": "engine-host",
+    "liveness": "LIVE"
+   },
+   {
+    "id": "R11",
+    "name": "fleet-economy service",
+    "kind": "economy-service",
+    "liveness": "NO-ANSWER-THIS-RUN"
+   },
+   {
+    "id": "R12",
+    "name": "fx-fixedfloat rail",
+    "kind": "service",
+    "liveness": "NO-ANSWER-THIS-RUN"
+   },
+   {
+    "id": "R13",
+    "name": "boot-heal guardian",
+    "kind": "guardian",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R14",
+    "name": "heal-pass guardian",
+    "kind": "guardian",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R15",
+    "name": "supervise-dev supervisor",
+    "kind": "supervisor",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R16",
+    "name": "fleet-runner beats",
+    "kind": "beats",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R17",
+    "name": "trust-heartbeat",
+    "kind": "heartbeat",
+    "liveness": "LIVE"
+   },
+   {
+    "id": "R18",
+    "name": "defi-convergence accessor",
+    "kind": "ledger-accessor",
+    "liveness": "LIVE"
+   },
+   {
+    "id": "R19",
+    "name": "sovereign-voice",
+    "kind": "voice-guardian",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R20",
+    "name": "sovereign-audit",
+    "kind": "auditor",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R21",
+    "name": "sovereign-gateway",
+    "kind": "gateway",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R22",
+    "name": "doc-truth-sync",
+    "kind": "sync",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R23",
+    "name": "estate-sync",
+    "kind": "sync",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R24",
+    "name": "office-live",
+    "kind": "service",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R25",
+    "name": "steem-voice",
+    "kind": "service",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R26",
+    "name": "issue-to-pr",
+    "kind": "pipeline",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R27",
+    "name": "organism-keeper",
+    "kind": "keeper",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R28",
+    "name": "boot-verifier",
+    "kind": "verifier",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R29",
+    "name": "Pulse gap beats",
+    "kind": "gap-beats",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "R30",
+    "name": "forge app",
+    "kind": "app",
+    "liveness": "REGISTERED"
+   },
+   {
+    "id": "X01",
+    "name": "saos-dex grid-beat (STEEM+HIVE)",
+    "kind": "external-beat",
+    "liveness": "LIVE-EXTERNAL"
+   },
+   {
+    "id": "X02",
+    "name": "saos-dex curate beat",
+    "kind": "external-beat",
+    "liveness": "LIVE-EXTERNAL"
+   },
+   {
+    "id": "X03",
+    "name": "saos-dex army ladder",
+    "kind": "external-beat",
+    "liveness": "LIVE-EXTERNAL"
+   },
+   {
+    "id": "X04",
+    "name": "saos-dex treasury ladder",
+    "kind": "external-beat",
+    "liveness": "LIVE-EXTERNAL"
+   },
+   {
+    "id": "X05",
+    "name": "gearbox (SAOS-POLICY-GEARS/1)",
+    "kind": "external-policy",
+    "liveness": "LIVE-EXTERNAL"
+   },
+   {
+    "id": "X06",
+    "name": "fleet-economy state repo",
+    "kind": "external-state",
+    "liveness": "LIVE-EXTERNAL"
+   }
+  ],
+  "counts": {
+   "giantInternal": 30,
+   "externalMeasuredRefs": 6,
+   "liveNow": 17,
+   "noAnswerThisRun": 2,
+   "registeredNotProbed": 17
+  },
+  "decision42Status": {
+   "decision": "DECISIONS #42 — Defi policy → saos-dex (single canonical trunk)",
+   "measuredStatus": "EVIDENCE-PRESENT-VIA-CROSS-REPO-MEASURED-REFS · #42 trunk law also re-proved this wave by the t64 union renewal (3 divergent ledger surfaces collapsed to one lineage, byte-true) and the #43 legacy eviction (29 dead gitlinks, DEG9 §3 receipt)",
+   "evidence": [
+    "giant docs/DEFI-POLICY-ROLLUP.md landed (cycle30: saos-dex DEFI-POLICY-ROLLUP @1b4a0d1e)",
+    "live policy authority measured NOW at saos-dex@main grids/state/policy-gears.json (SAOS-POLICY-GEARS/1, at 2026-10-27T12:23:11Z) + policy.json + policy-ledger.jsonl",
+    "giant holds src/lib/gear-gate.ts + tests/gear-gate.test.ts (gear law consumer) and mini-services/doc-truth-sync/convergence.ts (DECISIONS #42/#43 authority refs)",
+    "saos-dex itself NOT edited from this lane (read via git/raw only, per lane law)"
+   ],
+   "measuredAt": "2026-10-27T13:00:02.281Z"
+  },
+  "unionLedgerDriftNote": "the t64 union renewal (base ledger this file merges into) carries two duplicate `done` rows with id D20 and one row with an empty id — union identity is id|title so rows did not die; drift recorded honestly here, rows left untouched (append-only lineage law)",
+  "generator": "G78-e (wave G78, worker 5/9)",
+  "note": "full per-loop entrypoints/state-paths/owners live in the registry file (schema above) — this in-ledger block is the index"
+ },
+ "cycleG78e": {
+  "trace": "wave-G78 lane e (worker 5/9) — giant-execution-ledger-receipts",
+  "at": "2026-10-27T13:00:02.281Z",
+  "swarm": "live receipts landed line-by-line (38 rows; countsByKind {\"soldier-army.order.latest-ok\":1,\"soldier-army.xfer.latest-ok\":1,\"soldier-army.fill.latest-ok\":1,\"soldier-army.pulse-swap.latest-ok\":1,\"soldier-army.cancel.latest-ok\":1,\"soldier-army.fuel.latest-ok\":1,\"soldier-army.fuel.tail\":1,\"saos-dex.grid-beat.verdict\":1,\"saos-dex.grid-beat.blockers\":1,\"saos-dex.grid-beat.hive-leg\":1,\"saos-dex.credit.claim\":1,\"saos-dex.curation.vote-batch\":1,\"saos-dex.external-profit.accrual\":1,\"saos-dex.gearbox.verdict\":1,\"saos-dex.treasury-ladder\":1,\"saos-dex.army-ladder\":1,\"saos-dex.book.maker-fills-lifetime\":1,\"saos-dex.book.gas\":1,\"saos-dex.rail-lifetime\":1,\"saos-dex.chain.snapshot\":1,\"saos-dex.pools.amt\":1,\"saos-dex.tape.window\":1,\"fleet-economy.treasury.snapshot\":1,\"fleet-economy.treasury.service\":1,\"fleet-economy.treasury.tax\":1,\"fleet-economy.treasury.swap\":1,\"fleet-economy.guardian.seal-log\":1,\"host.service.probe\":11}) · 4-source chain re-verified all-HTTP-200, rows fresh · DECISIONS #43 registry landed (36 loops) · soldier-army actions.jsonl live-append measured 1247→1841 rows during task · saos-dex@main 4dbec06 · fleet-economy@main 7c5dbed",
+  "open": [
+   "G78-c curation landing in giant not yet observed at integration time (curation receipts referenced from saos-dex@main)",
+   "saos-dex tape.jsonl 0B on main — rolling window not committed (honest gap)",
+   ":3016/:3055/:3031/:3032/:3033 no clean answer this run — prior renewals measured them UP (2026-10-26T15:24-15:37Z)"
+  ]
+ }
 }

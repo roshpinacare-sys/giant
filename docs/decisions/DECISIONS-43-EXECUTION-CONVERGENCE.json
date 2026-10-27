@@ -1,0 +1,534 @@
+{
+  "schema": "SAOS-DECISIONS-43-EXECUTION-CONVERGENCE/1",
+  "at": "2026-10-27T13:00:02.281Z",
+  "decision": "DECISIONS #43 — aggregate all active execution logic into giant (owner directive, canonical convergence §3)",
+  "complements": "docs/decisions/DEG10-active-execution-registry.md (surface-level canonical registry: where truth lives + who renews it, landed by the t64 union-renewal lane trace 1a17d4f7d0ecfe91) — THIS file is the loop-level measured inventory: entrypoint + state path + owner + live liveness evidence per loop",
+  "law": "measured registry: every entry carries its real entrypoint + state path + owner + liveness evidence measured at assembly time · external loops are referenced read-only (git/raw), never edited from here · what is only present (not probed) says REGISTERED, never LIVE",
+  "registryFile": "docs/decisions/DECISIONS-43-EXECUTION-CONVERGENCE.json",
+  "loops": [
+    {
+      "id": "R01",
+      "name": "soldier-army engine",
+      "kind": "engine",
+      "entrypoint": "mini-services/soldier-army/index.ts",
+      "statePath": "mini-services/soldier-army/state/actions.jsonl",
+      "owner": "soldier-army beat (sem gal-16 · mandate msg-8 · 6 soldiers bank-300µ)",
+      "port": 3018,
+      "liveness": {
+        "status": "LIVE",
+        "evidence": ":3018 HTTP 200 + actions.jsonl 1841 rows, last row 2026-10-27T12:59:57.808Z (append observed during task 1247→1841)",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R02",
+      "name": "saos-architect-daemon",
+      "kind": "daemon-executive",
+      "entrypoint": "mini-services/saos-architect-daemon/index.ts (observe/decide/act/audit/receipts/git-law/registry)",
+      "statePath": "mini-services/saos-architect-daemon/state/receipts.jsonl",
+      "owner": "chief-sovereign-architect",
+      "port": 3051,
+      "liveness": {
+        "status": "LIVE",
+        "evidence": ":3051 HTTP 200 — uptimeSec ~1046, lastCycle verdict=aborted (honest fail-closed verify)",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R03",
+      "name": "saos-architect-supervisor",
+      "kind": "supervisor",
+      "entrypoint": "mini-services/saos-architect-supervisor/index.ts (observe/decide/act)",
+      "statePath": "selftest.mjs receipts",
+      "owner": "chief-sovereign-architect",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "entrypoint present; port not separately probed this run (:3047 answered as organ-commander host)",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R04",
+      "name": "organ-commander",
+      "kind": "guardian-commander",
+      "entrypoint": "mini-services/organ-commander/index.ts (revive/command/singleflight/truth/receipts)",
+      "statePath": "mini-services/organ-commander/receipts.ts chain",
+      "owner": "organism plane",
+      "port": 3047,
+      "liveness": {
+        "status": "LIVE",
+        "evidence": ":3047 HTTP 200 — host=saos-organ-commander startedAt 2026-10-27T12:26:27Z cycles=18 lastVerdict=noop lastAt=12:43:27Z",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R05",
+      "name": "issue-forge",
+      "kind": "daemon",
+      "entrypoint": "mini-services/issue-forge/index.ts (cycle/forge/probe-runner/verify/author/auditors)",
+      "statePath": "mini-services/issue-forge/selftest.mjs (45/45 baseline)",
+      "owner": "forge lane",
+      "port": 3046,
+      "liveness": {
+        "status": "LIVE",
+        "evidence": ":3046 HTTP 200 — uptimeMs 1045955, lastCycle null (idle-honest)",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R06",
+      "name": "self-financing-engine",
+      "kind": "engine",
+      "entrypoint": "mini-services/self-financing-engine/index.ts (rc-plan/yield-accrual/curation-harvest/roster-feeder/roster-from-book)",
+      "statePath": "activation state via :3061",
+      "owner": "self-financing lane",
+      "port": 3061,
+      "liveness": {
+        "status": "LIVE",
+        "evidence": ":3061 HTTP 200 — 'self-financing-engine: GET /state · POST /cycle'",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R07",
+      "name": "sovereign-mesh",
+      "kind": "service",
+      "entrypoint": "mini-services/sovereign-mesh/mesh.ts (pcp/holepunch/pmp-client)",
+      "statePath": "node pool state in :3053 health",
+      "owner": "mesh lane",
+      "port": 3053,
+      "liveness": {
+        "status": "LIVE",
+        "evidence": ":3053 HTTP 200 — pool 4/4 CLOSED eligible, broadcastEnabled=false (honest)",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R08",
+      "name": "dex-economy-bridge",
+      "kind": "bridge",
+      "entrypoint": "mini-services/dex-economy-bridge/index.ts",
+      "statePath": "/home/z/my-project/db/custom.db (wal)",
+      "owner": "economy lane",
+      "port": 3017,
+      "liveness": {
+        "status": "LIVE",
+        "evidence": ":3017 HTTP 200 — polls=44 inserted=0 errors=0",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R09",
+      "name": "hft-observe",
+      "kind": "observer",
+      "entrypoint": "src/lib/mini-guard.ts hft-loop host (observe mode)",
+      "statePath": "observation receipts via :3049",
+      "owner": "grid lane",
+      "port": 3049,
+      "liveness": {
+        "status": "LIVE",
+        "evidence": ":3049 HTTP 200 — mode observe (no DEX_OPERATOR_TOKEN, gate answers honestly)",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R10",
+      "name": "saos-dex engine node",
+      "kind": "engine-host",
+      "entrypoint": "mini-services/saos-dex-node/index.ts",
+      "statePath": "saos-dex db/* (external repo)",
+      "owner": "dex lane",
+      "port": 3010,
+      "liveness": {
+        "status": "LIVE",
+        "evidence": ":3010 HTTP 404 on /health but HTML served — host alive, route differs (honest note)",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R11",
+      "name": "fleet-economy service",
+      "kind": "economy-service",
+      "entrypoint": "mini-services/fleet-economy/index.ts (+fuel-stream/custody-guard/custody-seal/supervise-economy.sh)",
+      "statePath": "mini-services/fleet-economy/state/ (ledger.jsonl + state-custody/)",
+      "owner": "economy lane",
+      "port": 3016,
+      "liveness": {
+        "status": "NO-ANSWER-THIS-RUN",
+        "evidence": ":3016 no clean HTTP answer at probe time (000); repo-state truth measured from fleet-economy@main (seq 17354)",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R12",
+      "name": "fx-fixedfloat rail",
+      "kind": "service",
+      "entrypoint": "mini-services/fx-fixedfloat/index.ts (+fx.ts HMAC client)",
+      "statePath": "hash-chained receipts",
+      "owner": "fx lane",
+      "port": 3055,
+      "liveness": {
+        "status": "NO-ANSWER-THIS-RUN",
+        "evidence": ":3055 no answer at probe time; owner-side API permissions still pending (GAP-5 law)",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R13",
+      "name": "boot-heal guardian",
+      "kind": "guardian",
+      "entrypoint": "mini-services/boot-heal.sh",
+      "statePath": "honest jsonl receipts",
+      "owner": "perpetuity lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "entrypoint present (wipe-class counter-restore; D22 lineage)",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R14",
+      "name": "heal-pass guardian",
+      "kind": "guardian",
+      "entrypoint": "mini-services/heal-pass.sh",
+      "statePath": "honest jsonl receipts",
+      "owner": "perpetuity lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "entrypoint present",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R15",
+      "name": "supervise-dev supervisor",
+      "kind": "supervisor",
+      "entrypoint": "mini-services/supervise-dev.sh",
+      "statePath": "observe/decide/act receipts",
+      "owner": "supervisor lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "entrypoint present",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R16",
+      "name": "fleet-runner beats",
+      "kind": "beats",
+      "entrypoint": "mini-services/fleet-runner/scripts/{execution-ledger-renew,pulse-network-renew,economy-run,vault-seal-soldiers,provision-keys,agent-license}.ts + start-nodes.sh",
+      "statePath": "Domain + root-site ledgers (published) → giant mirror",
+      "owner": "fleet-runner (12h schedule)",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "renewal beat is lineage-preserving ({...prev} spread) — this ledger's liveReceipts section survives it",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R17",
+      "name": "trust-heartbeat",
+      "kind": "heartbeat",
+      "entrypoint": "scripts/trust-heartbeat.mjs",
+      "statePath": "giant git commits",
+      "owner": "trust lane",
+      "port": null,
+      "liveness": {
+        "status": "LIVE",
+        "evidence": "giant main commits 9e73260 (2026-10-27T09:28Z) + c98f8f8 (03:01Z) — autonomous scans today",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R18",
+      "name": "defi-convergence accessor",
+      "kind": "ledger-accessor",
+      "entrypoint": "mini-services/defi-convergence/cli.ts (verify/recover/mirror/receipts) + execution-accessor.ts + live-receipts.ts",
+      "statePath": "state/execution/execution-state.json (giant last-good mirror)",
+      "owner": "execution-ledger lane",
+      "port": null,
+      "liveness": {
+        "status": "LIVE",
+        "evidence": "accessor suite 28/28 + receipts suite green on this landing; cli receipts subcommand added",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R19",
+      "name": "sovereign-voice",
+      "kind": "voice-guardian",
+      "entrypoint": "mini-services/sovereign-voice/index.ts",
+      "statePath": "state/{alerts,heal-log,fuel-log,disk-log,alert-status,seal-log}.jsonl",
+      "owner": "voice lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "entrypoint + state paths present",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R20",
+      "name": "sovereign-audit",
+      "kind": "auditor",
+      "entrypoint": "mini-services/sovereign-audit/index.ts (+audit_soldiers.py)",
+      "statePath": "state/last-audit.json + evidence/*",
+      "owner": "audit lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "evidence bundles present (20261018*)",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R21",
+      "name": "sovereign-gateway",
+      "kind": "gateway",
+      "entrypoint": "mini-services/sovereign-gateway/index.ts (+airgap/*)",
+      "statePath": "SOVEREIGN-PROMPT.md",
+      "owner": "gateway lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "entrypoint present; llamacpp:8080 GAP-4 honest-down",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R22",
+      "name": "doc-truth-sync",
+      "kind": "sync",
+      "entrypoint": "mini-services/doc-truth-sync/index.ts (collect/convergence/receipts/census)",
+      "statePath": "doc-truth receipts",
+      "owner": "doc lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "entrypoint present; DECISIONS #42/#43 authority refs encoded in convergence.ts",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R23",
+      "name": "estate-sync",
+      "kind": "sync",
+      "entrypoint": "mini-services/estate-sync/index.ts",
+      "statePath": "estate state",
+      "owner": "estate lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "entrypoint present",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R24",
+      "name": "office-live",
+      "kind": "service",
+      "entrypoint": "mini-services/office-live/index.ts",
+      "statePath": "office state",
+      "owner": "office lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "entrypoint present",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R25",
+      "name": "steem-voice",
+      "kind": "service",
+      "entrypoint": "mini-services/steem-voice/index.ts",
+      "statePath": "steem voice state",
+      "owner": "steem lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "entrypoint present",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R26",
+      "name": "issue-to-pr",
+      "kind": "pipeline",
+      "entrypoint": "mini-services/issue-to-pr/index.ts (+planner-feed/fixers/receipts)",
+      "statePath": "issue-to-pr receipts",
+      "owner": "forge lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "entrypoint present",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R27",
+      "name": "organism-keeper",
+      "kind": "keeper",
+      "entrypoint": "mini-services/organism-keeper/index.ts",
+      "statePath": "state/keeper-log.jsonl",
+      "owner": "organism plane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "entrypoint + keeper log present",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R28",
+      "name": "boot-verifier",
+      "kind": "verifier",
+      "entrypoint": "mini-services/boot-verifier/index.ts",
+      "statePath": "boot verify receipts (receipts/boot-verify.json)",
+      "owner": "perpetuity lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "entrypoint present",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R29",
+      "name": "Pulse gap beats",
+      "kind": "gap-beats",
+      "entrypoint": "Pulse/scripts/{gap1-coverage,gap2-gate-run}.mjs",
+      "statePath": "state/gap-closure/{gap1-coverage-ledger,gap2-gate-run,gap3-register}.json",
+      "owner": "gap lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "gap ledger files present",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "R30",
+      "name": "forge app",
+      "kind": "app",
+      "entrypoint": "mini-services/forge (Next.js)",
+      "statePath": "forge storage/",
+      "owner": "forge lane",
+      "port": null,
+      "liveness": {
+        "status": "REGISTERED",
+        "evidence": "app tree present",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "X01",
+      "name": "saos-dex grid-beat (STEEM+HIVE)",
+      "kind": "external-beat",
+      "entrypoint": "saos-dex@main (grid engine)",
+      "statePath": "saos-dex db/grid-public.json + db/grid-ledger.json",
+      "owner": "saos-dex repo (read-only ref)",
+      "port": null,
+      "liveness": {
+        "status": "LIVE-EXTERNAL",
+        "evidence": "saos-dex@main 4dbec06 — grid-public publishedAt 2026-10-27T12:37:13Z verdict ARMED-WAITING keyGate authorityOk=true, 730 realFills cumulative",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "X02",
+      "name": "saos-dex curate beat",
+      "kind": "external-beat",
+      "entrypoint": "saos-dex@main (curate engine)",
+      "statePath": "saos-dex grids/state/curate-receipts.jsonl",
+      "owner": "saos-dex repo (read-only ref)",
+      "port": null,
+      "liveness": {
+        "status": "LIVE-EXTERNAL",
+        "evidence": "21 VOTED-LIVE beats × 20 votes (txid+block each), latest 2026-10-27T12:07:17Z",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "X03",
+      "name": "saos-dex army ladder",
+      "kind": "external-beat",
+      "entrypoint": "saos-dex@main (army ladder)",
+      "statePath": "saos-dex grids/state/army-public.json + army-receipts.jsonl",
+      "owner": "saos-dex repo (read-only ref)",
+      "port": null,
+      "liveness": {
+        "status": "LIVE-EXTERNAL",
+        "evidence": "army-public at 2026-10-27T12:22:58Z — roster 13, acted 0, stasis 10, ARMY-ACTS-FAILED (honest downshift)",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "X04",
+      "name": "saos-dex treasury ladder",
+      "kind": "external-beat",
+      "entrypoint": "saos-dex@main (treasury ladder)",
+      "statePath": "saos-dex grids/state/treasury-public.json + treasury-receipts.jsonl",
+      "owner": "saos-dex repo (read-only ref)",
+      "port": null,
+      "liveness": {
+        "status": "LIVE-EXTERNAL",
+        "evidence": "treasury-public at 2026-10-27T09:22:15Z — LADDER-ACTED, openOrders 2",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "X05",
+      "name": "gearbox (SAOS-POLICY-GEARS/1)",
+      "kind": "external-policy",
+      "entrypoint": "saos-dex@main grids/state/policy-gears.json + policy.json + policy-ledger.jsonl",
+      "statePath": "gear table in git (code only reads the table)",
+      "owner": "saos-dex repo (read-only ref) · DECISIONS #14/#12/#18",
+      "port": null,
+      "liveness": {
+        "status": "LIVE-EXTERNAL",
+        "evidence": "gear 1, greenStreak 0, kelly cap 2 SBD vs gearCap 25, informative 402 fills, at 2026-10-27T12:23:11Z",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    },
+    {
+      "id": "X06",
+      "name": "fleet-economy state repo",
+      "kind": "external-state",
+      "entrypoint": "fleet-economy@main (economy ledger)",
+      "statePath": "state/ledger.jsonl (17354 seq) + snapshot.json + seal-log.jsonl (2626)",
+      "owner": "fleet-economy repo (read-only ref)",
+      "port": null,
+      "liveness": {
+        "status": "LIVE-EXTERNAL",
+        "evidence": "fleet-economy@main 7c5dbed — snapshot savedAt 2026-10-27T12:35:55Z seq 17354, treasury 60129.84 USDS",
+        "measuredAt": "2026-10-27T13:00:02.281Z"
+      }
+    }
+  ],
+  "counts": {
+    "giantInternal": 30,
+    "externalMeasuredRefs": 6,
+    "liveNow": 17,
+    "noAnswerThisRun": 2,
+    "registeredNotProbed": 17
+  },
+  "decision42Status": {
+    "decision": "DECISIONS #42 — Defi policy → saos-dex (single canonical trunk)",
+    "measuredStatus": "EVIDENCE-PRESENT-VIA-CROSS-REPO-MEASURED-REFS · #42 trunk law also re-proved this wave by the t64 union renewal (3 divergent ledger surfaces collapsed to one lineage, byte-true) and the #43 legacy eviction (29 dead gitlinks, DEG9 §3 receipt)",
+    "evidence": [
+      "giant docs/DEFI-POLICY-ROLLUP.md landed (cycle30: saos-dex DEFI-POLICY-ROLLUP @1b4a0d1e)",
+      "live policy authority measured NOW at saos-dex@main grids/state/policy-gears.json (SAOS-POLICY-GEARS/1, at 2026-10-27T12:23:11Z) + policy.json + policy-ledger.jsonl",
+      "giant holds src/lib/gear-gate.ts + tests/gear-gate.test.ts (gear law consumer) and mini-services/doc-truth-sync/convergence.ts (DECISIONS #42/#43 authority refs)",
+      "saos-dex itself NOT edited from this lane (read via git/raw only, per lane law)"
+    ],
+    "measuredAt": "2026-10-27T13:00:02.281Z"
+  },
+  "unionLedgerDriftNote": "the t64 union renewal (base ledger this file merges into) carries two duplicate `done` rows with id D20 and one row with an empty id — union identity is id|title so rows did not die; drift recorded honestly here, rows left untouched (append-only lineage law)",
+  "generator": "G78-e (wave G78, worker 5/9)"
+}

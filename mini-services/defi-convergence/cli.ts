@@ -18,6 +18,7 @@ import {
   recoverExecutionState,
   type AccessResult,
 } from "./execution-accessor.ts";
+import { readLiveReceipts } from "./live-receipts.ts";
 
 function emitJson(r: AccessResult, extra: Record<string, unknown> = {}): void {
   console.log(
@@ -97,7 +98,36 @@ if (cmd === "verify") {
   if (json) console.log(JSON.stringify(receipt, null, 2));
   else console.log(`[execution-accessor] mirrored ${receipt.source} → ${receipt.mirror} byteIdentical=${ok}`);
   process.exit(ok ? 0 : 5);
+} else if (cmd === "receipts") {
+  // G78-e: validate the LIVE-RECEIPTS section (owner §3 — line-by-line live
+  // transaction receipts, zero fabricated rows). Fail-honest exit codes:
+  //   0 valid+fresh   2 stale (re-harvest)   3 invalid/absent   4 no ledger
+  const r = readExecutionState({});
+  if (!r.doc) {
+    if (json) console.log(JSON.stringify({ schema: "execution-live-receipts-report/1", at: new Date().toISOString(), status: r.status, reason: r.reason ?? null }, null, 2));
+    else console.error(`[live-receipts] ledger not readable: status=${r.status} reason=${r.reason ?? "(none)"}`);
+    process.exit(4);
+  }
+  const v = readLiveReceipts(r.doc);
+  const summary = {
+    schema: "execution-live-receipts-report/1",
+    at: new Date().toISOString(),
+    ledgerStatus: r.status,
+    ledgerPath: r.path,
+    receiptsStatus: v.valid ? "valid" : v.reason?.includes("older than") ? "stale" : "invalid",
+    rows: v.section?.receipts.length ?? 0,
+    countsByKind: v.section?.countsByKind ?? null,
+    reason: v.reason ?? null,
+  };
+  if (json) console.log(JSON.stringify(summary, null, 2));
+  else {
+    console.log(`[live-receipts] status=${summary.receiptsStatus} rows=${summary.rows} ledger=${r.path ?? "(none)"}`);
+    if (summary.reason) console.log(`[live-receipts] reason=${summary.reason}`);
+    const ck = summary.countsByKind;
+    if (ck) for (const k of Object.keys(ck)) console.log(`[live-receipts]   ${k} ×${ck[k]}`);
+  }
+  process.exit(v.valid ? 0 : summary.receiptsStatus === "stale" ? 2 : 3);
 } else {
-  console.error("usage: cli.ts verify|recover|mirror [--json] [--no-apply]");
+  console.error("usage: cli.ts verify|recover|mirror|receipts [--json] [--no-apply]");
   process.exit(1);
 }
