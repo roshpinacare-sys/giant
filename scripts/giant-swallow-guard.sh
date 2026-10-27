@@ -117,7 +117,24 @@ PYEOF
 try: print(json.dumps(json.load(sys.stdin)['hash']))
 except Exception: print('null')" 2>/dev/null || echo null)"
         QREC="$(printf '{"mode":"receipt","at":"%s","prevHash":%s,"payload":{"verdict":%s,"from":"%s","to":"%s"}}' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$QPREV" "$VERDICT" "$LAST_SCANNED" "$TIP" | bun "$REPO/scripts/quality-gate-cli.ts" 2>>"$LOG")" || QREC=""
-        [ -n "$QREC" ] && printf '%s\n' "$QREC" >> "$QUALITY_DIR/verdicts.jsonl"
+        # ── חוק-השרשרת-הנעולה (נתפס-חי 13:2xZ פעמיים במחזור-החי: guard-vs-agent
+        # שני מצמידים קראו את אותו prevHash והשרשרת התפצלה 12→{15,17}) — כל
+        # הצמדה אל quality/verdicts.jsonl (המגן וגם יד-ידנית/סוכן) חייבת flock
+        # על quality/.chain.lock: קריאת prevHash והנחת השורה בתוך אותו נעילה.
+        # הנעילה-כאן צרה (רק סביב ההצמדה) — חוק-המופע-היחיד של המגן (fd 9)
+        # נשאר כשהיה. ──
+        [ -n "$QREC" ] && (
+          flock -x 8
+          QPREV2="$(tail -1 "$QUALITY_DIR/verdicts.jsonl" 2>/dev/null | python3 -c "import json,sys
+try: print(json.dumps(json.load(sys.stdin)['hash']))
+except Exception: print('null')" 2>/dev/null || echo null)"
+          if [ "$QPREV2" != "$QPREV" ]; then
+            # הזנב זז תחתינו — מטביעים-מחדש על הזנב-החי (payload נשמר, קישור-מחושב)
+            QREC2="$(printf '{"mode":"receipt","at":"%s","prevHash":%s,"payload":{"verdict":%s,"from":"%s","to":"%s"}}' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$QPREV2" "$VERDICT" "$LAST_SCANNED" "$TIP" | bun "$REPO/scripts/quality-gate-cli.ts" 2>>"$LOG")" || QREC2=""
+            [ -n "$QREC2" ] && QREC="$QREC2"
+          fi
+          printf '%s\n' "$QREC" >> "$QUALITY_DIR/verdicts.jsonl"
+        ) 8>"$QUALITY_DIR/.chain.lock"
         # ── חוק-זכרון-הסריקה (נתפס-חי 18:07Z): .last-tip מתקדם רק על דין-מוכח —
         # נחיתה-שמעולם-לא-נשפטה (CLI-refused/diff-failed) תתמודד-שוב-מול-השער
         # במחזור-הבא; אף-נחיתה-לא-עוברת-מאחורי-גבו-של §6. ──
