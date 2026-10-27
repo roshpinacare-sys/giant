@@ -113,7 +113,7 @@ async function soldierCycle(prefix: string, k: SoldierKey & { stats: MeshStats }
   if (mid <= 0) return;
   // 3. ביטול-פקודות-שסטו מה-mid מעבר 0.4% (re-peg law)
   for (const o of my) {
-    if (Math.abs(o.limitPrice - mid) / mid > 0.004) {
+    if (Math.abs(o.limitPrice - mid) / mid > 0.0015) {
       const del = await dexDelete("/api/dex/orders", { id: o.id }, k.raw);
       if (del.status === 200) {
         k.stats.cancelled++;
@@ -127,7 +127,7 @@ async function soldierCycle(prefix: string, k: SoldierKey & { stats: MeshStats }
   // 5. הצבה: עד-2-פתוחות-לצד; גודל-פקודה עני-המצב (≤10% מהיתרה)
   const openBids = my.filter((o) => o.side === "BUY" && Math.abs(o.limitPrice - mid) / mid <= 0.004).length;
   const openAsks = my.filter((o) => o.side === "SELL" && Math.abs(o.limitPrice - mid) / mid <= 0.004).length;
-  const tick = Math.max(mid * 0.0009, 0.000001); // מיקרו-מרווח ~9bps
+  const tick = Math.max(mid * 0.0003, 0.000001); // מיקרו-מרווח ~3bps — קרוב-מספיק-כדי-שזרימה-תחצה
   if (openBids < 2 && balUsds > 5) {
     const spend = Math.min(balUsds * 0.1, 30);
     const price = Number((mid - tick).toFixed(8));
