@@ -289,11 +289,13 @@ if [ ! -s "$RUNNER_DIR/data/vault/fixedfloat.env" ] && [ -s /home/z/my-project/u
     || log "fixedfloat seal FAILED — quote lane stays fail-closed (honest)"
 fi
 
-# ── 11) economy-run cure ensure (the golden-copy law, 5th-wipe lesson) ──────
+# ── 11) runner cure ensure (the golden-copy law, 5th-wipe lesson) ────────────
 # The reset restores OLD my-project snapshots — the money-path cures (fuel
 # decimal law, era-lost key ensure/re-license, saos-0004 in CORE) died with
-# wipe #5. upload/golden/ survives every reset; restore the live copy from it
-# whenever the cure markers are missing. No-op when already cured.
+# wipe #5, and the OLD preset catalog then BURNED the schedules whose presets
+# it forgot (index.ts loadSchedules law: unknown preset → schedule dropped).
+# upload/golden/ survives every reset; restore the live copies whenever the
+# cure markers are missing. No-op when already cured.
 ER_SCRIPT="$RUNNER_DIR/scripts/economy-run.ts"
 ER_GOLDEN="/home/z/my-project/upload/golden/economy-run.ts"
 if [ -f "$ER_SCRIPT" ] && [ -f "$ER_GOLDEN" ]; then
@@ -308,6 +310,22 @@ if [ -f "$ER_SCRIPT" ] && [ -f "$ER_GOLDEN" ]; then
   if [ "$ER_SCRIPT" -nt "$ER_GOLDEN" ] && grep -q "usdsDec" "$ER_SCRIPT" && grep -q "ensureKeys(a)" "$ER_SCRIPT"; then
     cp "$ER_SCRIPT" "$ER_GOLDEN" && log "golden copy refreshed from live (live was newer and cured)"
   fi
+fi
+# preset catalog: the burn-law eats schedules when the catalog forgets them
+IR_INDEX="$RUNNER_DIR/index.ts"
+IR_GOLDEN="/home/z/my-project/upload/golden/index.ts"
+if [ -f "$IR_INDEX" ] && [ -f "$IR_GOLDEN" ]; then
+  if ! grep -q '"execution-ledger-renew"' "$IR_INDEX" || ! grep -q '"fixedfloat-quote"' "$IR_INDEX"; then
+    log "preset catalog lost the directive-42/54 presets — restoring from golden copy"
+    cp "$IR_GOLDEN" "$IR_INDEX" && log "preset catalog cured from golden (execution-ledger-renew + fixedfloat-quote live again)"
+  else
+    log "preset catalog cure markers present — no-op"
+  fi
+fi
+# start-nodes itself: the healer must survive the wipe that kills its cures
+SN_GOLDEN="/home/z/my-project/upload/golden/start-nodes.sh"
+if [ -f "$SN_GOLDEN" ] && ! grep -q "golden-copy law" "$RUNNER_DIR/start-nodes.sh" 2>/dev/null; then
+  cp "$SN_GOLDEN" "$RUNNER_DIR/start-nodes.sh" && log "start-nodes restored from golden (§7-11 heal sections were wiped)"
 fi
 
 # release the singleton lock explicitly: even if THIS bash somehow lingers
