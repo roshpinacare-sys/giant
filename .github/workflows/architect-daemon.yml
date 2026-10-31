@@ -43,6 +43,13 @@ jobs:
         with:
           bun-version: latest
 
+      # root-fix 2026-10-31 (measured 656 phantom TS2307s): the audit runs
+      # `bunx tsc --noEmit -p .` over the whole trunk — without node_modules every
+      # external import errors, the daemon "cures" phantoms, verify fails, RED forever.
+      # Deps first, truth after: bun-types resolves bun:test, the audit measures code.
+      - name: Install dependencies (the audit needs node_modules to see reality)
+        run: bun install --frozen-lockfile
+
       - name: Lawful identity (identity law v3)
         run: |
           git config user.name "github-actions[bot]"
