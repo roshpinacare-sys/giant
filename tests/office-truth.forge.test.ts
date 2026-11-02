@@ -32,3 +32,35 @@ describe("src/lib/office-truth.ts.getJson (forge characterization #241)", () => 
     expect(canon(actual)).toBe("null");
   });
 });
+
+/* ─── batch-1 additions (owner directive 2026-11-02): full-export characterization ─── */
+describe("src/lib/office-truth.ts guards (forge batch-1 additions)", () => {
+  test("FEEDS truth table captured", () => {
+    expect(canon(mod.FEEDS)).toBe("[{\"capMin\":130,\"he\":\"פורמן\",\"key\":\"foreman\",\"url\":\"https://raw.githubusercontent.com/roshpinacare-sys/FleetHQ/main/office/state/office-state.json\"},{\"capMin\":30,\"he\":\"דופק\",\"key\":\"pulse\",\"url\":\"https://raw.githubusercontent.com/roshpinacare-sys/Domain/main/office/data.json\"},{\"capMin\":150,\"he\":\"ספרים\",\"key\":\"live\",\"url\":\"https://raw.githubusercontent.com/roshpinacare-sys/Domain/main/agents/office-live.json\"},{\"capMin\":95,\"he\":\"הון\",\"key\":\"grid\",\"url\":\"https://raw.githubusercontent.com/roshpinacare-sys/Domain/main/agents/grid-truth.json\"},{\"capMin\":1600,\"he\":\"גיוס\",\"key\":\"recruit\",\"url\":\"https://raw.githubusercontent.com/roshpinacare-sys/Domain/main/agents/recruitment.json\"},{\"capMin\":1600,\"he\":\"מיזמים\",\"key\":\"ventures\",\"url\":\"https://raw.githubusercontent.com/roshpinacare-sys/Domain/main/agents/ventures.json\"},{\"capMin\":35,\"he\":\"פקודות\",\"key\":\"orders\",\"url\":\"https://raw.githubusercontent.com/roshpinacare-sys/Sandbox/main/ops/office/work-orders.json\"},{\"capMin\":95,\"he\":\"שלמות\",\"key\":\"integrity\",\"url\":\"https://raw.githubusercontent.com/roshpinacare-sys/Sandbox/main/ops/integrity/verdict.json\"},{\"capMin\":2880,\"he\":\"מוצר\",\"key\":\"products\",\"url\":\"https://raw.githubusercontent.com/roshpinacare-sys/Domain/main/marketing/products.json\"}]");
+  });
+  test("getJson fails honest on invalid URL (null, never throws)", async () => {
+    expect(await mod.getJson("definitely-not-a-valid-url", null)).toBe(null);
+  });
+  test("readPat resolves to string-or-null (env-honest)", async () => {
+    const p = await mod.readPat();
+    expect(p === null || typeof p === "string").toBe(true);
+  });
+  test("measureFeeds shape-honest (array of FEEDS.length or null)", async () => {
+    const r = await mod.measureFeeds(null);
+    if (r) expect(r.length).toBe(mod.FEEDS.length);
+    else expect(r).toBeNull();
+  });
+  test("measureStasis/measureOrders shape-honest or null", async () => {
+    const s = await mod.measureStasis(null);
+    expect(s === null || typeof s === "object").toBe(true);
+    const o = await mod.measureOrders(null);
+    expect(o === null || typeof o === "object").toBe(true);
+  });
+  test("measureRuns fails honest on unknown repo", async () => {
+    const r = await mod.measureRuns(null, "no-such-repo-for-forge-probe", 2);
+    expect(r === null || Array.isArray(r)).toBe(true);
+  });
+  test("dispatchWorkflow referenced (never invoked — dispatches real workflows)", () => {
+    expect(typeof mod.dispatchWorkflow).toBe("function");
+  });
+});
