@@ -32,3 +32,40 @@ describe("src/lib/markets/state.ts.makeState (forge characterization #275)", () 
     expect(canon(actual)).toBe("{\"cycle\":0,\"feeBps\":6,\"genesisEquityMu\":2200000000,\"ministries\":{\"autonomy\":{\"cashMu\":200000000,\"feesMu\":0,\"name\":\"autonomy\",\"policy\":{\"allow\":[\"XROB\",\"XNRG\",\"XTECH\"],\"clipMu\":26000000,\"kind\":\"momentum\",\"thresholdBps\":45},\"positions\":{},\"realizedPnlMu\":0,\"tradesBuy\":0,\"tradesSell\":0},\"construction\":{\"cashMu\":200000000,\"feesMu\":0,\"name\":\"construction\",\"policy\":{\"allow\":[\"XCONS\",\"XRE\",\"XNRG\"],\"clipMu\":25000000,\"kind\":\"meanrev\",\"thresholdBps\":30},\"positions\":{},\"realizedPnlMu\":0,\"tradesBuy\":0,\"tradesSell\":0},\"intelligence\":{\"cashMu\":200000000,\"feesMu\":0,\"name\":\"intelligence\",\"policy\":{\"allow\":[\"XAI\",\"XDEF\",\"XBIO\"],\"clipMu\":30000000,\"kind\":\"momentum\",\"thresholdBps\":60},\"positions\":{},\"realizedPnlMu\":0,\"tradesBuy\":0,\"tradesSell\":0},\"policy\":{\"cashMu\":200000000,\"feesMu\":0,\"name\":\"policy\",\"policy\":{\"allow\":[\"XFIN\",\"XDEF\",\"XRE\"],\"clipMu\":12000000,\"kind\":\"hold\",\"thresholdBps\":10000},\"positions\":{},\"realizedPnlMu\":0,\"tradesBuy\":0,\"tradesSell\":0},\"product\":{\"cashMu\":200000000,\"feesMu\":0,\"name\":\"product\",\"policy\":{\"allow\":[\"XTECH\",\"XSHIP\",\"XFIN\"],\"clipMu\":20000000,\"kind\":\"meanrev\",\"thresholdBps\":35},\"positions\":{},\"realizedPnlMu\":0,\"tradesBuy\":0,\"tradesSell\":0},\"technology\":{\"cashMu\":200000000,\"feesMu\":0,\"name\":\"technology\",\"policy\":{\"allow\":[\"XTECH\",\"XAI\",\"XROB\"],\"clipMu\":30000000,\"kind\":\"momentum\",\"thresholdBps\":40},\"positions\":{},\"realizedPnlMu\":0,\"tradesBuy\":0,\"tradesSell\":0}},\"treasuryMu\":1000000000}");
   });
 });
+
+/* ─── batch-1 additions (owner directive 2026-11-02): full-export characterization ─── */
+describe("src/lib/markets/state.ts ministries (forge batch-1 additions)", () => {
+  test("GENESIS constants captured", () => {
+    expect(mod.GENESIS_TREASURY_MU).toBe(1000000000);
+    expect(mod.MINISTRY_BUDGET_MU).toBe(200000000);
+    expect(mod.GENESIS_FEE_BPS).toBe(6);
+    expect([...mod.MINISTRIES]).toEqual(["technology","construction","intelligence","product","autonomy","policy"]);
+  });
+  test("totalEquityMu == genesisEquityMu at genesis (conservation invariant)", async () => {
+    const eng = await import("../src/lib/markets/engine");
+    const world = eng.makeWorld();
+    const st = mod.makeState();
+    expect(mod.totalEquityMu(st, world)).toBe(2200000000);
+    expect(mod.totalEquityMu(st, world)).toBe(st.genesisEquityMu);
+  });
+  test("sweepFeesToTreasury moves fees to treasury exactly", () => {
+    const st = mod.makeState();
+    const before = st.treasuryMu;
+    mod.sweepFeesToTreasury(st, 12345);
+    expect(st.treasuryMu).toBe(before + 12345);
+  });
+  test("runMinistryCycle deterministic on genesis world (captured)", async () => {
+    const eng = await import("../src/lib/markets/engine");
+    const world = eng.makeWorld();
+    const st = mod.makeState();
+    const dec = mod.runMinistryCycle(st, world, "technology", 3);
+    expect(canon(dec)).toBe("[]");
+    expect(mod.totalEquityMu(st, world)).toBe(2200000000);
+  });
+  test("ministryEquityMu captured (policy ministry at genesis)", async () => {
+    const eng = await import("../src/lib/markets/engine");
+    const world = eng.makeWorld();
+    const st = mod.makeState();
+    expect(mod.ministryEquityMu(st.ministries["policy"], world)).toBe(200000000);
+  });
+});
