@@ -114,3 +114,10 @@ mini-services/forge/storage/
 # G79-Q (sovereign-quality-gate): guard's own runtime receipts are local-only
 # (fleet law: live runtime state is NEVER git-tracked; chain verifies on disk).
 state/swallow-guard/
+
+# secrets hygiene 2026-11-03
+.env
+.env.*
+*.secret
+pat.env
+upload/*.txt
